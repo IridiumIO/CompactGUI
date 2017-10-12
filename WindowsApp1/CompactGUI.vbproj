@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="compactico.ico" />
+    <Content Include="Resources\SC.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
