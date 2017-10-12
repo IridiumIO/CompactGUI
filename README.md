@@ -1,9 +1,8 @@
 # CompactGUI
-Visual Interface for the Windows Compact.exe cmdlet
+This tool is a standalone visual interface to make using the Windows Compact function more availble to more people. It intentionally only exposes the ability to compress *folders*. Whole drives and entire Windows installations cannot be modified from this tool - users seeking that functionality should use the command-line version built into Windows.
 
-## Overview
-
-This tool is a visual interface to make using the Windows Compact function more availble to more people. It intentionally only exposes the ability to compress *folders*. Whole drives and entire Windows installations cannot be modified from this tool - users seeking that functionality should use the command-line version built into Windows.
+## Installation
+Download the standalone program from [Github Releases](https://github.com/ImminentFate/CompactGUI/releases)
 
 ## Uses
 Use this tool to: 
