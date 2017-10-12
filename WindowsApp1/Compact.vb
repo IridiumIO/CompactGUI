@@ -1,0 +1,568 @@
+﻿Imports System.IO
+Imports System.Runtime.InteropServices
+Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
+
+Public Class Compact
+
+    Private WithEvents MyProcess As Process
+    Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
+
+
+    Private Shared Sub Main()
+        Application.EnableVisualStyles()
+        Application.SetCompatibleTextRenderingDefault(False)
+        Application.Run(CompactGUI.Compact)
+    End Sub
+
+
+
+
+    'Status Monitors
+    Dim compressFinished = 0
+    Dim uncompressFinished = 0
+    Dim byteComparisonRaw As String = ""
+    Dim dirCountProgress As UInteger
+    Dim dirCountTotal As UInteger
+    Dim fileCountTotal As UInteger = 0
+    Dim fileCountProgress As UInteger
+
+
+
+
+    Private Sub MyProcess_ErrorDataReceived _
+        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
+        Handles MyProcess.ErrorDataReceived
+
+        AppendOutputText(vbCrLf & e.Data)                                                       'Ensures error data is printed to the output console
+
+    End Sub
+
+
+
+
+    Private Sub MyProcess_OutputDataReceived _
+        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
+        Handles MyProcess.OutputDataReceived
+
+        AppendOutputText(vbCrLf & e.Data)                                                       'Sends output to the embedded console
+
+        Try
+
+            If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
+                byteComparisonRaw = e.Data
+            End If
+
+            If e.Data.Contains("The compression ratio is") Then                                 'Gets the output line that contains the compression ratio and forces the progress bar to 100% (indirectly due to threading)
+                compressFinished = 1
+                dirCountProgress = dirCountTotal
+                fileCountProgress = fileCountTotal
+            End If
+
+            If e.Data.Contains("directories were uncompressed") Then                            'Gets the output line that identifies that an uncompression event has finished. 
+                dirCountProgress = 0
+                fileCountProgress = fileCountTotal
+                uncompressFinished = 1
+            End If
+
+            If e.Data.StartsWith(" Compressing files in") Then                                  'Gets each directory that is compressed. Used for the old progressbar.   
+                dirCountProgress += 1
+            End If
+
+            If e.Data.EndsWith("[OK]") Then                                                     'Gets each file that was successfully compressed OR uncompressed. 
+                fileCountProgress += 1
+            End If
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+
+
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        With dirChooser
+            .LinkBehavior = LinkBehavior.HoverUnderline
+
+            .LinkColor = Color.FromArgb(37, 110, 196)
+        End With
+
+        progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
+
+
+    End Sub
+
+
+
+
+    Private Sub ProgressTimer_Tick(sender As Object, e As EventArgs) Handles progressTimer.Tick
+
+        If fileCountTotal <> 0 Then                                                             'Makes sure that there are actually files being counted before attempting a calculation
+
+            progresspercent.Text = Math.Round _
+                ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
+
+            Try
+                If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
+                    compactprogressbar.Value = 1
+                Else
+                    compactprogressbar.Value = Math.Round _
+                        ((fileCountProgress / fileCountTotal * 100), 0)
+                End If
+            Catch ex As Exception
+            End Try
+
+        End If
+
+
+        If compressFinished = 1 Then                                                            'Hides and shows certain UI elements when compression is finished 
+            compressFinished = 0
+            buttonRevert.Visible = True
+            progressPageLabel.Text = "Compression Completed"
+            returnArrow.Visible = True
+            CalculateSaving()
+        End If
+
+        If uncompressFinished = 1 Then                                                          'Hides and shows certain UI elements when uncompression is finished 
+            uncompressFinished = 0
+            buttonCompress.Visible = True
+            buttonRevert.Visible = False
+            progressPageLabel.Text = "Folder Uncompressed."
+            returnArrow.Visible = True
+
+        End If
+
+    End Sub
+
+
+
+
+    Private Sub AppendOutputText(ByVal text As String)                                          'Attach output to the embedded console
+
+        Try
+
+            If conOut.InvokeRequired Then
+                Dim serverOutDelegate As New AppendOutputTextDelegate(AddressOf AppendOutputText)
+                Me.Invoke(serverOutDelegate, text)
+            Else
+                conOut.AppendText(text)
+                conOut.Select(conOut.TextLength, 1)
+                conOut.ScrollToCaret()
+            End If
+
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+
+
+    'Set variables for the advanced compression checkboxes. 
+    Dim workingDir As String = ""
+    Dim recursiveScan As String = ""
+    Dim hiddenFiles As String = ""
+    Dim forceCompression As String = ""                                                         'Not actually implemented - yet
+
+
+    'Set variables for minor security and error handling
+    Dim overrideCompressFolderButton = 0
+    Dim directorysizeexceptionCount = 0                                                         'Used in the DirectorySize() Function to ensure the error message only shows up once, even if multiple UnauthorizedAccessException errors get thrown
+
+
+
+
+    Private Sub SelectFolderToCompress _
+        (sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, chosenDirDisplay.Click
+
+        overrideCompressFolderButton = 0
+
+        Dim folderChoice As New VistaFolderBrowserDialog
+
+        folderChoice.ShowDialog()
+
+        Dim wDString = folderChoice.SelectedPath
+
+        If wDString.Contains("C:\Windows") Then                                                 'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
+
+            MsgBox("Compressing items in the Windows folder using this program 
+                    is not recommended. Please use the command line if you still 
+                    wish to compress the Windows folder")
+
+        ElseIf wDString.EndsWith(":\") Then
+
+            MsgBox("Compressing an entire drive with this tool is not allowed")
+
+        Else
+
+            If wDString.Length >= 3 Then                                                        'Makes sure the chosen folder isn't a null value or an exception
+
+
+                Dim DIwDString = New DirectoryInfo(wDString)
+
+                workingDir = Chr(34) + wDString.ToString() + Chr(34)
+                chosenDirDisplay.Text = DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
+
+                preSize.Text = "Folder Size: " + GetOutputSize _
+                    (Math.Round(DirectorySize(DIwDString, True), 0), True)
+                preSize.Visible = True
+
+                Try
+                    Dim directories() As String = System.IO.Directory.GetDirectories _
+                        (wDString, "*", IO.SearchOption.AllDirectories)
+
+                    dirCountTotal = directories.Length + 1
+
+                    Dim numberOfFiles As Integer = Directory.GetFiles _
+                        (wDString, "*", IO.SearchOption.AllDirectories).Length
+
+                    fileCountTotal = numberOfFiles '+ dirCountTotal + 1'                        'Windows seems to do a funny thing where it counts "files" as the number of files + folders
+                Catch ex As Exception
+                End Try
+
+                If overrideCompressFolderButton = 0 Then                                        'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
+                    buttonCompress.Enabled = True
+                Else
+                    buttonCompress.Enabled = False
+                End If
+
+            Else
+                Console.Write("No folder selected")
+
+            End If
+
+
+        End If
+
+        folderChoice.Dispose()
+
+    End Sub
+
+
+
+
+    Dim compactArgs As String
+
+
+
+
+    Private Sub CompressFolder_Click(sender As System.Object, e As System.EventArgs) Handles buttonCompress.Click
+        Try
+            MyProcess.Close()
+        Catch ex As Exception
+        End Try
+
+        Try
+
+            conOut.Clear()
+
+            MyProcess = New Process
+
+            With MyProcess.StartInfo
+                .FileName = "CMD.exe"
+                .Arguments = ""
+                .UseShellExecute = False
+                .CreateNoWindow = True
+                .RedirectStandardInput = True
+                .RedirectStandardOutput = True
+                .RedirectStandardError = True
+            End With
+
+            MyProcess.Start()
+            MyProcess.EnableRaisingEvents = True
+            MyProcess.BeginErrorReadLine()
+            MyProcess.BeginOutputReadLine()
+
+            Try
+
+                MyProcess.StandardInput.WriteLine("cd /d " + workingDir)
+                MyProcess.StandardInput.Flush()
+
+                MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why
+                MyProcess.StandardInput.Flush()
+
+                compactArgs = "compact /C"
+                RunCompact()
+
+                progressPageLabel.Text = "Compressing, Please Wait"
+                TabControl1.SelectedTab = ProgressPage
+
+            Catch ex As Exception
+            End Try
+
+        Catch ex As Exception
+            Console.WriteLine(ex.Data)
+        End Try
+
+    End Sub
+
+
+
+
+    Private Sub ButtonRevert_Click(sender As Object, e As EventArgs) Handles buttonRevert.Click             'Handles uncompressing. For now, uncompressing can only be done through the program only to revert a compression that's just been done.
+
+        fileCountProgress = 0
+        dirCountProgress = 0
+        CompResultsPanel.Visible = False
+        progressPageLabel.Text = "Reverting Changes, Please Wait"
+
+        Try
+            compactArgs = "compact /U"
+            RunCompact()
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+
+
+
+    Private Sub compressLZX_CheckedChanged(sender As Object, e As EventArgs) Handles compressLZX.CheckedChanged     'Cautions the user if they're about to use LZX compression
+
+        If compressLZX.Checked = True Then
+
+            If MsgBox("LZX is recommended only for folders that are not going to be used very often. Do not use this on program or game folders!" _
+                      & vbCrLf & vbCrLf & "Do you wish to continue?", MsgBoxStyle.YesNo, "Warning") = MsgBoxResult.No Then
+
+                compressX8.Checked = True
+
+            End If
+
+        End If
+    End Sub
+
+
+
+
+    Private Sub ReturnArrow_Click(sender As Object, e As EventArgs) Handles returnArrow.Click                       'Returns you to the first screen and cleans up some stuff
+
+        returnArrow.Visible = False
+        CompResultsPanel.Visible = False
+        TabControl1.SelectedTab = InputPage
+        dirCountProgress = 0
+        fileCountProgress = 0
+
+        MyProcess.Close()
+
+    End Sub
+
+
+
+
+    Private Sub CheckShowConOut_CheckedChanged(sender As Object, e As EventArgs) Handles checkShowConOut.CheckedChanged     'Handles showing the embedded console
+        If checkShowConOut.Checked Then
+            conOut.Visible = True
+        Else
+            conOut.Visible = False
+        End If
+    End Sub
+
+
+
+
+    Private Sub dirChooser_MouseEnter(sender As Object, e As EventArgs) Handles dirChooser.MouseEnter
+        dirChooser.LinkColor = Color.FromArgb(10, 80, 150)
+    End Sub
+    Private Sub dirChooser_MouseLeave(sender As Object, e As EventArgs) Handles dirChooser.MouseLeave
+        dirChooser.LinkColor = Color.FromArgb(37, 110, 196)
+    End Sub
+
+
+
+
+
+
+
+    '/////////////FUNCTIONS//////////////
+
+    Private Sub CalculateSaving()   'Calculations for all the relevant information after compression is completed. All the data is parsed from the console ouput using basic strings, but because that occurs on a different thread, information is stored to variables first (The Status Monitors at the top) then those values are used. 
+
+
+        Dim oldFolderSize = byteComparisonRaw.Substring _
+           (0, byteComparisonRaw.IndexOf("t")).Trim.Replace(",", "")
+
+
+        Dim newFolderSizem1 = byteComparisonRaw.Substring _
+            (byteComparisonRaw.LastIndexOf("n"c) + 1)
+
+        Dim newfoldersize = newFolderSizem1.Substring _
+            (0, newFolderSizem1.Length - 7).Trim.Replace(",", "")
+
+
+        origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
+        compressedSizeLabel.Text = GetOutputSize(newfoldersize, True)
+        compRatioLabel.Text = Math.Round(oldFolderSize / newfoldersize, 1)
+        spaceSavedLabel.Text = GetOutputSize((oldFolderSize - newfoldersize), True) + " Saved"
+
+        Try
+            compressedSizeVisual.Width = CInt(368 / compRatioLabel.Text)
+        Catch ex As System.OverflowException
+            compressedSizeVisual.Width = 368
+        End Try
+
+        CompResultsPanel.Visible = True
+
+
+    End Sub
+
+
+
+    Private Sub RunCompact()
+
+        If checkRecursiveScan.Checked = True Then
+            compactArgs = compactArgs + " /S"
+        End If
+        If checkForceCompression.Checked = True Then
+            compactArgs = compactArgs + " /F"
+        End If
+        If checkHiddenFiles.Checked = True Then
+            compactArgs = compactArgs + " /A"
+        End If
+        If compressX4.Checked = True Then
+            compactArgs = compactArgs + " /EXE:XPRESS4K"
+        End If
+        If compressX8.Checked = True Then
+            compactArgs = compactArgs + " /EXE:XPRESS8K"
+        End If
+        If compressX16.Checked = True Then
+            compactArgs = compactArgs + " /EXE:XPRESS16K"
+        End If
+        If compressLZX.Checked = True Then
+            compactArgs = compactArgs + " /EXE:LZX"
+        End If
+        'MsgBox(compactArgs)
+        MyProcess.StandardInput.WriteLine(compactArgs)
+        MyProcess.StandardInput.Flush()
+
+    End Sub
+
+
+
+
+    Public Function GetOutputSize(ByVal inputsize As Long, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
+        Dim sizeType As String = ""
+        If inputsize < 1024 Then
+            sizeType = " B"
+        Else
+            If inputsize < 1024 ^ 3 Then
+                If inputsize < 1024 ^ 2 Then
+                    sizeType = " KB"
+                    inputsize = inputsize / 1024
+                Else
+                    sizeType = " MB"
+                    inputsize = inputsize / 1024 ^ 2
+                End If
+            Else
+                sizeType = " GB"
+                inputsize = inputsize / 1024 ^ 3
+            End If
+        End If
+
+        If showSizeType = True Then
+            Return inputsize & sizeType
+        Else
+            Return inputsize
+        End If
+
+    End Function
+
+
+
+    Private Function DirectorySize _
+        (ByVal dInfo As IO.DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
+
+        Try
+            Dim totalSize As Long = dInfo.EnumerateFiles().Sum(Function(file) file.Length)
+
+            If includeSubdirectories Then
+                totalSize += dInfo.EnumerateDirectories().Sum(Function(dir) DirectorySize(dir, True))
+            End If
+
+            Return totalSize
+
+            directorysizeexceptionCount = 0
+
+        Catch generatedexceptionname As UnauthorizedAccessException
+
+            If directorysizeexceptionCount = 0 Then
+                MsgBox("This directory contains a subfolder that you do not have permission to access. Please try running the program again as an Administrator." _
+                       & vbCrLf & vbCrLf & "If the problem persists, the subfolder is most likely protected by the System, and by design this program will refuse to let you proceed.")
+
+                overrideCompressFolderButton = 1
+                directorysizeexceptionCount = 1
+            End If
+
+
+        Catch ex As Exception
+
+        End Try
+
+    End Function
+
+
+
+
+
+    '////////////////////TESTING////////////////////
+
+    Private Sub ExecuteButton_Click _
+        (ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click     'Code to run the manual testing input box
+
+
+        Dim input As String
+
+        input = TextBox1.Text
+
+        Try
+
+            MyProcess.StandardInput.WriteLine(input)
+            MyProcess.StandardInput.Flush()
+            conOut.Refresh()
+
+            fileCountProgress = 0
+            dirCountProgress = 0
+
+        Catch ex As Exception
+
+        End Try
+
+        TextBox1.Text = ""
+
+
+    End Sub
+
+
+
+
+    Private Sub TestArguments(sender As Object, e As EventArgs) Handles testcompactargs.Click
+        compactArgs = "compact /C"
+        If checkRecursiveScan.Checked = True Then
+            compactArgs = compactArgs + " /S"
+        End If
+        If checkForceCompression.Checked = True Then
+            compactArgs = compactArgs + " /F"
+        End If
+        If checkHiddenFiles.Checked = True Then
+            compactArgs = compactArgs + " /A"
+        End If
+        If compressX4.Checked = True Then
+            compactArgs = compactArgs + " /EXE:XPRESS4K"
+        End If
+        If compressX8.Checked = True Then
+            compactArgs = compactArgs + " /EXE:XPRESS8K"
+        End If
+        If compressX16.Checked = True Then
+            compactArgs = compactArgs + " /EXE:XPRESS16K"
+        End If
+        If compressLZX.Checked = True Then
+            compactArgs = compactArgs + " /EXE:LZX"
+        End If
+        'MsgBox(compactArgs)
+    End Sub
+
+    Private Sub Label13_Click(sender As Object, e As EventArgs) Handles Label13.Click
+        Info.Show()
+
+    End Sub
+End Class
