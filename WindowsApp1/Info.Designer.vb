@@ -27,6 +27,9 @@ Partial Class Info
         Me.Label2 = New System.Windows.Forms.Label()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.semVersion = New System.Windows.Forms.Label()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -66,11 +69,39 @@ Partial Class Info
         '
         Me.semVersion.AutoSize = True
         Me.semVersion.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.semVersion.Location = New System.Drawing.Point(12, 9)
+        Me.semVersion.Location = New System.Drawing.Point(3, 0)
         Me.semVersion.Name = "semVersion"
         Me.semVersion.Size = New System.Drawing.Size(69, 21)
         Me.semVersion.TabIndex = 3
         Me.semVersion.Text = "Version: "
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel1.Location = New System.Drawing.Point(78, 5)
+        Me.LinkLabel1.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(104, 13)
+        Me.LinkLabel1.TabIndex = 4
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Check For Updates"
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.AutoSize = True
+        Me.TableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.TableLayoutPanel1.ColumnCount = 2
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.04115!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.95885!))
+        Me.TableLayoutPanel1.Controls.Add(Me.semVersion, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.LinkLabel1, 1, 0)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(9, 26)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 1
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 21)
+        Me.TableLayoutPanel1.TabIndex = 5
         '
         'Info
         '
@@ -78,13 +109,15 @@ Partial Class Info
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(589, 362)
-        Me.Controls.Add(Me.semVersion)
+        Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.RichTextBox1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.MinimumSize = New System.Drawing.Size(400, 300)
         Me.Name = "Info"
         Me.Text = "Info"
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -94,4 +127,6 @@ Partial Class Info
     Friend WithEvents Label2 As Label
     Friend WithEvents RichTextBox1 As RichTextBox
     Friend WithEvents semVersion As Label
+    Friend WithEvents LinkLabel1 As LinkLabel
+    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
 End Class

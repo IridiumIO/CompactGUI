@@ -39,7 +39,7 @@ Partial Class Compact
         Me.compressLZX = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label13 = New System.Windows.Forms.Label()
+        Me.showinfopopup = New System.Windows.Forms.Label()
         Me.dirChooser = New System.Windows.Forms.LinkLabel()
         Me.chosenDirDisplay = New System.Windows.Forms.Label()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
@@ -66,6 +66,7 @@ Partial Class Compact
         Me.buttonRevert = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.InputPage = New System.Windows.Forms.TabPage()
+        Me.buttonQueryCompact = New System.Windows.Forms.Button()
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -78,6 +79,7 @@ Partial Class Compact
         Me.returnArrow = New System.Windows.Forms.Label()
         Me.progressPageLabel = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.testFileArgs = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -123,10 +125,11 @@ Partial Class Compact
         '
         'buttonCompress
         '
-        Me.buttonCompress.BackColor = System.Drawing.Color.White
+        Me.buttonCompress.BackColor = System.Drawing.Color.Gainsboro
         Me.buttonCompress.Enabled = False
         Me.buttonCompress.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.buttonCompress.Location = New System.Drawing.Point(8, 313)
+        Me.buttonCompress.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.buttonCompress.Location = New System.Drawing.Point(8, 302)
         Me.buttonCompress.Margin = New System.Windows.Forms.Padding(8, 3, 3, 3)
         Me.buttonCompress.Name = "buttonCompress"
         Me.buttonCompress.Size = New System.Drawing.Size(390, 54)
@@ -173,7 +176,7 @@ Partial Class Compact
         'compressX4
         '
         Me.compressX4.AutoSize = True
-        Me.compressX4.Location = New System.Drawing.Point(35, 46)
+        Me.compressX4.Location = New System.Drawing.Point(35, 40)
         Me.compressX4.Name = "compressX4"
         Me.compressX4.Size = New System.Drawing.Size(81, 17)
         Me.compressX4.TabIndex = 9
@@ -184,7 +187,7 @@ Partial Class Compact
         '
         Me.compressX8.AutoSize = True
         Me.compressX8.Checked = True
-        Me.compressX8.Location = New System.Drawing.Point(35, 69)
+        Me.compressX8.Location = New System.Drawing.Point(35, 63)
         Me.compressX8.Name = "compressX8"
         Me.compressX8.Size = New System.Drawing.Size(81, 17)
         Me.compressX8.TabIndex = 10
@@ -195,7 +198,7 @@ Partial Class Compact
         'compressX16
         '
         Me.compressX16.AutoSize = True
-        Me.compressX16.Location = New System.Drawing.Point(35, 92)
+        Me.compressX16.Location = New System.Drawing.Point(35, 86)
         Me.compressX16.Name = "compressX16"
         Me.compressX16.Size = New System.Drawing.Size(87, 17)
         Me.compressX16.TabIndex = 11
@@ -205,7 +208,7 @@ Partial Class Compact
         'compressLZX
         '
         Me.compressLZX.AutoSize = True
-        Me.compressLZX.Location = New System.Drawing.Point(35, 117)
+        Me.compressLZX.Location = New System.Drawing.Point(35, 111)
         Me.compressLZX.Name = "compressLZX"
         Me.compressLZX.Size = New System.Drawing.Size(48, 17)
         Me.compressLZX.TabIndex = 12
@@ -227,23 +230,23 @@ Partial Class Compact
         Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.Label13)
+        Me.Panel1.Controls.Add(Me.showinfopopup)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Location = New System.Drawing.Point(-3, -12)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(491, 56)
         Me.Panel1.TabIndex = 14
         '
-        'Label13
+        'showinfopopup
         '
-        Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label13.AutoSize = True
-        Me.Label13.ForeColor = System.Drawing.SystemColors.ControlDark
-        Me.Label13.Location = New System.Drawing.Point(439, 18)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(25, 13)
-        Me.Label13.TabIndex = 14
-        Me.Label13.Text = "Info"
+        Me.showinfopopup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.showinfopopup.AutoSize = True
+        Me.showinfopopup.ForeColor = System.Drawing.SystemColors.ControlDark
+        Me.showinfopopup.Location = New System.Drawing.Point(439, 33)
+        Me.showinfopopup.Name = "showinfopopup"
+        Me.showinfopopup.Size = New System.Drawing.Size(25, 13)
+        Me.showinfopopup.TabIndex = 14
+        Me.showinfopopup.Text = "Info"
         '
         'dirChooser
         '
@@ -291,7 +294,7 @@ Partial Class Compact
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.Label2.Location = New System.Drawing.Point(20, 11)
+        Me.Label2.Location = New System.Drawing.Point(20, 5)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(205, 21)
         Me.Label2.TabIndex = 18
@@ -300,7 +303,7 @@ Partial Class Compact
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(141, 48)
+        Me.Label3.Location = New System.Drawing.Point(141, 42)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(50, 13)
         Me.Label3.TabIndex = 19
@@ -309,7 +312,7 @@ Partial Class Compact
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(141, 71)
+        Me.Label4.Location = New System.Drawing.Point(141, 65)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(108, 13)
         Me.Label4.TabIndex = 19
@@ -318,7 +321,7 @@ Partial Class Compact
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(141, 96)
+        Me.Label5.Location = New System.Drawing.Point(141, 90)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(101, 13)
         Me.Label5.TabIndex = 19
@@ -327,7 +330,7 @@ Partial Class Compact
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(141, 119)
+        Me.Label6.Location = New System.Drawing.Point(141, 113)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(85, 13)
         Me.Label6.TabIndex = 19
@@ -357,9 +360,11 @@ Partial Class Compact
         'preSize
         '
         Me.preSize.AutoSize = True
-        Me.preSize.Location = New System.Drawing.Point(59, 112)
+        Me.preSize.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.preSize.ForeColor = System.Drawing.Color.SteelBlue
+        Me.preSize.Location = New System.Drawing.Point(64, 112)
         Me.preSize.Name = "preSize"
-        Me.preSize.Size = New System.Drawing.Size(56, 13)
+        Me.preSize.Size = New System.Drawing.Size(60, 13)
         Me.preSize.TabIndex = 21
         Me.preSize.Text = "FolderSize"
         Me.preSize.Visible = False
@@ -515,6 +520,7 @@ Partial Class Compact
         '
         'InputPage
         '
+        Me.InputPage.Controls.Add(Me.buttonQueryCompact)
         Me.InputPage.Controls.Add(Me.FlowLayoutPanel1)
         Me.InputPage.Controls.Add(Me.dirChooser)
         Me.InputPage.Controls.Add(Me.preSize)
@@ -528,6 +534,21 @@ Partial Class Compact
         Me.InputPage.Text = "InputPage"
         Me.InputPage.UseVisualStyleBackColor = True
         '
+        'buttonQueryCompact
+        '
+        Me.buttonQueryCompact.BackColor = System.Drawing.Color.Gainsboro
+        Me.buttonQueryCompact.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue
+        Me.buttonQueryCompact.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.buttonQueryCompact.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.buttonQueryCompact.ForeColor = System.Drawing.SystemColors.ControlDark
+        Me.buttonQueryCompact.Location = New System.Drawing.Point(289, 105)
+        Me.buttonQueryCompact.Name = "buttonQueryCompact"
+        Me.buttonQueryCompact.Size = New System.Drawing.Size(144, 27)
+        Me.buttonQueryCompact.TabIndex = 23
+        Me.buttonQueryCompact.Text = "Check Compression"
+        Me.buttonQueryCompact.UseVisualStyleBackColor = False
+        Me.buttonQueryCompact.Visible = False
+        '
         'FlowLayoutPanel1
         '
         Me.FlowLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -537,10 +558,10 @@ Partial Class Compact
         Me.FlowLayoutPanel1.Controls.Add(Me.Panel4)
         Me.FlowLayoutPanel1.Controls.Add(Me.Panel3)
         Me.FlowLayoutPanel1.Controls.Add(Me.buttonCompress)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(35, 128)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(35, 160)
         Me.FlowLayoutPanel1.MaximumSize = New System.Drawing.Size(700, 0)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(423, 370)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(423, 359)
         Me.FlowLayoutPanel1.TabIndex = 22
         '
         'Panel4
@@ -556,7 +577,7 @@ Partial Class Compact
         Me.Panel4.Controls.Add(Me.compressX16)
         Me.Panel4.Location = New System.Drawing.Point(3, 3)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(262, 148)
+        Me.Panel4.Size = New System.Drawing.Size(262, 137)
         Me.Panel4.TabIndex = 24
         '
         'Panel3
@@ -566,7 +587,7 @@ Partial Class Compact
         Me.Panel3.Controls.Add(Me.checkForceCompression)
         Me.Panel3.Controls.Add(Me.checkHiddenFiles)
         Me.Panel3.Controls.Add(Me.checkRecursiveScan)
-        Me.Panel3.Location = New System.Drawing.Point(3, 157)
+        Me.Panel3.Location = New System.Drawing.Point(3, 146)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(417, 150)
         Me.Panel3.TabIndex = 23
@@ -665,6 +686,7 @@ Partial Class Compact
         '
         'TabPage3
         '
+        Me.TabPage3.Controls.Add(Me.testFileArgs)
         Me.TabPage3.Controls.Add(Me.Label10)
         Me.TabPage3.Controls.Add(Me.testcompactargs)
         Me.TabPage3.Controls.Add(Me.compRatioLabel)
@@ -678,6 +700,15 @@ Partial Class Compact
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "TabPage3"
         Me.TabPage3.UseVisualStyleBackColor = True
+        '
+        'testFileArgs
+        '
+        Me.testFileArgs.Location = New System.Drawing.Point(278, 74)
+        Me.testFileArgs.Name = "testFileArgs"
+        Me.testFileArgs.Size = New System.Drawing.Size(75, 23)
+        Me.testFileArgs.TabIndex = 29
+        Me.testFileArgs.Text = "Test FileArgs"
+        Me.testFileArgs.UseVisualStyleBackColor = True
         '
         'Compact
         '
@@ -770,5 +801,7 @@ Partial Class Compact
     Friend WithEvents compressedSizeVisual As Panel
     Friend WithEvents checkShowConOut As CheckBox
     Friend WithEvents FlowLayoutPanel2 As FlowLayoutPanel
-    Friend WithEvents Label13 As Label
+    Friend WithEvents showinfopopup As Label
+    Friend WithEvents testFileArgs As Button
+    Friend WithEvents buttonQueryCompact As Button
 End Class

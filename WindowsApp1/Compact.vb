@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.0.1"
+    Dim version = "1.1.0"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -21,6 +21,7 @@ Public Class Compact
     'Status Monitors
     Dim compressFinished = 0
     Dim uncompressFinished = 0
+    Dim isQueryMode = 0
     Dim byteComparisonRaw As String = ""
     Dim dirCountProgress As UInteger
     Dim dirCountTotal As UInteger
@@ -97,6 +98,15 @@ Public Class Compact
 
 
 
+    Private Sub ShowInfoPopup_Click(sender As Object, e As EventArgs) Handles showinfopopup.Click
+        Info.semVersion.Text = "Version: " + version
+        Info.Show()
+
+    End Sub
+
+
+
+
     Private Sub ProgressTimer_Tick(sender As Object, e As EventArgs) Handles progressTimer.Tick
 
         If fileCountTotal <> 0 Then                                                             'Makes sure that there are actually files being counted before attempting a calculation
@@ -117,15 +127,25 @@ Public Class Compact
         End If
 
 
-        If compressFinished = 1 Then                                                            'Hides and shows certain UI elements when compression is finished 
+        If compressFinished = 1 Then                                                            'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
+
+            If isQueryMode Then
+                progressPageLabel.Text = "This folder contains compressed items"
+                progresspercent.Visible = False
+            Else
+                progressPageLabel.Text = "Compression Completed"
+            End If
+
             compressFinished = 0
+            isQueryMode = 0
             buttonRevert.Visible = True
-            progressPageLabel.Text = "Compression Completed"
             returnArrow.Visible = True
             CalculateSaving()
+
         End If
 
         If uncompressFinished = 1 Then                                                          'Hides and shows certain UI elements when uncompression is finished 
+
             uncompressFinished = 0
             buttonCompress.Visible = True
             buttonRevert.Visible = False
@@ -133,6 +153,8 @@ Public Class Compact
             returnArrow.Visible = True
 
         End If
+
+
 
     End Sub
 
@@ -205,9 +227,10 @@ Public Class Compact
                 workingDir = Chr(34) + wDString.ToString() + Chr(34)
                 chosenDirDisplay.Text = DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
 
-                preSize.Text = "Folder Size: " + GetOutputSize _
+                preSize.Text = "Uncompressed Size: " + GetOutputSize _
                     (Math.Round(DirectorySize(DIwDString, True), 0), True)
                 preSize.Visible = True
+                buttonQueryCompact.Visible = True
 
                 Try
                     Dim directories() As String = System.IO.Directory.GetDirectories _
@@ -249,13 +272,26 @@ Public Class Compact
 
 
     Private Sub CompressFolder_Click(sender As System.Object, e As System.EventArgs) Handles buttonCompress.Click
+        CreateProcess("compact")
+    End Sub
+    Private Sub buttonQueryCompact_Click(sender As Object, e As EventArgs) Handles buttonQueryCompact.Click
+        CreateProcess("query")
+    End Sub
+
+
+
+
+    Private Sub CreateProcess(passthrougharg As String)
         Try
             MyProcess.Close()
         Catch ex As Exception
         End Try
 
         Try
+            If passthrougharg = "compact" Then isQueryMode = 0
+            If passthrougharg = "query" Then isQueryMode = 1
 
+            progresspercent.Visible = True
             conOut.Clear()
 
             MyProcess = New Process
@@ -283,10 +319,11 @@ Public Class Compact
                 MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why
                 MyProcess.StandardInput.Flush()
 
-                'compactArgs = "compact /C"
-                RunCompact("compact")
 
-                progressPageLabel.Text = "Compressing, Please Wait"
+                RunCompact(passthrougharg)
+
+                If passthrougharg = "compact" Then progressPageLabel.Text = "Compressing, Please Wait"
+                If passthrougharg = "query" Then progressPageLabel.Text = "Analyzing"
                 TabControl1.SelectedTab = ProgressPage
 
             Catch ex As Exception
@@ -299,17 +336,15 @@ Public Class Compact
     End Sub
 
 
-
-
     Private Sub ButtonRevert_Click(sender As Object, e As EventArgs) Handles buttonRevert.Click             'Handles uncompressing. For now, uncompressing can only be done through the program only to revert a compression that's just been done.
-
+        isQueryMode = 0
         fileCountProgress = 0
         dirCountProgress = 0
+        progresspercent.Visible = True
         CompResultsPanel.Visible = False
         progressPageLabel.Text = "Reverting Changes, Please Wait"
 
         Try
-            'compactArgs = "compact /U"
             RunCompact("uncompact")
         Catch ex As Exception
         End Try
@@ -339,6 +374,7 @@ Public Class Compact
     Private Sub ReturnArrow_Click(sender As Object, e As EventArgs) Handles returnArrow.Click                       'Returns you to the first screen and cleans up some stuff
 
         returnArrow.Visible = False
+        buttonRevert.Visible = False
         CompResultsPanel.Visible = False
         TabControl1.SelectedTab = InputPage
         dirCountProgress = 0
@@ -393,18 +429,26 @@ Public Class Compact
         Dim newfoldersize = Long.Parse(Regex.Replace(newFolderSizem1.Substring _
             (0, newFolderSizem1.Length - 7), "[^\d]", ""))
 
-        origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
-        compressedSizeLabel.Text = GetOutputSize(newfoldersize, True)
-        compRatioLabel.Text = Math.Round(oldFolderSize / newfoldersize, 1)
-        spaceSavedLabel.Text = GetOutputSize((oldFolderSize - newfoldersize), True) + " Saved"
+        If GetOutputSize((oldFolderSize - newfoldersize), False) = "0" Then
+            progressPageLabel.Text = "Folder is not compressed"
+            buttonRevert.Visible = False
+        Else
+            origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
+            compressedSizeLabel.Text = GetOutputSize(newfoldersize, True)
+            compRatioLabel.Text = Math.Round(oldFolderSize / newfoldersize, 1)
+            spaceSavedLabel.Text = GetOutputSize((oldFolderSize - newfoldersize), True) + " Saved"
 
-        Try
-            compressedSizeVisual.Width = CInt(368 / compRatioLabel.Text)
-        Catch ex As System.OverflowException
-            compressedSizeVisual.Width = 368
-        End Try
+            Try
+                compressedSizeVisual.Width = CInt(368 / compRatioLabel.Text)
+            Catch ex As System.OverflowException
+                compressedSizeVisual.Width = 368
+            End Try
 
-        CompResultsPanel.Visible = True
+            CompResultsPanel.Visible = True
+
+        End If
+
+
 
 
     End Sub
@@ -439,7 +483,6 @@ Public Class Compact
                 compactArgs = compactArgs + " /EXE:LZX"
             End If
 
-            MsgBox(compactArgs)
             MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
 
@@ -457,12 +500,15 @@ Public Class Compact
                 compactArgs = compactArgs + " /A"
             End If
 
-            MsgBox(compactArgs)
             MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
 
-        ElseIf desiredfunction = "getstatus" Then
-            compactArgs = "compact /S"
+        ElseIf desiredfunction = "query" Then
+            compactArgs = "compact /S /Q /EXE"
+
+            MyProcess.StandardInput.WriteLine(compactArgs)
+            MyProcess.StandardInput.Flush()
+
         End If
 
 
@@ -592,9 +638,8 @@ Public Class Compact
         'MsgBox(compactArgs)
     End Sub
 
-    Private Sub Label13_Click(sender As Object, e As EventArgs) Handles Label13.Click
-        Info.semVersion.Text = "Version: " + version
-        Info.Show()
 
-    End Sub
+
+
+
 End Class
