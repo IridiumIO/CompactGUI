@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Runtime.InteropServices
+Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
@@ -169,7 +170,8 @@ Public Class Compact
                 Dim serverOutDelegate As New AppendOutputTextDelegate(AddressOf AppendOutputText)
                 Me.Invoke(serverOutDelegate, text)
             Else
-                conOut.AppendText(text)
+
+                conOut.AppendText(text.Replace("ÿ", " "))
                 conOut.Select(conOut.TextLength, 1)
                 conOut.ScrollToCaret()
             End If
