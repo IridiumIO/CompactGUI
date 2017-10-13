@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Runtime.InteropServices
+Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
@@ -379,16 +380,18 @@ Public Class Compact
     Private Sub CalculateSaving()   'Calculations for all the relevant information after compression is completed. All the data is parsed from the console ouput using basic strings, but because that occurs on a different thread, information is stored to variables first (The Status Monitors at the top) then those values are used. 
 
 
-        Dim oldFolderSize = byteComparisonRaw.Substring _
-           (0, byteComparisonRaw.IndexOf("t")).Trim.Replace(",", "")
-
+        'Dim oldFolderSize = byteComparisonRaw.Substring _
+        '(0, byteComparisonRaw.IndexOf("t")).Trim.Replace(",", "")
+        Dim oldFolderSize = Long.Parse(Regex.Replace(byteComparisonRaw.Substring _
+           (0, byteComparisonRaw.IndexOf("t")), "[^\d]", ""))
 
         Dim newFolderSizem1 = byteComparisonRaw.Substring _
             (byteComparisonRaw.LastIndexOf("n"c) + 1)
 
-        Dim newfoldersize = newFolderSizem1.Substring _
-            (0, newFolderSizem1.Length - 7).Trim.Replace(",", "")
-
+        'Dim newfoldersize = newFolderSizem1.Substring _
+        ' (0, newFolderSizem1.Length - 7).Trim.Replace(",", "")
+        Dim newfoldersize = Long.Parse(Regex.Replace(newFolderSizem1.Substring _
+            (0, newFolderSizem1.Length - 7), "[^\d]", ""))
 
         origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
         compressedSizeLabel.Text = GetOutputSize(newfoldersize, True)
