@@ -26,13 +26,14 @@ Partial Class Info
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.semVersion = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(13, 13)
+        Me.Label1.Location = New System.Drawing.Point(12, 65)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(130, 21)
         Me.Label1.TabIndex = 0
@@ -42,7 +43,7 @@ Partial Class Info
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(36, 58)
+        Me.Label2.Location = New System.Drawing.Point(35, 110)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(86, 17)
         Me.Label2.TabIndex = 1
@@ -54,12 +55,22 @@ Partial Class Info
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.RichTextBox1.BackColor = System.Drawing.Color.White
-        Me.RichTextBox1.Location = New System.Drawing.Point(39, 79)
+        Me.RichTextBox1.Location = New System.Drawing.Point(38, 131)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ReadOnly = True
         Me.RichTextBox1.Size = New System.Drawing.Size(511, 214)
         Me.RichTextBox1.TabIndex = 2
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
+        '
+        'semVersion
+        '
+        Me.semVersion.AutoSize = True
+        Me.semVersion.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.semVersion.Location = New System.Drawing.Point(12, 9)
+        Me.semVersion.Name = "semVersion"
+        Me.semVersion.Size = New System.Drawing.Size(69, 21)
+        Me.semVersion.TabIndex = 3
+        Me.semVersion.Text = "Version: "
         '
         'Info
         '
@@ -67,6 +78,7 @@ Partial Class Info
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(589, 362)
+        Me.Controls.Add(Me.semVersion)
         Me.Controls.Add(Me.RichTextBox1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
@@ -81,4 +93,5 @@ Partial Class Info
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents RichTextBox1 As RichTextBox
+    Friend WithEvents semVersion As Label
 End Class

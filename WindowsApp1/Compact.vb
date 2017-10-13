@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-
+    Dim version = "1.0.1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -593,6 +593,7 @@ Public Class Compact
     End Sub
 
     Private Sub Label13_Click(sender As Object, e As EventArgs) Handles Label13.Click
+        Info.semVersion.Text = "Version: " + version
         Info.Show()
 
     End Sub
