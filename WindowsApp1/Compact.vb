@@ -282,8 +282,8 @@ Public Class Compact
                 MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why
                 MyProcess.StandardInput.Flush()
 
-                compactArgs = "compact /C"
-                RunCompact()
+                'compactArgs = "compact /C"
+                RunCompact("compact")
 
                 progressPageLabel.Text = "Compressing, Please Wait"
                 TabControl1.SelectedTab = ProgressPage
@@ -308,8 +308,8 @@ Public Class Compact
         progressPageLabel.Text = "Reverting Changes, Please Wait"
 
         Try
-            compactArgs = "compact /U"
-            RunCompact()
+            'compactArgs = "compact /U"
+            RunCompact("uncompact")
         Catch ex As Exception
         End Try
 
@@ -408,32 +408,60 @@ Public Class Compact
 
 
 
-    Private Sub RunCompact()
+    Private Sub RunCompact(desiredfunction As String)
 
-        If checkRecursiveScan.Checked = True Then
-            compactArgs = compactArgs + " /S"
+        If desiredfunction = "compact" Then
+
+            compactArgs = "compact /C"
+
+            If checkRecursiveScan.Checked = True Then
+                compactArgs = compactArgs + " /S"
+            End If
+            If checkForceCompression.Checked = True Then
+                compactArgs = compactArgs + " /F"
+            End If
+            If checkHiddenFiles.Checked = True Then
+                compactArgs = compactArgs + " /A"
+            End If
+            If compressX4.Checked = True Then
+                compactArgs = compactArgs + " /EXE:XPRESS4K"
+            End If
+            If compressX8.Checked = True Then
+                compactArgs = compactArgs + " /EXE:XPRESS8K"
+            End If
+            If compressX16.Checked = True Then
+                compactArgs = compactArgs + " /EXE:XPRESS16K"
+            End If
+            If compressLZX.Checked = True Then
+                compactArgs = compactArgs + " /EXE:LZX"
+            End If
+
+            MsgBox(compactArgs)
+            MyProcess.StandardInput.WriteLine(compactArgs)
+            MyProcess.StandardInput.Flush()
+
+        ElseIf desiredfunction = "uncompact" Then
+
+            compactArgs = "compact /U /EXE"
+
+            If checkRecursiveScan.Checked = True Then
+                compactArgs = compactArgs + " /S"
+            End If
+            If checkForceCompression.Checked = True Then
+                compactArgs = compactArgs + " /F"
+            End If
+            If checkHiddenFiles.Checked = True Then
+                compactArgs = compactArgs + " /A"
+            End If
+
+            MsgBox(compactArgs)
+            MyProcess.StandardInput.WriteLine(compactArgs)
+            MyProcess.StandardInput.Flush()
+
+        ElseIf desiredfunction = "getstatus" Then
+            compactArgs = "compact /S"
         End If
-        If checkForceCompression.Checked = True Then
-            compactArgs = compactArgs + " /F"
-        End If
-        If checkHiddenFiles.Checked = True Then
-            compactArgs = compactArgs + " /A"
-        End If
-        If compressX4.Checked = True Then
-            compactArgs = compactArgs + " /EXE:XPRESS4K"
-        End If
-        If compressX8.Checked = True Then
-            compactArgs = compactArgs + " /EXE:XPRESS8K"
-        End If
-        If compressX16.Checked = True Then
-            compactArgs = compactArgs + " /EXE:XPRESS16K"
-        End If
-        If compressLZX.Checked = True Then
-            compactArgs = compactArgs + " /EXE:LZX"
-        End If
-        'MsgBox(compactArgs)
-        MyProcess.StandardInput.WriteLine(compactArgs)
-        MyProcess.StandardInput.Flush()
+
 
     End Sub
 

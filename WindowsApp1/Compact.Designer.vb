@@ -126,7 +126,7 @@ Partial Class Compact
         Me.buttonCompress.BackColor = System.Drawing.Color.White
         Me.buttonCompress.Enabled = False
         Me.buttonCompress.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.buttonCompress.Location = New System.Drawing.Point(8, 363)
+        Me.buttonCompress.Location = New System.Drawing.Point(8, 313)
         Me.buttonCompress.Margin = New System.Windows.Forms.Padding(8, 3, 3, 3)
         Me.buttonCompress.Name = "buttonCompress"
         Me.buttonCompress.Size = New System.Drawing.Size(390, 54)
@@ -540,7 +540,7 @@ Partial Class Compact
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(35, 128)
         Me.FlowLayoutPanel1.MaximumSize = New System.Drawing.Size(700, 0)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(423, 420)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(423, 370)
         Me.FlowLayoutPanel1.TabIndex = 22
         '
         'Panel4
@@ -556,7 +556,7 @@ Partial Class Compact
         Me.Panel4.Controls.Add(Me.compressX16)
         Me.Panel4.Location = New System.Drawing.Point(3, 3)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(262, 172)
+        Me.Panel4.Size = New System.Drawing.Size(262, 148)
         Me.Panel4.TabIndex = 24
         '
         'Panel3
@@ -566,9 +566,9 @@ Partial Class Compact
         Me.Panel3.Controls.Add(Me.checkForceCompression)
         Me.Panel3.Controls.Add(Me.checkHiddenFiles)
         Me.Panel3.Controls.Add(Me.checkRecursiveScan)
-        Me.Panel3.Location = New System.Drawing.Point(3, 181)
+        Me.Panel3.Location = New System.Drawing.Point(3, 157)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(417, 176)
+        Me.Panel3.Size = New System.Drawing.Size(417, 150)
         Me.Panel3.TabIndex = 23
         '
         'ProgressPage
