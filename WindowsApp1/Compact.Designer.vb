@@ -84,7 +84,6 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -523,7 +522,6 @@ Partial Class Compact
         '
         'InputPage
         '
-        Me.InputPage.Controls.Add(Me.Button2)
         Me.InputPage.Controls.Add(Me.buttonQueryCompact)
         Me.InputPage.Controls.Add(Me.FlowLayoutPanel1)
         Me.InputPage.Controls.Add(Me.dirChooser)
@@ -769,15 +767,6 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Number of Files Compressed"
         '
-        'Button2
-        '
-        Me.Button2.Location = New System.Drawing.Point(344, 39)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(89, 23)
-        Me.Button2.TabIndex = 24
-        Me.Button2.Text = "RunAsAdmin"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -878,5 +867,4 @@ Partial Class Compact
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents Label13 As Label
     Friend WithEvents ToolTipFilesCompressed As ToolTip
-    Friend WithEvents Button2 As Button
 End Class

@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.2.1"
+    Dim version = "1.2.2"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -99,11 +99,13 @@ Public Class Compact
 
         RCMenu.WriteLocRegistry()
 
-
-
-
         progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
 
+        For Each arg In My.Application.CommandLineArgs
+            If arg.ToString IsNot Nothing Then
+                SelectFolder(arg, "cmdlineargs")
+            End If
+        Next
 
     End Sub
 
@@ -111,7 +113,7 @@ Public Class Compact
 
 
     Private Sub ShowInfoPopup_Click(sender As Object, e As EventArgs) Handles showinfopopup.Click
-        Info.semVersion.Text = "Version: " + version
+        Info.semVersion.Text = "V " + version
         Info.Show()
 
     End Sub
@@ -217,7 +219,16 @@ Public Class Compact
 
         folderChoice.ShowDialog()
 
-        Dim wDString = folderChoice.SelectedPath
+        SelectFolder(folderChoice.SelectedPath, "button")
+
+        folderChoice.Dispose()
+
+    End Sub
+
+
+
+    Private Sub SelectFolder(selectedDir As String, senderID As String)
+        Dim wDString = selectedDir
 
         If wDString.Contains("C:\Windows") Then                                                 'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
 
@@ -265,18 +276,13 @@ Public Class Compact
                 End If
 
             Else
-                Console.Write("No folder selected")
+                If senderID = "button" Then Console.Write("No folder selected")
 
             End If
 
 
-        End If
-
-        folderChoice.Dispose()
-
+            End If
     End Sub
-
-
 
 
     Dim compactArgs As String
@@ -712,17 +718,6 @@ Public Class Compact
             compactArgs = compactArgs + " /EXE:LZX"
         End If
         'MsgBox(compactArgs)
-    End Sub
-
-
-
-
-
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        RCMenu.RunAsAdmin()
-
-
     End Sub
 
 

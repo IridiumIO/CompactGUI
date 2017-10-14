@@ -31,8 +31,9 @@ Partial Class Info
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.checkEnableRCMenu = New System.Windows.Forms.CheckBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -42,7 +43,7 @@ Partial Class Info
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(15, 15)
+        Me.Label1.Location = New System.Drawing.Point(29, 19)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(130, 21)
         Me.Label1.TabIndex = 0
@@ -71,7 +72,7 @@ Partial Class Info
         Me.RichTextBox1.Margin = New System.Windows.Forms.Padding(0)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.Size = New System.Drawing.Size(540, 98)
+        Me.RichTextBox1.Size = New System.Drawing.Size(540, 140)
         Me.RichTextBox1.TabIndex = 2
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
         '
@@ -79,17 +80,19 @@ Partial Class Info
         '
         Me.semVersion.AutoSize = True
         Me.semVersion.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.semVersion.ForeColor = System.Drawing.SystemColors.ButtonShadow
         Me.semVersion.Location = New System.Drawing.Point(3, 0)
         Me.semVersion.Name = "semVersion"
-        Me.semVersion.Size = New System.Drawing.Size(69, 21)
+        Me.semVersion.Size = New System.Drawing.Size(57, 21)
         Me.semVersion.TabIndex = 3
-        Me.semVersion.Text = "Version: "
+        Me.semVersion.Text = "V 1.2.2"
         '
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel1.Location = New System.Drawing.Point(78, 5)
+        Me.LinkLabel1.LinkColor = System.Drawing.SystemColors.MenuHighlight
+        Me.LinkLabel1.Location = New System.Drawing.Point(66, 5)
         Me.LinkLabel1.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(104, 13)
@@ -106,11 +109,11 @@ Partial Class Info
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.95885!))
         Me.TableLayoutPanel1.Controls.Add(Me.semVersion, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.LinkLabel1, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(9, 26)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(152, 20)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 21)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(210, 21)
         Me.TableLayoutPanel1.TabIndex = 5
         '
         'Panel1
@@ -123,39 +126,50 @@ Partial Class Info
         Me.Panel1.Controls.Add(Me.RichTextBox1)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(-4, 172)
+        Me.Panel1.Location = New System.Drawing.Point(-4, 130)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(599, 203)
+        Me.Panel1.Size = New System.Drawing.Size(599, 245)
         Me.Panel1.TabIndex = 6
         '
         'Panel2
         '
         Me.Panel2.Controls.Add(Me.checkEnableRCMenu)
         Me.Panel2.Controls.Add(Me.Label3)
-        Me.Panel2.Location = New System.Drawing.Point(-4, 79)
+        Me.Panel2.Location = New System.Drawing.Point(-4, 59)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(599, 87)
+        Me.Panel2.Size = New System.Drawing.Size(599, 65)
         Me.Panel2.TabIndex = 7
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(16, 11)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(110, 21)
-        Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Extra Features:"
         '
         'checkEnableRCMenu
         '
         Me.checkEnableRCMenu.AutoSize = True
-        Me.checkEnableRCMenu.Location = New System.Drawing.Point(33, 36)
+        Me.checkEnableRCMenu.Location = New System.Drawing.Point(43, 41)
         Me.checkEnableRCMenu.Name = "checkEnableRCMenu"
         Me.checkEnableRCMenu.Size = New System.Drawing.Size(249, 17)
         Me.checkEnableRCMenu.TabIndex = 2
         Me.checkEnableRCMenu.Text = "Enable integration into Explorer right-click menu"
         Me.checkEnableRCMenu.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(29, 12)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(110, 21)
+        Me.Label3.TabIndex = 1
+        Me.Label3.Text = "Extra Features:"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 16.0!)
+        Me.Label4.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.Label4.Location = New System.Drawing.Point(16, 13)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(136, 30)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = "CompactGUI"
         '
         'Info
         '
@@ -163,6 +177,7 @@ Partial Class Info
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(589, 362)
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -190,4 +205,5 @@ Partial Class Info
     Friend WithEvents Panel2 As Panel
     Friend WithEvents checkEnableRCMenu As CheckBox
     Friend WithEvents Label3 As Label
+    Friend WithEvents Label4 As Label
 End Class
