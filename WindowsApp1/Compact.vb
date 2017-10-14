@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.2.0"
+    Dim version = "1.2.1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -96,6 +96,11 @@ Public Class Compact
 
             .LinkColor = Color.FromArgb(37, 110, 196)
         End With
+
+        RCMenu.WriteLocRegistry()
+
+
+
 
         progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
 
