@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.3"
+    Dim version = "1.3.1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -31,7 +31,7 @@ Public Class Compact
     Dim fileCountTotal As UInteger = 0
     Dim fileCountProgress As UInteger
     Dim fileCountOutputCompressed As UInteger
-
+    Dim QdirCountProgress As UInteger
 
 
     Private Sub MyProcess_ErrorDataReceived _
@@ -80,6 +80,9 @@ Public Class Compact
             If e.Data.EndsWith(" are not compressed.") Then                                     'Gets the output line that identifies the total number of files compressed. 
                 byteComparisonRawFilesCompressed = e.Data
             End If
+            If e.Data.StartsWith(" Listing ") Then                                               'Gets the output line that identifies the query folder count
+                QdirCountProgress += 1
+            End If
         Catch ex As Exception
 
         End Try
@@ -125,18 +128,38 @@ Public Class Compact
 
         If fileCountTotal <> 0 Then                                                             'Makes sure that there are actually files being counted before attempting a calculation
 
-            progresspercent.Text = Math.Round _
+            If isQueryMode = 0 Then
+
+                progresspercent.Text = Math.Round _
                 ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
-            Try
-                If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
-                    compactprogressbar.Value = 1
-                Else
-                    compactprogressbar.Value = Math.Round _
-                        ((fileCountProgress / fileCountTotal * 100), 0)
-                End If
-            Catch ex As Exception
-            End Try
+                Try
+                    If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
+                        compactprogressbar.Value = 1
+                    Else
+                        compactprogressbar.Value = Math.Round _
+                            ((fileCountProgress / fileCountTotal * 100), 0)
+                    End If
+                Catch ex As Exception
+                End Try
+
+            ElseIf isQueryMode = 1 Then
+
+                progresspercent.Text = Math.Round _
+                ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress for the Query command.
+
+                Try
+                    If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
+                        compactprogressbar.Value = 1
+                    Else
+                        compactprogressbar.Value = Math.Round _
+                            ((QdirCountProgress / dirCountTotal * 100), 0)
+                    End If
+                Catch ex As Exception
+                End Try
+
+            End If
+
 
         End If
 
@@ -150,10 +173,11 @@ Public Class Compact
             End If
 
             compressFinished = 0
+
             buttonRevert.Visible = True
             returnArrow.Visible = True
             CalculateSaving()
-
+            QdirCountProgress = 0
         End If
 
         If uncompressFinished = 1 Then                                                          'Hides and shows certain UI elements when uncompression is finished 

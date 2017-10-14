@@ -376,7 +376,6 @@ Partial Class Compact
         '
         'progressTimer
         '
-        Me.progressTimer.Interval = 20
         '
         'progresspercent
         '
@@ -405,6 +404,7 @@ Partial Class Compact
         '
         Me.compactprogressbar.BackColor = System.Drawing.Color.WhiteSmoke
         Me.compactprogressbar.Location = New System.Drawing.Point(59, 70)
+        Me.compactprogressbar.MarqueeAnimationSpeed = 1000
         Me.compactprogressbar.MaximumSize = New System.Drawing.Size(374, 27)
         Me.compactprogressbar.Name = "compactprogressbar"
         Me.compactprogressbar.Size = New System.Drawing.Size(374, 27)
