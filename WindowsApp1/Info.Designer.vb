@@ -30,8 +30,12 @@ Partial Class Info
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.checkEnableRCMenu = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -67,7 +71,7 @@ Partial Class Info
         Me.RichTextBox1.Margin = New System.Windows.Forms.Padding(0)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.Size = New System.Drawing.Size(540, 217)
+        Me.RichTextBox1.Size = New System.Drawing.Size(540, 98)
         Me.RichTextBox1.TabIndex = 2
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
         '
@@ -119,10 +123,39 @@ Partial Class Info
         Me.Panel1.Controls.Add(Me.RichTextBox1)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(-4, 53)
+        Me.Panel1.Location = New System.Drawing.Point(-4, 172)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(599, 322)
+        Me.Panel1.Size = New System.Drawing.Size(599, 203)
         Me.Panel1.TabIndex = 6
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.checkEnableRCMenu)
+        Me.Panel2.Controls.Add(Me.Label3)
+        Me.Panel2.Location = New System.Drawing.Point(-4, 79)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(599, 87)
+        Me.Panel2.TabIndex = 7
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(16, 11)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(110, 21)
+        Me.Label3.TabIndex = 1
+        Me.Label3.Text = "Extra Features:"
+        '
+        'checkEnableRCMenu
+        '
+        Me.checkEnableRCMenu.AutoSize = True
+        Me.checkEnableRCMenu.Location = New System.Drawing.Point(33, 36)
+        Me.checkEnableRCMenu.Name = "checkEnableRCMenu"
+        Me.checkEnableRCMenu.Size = New System.Drawing.Size(249, 17)
+        Me.checkEnableRCMenu.TabIndex = 2
+        Me.checkEnableRCMenu.Text = "Enable integration into Explorer right-click menu"
+        Me.checkEnableRCMenu.UseVisualStyleBackColor = True
         '
         'Info
         '
@@ -130,6 +163,7 @@ Partial Class Info
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(589, 362)
+        Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.MinimumSize = New System.Drawing.Size(400, 300)
@@ -139,6 +173,8 @@ Partial Class Info
         Me.TableLayoutPanel1.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -151,4 +187,7 @@ Partial Class Info
     Friend WithEvents LinkLabel1 As LinkLabel
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents checkEnableRCMenu As CheckBox
+    Friend WithEvents Label3 As Label
 End Class
