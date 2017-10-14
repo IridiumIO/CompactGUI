@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.1.0"
+    Dim version = "1.2.0"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -23,12 +23,14 @@ Public Class Compact
     Dim compressFinished = 0
     Dim uncompressFinished = 0
     Dim isQueryMode = 0
+    Dim isQueryCalledByCompact = 0
     Dim byteComparisonRaw As String = ""
+    Dim byteComparisonRawFilesCompressed As String = ""
     Dim dirCountProgress As UInteger
     Dim dirCountTotal As UInteger
     Dim fileCountTotal As UInteger = 0
     Dim fileCountProgress As UInteger
-
+    Dim fileCountOutputCompressed As UInteger
 
 
 
@@ -73,6 +75,10 @@ Public Class Compact
 
             If e.Data.EndsWith("[OK]") Then                                                     'Gets each file that was successfully compressed OR uncompressed. 
                 fileCountProgress += 1
+            End If
+
+            If e.Data.EndsWith(" are not compressed.") Then                                     'Gets the output line that identifies the total number of files compressed. 
+                byteComparisonRawFilesCompressed = e.Data
             End If
         Catch ex As Exception
 
@@ -130,15 +136,13 @@ Public Class Compact
 
         If compressFinished = 1 Then                                                            'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
 
-            If isQueryMode Then
+            If isQueryMode And isQueryCalledByCompact = 0 Then
                 progressPageLabel.Text = "This folder contains compressed items"
                 progresspercent.Visible = False
-            Else
-                progressPageLabel.Text = "Compression Completed"
+
             End If
 
             compressFinished = 0
-            isQueryMode = 0
             buttonRevert.Visible = True
             returnArrow.Visible = True
             CalculateSaving()
@@ -196,6 +200,7 @@ Public Class Compact
     Dim directorysizeexceptionCount = 0                                                         'Used in the DirectorySize() Function to ensure the error message only shows up once, even if multiple UnauthorizedAccessException errors get thrown
 
 
+    Dim uncompressedfoldersize
 
 
     Private Sub SelectFolderToCompress _
@@ -228,7 +233,7 @@ Public Class Compact
 
                 workingDir = Chr(34) + wDString.ToString() + Chr(34)
                 chosenDirDisplay.Text = DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
-
+                uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
                 preSize.Text = "Uncompressed Size: " + GetOutputSize _
                     (Math.Round(DirectorySize(DIwDString, True), 0), True)
                 preSize.Visible = True
@@ -243,7 +248,8 @@ Public Class Compact
                     Dim numberOfFiles As Integer = Directory.GetFiles _
                         (wDString, "*", IO.SearchOption.AllDirectories).Length
 
-                    fileCountTotal = numberOfFiles '+ dirCountTotal + 1'                        'Windows seems to do a funny thing where it counts "files" as the number of files + folders
+                    fileCountTotal = numberOfFiles '- (dirCountTotal + 1) '                        'Windows seems to do a funny thing where it counts "files" as the number of files + folders
+
                 Catch ex As Exception
                 End Try
 
@@ -344,6 +350,7 @@ Public Class Compact
         dirCountProgress = 0
         progresspercent.Visible = True
         CompResultsPanel.Visible = False
+        buttonRevert.Visible = False
         progressPageLabel.Text = "Reverting Changes, Please Wait"
 
         Try
@@ -381,7 +388,7 @@ Public Class Compact
         TabControl1.SelectedTab = InputPage
         dirCountProgress = 0
         fileCountProgress = 0
-
+        isQueryCalledByCompact = 0
         MyProcess.Close()
 
     End Sub
@@ -417,50 +424,112 @@ Public Class Compact
 
     Private Sub CalculateSaving()   'Calculations for all the relevant information after compression is completed. All the data is parsed from the console ouput using basic strings, but because that occurs on a different thread, information is stored to variables first (The Status Monitors at the top) then those values are used. 
 
+        Dim numberFilesCompressed = 0
+        Dim querySize = 0
 
-        'Dim oldFolderSize = byteComparisonRaw.Substring _
-        '(0, byteComparisonRaw.IndexOf("t")).Trim.Replace(",", "")
+        If isQueryMode = 0 Then querySize = Long.Parse(Regex.Replace(byteComparisonRaw.Substring _
+          (0, byteComparisonRaw.IndexOf("t")), "[^\d]", ""))
+
         Dim oldFolderSize = Long.Parse(Regex.Replace(byteComparisonRaw.Substring _
            (0, byteComparisonRaw.IndexOf("t")), "[^\d]", ""))
 
         Dim newFolderSizem1 = byteComparisonRaw.Substring _
             (byteComparisonRaw.LastIndexOf("n"c) + 1)
 
-        'Dim newfoldersize = newFolderSizem1.Substring _
-        ' (0, newFolderSizem1.Length - 7).Trim.Replace(",", "")
         Dim newfoldersize = Long.Parse(Regex.Replace(newFolderSizem1.Substring _
             (0, newFolderSizem1.Length - 7), "[^\d]", ""))
 
-        If GetOutputSize((oldFolderSize - newfoldersize), False) = "0" Then
+        Try
+            numberFilesCompressed = Long.Parse(Regex.Replace(byteComparisonRawFilesCompressed.Substring _
+             (0, byteComparisonRawFilesCompressed.IndexOf("a")), "[^\d]", ""))
+        Catch ex As Exception
+        End Try
+
+        If GetOutputSize((oldFolderSize - newfoldersize), False) = "0" And isQueryMode = 1 Then
+
             progressPageLabel.Text = "Folder is not compressed"
             buttonRevert.Visible = False
+            isQueryCalledByCompact = 0
+
         Else
-            origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
-            compressedSizeLabel.Text = GetOutputSize(newfoldersize, True)
-            compRatioLabel.Text = Math.Round(oldFolderSize / newfoldersize, 1)
-            spaceSavedLabel.Text = GetOutputSize((oldFolderSize - newfoldersize), True) + " Saved"
+
+            progressPageLabel.Text = "Folder is compressed"
+
+            If isQueryMode = 1 And isQueryCalledByCompact = 0 Then
+                origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
+            Else
+                origSizeLabel.Text = GetOutputSize(uncompressedfoldersize, True)
+            End If
+
+            compressedSizeLabel.Text = GetOutputSize _
+                (uncompressedfoldersize - (oldFolderSize - newfoldersize), True)
+
+            compRatioLabel.Text = Math.Round _
+                (oldFolderSize / newfoldersize, 1)
+
+            compRatioLabel.Text = Math.Round _
+                (uncompressedfoldersize / (uncompressedfoldersize - (oldFolderSize - newfoldersize)), 1)
+
+            spaceSavedLabel.Text = GetOutputSize _
+                ((oldFolderSize - newfoldersize), True) + " Saved"
+
+            labelFilesCompressed.Text =
+                numberFilesCompressed.ToString + " / " + fileCountTotal.ToString + " files compressed"
 
             Try
+
                 compressedSizeVisual.Width = CInt(368 / compRatioLabel.Text)
+
+                If hasqueryfinished = 1 Then
+                    isQueryCalledByCompact = 0
+                    isQueryMode = 0
+                    buttonRevert.Visible = True
+                End If
+
             Catch ex As System.OverflowException
                 compressedSizeVisual.Width = 368
             End Try
 
-            CompResultsPanel.Visible = True
+            If isQueryCalledByCompact = 0 Then
+
+                CompResultsPanel.Visible = True
+
+            ElseIf isQueryCalledByCompact = 1 Then
+
+                buttonRevert.Visible = False
+                CompResultsPanel.Visible = False
+                progressPageLabel.Text = "Analyzing..."
+
+            End If
 
         End If
 
-
-
+        If isQueryCalledByCompact = 1 Then Queryaftercompact()
+        If isQueryCalledByCompact = 0 Then isQueryMode = 0
 
     End Sub
+
+
+
+
+    Private Sub Queryaftercompact()
+        isQueryMode = 1
+        hasqueryfinished = 1
+        RunCompact("query")
+    End Sub
+
+
+
+
+    Dim hasqueryfinished = 0
+
 
 
 
     Private Sub RunCompact(desiredfunction As String)
 
         If desiredfunction = "compact" Then
-
+            isQueryCalledByCompact = 0
             compactArgs = "compact /C"
 
             If checkRecursiveScan.Checked = True Then
@@ -488,13 +557,13 @@ Public Class Compact
             MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
 
+            isQueryCalledByCompact = 1
+            hasqueryfinished = 0
+
         ElseIf desiredfunction = "uncompact" Then
+            isQueryCalledByCompact = 0
+            compactArgs = "compact /U /EXE /S"
 
-            compactArgs = "compact /U /EXE"
-
-            If checkRecursiveScan.Checked = True Then
-                compactArgs = compactArgs + " /S"
-            End If
             If checkForceCompression.Checked = True Then
                 compactArgs = compactArgs + " /F"
             End If
@@ -524,8 +593,8 @@ Public Class Compact
         If inputsize < 1024 Then
             sizeType = " B"
         Else
-            If inputsize < 1024 ^ 3 Then
-                If inputsize < 1024 ^ 2 Then
+            If inputsize < (1024 ^ 3) * 9 Then
+                If inputsize < (1024 ^ 2) * 9 Then
                     sizeType = " KB"
                     inputsize = inputsize / 1024
                 Else
@@ -639,9 +708,6 @@ Public Class Compact
         End If
         'MsgBox(compactArgs)
     End Sub
-
-
-
 
 
 End Class

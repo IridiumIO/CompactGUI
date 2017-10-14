@@ -73,6 +73,9 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.compressedSizeVisual = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.checkShowConOut = New System.Windows.Forms.CheckBox()
@@ -80,6 +83,7 @@ Partial Class Compact
         Me.progressPageLabel = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
+        Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -89,6 +93,7 @@ Partial Class Compact
         Me.ProgressPage.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.CompResultsPanel.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
         Me.compressedSizeVisual.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.TabPage3.SuspendLayout()
@@ -99,10 +104,10 @@ Partial Class Compact
         Me.conOut.BackColor = System.Drawing.SystemColors.Window
         Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.conOut.ForeColor = System.Drawing.SystemColors.WindowFrame
-        Me.conOut.Location = New System.Drawing.Point(3, 254)
+        Me.conOut.Location = New System.Drawing.Point(3, 290)
         Me.conOut.Name = "conOut"
         Me.conOut.ReadOnly = True
-        Me.conOut.Size = New System.Drawing.Size(371, 190)
+        Me.conOut.Size = New System.Drawing.Size(371, 149)
         Me.conOut.TabIndex = 0
         Me.conOut.Text = ""
         Me.conOut.Visible = False
@@ -409,10 +414,9 @@ Partial Class Compact
         '
         'Label9
         '
-        Me.Label9.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label9.AutoSize = True
         Me.Label9.ForeColor = System.Drawing.Color.DimGray
-        Me.Label9.Location = New System.Drawing.Point(0, 55)
+        Me.Label9.Location = New System.Drawing.Point(1, 84)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(68, 13)
         Me.Label9.TabIndex = 25
@@ -420,9 +424,8 @@ Partial Class Compact
         '
         'Label11
         '
-        Me.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(0, 113)
+        Me.Label11.Location = New System.Drawing.Point(1, 142)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(91, 13)
         Me.Label11.TabIndex = 26
@@ -473,7 +476,6 @@ Partial Class Compact
         '
         'spaceSavedLabel
         '
-        Me.spaceSavedLabel.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.spaceSavedLabel.AutoSize = True
         Me.spaceSavedLabel.Font = New System.Drawing.Font("Segoe UI", 16.0!)
         Me.spaceSavedLabel.ForeColor = System.Drawing.SystemColors.WindowFrame
@@ -497,7 +499,7 @@ Partial Class Compact
         Me.buttonRevert.ForeColor = System.Drawing.Color.Black
         Me.buttonRevert.Location = New System.Drawing.Point(3, 3)
         Me.buttonRevert.Name = "buttonRevert"
-        Me.buttonRevert.Size = New System.Drawing.Size(374, 39)
+        Me.buttonRevert.Size = New System.Drawing.Size(375, 39)
         Me.buttonRevert.TabIndex = 29
         Me.buttonRevert.Text = "Uncompress"
         Me.buttonRevert.UseVisualStyleBackColor = True
@@ -613,14 +615,15 @@ Partial Class Compact
         Me.FlowLayoutPanel2.Controls.Add(Me.CompResultsPanel)
         Me.FlowLayoutPanel2.Controls.Add(Me.checkShowConOut)
         Me.FlowLayoutPanel2.Controls.Add(Me.conOut)
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(57, 100)
+        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(55, 100)
         Me.FlowLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
         Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(424, 463)
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(425, 463)
         Me.FlowLayoutPanel2.TabIndex = 31
         '
         'CompResultsPanel
         '
+        Me.CompResultsPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.CompResultsPanel.Controls.Add(Me.compressedSizeVisual)
         Me.CompResultsPanel.Controls.Add(Me.Panel5)
         Me.CompResultsPanel.Controls.Add(Me.Label9)
@@ -628,26 +631,69 @@ Partial Class Compact
         Me.CompResultsPanel.Controls.Add(Me.spaceSavedLabel)
         Me.CompResultsPanel.Location = New System.Drawing.Point(3, 48)
         Me.CompResultsPanel.Name = "CompResultsPanel"
-        Me.CompResultsPanel.Size = New System.Drawing.Size(402, 177)
+        Me.CompResultsPanel.Size = New System.Drawing.Size(402, 213)
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.AutoSize = True
+        Me.TableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.TableLayoutPanel1.ColumnCount = 2
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel1.Controls.Add(Me.Label13, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.labelFilesCompressed, 0, 0)
+        Me.TableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(2, 50)
+        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 1
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(172, 20)
+        Me.TableLayoutPanel1.TabIndex = 31
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.ForeColor = System.Drawing.SystemColors.MenuHighlight
+        Me.Label13.Location = New System.Drawing.Point(150, 1)
+        Me.Label13.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(22, 17)
+        Me.Label13.TabIndex = 31
+        Me.Label13.Text = "(?)"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.Label13, resources.GetString("Label13.ToolTip"))
+        '
+        'labelFilesCompressed
+        '
+        Me.labelFilesCompressed.AutoSize = True
+        Me.labelFilesCompressed.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.labelFilesCompressed.ForeColor = System.Drawing.SystemColors.WindowFrame
+        Me.labelFilesCompressed.Location = New System.Drawing.Point(0, 0)
+        Me.labelFilesCompressed.Margin = New System.Windows.Forms.Padding(0)
+        Me.labelFilesCompressed.MaximumSize = New System.Drawing.Size(0, 20)
+        Me.labelFilesCompressed.MinimumSize = New System.Drawing.Size(150, 20)
+        Me.labelFilesCompressed.Name = "labelFilesCompressed"
+        Me.labelFilesCompressed.Size = New System.Drawing.Size(150, 20)
+        Me.labelFilesCompressed.TabIndex = 30
+        Me.labelFilesCompressed.Text = "n/n Files Compressed"
+        '
         'compressedSizeVisual
         '
-        Me.compressedSizeVisual.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.compressedSizeVisual.BackColor = System.Drawing.Color.ForestGreen
         Me.compressedSizeVisual.Controls.Add(Me.compressedSizeLabel)
-        Me.compressedSizeVisual.Location = New System.Drawing.Point(3, 129)
+        Me.compressedSizeVisual.Location = New System.Drawing.Point(3, 158)
         Me.compressedSizeVisual.Name = "compressedSizeVisual"
         Me.compressedSizeVisual.Size = New System.Drawing.Size(368, 30)
         Me.compressedSizeVisual.TabIndex = 29
         '
         'Panel5
         '
-        Me.Panel5.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Panel5.BackColor = System.Drawing.Color.Chocolate
         Me.Panel5.Controls.Add(Me.origSizeLabel)
-        Me.Panel5.Location = New System.Drawing.Point(3, 71)
+        Me.Panel5.Location = New System.Drawing.Point(3, 100)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(368, 30)
         Me.Panel5.TabIndex = 28
@@ -655,7 +701,7 @@ Partial Class Compact
         'checkShowConOut
         '
         Me.checkShowConOut.AutoSize = True
-        Me.checkShowConOut.Location = New System.Drawing.Point(3, 231)
+        Me.checkShowConOut.Location = New System.Drawing.Point(3, 267)
         Me.checkShowConOut.Name = "checkShowConOut"
         Me.checkShowConOut.Size = New System.Drawing.Size(139, 17)
         Me.checkShowConOut.TabIndex = 32
@@ -710,6 +756,17 @@ Partial Class Compact
         Me.testFileArgs.Text = "Test FileArgs"
         Me.testFileArgs.UseVisualStyleBackColor = True
         '
+        'ToolTipFilesCompressed
+        '
+        Me.ToolTipFilesCompressed.AutoPopDelay = 12000
+        Me.ToolTipFilesCompressed.BackColor = System.Drawing.Color.White
+        Me.ToolTipFilesCompressed.ForeColor = System.Drawing.SystemColors.WindowFrame
+        Me.ToolTipFilesCompressed.InitialDelay = 200
+        Me.ToolTipFilesCompressed.IsBalloon = True
+        Me.ToolTipFilesCompressed.ReshowDelay = 100
+        Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
+        Me.ToolTipFilesCompressed.ToolTipTitle = "Number of Files Compressed"
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -738,6 +795,8 @@ Partial Class Compact
         Me.FlowLayoutPanel2.PerformLayout()
         Me.CompResultsPanel.ResumeLayout(False)
         Me.CompResultsPanel.PerformLayout()
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
         Me.compressedSizeVisual.ResumeLayout(False)
         Me.compressedSizeVisual.PerformLayout()
         Me.Panel5.ResumeLayout(False)
@@ -804,4 +863,8 @@ Partial Class Compact
     Friend WithEvents showinfopopup As Label
     Friend WithEvents testFileArgs As Button
     Friend WithEvents buttonQueryCompact As Button
+    Friend WithEvents labelFilesCompressed As Label
+    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
+    Friend WithEvents Label13 As Label
+    Friend WithEvents ToolTipFilesCompressed As ToolTip
 End Class
