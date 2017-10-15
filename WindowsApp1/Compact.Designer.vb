@@ -258,14 +258,14 @@ Partial Class Compact
         Me.dirChooser.ActiveLinkColor = System.Drawing.Color.Red
         Me.dirChooser.AutoSize = True
         Me.dirChooser.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dirChooser.LinkColor = System.Drawing.SystemColors.MenuHighlight
+        Me.dirChooser.LinkColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.dirChooser.Location = New System.Drawing.Point(58, 39)
         Me.dirChooser.Name = "dirChooser"
         Me.dirChooser.Size = New System.Drawing.Size(202, 21)
         Me.dirChooser.TabIndex = 15
         Me.dirChooser.TabStop = True
         Me.dirChooser.Text = "Choose Folder to Compress"
-        Me.dirChooser.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight
+        Me.dirChooser.VisitedLinkColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         '
         'chosenDirDisplay
         '
@@ -366,7 +366,7 @@ Partial Class Compact
         '
         Me.preSize.AutoSize = True
         Me.preSize.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.preSize.ForeColor = System.Drawing.Color.SteelBlue
+        Me.preSize.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.preSize.Location = New System.Drawing.Point(64, 112)
         Me.preSize.Name = "preSize"
         Me.preSize.Size = New System.Drawing.Size(60, 13)
@@ -522,6 +522,7 @@ Partial Class Compact
         '
         'InputPage
         '
+        Me.InputPage.BackColor = System.Drawing.Color.White
         Me.InputPage.Controls.Add(Me.buttonQueryCompact)
         Me.InputPage.Controls.Add(Me.FlowLayoutPanel1)
         Me.InputPage.Controls.Add(Me.dirChooser)
@@ -534,7 +535,6 @@ Partial Class Compact
         Me.InputPage.Size = New System.Drawing.Size(495, 598)
         Me.InputPage.TabIndex = 0
         Me.InputPage.Text = "InputPage"
-        Me.InputPage.UseVisualStyleBackColor = True
         '
         'buttonQueryCompact
         '
@@ -657,7 +657,7 @@ Partial Class Compact
         '
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.ForeColor = System.Drawing.SystemColors.MenuHighlight
+        Me.Label13.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.Label13.Location = New System.Drawing.Point(150, 1)
         Me.Label13.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.Label13.Name = "Label13"
@@ -682,7 +682,7 @@ Partial Class Compact
         '
         'compressedSizeVisual
         '
-        Me.compressedSizeVisual.BackColor = System.Drawing.Color.ForestGreen
+        Me.compressedSizeVisual.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(96, Byte), Integer))
         Me.compressedSizeVisual.Controls.Add(Me.compressedSizeLabel)
         Me.compressedSizeVisual.Location = New System.Drawing.Point(3, 158)
         Me.compressedSizeVisual.Name = "compressedSizeVisual"
@@ -691,7 +691,7 @@ Partial Class Compact
         '
         'Panel5
         '
-        Me.Panel5.BackColor = System.Drawing.Color.Chocolate
+        Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(CType(211, Byte), Integer), CType(CType(84, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel5.Controls.Add(Me.origSizeLabel)
         Me.Panel5.Location = New System.Drawing.Point(3, 100)
         Me.Panel5.Name = "Panel5"
