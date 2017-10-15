@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.3.1"
+    Dim version = "1.3.2"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -460,10 +460,12 @@ Public Class Compact
     Private Sub CalculateSaving()   'Calculations for all the relevant information after compression is completed. All the data is parsed from the console ouput using basic strings, but because that occurs on a different thread, information is stored to variables first (The Status Monitors at the top) then those values are used. 
 
         Dim numberFilesCompressed = 0
-        Dim querySize = 0
+        Dim querySize As Int64 = 0
+
 
         If isQueryMode = 0 Then querySize = Long.Parse(Regex.Replace(byteComparisonRaw.Substring _
           (0, byteComparisonRaw.IndexOf("t")), "[^\d]", ""))
+
 
         Dim oldFolderSize = Long.Parse(Regex.Replace(byteComparisonRaw.Substring _
            (0, byteComparisonRaw.IndexOf("t")), "[^\d]", ""))
@@ -743,8 +745,5 @@ Public Class Compact
         End If
         'MsgBox(compactArgs)
     End Sub
-
-
-
 
 End Class
