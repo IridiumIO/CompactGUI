@@ -19,7 +19,15 @@ Use this tool to:
 
 For most modern computers there will be no (or very little) performance loss. Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.
 
-![Screenshot](https://i.imgur.com/BkDnVa4.png)![Screenshot2](https://i.imgur.com/4fThTKX.png)
+## Extra Features
+
+ - More accurate reporting than the built-in Windows command-line tool (as there are some bugs with parsing that Microsoft needs to fix)
+ - Analyze the status of existing folders
+ - Integration into Explorer context menus for easier use.
+
+## Screenshots
+<p align="center"><img src="https://i.imgur.com/BkDnVa4.png" alt="compactGUI"></p>
+<p align="center"><img src="https://i.imgur.com/4fThTKX.png" alt="compactGUI"></p>
 
 ## Background
 Windows 10 includes a little-known but very useful tool called Compact that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU, this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
@@ -43,6 +51,7 @@ The options available are:
 ### Additional Notes
 
 In my testing, using any of the XPRESS modes has no discernible impact on CPU performance when the compressed program is run (Using an i7-6700HQ). Here's the output tests for Adobe Photoshop:
-![Photoshop compression results](https://i.imgur.com/ou0D0B1.png)
+<p align="center"><img src="https://i.imgur.com/ou0D0B1.png" alt="PSResults"></p>
+
 
 However, if your processor is especially old, you may find that performance is worse when folders are compressed with 8K and 16K. Use 4K instead. Despite this, I've successfully tested it on an i3-370M from 2010, and it had no issues with performance on any of the compression modes. 
