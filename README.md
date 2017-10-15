@@ -1,4 +1,7 @@
-# CompactGUI
+<p align="center"><img src="https://i.imgur.com/vT1Tfi1.png" alt="compactGUI" /</p>
+  
+----
+
 This tool is an open-source standalone visual interface to make using the Windows 10 compact.exe function more available to more people. 
 
 The compression used by compact.exe is similar to the built-in NTFS compression in that it is transparent. Compressed files and programs can still be accessed as if nothing has changed and show up in Explorer as they normally would — they'll just be decompressed on the fly at runtime. However, the newer algorithms used by Compact are much more efficient. 
