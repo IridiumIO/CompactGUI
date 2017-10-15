@@ -12,6 +12,8 @@ Use this tool to:
 - Compress game install folders (e.g. Portal 2: 11.8 GB --> 7.88 GB)
 - Compress any other folder on your computer. 
 
+**See the [Wiki](https://github.com/ImminentFate/CompactGUI/wiki/Game-and-Program-Compression-Tests) for more games and programs that I've tested**
+
 For most modern computers there will be no (or very little) performance loss. Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.
 
 ![Screenshot](https://i.imgur.com/BkDnVa4.png)![Screenshot2](https://i.imgur.com/4fThTKX.png)
