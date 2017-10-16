@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.3.5"
+    Dim version = "1.3.5.1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -361,7 +361,7 @@ Public Class Compact
 
             Try
 
-                MyProcess.StandardInput.WriteLine("cd " + workingDir)
+                MyProcess.StandardInput.WriteLine("cd /d " + workingDir)
                 MyProcess.StandardInput.Flush()
 
                 MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why

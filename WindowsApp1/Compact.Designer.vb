@@ -255,7 +255,7 @@ Partial Class Compact
         '
         Me.showinfopopup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.showinfopopup.AutoSize = True
-        Me.showinfopopup.ForeColor = System.Drawing.SystemColors.ControlDark
+        Me.showinfopopup.ForeColor = System.Drawing.Color.DarkGray
         Me.showinfopopup.Location = New System.Drawing.Point(439, 33)
         Me.showinfopopup.Name = "showinfopopup"
         Me.showinfopopup.Size = New System.Drawing.Size(25, 13)
