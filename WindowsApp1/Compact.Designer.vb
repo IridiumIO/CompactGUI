@@ -101,7 +101,7 @@ Partial Class Compact
         '
         'conOut
         '
-        Me.conOut.BackColor = System.Drawing.SystemColors.Window
+        Me.conOut.BackColor = System.Drawing.Color.White
         Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.conOut.ForeColor = System.Drawing.SystemColors.WindowFrame
         Me.conOut.Location = New System.Drawing.Point(3, 290)
@@ -596,6 +596,7 @@ Partial Class Compact
         '
         'ProgressPage
         '
+        Me.ProgressPage.BackColor = System.Drawing.Color.White
         Me.ProgressPage.Controls.Add(Me.FlowLayoutPanel2)
         Me.ProgressPage.Controls.Add(Me.returnArrow)
         Me.ProgressPage.Controls.Add(Me.progressPageLabel)
@@ -607,7 +608,6 @@ Partial Class Compact
         Me.ProgressPage.Size = New System.Drawing.Size(495, 598)
         Me.ProgressPage.TabIndex = 1
         Me.ProgressPage.Text = "ProgressPage"
-        Me.ProgressPage.UseVisualStyleBackColor = True
         '
         'FlowLayoutPanel2
         '
