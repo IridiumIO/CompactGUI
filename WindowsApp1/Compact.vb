@@ -53,7 +53,7 @@ Public Class Compact
 
         Try
 
-            If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
+        If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
                 byteComparisonRaw = e.Data
             End If
 
@@ -170,6 +170,7 @@ Public Class Compact
                 progressPageLabel.Text = "This folder contains compressed items"
                 progresspercent.Visible = False
 
+
             End If
 
             compressFinished = 0
@@ -249,7 +250,7 @@ Public Class Compact
 
     End Sub
 
-
+    Dim dirLabelResults As String = ""
 
     Private Sub SelectFolder(selectedDir As String, senderID As String)
         Dim wDString = selectedDir
@@ -276,6 +277,9 @@ Public Class Compact
                 uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
                 preSize.Text = "Uncompressed Size: " + GetOutputSize _
                     (Math.Round(DirectorySize(DIwDString, True), 0), True)
+
+                dirLabelResults = DIwDString.Name.ToString
+
                 preSize.Visible = True
                 buttonQueryCompact.Visible = True
 
@@ -305,7 +309,7 @@ Public Class Compact
             End If
 
 
-            End If
+        End If
     End Sub
 
 
@@ -347,6 +351,7 @@ Public Class Compact
                 .RedirectStandardInput = True
                 .RedirectStandardOutput = True
                 .RedirectStandardError = True
+
             End With
 
             MyProcess.Start()
@@ -510,6 +515,8 @@ Public Class Compact
             spaceSavedLabel.Text = GetOutputSize _
                 ((oldFolderSize - newfoldersize), True) + " Saved"
 
+            dirChosenLabel.Text = "❯ In " + dirLabelResults
+
             labelFilesCompressed.Text =
                 numberFilesCompressed.ToString + " / " + fileCountTotal.ToString + " files compressed"
 
@@ -530,6 +537,7 @@ Public Class Compact
             If isQueryCalledByCompact = 0 Then
 
                 CompResultsPanel.Visible = True
+
 
             ElseIf isQueryCalledByCompact = 1 Then
 
