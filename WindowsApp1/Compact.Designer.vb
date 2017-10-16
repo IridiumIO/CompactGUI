@@ -73,6 +73,7 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
+        Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
@@ -84,7 +85,6 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
-        Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -102,16 +102,13 @@ Partial Class Compact
         '
         'conOut
         '
-        Me.conOut.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.conOut.BackColor = System.Drawing.Color.White
         Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.conOut.ForeColor = System.Drawing.Color.DimGray
         Me.conOut.Location = New System.Drawing.Point(3, 313)
         Me.conOut.Name = "conOut"
         Me.conOut.ReadOnly = True
-        Me.conOut.Size = New System.Drawing.Size(402, 161)
+        Me.conOut.Size = New System.Drawing.Size(375, 161)
         Me.conOut.TabIndex = 0
         Me.conOut.Text = ""
         Me.conOut.Visible = False
@@ -631,9 +628,6 @@ Partial Class Compact
         '
         'FlowLayoutPanel2
         '
-        Me.FlowLayoutPanel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel2.Controls.Add(Me.buttonRevert)
         Me.FlowLayoutPanel2.Controls.Add(Me.CompResultsPanel)
         Me.FlowLayoutPanel2.Controls.Add(Me.checkShowConOut)
@@ -659,6 +653,17 @@ Partial Class Compact
         Me.CompResultsPanel.Size = New System.Drawing.Size(402, 236)
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
+        '
+        'dirChosenLabel
+        '
+        Me.dirChosenLabel.AutoSize = True
+        Me.dirChosenLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dirChosenLabel.ForeColor = System.Drawing.Color.DarkGray
+        Me.dirChosenLabel.Location = New System.Drawing.Point(2, 79)
+        Me.dirChosenLabel.Name = "dirChosenLabel"
+        Me.dirChosenLabel.Size = New System.Drawing.Size(87, 15)
+        Me.dirChosenLabel.TabIndex = 32
+        Me.dirChosenLabel.Text = "dirchosenLabel"
         '
         'TableLayoutPanel1
         '
@@ -793,17 +798,6 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ReshowDelay = 100
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Number of Files Compressed"
-        '
-        'dirChosenLabel
-        '
-        Me.dirChosenLabel.AutoSize = True
-        Me.dirChosenLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dirChosenLabel.ForeColor = System.Drawing.Color.DarkGray
-        Me.dirChosenLabel.Location = New System.Drawing.Point(2, 79)
-        Me.dirChosenLabel.Name = "dirChosenLabel"
-        Me.dirChosenLabel.Size = New System.Drawing.Size(87, 15)
-        Me.dirChosenLabel.TabIndex = 32
-        Me.dirChosenLabel.Text = "dirchosenLabel"
         '
         'Compact
         '

@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.3.4"
+    Dim version = "1.3.5"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -53,7 +53,7 @@ Public Class Compact
 
         Try
 
-        If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
+            If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
                 byteComparisonRaw = e.Data
             End If
 
@@ -361,12 +361,14 @@ Public Class Compact
 
             Try
 
-                MyProcess.StandardInput.WriteLine("cd /d " + workingDir)
+                MyProcess.StandardInput.WriteLine("cd " + workingDir)
                 MyProcess.StandardInput.Flush()
 
                 MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why
                 MyProcess.StandardInput.Flush()
 
+                MyProcess.StandardInput.WriteLine("chcp 437")
+                MyProcess.StandardInput.Flush()
 
                 RunCompact(passthrougharg)
 
