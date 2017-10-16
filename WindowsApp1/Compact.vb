@@ -26,12 +26,12 @@ Public Class Compact
     Dim isQueryCalledByCompact = 0
     Dim byteComparisonRaw As String = ""
     Dim byteComparisonRawFilesCompressed As String = ""
-    Dim dirCountProgress As UInteger
-    Dim dirCountTotal As UInteger
-    Dim fileCountTotal As UInteger = 0
-    Dim fileCountProgress As UInteger
-    Dim fileCountOutputCompressed As UInteger
-    Dim QdirCountProgress As UInteger
+    Dim dirCountProgress As Int64
+    Dim dirCountTotal As Int64
+    Dim fileCountTotal As Int64 = 0
+    Dim fileCountProgress As Int64
+    Dim fileCountOutputCompressed As Int64
+    Dim QdirCountProgress As Int64
 
 
     Private Sub MyProcess_ErrorDataReceived _
@@ -285,7 +285,7 @@ Public Class Compact
 
                     dirCountTotal = directories.Length + 1
 
-                    Dim numberOfFiles As Integer = Directory.GetFiles _
+                    Dim numberOfFiles As Int64 = Directory.GetFiles _
                         (wDString, "*", IO.SearchOption.AllDirectories).Length
 
                     fileCountTotal = numberOfFiles '- (dirCountTotal + 1) '                        'Windows seems to do a funny thing where it counts "files" as the number of files + folders

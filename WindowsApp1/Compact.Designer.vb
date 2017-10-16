@@ -134,6 +134,7 @@ Partial Class Compact
         Me.buttonCompress.Enabled = False
         Me.buttonCompress.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.buttonCompress.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.buttonCompress.ForeColor = System.Drawing.Color.DarkGray
         Me.buttonCompress.Location = New System.Drawing.Point(8, 302)
         Me.buttonCompress.Margin = New System.Windows.Forms.Padding(8, 3, 3, 3)
         Me.buttonCompress.Name = "buttonCompress"
@@ -151,6 +152,7 @@ Partial Class Compact
         Me.checkRecursiveScan.AutoSize = True
         Me.checkRecursiveScan.Checked = True
         Me.checkRecursiveScan.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.checkRecursiveScan.ForeColor = System.Drawing.Color.DimGray
         Me.checkRecursiveScan.Location = New System.Drawing.Point(35, 48)
         Me.checkRecursiveScan.Name = "checkRecursiveScan"
         Me.checkRecursiveScan.Size = New System.Drawing.Size(190, 17)
@@ -161,6 +163,7 @@ Partial Class Compact
         'checkHiddenFiles
         '
         Me.checkHiddenFiles.AutoSize = True
+        Me.checkHiddenFiles.ForeColor = System.Drawing.Color.DimGray
         Me.checkHiddenFiles.Location = New System.Drawing.Point(35, 71)
         Me.checkHiddenFiles.Name = "checkHiddenFiles"
         Me.checkHiddenFiles.Size = New System.Drawing.Size(219, 17)
@@ -171,6 +174,7 @@ Partial Class Compact
         'checkForceCompression
         '
         Me.checkForceCompression.AutoSize = True
+        Me.checkForceCompression.ForeColor = System.Drawing.Color.DimGray
         Me.checkForceCompression.Location = New System.Drawing.Point(35, 94)
         Me.checkForceCompression.Name = "checkForceCompression"
         Me.checkForceCompression.Size = New System.Drawing.Size(363, 17)
@@ -181,6 +185,7 @@ Partial Class Compact
         'compressX4
         '
         Me.compressX4.AutoSize = True
+        Me.compressX4.ForeColor = System.Drawing.Color.DimGray
         Me.compressX4.Location = New System.Drawing.Point(35, 40)
         Me.compressX4.Name = "compressX4"
         Me.compressX4.Size = New System.Drawing.Size(81, 17)
@@ -192,6 +197,7 @@ Partial Class Compact
         '
         Me.compressX8.AutoSize = True
         Me.compressX8.Checked = True
+        Me.compressX8.ForeColor = System.Drawing.Color.DimGray
         Me.compressX8.Location = New System.Drawing.Point(35, 63)
         Me.compressX8.Name = "compressX8"
         Me.compressX8.Size = New System.Drawing.Size(81, 17)
@@ -203,6 +209,7 @@ Partial Class Compact
         'compressX16
         '
         Me.compressX16.AutoSize = True
+        Me.compressX16.ForeColor = System.Drawing.Color.DimGray
         Me.compressX16.Location = New System.Drawing.Point(35, 86)
         Me.compressX16.Name = "compressX16"
         Me.compressX16.Size = New System.Drawing.Size(87, 17)
@@ -213,6 +220,7 @@ Partial Class Compact
         'compressLZX
         '
         Me.compressLZX.AutoSize = True
+        Me.compressLZX.ForeColor = System.Drawing.Color.DimGray
         Me.compressLZX.Location = New System.Drawing.Point(35, 111)
         Me.compressLZX.Name = "compressLZX"
         Me.compressLZX.Size = New System.Drawing.Size(48, 17)
@@ -287,7 +295,7 @@ Partial Class Compact
         '
         Me.CheckBox1.AutoSize = True
         Me.CheckBox1.Enabled = False
-        Me.CheckBox1.ForeColor = System.Drawing.SystemColors.ControlLight
+        Me.CheckBox1.ForeColor = System.Drawing.Color.DimGray
         Me.CheckBox1.Location = New System.Drawing.Point(35, 117)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(347, 17)
@@ -299,6 +307,7 @@ Partial Class Compact
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.Label2.ForeColor = System.Drawing.Color.DimGray
         Me.Label2.Location = New System.Drawing.Point(20, 5)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(205, 21)
@@ -308,6 +317,7 @@ Partial Class Compact
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.ForeColor = System.Drawing.Color.DimGray
         Me.Label3.Location = New System.Drawing.Point(141, 42)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(50, 13)
@@ -317,6 +327,7 @@ Partial Class Compact
         'Label4
         '
         Me.Label4.AutoSize = True
+        Me.Label4.ForeColor = System.Drawing.Color.DimGray
         Me.Label4.Location = New System.Drawing.Point(141, 65)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(108, 13)
@@ -326,6 +337,7 @@ Partial Class Compact
         'Label5
         '
         Me.Label5.AutoSize = True
+        Me.Label5.ForeColor = System.Drawing.Color.DimGray
         Me.Label5.Location = New System.Drawing.Point(141, 90)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(101, 13)
@@ -335,6 +347,7 @@ Partial Class Compact
         'Label6
         '
         Me.Label6.AutoSize = True
+        Me.Label6.ForeColor = System.Drawing.Color.DimGray
         Me.Label6.Location = New System.Drawing.Point(141, 113)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(85, 13)
@@ -356,6 +369,7 @@ Partial Class Compact
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.Label8.ForeColor = System.Drawing.Color.DimGray
         Me.Label8.Location = New System.Drawing.Point(20, 11)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(207, 21)
@@ -425,6 +439,7 @@ Partial Class Compact
         'Label11
         '
         Me.Label11.AutoSize = True
+        Me.Label11.ForeColor = System.Drawing.Color.DimGray
         Me.Label11.Location = New System.Drawing.Point(1, 142)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(91, 13)
@@ -478,7 +493,7 @@ Partial Class Compact
         '
         Me.spaceSavedLabel.AutoSize = True
         Me.spaceSavedLabel.Font = New System.Drawing.Font("Segoe UI", 16.0!)
-        Me.spaceSavedLabel.ForeColor = System.Drawing.SystemColors.WindowFrame
+        Me.spaceSavedLabel.ForeColor = System.Drawing.Color.DimGray
         Me.spaceSavedLabel.Location = New System.Drawing.Point(-2, 10)
         Me.spaceSavedLabel.Name = "spaceSavedLabel"
         Me.spaceSavedLabel.Size = New System.Drawing.Size(127, 30)
@@ -496,13 +511,14 @@ Partial Class Compact
         '
         'buttonRevert
         '
+        Me.buttonRevert.BackColor = System.Drawing.Color.White
         Me.buttonRevert.ForeColor = System.Drawing.Color.Black
         Me.buttonRevert.Location = New System.Drawing.Point(3, 3)
         Me.buttonRevert.Name = "buttonRevert"
         Me.buttonRevert.Size = New System.Drawing.Size(375, 39)
         Me.buttonRevert.TabIndex = 29
         Me.buttonRevert.Text = "Uncompress"
-        Me.buttonRevert.UseVisualStyleBackColor = True
+        Me.buttonRevert.UseVisualStyleBackColor = False
         Me.buttonRevert.Visible = False
         '
         'TabControl1
@@ -542,7 +558,7 @@ Partial Class Compact
         Me.buttonQueryCompact.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue
         Me.buttonQueryCompact.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.buttonQueryCompact.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.buttonQueryCompact.ForeColor = System.Drawing.SystemColors.ControlDark
+        Me.buttonQueryCompact.ForeColor = System.Drawing.Color.DarkGray
         Me.buttonQueryCompact.Location = New System.Drawing.Point(289, 105)
         Me.buttonQueryCompact.Name = "buttonQueryCompact"
         Me.buttonQueryCompact.Size = New System.Drawing.Size(144, 27)
@@ -670,7 +686,7 @@ Partial Class Compact
         '
         Me.labelFilesCompressed.AutoSize = True
         Me.labelFilesCompressed.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.labelFilesCompressed.ForeColor = System.Drawing.SystemColors.WindowFrame
+        Me.labelFilesCompressed.ForeColor = System.Drawing.Color.DimGray
         Me.labelFilesCompressed.Location = New System.Drawing.Point(0, 0)
         Me.labelFilesCompressed.Margin = New System.Windows.Forms.Padding(0)
         Me.labelFilesCompressed.MaximumSize = New System.Drawing.Size(0, 20)
@@ -701,6 +717,7 @@ Partial Class Compact
         'checkShowConOut
         '
         Me.checkShowConOut.AutoSize = True
+        Me.checkShowConOut.ForeColor = System.Drawing.Color.DimGray
         Me.checkShowConOut.Location = New System.Drawing.Point(3, 267)
         Me.checkShowConOut.Name = "checkShowConOut"
         Me.checkShowConOut.Size = New System.Drawing.Size(139, 17)
@@ -724,6 +741,7 @@ Partial Class Compact
         '
         Me.progressPageLabel.AutoSize = True
         Me.progressPageLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.progressPageLabel.ForeColor = System.Drawing.Color.DimGray
         Me.progressPageLabel.Location = New System.Drawing.Point(58, 39)
         Me.progressPageLabel.Name = "progressPageLabel"
         Me.progressPageLabel.Size = New System.Drawing.Size(188, 21)

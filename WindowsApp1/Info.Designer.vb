@@ -43,6 +43,7 @@ Partial Class Info
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.Black
         Me.Label1.Location = New System.Drawing.Point(29, 19)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(130, 21)
@@ -53,6 +54,7 @@ Partial Class Info
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.Black
         Me.Label2.Location = New System.Drawing.Point(39, 50)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(87, 17)
@@ -80,7 +82,7 @@ Partial Class Info
         '
         Me.semVersion.AutoSize = True
         Me.semVersion.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.semVersion.ForeColor = System.Drawing.SystemColors.ButtonShadow
+        Me.semVersion.ForeColor = System.Drawing.Color.DarkGray
         Me.semVersion.Location = New System.Drawing.Point(3, 0)
         Me.semVersion.Name = "semVersion"
         Me.semVersion.Size = New System.Drawing.Size(57, 21)
@@ -143,6 +145,7 @@ Partial Class Info
         'checkEnableRCMenu
         '
         Me.checkEnableRCMenu.AutoSize = True
+        Me.checkEnableRCMenu.ForeColor = System.Drawing.Color.Black
         Me.checkEnableRCMenu.Location = New System.Drawing.Point(43, 41)
         Me.checkEnableRCMenu.Name = "checkEnableRCMenu"
         Me.checkEnableRCMenu.Size = New System.Drawing.Size(249, 17)
@@ -154,6 +157,7 @@ Partial Class Info
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.Black
         Me.Label3.Location = New System.Drawing.Point(29, 12)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(110, 21)
