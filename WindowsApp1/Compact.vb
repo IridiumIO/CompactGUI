@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.3.4"
+    Dim version = "1.3.5"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -32,7 +32,7 @@ Public Class Compact
     Dim fileCountProgress As Int64
     Dim fileCountOutputCompressed As Int64
     Dim QdirCountProgress As Int64
-    Dim localisationAdjustment = "[Threading.Thread]::CurrentThread.CurrentUICulture = 'en'; "
+
 
     Private Sub MyProcess_ErrorDataReceived _
         (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
@@ -344,7 +344,7 @@ Public Class Compact
             MyProcess = New Process
 
             With MyProcess.StartInfo
-                .FileName = "powershell.exe"
+                .FileName = "CMD.exe"
                 .Arguments = ""
                 .UseShellExecute = False
                 .CreateNoWindow = True
@@ -367,6 +367,8 @@ Public Class Compact
                 MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why
                 MyProcess.StandardInput.Flush()
 
+                MyProcess.StandardInput.WriteLine("chcp 437")
+                MyProcess.StandardInput.Flush()
 
                 RunCompact(passthrougharg)
 
@@ -599,7 +601,7 @@ Public Class Compact
                 compactArgs = compactArgs + " /EXE:LZX"
             End If
 
-            MyProcess.StandardInput.WriteLine(localisationAdjustment & compactArgs)
+            MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
 
             isQueryCalledByCompact = 1
@@ -616,13 +618,13 @@ Public Class Compact
                 compactArgs = compactArgs + " /A"
             End If
 
-            MyProcess.StandardInput.WriteLine(localisationAdjustment & compactArgs)
+            MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
 
         ElseIf desiredfunction = "query" Then
             compactArgs = "compact /S /Q /EXE"
 
-            MyProcess.StandardInput.WriteLine(localisationAdjustment & compactArgs)
+            MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
 
         End If
