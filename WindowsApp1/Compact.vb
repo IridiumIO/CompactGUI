@@ -32,7 +32,7 @@ Public Class Compact
     Dim fileCountProgress As Int64
     Dim fileCountOutputCompressed As Int64
     Dim QdirCountProgress As Int64
-
+    Dim localisationAdjustment = "[Threading.Thread]::CurrentThread.CurrentUICulture = 'en'; "
 
     Private Sub MyProcess_ErrorDataReceived _
         (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
@@ -53,7 +53,7 @@ Public Class Compact
 
         Try
 
-        If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
+            If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
                 byteComparisonRaw = e.Data
             End If
 
@@ -344,7 +344,7 @@ Public Class Compact
             MyProcess = New Process
 
             With MyProcess.StartInfo
-                .FileName = "CMD.exe"
+                .FileName = "powershell.exe"
                 .Arguments = ""
                 .UseShellExecute = False
                 .CreateNoWindow = True
@@ -361,7 +361,7 @@ Public Class Compact
 
             Try
 
-                MyProcess.StandardInput.WriteLine("cd /d " + workingDir)
+                MyProcess.StandardInput.WriteLine("cd " + workingDir)
                 MyProcess.StandardInput.Flush()
 
                 MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why
@@ -599,7 +599,7 @@ Public Class Compact
                 compactArgs = compactArgs + " /EXE:LZX"
             End If
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
+            MyProcess.StandardInput.WriteLine(localisationAdjustment & compactArgs)
             MyProcess.StandardInput.Flush()
 
             isQueryCalledByCompact = 1
@@ -616,13 +616,13 @@ Public Class Compact
                 compactArgs = compactArgs + " /A"
             End If
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
+            MyProcess.StandardInput.WriteLine(localisationAdjustment & compactArgs)
             MyProcess.StandardInput.Flush()
 
         ElseIf desiredfunction = "query" Then
             compactArgs = "compact /S /Q /EXE"
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
+            MyProcess.StandardInput.WriteLine(localisationAdjustment & compactArgs)
             MyProcess.StandardInput.Flush()
 
         End If
