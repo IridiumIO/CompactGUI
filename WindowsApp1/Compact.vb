@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 
 Public Class Compact
-    Dim version = "1.3.5.1"
+    Dim version = "1.3.6"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -24,6 +24,7 @@ Public Class Compact
     Dim uncompressFinished = 0
     Dim isQueryMode = 0
     Dim isQueryCalledByCompact = 0
+    Dim isActive = 0
     Dim byteComparisonRaw As String = ""
     Dim byteComparisonRawFilesCompressed As String = ""
     Dim dirCountProgress As Int64
@@ -61,12 +62,14 @@ Public Class Compact
                 compressFinished = 1
                 dirCountProgress = dirCountTotal
                 fileCountProgress = fileCountTotal
+                isActive = 0
             End If
 
             If e.Data.Contains("directories were uncompressed") Then                            'Gets the output line that identifies that an uncompression event has finished. 
                 dirCountProgress = 0
                 fileCountProgress = fileCountTotal
                 uncompressFinished = 1
+                isActive = 0
             End If
 
             If e.Data.StartsWith(" Compressing files in") Then                                  'Gets each directory that is compressed. Used for the old progressbar.   
@@ -355,9 +358,11 @@ Public Class Compact
             End With
 
             MyProcess.Start()
+
             MyProcess.EnableRaisingEvents = True
             MyProcess.BeginErrorReadLine()
             MyProcess.BeginOutputReadLine()
+
 
             Try
 
@@ -444,6 +449,41 @@ Public Class Compact
         Else
             conOut.Visible = False
         End If
+    End Sub
+
+
+
+
+    Private Sub MyForm_Closing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If isActive = 1 Then
+
+            If MessageBox.Show _
+                ("Quitting while the Compact function is running is potentially dangerous." _
+                 & "Continuing to close could lead to one of your files becoming stuck in a semi-compressed state." _
+                 & vbCrLf & vbCrLf &
+                 "If you do decide to force quit now, you can potentially fix any unreadable files by running Compact again," _
+                 & "selecting the 'Force Compression' Checkbox and then running uncompress on the folder.",
+                 "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) <> DialogResult.Yes Then
+
+                e.Cancel = True
+
+            Else
+                Try
+                    MyProcess.Kill()
+                Catch ex As Exception
+                End Try
+
+            End If
+        Else
+
+            Try
+                MyProcess.Kill()
+            Catch ex As Exception
+            End Try
+
+        End If
+
+
     End Sub
 
 
@@ -606,6 +646,7 @@ Public Class Compact
 
             isQueryCalledByCompact = 1
             hasqueryfinished = 0
+            isActive = 1
 
         ElseIf desiredfunction = "uncompact" Then
             isQueryCalledByCompact = 0
@@ -620,6 +661,7 @@ Public Class Compact
 
             MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
+            isActive = 1
 
         ElseIf desiredfunction = "query" Then
             compactArgs = "compact /S /Q /EXE"
@@ -755,5 +797,8 @@ Public Class Compact
         End If
         'MsgBox(compactArgs)
     End Sub
+
+
+
 
 End Class

@@ -85,6 +85,7 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -165,22 +166,22 @@ Partial Class Compact
         '
         Me.checkHiddenFiles.AutoSize = True
         Me.checkHiddenFiles.ForeColor = System.Drawing.Color.DimGray
-        Me.checkHiddenFiles.Location = New System.Drawing.Point(35, 71)
+        Me.checkHiddenFiles.Location = New System.Drawing.Point(35, 94)
         Me.checkHiddenFiles.Name = "checkHiddenFiles"
-        Me.checkHiddenFiles.Size = New System.Drawing.Size(219, 17)
+        Me.checkHiddenFiles.Size = New System.Drawing.Size(287, 17)
         Me.checkHiddenFiles.TabIndex = 6
-        Me.checkHiddenFiles.Text = "Compress hidden and system files as well"
+        Me.checkHiddenFiles.Text = "Compress / uncompress hidden and system files as well"
         Me.checkHiddenFiles.UseVisualStyleBackColor = True
         '
         'checkForceCompression
         '
         Me.checkForceCompression.AutoSize = True
         Me.checkForceCompression.ForeColor = System.Drawing.Color.DimGray
-        Me.checkForceCompression.Location = New System.Drawing.Point(35, 94)
+        Me.checkForceCompression.Location = New System.Drawing.Point(35, 71)
         Me.checkForceCompression.Name = "checkForceCompression"
-        Me.checkForceCompression.Size = New System.Drawing.Size(363, 17)
+        Me.checkForceCompression.Size = New System.Drawing.Size(246, 17)
         Me.checkForceCompression.TabIndex = 7
-        Me.checkForceCompression.Text = "Force compress all files, even ones that have already been compressed"
+        Me.checkForceCompression.Text = "Force compression / uncompression on all files"
         Me.checkForceCompression.UseVisualStyleBackColor = True
         '
         'compressX4
@@ -419,7 +420,6 @@ Partial Class Compact
         '
         Me.compactprogressbar.BackColor = System.Drawing.Color.WhiteSmoke
         Me.compactprogressbar.Location = New System.Drawing.Point(59, 70)
-        Me.compactprogressbar.MarqueeAnimationSpeed = 1000
         Me.compactprogressbar.MaximumSize = New System.Drawing.Size(374, 27)
         Me.compactprogressbar.Name = "compactprogressbar"
         Me.compactprogressbar.Size = New System.Drawing.Size(374, 27)
@@ -604,6 +604,7 @@ Partial Class Compact
         Me.Panel3.Controls.Add(Me.Label8)
         Me.Panel3.Controls.Add(Me.CheckBox1)
         Me.Panel3.Controls.Add(Me.checkForceCompression)
+        Me.Panel3.Controls.Add(Me.Label14)
         Me.Panel3.Controls.Add(Me.checkHiddenFiles)
         Me.Panel3.Controls.Add(Me.checkRecursiveScan)
         Me.Panel3.Location = New System.Drawing.Point(3, 146)
@@ -797,7 +798,20 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.IsBalloon = True
         Me.ToolTipFilesCompressed.ReshowDelay = 100
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
-        Me.ToolTipFilesCompressed.ToolTipTitle = "Number of Files Compressed"
+        Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.Label14.Location = New System.Drawing.Point(278, 69)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(22, 17)
+        Me.Label14.TabIndex = 32
+        Me.Label14.Text = "(?)"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.Label14, resources.GetString("Label14.ToolTip"))
         '
         'Compact
         '
@@ -805,8 +819,8 @@ Partial Class Compact
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(474, 611)
-        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.Panel1)
         Me.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(490, 650)
@@ -900,4 +914,5 @@ Partial Class Compact
     Friend WithEvents Label13 As Label
     Friend WithEvents ToolTipFilesCompressed As ToolTip
     Friend WithEvents dirChosenLabel As Label
+    Friend WithEvents Label14 As Label
 End Class
