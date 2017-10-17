@@ -3,6 +3,7 @@ Imports System.Runtime.InteropServices
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
+Imports System.Management
 
 Public Class Compact
     Dim version = "1.3.6"
@@ -274,7 +275,7 @@ Public Class Compact
 
 
                 Dim DIwDString = New DirectoryInfo(wDString)
-
+                directorysizeexceptionCount = 0
                 workingDir = Chr(34) + wDString.ToString() + Chr(34)
                 chosenDirDisplay.Text = DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
                 uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
@@ -361,6 +362,7 @@ Public Class Compact
             MyProcess.EnableRaisingEvents = True
             MyProcess.BeginErrorReadLine()
             MyProcess.BeginOutputReadLine()
+
 
             Try
 
@@ -466,20 +468,16 @@ Public Class Compact
 
             Else
                 Try
-                    MyProcess.Kill()
+                    LetsKillStuff()
                 Catch ex As Exception
                 End Try
-
             End If
         Else
-
             Try
-                MyProcess.Kill()
+                LetsKillStuff()
             Catch ex As Exception
             End Try
-
         End If
-
 
     End Sub
 
@@ -608,8 +606,6 @@ Public Class Compact
     Dim hasqueryfinished = 0
 
 
-
-
     Private Sub RunCompact(desiredfunction As String)
 
         If desiredfunction = "compact" Then
@@ -668,7 +664,6 @@ Public Class Compact
 
         End If
 
-
     End Sub
 
 
@@ -706,7 +701,9 @@ Public Class Compact
     Private Function DirectorySize _
         (ByVal dInfo As IO.DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
 
+
         Try
+
             Dim totalSize As Long = dInfo.EnumerateFiles().Sum(Function(file) file.Length)
 
             If includeSubdirectories Then
@@ -715,18 +712,31 @@ Public Class Compact
 
             Return totalSize
 
-            directorysizeexceptionCount = 0
-
         Catch generatedexceptionname As UnauthorizedAccessException
+            directorysizeexceptionCount += 1
 
-            If directorysizeexceptionCount = 0 Then
-                MsgBox("This directory contains a subfolder that you do not have permission to access. Please try running the program again as an Administrator." _
-                       & vbCrLf & vbCrLf & "If the problem persists, the subfolder is most likely protected by the System, and by design this program will refuse to let you proceed.")
+
+            If directorysizeexceptionCount = 1 Then
 
                 overrideCompressFolderButton = 1
-                directorysizeexceptionCount = 1
-            End If
+                directorysizeexceptionCount += 1
 
+                If My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) = False Then
+                    If MessageBox.Show("This directory contains a subfolder that you do not have permission to access. Please try running the program again as an Administrator." _
+                         & vbCrLf & vbCrLf & "If the problem persists, the subfolder is most likely protected by the System, and by design this program will refuse to let you proceed." _
+                        & vbCrLf & vbCrLf & " Would you like to restart the program as an Administrator?", "Permission Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.Yes Then
+
+                        RCMenu.RunAsAdmin()
+                        Me.Close()
+
+                    End If
+
+                Else
+                    MsgBox("This directory contains a subfolder that you do not have permission To access." _
+                       & vbCrLf & vbCrLf & "The subfolder is most likely protected by the System, and by design this program will refuse to let you proceed.")
+                End If
+
+            End If
 
         Catch ex As Exception
 
@@ -734,6 +744,24 @@ Public Class Compact
 
     End Function
 
+
+
+
+    Private WithEvents KillProc As Process
+    Private Sub LetsKillStuff()
+
+        KillProc = New Process
+
+        With KillProc.StartInfo
+            .FileName = "powershell.exe"
+            .Arguments = "taskkill /f /im compact.exe"
+            .UseShellExecute = False
+            .CreateNoWindow = True
+        End With
+
+        KillProc.Start()
+
+    End Sub
 
 
 
@@ -794,7 +822,6 @@ Public Class Compact
         End If
         'MsgBox(compactArgs)
     End Sub
-
 
 
 End Class
