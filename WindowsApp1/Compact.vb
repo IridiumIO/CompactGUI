@@ -333,7 +333,7 @@ Public Class Compact
 
     Private Sub CreateProcess(passthrougharg As String)
         Try
-            MyProcess.Close()
+            MyProcess.Kill()
         Catch ex As Exception
         End Try
 
@@ -354,15 +354,13 @@ Public Class Compact
                 .RedirectStandardInput = True
                 .RedirectStandardOutput = True
                 .RedirectStandardError = True
-
             End With
 
             MyProcess.Start()
-
+            MyProcess.PriorityClass = ProcessPriorityClass.BelowNormal
             MyProcess.EnableRaisingEvents = True
             MyProcess.BeginErrorReadLine()
             MyProcess.BeginOutputReadLine()
-
 
             Try
 
@@ -436,8 +434,7 @@ Public Class Compact
         dirCountProgress = 0
         fileCountProgress = 0
         isQueryCalledByCompact = 0
-        MyProcess.Close()
-
+        MyProcess.Kill()
     End Sub
 
 
@@ -797,7 +794,6 @@ Public Class Compact
         End If
         'MsgBox(compactArgs)
     End Sub
-
 
 
 

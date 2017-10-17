@@ -86,6 +86,7 @@ Partial Class Compact
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
         Me.Label14 = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -615,6 +616,7 @@ Partial Class Compact
         'ProgressPage
         '
         Me.ProgressPage.BackColor = System.Drawing.Color.White
+        Me.ProgressPage.Controls.Add(Me.Button2)
         Me.ProgressPage.Controls.Add(Me.FlowLayoutPanel2)
         Me.ProgressPage.Controls.Add(Me.returnArrow)
         Me.ProgressPage.Controls.Add(Me.progressPageLabel)
@@ -813,6 +815,15 @@ Partial Class Compact
         Me.Label14.Text = "(?)"
         Me.ToolTipFilesCompressed.SetToolTip(Me.Label14, resources.GetString("Label14.ToolTip"))
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(296, 7)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(75, 23)
+        Me.Button2.TabIndex = 32
+        Me.Button2.Text = "Button2"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -915,4 +926,5 @@ Partial Class Compact
     Friend WithEvents ToolTipFilesCompressed As ToolTip
     Friend WithEvents dirChosenLabel As Label
     Friend WithEvents Label14 As Label
+    Friend WithEvents Button2 As Button
 End Class
