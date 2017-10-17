@@ -6,7 +6,7 @@ Imports Ookii.Dialogs                                                           
 Imports System.Management
 
 Public Class Compact
-    Dim version = "1.3.6"
+    Dim version = "1.4.0_rc0"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 

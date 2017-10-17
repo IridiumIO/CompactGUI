@@ -34,9 +34,13 @@ Partial Class Info
         Me.checkEnableRCMenu = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -74,7 +78,7 @@ Partial Class Info
         Me.RichTextBox1.Margin = New System.Windows.Forms.Padding(0)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.Size = New System.Drawing.Size(540, 140)
+        Me.RichTextBox1.Size = New System.Drawing.Size(540, 77)
         Me.RichTextBox1.TabIndex = 2
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
         '
@@ -107,15 +111,16 @@ Partial Class Info
         Me.TableLayoutPanel1.AutoSize = True
         Me.TableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.04115!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.95885!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.TableLayoutPanel1.Controls.Add(Me.semVersion, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.LinkLabel1, 1, 0)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(152, 20)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(210, 21)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(173, 21)
         Me.TableLayoutPanel1.TabIndex = 5
         '
         'Panel1
@@ -128,18 +133,21 @@ Partial Class Info
         Me.Panel1.Controls.Add(Me.RichTextBox1)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(-4, 130)
+        Me.Panel1.Location = New System.Drawing.Point(-4, 202)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(599, 245)
+        Me.Panel1.Size = New System.Drawing.Size(599, 182)
         Me.Panel1.TabIndex = 6
         '
         'Panel2
         '
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel2.Controls.Add(Me.checkEnableRCMenu)
         Me.Panel2.Controls.Add(Me.Label3)
-        Me.Panel2.Location = New System.Drawing.Point(-4, 59)
+        Me.Panel2.Location = New System.Drawing.Point(-4, 109)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(599, 65)
+        Me.Panel2.Size = New System.Drawing.Size(599, 100)
         Me.Panel2.TabIndex = 7
         '
         'checkEnableRCMenu
@@ -175,25 +183,59 @@ Partial Class Info
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "CompactGUI"
         '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.Label5)
+        Me.Panel3.Controls.Add(Me.LinkLabel2)
+        Me.Panel3.Location = New System.Drawing.Point(-4, 59)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(599, 44)
+        Me.Panel3.TabIndex = 9
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(40, 13)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(185, 13)
+        Me.Label5.TabIndex = 6
+        Me.Label5.Text = "Help and information can be found on"
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.AutoSize = True
+        Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel2.LinkColor = System.Drawing.SystemColors.MenuHighlight
+        Me.LinkLabel2.Location = New System.Drawing.Point(222, 13)
+        Me.LinkLabel2.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(43, 13)
+        Me.LinkLabel2.TabIndex = 5
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "Github"
+        '
         'Info
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(589, 362)
+        Me.ClientSize = New System.Drawing.Size(589, 371)
+        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(400, 300)
         Me.Name = "Info"
-        Me.Text = "Info"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -210,4 +252,7 @@ Partial Class Info
     Friend WithEvents checkEnableRCMenu As CheckBox
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Label5 As Label
+    Friend WithEvents LinkLabel2 As LinkLabel
 End Class
