@@ -70,6 +70,7 @@ Partial Class Compact
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
@@ -85,8 +86,6 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -613,10 +612,22 @@ Partial Class Compact
         Me.Panel3.Size = New System.Drawing.Size(417, 150)
         Me.Panel3.TabIndex = 23
         '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.Label14.Location = New System.Drawing.Point(278, 69)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(22, 17)
+        Me.Label14.TabIndex = 32
+        Me.Label14.Text = "(?)"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.Label14, resources.GetString("Label14.ToolTip"))
+        '
         'ProgressPage
         '
         Me.ProgressPage.BackColor = System.Drawing.Color.White
-        Me.ProgressPage.Controls.Add(Me.Button2)
         Me.ProgressPage.Controls.Add(Me.FlowLayoutPanel2)
         Me.ProgressPage.Controls.Add(Me.returnArrow)
         Me.ProgressPage.Controls.Add(Me.progressPageLabel)
@@ -802,36 +813,14 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.Label14.Location = New System.Drawing.Point(278, 69)
-        Me.Label14.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(22, 17)
-        Me.Label14.TabIndex = 32
-        Me.Label14.Text = "(?)"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.Label14, resources.GetString("Label14.ToolTip"))
-        '
-        'Button2
-        '
-        Me.Button2.Location = New System.Drawing.Point(296, 7)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 32
-        Me.Button2.Text = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(474, 611)
-        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.TabControl1)
         Me.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(490, 650)
@@ -926,5 +915,4 @@ Partial Class Compact
     Friend WithEvents ToolTipFilesCompressed As ToolTip
     Friend WithEvents dirChosenLabel As Label
     Friend WithEvents Label14 As Label
-    Friend WithEvents Button2 As Button
 End Class
