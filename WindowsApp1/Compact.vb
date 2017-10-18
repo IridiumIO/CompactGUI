@@ -6,7 +6,7 @@ Imports Ookii.Dialogs                                                           
 Imports System.Management
 
 Public Class Compact
-    Dim version = "1.4.0_rc0"
+    Dim version = "1.4.0_rc1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -202,25 +202,20 @@ Public Class Compact
 
 
 
-    Private Sub AppendOutputText(ByVal text As String)                                          'Attach output to the embedded console
-
+    Private Sub AppendOutputText(ByVal text As String)                                           'Attach output to the embedded console
         Try
-
             If conOut.InvokeRequired Then
                 Dim serverOutDelegate As New AppendOutputTextDelegate(AddressOf AppendOutputText)
-                Me.Invoke(serverOutDelegate, text)
+                Me.Invoke(serverOutDelegate, text.Replace("ÿ", " "))
             Else
-
-                conOut.AppendText(text.Replace("ÿ", " "))
-                conOut.Select(conOut.TextLength, 1)
-                conOut.ScrollToCaret()
+                If text <> vbCrLf Then
+                    conOut.Items.Insert(0, text)
+                End If
             End If
-
         Catch ex As Exception
-
         End Try
-
     End Sub
+
 
 
 
@@ -343,7 +338,7 @@ Public Class Compact
             If passthrougharg = "query" Then isQueryMode = 1
 
             progresspercent.Visible = True
-            conOut.Clear()
+            conOut.Items.Clear()
 
             MyProcess = New Process
 
@@ -445,6 +440,7 @@ Public Class Compact
     Private Sub CheckShowConOut_CheckedChanged(sender As Object, e As EventArgs) Handles checkShowConOut.CheckedChanged     'Handles showing the embedded console
         If checkShowConOut.Checked Then
             conOut.Visible = True
+
         Else
             conOut.Visible = False
         End If

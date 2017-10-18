@@ -24,7 +24,7 @@ Partial Class Compact
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Compact))
-        Me.conOut = New System.Windows.Forms.RichTextBox()
+        Me.OldconOut = New System.Windows.Forms.RichTextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.buttonCompress = New System.Windows.Forms.Button()
@@ -72,7 +72,6 @@ Partial Class Compact
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.ProgressPage = New System.Windows.Forms.TabPage()
-        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -86,6 +85,9 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
+        Me.conOut = New System.Windows.Forms.ListBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -93,26 +95,27 @@ Partial Class Compact
         Me.Panel4.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.ProgressPage.SuspendLayout()
-        Me.FlowLayoutPanel2.SuspendLayout()
         Me.CompResultsPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.compressedSizeVisual.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
-        'conOut
+        'OldconOut
         '
-        Me.conOut.BackColor = System.Drawing.Color.White
-        Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.conOut.ForeColor = System.Drawing.Color.DimGray
-        Me.conOut.Location = New System.Drawing.Point(3, 313)
-        Me.conOut.Name = "conOut"
-        Me.conOut.ReadOnly = True
-        Me.conOut.Size = New System.Drawing.Size(375, 161)
-        Me.conOut.TabIndex = 0
-        Me.conOut.Text = ""
-        Me.conOut.Visible = False
+        Me.OldconOut.BackColor = System.Drawing.Color.White
+        Me.OldconOut.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.OldconOut.ForeColor = System.Drawing.Color.DimGray
+        Me.OldconOut.Location = New System.Drawing.Point(32, 308)
+        Me.OldconOut.Name = "OldconOut"
+        Me.OldconOut.ReadOnly = True
+        Me.OldconOut.Size = New System.Drawing.Size(375, 161)
+        Me.OldconOut.TabIndex = 0
+        Me.OldconOut.Text = ""
+        Me.OldconOut.Visible = False
         '
         'TextBox1
         '
@@ -628,8 +631,8 @@ Partial Class Compact
         'ProgressPage
         '
         Me.ProgressPage.BackColor = System.Drawing.Color.White
-        Me.ProgressPage.Controls.Add(Me.FlowLayoutPanel2)
         Me.ProgressPage.Controls.Add(Me.returnArrow)
+        Me.ProgressPage.Controls.Add(Me.TableLayoutPanel2)
         Me.ProgressPage.Controls.Add(Me.progressPageLabel)
         Me.ProgressPage.Controls.Add(Me.compactprogressbar)
         Me.ProgressPage.Controls.Add(Me.progresspercent)
@@ -639,19 +642,6 @@ Partial Class Compact
         Me.ProgressPage.Size = New System.Drawing.Size(495, 598)
         Me.ProgressPage.TabIndex = 1
         Me.ProgressPage.Text = "ProgressPage"
-        '
-        'FlowLayoutPanel2
-        '
-        Me.FlowLayoutPanel2.Controls.Add(Me.buttonRevert)
-        Me.FlowLayoutPanel2.Controls.Add(Me.CompResultsPanel)
-        Me.FlowLayoutPanel2.Controls.Add(Me.checkShowConOut)
-        Me.FlowLayoutPanel2.Controls.Add(Me.conOut)
-        Me.FlowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(55, 100)
-        Me.FlowLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
-        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(425, 479)
-        Me.FlowLayoutPanel2.TabIndex = 31
         '
         'CompResultsPanel
         '
@@ -664,7 +654,7 @@ Partial Class Compact
         Me.CompResultsPanel.Controls.Add(Me.spaceSavedLabel)
         Me.CompResultsPanel.Location = New System.Drawing.Point(3, 48)
         Me.CompResultsPanel.Name = "CompResultsPanel"
-        Me.CompResultsPanel.Size = New System.Drawing.Size(402, 236)
+        Me.CompResultsPanel.Size = New System.Drawing.Size(375, 231)
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
@@ -746,7 +736,7 @@ Partial Class Compact
         '
         Me.checkShowConOut.AutoSize = True
         Me.checkShowConOut.ForeColor = System.Drawing.Color.DimGray
-        Me.checkShowConOut.Location = New System.Drawing.Point(3, 290)
+        Me.checkShowConOut.Location = New System.Drawing.Point(1, 3)
         Me.checkShowConOut.Name = "checkShowConOut"
         Me.checkShowConOut.Size = New System.Drawing.Size(139, 17)
         Me.checkShowConOut.TabIndex = 32
@@ -780,6 +770,7 @@ Partial Class Compact
         '
         Me.TabPage3.Controls.Add(Me.testFileArgs)
         Me.TabPage3.Controls.Add(Me.Label10)
+        Me.TabPage3.Controls.Add(Me.OldconOut)
         Me.TabPage3.Controls.Add(Me.testcompactargs)
         Me.TabPage3.Controls.Add(Me.compRatioLabel)
         Me.TabPage3.Controls.Add(Me.Button1)
@@ -813,6 +804,52 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
+        'conOut
+        '
+        Me.conOut.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.conOut.BackColor = System.Drawing.Color.White
+        Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.conOut.ForeColor = System.Drawing.Color.DimGray
+        Me.conOut.FormattingEnabled = True
+        Me.conOut.Location = New System.Drawing.Point(0, 26)
+        Me.conOut.Name = "conOut"
+        Me.conOut.Size = New System.Drawing.Size(374, 156)
+        Me.conOut.TabIndex = 30
+        Me.conOut.Visible = False
+        '
+        'Panel2
+        '
+        Me.Panel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.Controls.Add(Me.checkShowConOut)
+        Me.Panel2.Controls.Add(Me.conOut)
+        Me.Panel2.Location = New System.Drawing.Point(3, 285)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(377, 186)
+        Me.Panel2.TabIndex = 33
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.ColumnCount = 1
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Panel2, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.CompResultsPanel, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.buttonRevert, 0, 0)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(55, 102)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 3
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(383, 474)
+        Me.TableLayoutPanel2.TabIndex = 31
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -821,7 +858,8 @@ Partial Class Compact
         Me.ClientSize = New System.Drawing.Size(474, 611)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TabControl1)
-        Me.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.DoubleBuffered = True
+        Me.ForeColor = System.Drawing.Color.DimGray
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(490, 650)
         Me.Name = "Compact"
@@ -837,8 +875,6 @@ Partial Class Compact
         Me.Panel3.PerformLayout()
         Me.ProgressPage.ResumeLayout(False)
         Me.ProgressPage.PerformLayout()
-        Me.FlowLayoutPanel2.ResumeLayout(False)
-        Me.FlowLayoutPanel2.PerformLayout()
         Me.CompResultsPanel.ResumeLayout(False)
         Me.CompResultsPanel.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -849,11 +885,14 @@ Partial Class Compact
         Me.Panel5.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
 
-    Friend WithEvents conOut As RichTextBox
+    Friend WithEvents OldconOut As RichTextBox
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Button1 As Button
     Friend WithEvents buttonCompress As Button
@@ -905,7 +944,6 @@ Partial Class Compact
     Friend WithEvents Panel5 As Panel
     Friend WithEvents compressedSizeVisual As Panel
     Friend WithEvents checkShowConOut As CheckBox
-    Friend WithEvents FlowLayoutPanel2 As FlowLayoutPanel
     Friend WithEvents showinfopopup As Label
     Friend WithEvents testFileArgs As Button
     Friend WithEvents buttonQueryCompact As Button
@@ -915,4 +953,7 @@ Partial Class Compact
     Friend WithEvents ToolTipFilesCompressed As ToolTip
     Friend WithEvents dirChosenLabel As Label
     Friend WithEvents Label14 As Label
+    Friend WithEvents conOut As ListBox
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
 End Class
