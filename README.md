@@ -14,8 +14,10 @@ Use this tool to:
 - Compress program folders (e.g. Adobe Photoshop: 1.71 GB --> 886 MB)
 - Compress game install folders (e.g. Portal 2: 11.8 GB --> 7.88 GB)
 - Compress any other folder on your computer. 
+  
+<h2 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <img src="https://img.shields.io/badge/Games-517-blue.svg"> and <img src="https://img.shields.io/badge/Programs-30-blue.svg"> that have been tested</b></h2>
 
-**See the [Wiki](https://github.com/ImminentFate/CompactGUI/wiki/Game-and-Program-Compression-Tests) for more games and programs that I've tested**
+
 
 For most modern computers there will be no (or very little) performance loss. Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.
 
