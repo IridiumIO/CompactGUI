@@ -7,6 +7,8 @@ This tool is an open-source standalone visual interface to make using the Window
 The compression used by compact.exe is similar to the built-in NTFS compression in that it is transparent. Compressed files and programs can still be accessed as if nothing has changed and show up in Explorer as they normally would — they'll just be decompressed on the fly at runtime. However, the newer algorithms used by Compact are much more efficient. 
 
 ## Installation
+**Note: Proceed with caution if your system language is *not* English. There are [potential issues](https://github.com/ImminentFate/CompactGUI/wiki/Important-Information#localization-issues-40) that may crop up if your language is set to anything else.** 
+
 Download the standalone program from [Github Releases](https://github.com/ImminentFate/CompactGUI/releases)
 
 ## Uses
