@@ -42,7 +42,7 @@ Partial Class Compact
         Me.showinfopopup = New System.Windows.Forms.Label()
         Me.dirChooser = New System.Windows.Forms.LinkLabel()
         Me.chosenDirDisplay = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.checkMarkFolder = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -72,6 +72,11 @@ Partial Class Compact
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.ProgressPage = New System.Windows.Forms.TabPage()
+        Me.returnArrow = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.checkShowConOut = New System.Windows.Forms.CheckBox()
+        Me.conOut = New System.Windows.Forms.ListBox()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -79,15 +84,10 @@ Partial Class Compact
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.compressedSizeVisual = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.checkShowConOut = New System.Windows.Forms.CheckBox()
-        Me.returnArrow = New System.Windows.Forms.Label()
         Me.progressPageLabel = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
-        Me.conOut = New System.Windows.Forms.ListBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -95,13 +95,13 @@ Partial Class Compact
         Me.Panel4.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.ProgressPage.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.CompResultsPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.compressedSizeVisual.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.TabPage3.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'OldconOut
@@ -296,17 +296,16 @@ Partial Class Compact
         Me.chosenDirDisplay.Size = New System.Drawing.Size(374, 27)
         Me.chosenDirDisplay.TabIndex = 16
         '
-        'CheckBox1
+        'checkMarkFolder
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Enabled = False
-        Me.CheckBox1.ForeColor = System.Drawing.Color.DimGray
-        Me.CheckBox1.Location = New System.Drawing.Point(35, 117)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(347, 17)
-        Me.CheckBox1.TabIndex = 17
-        Me.CheckBox1.Text = "Mark folder so that files added afterwards will be compressed as well"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.checkMarkFolder.AutoSize = True
+        Me.checkMarkFolder.ForeColor = System.Drawing.Color.DimGray
+        Me.checkMarkFolder.Location = New System.Drawing.Point(35, 117)
+        Me.checkMarkFolder.Name = "checkMarkFolder"
+        Me.checkMarkFolder.Size = New System.Drawing.Size(347, 17)
+        Me.checkMarkFolder.TabIndex = 17
+        Me.checkMarkFolder.Text = "Mark folder so that files added afterwards will be compressed as well"
+        Me.checkMarkFolder.UseVisualStyleBackColor = True
         '
         'Label2
         '
@@ -395,6 +394,7 @@ Partial Class Compact
         '
         'progressTimer
         '
+        Me.progressTimer.Interval = 20
         '
         'progresspercent
         '
@@ -605,7 +605,7 @@ Partial Class Compact
         'Panel3
         '
         Me.Panel3.Controls.Add(Me.Label8)
-        Me.Panel3.Controls.Add(Me.CheckBox1)
+        Me.Panel3.Controls.Add(Me.checkMarkFolder)
         Me.Panel3.Controls.Add(Me.checkForceCompression)
         Me.Panel3.Controls.Add(Me.Label14)
         Me.Panel3.Controls.Add(Me.checkHiddenFiles)
@@ -642,6 +642,75 @@ Partial Class Compact
         Me.ProgressPage.Size = New System.Drawing.Size(495, 598)
         Me.ProgressPage.TabIndex = 1
         Me.ProgressPage.Text = "ProgressPage"
+        '
+        'returnArrow
+        '
+        Me.returnArrow.AutoSize = True
+        Me.returnArrow.Font = New System.Drawing.Font("Calibri", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.returnArrow.ForeColor = System.Drawing.Color.SteelBlue
+        Me.returnArrow.Location = New System.Drawing.Point(32, 42)
+        Me.returnArrow.Name = "returnArrow"
+        Me.returnArrow.Size = New System.Drawing.Size(25, 18)
+        Me.returnArrow.TabIndex = 22
+        Me.returnArrow.Text = "← "
+        Me.returnArrow.Visible = False
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.ColumnCount = 1
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Panel2, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.CompResultsPanel, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.buttonRevert, 0, 0)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(55, 102)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 3
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(383, 474)
+        Me.TableLayoutPanel2.TabIndex = 31
+        '
+        'Panel2
+        '
+        Me.Panel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.Controls.Add(Me.checkShowConOut)
+        Me.Panel2.Controls.Add(Me.conOut)
+        Me.Panel2.Location = New System.Drawing.Point(3, 285)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(377, 186)
+        Me.Panel2.TabIndex = 33
+        '
+        'checkShowConOut
+        '
+        Me.checkShowConOut.AutoSize = True
+        Me.checkShowConOut.ForeColor = System.Drawing.Color.DimGray
+        Me.checkShowConOut.Location = New System.Drawing.Point(1, 3)
+        Me.checkShowConOut.Name = "checkShowConOut"
+        Me.checkShowConOut.Size = New System.Drawing.Size(139, 17)
+        Me.checkShowConOut.TabIndex = 32
+        Me.checkShowConOut.Text = "Show Detailed Progress"
+        Me.checkShowConOut.UseVisualStyleBackColor = True
+        '
+        'conOut
+        '
+        Me.conOut.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.conOut.BackColor = System.Drawing.Color.White
+        Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.conOut.ForeColor = System.Drawing.Color.DimGray
+        Me.conOut.FormattingEnabled = True
+        Me.conOut.Location = New System.Drawing.Point(0, 26)
+        Me.conOut.Name = "conOut"
+        Me.conOut.Size = New System.Drawing.Size(374, 156)
+        Me.conOut.TabIndex = 30
+        Me.conOut.Visible = False
         '
         'CompResultsPanel
         '
@@ -732,29 +801,6 @@ Partial Class Compact
         Me.Panel5.Size = New System.Drawing.Size(368, 30)
         Me.Panel5.TabIndex = 28
         '
-        'checkShowConOut
-        '
-        Me.checkShowConOut.AutoSize = True
-        Me.checkShowConOut.ForeColor = System.Drawing.Color.DimGray
-        Me.checkShowConOut.Location = New System.Drawing.Point(1, 3)
-        Me.checkShowConOut.Name = "checkShowConOut"
-        Me.checkShowConOut.Size = New System.Drawing.Size(139, 17)
-        Me.checkShowConOut.TabIndex = 32
-        Me.checkShowConOut.Text = "Show Detailed Progress"
-        Me.checkShowConOut.UseVisualStyleBackColor = True
-        '
-        'returnArrow
-        '
-        Me.returnArrow.AutoSize = True
-        Me.returnArrow.Font = New System.Drawing.Font("Calibri", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.returnArrow.ForeColor = System.Drawing.Color.SteelBlue
-        Me.returnArrow.Location = New System.Drawing.Point(32, 42)
-        Me.returnArrow.Name = "returnArrow"
-        Me.returnArrow.Size = New System.Drawing.Size(25, 18)
-        Me.returnArrow.TabIndex = 22
-        Me.returnArrow.Text = "← "
-        Me.returnArrow.Visible = False
-        '
         'progressPageLabel
         '
         Me.progressPageLabel.AutoSize = True
@@ -804,52 +850,6 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
-        'conOut
-        '
-        Me.conOut.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.conOut.BackColor = System.Drawing.Color.White
-        Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.conOut.ForeColor = System.Drawing.Color.DimGray
-        Me.conOut.FormattingEnabled = True
-        Me.conOut.Location = New System.Drawing.Point(0, 26)
-        Me.conOut.Name = "conOut"
-        Me.conOut.Size = New System.Drawing.Size(374, 156)
-        Me.conOut.TabIndex = 30
-        Me.conOut.Visible = False
-        '
-        'Panel2
-        '
-        Me.Panel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.Controls.Add(Me.checkShowConOut)
-        Me.Panel2.Controls.Add(Me.conOut)
-        Me.Panel2.Location = New System.Drawing.Point(3, 285)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(377, 186)
-        Me.Panel2.TabIndex = 33
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel2.ColumnCount = 1
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Panel2, 0, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.CompResultsPanel, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.buttonRevert, 0, 0)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(55, 102)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 3
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(383, 474)
-        Me.TableLayoutPanel2.TabIndex = 31
-        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -875,6 +875,9 @@ Partial Class Compact
         Me.Panel3.PerformLayout()
         Me.ProgressPage.ResumeLayout(False)
         Me.ProgressPage.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.CompResultsPanel.ResumeLayout(False)
         Me.CompResultsPanel.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -885,9 +888,6 @@ Partial Class Compact
         Me.Panel5.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -909,7 +909,7 @@ Partial Class Compact
     Friend WithEvents Panel1 As Panel
     Friend WithEvents dirChooser As LinkLabel
     Friend WithEvents chosenDirDisplay As Label
-    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents checkMarkFolder As CheckBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label

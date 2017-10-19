@@ -59,7 +59,7 @@ Public Class Compact
                 byteComparisonRaw = e.Data
             End If
 
-            If e.Data.Contains("The compression ratio is") Then                                 'Gets the output line that contains the compression ratio and forces the progress bar to 100% (indirectly due to threading)
+            If e.Data.EndsWith("1.") Then                                 'Gets the output line that contains the compression ratio and forces the progress bar to 100% (indirectly due to threading)
                 compressFinished = 1
                 dirCountProgress = dirCountTotal
                 fileCountProgress = fileCountTotal
@@ -67,10 +67,19 @@ Public Class Compact
             End If
 
             If e.Data.Contains("directories were uncompressed") Then                            'Gets the output line that identifies that an uncompression event has finished. 
-                dirCountProgress = 0
-                fileCountProgress = fileCountTotal
-                uncompressFinished = 1
-                isActive = 0
+                If uncompactPass2 = 0 Then
+                    dirCountProgress = 0
+                    fileCountProgress = 0
+                    uncompactPass2 = 1
+                    uncompressFinished = 2
+                ElseIf uncompactPass2 = 1 Then
+                    dirCountProgress = 0
+                    fileCountProgress = fileCountTotal
+                    uncompressFinished = 1
+                    isActive = 0
+                    uncompactPass2 = 0
+                End If
+
             End If
 
             If e.Data.StartsWith(" Compressing files in") Then                                  'Gets each directory that is compressed. Used for the old progressbar.   
@@ -138,7 +147,7 @@ Public Class Compact
                 ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
                 Try
-                    If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
+                    If compactprogressbar.Value > 100 Then                                         'Avoids a /r/softwaregore scenario
                         compactprogressbar.Value = 1
                     Else
                         compactprogressbar.Value = Math.Round _
@@ -153,7 +162,7 @@ Public Class Compact
                 ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress for the Query command.
 
                 Try
-                    If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
+                    If compactprogressbar.Value > 100 Then                                         'Avoids a /r/softwaregore scenario
                         compactprogressbar.Value = 1
                     Else
                         compactprogressbar.Value = Math.Round _
@@ -192,6 +201,9 @@ Public Class Compact
             buttonRevert.Visible = False
             progressPageLabel.Text = "Folder Uncompressed."
             returnArrow.Visible = True
+        ElseIf uncompressFinished = 2 Then
+            uncompressFinished = 0
+            RunCompact("uncompact")
 
         End If
 
@@ -446,6 +458,13 @@ Public Class Compact
         End If
     End Sub
 
+    Private Sub checkMarkFolder_CheckedChanged(sender As Object, e As EventArgs) Handles checkMarkFolder.CheckedChanged
+        If checkMarkFolder.Checked = False Then
+
+            markFolder = 0
+        End If
+    End Sub
+
 
 
 
@@ -573,16 +592,27 @@ Public Class Compact
 
 
             ElseIf isQueryCalledByCompact = 1 Then
-
+                If checkMarkFolder.Checked = True Then
+                    progressPageLabel.Text = "Marking Folder..."
+                Else
+                    progressPageLabel.Text = "Analyzing..."
+                End If
                 buttonRevert.Visible = False
                 CompResultsPanel.Visible = False
-                progressPageLabel.Text = "Analyzing..."
+
 
             End If
 
         End If
 
-        If isQueryCalledByCompact = 1 Then Queryaftercompact()
+        If isQueryCalledByCompact = 1 Then
+            If checkMarkFolder.Checked = True Then
+                markFolder = 1
+                RunCompact("compact")
+            End If
+
+            Queryaftercompact()
+        End If
         If isQueryCalledByCompact = 0 Then isQueryMode = 0
 
     End Sub
@@ -600,59 +630,88 @@ Public Class Compact
 
 
     Dim hasqueryfinished = 0
-
+    Dim markFolder = 0
+    Dim isUncompacting = 0
+    Dim uncompactPass2 = 0
 
     Private Sub RunCompact(desiredfunction As String)
 
         If desiredfunction = "compact" Then
+            Dim isUncompacting = 0
             isQueryCalledByCompact = 0
             compactArgs = "compact /C"
 
-            If checkRecursiveScan.Checked = True Then
-                compactArgs = compactArgs + " /S"
-            End If
-            If checkForceCompression.Checked = True Then
-                compactArgs = compactArgs + " /F"
-            End If
-            If checkHiddenFiles.Checked = True Then
-                compactArgs = compactArgs + " /A"
-            End If
-            If compressX4.Checked = True Then
-                compactArgs = compactArgs + " /EXE:XPRESS4K"
-            End If
-            If compressX8.Checked = True Then
-                compactArgs = compactArgs + " /EXE:XPRESS8K"
-            End If
-            If compressX16.Checked = True Then
-                compactArgs = compactArgs + " /EXE:XPRESS16K"
-            End If
-            If compressLZX.Checked = True Then
-                compactArgs = compactArgs + " /EXE:LZX"
-            End If
+            If markFolder = 1 Then
+                compactArgs = compactArgs + " /S *.*"
+                MyProcess.StandardInput.WriteLine(compactArgs)
+                MyProcess.StandardInput.Flush()
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
-            MyProcess.StandardInput.Flush()
+                markFolder = 0
+            Else
+                If checkRecursiveScan.Checked = True Then
+                    compactArgs = compactArgs + " /S"
+                End If
+                If checkForceCompression.Checked = True Then
+                    compactArgs = compactArgs + " /F"
+                End If
+                If checkHiddenFiles.Checked = True Then
+                    compactArgs = compactArgs + " /A"
+                End If
+                If compressX4.Checked = True Then
+                    compactArgs = compactArgs + " /EXE:XPRESS4K"
+                End If
+                If compressX8.Checked = True Then
+                    compactArgs = compactArgs + " /EXE:XPRESS8K"
+                End If
+                If compressX16.Checked = True Then
+                    compactArgs = compactArgs + " /EXE:XPRESS16K"
+                End If
+                If compressLZX.Checked = True Then
+                    compactArgs = compactArgs + " /EXE:LZX"
+                End If
+
+                MyProcess.StandardInput.WriteLine(compactArgs)
+                MyProcess.StandardInput.Flush()
+
+            End If
 
             isQueryCalledByCompact = 1
             hasqueryfinished = 0
             isActive = 1
 
         ElseIf desiredfunction = "uncompact" Then
-            isQueryCalledByCompact = 0
-            compactArgs = "compact /U /EXE /S"
+            If uncompactPass2 = 1 Then
+                isQueryMode = 0
 
-            If checkForceCompression.Checked = True Then
-                compactArgs = compactArgs + " /F"
-            End If
-            If checkHiddenFiles.Checked = True Then
-                compactArgs = compactArgs + " /A"
+
+                progressPageLabel.Text = "Setting Attributes..."
+                MyProcess.StandardInput.WriteLine("compact /U /S *.*")
+                MyProcess.StandardInput.Flush()
+
+            ElseIf uncompactPass2 = 0 Then
+
+                isQueryCalledByCompact = 0
+                isUncompacting = 1
+                compactArgs = "compact /U /S /EXE "
+
+                If checkForceCompression.Checked = True Then
+                    compactArgs = compactArgs + " /F"
+                End If
+                If checkHiddenFiles.Checked = True Then
+                    compactArgs = compactArgs + " /A"
+                End If
+
+                MyProcess.StandardInput.WriteLine(compactArgs)
+                MyProcess.StandardInput.Flush()
+
+                isActive = 1
+
+
             End If
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
-            MyProcess.StandardInput.Flush()
-            isActive = 1
 
         ElseIf desiredfunction = "query" Then
+            Dim isUncompacting = 0
             compactArgs = "compact /S /Q /EXE"
 
             MyProcess.StandardInput.WriteLine(compactArgs)
