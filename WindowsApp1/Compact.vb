@@ -593,7 +593,7 @@ Public Class Compact
 
             ElseIf isQueryCalledByCompact = 1 Then
                 If checkMarkFolder.Checked = True Then
-                    progressPageLabel.Text = "Marking Folder..."
+                    progressPageLabel.Text = "Setting Attributes..."
                 Else
                     progressPageLabel.Text = "Analyzing..."
                 End If
@@ -631,18 +631,17 @@ Public Class Compact
 
     Dim hasqueryfinished = 0
     Dim markFolder = 0
-    Dim isUncompacting = 0
     Dim uncompactPass2 = 0
 
     Private Sub RunCompact(desiredfunction As String)
 
         If desiredfunction = "compact" Then
-            Dim isUncompacting = 0
+            uncompactPass2 = 0
             isQueryCalledByCompact = 0
             compactArgs = "compact /C"
 
             If markFolder = 1 Then
-                compactArgs = compactArgs + " /S *.*"
+                compactArgs = compactArgs + " /S"
                 MyProcess.StandardInput.WriteLine(compactArgs)
                 MyProcess.StandardInput.Flush()
 
@@ -685,13 +684,13 @@ Public Class Compact
 
 
                 progressPageLabel.Text = "Setting Attributes..."
-                MyProcess.StandardInput.WriteLine("compact /U /S *.*")
+                MyProcess.StandardInput.WriteLine("compact /U /S ")
                 MyProcess.StandardInput.Flush()
 
             ElseIf uncompactPass2 = 0 Then
 
                 isQueryCalledByCompact = 0
-                isUncompacting = 1
+
                 compactArgs = "compact /U /S /EXE "
 
                 If checkForceCompression.Checked = True Then
@@ -711,7 +710,7 @@ Public Class Compact
 
 
         ElseIf desiredfunction = "query" Then
-            Dim isUncompacting = 0
+            uncompactPass2 = 0
             compactArgs = "compact /S /Q /EXE"
 
             MyProcess.StandardInput.WriteLine(compactArgs)
