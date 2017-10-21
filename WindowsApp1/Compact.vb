@@ -59,7 +59,7 @@ Public Class Compact
                 byteComparisonRaw = e.Data
             End If
 
-            If e.Data.EndsWith(" 1.") Then                                 'Gets the output line that contains the compression ratio and forces the progress bar to 100% (indirectly due to threading)
+            If e.Data.EndsWith("1.") Then                                 'Gets the output line that contains the compression ratio and forces the progress bar to 100% (indirectly due to threading)
                 compressFinished = 1
                 dirCountProgress = dirCountTotal
                 fileCountProgress = fileCountTotal
