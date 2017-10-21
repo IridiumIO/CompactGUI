@@ -42,7 +42,6 @@ Partial Class Compact
         Me.showinfopopup = New System.Windows.Forms.Label()
         Me.dirChooser = New System.Windows.Forms.LinkLabel()
         Me.chosenDirDisplay = New System.Windows.Forms.Label()
-        Me.checkMarkFolder = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -295,17 +294,6 @@ Partial Class Compact
         Me.chosenDirDisplay.Padding = New System.Windows.Forms.Padding(5)
         Me.chosenDirDisplay.Size = New System.Drawing.Size(374, 27)
         Me.chosenDirDisplay.TabIndex = 16
-        '
-        'checkMarkFolder
-        '
-        Me.checkMarkFolder.AutoSize = True
-        Me.checkMarkFolder.ForeColor = System.Drawing.Color.DimGray
-        Me.checkMarkFolder.Location = New System.Drawing.Point(35, 117)
-        Me.checkMarkFolder.Name = "checkMarkFolder"
-        Me.checkMarkFolder.Size = New System.Drawing.Size(347, 17)
-        Me.checkMarkFolder.TabIndex = 17
-        Me.checkMarkFolder.Text = "Mark folder so that files added afterwards will be compressed as well"
-        Me.checkMarkFolder.UseVisualStyleBackColor = True
         '
         'Label2
         '
@@ -605,7 +593,6 @@ Partial Class Compact
         'Panel3
         '
         Me.Panel3.Controls.Add(Me.Label8)
-        Me.Panel3.Controls.Add(Me.checkMarkFolder)
         Me.Panel3.Controls.Add(Me.checkForceCompression)
         Me.Panel3.Controls.Add(Me.Label14)
         Me.Panel3.Controls.Add(Me.checkHiddenFiles)
@@ -856,8 +843,8 @@ Partial Class Compact
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(474, 611)
-        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.Panel1)
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.DimGray
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -909,7 +896,6 @@ Partial Class Compact
     Friend WithEvents Panel1 As Panel
     Friend WithEvents dirChooser As LinkLabel
     Friend WithEvents chosenDirDisplay As Label
-    Friend WithEvents checkMarkFolder As CheckBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
