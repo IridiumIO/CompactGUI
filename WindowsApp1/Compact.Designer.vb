@@ -555,7 +555,7 @@ Partial Class Compact
         Me.buttonQueryCompact.Name = "buttonQueryCompact"
         Me.buttonQueryCompact.Size = New System.Drawing.Size(144, 27)
         Me.buttonQueryCompact.TabIndex = 23
-        Me.buttonQueryCompact.Text = "Check Compression"
+        Me.buttonQueryCompact.Text = "Analyse Folder"
         Me.buttonQueryCompact.UseVisualStyleBackColor = False
         Me.buttonQueryCompact.Visible = False
         '
