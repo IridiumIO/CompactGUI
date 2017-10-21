@@ -363,7 +363,7 @@ Public Class Compact
             MyProcess.BeginOutputReadLine()
 
             Try
-                MyProcess.StandardInput.WriteLine("chcp 65001")                    'UTF-8 codepage in console output. Otherwise it will translate to ASCII equivalents.
+                MyProcess.StandardInput.WriteLine("chcp 437")                    'US codepage in console output to aid in some localisations.
                 MyProcess.StandardInput.Flush()
 
                 RunCompact(passthrougharg)
