@@ -6,7 +6,7 @@ Imports Ookii.Dialogs                                                           
 Imports System.Management
 
 Public Class Compact
-    Dim version = "1.4.0_rc1"
+    Dim version = "1.4.0_rc2"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -649,21 +649,21 @@ Public Class Compact
 
             compactArgs = "compact /U /S /EXE "
 
-                If checkForceCompression.Checked = True Then
-                    compactArgs = compactArgs + " /F"
-                End If
-                If checkHiddenFiles.Checked = True Then
-                    compactArgs = compactArgs + " /A"
-                End If
+            If checkForceCompression.Checked = True Then
+                compactArgs = compactArgs + " /F"
+            End If
+            If checkHiddenFiles.Checked = True Then
+                compactArgs = compactArgs + " /A"
+            End If
 
-                MyProcess.StandardInput.WriteLine(compactArgs)
-                MyProcess.StandardInput.Flush()
+            MyProcess.StandardInput.WriteLine(compactArgs)
+            MyProcess.StandardInput.Flush()
 
-                isActive = 1
+            isActive = 1
 
 
         ElseIf desiredfunction = "query" Then
-            Dim isUncompacting = 0
+
             compactArgs = "compact /S /Q /EXE"
 
             MyProcess.StandardInput.WriteLine(compactArgs)

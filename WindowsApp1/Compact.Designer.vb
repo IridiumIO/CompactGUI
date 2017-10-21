@@ -843,8 +843,8 @@ Partial Class Compact
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(474, 611)
-        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.TabControl1)
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.DimGray
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
