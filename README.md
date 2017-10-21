@@ -19,7 +19,7 @@ Use this tool to:
 - Compress game install folders (e.g. Portal 2: 11.8 GB --> 7.88 GB)
 - Compress any other folder on your computer. 
   
-<h3 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <img src="https://img.shields.io/badge/Games-732-blue.svg"> and <img src="https://img.shields.io/badge/Programs-47-blue.svg"> that have been tested</b></h3>
+<h3 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-925-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-47-blue.svg"></a> that have been tested</b></h3>
 <p>&nbsp;</p>
 
 
