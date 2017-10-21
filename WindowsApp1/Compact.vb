@@ -283,7 +283,7 @@ Public Class Compact
 
                 Dim DIwDString = New DirectoryInfo(wDString)
                 directorysizeexceptionCount = 0
-                workingDir = Chr(34) + wDString.ToString() + Chr(34)
+                workingDir = wDString.ToString()
                 chosenDirDisplay.Text = DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
                 uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
                 preSize.Text = "Uncompressed Size: " + GetOutputSize _
@@ -357,6 +357,9 @@ Public Class Compact
             With MyProcess.StartInfo
                 .FileName = "CMD.exe"
                 .Arguments = ""
+                .StandardOutputEncoding = Encoding.UTF8                             'Allow console output to use UTF-8. Otherwise it will translate to ASCII equivalents.
+                .StandardErrorEncoding = Encoding.UTF8
+                .WorkingDirectory = workingDir                                      'Set working directory via argument, allows UTF-8 to be passed directly.
                 .UseShellExecute = False
                 .CreateNoWindow = True
                 .RedirectStandardInput = True
@@ -370,16 +373,8 @@ Public Class Compact
             MyProcess.BeginErrorReadLine()
             MyProcess.BeginOutputReadLine()
 
-
             Try
-
-                MyProcess.StandardInput.WriteLine("cd /d " + workingDir)
-                MyProcess.StandardInput.Flush()
-
-                MyProcess.StandardInput.WriteLine("")                                           'Required for the embedded console to show the next line in the buffer after the 'cd' command. No idea why
-                MyProcess.StandardInput.Flush()
-
-                MyProcess.StandardInput.WriteLine("chcp 437")
+                MyProcess.StandardInput.WriteLine("chcp 65001")                    'UTF-8 codepage in console output. Otherwise it will translate to ASCII equivalents.
                 MyProcess.StandardInput.Flush()
 
                 RunCompact(passthrougharg)
