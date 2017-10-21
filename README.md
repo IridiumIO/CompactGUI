@@ -9,6 +9,8 @@ The compression used by compact.exe is similar to the built-in NTFS compression 
 ## Installation
 **Note: Proceed with caution if your system language is *not* English. There are [potential issues](https://github.com/ImminentFate/CompactGUI/wiki/Important-Information#localization-issues-40) that may crop up if your language is set to anything else.** 
 
+**Note2: If the folder you're selecting has symbols anywhere in its name, this may not work. An example is Hitman [#88](https://github.com/ImminentFate/CompactGUI/issues/88), the program will default to compressing the folder its currently in because that's how Windows works. A fix is in the works, but for now, don't compress games with symbols in the path!.** 
+
 Download the standalone program from [Github Releases](https://github.com/ImminentFate/CompactGUI/releases)
 
 ## Uses
