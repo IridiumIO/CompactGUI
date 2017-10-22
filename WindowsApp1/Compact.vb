@@ -502,9 +502,9 @@ Public Class Compact
 
         If wDString.Contains("C:\Windows") Then                                                 'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
 
-            MsgBox("Compressing items in the Windows folder using this program 
-                    is not recommended. Please use the command line if you still 
-                    wish to compress the Windows folder")
+            MsgBox("Compressing items in the Windows folder using this program " _
+                    & "is not recommended. Please use the command line if you still " _
+                    & "wish to compress the Windows folder")
 
         ElseIf wDString.EndsWith(":\") Then
 
