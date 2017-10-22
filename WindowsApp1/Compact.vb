@@ -610,7 +610,7 @@ Public Class Compact
             Loop
 
             'MsgBox(Res.Split(" ").Reverse().ElementAt(0))
-            Dim CP = Integer.Parse(Res.Split(" ").Reverse().ElementAt(0))
+            Dim CP = Integer.Parse(Regex.Replace((Res.Split(" ").Reverse().ElementAt(0)), "[^\d]", ""))
             MyProcess.StandardInput.WriteLine("exit")
             MyProcess.StandardInput.Flush()
             MyProcess.WaitForExit()
