@@ -84,13 +84,7 @@ Public Class Compact
     Dim FMT_FILESCOMPRESSED As String = ""
 
     'Gets the relevant lines from the FMT_XXX_MSG Arrays
-    Dim FMTFilesWithin As String() = FMT_ANALYSIS_MSG(0).Split(" ")
-    Dim FMTCompNotComp As String() = FMT_ANALYSIS_MSG(1).Trim(vbCrLf).Split(" ")
-    Dim FMTTotalBytes As String() = (FMT_ANALYSIS_MSG(2).Trim(vbCrLf)).Split(" ")
-    Dim FMTCompRatio As String() = FMT_ANALYSIS_MSG(3).Trim(vbCrLf).Split(" ")
-    Dim FMTListing As String() = FMT_LISTING_MSG.Trim().Split(" ")
-    Dim FMTUncompressed As String() = FMT_UNCOMPRESSED_MSG.Split(" ")
-    Dim FMTCompressFinished As String() = FMT_COMPRESSED_MSG(FMT_COMPRESSED_MSG.Count - 1).Trim(vbCrLf).Split(" ")
+
 
 
     'Index values that are found while parsing the console output. 
@@ -129,12 +123,15 @@ Public Class Compact
 
 
     Public Function CALC_OUTPUT(edata As String)
-
-
-
         Dim CONINPUTDATA As String() = REGEX_NUMBERFORMATTER.Replace(edata, "").Trim().Split(" ")
 
-
+        Dim FMTFilesWithin As String() = FMT_ANALYSIS_MSG(0).Split(" ")
+        Dim FMTCompNotComp As String() = FMT_ANALYSIS_MSG(1).Trim(vbCrLf).Split(" ")
+        Dim FMTTotalBytes As String() = (FMT_ANALYSIS_MSG(2).Trim(vbCrLf)).Split(" ")
+        Dim FMTCompRatio As String() = FMT_ANALYSIS_MSG(3).Trim(vbCrLf).Split(" ")
+        Dim FMTListing As String() = FMT_LISTING_MSG.Trim().Split(" ")
+        Dim FMTUncompressed As String() = FMT_UNCOMPRESSED_MSG.Split(" ")
+        Dim FMTCompressFinished As String() = FMT_COMPRESSED_MSG(FMT_COMPRESSED_MSG.Count - 1).Trim(vbCrLf).Split(" ")
 
         'LISTING - DIRECTORY COUNT
         If FMTListing(0) = CONINPUTDATA(0) Then
@@ -148,17 +145,25 @@ Public Class Compact
             fileCountProgress += 1
         End If
 
+
         'Uncompressed - Checks if uncompression is finished
-        If FMTUncompressed.Count = CONINPUTDATA.Count And (FMTUncompressed(FMTUncompressed.Count - 1) = CONINPUTDATA(CONINPUTDATA.Count - 1) Or FMTUncompressed(FMTUncompressed.Count - 1).Contains("%2")) Then
+        If FMTUncompressed.Count = CONINPUTDATA.Count _
+            And (FMTUncompressed(FMTUncompressed.Count - 1) = CONINPUTDATA(CONINPUTDATA.Count - 1) _
+                Or FMTUncompressed(FMTUncompressed.Count - 1).Contains("%2")) Then
 
             dirCountProgress = 0
             fileCountProgress = fileCountTotal
             uncompressFinished = 1
             isActive = 0
+
         End If
 
+
         'Compress Finished Ratio - Checks if compression is finished
-        If FMTCompressFinished.Count = CONINPUTDATA.Count And OutputlineIndex = 0 And (FMTCompressFinished(FMTCompressFinished.Count - 1) = CONINPUTDATA(CONINPUTDATA.Count - 1) Or CONINPUTDATA(CONINPUTDATA.Count - 1).Contains("1.")) Then
+        If FMTCompressFinished.Count = CONINPUTDATA.Count _
+            And OutputlineIndex = 0 _
+            And (FMTCompressFinished(FMTCompressFinished.Count - 1) = CONINPUTDATA(CONINPUTDATA.Count - 1) _
+                Or CONINPUTDATA(CONINPUTDATA.Count - 1).Contains("1.")) Then
 
             compressFinished = 1
             dirCountProgress = dirCountTotal
@@ -166,7 +171,6 @@ Public Class Compact
             isActive = 0
 
         End If
-
 
 
         'Analysis Complete - Gets the lines when analysing a folder is completed
@@ -202,88 +206,52 @@ Public Class Compact
 
 
         If OutputlineIndex = 1 Then
-            Dim i = 0
-            For Each c In FMTCompNotComp
-                If c.Contains("%3") Then
-                    FMTCompNotComp(i) = CONINPUTDATA(i)
-                    CON_INDEX_FILESCOMPRESSEDCOUNT = i
-                ElseIf c.Contains("%4") Then
-                    FMTCompNotComp(i) = CONINPUTDATA(i)
-                    CON_INDEX_FILESNOTCOMPRESSEDCOUNT = i
-                End If
-                i += 1
-            Next
-
-            Dim builder As New StringBuilder
-            Dim b = 0
-            For Each c In FMTCompNotComp
-                builder.Append(FMTCompNotComp(b))
-                builder.Append(" ")
-                b += 1
-            Next
-            ARR_FILESCOMPRESSED = FMTCompNotComp
-            Dim s As String = builder.ToString
-            Return s
+            Return OutputLines(FMTCompNotComp, CONINPUTDATA, CON_INDEX_FILESCOMPRESSEDCOUNT, CON_INDEX_FILESNOTCOMPRESSEDCOUNT, ARR_FILESCOMPRESSED, "%3", "%4")
         End If
-
         If OutputlineIndex = 2 Then
-            Dim i = 0
-            For Each c In FMTTotalBytes
-                If c.Contains("%5") Then
-                    FMTTotalBytes(i) = CONINPUTDATA(i)
-                    CON_INDEX_TOTALBYTESNOTCOMPRESSED = i
-
-                ElseIf c.Contains("%6") Then
-                    FMTTotalBytes(i) = CONINPUTDATA(i)
-                    CON_INDEX_TOTALBYTESCOMPRESSED = i
-                End If
-                i += 1
-            Next
-
-            Dim builder As New StringBuilder
-            Dim b = 0
-            For Each c In FMTTotalBytes
-                builder.Append(FMTTotalBytes(b))
-                builder.Append(" ")
-                b += 1
-            Next
-            ARR_TOTALBYTES = FMTTotalBytes
-            Dim s As String = builder.ToString
-            Return s
+            Return OutputLines(FMTTotalBytes, CONINPUTDATA, CON_INDEX_TOTALBYTESNOTCOMPRESSED, CON_INDEX_TOTALBYTESCOMPRESSED, ARR_TOTALBYTES, "%5", "%6")
         End If
-
         If OutputlineIndex = 3 Then
-            Dim i = 0
-
-            For Each c In FMTCompRatio
-                If c.Contains("%7") Then
-                    FMTCompRatio(i) = CONINPUTDATA(i)
-                    CON_INDEX_COMPRESSIONRATIO = i
-
-                End If
-                i += 1
-            Next
-
-            Dim builder As New StringBuilder
-            Dim b = 0
-
-            For Each c In FMTCompRatio
-                builder.Append(FMTCompRatio(b))
-                builder.Append(" ")
-                b += 1
-            Next
-
-            ARR_COMPRATIO = FMTCompRatio
-
-            Dim s As String = builder.ToString
-            Return s
-
+            Return OutputLines(FMTCompRatio, CONINPUTDATA, CON_INDEX_COMPRESSIONRATIO, CON_INDEX_COMPRESSIONRATIO, ARR_COMPRATIO, "%7")
         End If
-
 
         Return ("Nothing")
 
     End Function
+
+    Dim Con_Index2Default As Integer = 1
+    Public Function OutputLines(ByRef FMTVal As Object, ByRef CONVal As Object, ByRef CON_Index1 As Object, ByRef CON_Index2 As Object, ByRef ARRVal As Object, ByRef Val1 As String, Optional ByRef Val2 As String = "%xnull")
+
+        Dim i = 0
+        For Each c In FMTVal
+            If c.Contains(Val1) Then
+                FMTVal(i) = CONVal(i)
+                CON_Index1 = i
+
+            ElseIf c.Contains(Val2) Then
+                FMTVal(i) = CONVal(i)
+                CON_Index2 = i
+            End If
+            i += 1
+        Next
+
+        Dim builder As New StringBuilder
+        Dim b = 0
+        For Each c In FMTVal
+            builder.Append(FMTVal(b))
+            builder.Append(" ")
+            b += 1
+        Next
+        ARRVal = FMTVal
+        Return builder.ToString
+
+
+
+    End Function
+
+
+
+
 
     Private Sub MyProcess_OutputDataReceived _
         (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
@@ -590,7 +558,7 @@ Public Class Compact
                     Dim numberOfFiles As Int64 = Directory.GetFiles _
                         (wDString, "*", IO.SearchOption.AllDirectories).Length
 
-                    fileCountTotal = numberOfFiles '- (dirCountTotal + 1) '                        'Windows seems to do a funny thing where it counts "files" as the number of files + folders
+                    fileCountTotal = numberOfFiles
 
                 Catch ex As Exception
                 End Try
