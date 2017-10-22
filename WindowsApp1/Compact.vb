@@ -59,7 +59,7 @@ Public Class Compact
 
 
 
-    'FormatMessage substrings
+    'FormatMessage substrings   
     Dim fmt8 As String = GetMessageFromModule("compact.exe", 8)   'Analysis Endlines
     Dim fmt7 As String = GetMessageFromModule("compact.exe", 7)   'Listing[] Lines - directory count
     Dim fmt1 As String = GetMessageFromModule("compact.exe", 1)   '[OK] Line - file count
@@ -88,13 +88,13 @@ Public Class Compact
 
 
     'Index values that are found while parsing the console output. 
-    Dim CON_INDEX_TOTALFILES As Integer
-    Dim CON_INDEX_TOTALDIRECTORIES As Integer
-    Dim CON_INDEX_FILESCOMPRESSEDCOUNT As Integer
-    Dim CON_INDEX_FILESNOTCOMPRESSEDCOUNT As Integer
-    Dim CON_INDEX_TOTALBYTESCOMPRESSED As Integer
-    Dim CON_INDEX_TOTALBYTESNOTCOMPRESSED As Integer
-    Dim CON_INDEX_COMPRESSIONRATIO As Integer
+    Dim CON_INDEX_TOTALFILES As Integer = 1
+    Dim CON_INDEX_TOTALDIRECTORIES As Integer = 1
+    Dim CON_INDEX_FILESCOMPRESSEDCOUNT As Integer = 1
+    Dim CON_INDEX_FILESNOTCOMPRESSEDCOUNT As Integer = 1
+    Dim CON_INDEX_TOTALBYTESCOMPRESSED As Integer = 1
+    Dim CON_INDEX_TOTALBYTESNOTCOMPRESSED As Integer = 1
+    Dim CON_INDEX_COMPRESSIONRATIO As Integer = 1
 
     'e.Data Output Strings from the console - each of these is one of the four lines at the end of the console output. 
     Dim CON_FILESWITHINDIRECTORIESLINE
@@ -132,6 +132,7 @@ Public Class Compact
         Dim FMTListing As String() = FMT_LISTING_MSG.Trim().Split(" ")
         Dim FMTUncompressed As String() = FMT_UNCOMPRESSED_MSG.Split(" ")
         Dim FMTCompressFinished As String() = FMT_COMPRESSED_MSG(FMT_COMPRESSED_MSG.Count - 1).Trim(vbCrLf).Split(" ")
+
 
         'LISTING - DIRECTORY COUNT
         If FMTListing(0) = CONINPUTDATA(0) Then
@@ -174,36 +175,13 @@ Public Class Compact
 
 
         'Analysis Complete - Gets the lines when analysing a folder is completed
-        If FMTFilesWithin.Count = CONINPUTDATA.Count And (FMTFilesWithin(0) = CONINPUTDATA(0) Or FMTFilesWithin(0).Contains("%1")) Then
+        If FMTFilesWithin.Count = CONINPUTDATA.Count _
+            And (FMTFilesWithin(0) = CONINPUTDATA(0) _
+                Or FMTFilesWithin(0).Contains("%1")) Then
 
-            Dim i = 0
-            For Each c In FMTFilesWithin
-                If c.Contains("%1") Then
-                    FMTFilesWithin(i) = CONINPUTDATA(i)
-                    CON_INDEX_TOTALFILES = i
-                ElseIf c.Contains("%2") Then
-                    FMTFilesWithin(i) = CONINPUTDATA(i)
-                    CON_INDEX_TOTALDIRECTORIES = i
-                End If
-                i += 1
-            Next
-
-            Dim builder As New StringBuilder
-            Dim b = 0
-            For Each c In FMTFilesWithin
-                builder.Append(FMTFilesWithin(b))
-                builder.Append(" ")
-                b += 1
-            Next
-
-            ARR_FILESWITHINDIRECTORIES = FMTFilesWithin
-
-            Dim s As String = builder.ToString
-            Return s
-            'Return s.Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)(0)
+            Return OutputLines(FMTFilesWithin, CONINPUTDATA, CON_INDEX_TOTALFILES, CON_INDEX_TOTALDIRECTORIES, ARR_FILESWITHINDIRECTORIES, "%1", "%2")
 
         End If
-
 
         If OutputlineIndex = 1 Then
             Return OutputLines(FMTCompNotComp, CONINPUTDATA, CON_INDEX_FILESCOMPRESSEDCOUNT, CON_INDEX_FILESNOTCOMPRESSEDCOUNT, ARR_FILESCOMPRESSED, "%3", "%4")
@@ -215,11 +193,12 @@ Public Class Compact
             Return OutputLines(FMTCompRatio, CONINPUTDATA, CON_INDEX_COMPRESSIONRATIO, CON_INDEX_COMPRESSIONRATIO, ARR_COMPRATIO, "%7")
         End If
 
+
         Return ("Nothing")
 
     End Function
 
-    Dim Con_Index2Default As Integer = 1
+
     Public Function OutputLines(ByRef FMTVal As Object, ByRef CONVal As Object, ByRef CON_Index1 As Object, ByRef CON_Index2 As Object, ByRef ARRVal As Object, ByRef Val1 As String, Optional ByRef Val2 As String = "%xnull")
 
         Dim i = 0
@@ -245,8 +224,6 @@ Public Class Compact
         ARRVal = FMTVal
         Return builder.ToString
 
-
-
     End Function
 
 
@@ -258,6 +235,8 @@ Public Class Compact
         Handles MyProcess.OutputDataReceived
 
         AppendOutputText(vbCrLf & e.Data)
+
+
         If MyProcess.HasExited = False Then
             If e.Data.Contains(CALC_OUTPUT(e.Data).ToString.Trim(" ")) And canProceed = 0 Then          'If the output line of the console is the "%files within" line then do stuff. Trim gets rid of the spaces before and after some lines
                 CON_FILESWITHINDIRECTORIESLINE = e.Data.Trim(" ")                                           ' This variable can't get set if the first criteria fails. This means that the console output is not parsing the russian properly. 
@@ -270,7 +249,7 @@ Public Class Compact
 
 
 
-        If OutputlineIndex = 1 And canProceed = 1 Then              ' These all run after the one above is met, since if the one above is met then it means there's only 3 lines left. 
+        If OutputlineIndex = 1 And canProceed = 1 Then                                                  ' These all run after the one above is met, since if the one above is met then it means there's only 3 lines left. 
             CON_FILESCOMPRESSEDLINE = e.Data
             CALC_OUTPUT(e.Data)
             byteComparisonRawFilesCompressed = e.Data
@@ -645,8 +624,8 @@ Public Class Compact
             With MyProcess.StartInfo
                 .FileName = "CMD.exe"
                 .Arguments = ""
-                .StandardOutputEncoding = Encoding.UTF8                             'Allow console output to use UTF-8. Otherwise it will translate to ASCII equivalents.
-                .StandardErrorEncoding = Encoding.UTF8
+                .StandardOutputEncoding = Encoding.GetEncoding(CP)                             'Allow console output to use UTF-8. Otherwise it will translate to ASCII equivalents.
+                .StandardErrorEncoding = Encoding.GetEncoding(CP)
                 .WorkingDirectory = workingDir                                      'Set working directory via argument, allows UTF-8 to be passed directly.
                 .UseShellExecute = False
                 .CreateNoWindow = True
@@ -794,7 +773,7 @@ Public Class Compact
         Dim querySize As Int64 = 0
 
 
-        If isQueryMode = 0 Then querySize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
+        'If isQueryMode = 0 Then querySize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
 
 
         Dim oldFolderSize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
