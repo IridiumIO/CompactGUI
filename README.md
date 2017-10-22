@@ -7,11 +7,11 @@ This tool is an open-source standalone visual interface to make using the Window
 The compression used by compact.exe is similar to the built-in NTFS compression in that it is transparent. Compressed files and programs can still be accessed as if nothing has changed and show up in Explorer as they normally would — they'll just be decompressed on the fly at runtime. However, the newer algorithms used by Compact are much more efficient. 
 
 ## Installation
-**Note: Proceed with caution if your system language is *not* English. There are [potential issues](https://github.com/ImminentFate/CompactGUI/wiki/Important-Information#localization-issues-40) that may crop up if your language is set to anything else.** 
+**Note: Proceed with caution if your system language is *not* English. There are [potential issues](https://github.com/ImminentFate/CompactGUI/wiki/Important-Information#localization-issues-40) that may crop up if your language is set to anything else. A fix for this will be released soon** 
 
-**Note2: If the folder you're selecting has symbols anywhere in its name, this may not work. An example is Hitman [#88](https://github.com/ImminentFate/CompactGUI/issues/88), the program will default to compressing the folder its currently in because the `cd` command fails. A fix is in the works, but for now, click "Check compression" on games with symbols in the path before actually compressing!.** 
+<p align = "center">Download the standalone program from <a href="https://github.com/ImminentFate/CompactGUI/releases">GitHub Releases</a></p>
 
-Download the standalone program from [Github Releases](https://github.com/ImminentFate/CompactGUI/releases)
+<p align = "center"><a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg"></a></p>
 
 ## Uses
 Use this tool to: 
@@ -19,7 +19,7 @@ Use this tool to:
 - Compress game install folders (e.g. Portal 2: 11.8 GB --> 7.88 GB)
 - Compress any other folder on your computer. 
   
-<h3 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <img src="https://img.shields.io/badge/Games-732-blue.svg"> and <img src="https://img.shields.io/badge/Programs-47-blue.svg"> that have been tested</b></h3>
+<h3 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-925-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-47-blue.svg"></a> that have been tested</b></h3>
 <p>&nbsp;</p>
 
 
