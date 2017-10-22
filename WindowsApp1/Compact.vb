@@ -452,7 +452,7 @@ Public Class Compact
         Try
             If conOut.InvokeRequired Then
                 Dim serverOutDelegate As New AppendOutputTextDelegate(AddressOf AppendOutputText)
-                Me.Invoke(serverOutDelegate, text.Replace("ÿ", " "))
+                Me.Invoke(serverOutDelegate, text)
             Else
                 If text <> vbCrLf Then
                     conOut.Items.Insert(0, text)
@@ -725,12 +725,12 @@ Public Class Compact
         If isActive = 1 Then
 
             If MessageBox.Show _
-                ("Quitting while the Compact function is running is potentially dangerous." _
+                ("Are you sure you want to exit?" & vbCrLf & vbCrLf & "Quitting while the Compact function is running is potentially dangerous." _
                  & "Continuing to close could lead to one of your files becoming stuck in a semi-compressed state." _
                  & vbCrLf & vbCrLf &
                  "If you do decide to force quit now, you can potentially fix any unreadable files by running Compact again," _
-                 & "selecting the 'Force Compression' Checkbox and then running uncompress on the folder.",
-                 "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) <> DialogResult.Yes Then
+                 & "selecting the 'Force Compression' Checkbox and then running uncompress on the folder." & vbCrLf & "Click Yes to continue exiting the program.",
+                 "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) <> DialogResult.Yes Then
 
                 e.Cancel = True
 
