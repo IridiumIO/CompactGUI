@@ -6,7 +6,7 @@ Imports Ookii.Dialogs                                                           
 Imports System.Management
 
 Public Class Compact
-    Dim version = "1.4.0_rc2"
+    Dim version = "1.4.0_rc3"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -17,6 +17,70 @@ Public Class Compact
         Application.Run(CompactGUI.Compact)
     End Sub
 
+
+    '//////////////FORMATMESSAGESFROMMUI///////////////////////////////////////////
+
+    <DllImport("Kernel32.dll", EntryPoint:="FormatMessageW",
+               SetLastError:=True, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.StdCall)>
+    Public Shared Function FormatMessage(
+        ByVal dwFlags As Integer,
+        ByVal lpSource As Integer,
+        ByVal dwMessageId As Integer,
+        ByVal dwLanguageId As Integer,
+        <MarshalAs(UnmanagedType.LPWStr)> ByRef lpBuffer As String,
+        ByVal nSize As Integer,
+        ByRef Arguments As IntPtr) As Integer
+    End Function
+
+
+    <DllImport("kernel32.dll")>
+    Private Shared Function LoadLibraryEx(
+        lpFileName As String,
+        hReservedNull As IntPtr,
+        dwFlags As UInteger) As IntPtr
+    End Function
+
+    <DllImport("kernel32.dll")>
+    Private Shared Function LoadLibraryA(
+        lpFileName As String) As IntPtr
+    End Function
+
+    Private Const FORMAT_MESSAGE_FROM_HMODULE As Long = &H800
+
+
+    Public Function GetMessageFromModule(
+        ByRef strModuleName As String,
+        ByVal msgID As Long) As String
+
+        Dim rt As Long
+        Dim sCodes As String
+        Dim bufferStr As String
+        Dim hModule As Integer
+
+        'hModule = LoadLibraryEx("kernel32.dll", IntPtr.Zero, &H2)
+        hModule = LoadLibraryA(strModuleName)
+
+        If hModule <> 0 Then
+            bufferStr = Space(12)
+            Try
+                rt = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE Or &H100 Or &H200,
+                       hModule, msgID, 0&, bufferStr, Len(bufferStr), 0&)
+            Catch ex As Exception
+            End Try
+
+            If rt Then
+                bufferStr = Microsoft.VisualBasic.Left$(bufferStr, rt)
+                Return bufferStr
+                sCodes = "Dec: " & msgID & vbTab & "Hex: " & Hex(msgID)
+                GetMessageFromModule = bufferStr & vbCrLf & sCodes
+            End If
+
+        End If
+
+    End Function
+
+
+    '/////END/////////FORMATMESSAGESFROMMUI///////////////////////////////////////////
 
 
 
@@ -45,11 +109,316 @@ Public Class Compact
     End Sub
 
 
+    'ANALYSIS OUTPUT                                                            <- all of this is one message string from the MUI table. 
+    'Of %1 files within %2 directories\r\n
+    '%3 are compressed and %4 are not compressed.\r\n
+    '%5 total bytes of data are stored in %6 bytes.\r\n
+    'The compression ratio Is %7 to 1."
 
+
+    Private Const MSG_INDEX_TOTALFILES As String = "%1"
+    Private Const MSG_INDEX_TOTALDIRECTORIES As String = "%2"
+    Private Const MSG_INDEX_FILESCOMPRESSEDCOUNT As String = "%3"
+    Private Const MSG_INDEX_FILESNOTCOMPRESSEDCOUNT As String = "%4"
+    Private Const MSG_INDEX_TOTALBYTESUNCOMPRESSED As String = "%5"
+    Private Const MSG_INDEX_TOTALBYTESCOMPRESSED As String = "%6"
+    Private Const MSG_INDEX_COMPRESSIONRATIO As String = "%7"
+
+
+
+    'FormatMessage substrings
+    Dim fmt8 As String = GetMessageFromModule("compact.exe", 8)   'Analysis Endlines
+    Dim fmt7 As String = GetMessageFromModule("compact.exe", 7)   'Listing[] Lines - directory count
+    Dim fmt1 As String = GetMessageFromModule("compact.exe", 1)   '[OK] Line - file count
+    Dim fmt10 As String = GetMessageFromModule("compact.exe", &H10) 'Uncompression finished line
+    Dim fmtC As String = GetMessageFromModule("compact.exe", &HC)   'Compression finished Endlines
+
+    Dim fixedfmt8 = fmt8.Trim()                            'removes the two leading spaces before the analysis endstring so that formatting works. 
+    Dim fixedfmt7 = fmt7.Trim()
+    Dim fixedfmt1 = fmt1.Trim()
+    Dim fixedfmt10 = fmt10.Trim()
+    Dim fixedfmtc = fmtC.Trim()
+
+
+    Dim FMT_ANALYSIS_MSG As String() = fixedfmt8.Split(vbCrLf)                   'splits the lone message into its four components (see the above ANALYSIS OUTPUT comment
+    Dim FMT_LISTING_MSG As String = fixedfmt7.split(vbCrLf)(0)
+    Dim FMT_UNCOMPRESSED_MSG As String = fixedfmt10.split(vbCrLf)(0)
+    Dim FMT_COMPRESSED_MSG As String() = fixedfmtc.split(vbCrLf)
+
+    'These aren't currently used
+    Dim FMT_FILESWITHINDIRECTORIES1 As String = Before(fmt8.Replace(vbCrLf, ""), MSG_INDEX_TOTALFILES)
+    Dim FMT_FILESWITHINDIRECTORIES2 As String = Between(fmt8.Replace(vbCrLf, ""), MSG_INDEX_TOTALFILES, MSG_INDEX_TOTALDIRECTORIES)
+    Dim FMT_FILESCOMPRESSED As String = ""
+
+
+    'Index values that are found while parsing the console output. 
+    Dim CON_INDEX_TOTALFILES As Integer
+    Dim CON_INDEX_TOTALDIRECTORIES As Integer
+    Dim CON_INDEX_FILESCOMPRESSEDCOUNT As Integer
+    Dim CON_INDEX_FILESNOTCOMPRESSEDCOUNT As Integer
+    Dim CON_INDEX_TOTALBYTESUNCOMPRESSED As Integer
+    Dim CON_INDEX_TOTALBYTESCOMPRESSED As Integer
+    Dim CON_INDEX_COMPRESSIONRATIO As Integer
+
+    'e.Data Output Strings from the console - each of these is one of the four lines at the end of the console output. 
+    Dim CON_FILESWITHINDIRECTORIESLINE
+    Dim CON_FILESCOMPRESSEDLINE
+    Dim CON_TOTALBYTESLINE
+    Dim CON_COMPRATIO
+
+
+    'Output Arrays - These start of with the %1 etc. values in them, but when the console output is parse the %values are replaced with the actual data, and the index of the actual data is stored as the CON_INDEX variables above
+    Dim ARR_FMT_FILESWITHINDIRECTORIES As String() = fixedfmt8.split()
+    Dim ARR_FILESWITHINDIRECTORIES As String() = fixedfmt8.split()
+    Dim ARR_FILESCOMPRESSED As String() = fixedfmt8.split()
+    Dim ARR_TOTALBYTES As String() = fixedfmt8.split()
+    Dim ARR_COMPRATIO As String() = fixedfmt8.split()
+
+    Dim ARR_LISTING As String() = fixedfmt7.split()
+
+    'Counts up from the first results line until it find four lines
+    Dim OutputlineIndex = 0
+    Dim canProceed = 0
+
+
+
+    Dim REGEX_NUMBERFORMATTER As New Regex("(?<=\d+)\s+(?=\d+)")
+
+    'splits each line of the MUI output into its own array
+
+
+    Public Function CALC_Uncompressed(edata As String)
+
+
+    End Function
+
+
+
+    Public Function CALC_AnalysisOutput(edata As String)
+        Dim FMTFilesWithin As String() = FMT_ANALYSIS_MSG(0).Split(" ")
+        Dim FMTCompNotComp As String() = FMT_ANALYSIS_MSG(1).Trim(vbCrLf).Split(" ")
+        Dim FMTTotalBytes As String() = (FMT_ANALYSIS_MSG(2).Trim(vbCrLf)).Split(" ")
+        Dim FMTCompRatio As String() = FMT_ANALYSIS_MSG(3).Trim(vbCrLf).Split(" ")
+        Dim FMTListing As String() = FMT_LISTING_MSG.Trim().Split(" ")
+        Dim FMTUncompressed As String() = FMT_UNCOMPRESSED_MSG.Split(" ")
+        Dim FMTCompressFinished As String() = FMT_COMPRESSED_MSG(FMT_COMPRESSED_MSG.Count - 1).Trim(vbCrLf).Split(" ")
+
+        'all the replacement logic happens here
+
+        Dim CONANALYSISCOMP As String() = REGEX_NUMBERFORMATTER.Replace(edata, "").Split(" ")
+        Dim CONLISTINGCOMP As String() = REGEX_NUMBERFORMATTER.Replace(edata, "").Trim().Split(" ")
+        Dim CONUNCOMPRESSEDCOMP As String() = REGEX_NUMBERFORMATTER.Replace(edata, "").Trim().Split(" ")
+        Dim CONCOMPRESSCOMP As String() = REGEX_NUMBERFORMATTER.Replace(edata, "").Trim().Split(" ")
+
+        'LISTING - DIRECTORY COUNT
+        If FMTListing(0) = CONLISTINGCOMP(0) Then
+            QdirCountProgress += 1
+        End If
+
+        'OK - FILE COUNT
+        If edata.EndsWith(fixedfmt1) Then
+            Console.WriteLine(edata)
+            fileCountProgress += 1
+        End If
+
+        If FMTUncompressed.Count = CONUNCOMPRESSEDCOMP.Count And (FMTUncompressed(FMTUncompressed.Count - 1) = CONUNCOMPRESSEDCOMP(CONUNCOMPRESSEDCOMP.Count - 1) Or FMTUncompressed(FMTUncompressed.Count - 1).Contains("%2")) Then
+
+            dirCountProgress = 0
+            fileCountProgress = fileCountTotal
+            uncompressFinished = 1
+            isActive = 0
+        End If
+
+        If FMTCompressFinished.Count = CONCOMPRESSCOMP.Count And OutputlineIndex = 0 And (FMTCompressFinished(FMTCompressFinished.Count - 1) = CONCOMPRESSCOMP(CONCOMPRESSCOMP.Count - 1) Or CONCOMPRESSCOMP(CONCOMPRESSCOMP.Count - 1).Contains("1.")) Then
+
+            compressFinished = 1
+            dirCountProgress = dirCountTotal
+            fileCountProgress = fileCountTotal
+            isActive = 0
+
+        End If
+
+
+
+
+        If FMTFilesWithin.Count = CONANALYSISCOMP.Count And (FMTFilesWithin(0) = CONANALYSISCOMP(0) Or FMTFilesWithin(0).Contains("%1")) Then
+
+            Dim i = 0
+            For Each c In FMTFilesWithin
+                If c.Contains("%1") Then
+                    FMTFilesWithin(i) = CONANALYSISCOMP(i)
+                    CON_INDEX_TOTALFILES = i
+                ElseIf c.Contains("%2") Then
+                    FMTFilesWithin(i) = CONANALYSISCOMP(i)
+                    CON_INDEX_TOTALDIRECTORIES = i
+                End If
+                i += 1
+            Next
+
+            Dim builder As New StringBuilder
+            Dim b = 0
+            For Each c In FMTFilesWithin
+                builder.Append(FMTFilesWithin(b))
+                builder.Append(" ")
+                b += 1
+            Next
+
+            ARR_FILESWITHINDIRECTORIES = FMTFilesWithin
+
+            Dim s As String = builder.ToString
+            Return s
+            'Return s.Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)(0)
+
+        End If
+
+
+        If OutputlineIndex = 1 Then
+            Dim i = 0
+            For Each c In FMTCompNotComp
+                If c.Contains("%3") Then
+                    FMTCompNotComp(i) = CONANALYSISCOMP(i)
+                    CON_INDEX_FILESCOMPRESSEDCOUNT = i
+                ElseIf c.Contains("%4") Then
+                    FMTCompNotComp(i) = CONANALYSISCOMP(i)
+                    CON_INDEX_FILESNOTCOMPRESSEDCOUNT = i
+                End If
+                i += 1
+            Next
+
+            Dim builder As New StringBuilder
+            Dim b = 0
+            For Each c In FMTCompNotComp
+                builder.Append(FMTCompNotComp(b))
+                builder.Append(" ")
+                b += 1
+            Next
+            ARR_FILESCOMPRESSED = FMTCompNotComp
+            Dim s As String = builder.ToString
+            Return s
+        End If
+
+        If OutputlineIndex = 2 Then
+            Dim i = 0
+            For Each c In FMTTotalBytes
+                If c.Contains("%5") Then
+                    FMTTotalBytes(i) = CONANALYSISCOMP(i)
+                    CON_INDEX_TOTALBYTESCOMPRESSED = i
+
+                ElseIf c.Contains("%6") Then
+                    FMTTotalBytes(i) = CONANALYSISCOMP(i)
+                    CON_INDEX_TOTALBYTESUNCOMPRESSED = i
+                End If
+                i += 1
+            Next
+
+            Dim builder As New StringBuilder
+            Dim b = 0
+            For Each c In FMTTotalBytes
+                builder.Append(FMTTotalBytes(b))
+                builder.Append(" ")
+                b += 1
+            Next
+            ARR_TOTALBYTES = FMTTotalBytes
+            Dim s As String = builder.ToString
+            Return s
+        End If
+
+        If OutputlineIndex = 3 Then
+            Dim i = 0
+
+            For Each c In FMTCompRatio
+                If c.Contains("%7") Then
+                    FMTCompRatio(i) = CONANALYSISCOMP(i)
+                    CON_INDEX_COMPRESSIONRATIO = i
+
+                End If
+                i += 1
+            Next
+
+            Dim builder As New StringBuilder
+            Dim b = 0
+
+            For Each c In FMTCompRatio
+                builder.Append(FMTCompRatio(b))
+                builder.Append(" ")
+                b += 1
+            Next
+
+            ARR_COMPRATIO = FMTCompRatio
+
+            Dim s As String = builder.ToString
+            Return s
+
+        End If
+
+
+        Return ("Nothing")
+
+    End Function
 
     Private Sub MyProcess_OutputDataReceived _
         (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
         Handles MyProcess.OutputDataReceived
+
+        AppendOutputText(vbCrLf & e.Data)
+        If MyProcess.HasExited = False Then
+            If e.Data.Contains(CALC_AnalysisOutput(e.Data).ToString.Trim(" ")) And canProceed = 0 Then          'If the output line of the console is the "%files within" line then do stuff. Trim gets rid of the spaces before and after some lines
+                CON_FILESWITHINDIRECTORIESLINE = e.Data.Trim(" ")                                           ' This variable can't get set if the first criteria fails. This means that the console output is not parsing the russian properly. 
+                Console.WriteLine("Files: " +
+                    ARR_FILESWITHINDIRECTORIES(CON_INDEX_TOTALFILES) + " Directories: " +
+                    ARR_FILESWITHINDIRECTORIES(CON_INDEX_TOTALDIRECTORIES))
+                canProceed = 1
+            End If
+        End If
+
+
+
+        If OutputlineIndex = 1 And canProceed = 1 Then              ' These all run after the one above is met, since if the one above is met then it means there's only 3 lines left. 
+            CON_FILESCOMPRESSEDLINE = e.Data
+            CALC_AnalysisOutput(e.Data)
+            byteComparisonRawFilesCompressed = e.Data
+            Console.WriteLine("Compressed: " +
+              ARR_FILESCOMPRESSED(CON_INDEX_FILESCOMPRESSEDCOUNT) + " Not Compressed: " +
+              ARR_FILESCOMPRESSED(CON_INDEX_FILESNOTCOMPRESSEDCOUNT))
+        End If
+
+
+        If OutputlineIndex = 2 Then
+            CON_TOTALBYTESLINE = e.Data
+            CALC_AnalysisOutput(e.Data)
+            byteComparisonRaw = e.Data
+            Console.WriteLine("Bytes Compressed: " +
+                ARR_TOTALBYTES(CON_INDEX_TOTALBYTESCOMPRESSED) + " In Total Bytes: " +
+                ARR_TOTALBYTES(CON_INDEX_TOTALBYTESUNCOMPRESSED))
+        End If
+
+        If OutputlineIndex = 3 Then
+            CON_COMPRATIO = e.Data
+            CALC_AnalysisOutput(e.Data)
+
+            Console.WriteLine("Ratio: " +
+                ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO) + " to 1.")
+
+            compressFinished = 1
+            dirCountProgress = dirCountTotal
+            fileCountProgress = fileCountTotal
+            isActive = 0
+
+            canProceed = 0
+            OutputlineIndex = 0
+        End If
+
+
+        If canProceed = 1 Then
+            OutputlineIndex += 1
+        End If
+
+    End Sub
+
+
+    Private Sub MyProcess_OutputDataReceived1 _
+        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs)
+
 
         AppendOutputText(vbCrLf & e.Data)                                                       'Sends output to the embedded console
 
@@ -342,6 +711,39 @@ Public Class Compact
             conOut.Items.Clear()
 
             MyProcess = New Process
+            With MyProcess.StartInfo
+                .FileName = "CMD.exe"
+                .Arguments = ""
+                .UseShellExecute = False
+                .CreateNoWindow = True
+                .StandardOutputEncoding = Encoding.Default
+                .StandardErrorEncoding = Encoding.Default
+                .WorkingDirectory = workingDir
+                .RedirectStandardInput = True
+                .RedirectStandardOutput = True
+                .RedirectStandardError = True
+            End With
+            MyProcess.Start()
+            MyProcess.StandardInput.WriteLine("chcp")
+            MyProcess.StandardInput.Flush()
+            Dim Res = MyProcess.StandardOutput.ReadLine()
+
+            Dim i = 0
+            Do Until i = 4
+                Res = MyProcess.StandardOutput.ReadLine()
+                i += 1
+            Loop
+
+            'MsgBox(Res.Split(" ").Reverse().ElementAt(0))
+            Dim CP = Integer.Parse(Res.Split(" ").Reverse().ElementAt(0))
+            MyProcess.StandardInput.WriteLine("exit")
+            MyProcess.StandardInput.Flush()
+            MyProcess.WaitForExit()
+
+
+
+
+            MyProcess = New Process
 
             With MyProcess.StartInfo
                 .FileName = "CMD.exe"
@@ -363,9 +765,6 @@ Public Class Compact
             MyProcess.BeginOutputReadLine()
 
             Try
-                MyProcess.StandardInput.WriteLine("chcp 437")                    'US codepage in console output to aid in some localisations.
-                MyProcess.StandardInput.Flush()
-
                 RunCompact(passthrougharg)
 
                 If passthrougharg = "compact" Then progressPageLabel.Text = "Compressing, Please Wait"
@@ -766,6 +1165,52 @@ Public Class Compact
     End Sub
 
 
+    '///////EXTRA FUNCTIONS/////////////
+
+    Function Between(value As String, a As String, b As String) As String
+
+        Dim posA As Integer = value.IndexOf(a)
+        Dim posB As Integer = value.LastIndexOf(b)
+        If posA = -1 Then
+            Return ""
+        End If
+        If posB = -1 Then
+            Return ""
+        End If
+
+        Dim adjustedPosA As Integer = posA + a.Length
+        If adjustedPosA >= posB Then
+            Return ""
+        End If
+
+        Return value.Substring(adjustedPosA, posB - adjustedPosA)
+
+    End Function
+
+
+    Function Before(value As String, a As String) As String
+
+        Dim posA As Integer = value.IndexOf(a)
+        If posA = -1 Then
+            Return ""
+        End If
+        Return value.Substring(0, posA)
+    End Function
+
+
+    Function After(value As String, a As String) As String
+
+        Dim posA As Integer = value.LastIndexOf(a)
+        If posA = -1 Then
+            Return ""
+        End If
+        Dim adjustedPosA As Integer = posA + a.Length
+        If adjustedPosA >= value.Length Then
+            Return ""
+        End If
+        Return value.Substring(adjustedPosA)
+    End Function
+
 
 
     '////////////////////TESTING////////////////////
@@ -824,6 +1269,11 @@ Public Class Compact
         End If
         'MsgBox(compactArgs)
     End Sub
+
+
+
+
+
 
 
 End Class
