@@ -142,7 +142,6 @@ Public Class Compact
 
         'OK - FILE COUNT
         If edata.EndsWith(fixedfmt1) Then
-            Console.WriteLine(edata)
             fileCountProgress += 1
         End If
 
