@@ -9,7 +9,7 @@ The compression used by compact.exe is similar to the built-in NTFS compression 
 ## Installation
 ~~**Note: Proceed with caution if your system language is *not* English. There are [potential issues](https://github.com/ImminentFate/CompactGUI/wiki/Important-Information#localization-issues-40) that may crop up if your language is set to anything else.~~** 
 
-**A fix for this has been released! Please post an issue if you have an issue with another language** 
+**A fix for this has been released! Please post an issue if you have trouble with another language** 
 
 <p align = "center">Download the standalone program from <a href="https://github.com/ImminentFate/CompactGUI/releases">GitHub Releases</a></p>
 
