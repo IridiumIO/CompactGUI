@@ -66,9 +66,9 @@ Partial Class Form2
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(11, 149)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(117, 25)
+        Me.Label1.Size = New System.Drawing.Size(131, 25)
         Me.Label1.TabIndex = 8
-        Me.Label1.Text = "Wiki Results "
+        Me.Label1.Text = "Online Results"
         '
         'Panel1
         '
