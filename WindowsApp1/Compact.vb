@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 Imports System.Management
 
+
 Public Class Compact
     Dim version = "1.6.0"
     Private WithEvents MyProcess As Process
@@ -474,12 +475,14 @@ Public Class Compact
                 workingDir = wDString.ToString()
                 chosenDirDisplay.Text = DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
                 uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
-                preSize.Text = "Uncompressed Size: " + GetOutputSize _
-                    (Math.Round(DirectorySize(DIwDString, True), 0), True)
+                Dim rawpreSize = GetOutputSize _
+                    (Math.Round(DirectorySize(DIwDString, True), 1), True)
+                preSize.Text = "Uncompressed Size: " + rawpreSize
 
                 dirLabelResults = DIwDString.Name.ToString
 
-                preSize.Visible = True
+                'preSize.Visible = True
+                seecompest.Visible = True
                 buttonQueryCompact.Visible = True
 
                 Try
@@ -492,6 +495,8 @@ Public Class Compact
                         (wDString, "*", IO.SearchOption.AllDirectories).Length
 
                     fileCountTotal = numberOfFiles
+
+                    WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
 
                 Catch ex As Exception
                 End Try
@@ -1203,5 +1208,50 @@ Public Class Compact
     End Sub
 
 
+    Dim ishide = 0
 
+    Private Sub seecompest_Click(sender As Object, e As EventArgs) Handles seecompest.MouseEnter
+        WikiHandler.showWikiRes()
+        ishide = 0
+
+    End Sub
+
+
+    Private Sub hideWikiRes(sender As Object, e As EventArgs) Handles MyBase.MouseEnter, TabControl1.MouseEnter,
+                                InputPage.MouseEnter, FlowLayoutPanel1.MouseEnter, Panel3.MouseEnter, Panel4.MouseEnter
+        FadeWikiInfo.Start()
+    End Sub
+
+
+
+    Private Sub FadeWikiInfo_Tick(sender As Object, e As EventArgs) Handles FadeWikiInfo.Tick
+        If ishide = 0 Then
+            If Form2.Opacity < 0.95 Then
+                Form2.Opacity += 0.08
+            Else
+                ishide = 1
+                Form2.Opacity = 0.96
+                FadeWikiInfo.Stop()
+            End If
+
+
+        ElseIf ishide = 1 Then
+            If Form2.Opacity > 0.1 Then
+                Form2.Opacity -= 0.08
+            Else
+                ishide = 0
+                Form2.Opacity = 0
+                Form2.Hide()
+                FadeWikiInfo.Stop()
+            End If
+
+        End If
+
+
+
+    End Sub
+
+    Private Sub Label15_Click(sender As Object, e As EventArgs) Handles Label15.Click
+        Process.Start("https://goo.gl/forms/Udi5SUkMdCOMG3m23")
+    End Sub
 End Class

@@ -70,6 +70,7 @@ Partial Class Compact
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label14 = New System.Windows.Forms.Label()
+        Me.seecompest = New System.Windows.Forms.Label()
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.returnArrow = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
@@ -89,6 +90,7 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
+        Me.FadeWikiInfo = New System.Windows.Forms.Timer(Me.components)
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -275,10 +277,10 @@ Partial Class Compact
         Me.dirChooser.LinkColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.dirChooser.Location = New System.Drawing.Point(58, 39)
         Me.dirChooser.Name = "dirChooser"
-        Me.dirChooser.Size = New System.Drawing.Size(202, 21)
+        Me.dirChooser.Size = New System.Drawing.Size(145, 21)
         Me.dirChooser.TabIndex = 15
         Me.dirChooser.TabStop = True
-        Me.dirChooser.Text = "Choose Folder to Compress"
+        Me.dirChooser.Text = "Select Target Folder"
         Me.dirChooser.VisitedLinkColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         '
         'chosenDirDisplay
@@ -304,9 +306,9 @@ Partial Class Compact
         Me.Label2.ForeColor = System.Drawing.Color.DimGray
         Me.Label2.Location = New System.Drawing.Point(20, 5)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(205, 21)
+        Me.Label2.Size = New System.Drawing.Size(221, 21)
         Me.Label2.TabIndex = 18
-        Me.Label2.Text = "Select Compression Method"
+        Me.Label2.Text = "Select Compression Algorithm"
         '
         'Label3
         '
@@ -375,7 +377,7 @@ Partial Class Compact
         Me.preSize.AutoSize = True
         Me.preSize.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.preSize.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.preSize.Location = New System.Drawing.Point(64, 112)
+        Me.preSize.Location = New System.Drawing.Point(312, 146)
         Me.preSize.Name = "preSize"
         Me.preSize.Size = New System.Drawing.Size(60, 13)
         Me.preSize.TabIndex = 21
@@ -536,7 +538,7 @@ Partial Class Compact
         Me.InputPage.Controls.Add(Me.buttonQueryCompact)
         Me.InputPage.Controls.Add(Me.FlowLayoutPanel1)
         Me.InputPage.Controls.Add(Me.dirChooser)
-        Me.InputPage.Controls.Add(Me.preSize)
+        Me.InputPage.Controls.Add(Me.seecompest)
         Me.InputPage.Controls.Add(Me.chosenDirDisplay)
         Me.InputPage.Controls.Add(Me.Label7)
         Me.InputPage.Location = New System.Drawing.Point(4, 22)
@@ -616,6 +618,18 @@ Partial Class Compact
         Me.Label14.TabIndex = 32
         Me.Label14.Text = "(?)"
         Me.ToolTipFilesCompressed.SetToolTip(Me.Label14, resources.GetString("Label14.ToolTip"))
+        '
+        'seecompest
+        '
+        Me.seecompest.AutoSize = True
+        Me.seecompest.Font = New System.Drawing.Font("Segoe UI Symbol", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.seecompest.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.seecompest.Location = New System.Drawing.Point(59, 112)
+        Me.seecompest.Name = "seecompest"
+        Me.seecompest.Size = New System.Drawing.Size(156, 13)
+        Me.seecompest.TabIndex = 21
+        Me.seecompest.Text = "❯ See Compression Estimate  "
+        Me.seecompest.Visible = False
         '
         'ProgressPage
         '
@@ -734,6 +748,7 @@ Partial Class Compact
         'Label15
         '
         Me.Label15.AutoSize = True
+        Me.Label15.Cursor = System.Windows.Forms.Cursors.Hand
         Me.Label15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label15.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.Label15.Location = New System.Drawing.Point(237, 0)
@@ -832,6 +847,7 @@ Partial Class Compact
         '
         Me.TabPage3.Controls.Add(Me.testFileArgs)
         Me.TabPage3.Controls.Add(Me.Label10)
+        Me.TabPage3.Controls.Add(Me.preSize)
         Me.TabPage3.Controls.Add(Me.OldconOut)
         Me.TabPage3.Controls.Add(Me.testcompactargs)
         Me.TabPage3.Controls.Add(Me.compRatioLabel)
@@ -866,14 +882,18 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
+        'FadeWikiInfo
+        '
+        Me.FadeWikiInfo.Interval = 10
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(474, 621)
-        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.TabControl1)
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.DimGray
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -973,4 +993,6 @@ Partial Class Compact
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents Label15 As Label
     Friend WithEvents saveconlog As Button
+    Friend WithEvents seecompest As Label
+    Friend WithEvents FadeWikiInfo As Timer
 End Class
