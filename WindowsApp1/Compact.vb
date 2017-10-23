@@ -734,9 +734,9 @@ Public Class Compact
         'If isQueryMode = 0 Then querySize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
 
 
-        Dim oldFolderSize As Long = 999
+        Dim oldFolderSize As Long = 999999999
 
-        Dim newFolderSize As Long = 999
+        Dim newFolderSize As Long = 999999999
         Try
             oldFolderSize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
         Catch ex As Exception
