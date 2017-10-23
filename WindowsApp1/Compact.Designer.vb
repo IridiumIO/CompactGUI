@@ -74,9 +74,11 @@ Partial Class Compact
         Me.returnArrow = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.saveconlog = New System.Windows.Forms.Button()
         Me.checkShowConOut = New System.Windows.Forms.CheckBox()
         Me.conOut = New System.Windows.Forms.ListBox()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label13 = New System.Windows.Forms.Label()
@@ -525,7 +527,7 @@ Partial Class Compact
         Me.TabControl1.MinimumSize = New System.Drawing.Size(503, 624)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(503, 624)
+        Me.TabControl1.Size = New System.Drawing.Size(503, 634)
         Me.TabControl1.TabIndex = 30
         '
         'InputPage
@@ -540,7 +542,7 @@ Partial Class Compact
         Me.InputPage.Location = New System.Drawing.Point(4, 22)
         Me.InputPage.Name = "InputPage"
         Me.InputPage.Padding = New System.Windows.Forms.Padding(3)
-        Me.InputPage.Size = New System.Drawing.Size(495, 598)
+        Me.InputPage.Size = New System.Drawing.Size(495, 608)
         Me.InputPage.TabIndex = 0
         Me.InputPage.Text = "InputPage"
         '
@@ -626,7 +628,7 @@ Partial Class Compact
         Me.ProgressPage.Location = New System.Drawing.Point(4, 22)
         Me.ProgressPage.Name = "ProgressPage"
         Me.ProgressPage.Padding = New System.Windows.Forms.Padding(3)
-        Me.ProgressPage.Size = New System.Drawing.Size(495, 598)
+        Me.ProgressPage.Size = New System.Drawing.Size(495, 608)
         Me.ProgressPage.TabIndex = 1
         Me.ProgressPage.Text = "ProgressPage"
         '
@@ -658,7 +660,7 @@ Partial Class Compact
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(383, 474)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(383, 484)
         Me.TableLayoutPanel2.TabIndex = 31
         '
         'Panel2
@@ -666,12 +668,26 @@ Partial Class Compact
         Me.Panel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.Controls.Add(Me.saveconlog)
         Me.Panel2.Controls.Add(Me.checkShowConOut)
         Me.Panel2.Controls.Add(Me.conOut)
         Me.Panel2.Location = New System.Drawing.Point(3, 285)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(377, 186)
+        Me.Panel2.Size = New System.Drawing.Size(377, 196)
         Me.Panel2.TabIndex = 33
+        '
+        'saveconlog
+        '
+        Me.saveconlog.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.saveconlog.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.saveconlog.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.saveconlog.Location = New System.Drawing.Point(299, 162)
+        Me.saveconlog.Name = "saveconlog"
+        Me.saveconlog.Size = New System.Drawing.Size(75, 23)
+        Me.saveconlog.TabIndex = 33
+        Me.saveconlog.Text = "Save Log"
+        Me.saveconlog.UseVisualStyleBackColor = False
+        Me.saveconlog.Visible = False
         '
         'checkShowConOut
         '
@@ -695,12 +711,13 @@ Partial Class Compact
         Me.conOut.FormattingEnabled = True
         Me.conOut.Location = New System.Drawing.Point(0, 26)
         Me.conOut.Name = "conOut"
-        Me.conOut.Size = New System.Drawing.Size(374, 156)
+        Me.conOut.Size = New System.Drawing.Size(374, 130)
         Me.conOut.TabIndex = 30
         Me.conOut.Visible = False
         '
         'CompResultsPanel
         '
+        Me.CompResultsPanel.Controls.Add(Me.Label15)
         Me.CompResultsPanel.Controls.Add(Me.dirChosenLabel)
         Me.CompResultsPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.CompResultsPanel.Controls.Add(Me.compressedSizeVisual)
@@ -713,6 +730,18 @@ Partial Class Compact
         Me.CompResultsPanel.Size = New System.Drawing.Size(375, 231)
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.Label15.Location = New System.Drawing.Point(237, 0)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Padding = New System.Windows.Forms.Padding(3, 5, 3, 5)
+        Me.Label15.Size = New System.Drawing.Size(138, 23)
+        Me.Label15.TabIndex = 33
+        Me.Label15.Text = "❯ Submit Results to Wiki"
         '
         'dirChosenLabel
         '
@@ -812,7 +841,7 @@ Partial Class Compact
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(495, 598)
+        Me.TabPage3.Size = New System.Drawing.Size(495, 608)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "TabPage3"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -842,13 +871,13 @@ Partial Class Compact
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(474, 611)
-        Me.Controls.Add(Me.Panel1)
+        Me.ClientSize = New System.Drawing.Size(474, 621)
         Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.Panel1)
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.DimGray
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(490, 650)
+        Me.MinimumSize = New System.Drawing.Size(490, 660)
         Me.Name = "Compact"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
@@ -942,4 +971,6 @@ Partial Class Compact
     Friend WithEvents conOut As ListBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
+    Friend WithEvents Label15 As Label
+    Friend WithEvents saveconlog As Button
 End Class

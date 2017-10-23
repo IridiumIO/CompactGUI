@@ -6,7 +6,7 @@ Imports Ookii.Dialogs                                                           
 Imports System.Management
 
 Public Class Compact
-    Dim version = "1.5.1"
+    Dim version = "1.6.0"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -518,9 +518,11 @@ Public Class Compact
 
 
     Private Sub CompressFolder_Click(sender As System.Object, e As System.EventArgs) Handles buttonCompress.Click
+        conOut.Items.Clear()
         CreateProcess("compact")
     End Sub
     Private Sub buttonQueryCompact_Click(sender As Object, e As EventArgs) Handles buttonQueryCompact.Click
+        conOut.Items.Clear()
         CreateProcess("query")
     End Sub
 
@@ -538,7 +540,8 @@ Public Class Compact
             If passthrougharg = "query" Then isQueryMode = 1
 
             progresspercent.Visible = True
-            conOut.Items.Clear()
+
+
 
             MyProcess = New Process
             With MyProcess.StartInfo
@@ -665,9 +668,10 @@ Public Class Compact
     Private Sub CheckShowConOut_CheckedChanged(sender As Object, e As EventArgs) Handles checkShowConOut.CheckedChanged     'Handles showing the embedded console
         If checkShowConOut.Checked Then
             conOut.Visible = True
-
+            saveconlog.Visible = True
         Else
             conOut.Visible = False
+            saveconlog.Visible = False
         End If
     End Sub
 
@@ -1170,9 +1174,33 @@ Public Class Compact
         'MsgBox(compactArgs)
     End Sub
 
+    Private Sub Saveconlog_Click(sender As Object, e As EventArgs) Handles saveconlog.Click
+        If MsgBox("Save console output?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+            Dim reverseCon As New List(Of Object)
+            Dim sb As New System.Text.StringBuilder()
 
+            For Each ln As Object In conOut.Items
+                reverseCon.Add(ln)
+            Next
 
+            reverseCon.Reverse()
+            sb.AppendLine("CompactGUI: Log at " & System.DateTime.Now & vbCrLf _
+                          & "//////////////////////////////////////////////////////////////////////////////////" _
+                          & "//////////////////////////////////////////////////////////////////////////////////")
 
+            For Each ln As Object In reverseCon
+                sb.AppendLine(ln)
+            Next
+
+            sb.AppendLine("End Log at " & System.DateTime.Now & vbCrLf _
+                          & "//////////////////////////////////////////////////////////////////////////////////" _
+                          & "//////////////////////////////////////////////////////////////////////////////////" & vbCrLf & vbCrLf)
+
+            System.IO.File.WriteAllText(Application.StartupPath & "\CompactGUILog.txt", sb.ToString)
+
+            MsgBox("Saved log to " & Application.StartupPath & "\CompactGUILog.txt")
+        End If
+    End Sub
 
 
 
