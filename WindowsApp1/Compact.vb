@@ -495,7 +495,7 @@ Public Class Compact
                         (wDString, "*", IO.SearchOption.AllDirectories).Length
 
                     fileCountTotal = numberOfFiles
-
+                    Form2.lblCompactIssues.Visible = False
                     WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
 
                 Catch ex As Exception

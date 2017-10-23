@@ -35,6 +35,7 @@ Partial Class Form2
         Me.wkPreSizeUnit = New System.Windows.Forms.Label()
         Me.wkPreSizeVal = New System.Windows.Forms.Label()
         Me.wkPostSizeVal = New System.Windows.Forms.Label()
+        Me.lblCompactIssues = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
@@ -114,6 +115,7 @@ Partial Class Form2
         Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.lblCompactIssues)
         Me.Panel2.Controls.Add(Me.Label4)
         Me.Panel2.Controls.Add(Me.wkPostSizeUnit)
         Me.Panel2.Controls.Add(Me.Label3)
@@ -199,6 +201,18 @@ Partial Class Form2
         Me.wkPostSizeVal.TabIndex = 8
         Me.wkPostSizeVal.Text = "210.7"
         '
+        'lblCompactIssues
+        '
+        Me.lblCompactIssues.AutoSize = True
+        Me.lblCompactIssues.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCompactIssues.ForeColor = System.Drawing.Color.DarkRed
+        Me.lblCompactIssues.Location = New System.Drawing.Point(213, 75)
+        Me.lblCompactIssues.Name = "lblCompactIssues"
+        Me.lblCompactIssues.Size = New System.Drawing.Size(103, 15)
+        Me.lblCompactIssues.TabIndex = 9
+        Me.lblCompactIssues.Text = "! Game has issues"
+        Me.lblCompactIssues.Visible = False
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -233,4 +247,5 @@ Partial Class Form2
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel2 As Panel
+    Friend WithEvents lblCompactIssues As Label
 End Class

@@ -23,7 +23,7 @@ Public Class WikiHandler
         Dim gameName As New List(Of String)
 
         If InputFromGitHub Is Nothing Then
-
+            Console.WriteLine("Getting List")
             Dim wc As New WebClient
             wc.Encoding = Encoding.UTF8
             Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
@@ -111,6 +111,11 @@ Public Class WikiHandler
             FillTable(n)
 
             ratioavg += Decimal.Parse(InputFromGitHub(n).Split("|")(6))
+            If InputFromGitHub(n).Split("|")(7).Contains("*") Then
+                Form2.lblCompactIssues.Visible = True
+            Else
+                Form2.lblCompactIssues.Visible = False
+            End If
 
         Next
 
