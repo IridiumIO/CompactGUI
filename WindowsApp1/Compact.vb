@@ -233,7 +233,7 @@ Public Class Compact
         (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
         Handles MyProcess.OutputDataReceived
 
-        AppendOutputText(vbCrLf & e.Data)
+        AppendOutputText(vbCrLf & e.Data)                                                               'Sends output to the embedded console
 
 
         If MyProcess.HasExited = False Then
@@ -291,51 +291,6 @@ Public Class Compact
     End Sub
 
 
-    Private Sub MyProcess_OutputDataReceived1 _
-        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs)
-
-
-        AppendOutputText(vbCrLf & e.Data)                                                       'Sends output to the embedded console
-
-        Try
-
-            If e.Data.Contains("total bytes of data are stored in") Then                        'Gets the output line that contains both the pre- and post-compression folder sizes
-                byteComparisonRaw = e.Data
-            End If
-
-            If e.Data.EndsWith("1.") Then                                 'Gets the output line that contains the compression ratio and forces the progress bar to 100% (indirectly due to threading)
-                compressFinished = 1
-                dirCountProgress = dirCountTotal
-                fileCountProgress = fileCountTotal
-                isActive = 0
-            End If
-
-            If e.Data.Contains("directories were uncompressed") Then                            'Gets the output line that identifies that an uncompression event has finished.    
-                dirCountProgress = 0
-                fileCountProgress = fileCountTotal
-                uncompressFinished = 1
-                isActive = 0
-            End If
-
-            If e.Data.StartsWith(" Compressing files in") Then                                  'Gets each directory that is compressed. Used for the old progressbar.   
-                dirCountProgress += 1
-            End If
-
-            If e.Data.EndsWith("[OK]") Then                                                     'Gets each file that was successfully compressed OR uncompressed. 
-                fileCountProgress += 1
-            End If
-
-            If e.Data.EndsWith(" are not compressed.") Then                                     'Gets the output line that identifies the total number of files compressed. 
-                byteComparisonRawFilesCompressed = e.Data
-            End If
-            If e.Data.StartsWith(" Listing ") Then                                               'Gets the output line that identifies the query folder count
-                QdirCountProgress += 1
-            End If
-        Catch ex As Exception
-
-        End Try
-
-    End Sub
 
 
 
@@ -610,7 +565,7 @@ Public Class Compact
             Loop
 
             'MsgBox(Res.Split(" ").Reverse().ElementAt(0))
-            Dim CP = Integer.Parse(Regex.Replace((Res.Split(" ").Reverse().ElementAt(0)), "[^\d]", ""))
+            Dim CP = Integer.Parse(Regex.Replace(Res, "[^\d]", ""))
             MyProcess.StandardInput.WriteLine("exit")
             MyProcess.StandardInput.Flush()
             MyProcess.WaitForExit()
@@ -623,9 +578,9 @@ Public Class Compact
             With MyProcess.StartInfo
                 .FileName = "CMD.exe"
                 .Arguments = ""
-                .StandardOutputEncoding = Encoding.GetEncoding(CP)                             'Allow console output to use UTF-8. Otherwise it will translate to ASCII equivalents.
+                .StandardOutputEncoding = Encoding.GetEncoding(CP)                             'Allow console output to use the System's encoding for localization support
                 .StandardErrorEncoding = Encoding.GetEncoding(CP)
-                .WorkingDirectory = workingDir                                      'Set working directory via argument, allows UTF-8 to be passed directly.
+                .WorkingDirectory = workingDir                                      'Set working directory via argument, allows Encoding to be passed directly.
                 .UseShellExecute = False
                 .CreateNoWindow = True
                 .RedirectStandardInput = True
@@ -775,16 +730,28 @@ Public Class Compact
         'If isQueryMode = 0 Then querySize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
 
 
-        Dim oldFolderSize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
+        Dim oldFolderSize As Long = 999
 
-        Dim newfoldersize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESCOMPRESSED), "[^\d]", ""))
+        Dim newFolderSize As Long = 999
+        Try
+            oldFolderSize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
+        Catch ex As Exception
+
+        End Try
+
+        Try
+            newFolderSize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESCOMPRESSED), "[^\d]", ""))
+        Catch ex As Exception
+
+        End Try
+
 
         Try
             numberFilesCompressed = Long.Parse(Regex.Replace(ARR_FILESCOMPRESSED(CON_INDEX_FILESCOMPRESSEDCOUNT), "[^\d]", ""))
         Catch ex As Exception
         End Try
 
-        If GetOutputSize((oldFolderSize - newfoldersize), False) = "0" And isQueryMode = 1 Then
+        If GetOutputSize((oldFolderSize - newFolderSize), False) = "0" And isQueryMode = 1 Then
 
             progressPageLabel.Text = "Folder is not compressed"
             buttonRevert.Visible = False
@@ -801,16 +768,16 @@ Public Class Compact
             End If
 
             compressedSizeLabel.Text = GetOutputSize _
-                (uncompressedfoldersize - (oldFolderSize - newfoldersize), True)
+                (uncompressedfoldersize - (oldFolderSize - newFolderSize), True)
 
             compRatioLabel.Text = Math.Round _
-                (oldFolderSize / newfoldersize, 1)
+                (oldFolderSize / newFolderSize, 1)
 
             compRatioLabel.Text = Math.Round _
-                (uncompressedfoldersize / (uncompressedfoldersize - (oldFolderSize - newfoldersize)), 1)
+                (uncompressedfoldersize / (uncompressedfoldersize - (oldFolderSize - newFolderSize)), 1)
 
             spaceSavedLabel.Text = GetOutputSize _
-                ((oldFolderSize - newfoldersize), True) + " Saved"
+                ((oldFolderSize - newFolderSize), True) + " Saved"
 
             dirChosenLabel.Text = "❯ In " + dirLabelResults
 
