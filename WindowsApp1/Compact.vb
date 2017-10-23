@@ -366,6 +366,12 @@ Public Class Compact
 
         End If
 
+        If uncompressFinished OrElse compressFinished Then                                      'Check if we're done compressing or decompressing
+            If checkShutdown.Checked Then                                                       'Check if shutdown is checked
+                checkShutdown.Checked = False                                                   'Cleaning up for Tab change. This is more for 'sleep'
+                pcControl("shutdown")
+            End If
+        End If
 
         If compressFinished = 1 Then                                                            'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
 
@@ -382,6 +388,8 @@ Public Class Compact
             returnArrow.Visible = True
             CalculateSaving()
             QdirCountProgress = 0
+
+
         End If
 
         If uncompressFinished = 1 Then                                                          'Hides and shows certain UI elements when uncompression is finished 
@@ -394,7 +402,6 @@ Public Class Compact
 
 
         End If
-
 
 
     End Sub
@@ -649,6 +656,7 @@ Public Class Compact
 
     Private Sub ReturnArrow_Click(sender As Object, e As EventArgs) Handles returnArrow.Click                       'Returns you to the first screen and cleans up some stuff
 
+        checkShutdown.Checked = False
         returnArrow.Visible = False
         buttonRevert.Visible = False
         CompResultsPanel.Visible = False
@@ -821,7 +829,19 @@ Public Class Compact
     End Sub
 
 
-
+    Private Sub pcControl(state As String)                                                                                      'The added cases are for possible future use of allowing users multiple pc controls
+        Select Case state
+            Case "hybrid"       'This is for Windows 10 fastboot-based hybrid shutdown
+                Process.Start("shutdown", "/s /hybrid /t 0")
+                Me.Close()
+            Case "shutdown"
+                Process.Start("shutdown", "/s /t 0")
+                Me.Close()
+            Case "sleep"
+                Application.SetSuspendState(PowerState.Suspend, True, True)
+                'Me.Close()     'Up to dev whether app should be present after sleep
+        End Select
+    End Sub
 
     Private Sub Queryaftercompact()
         isQueryMode = 1
@@ -1170,10 +1190,7 @@ Public Class Compact
         'MsgBox(compactArgs)
     End Sub
 
-
-
-
-
-
-
+	
+	
+	
 End Class
