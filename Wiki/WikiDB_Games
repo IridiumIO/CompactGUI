@@ -147,7 +147,7 @@
 |LZX|Bioshock 2|13.2 GB|9.1 GB|4.1 GB|0.69|0|
 |XPress16K|BioShock 2 Remastered|19.3 GB|13.5 GB|5.8 GB|0.7|0|
 |XPress16K|Bioshock Infinite|41 GB|38 GB|3 GB|0.93|0|
-#REF!
+|XPress8K|BioShock Remastered|21 GB|16 GB|5 GB|0.76|0|
 |XPress8K|Bit Blaster XL|98 MB|45 MB|53 MB|0.46|0|
 |XPress16K|Black & White 2|3.1 GB|2.4 GB|700 MB|0.77|0|
 |XPress16K|Black Desert Online |52 GB|52 GB|0 MB|1|0|
@@ -290,7 +290,7 @@
 |XPress16K|Deus Ex GOTY|5.9 GB|3.7 GB|2.2 GB|0.63|0|
 |XPress16K|Deus Ex Human Revolution DC|18 GB|16 GB|2 GB|0.89|0|
 |XPress8K|Deus Ex: Mankind Divided|69 GB|28 GB|41 GB|0.41|0|
-#REF!
+|XPress16K|Deus Ex: Mankind Divided|41.1 GB|15.9 GB|25.2 GB|0.39|0|
 |XPress16K|Devil Daggers|526 MB|443 MB|83 MB|0.84|0|
 |XPress8K|Devil May Cry 4 - Special Edition|24.5 GB|24.4 GB|100 MB|1|0|
 |XPress16K|Diablo 3|17.6 GB|17.4 GB|200 MB|0.99|0|
@@ -401,11 +401,11 @@
 |XPress16K|FIFA 18|33 GB|31.9 GB|1.1 GB|0.97|0|
 |XPress16K|Final Approach|2.9 GB|1.7 GB|1.2 GB|0.58|0|
 |XPress16K|Final Approach: Pilot Edition|2.8 GB|1.6 GB|1.2 GB|0.56|0|
-|XPress16K|Final Fantasy VI|783 MB|608 MB|175 MB|0.78|0|
 |XPress16K|Final Fantasy III|619 MB|565 MB|54 MB|0.91|0|
 |XPress16K|Final Fantasy IX|7.3 GB|4.4 GB|2.9 GB|0.6|0|
 |XPress16K|Final Fantasy Type-0 HD|25 GB|24 GB|1 GB|0.96|0|
 |XPress16K|Final Fantasy V|1.2 GB|1 GB|133 MB|0.89|0|
+|XPress16K|Final Fantasy VI|783 MB|608 MB|175 MB|0.78|0|
 |XPress16K|Final Fantasy VII|1.5 GB|1.3 GB|222 MB|0.86|0|
 |XPress16K|Final Fantasy X/X2 HD|37 GB|4.6 GB|32.4 GB|0.12|0|
 |XPress16K|Final Fantasy XIII|58 GB|56 GB|2 GB|0.97|0|
@@ -618,7 +618,7 @@
 |XPress16K|Metro Last Light Redux|9 GB|8.9 GB|100 MB|0.99|0|
 |XPress8K|Microsoft FSX |13 GB|9 GB|4 GB|0.69|0|
 |XPress16K|Middle-earth Shadow of War (Normal Textures)|51 GB|43 GB|8 GB|0.84|0|
-#REF!
+|XPress16K|Middle-earth: Shadow of Mordor|54 GB|54 GB|0 MB|1|0|
 |XPress16K|Middle-earth: Shadow of War|100 GB|84 GB|16 GB|0.84|0|
 |XPress16K|Mind: Path to Thalamus|11 GB|5.8 GB|5.2 GB|0.53|0|
 |XPress16K|Minecraft|234 MB|209 MB|25 MB|0.89|0|
@@ -633,14 +633,14 @@
 |XPress16K|Monopoly Plus|1.3 GB|1.2 GB|150 MB|0.89|0|
 |XPress16K|Mortal Kombat X|43 GB|41 GB|2 GB|0.95|0|
 |XPress16K|Mortal Kombat X|43 GB|40 GB|3 GB|0.93|0|
-|XPress16K|Moto Racer 2|577 MB|478 MB|100 MB|0.83|0|
-|XPress8K|Mount & Blade: Warband|1.6 GB|1 GB|530 MB|0.66|0|
-|XPress16K|Mount Your Friends|202 MB|197 MB|5 MB|0.98|0|
-|LZX|Munin|1.5 GB|450 MB|1 GB|0.31|0|
-|XPress8K|My Summer Car|605 MB|340 MB|266 MB|0.56|0|
+|XPress8K|Moto Racer 2|577 MB|478 MB|100 MB|0.83|0|
+|XPress16K|Mount & Blade: Warband|1.6 GB|1 GB|530 MB|0.66|0|
+|LZX|Mount Your Friends|202 MB|197 MB|5 MB|0.98|0|
+|XPress8K|Munin|1.5 GB|450 MB|1 GB|0.31|0|
+|XPress16K|My Summer Car|605 MB|340 MB|266 MB|0.56|0|
 |XPress16K|Napoleon: Total War|23 GB|13 GB|10 GB|0.57|0|
-|XPress16K|Naruto SHIPPUDEN - Ultimate Ninja Storm 2|7.1 GB|6.7 GB|367 MB|0.95|0|
-|XPress8K|Naruto Ultimate Ninja Storm 4|39 GB|17 GB|22 GB|0.44|0|
+|XPress8K|Naruto SHIPPUDEN - Ultimate Ninja Storm 2|7.1 GB|6.7 GB|367 MB|0.95|0|
+|XPress16K|Naruto Ultimate Ninja Storm 4|39 GB|17 GB|22 GB|0.44|0|
 |XPress16K|Natural Selection 2|10 GB|5.5 GB|4.5 GB|0.55|0|
 |XPress16K|NBA 2K17|65 GB|30 GB|35 GB|0.46|0|
 |XPress16K|Need for Speed (2015)|13.6 GB|12.1 GB|1.5 GB|0.89|0|
@@ -648,18 +648,18 @@
 |XPress16K|Need for Speed II Special Edition|1.2 GB|1 GB|120 MB|0.9|0|
 |XPress16K|Need for Speed Most Wanted (2012)|6.1 GB|6.1 GB|50 MB|0.99|0|
 |XPress16K|Need for Speed: Carbon|5.3 GB|4.2 GB|1.1 GB|0.79|0|
-|XPress16K|Need for Speed: Most Wanted (2005)|4.2 GB|3.4 GB|800 MB|0.81|0|
+|XPress8K|Need for Speed: Most Wanted (2005)|4.2 GB|3.4 GB|800 MB|0.81|0|
 |XPress8K|Need for Speed: Underground 2|1.7 GB|1.3 GB|400 MB|0.76|0|
 |XPress8K|Need For Speed: World|4.5 GB|3.1 GB|1.4 GB|0.7|0|
 |XPress8K|Neptunia U|2.9 GB|1.9 GB|1 GB|0.65|0|
-|XPress8K|Never Alone (Kisima Ingitchuna)|2.4 GB|1.7 GB|700 MB|0.71|0|
+|XPress16K|Never Alone (Kisima Ingitchuna)|2.4 GB|1.7 GB|700 MB|0.71|0|
 |XPress16K|Nevermind|8.6 GB|5.1 GB|3.4 GB|0.6|0|
 |XPress16K|Neverwinter Nights 2 Complete|12 GB|7.8 GB|4.2 GB|0.65|0|
 |XPress16K|Neverwinter Nights Diamond|4.7 GB|3 GB|1.7 GB|0.63|0|
 |XPress16K|Next Car Game: Wreckfest|10 GB|8.9 GB|1.1 GB|0.89|0|
 |XPress16K|Nidhogg|170 MB|156 MB|14 MB|0.92|0|
-|XPress16K|NieR - Automata|48 GB|35 GB|13 GB|0.73|0|
-|XPress8K|Nights of Azure|5.8 GB|5.1 GB|649 MB|0.89|0|
+|XPress8K|NieR - Automata|48 GB|35 GB|13 GB|0.73|0|
+|XPress16K|Nights of Azure|5.8 GB|5.1 GB|649 MB|0.89|0|
 |XPress16K|No Man's Sky|5.9 GB|5.8 GB|53 MB|0.99|0|
 |XPress16K|NVIDIA VR Funhouse|3.2 GB|1.5 GB|1.7 GB|0.46|0|
 |XPress16K|NWN Diamond|6.2 GB|3.4 GB|2.8 GB|0.55|0|
@@ -667,104 +667,104 @@
 |XPress16K|Oddworld New N' Tasty|7.7 GB|5.2 GB|2.5 GB|0.68|0|
 |XPress16K|Offworld Trading Company|1.4 GB|684 MB|716 MB|0.49|0|
 |XPress16K|Offworld Trading Company|1.4 GB|654 MB|726 MB|0.47|0|
-|XPress16K|Onechanbara Z2: Chaos|9 GB|4.5 GB|4.5 GB|0.5|0|
-|XPress8K|oO|80 MB|31 MB|49 MB|0.39|0|
+|XPress8K|Onechanbara Z2: Chaos|9 GB|4.5 GB|4.5 GB|0.5|0|
+|XPress16K|oO|80 MB|31 MB|49 MB|0.39|0|
 |XPress16K|Operation Abyaa New Tokyo Legacy|3.9 GB|1.9 GB|2 GB|0.49|0|
 |XPress16K|Orbt XL|292 MB|30 MB|262 MB|0.1|0|
-|XPress16K|Orcs Must Die!|4.8 GB|2.3 GB|2.5 GB|0.48|0|
-|XPress8K|Orcs Must Die! 2|4.7 GB|2.6 GB|2.2 GB|0.54|0|
+|XPress8K|Orcs Must Die!|4.8 GB|2.3 GB|2.5 GB|0.48|0|
+|XPress16K|Orcs Must Die! 2|4.7 GB|2.6 GB|2.2 GB|0.54|0|
 |XPress16K|Ori and the Blind Forest |7.6 GB|3 GB|4.6 GB|0.39|0|
-|XPress16K|Ori and the Blind Forest DE|10.3 GB|4.9 GB|5.4 GB|0.48|0|
-|XPress8K|Orwell|597 MB|299 MB|298 MB|0.5|0|
+|XPress8K|Ori and the Blind Forest DE|10.3 GB|4.9 GB|5.4 GB|0.48|0|
+|XPress16K|Orwell|597 MB|299 MB|298 MB|0.5|0|
 |XPress16K|Orwell|587 MB|278 MB|309 MB|0.47|0|
 |XPress16K|Osiris: New Dawn|8.2 GB|4.9 GB|3.3 GB|0.6|0|
-|XPress16K|Outlast 2|25.3 GB|19.7 GB|5.6 GB|0.78|0|
-|LZX|Outlast 2|25.3 GB|16.1 GB|9.2 GB|0.64|0|
+|LZX|Outlast 2|25.3 GB|19.7 GB|5.6 GB|0.78|0|
+|XPress16K|Outlast 2|25.3 GB|16.1 GB|9.2 GB|0.64|0|
 |XPress16K|Overcooked|762 MB|396 MB|365 MB|0.52|0|
-|XPress16K|Overgrowth|16 GB|7.4 GB|8.6 GB|0.47|0|
-|XPress8K|Overlord II|3.9 GB|2.9 GB|970 MB|0.75|0|
+|XPress8K|Overgrowth|16 GB|7.4 GB|8.6 GB|0.47|0|
+|XPress16K|Overlord II|3.9 GB|2.9 GB|970 MB|0.75|0|
 |XPress16K|Overlord: Raising Hell|4.8 GB|3.7 GB|1.1 GB|0.77|0|
 |XPress16K|Overwatch|12 GB|12 GB|0 MB|1|0|
 |XPress16K|Overwatch|13.4 GB|13.2 GB|200 MB|0.99|0|
-|XPress16K|Oxygen Not Included|1 GB|436 MB|564 MB|0.44|0|
-|XPress8K|Oxygen Not Included|1 GB|358 MB|642 MB|0.36|0|
-|XPress16K|Painkiller: Hell & Damnation|14 GB|13 GB|1 GB|0.93|0|
-|XPress8K|Paladins|8.6 GB|7.5 GB|1.1 GB|0.87|0|
-|LZX|Paladins (Steam Version)|8.4 GB|7.4 GB|1 GB|0.88|0|
-|XPress16K|Paragon|37 GB|21 GB|16 GB|0.57|0|
-|XPress8K|Party Hard|1.1 GB|478 MB|619 MB|0.44|0|
+|XPress8K|Oxygen Not Included|1 GB|436 MB|564 MB|0.44|0|
+|XPress16K|Oxygen Not Included|1 GB|358 MB|642 MB|0.36|0|
+|XPress8K|Painkiller: Hell & Damnation|14 GB|13 GB|1 GB|0.93|0|
+|LZX|Paladins|8.6 GB|7.5 GB|1.1 GB|0.87|0|
+|XPress16K|Paladins (Steam Version)|8.4 GB|7.4 GB|1 GB|0.88|0|
+|XPress8K|Paragon|37 GB|21 GB|16 GB|0.57|0|
+|XPress16K|Party Hard|1.1 GB|478 MB|619 MB|0.44|0|
 |XPress16K|Path of Exile|8.8 GB|3.9 GB|4.9 GB|0.44|0|
 |XPress16K|Path of Exile|9.2 GB|4.1 GB|5.2 GB|0.44|0|
-|XPress16K|Path of Exile|8.3 GB|3.3 GB|5 GB|0.4|0|
-|XPress8K|Pavlov VR|4.8 GB|2.7 GB|2 GB|0.57|0|
+|XPress8K|Path of Exile|8.3 GB|3.3 GB|5 GB|0.4|0|
+|XPress16K|Pavlov VR|4.8 GB|2.7 GB|2 GB|0.57|0|
 |XPress16K|Payday 2|40.9 GB|27.4 GB|13.5 GB|0.67|0|
 |XPress16K|Payday 2|41 GB|27 GB|14 GB|0.66|0|
-|XPress16K|Payday: The Heist|5.4 GB|4 GB|1.4 GB|0.74|0|
-|XPress8K|Payday: The Heist|5.2 GB|3.7 GB|1.5 GB|0.71|0|
-|XPress16K|Pillars of Eternity|23 GB|13 GB|10 GB|0.57|0|
-|XPress8K|Pillars of Eternity Complete Edition|24 GB|14 GB|10 GB|0.58|0|
-|XPress16K|Pinball Arcade|17 GB|14 GB|3 GB|0.82|0|
-|XPress8K|Pinball FX3|4.8 GB|4.8 GB|6 MB|1|0|
+|XPress8K|Payday: The Heist|5.4 GB|4 GB|1.4 GB|0.74|0|
+|XPress16K|Payday: The Heist|5.2 GB|3.7 GB|1.5 GB|0.71|0|
+|XPress8K|Pillars of Eternity|23 GB|13 GB|10 GB|0.57|0|
+|XPress16K|Pillars of Eternity Complete Edition|24 GB|14 GB|10 GB|0.58|0|
+|XPress8K|Pinball Arcade|17 GB|14 GB|3 GB|0.82|0|
+|XPress16K|Pinball FX3|4.8 GB|4.8 GB|6 MB|1|0|
 |XPress16K|Pixel Privateers|1.4 GB|432 MB|972 MB|0.31|0|
 |XPress16K|Plague Inc Evolved|896 MB|886 MB|11 MB|0.99|0|
 |XPress16K|Planescape: Torment: Enhanced Edition|1.6 GB|1.4 GB|216 MB|0.87|0|
-|XPress16K|Planet Coaster|7 GB|6.9 GB|117 MB|0.98|0|
-|XPress8K|Planetary Annihilation Titans|3.1 GB|2.2 GB|965 MB|0.69|0|
+|XPress8K|Planet Coaster|7 GB|6.9 GB|117 MB|0.98|0|
+|XPress16K|Planetary Annihilation Titans|3.1 GB|2.2 GB|965 MB|0.69|0|
 |XPress16K|Planetbase (version 1.06)|505 MB|322 MB|183 MB|0.64|0|
 |XPress16K|Planetside 2|17.3 GB|12.3 GB|5 GB|0.71|0|
-|XPress16K|Planetside 2|17.3 GB|11 GB|6.3 GB|0.64|0|
-|XPress8K|Play Home|15 GB|7.6 GB|7.4 GB|0.51|0|
-|XPress16K|Player Unknown's: Battlegrounds|7.2 GB|7 GB|200 MB|0.97|0|
-|LZX|Polarity|3.1 GB|438 MB|2.7 GB|0.14|0|
+|XPress8K|Planetside 2|17.3 GB|11 GB|6.3 GB|0.64|0|
+|XPress16K|Play Home|15 GB|7.6 GB|7.4 GB|0.51|0|
+|LZX|Player Unknown's: Battlegrounds|7.2 GB|7 GB|200 MB|0.97|0|
+|XPress16K|Polarity|3.1 GB|438 MB|2.7 GB|0.14|0|
 |XPress16K|Pony Island|337 MB|136 MB|201 MB|0.4|0|
 |XPress16K|Pool Nation|4.8 GB|1.6 GB|3.2 GB|0.33|0|
 |XPress16K|Populous - The Beginning|386 MB|347 MB|39 MB|0.9|0|
-|XPress16K|Portal|4.1 GB|2.7 GB|1.4 GB|0.66|0|
-|XPress8K|Portal 2|12 GB|7.9 GB|4.1 GB|0.66|0|
-|LZX|Portal Knights|4.5 GB|2.5 GB|2 GB|0.56|0|
+|XPress8K|Portal|4.1 GB|2.7 GB|1.4 GB|0.66|0|
+|LZX|Portal 2|12 GB|7.9 GB|4.1 GB|0.66|0|
+|XPress16K|Portal Knights|4.5 GB|2.5 GB|2 GB|0.56|0|
 |XPress16K|Portal Stories: Mel|8.5 GB|5.7 GB|2.9 GB|0.66|0|
 |XPress16K|Postal 2 Complete|7.2 GB|4.2 GB|3 GB|0.58|0|
 |XPress16K|POSTAL 2 Complete Edition|7 GB|4.1 GB|2.9 GB|0.59|0|
 |XPress16K|POSTAL Redux|4.2 GB|1.2 GB|2.9 GB|0.29|0|
-|XPress16K|Prey|18 GB|18 GB|0 MB|1|0|
+|XPress8K|Prey|18 GB|18 GB|0 MB|1|0|
 |XPress8K|Prey (2006)|1.6 GB|1.6 GB|10 MB|0.99|0|
-|XPress8K|Prince of Persia Sands of Time|1.8 GB|1.6 GB|190 MB|0.9|0|
+|XPress16K|Prince of Persia Sands of Time|1.8 GB|1.6 GB|190 MB|0.9|0|
 |XPress16K|Prison Architect|334 MB|331 MB|3 MB|0.99|0|
 |XPress16K|Pro Evolution Soccer 2018|20 GB|10 GB|10 GB|0.5|0|
 |XPress16K|Project Cars |21.6 GB|21.1 GB|500 MB|0.98|0|
-|XPress16K|Prototype|7.8 GB|7.4 GB|398 MB|0.95|0|
-|XPress8K|Puzzle Agent|245 MB|240 MB|5 MB|0.98|0|
+|XPress8K|Prototype|7.8 GB|7.4 GB|398 MB|0.95|0|
+|XPress16K|Puzzle Agent|245 MB|240 MB|5 MB|0.98|0|
 |XPress16K|Pyre|6.2 GB|5.7 GB|450 MB|0.93|0|
 |XPress16K|Quake 2|541 MB|421 MB|120 MB|0.78|0|
 |XPress16K|Quake 4|2.5 GB|2.4 GB|100 MB|0.96|0|
 |XPress16K|Quake Champions|14 GB|4.4 GB|9.6 GB|0.31|0|
-|XPress16K|Quantum Break|67 GB|15 GB|52 GB|0.22|0|
-|XPress8K|Quantum Redshift|67 GB|15 GB|52 GB|0.22|0|
+|XPress8K|Quantum Break|67 GB|15 GB|52 GB|0.22|0|
+|XPress16K|Quantum Redshift|67 GB|15 GB|52 GB|0.22|0|
 |XPress16K|Race Driver: GRID|10 GB|7 GB|3 GB|0.7|0|
 |XPress16K|Rad Rodgers: World One|8.8 GB|5.8 GB|3 GB|0.66|0|
 |XPress16K|RAGE|21.2 GB|18.5 GB|2.7 GB|0.87|0|
 |XPress16K|Raiden V - Director's Cut|5 GB|3 GB|2 GB|0.6|0|
 |XPress16K|Rain World|3.1 GB|2.3 GB|805 MB|0.74|0|
-|XPress16K|Rainbow Six: Siege Ultra HD Pack|52 GB|35 GB|17 GB|0.67|0|
-|XPress8K|Raw Data|9 GB|8.4 GB|645 MB|0.93|0|
+|XPress8K|Rainbow Six: Siege Ultra HD Pack|52 GB|35 GB|17 GB|0.67|0|
+|XPress16K|Raw Data|9 GB|8.4 GB|645 MB|0.93|0|
 |XPress16K|Rayman Legends|5.8 GB|1.1 GB|4.7 GB|0.19|0|
 |XPress16K|Rayman Origins|3.4 GB|2.7 GB|754 MB|0.78|0|
 |XPress16K|Rebel Galaxy|2.2 GB|2.2 GB|30 MB|0.99|0|
 |XPress16K|Rec Room|3.5 GB|1.7 GB|1.8 GB|0.49|0|
-|XPress16K|Recettear - An Item Shops Tale|637 MB|497 MB|140 MB|0.78|0|
-|XPress8K|Red Orchestra 2|23 GB|12 GB|11 GB|0.52|0|
+|XPress8K|Recettear - An Item Shops Tale|637 MB|497 MB|140 MB|0.78|0|
+|XPress16K|Red Orchestra 2|23 GB|12 GB|11 GB|0.52|0|
 |XPress16K|Red Orchestra 2: Heroes of Stalingrad|10 GB|7.3 GB|2.7 GB|0.73|0|
 |XPress16K|Redout|5.6 GB|1.5 GB|4.2 GB|0.26|0|
 |XPress16K|Regicide|4.9 GB|3.5 GB|1.4 GB|0.71|0|
 |XPress16K|Remember Me|6.9 GB|6.4 GB|467 MB|0.93|0|
-|XPress16K|Renegade Ops|2.7 GB|2.4 GB|319 MB|0.88|0|
-|XPress8K|Republique Remastered|7.4 GB|4.8 GB|2.6 GB|0.65|0|
+|XPress8K|Renegade Ops|2.7 GB|2.4 GB|319 MB|0.88|0|
+|XPress16K|Republique Remastered|7.4 GB|4.8 GB|2.6 GB|0.65|0|
 |XPress16K|Resident Evil 4|11.1 GB|10.6 GB|500 MB|0.95|0|
-|XPress16K|Resident Evil 5|8.4 GB|8.2 GB|244 MB|0.97|0|
-|XPress8K|Resident Evil 6|17 GB|16 GB|1 GB|0.94|0|
+|XPress8K|Resident Evil 5|8.4 GB|8.2 GB|244 MB|0.97|0|
+|XPress16K|Resident Evil 6|17 GB|16 GB|1 GB|0.94|0|
 |XPress16K|Resident Evil 7|26.4 GB|9.3 GB|17.1 GB|0.35|0|
-|XPress16K|Resident Evil Biohazard HD|17.6 GB|17.5 GB|100 MB|0.99|0|
-|XPress8K|Resident Evil Revelations|7.1 GB|7 GB|150 MB|0.98|0|
+|XPress8K|Resident Evil Biohazard HD|17.6 GB|17.5 GB|100 MB|0.99|0|
+|XPress16K|Resident Evil Revelations|7.1 GB|7 GB|150 MB|0.98|0|
 |XPress16K|Resident Evil Revelations 2|18 GB|17.6 GB|400 MB|0.98|0|
 |XPress16K|Reus|457 MB|414 MB|43 MB|0.91|0|
 |XPress16K|Rez: Infinite|1.2 GB|1.1 GB|100 MB|0.92|0|
@@ -776,20 +776,20 @@
 |XPress16K|Rising Storm 2: Vietnam|24 GB|12 GB|12 GB|0.5|0|
 |XPress16K|Road Redemption|5.6 GB|4.1 GB|1.5 GB|0.73|0|
 |XPress16K|RoboRecall|9.3 GB|1.6 GB|7.7 GB|0.17|0|
-|XPress16K|Robot Roller-Derby Disco Dodgeball|509 MB|311 MB|198 MB|0.61|0|
-|XPress8K|Rocket League|7.8 GB|7.7 GB|67 MB|0.99|0|
+|XPress8K|Robot Roller-Derby Disco Dodgeball|509 MB|311 MB|198 MB|0.61|0|
+|XPress16K|Rocket League|7.8 GB|7.7 GB|67 MB|0.99|0|
 |XPress16K|Rocket League|7.6 GB|7.3 GB|269 MB|0.96|0|
 |XPress16K|Rogue Legacy|267 MB|145 MB|122 MB|0.54|0|
-|XPress16K|Root Double -BCAD - XtE|7.9 GB|7.3 GB|570 MB|0.93|0|
-|XPress8K|Ruiner|10 GB|5.5 GB|4.5 GB|0.55|0|
+|XPress8K|Root Double -BCAD - XtE|7.9 GB|7.3 GB|570 MB|0.93|0|
+|XPress16K|Ruiner|10 GB|5.5 GB|4.5 GB|0.55|0|
 |XPress16K|Rust|6.9 GB|4.3 GB|2.6 GB|0.62|0|
 |XPress16K|RWBY: Grimm Eclipse|3.2 GB|1.7 GB|1.5 GB|0.53|0|
 |XPress16K|Ryse: Son of Rome|25.8 GB|24.8 GB|1 GB|0.96|0|
 |XPress16K|S.T.A.L.K.E.R.: Call of Pripyat|5.3 GB|4 GB|1.3 GB|0.75|0|
 |XPress16K|S.T.A.L.K.E.R.: Clear Sky|5.5 GB|3.5 GB|2 GB|0.64|0|
-|XPress16K|S.T.A.L.K.E.R.: Shadow of Chernobyl|5.7 GB|3.8 GB|1.9 GB|0.67|0|
+|XPress8K|S.T.A.L.K.E.R.: Shadow of Chernobyl|5.7 GB|3.8 GB|1.9 GB|0.67|0|
 |XPress8K|Saints Row 2|13 GB|8.4 GB|4.6 GB|0.65|0|
-|XPress8K|Saints Row Gat Out of Hell|6.6 GB|6.1 GB|440 MB|0.93|0|
+|XPress16K|Saints Row Gat Out of Hell|6.6 GB|6.1 GB|440 MB|0.93|0|
 |XPress16K|Saints Row IV|10 GB|9.4 GB|600 MB|0.94|0|
 |XPress16K|Sairento VR|5.1 GB|2.4 GB|2.7 GB|0.47|0|
 |XPress16K|Sakura Spirit|177 MB|141 MB|36 MB|0.8|0|
@@ -804,13 +804,13 @@
 |XPress16K|Senran Kagura Estival Versus|18 GB|11 GB|7 GB|0.61|0|
 |XPress16K|Senran Kagura Shinovi Versus|4.9 GB|3.2 GB|1.7 GB|0.66|0|
 |XPress16K|Senza Peso|1.8 GB|1.2 GB|613 MB|0.67|0|
-|XPress16K|Shadow Warrior|13.8 GB|13.7 GB|100 MB|0.99|0|
-|XPress8K|Shadow Warrior 2|13.4 GB|9.4 GB|4 GB|0.7|0|
-|XPress16K|Shadowrun Dragonfall Director's Cut|6.9 GB|2.4 GB|4.5 GB|0.34|0|
-|XPress8K|Shadowrun Returns|2.8 GB|1.6 GB|1.2 GB|0.58|0|
+|XPress8K|Shadow Warrior|13.8 GB|13.7 GB|100 MB|0.99|0|
+|XPress16K|Shadow Warrior 2|13.4 GB|9.4 GB|4 GB|0.7|0|
+|XPress8K|Shadowrun Dragonfall Director's Cut|6.9 GB|2.4 GB|4.5 GB|0.34|0|
+|XPress16K|Shadowrun Returns|2.8 GB|1.6 GB|1.2 GB|0.58|0|
 |XPress16K|Shank 2|1.4 GB|1.3 GB|114 MB|0.92|0|
-|XPress16K|Shantai Half-Genie Hero|1.6 GB|1.3 GB|360 MB|0.78|0|
-|XPress8K|ShellShock Live|338 MB|118 MB|220 MB|0.35|0|
+|XPress8K|Shantai Half-Genie Hero|1.6 GB|1.3 GB|360 MB|0.78|0|
+|XPress16K|ShellShock Live|338 MB|118 MB|220 MB|0.35|0|
 |XPress16K|SHENZHEN.IO |370 MB|340 MB|30 MB|0.92|0|
 |XPress16K|Sherlock Holmes: Devils Daughter|14 GB|12 GB|2 GB|0.86|0|
 |XPress16K|Shiny Days|15.9 GB|15.4 GB|500 MB|0.97|0|
@@ -824,13 +824,13 @@
 |XPress16K|Sine Mora EX|747 MB|710 MB|37 MB|0.95|0|
 |XPress16K|Sins of a Solar Empire: Rebellion|3.5 GB|2.6 GB|900 MB|0.74|0|
 |XPress16K|Skullgirls|4.1 GB|2.2 GB|1.9 GB|0.53|0|
-|XPress16K|Skyborn|190 MB|184 MB|7 MB|0.96|0|
-|XPress8K|Sleeping Dogs|11 GB|11 GB|0 MB|1|0|
-|XPress16K|Sleeping Dogs - Definitive Edition|17 GB|12 GB|5 GB|0.71|0|
-|LZX|Slime Rancher|759 MB|445 MB|313 MB|0.59|0|
+|XPress8K|Skyborn|190 MB|184 MB|7 MB|0.96|0|
+|XPress16K|Sleeping Dogs|11 GB|11 GB|0 MB|1|0|
+|LZX|Sleeping Dogs - Definitive Edition|17 GB|12 GB|5 GB|0.71|0|
+|XPress16K|Slime Rancher|759 MB|445 MB|313 MB|0.59|0|
 |XPress16K|Slime Rancher|873 MB|488 MB|385 MB|0.56|0|
-|XPress16K|Slime-San|1 GB|422 MB|578 MB|0.42|0|
-|XPress8K|Snake Pass|3.6 GB|1.9 GB|1.7 GB|0.53|0|
+|XPress8K|Slime-San|1 GB|422 MB|578 MB|0.42|0|
+|XPress16K|Snake Pass|3.6 GB|1.9 GB|1.7 GB|0.53|0|
 |XPress16K|Sniper Elite 3|25 GB|20 GB|5 GB|0.8|0|
 |XPress16K|Sniper Elite 4|67 GB|55 GB|12 GB|0.82|0|
 |XPress16K|Sniper Elite V2|7.5 GB|6.5 GB|1 GB|0.87|0|
@@ -843,8 +843,8 @@
 |XPress16K|Sonic Generations|8.4 GB|7.9 GB|510 MB|0.94|0|
 |XPress16K|Sonic Mania|214 MB|205 MB|9 MB|0.96|0|
 |XPress16K|Source SDK Base 2007|3.8 GB|2.4 GB|1.4 GB|0.64|0|
-|XPress16K|South Park - The Stick of Truth |5.4 GB|4.4 GB|1.1 GB|0.8|0|
-|XPress8K|South Park: Fractured But Whole|19.4 GB|18.2 GB|1.2 GB|0.94|0|
+|XPress8K|South Park - The Stick of Truth |5.4 GB|4.4 GB|1.1 GB|0.8|0|
+|XPress16K|South Park: Fractured But Whole|19.4 GB|18.2 GB|1.2 GB|0.94|0|
 |XPress16K|South Park: The Fractured But Whole|19.4 GB|18.2 GB|1.2 GB|0.94|0|
 |XPress16K|Space Engineers|15 GB|8.4 GB|6.6 GB|0.56|0|
 |XPress16K|Space Hulk: Deathwing|32 GB|4.1 GB|27.9 GB|0.13|0|
@@ -853,42 +853,42 @@
 |XPress16K|SpaceEngineers|14.9 GB|8.4 GB|6.5 GB|0.56|0|
 |XPress16K|Spec Ops The Line|7 GB|6.5 GB|477 MB|0.93|0|
 |XPress16K|Spelunky|419 MB|390 MB|29 MB|0.93|0|
-|XPress16K|Spintires|616 MB|613 MB|3 MB|1|0|
-|XPress8K|Splinter Cell Blacklist|19 GB|19 GB|0 MB|1|0|
+|XPress8K|Spintires|616 MB|613 MB|3 MB|1|0|
+|XPress16K|Splinter Cell Blacklist|19 GB|19 GB|0 MB|1|0|
 |XPress16K|Splinter Cell Conviction|7 GB|6.5 GB|490 MB|0.93|0|
 |XPress16K|Splinter Cell: Chaos Theory|4.7 GB|3.9 GB|750 MB|0.84|0|
-|XPress16K|Squad|26 GB|14 GB|12 GB|0.54|0|
-|XPress8K|Squad|26 GB|13 GB|13 GB|0.5|0|
-|XPress16K|Star Citizen|30.5 GB|30.1 GB|400 MB|0.99|0|
-|XPress8K|Star conflict|6.6 GB|6.2 GB|380 MB|0.94|0|
-|XPress16K|Star Crawlers|4.5 GB|2.2 GB|2.2 GB|0.5|0|
+|XPress8K|Squad|26 GB|14 GB|12 GB|0.54|0|
+|XPress16K|Squad|26 GB|13 GB|13 GB|0.5|0|
+|XPress8K|Star Citizen|30.5 GB|30.1 GB|400 MB|0.99|0|
+|XPress16K|Star conflict|6.6 GB|6.2 GB|380 MB|0.94|0|
+|XPress8K|Star Crawlers|4.5 GB|2.2 GB|2.2 GB|0.5|0|
 |XPress8K|Star Ruler 2|959 MB|582 MB|377 MB|0.61|0|
-|XPress8K|Star Trek Bridge Crew|9.8 GB|6.4 GB|3.4 GB|0.65|0|
+|XPress16K|Star Trek Bridge Crew|9.8 GB|6.4 GB|3.4 GB|0.65|0|
 |XPress16K|Star Wars: Battlefront|52 GB|45 GB|7 GB|0.87|0|
 |XPress16K|Star Wars: Battlefront II (2005)|4.4 GB|3.2 GB|1.2 GB|0.73|0|
 |XPress16K|Star Wars: Knights of the Old Republic|3.4 GB|2.4 GB|938 MB|0.72|0|
 |XPress16K|Star Wars: Knights of the Old Republic II|4.5 GB|3.4 GB|1 GB|0.77|0|
-|XPress16K|Star Wars: The Force Unleashed|29 GB|17 GB|12 GB|0.59|0|
-|XPress8K|Star Wars: The Old Republic|38 GB|37 GB|1 GB|0.97|0|
+|XPress8K|Star Wars: The Force Unleashed|29 GB|17 GB|12 GB|0.59|0|
+|XPress16K|Star Wars: The Old Republic|38 GB|37 GB|1 GB|0.97|0|
 |XPress16K|Starbound|1.6 GB|941 MB|675 MB|0.58|0|
 |XPress16K|Starbound|2.4 GB|1.6 GB|801 MB|0.67|0|
-|XPress16K|Starcraft I|7 GB|6.9 GB|100 MB|0.99|0|
-|XPress8K|Starcraft II|24.3 GB|24.1 GB|200 MB|0.99|0|
+|XPress8K|Starcraft I|7 GB|6.9 GB|100 MB|0.99|0|
+|XPress16K|Starcraft II|24.3 GB|24.1 GB|200 MB|0.99|0|
 |XPress16K|Stardew Valley|454 MB|363 MB|91 MB|0.8|0|
 |XPress16K|Stardust Galaxy Warriors|652 MB|415 MB|237 MB|0.64|0|
 |XPress16K|Starpoint Gemini : Warlords|11.9 GB|6.6 GB|5.3 GB|0.55|0|
 |XPress16K|Starpoint Gemini: Warlords|12.9 GB|7.2 GB|5.7 GB|0.56|0|
 |XPress16K|State of Decay. Year One Survival Edition|3 GB|2.8 GB|170 MB|0.94|0|
-|XPress16K|Stealth Bastard Deluxe|141 MB|121 MB|20 MB|0.86|0|
+|XPress8K|Stealth Bastard Deluxe|141 MB|121 MB|20 MB|0.86|0|
 |XPress8K|Steins;Gate|6.3 GB|6.1 GB|200 MB|0.97|0|
-|XPress8K|Stellaris|3.4 GB|2.1 GB|1.3 GB|0.62|0|
+|XPress16K|Stellaris|3.4 GB|2.1 GB|1.3 GB|0.62|0|
 |XPress16K|Streamline|5.7 GB|2.2 GB|3.4 GB|0.39|0|
 |XPress16K|Street Fighter V|26 GB|20 GB|6 GB|0.77|0|
 |XPress16K|Street Fighter V|26 GB|20 GB|6 GB|0.77|0|
 |XPress16K|Street Racing Syndicate|1.7 GB|1.1 GB|580 MB|0.66|0|
-|XPress16K|Subnautica|15 GB|7.8 GB|7.2 GB|0.52|0|
+|XPress8K|Subnautica|15 GB|7.8 GB|7.2 GB|0.52|0|
 |XPress8K|Sunless Sea|631 MB|296 MB|335 MB|0.47|0|
-|XPress8K|Super Meat Boy|242 MB|175 MB|67 MB|0.72|0|
+|XPress16K|Super Meat Boy|242 MB|175 MB|67 MB|0.72|0|
 |XPress16K|SUPERHOT|4.2 GB|1.7 GB|2.5 GB|0.4|0|
 |XPress16K|SUPERHOT VR|3.6 GB|1.2 GB|2.4 GB|0.33|0|
 |XPress16K|Supreme Commander|7.1 GB|5.1 GB|2 GB|0.72|0|
@@ -908,8 +908,8 @@
 |XPress16K|Tekken 7|60 GB|31 GB|29 GB|0.52|0|
 |XPress16K|Tekken 7 (Videos Removed)|35 GB|7.2 GB|27.8 GB|0.21|0|
 |XPress16K|Tembo: The Badass Elephant|933 MB|425 MB|508 MB|0.46|0|
-|XPress16K|TERA|45 GB|38 GB|7 GB|0.84|0|
-|XPress8K|Terraria|235 MB|193 MB|42 MB|0.82|0|
+|XPress8K|TERA|45 GB|38 GB|7 GB|0.84|0|
+|XPress16K|Terraria|235 MB|193 MB|42 MB|0.82|0|
 |XPress16K|Tesla Effect|16 GB|15 GB|1 GB|0.94|0|
 |XPress16K|Tesla Effect: A Tex Murphy Adventure|16.4 GB|15.1 GB|1.3 GB|0.92|0|
 |XPress16K|Test Drive Unlimited 2|16 GB|11 GB|5 GB|0.69|0|
@@ -918,8 +918,8 @@
 |XPress16K|The Binding Of Isaac Afterbirth Plus|599 MB|576 MB|22 MB|0.96|0|
 |XPress16K|The Binding of Isaac: Rebirth|300 MB|300 MB|0 MB|1|0|
 |XPress16K|The Body VR: Journey Inside a Cell|324 MB|162 MB|162 MB|0.5|0|
-|XPress16K|The Brookhaven Experiment|19 GB|6.4 GB|12.6 GB|0.33|0|
-|XPress8K|The Chronicles of Riddick|10 GB|7.6 GB|2.4 GB|0.76|0|
+|XPress8K|The Brookhaven Experiment|19 GB|6.4 GB|12.6 GB|0.33|0|
+|XPress16K|The Chronicles of Riddick|10 GB|7.6 GB|2.4 GB|0.76|0|
 |XPress16K|The Club|6.1 GB|5.8 GB|216 MB|0.96|0|
 |XPress16K|The Crew|2.4 GB|2.2 GB|190 MB|0.92|0|
 |XPress16K|The Cubicle.|215 MB|86 MB|129 MB|0.4|0|
@@ -930,8 +930,8 @@
 |XPress16K|The Escapists 2|2.4 GB|635 MB|1.8 GB|0.26|0|
 |XPress16K|The Evil Within|58 GB|54 GB|4 GB|0.93|0|
 |XPress16K|The Evil Within|58 GB|53 GB|5 GB|0.91|0|
-|XPress16K|The Evil Within 2|33 GB|23 GB|10 GB|0.7|0|
 |XPress8K|The Evil Within 2|33 GB|23 GB|10 GB|0.7|0|
+|XPress16K|The Evil Within 2|33 GB|23 GB|10 GB|0.7|0|
 |XPress16K|The Final Station|2.2 GB|1.9 GB|300 MB|0.86|0|
 |XPress16K|The Flame in the Flood|2.7 GB|1.8 GB|874 MB|0.67|0|
 |XPress16K|The Forest|3.3 GB|2.5 GB|800 MB|0.76|0|
@@ -940,14 +940,14 @@
 |XPress16K|The Golf Club 2|4.8 GB|3 GB|1.7 GB|0.64|0|
 |XPress16K|The Hobbit (2003)|1.6 GB|1.3 GB|300 MB|0.81|0|
 |XPress16K|The Incredible Adventures of Van Helsing + DLC|19 GB|11 GB|8 GB|0.58|0|
-|XPress16K|The Incredible Adventures of Van Helsing II|23 GB|14 GB|9 GB|0.61|0|
-|XPress8K|The incredible Adventures of Van Helsing: Final Cut|55.1 GB|32.5 GB|22.6 GB|0.59|0|
+|XPress8K|The Incredible Adventures of Van Helsing II|23 GB|14 GB|9 GB|0.61|0|
+|XPress16K|The incredible Adventures of Van Helsing: Final Cut|55.1 GB|32.5 GB|22.6 GB|0.59|0|
 |XPress16K|The Jackbox Party Pack 2|458 MB|431 MB|27 MB|0.94|0|
 |XPress16K|The Jackbox Party Pack 3|713 MB|688 MB|25 MB|0.96|0|
 |XPress16K|The King of Fighters XIV|16.3 GB|2.2 GB|14.1 GB|0.13|0|
 |XPress16K|The Lab|14.5 GB|8.2 GB|6.3 GB|0.56|0|
-|XPress16K|The Legend of Heroes: Trails in the Sky|2.4 GB|2.1 GB|260 MB|0.89|0|
-|XPress8K|The Legend of Heroes: Trails of Cold Steel|17 GB|12 GB|5 GB|0.71|0|
+|XPress8K|The Legend of Heroes: Trails in the Sky|2.4 GB|2.1 GB|260 MB|0.89|0|
+|XPress16K|The Legend of Heroes: Trails of Cold Steel|17 GB|12 GB|5 GB|0.71|0|
 |XPress16K|The Long Dark|5.8 GB|4 GB|1.8 GB|0.69|0|
 |XPress16K|The Long Journey Home|11.6 GB|1.4 GB|10.2 GB|0.12|0|
 |XPress16K|The Lord of the Rings: War in the North|7.2 GB|5 GB|2.2 GB|0.69|0|
@@ -966,11 +966,11 @@
 |XPress16K|The Solus Project|9.6 GB|4.6 GB|5.1 GB|0.47|0|
 |XPress16K|The Surge|13 GB|11 GB|2 GB|0.85|0|
 |XPress16K|The Swapper|938 MB|767 MB|171 MB|0.82|0|
-|XPress16K|The Talos Principle|6.4 GB|6.4 GB|66 MB|0.99|0|
-|XPress8K|The Technomancer|9 GB|8.6 GB|370 MB|0.96|0|
+|XPress8K|The Talos Principle|6.4 GB|6.4 GB|66 MB|0.99|0|
+|XPress16K|The Technomancer|9 GB|8.6 GB|370 MB|0.96|0|
 |XPress16K|The Turing Test|9.6 GB|5.2 GB|4.4 GB|0.54|0|
-|XPress16K|The Uncertain|1.9 GB|960 MB|980 MB|0.49|0|
-|LZX|The ur-Quan Masters HD|819 MB|771 MB|49 MB|0.94|0|
+|LZX|The Uncertain|1.9 GB|960 MB|980 MB|0.49|0|
+|XPress16K|The ur-Quan Masters HD|819 MB|771 MB|49 MB|0.94|0|
 |XPress16K|The Vanishing of Ethan Carter Redux|5.4 GB|3.2 GB|2.2 GB|0.6|0|
 |XPress16K|The Walkind Dead|3.5 GB|3.5 GB|92 MB|0.97|0|
 |XPress16K|The Walking Dead: A New Frontier|19.4 GB|19.3 GB|87 MB|1|0|
@@ -981,31 +981,31 @@
 |XPress16K|The Witcher 3|50 GB|43 GB|7 GB|0.86|0|
 |XPress16K|The Witcher 3|45.3 GB|37.5 GB|7.8 GB|0.83|0|
 |XPress16K|The Witcher 3 + DLC|50 GB|43 GB|7 GB|0.86|0|
-|XPress16K|The Witcher Enhanced Edition |15.6 GB|11.6 GB|4 GB|0.74|0|
-|LZX|The Witness|4 GB|3.7 GB|310 MB|0.92|0|
-|XPress8K|The Wolf Among Us|5.8 GB|5 GB|800 MB|0.86|0|
+|LZX|The Witcher Enhanced Edition |15.6 GB|11.6 GB|4 GB|0.74|0|
+|XPress8K|The Witness|4 GB|3.7 GB|310 MB|0.92|0|
+|XPress16K|The Wolf Among Us|5.8 GB|5 GB|800 MB|0.86|0|
 |XPress16K|theBlu|3.8 GB|2.1 GB|1.7 GB|0.55|0|
 |XPress16K|Theme Hosptial|223 MB|179 MB|44 MB|0.8|0|
-|XPress16K|TheWaveVR|4.9 GB|3.8 GB|1.1 GB|0.78|0|
-|XPress8K|Thief|24 GB|21 GB|3 GB|0.88|0|
+|XPress8K|TheWaveVR|4.9 GB|3.8 GB|1.1 GB|0.78|0|
+|XPress16K|Thief|24 GB|21 GB|3 GB|0.88|0|
 |XPress16K|Thimbleweed Park|824 MB|814 MB|10 MB|0.99|0|
 |XPress16K|This War of Mine|1.6 GB|1.5 GB|82 MB|0.95|0|
 |XPress16K|Thomas Was Alone|284 MB|215 MB|69 MB|0.76|0|
 |XPress16K|Thomas Was Alone|281 MB|204 MB|77 MB|0.73|0|
-|XPress16K|Thumper|781 MB|353 MB|429 MB|0.45|0|
-|XPress8K|Tilt Brush by Google|638 MB|363 MB|274 MB|0.57|0|
+|XPress8K|Thumper|781 MB|353 MB|429 MB|0.45|0|
+|XPress16K|Tilt Brush by Google|638 MB|363 MB|274 MB|0.57|0|
 |XPress16K|Titan Quest Anniversary Edition|5.7 GB|5.7 GB|45 MB|0.99|0|
 |XPress16K|Titanfall|63 GB|47 GB|16 GB|0.75|0|
-|XPress16K|Titanfall 2|64 GB|42 GB|22 GB|0.66|0|
-|XPress8K|Titanfall 2|63.3 GB|40.1 GB|23.2 GB|0.63|0|
-|XPress16K|To the Moon|611 MB|610 MB|1 MB|1|0|
-|XPress4K|Tom Clancy's Ghost Recon: Wildlands|68 GB|35 GB|33 GB|0.51|0|
+|XPress8K|Titanfall 2|64 GB|42 GB|22 GB|0.66|0|
+|XPress16K|Titanfall 2|63.3 GB|40.1 GB|23.2 GB|0.63|0|
+|XPress4K|To the Moon|611 MB|610 MB|1 MB|1|0|
+|XPress16K|Tom Clancy's Ghost Recon: Wildlands|68 GB|35 GB|33 GB|0.51|0|
 |XPress16K|Tom Clancy's Rainbow Six Siege|36.1 GB|26.3 GB|9.8 GB|0.73|0|
 |XPress16K|Tom Clancy's Rainbow Six: Lockdown|5.6 GB|3.4 GB|2.2 GB|0.61|0|
 |XPress16K|Tom Clancy's Splinter Cell|2.4 GB|2.2 GB|110 MB|0.95|0|
 |XPress16K|Tom Clancy's The Division|47 GB|46 GB|1 GB|0.98|0|
-|XPress16K|Tomb Raider (2013)|11 GB|10 GB|1 GB|0.91|0|
-|XPress8K|Tomb Raider DOX-1.0|4 GB|2.3 GB|1.7 GB|0.58|0|
+|XPress8K|Tomb Raider (2013)|11 GB|10 GB|1 GB|0.91|0|
+|XPress16K|Tomb Raider DOX-1.0|4 GB|2.3 GB|1.7 GB|0.58|0|
 |XPress16K|Tomb Raider: Legend|7.2 GB|5.1 GB|2.1 GB|0.71|0|
 |XPress16K|Torchlight 2|1.7 GB|1.7 GB|0 MB|1|0|
 |XPress16K|Torment: Tides of Numenera|10 GB|5.6 GB|4.4 GB|0.56|0|
@@ -1014,8 +1014,8 @@
 |XPress16K|Total War: Shogun 2|23 GB|16 GB|7 GB|0.7|0|
 |XPress16K|Total War: Warhammer|33 GB|21 GB|12 GB|0.64|0|
 |XPress16K|Total War: Warhammer|35 GB|22 GB|13 GB|0.63|0|
-|XPress16K|Total War: Warhammer II|38 GB|29 GB|9 GB|0.76|0|
-|XPress8K|Tower Unite|16.3 GB|8.2 GB|8.1 GB|0.5|0|
+|XPress8K|Total War: Warhammer II|38 GB|29 GB|9 GB|0.76|0|
+|XPress16K|Tower Unite|16.3 GB|8.2 GB|8.1 GB|0.5|0|
 |XPress16K|Town of Salem|1.2 GB|1.2 GB|40 MB|0.97|0|
 |XPress16K|Toxikk|4.2 GB|3.2 GB|1 GB|0.76|0|
 |XPress16K|Trackmania Turbo|3.9 GB|3.5 GB|440 MB|0.89|0|
@@ -1040,38 +1040,38 @@
 |XPress16K|Uno |2.3 GB|800 MB|1.5 GB|0.35|0|
 |XPress16K|Uno |2.3 GB|800 MB|1.5 GB|0.35|0|
 |XPress16K|Unravel|3.2 GB|2.8 GB|400 MB|0.88|0|
-|XPress16K|Unravel|3.3 GB|2.9 GB|400 MB|0.88|0|
-|XPress8K|Unreal Anthology|9.1 GB|5 GB|4.1 GB|0.55|0|
-|LZX|Unreal Gold|695 MB|357 MB|338 MB|0.51|0|
+|XPress8K|Unravel|3.3 GB|2.9 GB|400 MB|0.88|0|
+|LZX|Unreal Anthology|9.1 GB|5 GB|4.1 GB|0.55|0|
+|XPress16K|Unreal Gold|695 MB|357 MB|338 MB|0.51|0|
 |XPress16K|Unreal Tournament 4 Alpha|19.3 GB|2.8 GB|16.5 GB|0.15|0|
-|XPress16K|Unseen Diplomacy|272 MB|176 MB|97 MB|0.65|0|
-|XPress8K|Unturned|4.4 GB|2.3 GB|2.2 GB|0.51|0|
+|XPress8K|Unseen Diplomacy|272 MB|176 MB|97 MB|0.65|0|
+|XPress16K|Unturned|4.4 GB|2.3 GB|2.2 GB|0.51|0|
 |XPress16K|Valkyria Chronicles|20 GB|18 GB|2 GB|0.9|0|
 |XPress16K|Valkyria Chronicles|19.8 GB|17.7 GB|2.1 GB|0.89|0|
 |XPress16K|Vampire: The Masquerade - Bloodlines|3.9 GB|2.7 GB|1.2 GB|0.69|0|
-|XPress16K|Vanishing Realms|1.5 GB|799 MB|683 MB|0.54|0|
-|XPress8K|Vanquish|18.6 GB|17.1 GB|1.5 GB|0.92|0|
+|XPress8K|Vanishing Realms|1.5 GB|799 MB|683 MB|0.54|0|
+|XPress16K|Vanquish|18.6 GB|17.1 GB|1.5 GB|0.92|0|
 |XPress16K|Vaporum|5.2 GB|3.3 GB|2 GB|0.62|0|
 |XPress16K|Verdun|4.3 GB|2.6 GB|1.7 GB|0.6|0|
 |XPress16K|Vermintide|45 GB|44.5 GB|500 MB|0.99|0|
 |XPress16K|Virginia|4.4 GB|2.7 GB|1.7 GB|0.61|0|
 |XPress16K|Virtual Pool 4|1.1 GB|636 MB|464 MB|0.58|0|
-|XPress16K|Viscera Cleanup Detail|4 GB|3.2 GB|800 MB|0.8|0|
-|XPress8K|Viscera Cleanup Detail|4 GB|3.1 GB|899 MB|0.77|0|
-|XPress16K|Volume|762 MB|588 MB|174 MB|0.77|0|
-|XPress8K|Wakfu|1.6 GB|1.4 GB|163 MB|0.9|0|
+|XPress8K|Viscera Cleanup Detail|4 GB|3.2 GB|800 MB|0.8|0|
+|XPress16K|Viscera Cleanup Detail|4 GB|3.1 GB|899 MB|0.77|0|
+|XPress8K|Volume|762 MB|588 MB|174 MB|0.77|0|
+|XPress16K|Wakfu|1.6 GB|1.4 GB|163 MB|0.9|0|
 |XPress16K|War for the Overworld|5.7 GB|4.5 GB|1.2 GB|0.79|0|
 |XPress16K|War Thunder|19.3 GB|18.3 GB|1 GB|0.95|0|
 |XPress16K|War Thunder|17 GB|15.3 GB|1.7 GB|0.9|0|
 |XPress16K|War Thunder|30 GB|26 GB|4 GB|0.87|0|
 |XPress16K|Warcraft III|1.1 GB|1 GB|54 MB|0.95|0|
 |XPress16K|Warface|8.9 GB|8.7 GB|250 MB|0.97|0|
-|XPress16K|Warframe|29 GB|14 GB|15 GB|0.48|0|
-|XPress8K|Warframe|23 GB|9 GB|14 GB|0.39|0|
+|XPress8K|Warframe|29 GB|14 GB|15 GB|0.48|0|
+|XPress16K|Warframe|23 GB|9 GB|14 GB|0.39|0|
 |XPress16K|Warhammer 40,000 Dawn of War II|4.9 GB|4.9 GB|79 MB|0.98|0|
 |XPress16K|Warhammer 40,000 Dawn of War III|30 GB|27 GB|3 GB|0.9|0|
-|XPress16K|Warhammer 40,000 Eternal Crusade|12 GB|3.1 GB|8.9 GB|0.26|0|
-|XPress8K|Warhammer 40,000 Space Marine|8.9 GB|8.8 GB|57 MB|0.99|0|
+|XPress8K|Warhammer 40,000 Eternal Crusade|12 GB|3.1 GB|8.9 GB|0.26|0|
+|XPress16K|Warhammer 40,000 Space Marine|8.9 GB|8.8 GB|57 MB|0.99|0|
 |XPress16K|Warhammer: End Times|45 GB|44.5 GB|500 MB|0.99|0|
 |XPress16K|Warriors All-Stars|22 GB|14 GB|8 GB|0.64|0|
 |XPress16K|Wasteland 2 Director's Cut|15 GB|11 GB|4 GB|0.73|0|
@@ -1089,18 +1089,18 @@
 |XPress16K|Wolfenstein: The New Order|44 GB|42 GB|2 GB|0.95|0|
 |XPress16K|Wolfenstein: The New Order|44 GB|42 GB|2 GB|0.95|0|
 |XPress16K|Wolfenstein: The Old Blood|36.4 GB|35.3 GB|1.1 GB|0.97|0|
-|XPress16K|World in Conflict: Complete Edition|6.4 GB|5.8 GB|569 MB|0.91|0|
-|XPress8K|World of Tanks|42 GB|32 GB|10 GB|0.76|0|
+|XPress8K|World in Conflict: Complete Edition|6.4 GB|5.8 GB|569 MB|0.91|0|
+|XPress16K|World of Tanks|42 GB|32 GB|10 GB|0.76|0|
 |XPress16K|World of Tanks|33 GB|23 GB|10 GB|0.7|0|
 |XPress16K|World of Warcraft |46.3 GB|44.8 GB|1.5 GB|0.97|0|
-|XPress16K|World of warplanes|41 GB|29 GB|12 GB|0.71|0|
-|XPress8K|World of Warships|27 GB|21 GB|6 GB|0.78|0|
-|XPress16K|Worms reloaded|3.3 GB|743 MB|2.6 GB|0.22|0|
+|XPress8K|World of warplanes|41 GB|29 GB|12 GB|0.71|0|
+|XPress16K|World of Warships|27 GB|21 GB|6 GB|0.78|0|
+|XPress8K|Worms reloaded|3.3 GB|743 MB|2.6 GB|0.22|0|
 |XPress8K|Worms Revolution|1.5 GB|1.1 GB|390 MB|0.74|0|
 |XPress8K|Worms W.M.D|5.4 GB|1.8 GB|3.6 GB|0.33|0|
 |XPress8K|WWE 2K16|44 GB|43 GB|1 GB|0.98|0|
 |XPress8K|WWE 2K18|44 GB|43 GB|1 GB|0.98|0|
-|XPress8K|XCOM 2|33 GB|31 GB|2 GB|0.94|0|
+|XPress16K|XCOM 2|33 GB|31 GB|2 GB|0.94|0|
 |XPress16K|XCOM 2 War of the Chosen|127 GB|109 GB|18 GB|0.86|0|
 |XPress16K|XCOM: Enemy Unknown|19 GB|17 GB|2 GB|0.89|0|
 |XPress16K|Year Walk|952 MB|335 MB|617 MB|0.35|0|
