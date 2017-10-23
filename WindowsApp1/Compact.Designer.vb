@@ -87,6 +87,7 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
+        Me.checkShutdown = New System.Windows.Forms.CheckBox()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -666,6 +667,7 @@ Partial Class Compact
         Me.Panel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.Controls.Add(Me.checkShutdown)
         Me.Panel2.Controls.Add(Me.checkShowConOut)
         Me.Panel2.Controls.Add(Me.conOut)
         Me.Panel2.Location = New System.Drawing.Point(3, 285)
@@ -837,6 +839,16 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
+        'checkShutdown
+        '
+        Me.checkShutdown.AutoSize = True
+        Me.checkShutdown.Location = New System.Drawing.Point(228, 3)
+        Me.checkShutdown.Name = "checkShutdown"
+        Me.checkShutdown.Size = New System.Drawing.Size(146, 17)
+        Me.checkShutdown.TabIndex = 33
+        Me.checkShutdown.Text = "Shutdown On Completion"
+        Me.checkShutdown.UseVisualStyleBackColor = True
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -942,4 +954,5 @@ Partial Class Compact
     Friend WithEvents conOut As ListBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
+    Friend WithEvents checkShutdown As CheckBox
 End Class
