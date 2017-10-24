@@ -92,6 +92,12 @@
       <DependentUpon>Compact.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ShutdownDialog.Designer.vb">
+      <DependentUpon>ShutdownDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ShutdownDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form2.Designer.vb">
       <DependentUpon>Form2.vb</DependentUpon>
     </Compile>
@@ -125,6 +131,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Compact.resx">
       <DependentUpon>Compact.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShutdownDialog.resx">
+      <DependentUpon>ShutdownDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.vb</DependentUpon>

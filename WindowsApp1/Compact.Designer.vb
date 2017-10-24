@@ -69,6 +69,8 @@ Partial Class Compact
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.comboChooseShutdown = New System.Windows.Forms.ComboBox()
+        Me.checkShutdownOnCompletion = New System.Windows.Forms.CheckBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.seecompest = New System.Windows.Forms.Label()
         Me.ProgressPage = New System.Windows.Forms.TabPage()
@@ -596,6 +598,8 @@ Partial Class Compact
         '
         'Panel3
         '
+        Me.Panel3.Controls.Add(Me.comboChooseShutdown)
+        Me.Panel3.Controls.Add(Me.checkShutdownOnCompletion)
         Me.Panel3.Controls.Add(Me.Label8)
         Me.Panel3.Controls.Add(Me.checkForceCompression)
         Me.Panel3.Controls.Add(Me.Label14)
@@ -605,6 +609,31 @@ Partial Class Compact
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(417, 150)
         Me.Panel3.TabIndex = 23
+        '
+        'comboChooseShutdown
+        '
+        Me.comboChooseShutdown.BackColor = System.Drawing.Color.White
+        Me.comboChooseShutdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.comboChooseShutdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.comboChooseShutdown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.comboChooseShutdown.ForeColor = System.Drawing.Color.DimGray
+        Me.comboChooseShutdown.FormattingEnabled = True
+        Me.comboChooseShutdown.Items.AddRange(New Object() {"Shutdown", "Restart", "Sleep"})
+        Me.comboChooseShutdown.Location = New System.Drawing.Point(50, 121)
+        Me.comboChooseShutdown.Margin = New System.Windows.Forms.Padding(0)
+        Me.comboChooseShutdown.Name = "comboChooseShutdown"
+        Me.comboChooseShutdown.Size = New System.Drawing.Size(75, 21)
+        Me.comboChooseShutdown.TabIndex = 34
+        '
+        'checkShutdownOnCompletion
+        '
+        Me.checkShutdownOnCompletion.AutoSize = True
+        Me.checkShutdownOnCompletion.Location = New System.Drawing.Point(35, 124)
+        Me.checkShutdownOnCompletion.Name = "checkShutdownOnCompletion"
+        Me.checkShutdownOnCompletion.Size = New System.Drawing.Size(160, 17)
+        Me.checkShutdownOnCompletion.TabIndex = 33
+        Me.checkShutdownOnCompletion.Text = "                         PC on Finish"
+        Me.checkShutdownOnCompletion.UseVisualStyleBackColor = True
         '
         'Label14
         '
@@ -751,7 +780,7 @@ Partial Class Compact
         Me.Label15.Cursor = System.Windows.Forms.Cursors.Hand
         Me.Label15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label15.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.Label15.Location = New System.Drawing.Point(237, 0)
+        Me.Label15.Location = New System.Drawing.Point(242, 17)
         Me.Label15.Name = "Label15"
         Me.Label15.Padding = New System.Windows.Forms.Padding(3, 5, 3, 5)
         Me.Label15.Size = New System.Drawing.Size(138, 23)
@@ -995,4 +1024,6 @@ Partial Class Compact
     Friend WithEvents saveconlog As Button
     Friend WithEvents seecompest As Label
     Friend WithEvents FadeWikiInfo As Timer
+    Friend WithEvents comboChooseShutdown As ComboBox
+    Friend WithEvents checkShutdownOnCompletion As CheckBox
 End Class

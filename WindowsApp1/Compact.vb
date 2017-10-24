@@ -304,6 +304,8 @@ Public Class Compact
             .LinkColor = Color.FromArgb(37, 110, 196)
         End With
 
+        comboChooseShutdown.SelectedItem = comboChooseShutdown.Items.Item(0)
+
         RCMenu.WriteLocRegistry()
 
         progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
@@ -378,11 +380,18 @@ Public Class Compact
             End If
 
             compressFinished = 0
+            If checkShutdownOnCompletion.Checked = True And isQueryMode = 0 Then
+                ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
+                ShutdownDialog.Show()
+            End If
 
             buttonRevert.Visible = True
             returnArrow.Visible = True
             CalculateSaving()
             QdirCountProgress = 0
+
+
+
         End If
 
         If uncompressFinished = 1 Then                                                          'Hides and shows certain UI elements when uncompression is finished 
@@ -393,6 +402,10 @@ Public Class Compact
             progressPageLabel.Text = "Folder Uncompressed."
             returnArrow.Visible = True
 
+            If checkShutdownOnCompletion.Checked = True Then
+                ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
+                ShutdownDialog.Show()
+            End If
 
         End If
 
@@ -660,6 +673,7 @@ Public Class Compact
         returnArrow.Visible = False
         buttonRevert.Visible = False
         CompResultsPanel.Visible = False
+        checkShutdownOnCompletion.Checked = False
         TabControl1.SelectedTab = InputPage
         dirCountProgress = 0
         fileCountProgress = 0
@@ -1254,4 +1268,15 @@ Public Class Compact
     Private Sub Label15_Click(sender As Object, e As EventArgs) Handles Label15.Click
         Process.Start("https://goo.gl/forms/Udi5SUkMdCOMG3m23")
     End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboChooseShutdown.SelectedIndexChanged
+        InputPage.Focus()
+
+    End Sub
+
+    Private Sub ComboBox1_MouseLeave(sender As Object, e As EventArgs) Handles comboChooseShutdown.MouseLeave
+        InputPage.Focus()
+
+    End Sub
+
 End Class
