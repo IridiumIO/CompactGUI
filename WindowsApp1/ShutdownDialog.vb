@@ -12,10 +12,17 @@ Public Class ShutdownDialog
 
     Private Sub Dialog1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         shutdownTimer.Start()
-
+        Select Case SDProcIntent.Text
+            Case "Shutdown"
+                SDProgText.Text = "Shutting down in 10 seconds"
+            Case "Restart"
+                SDProgText.Text = "Restarting in 10 seconds"
+            Case "Sleep"
+                SDProgText.Text = "Sleeping in 10 seconds"
+        End Select
     End Sub
 
-    Dim secCount As Integer = 10
+    Dim secCount As Integer = 9
     Private Sub shutdownTimer_Tick(sender As Object, e As EventArgs) Handles shutdownTimer.Tick
 
         Select Case SDProcIntent.Text

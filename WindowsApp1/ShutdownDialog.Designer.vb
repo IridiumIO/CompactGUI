@@ -84,9 +84,7 @@ Partial Class ShutdownDialog
         Me.SDProgText.Name = "SDProgText"
         Me.SDProgText.Size = New System.Drawing.Size(304, 25)
         Me.SDProgText.TabIndex = 1
-        Me.SDProgText.Text = "Shutting down in 10 seconds"
         Me.SDProgText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.SDProgText.Visible = False
         '
         'Panel1
         '
