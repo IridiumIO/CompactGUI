@@ -388,7 +388,8 @@ Public Class Compact
             compressFinished = 0
             If checkShutdownOnCompletion.Checked = True And isQueryMode = 0 Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
-                ShutdownDialog.Show()
+                FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 300)
+
             End If
 
             buttonRevert.Visible = True
@@ -410,7 +411,7 @@ Public Class Compact
 
             If checkShutdownOnCompletion.Checked = True Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
-                ShutdownDialog.Show()
+                FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 300)
             End If
 
         End If
@@ -1177,48 +1178,27 @@ Public Class Compact
     End Sub
 
 
-    Dim ishide = 0
+
 
     Private Sub seecompest_Click(sender As Object, e As EventArgs) Handles seecompest.MouseEnter
         WikiHandler.showWikiRes()
-        ishide = 0
+        isAlreadyFading = 0
 
     End Sub
 
-
+    Dim isAlreadyFading = 2
     Private Sub hideWikiRes(sender As Object, e As EventArgs) Handles MyBase.MouseEnter, TabControl1.MouseEnter,
                                 InputPage.MouseEnter, FlowLayoutPanel1.MouseEnter, Panel3.MouseEnter, Panel4.MouseEnter
-        FadeWikiInfo.Start()
-    End Sub
-
-
-
-    Private Sub FadeWikiInfo_Tick(sender As Object, e As EventArgs) Handles FadeWikiInfo.Tick
-        If ishide = 0 Then
-            If Form2.Opacity < 0.95 Then
-                Form2.Opacity += 0.08
-            Else
-                ishide = 1
-                Form2.Opacity = 0.96
-                FadeWikiInfo.Stop()
-            End If
-
-
-        ElseIf ishide = 1 Then
-            If Form2.Opacity > 0.1 Then
-                Form2.Opacity -= 0.08
-            Else
-                ishide = 0
-                Form2.Opacity = 0
-                Form2.Hide()
-                FadeWikiInfo.Stop()
-            End If
-
+        If isAlreadyFading = 0 Then
+            FadeTransition.FadeForm(Form2, 0.95, 0, 500)
+            isAlreadyFading = 1
         End If
 
 
 
+
     End Sub
+
 
     Private Sub submitToWiki_Click(sender As Object, e As EventArgs) Handles submitToWiki.Click
         Process.Start("https://goo.gl/forms/Udi5SUkMdCOMG3m23")
@@ -1251,5 +1231,7 @@ Public Class Compact
         If My.Settings.SavedCompressionOption = 3 Then compressLZX.Checked = True
 
     End Sub
+
+
 
 End Class
