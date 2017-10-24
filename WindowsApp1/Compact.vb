@@ -336,30 +336,36 @@ Public Class Compact
 
             If isQueryMode = 0 Then
 
-                progresspercent.Text = Math.Round _
-                ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
                 Try
                     If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
                         compactprogressbar.Value = 1
+                        progresspercent.Text = "100 %"
                     Else
                         compactprogressbar.Value = Math.Round _
                             ((fileCountProgress / fileCountTotal * 100), 0)
+
+                        progresspercent.Text = Math.Round _
+                            ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
+
                     End If
                 Catch ex As Exception
                 End Try
 
             ElseIf isQueryMode = 1 Then
 
-                progresspercent.Text = Math.Round _
-                ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress for the Query command.
 
                 Try
                     If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
                         compactprogressbar.Value = 1
+                        progresspercent.Text = "100 %"
                     Else
                         compactprogressbar.Value = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 100), 0)
+
+                        progresspercent.Text = Math.Round _
+                            ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress for the Query command.
+
                     End If
                 Catch ex As Exception
                 End Try
