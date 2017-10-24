@@ -6,8 +6,8 @@ Public Class ShutdownDialog
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Abort
-        shutdownTimer.Stop()
-        FadeTransition.FadeForm(Me, 0.96, 0, 300)
+        shutdownTimer.Stop
+        FadeTransition.FadeForm(Me, 0.96, 0, 300, True)
         'Me.Close()
     End Sub
 

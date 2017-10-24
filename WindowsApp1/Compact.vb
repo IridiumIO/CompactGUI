@@ -388,7 +388,7 @@ Public Class Compact
             compressFinished = 0
             If checkShutdownOnCompletion.Checked = True And isQueryMode = 0 Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
-                FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 300)
+                FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 300, True)
 
             End If
 
@@ -411,7 +411,7 @@ Public Class Compact
 
             If checkShutdownOnCompletion.Checked = True Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
-                FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 300)
+                FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 200, True)
             End If
 
         End If
@@ -1180,7 +1180,7 @@ Public Class Compact
 
 
 
-    Private Sub seecompest_Click(sender As Object, e As EventArgs) Handles seecompest.MouseEnter
+    Private Sub seecompest_MouseHover(sender As Object, e As EventArgs) Handles seecompest.MouseHover
         WikiHandler.showWikiRes()
         isAlreadyFading = 0
 
@@ -1190,7 +1190,7 @@ Public Class Compact
     Private Sub hideWikiRes(sender As Object, e As EventArgs) Handles MyBase.MouseEnter, TabControl1.MouseEnter,
                                 InputPage.MouseEnter, FlowLayoutPanel1.MouseEnter, Panel3.MouseEnter, Panel4.MouseEnter
         If isAlreadyFading = 0 Then
-            FadeTransition.FadeForm(Form2, 0.95, 0, 500)
+            FadeTransition.FadeForm(Form2, 0.96, 0, 200)
             isAlreadyFading = 1
         End If
 

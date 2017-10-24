@@ -262,7 +262,7 @@ Public Class WikiHandler
             Form2.SetBounds(screenpos.X, screenpos.Y, Form2.GamesTable.Width + 35, Form2.GamesTable.Height + 200)
         End If
 
-        FadeTransition.FadeForm(Form2, 0, 0.95, 500)
+        FadeTransition.FadeForm(Form2, 0, 0.96, 200)
 
 
     End Sub
