@@ -472,6 +472,8 @@ Public Class Compact
     Dim dirLabelResults As String = ""
 
     Private Sub SelectFolder(selectedDir As String, senderID As String)
+        Cursor.Current = Cursors.WaitCursor
+
         Dim wDString = selectedDir
 
         If wDString.Contains("C:\Windows") Then                                                 'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
