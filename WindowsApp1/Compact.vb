@@ -297,7 +297,7 @@ Public Class Compact
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        loadFromSettings()
         With dirChooser
             .LinkBehavior = LinkBehavior.HoverUnderline
 
@@ -332,13 +332,13 @@ Public Class Compact
 
     Private Sub ProgressTimer_Tick(sender As Object, e As EventArgs) Handles progressTimer.Tick
 
-        If fileCountTotal <> 0 Then                                                             'Makes sure that there are actually files being counted before attempting a calculation
+        If fileCountTotal <> 0 Then                                                                         'Makes sure that there are actually files being counted before attempting a calculation
 
             If isQueryMode = 0 Then
 
 
                 Try
-                    If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
+                    If compactprogressbar.Value >= 101 Then                                                 'Avoids a /r/softwaregore scenario
                         compactprogressbar.Value = 1
                         progresspercent.Text = "100 %"
                     Else
@@ -356,7 +356,7 @@ Public Class Compact
 
 
                 Try
-                    If compactprogressbar.Value >= 101 Then                                         'Avoids a /r/softwaregore scenario
+                    If compactprogressbar.Value >= 101 Then                                                 'Avoids a /r/softwaregore scenario
                         compactprogressbar.Value = 1
                         progresspercent.Text = "100 %"
                     Else
@@ -364,7 +364,7 @@ Public Class Compact
                             ((QdirCountProgress / dirCountTotal * 100), 0)
 
                         progresspercent.Text = Math.Round _
-                            ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress for the Query command.
+                            ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                  'Generates an estimate of progress for the Query command.
 
                     End If
                 Catch ex As Exception
@@ -376,7 +376,7 @@ Public Class Compact
         End If
 
 
-        If compressFinished = 1 Then                                                            'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
+        If compressFinished = 1 Then                                                                        'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
 
             If isQueryMode And isQueryCalledByCompact = 0 Then
                 progressPageLabel.Text = "This folder contains compressed items"
@@ -400,7 +400,7 @@ Public Class Compact
 
         End If
 
-        If uncompressFinished = 1 Then                                                          'Hides and shows certain UI elements when uncompression is finished 
+        If uncompressFinished = 1 Then                                                                      'Hides and shows certain UI elements when uncompression is finished 
 
             uncompressFinished = 0
             buttonCompress.Visible = True
@@ -1144,60 +1144,7 @@ Public Class Compact
 
     '////////////////////TESTING////////////////////
 
-    Private Sub ExecuteButton_Click _
-        (ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click     'Code to run the manual testing input box
 
-
-        Dim input As String
-
-        input = TextBox1.Text
-
-        Try
-
-            MyProcess.StandardInput.WriteLine(input)
-            MyProcess.StandardInput.Flush()
-            conOut.Refresh()
-
-            fileCountProgress = 0
-            dirCountProgress = 0
-
-        Catch ex As Exception
-
-        End Try
-
-        TextBox1.Text = ""
-
-
-    End Sub
-
-
-
-
-    Private Sub TestArguments(sender As Object, e As EventArgs) Handles testcompactargs.Click
-        compactArgs = "compact /C"
-        If checkRecursiveScan.Checked = True Then
-            compactArgs = compactArgs + " /S"
-        End If
-        If checkForceCompression.Checked = True Then
-            compactArgs = compactArgs + " /F"
-        End If
-        If checkHiddenFiles.Checked = True Then
-            compactArgs = compactArgs + " /A"
-        End If
-        If compressX4.Checked = True Then
-            compactArgs = compactArgs + " /EXE:XPRESS4K"
-        End If
-        If compressX8.Checked = True Then
-            compactArgs = compactArgs + " /EXE:XPRESS8K"
-        End If
-        If compressX16.Checked = True Then
-            compactArgs = compactArgs + " /EXE:XPRESS16K"
-        End If
-        If compressLZX.Checked = True Then
-            compactArgs = compactArgs + " /EXE:LZX"
-        End If
-        'MsgBox(compactArgs)
-    End Sub
 
     Private Sub Saveconlog_Click(sender As Object, e As EventArgs) Handles saveconlog.Click
         If MsgBox("Save console output?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
@@ -1271,7 +1218,7 @@ Public Class Compact
 
     End Sub
 
-    Private Sub Label15_Click(sender As Object, e As EventArgs) Handles Label15.Click
+    Private Sub submitToWiki_Click(sender As Object, e As EventArgs) Handles submitToWiki.Click
         Process.Start("https://goo.gl/forms/Udi5SUkMdCOMG3m23")
     End Sub
 
@@ -1282,6 +1229,24 @@ Public Class Compact
 
     Private Sub ComboBox1_MouseLeave(sender As Object, e As EventArgs) Handles comboChooseShutdown.MouseLeave
         InputPage.Focus()
+
+    End Sub
+
+    Private Sub compressX8_CheckedChanged(sender As Object, e As EventArgs) Handles compressX4.Click, compressX8.Click, compressX16.Click, compressLZX.Click
+
+        If compressX4.Checked Then My.Settings.SavedCompressionOption = 0
+        If compressX8.Checked Then My.Settings.SavedCompressionOption = 1
+        If compressX16.Checked Then My.Settings.SavedCompressionOption = 2
+        If compressLZX.Checked Then My.Settings.SavedCompressionOption = 3
+
+    End Sub
+
+    Private Sub loadFromSettings()
+
+        If My.Settings.SavedCompressionOption = 0 Then compressX4.Checked = True
+        If My.Settings.SavedCompressionOption = 1 Then compressX8.Checked = True
+        If My.Settings.SavedCompressionOption = 2 Then compressX16.Checked = True
+        If My.Settings.SavedCompressionOption = 3 Then compressLZX.Checked = True
 
     End Sub
 

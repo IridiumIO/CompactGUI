@@ -81,7 +81,7 @@ Partial Class Compact
         Me.checkShowConOut = New System.Windows.Forms.CheckBox()
         Me.conOut = New System.Windows.Forms.ListBox()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
-        Me.Label15 = New System.Windows.Forms.Label()
+        Me.submitToWiki = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label13 = New System.Windows.Forms.Label()
@@ -622,7 +622,7 @@ Partial Class Compact
         Me.comboChooseShutdown.Location = New System.Drawing.Point(50, 121)
         Me.comboChooseShutdown.Margin = New System.Windows.Forms.Padding(0)
         Me.comboChooseShutdown.Name = "comboChooseShutdown"
-        Me.comboChooseShutdown.Size = New System.Drawing.Size(75, 21)
+        Me.comboChooseShutdown.Size = New System.Drawing.Size(73, 21)
         Me.comboChooseShutdown.TabIndex = 34
         '
         'checkShutdownOnCompletion
@@ -630,9 +630,9 @@ Partial Class Compact
         Me.checkShutdownOnCompletion.AutoSize = True
         Me.checkShutdownOnCompletion.Location = New System.Drawing.Point(35, 124)
         Me.checkShutdownOnCompletion.Name = "checkShutdownOnCompletion"
-        Me.checkShutdownOnCompletion.Size = New System.Drawing.Size(160, 17)
+        Me.checkShutdownOnCompletion.Size = New System.Drawing.Size(157, 17)
         Me.checkShutdownOnCompletion.TabIndex = 33
-        Me.checkShutdownOnCompletion.Text = "                         PC on Finish"
+        Me.checkShutdownOnCompletion.Text = "                        PC on Finish"
         Me.checkShutdownOnCompletion.UseVisualStyleBackColor = True
         '
         'Label14
@@ -760,7 +760,7 @@ Partial Class Compact
         '
         'CompResultsPanel
         '
-        Me.CompResultsPanel.Controls.Add(Me.Label15)
+        Me.CompResultsPanel.Controls.Add(Me.submitToWiki)
         Me.CompResultsPanel.Controls.Add(Me.dirChosenLabel)
         Me.CompResultsPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.CompResultsPanel.Controls.Add(Me.compressedSizeVisual)
@@ -774,18 +774,18 @@ Partial Class Compact
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
-        'Label15
+        'submitToWiki
         '
-        Me.Label15.AutoSize = True
-        Me.Label15.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Label15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.Label15.Location = New System.Drawing.Point(242, 17)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Padding = New System.Windows.Forms.Padding(3, 5, 3, 5)
-        Me.Label15.Size = New System.Drawing.Size(138, 23)
-        Me.Label15.TabIndex = 33
-        Me.Label15.Text = "❯ Submit Results to Wiki"
+        Me.submitToWiki.AutoSize = True
+        Me.submitToWiki.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.submitToWiki.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.submitToWiki.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.submitToWiki.Location = New System.Drawing.Point(242, 17)
+        Me.submitToWiki.Name = "submitToWiki"
+        Me.submitToWiki.Padding = New System.Windows.Forms.Padding(3, 5, 3, 5)
+        Me.submitToWiki.Size = New System.Drawing.Size(138, 23)
+        Me.submitToWiki.TabIndex = 33
+        Me.submitToWiki.Text = "❯ Submit Results to Wiki"
         '
         'dirChosenLabel
         '
@@ -921,8 +921,8 @@ Partial Class Compact
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(474, 621)
-        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.Panel1)
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.DimGray
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -1020,7 +1020,7 @@ Partial Class Compact
     Friend WithEvents conOut As ListBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
-    Friend WithEvents Label15 As Label
+    Friend WithEvents submitToWiki As Label
     Friend WithEvents saveconlog As Button
     Friend WithEvents seecompest As Label
     Friend WithEvents FadeWikiInfo As Timer
