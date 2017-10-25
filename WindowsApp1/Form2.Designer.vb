@@ -25,17 +25,17 @@ Partial Class Form2
         Me.GamesTable = New System.Windows.Forms.TableLayoutPanel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.lblCompactIssues = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.wkPostSizeUnit = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.wkPreSizeUnit = New System.Windows.Forms.Label()
         Me.wkPreSizeVal = New System.Windows.Forms.Label()
         Me.wkPostSizeVal = New System.Windows.Forms.Label()
-        Me.lblCompactIssues = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
@@ -86,6 +86,14 @@ Partial Class Form2
         Me.Panel1.Size = New System.Drawing.Size(430, 375)
         Me.Panel1.TabIndex = 9
         '
+        'Panel3
+        '
+        Me.Panel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Location = New System.Drawing.Point(406, 28)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(10, 104)
+        Me.Panel3.TabIndex = 10
+        '
         'Panel5
         '
         Me.Panel5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -101,14 +109,6 @@ Partial Class Form2
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(10, 108)
         Me.Panel4.TabIndex = 10
-        '
-        'Panel3
-        '
-        Me.Panel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.Location = New System.Drawing.Point(406, 28)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(10, 104)
-        Me.Panel3.TabIndex = 10
         '
         'Panel2
         '
@@ -126,6 +126,18 @@ Partial Class Form2
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(390, 100)
         Me.Panel2.TabIndex = 9
+        '
+        'lblCompactIssues
+        '
+        Me.lblCompactIssues.AutoSize = True
+        Me.lblCompactIssues.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCompactIssues.ForeColor = System.Drawing.Color.DarkRed
+        Me.lblCompactIssues.Location = New System.Drawing.Point(213, 75)
+        Me.lblCompactIssues.Name = "lblCompactIssues"
+        Me.lblCompactIssues.Size = New System.Drawing.Size(103, 15)
+        Me.lblCompactIssues.TabIndex = 9
+        Me.lblCompactIssues.Text = "! Game has issues"
+        Me.lblCompactIssues.Visible = False
         '
         'Label4
         '
@@ -151,6 +163,7 @@ Partial Class Form2
         Me.wkPostSizeUnit.Size = New System.Drawing.Size(24, 17)
         Me.wkPostSizeUnit.TabIndex = 8
         Me.wkPostSizeUnit.Text = "GB"
+        Me.wkPostSizeUnit.Visible = False
         '
         'Label3
         '
@@ -185,9 +198,9 @@ Partial Class Form2
         Me.wkPreSizeVal.Location = New System.Drawing.Point(10, 26)
         Me.wkPreSizeVal.Margin = New System.Windows.Forms.Padding(0)
         Me.wkPreSizeVal.Name = "wkPreSizeVal"
-        Me.wkPreSizeVal.Size = New System.Drawing.Size(71, 45)
+        Me.wkPreSizeVal.Size = New System.Drawing.Size(34, 45)
         Me.wkPreSizeVal.TabIndex = 8
-        Me.wkPreSizeVal.Text = "300"
+        Me.wkPreSizeVal.Text = "?"
         '
         'wkPostSizeVal
         '
@@ -197,21 +210,9 @@ Partial Class Form2
         Me.wkPostSizeVal.Location = New System.Drawing.Point(205, 26)
         Me.wkPostSizeVal.Margin = New System.Windows.Forms.Padding(0)
         Me.wkPostSizeVal.Name = "wkPostSizeVal"
-        Me.wkPostSizeVal.Size = New System.Drawing.Size(95, 45)
+        Me.wkPostSizeVal.Size = New System.Drawing.Size(34, 45)
         Me.wkPostSizeVal.TabIndex = 8
-        Me.wkPostSizeVal.Text = "210.7"
-        '
-        'lblCompactIssues
-        '
-        Me.lblCompactIssues.AutoSize = True
-        Me.lblCompactIssues.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCompactIssues.ForeColor = System.Drawing.Color.DarkRed
-        Me.lblCompactIssues.Location = New System.Drawing.Point(213, 75)
-        Me.lblCompactIssues.Name = "lblCompactIssues"
-        Me.lblCompactIssues.Size = New System.Drawing.Size(103, 15)
-        Me.lblCompactIssues.TabIndex = 9
-        Me.lblCompactIssues.Text = "! Game has issues"
-        Me.lblCompactIssues.Visible = False
+        Me.wkPostSizeVal.Text = "?"
         '
         'Form2
         '
