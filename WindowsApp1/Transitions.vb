@@ -65,7 +65,68 @@
 
     End Sub
 
+End Class
 
+
+Public Class UnfurlTransition
+
+    Shared UnfurlObj As Control
+    Shared UnfurlStartWidth As Integer
+    Shared UnfurlEndWidth As Integer
+    Shared UnfurlDuration As Integer
+    Shared UnfurlTimer As New Timer
+    Shared Modifier As Decimal = 16 + 2 / 3
+    Shared UnfurlTickcount
+    Shared Bounds As Decimal
+
+    Public Shared Sub UnfurlControl(target As Control, startwidth As Integer, endwidth As Integer, duration As Integer)
+        If endwidth - startwidth <> 0 Then
+
+            UnfurlTimer.Interval = Modifier
+
+            UnfurlObj = target
+            UnfurlStartWidth = startwidth
+            UnfurlEndWidth = endwidth
+            UnfurlDuration = duration
+            UnfurlTickcount = ((endwidth - startwidth)) / (duration / Modifier)
+            If endwidth - startwidth < 0 Then
+                Bounds = -UnfurlTickcount
+
+            Else
+                Bounds = UnfurlTickcount
+            End If
+
+
+            UnfurlObj.Width = startwidth
+            UnfurlObj.Show()
+            AddHandler UnfurlTimer.Tick, AddressOf UnfurlTimer_Tick
+            UnfurlTimer.Start()
+
+        End If
+
+
+    End Sub
+
+
+    Shared Sub UnfurlTimer_Tick(sender As Object, e As EventArgs)
+        If UnfurlObj.Width < UnfurlEndWidth + Bounds And UnfurlObj.Width > UnfurlEndWidth - Bounds Then
+
+            UnfurlTimer.Stop()
+
+            UnfurlObj.Width = UnfurlEndWidth
+
+            If UnfurlObj Is Compact.Panel7 Then Compact.buttonQueryCompact.Visible = True
+
+            RemoveHandler UnfurlTimer.Tick, AddressOf UnfurlTimer_Tick
+        Else
+
+
+            UnfurlObj.Width += UnfurlTickcount
+
+
+        End If
+    End Sub
 
 
 End Class
+

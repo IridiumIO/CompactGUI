@@ -175,6 +175,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\iconbright.png" />
+    <None Include="Resources\dsmask.png" />
     <Content Include="Resources\SC.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

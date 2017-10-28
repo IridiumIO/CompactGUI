@@ -30,11 +30,11 @@ Public Class WikiHandler
                 Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
                 InputFromGitHub = Source.TrimEnd().Split(vbLf)
             Catch ex As WebException
-                Form2.lblCompactIssues.Text = "! No Internet Connection"
-                Form2.lblCompactIssues.Visible = True
-                Form2.wkPostSizeVal.Text = "?"
-                Form2.wkPostSizeUnit.Text = ""
-                Form2.wkPostSizeUnit.Location = New Point(Form2.wkPostSizeVal.Location.X + Form2.wkPostSizeVal.Size.Width, Form2.wkPostSizeVal.Location.Y)
+                Compact.sb_lblGameIssues.Text = "! No Internet Connection"
+                Compact.sb_lblGameIssues.Visible = True
+                Compact.wkPostSizeVal.Text = "?"
+                Compact.wkPostSizeUnit.Text = ""
+                Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + Compact.wkPostSizeVal.Size.Width, Compact.wkPostSizeVal.Location.Y)
             End Try
 
         End If
@@ -115,16 +115,17 @@ Public Class WikiHandler
         GName.Dock = DockStyle.Left
 
         Dim ratioavg As Decimal = 1
+        firstGame = 0
         For Each n In gcount
 
             FillTable(n)
 
             ratioavg += Decimal.Parse(InputFromGitHub(n).Split("|")(6))
             If InputFromGitHub(n).Split("|")(7).Contains("*") Then
-                Form2.lblCompactIssues.Visible = True
-                Form2.lblCompactIssues.Text = "! Game has issues"
+                Compact.sb_lblGameIssues.Visible = True
+                Compact.sb_lblGameIssues.Text = "! Game has issues"
             Else
-                Form2.lblCompactIssues.Visible = False
+                Compact.sb_lblGameIssues.Visible = False
             End If
 
         Next
@@ -132,28 +133,42 @@ Public Class WikiHandler
         Try
             ratioavg = (ratioavg - 1) / gcount.Count
 
-            'Compact.seecompest.Text = "Compression Estimate: " & Math.Round(folderSize * ratioavg, 2) & " " & suffix
-            Form2.wkPostSizeVal.Text = Math.Round(folderSize * ratioavg, 1)
-            Form2.wkPostSizeUnit.Text = suffix
-            Form2.wkPostSizeUnit.Location = New Point(Form2.wkPostSizeVal.Location.X + Form2.wkPostSizeVal.Size.Width - 10, Form2.wkPostSizeVal.Location.Y + 10)
-            Form2.wkPostSizeUnit.Visible = True
+            Compact.wkPostSizeVal.Text = Math.Round(folderSize * ratioavg, 1)
+            Compact.wkPostSizeUnit.Text = suffix
+            Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
+            Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), Compact.wkPostSizeVal.Location.Y + 16)
+            Compact.wkPostSizeUnit.Visible = True
         Catch ex As System.DivideByZeroException
-            'Compact.seecompest.Text = "Compression Estimate: Unknown"
-            Form2.wkPostSizeVal.Text = "?"
-            Form2.wkPostSizeUnit.Text = ""
-            Form2.wkPostSizeUnit.Location = New Point(Form2.wkPostSizeVal.Location.X + Form2.wkPostSizeVal.Size.Width, Form2.wkPostSizeVal.Location.Y)
+
+            Compact.wkPostSizeVal.Text = "?"
+            Compact.wkPostSizeUnit.Text = ""
+            Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
+            Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), Compact.wkPostSizeVal.Location.Y + 16)
         End Try
+
+        If Form2.GamesTable.RowCount > 1 Then
+            Compact.seecompest.Visible = True
+        Else
+            Compact.seecompest.Visible = False
+        End If
 
 
         Form2.GamesTable.Visible = True
 
 
 
+        Compact.sb_Panel.Show()
+
     End Sub
 
+
+    Shared firstGame As Integer = 0
     Private Shared Sub FillTable(ps As Integer)
 
-
+        If firstGame = 0 Then
+            Compact.sb_FolderName.Text = InputFromGitHub(ps).Split("|")(2)
+            firstGame = 1
+        End If
 
 
         Dim GName As New Label
@@ -237,14 +252,16 @@ Public Class WikiHandler
 
         Try
 
-            Form2.wkPreSizeVal.Text = Math.Round(folderSize, 1)
-            Form2.wkPreSizeUnit.Text = suffix
-            Form2.wkPreSizeUnit.Location = New Point(Form2.wkPreSizeVal.Location.X + Form2.wkPreSizeVal.Size.Width - 10, Form2.wkPreSizeVal.Location.Y + 10)
+            Compact.wkPreSizeVal.Text = Math.Round(folderSize, 1)
+            Compact.wkPreSizeUnit.Text = suffix
+            Dim wkPreSizeVal_Len = TextRenderer.MeasureText(Compact.wkPreSizeVal.Text, Compact.wkPreSizeVal.Font)
+            Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 4), Compact.wkPreSizeVal.Location.Y + 16)
         Catch ex As System.DivideByZeroException
 
-            Form2.wkPreSizeVal.Text = "?"
-            Form2.wkPreSizeUnit.Text = ""
-            Form2.wkPreSizeUnit.Location = New Point(Form2.wkPreSizeVal.Location.X + Form2.wkPreSizeVal.Size.Width, Form2.wkPreSizeVal.Location.Y)
+            Compact.wkPreSizeVal.Text = "?"
+            Compact.wkPreSizeUnit.Text = ""
+            Dim wkPreSizeVal_Len = TextRenderer.MeasureText(Compact.wkPreSizeVal.Text, Compact.wkPreSizeVal.Font)
+            Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 4), Compact.wkPreSizeVal.Location.Y + 16)
         End Try
 
 
@@ -258,13 +275,14 @@ Public Class WikiHandler
 
     Public Shared Sub showWikiRes()
 
-        Dim screenpos As Point = Compact.PointToScreen(New Point(Compact.seecompest.Location.X - 1, Compact.seecompest.Location.Y + 12))
+        Dim screenpos As Point = Compact.PointToScreen(New Point(Compact.seecompest.Location.X + 670, Compact.seecompest.Location.Y + 135))
 
         Form2.StartPosition = FormStartPosition.Manual
 
         If Form2.GamesTable.Width < 450 Then
             If Form2.GamesTable.RowCount > 1 Then
                 Form2.SetBounds(screenpos.X, screenpos.Y, Form2.GamesTable.Width + 35, Form2.GamesTable.Height + 200)
+
             Else
                 Form2.SetBounds(screenpos.X, screenpos.Y, 450, 130)
             End If

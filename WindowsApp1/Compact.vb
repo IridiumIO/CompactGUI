@@ -298,10 +298,11 @@ Public Class Compact
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         loadFromSettings()
-        With dirChooser
-            .LinkBehavior = LinkBehavior.HoverUnderline
+        ' Me.Width = 1000 - sb_Panel.Width
 
-            .LinkColor = Color.FromArgb(37, 110, 196)
+        With dirChooser
+
+            .LinkColor = Color.White
         End With
 
         comboChooseShutdown.SelectedItem = comboChooseShutdown.Items.Item(0)
@@ -338,13 +339,12 @@ Public Class Compact
 
 
                 Try
-                    If compactprogressbar.Value >= 101 Then                                                 'Avoids a /r/softwaregore scenario
-                        compactprogressbar.Value = 1
+                    If sb_progressbar.Width >= 302 Then                                                 'Avoids a /r/softwaregore scenario
+                        sb_progressbar.Width = 301
                         progresspercent.Text = "100 %"
                     Else
-                        compactprogressbar.Value = Math.Round _
-                            ((fileCountProgress / fileCountTotal * 100), 0)
-
+                        sb_progressbar.Width = Math.Round _
+                            ((fileCountProgress / fileCountTotal * 301), 0)
                         progresspercent.Text = Math.Round _
                             ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
@@ -356,16 +356,14 @@ Public Class Compact
 
 
                 Try
-                    If compactprogressbar.Value >= 101 Then                                                 'Avoids a /r/softwaregore scenario
-                        compactprogressbar.Value = 1
+                    If sb_progressbar.Width >= 302 Then                                                 'Avoids a /r/softwaregore scenario
+                        sb_progressbar.Width = 301
                         progresspercent.Text = "100 %"
                     Else
-                        compactprogressbar.Value = Math.Round _
-                            ((QdirCountProgress / dirCountTotal * 100), 0)
-
+                        sb_progressbar.Width = Math.Round _
+                            ((QdirCountProgress / dirCountTotal * 301), 0)
                         progresspercent.Text = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                  'Generates an estimate of progress for the Query command.
-
                     End If
                 Catch ex As Exception
                 End Try
@@ -379,7 +377,7 @@ Public Class Compact
         If compressFinished = 1 Then                                                                        'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
 
             If isQueryMode And isQueryCalledByCompact = 0 Then
-                progressPageLabel.Text = "This folder contains compressed items"
+                sb_progresslabel.Text = "This folder contains compressed items"
                 progresspercent.Visible = False
 
 
@@ -406,7 +404,8 @@ Public Class Compact
             uncompressFinished = 0
             buttonCompress.Visible = True
             buttonRevert.Visible = False
-            progressPageLabel.Text = "Folder Uncompressed."
+            sb_progresslabel.Text = "Folder Uncompressed."
+            sb_compressedSizeVisual.Width = 301
             returnArrow.Visible = True
 
             If checkShutdownOnCompletion.Checked = True Then
@@ -456,8 +455,8 @@ Public Class Compact
 
 
     Private Sub SelectFolderToCompress _
-        (sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, chosenDirDisplay.Click
-
+        (sender As Object, e As EventArgs) Handles dirChooser.LinkClicked
+        sb_AnalysisPanel.Visible = False
         overrideCompressFolderButton = 0
 
         Dim folderChoice As New VistaFolderBrowserDialog
@@ -495,42 +494,55 @@ Public Class Compact
                 Dim DIwDString = New DirectoryInfo(wDString)
                 directorysizeexceptionCount = 0
                 workingDir = wDString.ToString()
-                chosenDirDisplay.Text = DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
-                uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
-                Dim rawpreSize = GetOutputSize _
-                    (Math.Round(DirectorySize(DIwDString, True), 1), True)
-                preSize.Text = "Uncompressed Size: " + rawpreSize
+                If DIwDString.Name.ToString.Length > 0 Then sb_FolderName.Text = DIwDString.Name.ToString.Substring(0, 1).ToUpper + DIwDString.Name.ToString.Substring(1)
 
-                dirLabelResults = DIwDString.Name.ToString
-
-                'preSize.Visible = True
-                seecompest.Visible = True
-                buttonQueryCompact.Visible = True
 
                 Try
-                    Dim directories() As String = System.IO.Directory.GetDirectories _
+                        If DIwDString.Parent.Parent.ToString <> Nothing Then
+                            dirChooser.Text = "❯ " + DIwDString.Parent.Parent.ToString + " ❯ " + DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
+                        Else
+                            dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") + " ❯ " + DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
+                        End If
+
+                    Catch ex As Exception
+                        dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") + " ❯ " + DIwDString.Name.ToString
+                    End Try
+
+                    uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
+                    Dim rawpreSize = GetOutputSize _
+                    (Math.Round(DirectorySize(DIwDString, True), 1), True)
+                    preSize.Text = "Uncompressed Size: " + rawpreSize
+
+                    dirLabelResults = DIwDString.Name.ToString
+
+
+                    Try
+                        Dim directories() As String = System.IO.Directory.GetDirectories _
                         (wDString, "*", IO.SearchOption.AllDirectories)
 
-                    dirCountTotal = directories.Length + 1
+                        dirCountTotal = directories.Length + 1
 
-                    Dim numberOfFiles As Int64 = Directory.GetFiles _
+                        Dim numberOfFiles As Int64 = Directory.GetFiles _
                         (wDString, "*", IO.SearchOption.AllDirectories).Length
 
-                    fileCountTotal = numberOfFiles
-                    Form2.lblCompactIssues.Visible = False
-                    WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
+                        fileCountTotal = numberOfFiles
+                        Form2.lblCompactIssues.Visible = False
+                        UnfurlTransition.UnfurlControl(Panel7, Panel7.Width, 603, 100)
 
-                Catch ex As Exception
-                End Try
+                        WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
 
-                If overrideCompressFolderButton = 0 Then                                        'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
-                    buttonCompress.Enabled = True
+
+                    Catch ex As Exception
+                    End Try
+
+                    If overrideCompressFolderButton = 0 Then                                        'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
+                        buttonCompress.Enabled = True
+                    Else
+                        buttonCompress.Enabled = False
+                    End If
+
                 Else
-                    buttonCompress.Enabled = False
-                End If
-
-            Else
-                If senderID = "button" Then Console.Write("No folder selected")
+                    If senderID = "button" Then Console.Write("No folder selected")
 
             End If
 
@@ -546,11 +558,13 @@ Public Class Compact
 
     Private Sub CompressFolder_Click(sender As System.Object, e As System.EventArgs) Handles buttonCompress.Click
         conOut.Items.Clear()
+        sb_AnalysisPanel.Visible = True
         CreateProcess("compact")
     End Sub
     Private Sub buttonQueryCompact_Click(sender As Object, e As EventArgs) Handles buttonQueryCompact.Click
         conOut.Items.Clear()
         CreateProcess("query")
+        sb_AnalysisPanel.Visible = True
     End Sub
 
 
@@ -627,8 +641,8 @@ Public Class Compact
             Try
                 RunCompact(passthrougharg)
 
-                If passthrougharg = "compact" Then progressPageLabel.Text = "Compressing, Please Wait"
-                If passthrougharg = "query" Then progressPageLabel.Text = "Analyzing"
+                If passthrougharg = "compact" Then sb_progresslabel.Text = "Compressing, Please Wait"
+                If passthrougharg = "query" Then sb_progresslabel.Text = "Analyzing"
                 TabControl1.SelectedTab = ProgressPage
 
             Catch ex As Exception
@@ -648,7 +662,7 @@ Public Class Compact
         progresspercent.Visible = True
         CompResultsPanel.Visible = False
         buttonRevert.Visible = False
-        progressPageLabel.Text = "Reverting Changes, Please Wait"
+        sb_progresslabel.Text = "Reverting Changes, Please Wait"
 
         Try
             RunCompact("uncompact")
@@ -739,10 +753,10 @@ Public Class Compact
 
 
     Private Sub dirChooser_MouseEnter(sender As Object, e As EventArgs) Handles dirChooser.MouseEnter
-        dirChooser.LinkColor = Color.FromArgb(10, 80, 150)
+        dirChooser.LinkColor = Color.FromArgb(200, 200, 200)
     End Sub
     Private Sub dirChooser_MouseLeave(sender As Object, e As EventArgs) Handles dirChooser.MouseLeave
-        dirChooser.LinkColor = Color.FromArgb(37, 110, 196)
+        dirChooser.LinkColor = Color.White
     End Sub
 
 
@@ -785,13 +799,13 @@ Public Class Compact
 
         If GetOutputSize((oldFolderSize - newFolderSize), False) = "0" And isQueryMode = 1 Then
 
-            progressPageLabel.Text = "Folder is not compressed"
+            sb_progresslabel.Text = "Folder is not compressed"
             buttonRevert.Visible = False
             isQueryCalledByCompact = 0
 
         Else
 
-            progressPageLabel.Text = "Folder is compressed"
+            sb_progresslabel.Text = "Folder is compressed"
 
             If isQueryMode = 1 And isQueryCalledByCompact = 0 Then
                 origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
@@ -819,6 +833,10 @@ Public Class Compact
             Try
 
                 compressedSizeVisual.Width = CInt(368 / compRatioLabel.Text)
+                Callpercent = newFolderSize / oldFolderSize * 100
+                sb_compressedSizeVisual.Width = CInt(301 / compRatioLabel.Text)
+
+                'sb_Panel.Refresh()
 
                 If hasqueryfinished = 1 Then
                     isQueryCalledByCompact = 0
@@ -828,6 +846,7 @@ Public Class Compact
 
             Catch ex As System.OverflowException
                 compressedSizeVisual.Width = 368
+                sb_compressedSizeVisual.Width = 301
             End Try
 
             If isQueryCalledByCompact = 0 Then
@@ -837,7 +856,7 @@ Public Class Compact
 
             ElseIf isQueryCalledByCompact = 1 Then
 
-                progressPageLabel.Text = "Analyzing..."
+                sb_progresslabel.Text = "Analyzing..."
 
                 buttonRevert.Visible = False
                 CompResultsPanel.Visible = False
@@ -1188,7 +1207,7 @@ Public Class Compact
 
     Dim isAlreadyFading = 2
     Private Sub hideWikiRes(sender As Object, e As EventArgs) Handles MyBase.MouseEnter, TabControl1.MouseEnter,
-                                InputPage.MouseEnter, FlowLayoutPanel1.MouseEnter, Panel3.MouseEnter, Panel4.MouseEnter
+                                InputPage.MouseEnter, FlowLayoutPanel1.MouseEnter, Panel3.MouseEnter, Panel4.MouseEnter, seecompest.MouseLeave
         If isAlreadyFading = 0 Then
             FadeTransition.FadeForm(Form2, 0.96, 0, 200)
             isAlreadyFading = 1
@@ -1231,6 +1250,242 @@ Public Class Compact
         If My.Settings.SavedCompressionOption = 3 Then compressLZX.Checked = True
 
     End Sub
+
+    Private Sub btn_Mainexit_Click(sender As Object, e As EventArgs) Handles btn_Mainexit.Click
+        Me.Close()
+    End Sub
+
+    Private Sub btn_Mainmin_Click(sender As Object, e As EventArgs) Handles btn_Mainmin.Click
+        Me.WindowState = FormWindowState.Minimized
+    End Sub
+
+    Private Sub btn_Mainmax_Click(sender As Object, e As EventArgs) Handles btn_Mainmax.Click
+        If Me.WindowState = FormWindowState.Normal Then
+            Me.WindowState = FormWindowState.Maximized
+        ElseIf Me.WindowState = FormWindowState.Maximized Then
+            Me.WindowState = FormWindowState.Normal
+        End If
+
+    End Sub
+
+    Private Sub sb_Panel_Paint(sender As Object, e As PaintEventArgs) Handles sb_Panel.Paint
+        Dim p As New Pen(Brushes.DimGray, 1)
+        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias
+        e.Graphics.DrawLine(p, New Point(40, 180), New Point(313, 180))
+        e.Graphics.DrawLine(p, New Point(40, 285), New Point(313, 285))
+
+
+        DrawProgress(e.Graphics, New Rectangle(116, 300, 121, 121), Callpercent)
+
+    End Sub
+
+    Dim Callpercent As Single
+
+    Private Sub DrawProgress(g As Graphics, rect As Rectangle, percentage As Single)
+        'work out the angles for each arc
+        Dim progressAngle = CInt(180 / 100 * (percentage))
+        Dim remainderAngle = 180 - progressAngle
+
+        'create pens to use for the arcs
+        Using progressPen As New Pen(Color.FromArgb(255, 39, 174, 96), 17), remainderPen As New Pen(Color.FromArgb(255, 211, 84, 0), 17)
+            'set the smoothing to high quality for better output
+            'g.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed
+            'draw the blue and white arcs
+
+            g.DrawArc(progressPen, rect, -180, progressAngle)
+            g.DrawArc(remainderPen, rect, progressAngle - 180, remainderAngle)
+        End Using
+
+        'draw the text in the centre by working out how big it is and adjusting the co-ordinates accordingly
+        'Using fnt As New Font(Me.Font.FontFamily, 14)
+        '    Dim text As String = Math.Round(percentage, 1) + "%"
+        '    Dim textSize = g.MeasureString(text, fnt)
+        '    Dim textPoint As New Point(CInt(rect.Left + (rect.Width / 2) - (textSize.Width / 2)), CInt(rect.Top + (rect.Height / 2) - (textSize.Height / 2)))
+        '    'now we have all the values draw the text
+        '    g.DrawString(text, fnt, Brushes.Black, textPoint)
+        'End Using
+    End Sub
+
+
+
+
+    Private Sub buttonCompress_EnabledChanged(sender As Object, e As EventArgs) Handles buttonCompress.EnabledChanged
+        Dim btn = DirectCast(sender, Button)
+        btn.ForeColor = If(btn.Enabled, Color.White, Color.Silver)
+    End Sub
+
+    Private Sub buttonCompress_Paint(sender As Object, e As PaintEventArgs) Handles buttonCompress.Paint
+        Dim btn = DirectCast(sender, Button)
+        Dim drawBrush = New SolidBrush(btn.ForeColor)
+        Dim sf = New StringFormat() With {
+            .Alignment = StringAlignment.Center,
+            .LineAlignment = StringAlignment.Center
+        }
+        buttonCompress.Text = String.Empty
+        e.Graphics.DrawString("Compress Folder", btn.Font, drawBrush, e.ClipRectangle, sf)
+        drawBrush.Dispose()
+        sf.Dispose()
+    End Sub
+
+
+
+
+
+#Region "Move And Resize"
+
+    '//////////////////////////MOVE  AND  RESIZE  FORM//////////////////////////////////'
+
+    <DllImport("user32.dll")>
+    Public Shared Function ReleaseCapture() As Boolean
+    End Function
+
+    <DllImport("user32.dll")>
+    Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal Msg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
+    End Function
+
+
+
+
+    Private Sub MoveForm()
+        ReleaseCapture()
+        SendMessage(Me.Handle, &HA1, 2, 0)
+    End Sub
+
+    Private Sub panel_topBar_MouseDown(sender As Object, e As MouseEventArgs) Handles panel_topBar.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Left Then
+            MoveForm()
+        End If
+    End Sub
+
+
+
+    'Dim bordercapture As Integer = 8
+
+    'Public Enum ResizeDirection
+    '    Normal = 0
+    '    T = 1
+    '    TR = 2
+    '    R = 3
+    '    RB = 4
+    '    B = 5
+    '    LB = 6
+    '    L = 7
+    '    TL = 8
+    'End Enum
+
+    'Dim RD As ResizeDirection = ResizeDirection.Normal
+
+    'Public Property ResizeCursor() As ResizeDirection
+    '    Get
+    '        Return RD
+    '    End Get
+    '    Set(value As ResizeDirection)
+    '        RD = value
+    '        Select Case value
+    '            Case ResizeDirection.T
+    '                Me.Cursor = Cursors.SizeNS
+
+    '            Case ResizeDirection.TR
+    '                Me.Cursor = Cursors.SizeNESW
+
+    '            Case ResizeDirection.R
+    '                Me.Cursor = Cursors.SizeWE
+
+    '            Case ResizeDirection.RB
+    '                Me.Cursor = Cursors.SizeNWSE
+
+    '            Case ResizeDirection.B
+    '                Me.Cursor = Cursors.SizeNS
+
+    '            Case ResizeDirection.LB
+    '                Me.Cursor = Cursors.SizeNESW
+
+    '            Case ResizeDirection.L
+    '                Me.Cursor = Cursors.SizeWE
+
+    '            Case ResizeDirection.TL
+    '                Me.Cursor = Cursors.SizeNWSE
+
+    '            Case Else
+    '                Me.Cursor = Cursors.Default
+
+    '        End Select
+    '    End Set
+    'End Property
+
+    'Private Sub panel_MainWindow_MouseDown(sender As Object, e As MouseEventArgs) Handles panel_MainWindow.MouseDown, TabControl1.MouseDown, panel_topBar.MouseDown
+    '    If e.Button = Windows.Forms.MouseButtons.Left Then
+    '        ResizeForm(ResizeCursor)
+    '    End If
+    'End Sub
+
+    'Private Sub panel_MainWindow_MouseMove(sender As Object, e As MouseEventArgs) Handles panel_MainWindow.MouseMove, sb_Panel.MouseMove, panel_topBar.MouseMove, TabControl1.MouseMove
+    '    If e.Location.Y < bordercapture Then
+    '        ResizeCursor = ResizeDirection.T
+
+    '    ElseIf e.Location.X > Me.Width - bordercapture And e.Location.Y < bordercapture Then
+    '        ResizeCursor = ResizeDirection.TR
+
+    '    ElseIf e.Location.X > Me.Width - bordercapture Then
+    '        ResizeCursor = ResizeDirection.R
+
+    '    ElseIf e.Location.X > Me.Width - bordercapture And e.Location.Y > Me.Height - bordercapture Then
+    '        ResizeCursor = ResizeDirection.RB
+
+    '    ElseIf e.Location.Y > Me.Height - bordercapture Then
+    '        ResizeCursor = ResizeDirection.B
+
+    '    ElseIf e.Location.X < bordercapture And e.Location.Y > Me.Height - bordercapture Then
+    '        ResizeCursor = ResizeDirection.LB
+
+    '    ElseIf e.Location.X < bordercapture Then
+    '        ResizeCursor = ResizeDirection.L
+
+    '    ElseIf e.Location.X < bordercapture And e.Location.Y < bordercapture Then
+    '        ResizeCursor = ResizeDirection.TL
+
+    '    Else
+    '        ResizeCursor = ResizeDirection.Normal
+    '    End If
+    'End Sub
+
+
+
+
+    'Private Sub ResizeForm(ByVal resdirection As ResizeDirection)
+    '    Dim d As Integer = -1
+    '    Select Case resdirection
+    '        Case ResizeDirection.T
+    '            d = 12
+
+    '        Case ResizeDirection.TR
+    '            d = 14
+
+    '        Case ResizeDirection.R
+    '            d = 11
+
+    '        Case ResizeDirection.RB
+    '            d = 17
+
+    '        Case ResizeDirection.B
+    '            d = 15
+
+    '        Case ResizeDirection.LB
+    '            d = 16
+
+    '        Case ResizeDirection.L
+    '            d = 10
+
+    '        Case ResizeDirection.TL
+    '            d = 13
+    '    End Select
+
+    '    If d <> -1 Then
+    '        ReleaseCapture()
+    '        SendMessage(Me.Handle, &HA1, d, 0)
+    '    End If
+    'End Sub
+#End Region
 
 
 

@@ -129,15 +129,6 @@
   <metadata name="ToolTipFilesCompressed.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>460, 17</value>
   </metadata>
-  <data name="Label14.ToolTip" xml:space="preserve">
-    <value>Forces compression or uncompression of the specified directory or file. This is used in the case of a file that was 
-partly compressed when the operation was program was closed halfway through an operation.
-
-If you select this option: 
-    •  Press "Compress Folder", to compress all the files in the folder, fixing the interrupted file in the process. 
-
-    •  Press "Check Compression" then decompress all the files in the folder, fixing the interrupted file in the process. </value>
-  </data>
   <data name="Label13.ToolTip" xml:space="preserve">
     <value>The number of files compressed may not necessarily equal the total number of files in the folder. 
 This is often normal, as some files cannot be compressed, or are protected by the system. 
@@ -146,6 +137,15 @@ If the number of compressed files appears too small:
     •  Ensure the "Compress files in subfolders as well" checkbox is ticked. 
     •  Try running CompactGUI as an Administrator
 </value>
+  </data>
+  <data name="Label14.ToolTip" xml:space="preserve">
+    <value>Forces compression or uncompression of the specified directory or file. This is used in the case of a file that was 
+partly compressed when the operation was program was closed halfway through an operation.
+
+If you select this option: 
+    •  Press "Compress Folder", to compress all the files in the folder, fixing the interrupted file in the process. 
+
+    •  Press "Check Compression" then decompress all the files in the folder, fixing the interrupted file in the process. </value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>52</value>
