@@ -26,15 +26,15 @@ Partial Class Compact
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Compact))
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.topbar_title = New System.Windows.Forms.Label()
         Me.panel_topBar = New System.Windows.Forms.Panel()
         Me.buttonQueryCompact = New System.Windows.Forms.Button()
-        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.topbar_dirchooserContainer = New System.Windows.Forms.Panel()
         Me.dirChooser = New System.Windows.Forms.LinkLabel()
         Me.btn_Mainmin = New System.Windows.Forms.Button()
         Me.btn_Mainmax = New System.Windows.Forms.Button()
         Me.btn_Mainexit = New System.Windows.Forms.Button()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.topbar_icon = New System.Windows.Forms.PictureBox()
         Me.showinfopopup = New System.Windows.Forms.Label()
         Me.progressTimer = New System.Windows.Forms.Timer(Me.components)
         Me.seecompest = New System.Windows.Forms.Label()
@@ -43,6 +43,13 @@ Partial Class Compact
         Me.Label14 = New System.Windows.Forms.Label()
         Me.panel_MainWindow = New System.Windows.Forms.Panel()
         Me.sb_Panel = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.sb_ResultsPanel = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.sb_compressedSizeVisual = New System.Windows.Forms.Panel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.sb_SpaceSavedLabel = New System.Windows.Forms.Label()
         Me.sb_AnalysisPanel = New System.Windows.Forms.Panel()
         Me.sb_progresslabel = New System.Windows.Forms.Label()
         Me.sb_progressbar = New System.Windows.Forms.Panel()
@@ -53,7 +60,7 @@ Partial Class Compact
         Me.wkPreSizeUnit = New System.Windows.Forms.Label()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label19 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
+        Me.sb_labelCompressed = New System.Windows.Forms.Label()
         Me.sb_FolderName = New System.Windows.Forms.Label()
         Me.vis_dropshadowmain2 = New System.Windows.Forms.Panel()
         Me.wkPreSizeVal = New System.Windows.Forms.Label()
@@ -104,16 +111,13 @@ Partial Class Compact
         Me.compRatioLabel = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.sb_compressedSizeVisual = New System.Windows.Forms.Panel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.panel_topBar.SuspendLayout()
-        Me.Panel7.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.topbar_dirchooserContainer.SuspendLayout()
+        CType(Me.topbar_icon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panel_MainWindow.SuspendLayout()
         Me.sb_Panel.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.sb_ResultsPanel.SuspendLayout()
         Me.sb_AnalysisPanel.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.TabControl1.SuspendLayout()
@@ -128,35 +132,34 @@ Partial Class Compact
         Me.Panel5.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
         '
-        'Label1
+        'topbar_title
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semilight", 15.75!)
-        Me.Label1.ForeColor = System.Drawing.Color.White
-        Me.Label1.Location = New System.Drawing.Point(59, 18)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(135, 30)
-        Me.Label1.TabIndex = 13
-        Me.Label1.Text = "Compact GUI"
+        Me.topbar_title.AutoSize = True
+        Me.topbar_title.Font = New System.Drawing.Font("Segoe UI Semilight", 15.75!)
+        Me.topbar_title.ForeColor = System.Drawing.Color.White
+        Me.topbar_title.Location = New System.Drawing.Point(59, 18)
+        Me.topbar_title.Name = "topbar_title"
+        Me.topbar_title.Size = New System.Drawing.Size(135, 30)
+        Me.topbar_title.TabIndex = 13
+        Me.topbar_title.Text = "Compact GUI"
         '
         'panel_topBar
         '
         Me.panel_topBar.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.panel_topBar.Controls.Add(Me.buttonQueryCompact)
-        Me.panel_topBar.Controls.Add(Me.Panel7)
+        Me.panel_topBar.Controls.Add(Me.topbar_dirchooserContainer)
         Me.panel_topBar.Controls.Add(Me.btn_Mainmin)
         Me.panel_topBar.Controls.Add(Me.btn_Mainmax)
         Me.panel_topBar.Controls.Add(Me.btn_Mainexit)
-        Me.panel_topBar.Controls.Add(Me.PictureBox1)
+        Me.panel_topBar.Controls.Add(Me.topbar_icon)
         Me.panel_topBar.Controls.Add(Me.showinfopopup)
-        Me.panel_topBar.Controls.Add(Me.Label1)
+        Me.panel_topBar.Controls.Add(Me.topbar_title)
         Me.panel_topBar.Dock = System.Windows.Forms.DockStyle.Top
         Me.panel_topBar.Location = New System.Drawing.Point(0, 0)
         Me.panel_topBar.Name = "panel_topBar"
@@ -182,17 +185,17 @@ Partial Class Compact
         Me.buttonQueryCompact.UseVisualStyleBackColor = False
         Me.buttonQueryCompact.Visible = False
         '
-        'Panel7
+        'topbar_dirchooserContainer
         '
-        Me.Panel7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.topbar_dirchooserContainer.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel7.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.Panel7.Controls.Add(Me.dirChooser)
-        Me.Panel7.Location = New System.Drawing.Point(44, 69)
-        Me.Panel7.MinimumSize = New System.Drawing.Size(270, 0)
-        Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(912, 43)
-        Me.Panel7.TabIndex = 15
+        Me.topbar_dirchooserContainer.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.topbar_dirchooserContainer.Controls.Add(Me.dirChooser)
+        Me.topbar_dirchooserContainer.Location = New System.Drawing.Point(44, 69)
+        Me.topbar_dirchooserContainer.MinimumSize = New System.Drawing.Size(270, 0)
+        Me.topbar_dirchooserContainer.Name = "topbar_dirchooserContainer"
+        Me.topbar_dirchooserContainer.Size = New System.Drawing.Size(912, 43)
+        Me.topbar_dirchooserContainer.TabIndex = 15
         '
         'dirChooser
         '
@@ -266,15 +269,15 @@ Partial Class Compact
         Me.btn_Mainexit.Text = "✕"
         Me.btn_Mainexit.UseVisualStyleBackColor = False
         '
-        'PictureBox1
+        'topbar_icon
         '
-        Me.PictureBox1.Image = Global.CompactGUI.My.Resources.Resources.iconbright
-        Me.PictureBox1.Location = New System.Drawing.Point(19, 19)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(25, 25)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 15
-        Me.PictureBox1.TabStop = False
+        Me.topbar_icon.Image = Global.CompactGUI.My.Resources.Resources.iconbright
+        Me.topbar_icon.Location = New System.Drawing.Point(19, 19)
+        Me.topbar_icon.Name = "topbar_icon"
+        Me.topbar_icon.Size = New System.Drawing.Size(25, 25)
+        Me.topbar_icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.topbar_icon.TabIndex = 15
+        Me.topbar_icon.TabStop = False
         '
         'showinfopopup
         '
@@ -359,8 +362,7 @@ Partial Class Compact
         Me.sb_Panel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.sb_Panel.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.sb_Panel.Controls.Add(Me.Panel1)
-        Me.sb_Panel.Controls.Add(Me.sb_AnalysisPanel)
+        Me.sb_Panel.Controls.Add(Me.TableLayoutPanel2)
         Me.sb_Panel.Controls.Add(Me.sb_lblGameIssues)
         Me.sb_Panel.Controls.Add(Me.seecompest)
         Me.sb_Panel.Controls.Add(Me.wkPostSizeUnit)
@@ -376,15 +378,99 @@ Partial Class Compact
         Me.sb_Panel.Padding = New System.Windows.Forms.Padding(20, 0, 20, 0)
         Me.sb_Panel.Size = New System.Drawing.Size(353, 515)
         Me.sb_Panel.TabIndex = 15
+        Me.sb_Panel.Visible = False
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 1
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel2.Controls.Add(Me.sb_ResultsPanel, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.sb_AnalysisPanel, 0, 1)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(7, 173)
+        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(342, 339)
+        Me.TableLayoutPanel2.TabIndex = 23
+        '
+        'sb_ResultsPanel
+        '
+        Me.sb_ResultsPanel.Controls.Add(Me.Label4)
+        Me.sb_ResultsPanel.Controls.Add(Me.Label3)
+        Me.sb_ResultsPanel.Controls.Add(Me.sb_compressedSizeVisual)
+        Me.sb_ResultsPanel.Controls.Add(Me.Panel6)
+        Me.sb_ResultsPanel.Controls.Add(Me.sb_SpaceSavedLabel)
+        Me.sb_ResultsPanel.Location = New System.Drawing.Point(3, 3)
+        Me.sb_ResultsPanel.Name = "sb_ResultsPanel"
+        Me.sb_ResultsPanel.Padding = New System.Windows.Forms.Padding(40, 0, 40, 0)
+        Me.sb_ResultsPanel.Size = New System.Drawing.Size(332, 141)
+        Me.sb_ResultsPanel.TabIndex = 25
+        Me.sb_ResultsPanel.Visible = False
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.Color.Silver
+        Me.Label4.Location = New System.Drawing.Point(202, 126)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(93, 13)
+        Me.Label4.TabIndex = 26
+        Me.Label4.Text = "Compressed Size"
+        Me.Label4.Visible = False
+        '
+        'Label3
+        '
+        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.Silver
+        Me.Label3.Location = New System.Drawing.Point(48, 126)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(72, 13)
+        Me.Label3.TabIndex = 26
+        Me.Label3.Text = "Original Size"
+        Me.Label3.Visible = False
+        '
+        'sb_compressedSizeVisual
+        '
+        Me.sb_compressedSizeVisual.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(96, Byte), Integer))
+        Me.sb_compressedSizeVisual.Location = New System.Drawing.Point(226, 5)
+        Me.sb_compressedSizeVisual.Name = "sb_compressedSizeVisual"
+        Me.sb_compressedSizeVisual.Size = New System.Drawing.Size(40, 113)
+        Me.sb_compressedSizeVisual.TabIndex = 0
+        '
+        'Panel6
+        '
+        Me.Panel6.BackColor = System.Drawing.Color.FromArgb(CType(CType(211, Byte), Integer), CType(CType(84, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.Panel6.Location = New System.Drawing.Point(64, 5)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(40, 113)
+        Me.Panel6.TabIndex = 0
+        '
+        'sb_SpaceSavedLabel
+        '
+        Me.sb_SpaceSavedLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.sb_SpaceSavedLabel.ForeColor = System.Drawing.Color.White
+        Me.sb_SpaceSavedLabel.Location = New System.Drawing.Point(110, 91)
+        Me.sb_SpaceSavedLabel.Name = "sb_SpaceSavedLabel"
+        Me.sb_SpaceSavedLabel.Size = New System.Drawing.Size(113, 27)
+        Me.sb_SpaceSavedLabel.TabIndex = 27
+        Me.sb_SpaceSavedLabel.Text = "700MB Saved"
+        Me.sb_SpaceSavedLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.sb_SpaceSavedLabel.Visible = False
         '
         'sb_AnalysisPanel
         '
         Me.sb_AnalysisPanel.Controls.Add(Me.sb_progresslabel)
         Me.sb_AnalysisPanel.Controls.Add(Me.sb_progressbar)
         Me.sb_AnalysisPanel.Controls.Add(Me.progresspercent)
-        Me.sb_AnalysisPanel.Location = New System.Drawing.Point(10, 192)
+        Me.sb_AnalysisPanel.Location = New System.Drawing.Point(3, 150)
         Me.sb_AnalysisPanel.Name = "sb_AnalysisPanel"
-        Me.sb_AnalysisPanel.Size = New System.Drawing.Size(332, 76)
+        Me.sb_AnalysisPanel.Size = New System.Drawing.Size(332, 96)
         Me.sb_AnalysisPanel.TabIndex = 24
         Me.sb_AnalysisPanel.Visible = False
         '
@@ -392,7 +478,7 @@ Partial Class Compact
         '
         Me.sb_progresslabel.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.sb_progresslabel.ForeColor = System.Drawing.Color.White
-        Me.sb_progresslabel.Location = New System.Drawing.Point(19, 5)
+        Me.sb_progresslabel.Location = New System.Drawing.Point(19, 32)
         Me.sb_progresslabel.Name = "sb_progresslabel"
         Me.sb_progresslabel.Size = New System.Drawing.Size(301, 20)
         Me.sb_progresslabel.TabIndex = 11
@@ -402,7 +488,7 @@ Partial Class Compact
         'sb_progressbar
         '
         Me.sb_progressbar.BackColor = System.Drawing.Color.Green
-        Me.sb_progressbar.Location = New System.Drawing.Point(19, 28)
+        Me.sb_progressbar.Location = New System.Drawing.Point(19, 55)
         Me.sb_progressbar.Name = "sb_progressbar"
         Me.sb_progressbar.Size = New System.Drawing.Size(301, 14)
         Me.sb_progressbar.TabIndex = 10
@@ -412,7 +498,7 @@ Partial Class Compact
         Me.progresspercent.BackColor = System.Drawing.Color.Transparent
         Me.progresspercent.Font = New System.Drawing.Font("Segoe UI", 8.25!)
         Me.progresspercent.ForeColor = System.Drawing.Color.White
-        Me.progresspercent.Location = New System.Drawing.Point(107, 45)
+        Me.progresspercent.Location = New System.Drawing.Point(107, 72)
         Me.progresspercent.Name = "progresspercent"
         Me.progresspercent.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.progresspercent.Size = New System.Drawing.Size(122, 14)
@@ -474,9 +560,9 @@ Partial Class Compact
         Me.TableLayoutPanel3.ColumnCount = 3
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 87.73006!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.26994!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 148.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 152.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.Label19, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label20, 2, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.sb_labelCompressed, 2, 0)
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(23, 92)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
@@ -492,23 +578,23 @@ Partial Class Compact
         Me.Label19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
         Me.Label19.Location = New System.Drawing.Point(3, 0)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(133, 20)
+        Me.Label19.Size = New System.Drawing.Size(129, 20)
         Me.Label19.TabIndex = 8
-        Me.Label19.Text = "Actual Uncompressed"
+        Me.Label19.Text = "Uncompressed"
         Me.Label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label20
+        'sb_labelCompressed
         '
-        Me.Label20.BackColor = System.Drawing.Color.Transparent
-        Me.Label20.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label20.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
-        Me.Label20.Location = New System.Drawing.Point(161, 0)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(143, 20)
-        Me.Label20.TabIndex = 8
-        Me.Label20.Text = "Estimated Compressed"
-        Me.Label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.sb_labelCompressed.BackColor = System.Drawing.Color.Transparent
+        Me.sb_labelCompressed.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.sb_labelCompressed.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.sb_labelCompressed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
+        Me.sb_labelCompressed.Location = New System.Drawing.Point(157, 0)
+        Me.sb_labelCompressed.Name = "sb_labelCompressed"
+        Me.sb_labelCompressed.Size = New System.Drawing.Size(147, 20)
+        Me.sb_labelCompressed.TabIndex = 8
+        Me.sb_labelCompressed.Text = "Estimated Compressed"
+        Me.sb_labelCompressed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'sb_FolderName
         '
@@ -1116,57 +1202,6 @@ Partial Class Compact
         Me.Label12.Text = "Ratio:"
         Me.Label12.Visible = False
         '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.Label4)
-        Me.Panel1.Controls.Add(Me.Label3)
-        Me.Panel1.Controls.Add(Me.sb_compressedSizeVisual)
-        Me.Panel1.Controls.Add(Me.Panel6)
-        Me.Panel1.Location = New System.Drawing.Point(10, 291)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Padding = New System.Windows.Forms.Padding(40, 0, 40, 0)
-        Me.Panel1.Size = New System.Drawing.Size(332, 215)
-        Me.Panel1.TabIndex = 25
-        '
-        'Panel6
-        '
-        Me.Panel6.BackColor = System.Drawing.Color.FromArgb(CType(CType(211, Byte), Integer), CType(CType(84, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.Panel6.Location = New System.Drawing.Point(19, 33)
-        Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(301, 20)
-        Me.Panel6.TabIndex = 0
-        '
-        'sb_compressedSizeVisual
-        '
-        Me.sb_compressedSizeVisual.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.sb_compressedSizeVisual.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(96, Byte), Integer))
-        Me.sb_compressedSizeVisual.Location = New System.Drawing.Point(19, 85)
-        Me.sb_compressedSizeVisual.Name = "sb_compressedSizeVisual"
-        Me.sb_compressedSizeVisual.Size = New System.Drawing.Size(301, 20)
-        Me.sb_compressedSizeVisual.TabIndex = 0
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.Silver
-        Me.Label3.Location = New System.Drawing.Point(19, 17)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(72, 13)
-        Me.Label3.TabIndex = 26
-        Me.Label3.Text = "Original Size"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.Color.Silver
-        Me.Label4.Location = New System.Drawing.Point(19, 69)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(93, 13)
-        Me.Label4.TabIndex = 26
-        Me.Label4.Text = "Compressed Size"
-        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1182,11 +1217,14 @@ Partial Class Compact
         Me.Name = "Compact"
         Me.panel_topBar.ResumeLayout(False)
         Me.panel_topBar.PerformLayout()
-        Me.Panel7.ResumeLayout(False)
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.topbar_dirchooserContainer.ResumeLayout(False)
+        CType(Me.topbar_icon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panel_MainWindow.ResumeLayout(False)
         Me.sb_Panel.ResumeLayout(False)
         Me.sb_Panel.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.sb_ResultsPanel.ResumeLayout(False)
+        Me.sb_ResultsPanel.PerformLayout()
         Me.sb_AnalysisPanel.ResumeLayout(False)
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
@@ -1210,14 +1248,12 @@ Partial Class Compact
         Me.Panel2.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
-    Friend WithEvents Label1 As Label
+    Friend WithEvents topbar_title As Label
     Friend WithEvents panel_topBar As Panel
     Friend WithEvents dirChooser As LinkLabel
     Friend WithEvents progressTimer As Timer
@@ -1225,9 +1261,9 @@ Partial Class Compact
     Friend WithEvents buttonQueryCompact As Button
     Friend WithEvents ToolTipFilesCompressed As ToolTip
     Friend WithEvents seecompest As Label
-    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents topbar_icon As PictureBox
     Friend WithEvents panel_MainWindow As Panel
-    Friend WithEvents Panel7 As Panel
+    Friend WithEvents topbar_dirchooserContainer As Panel
     Friend WithEvents btn_Mainmin As Button
     Friend WithEvents btn_Mainmax As Button
     Friend WithEvents btn_Mainexit As Button
@@ -1239,7 +1275,7 @@ Partial Class Compact
     Friend WithEvents wkPreSizeUnit As Label
     Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
     Friend WithEvents Label19 As Label
-    Friend WithEvents Label20 As Label
+    Friend WithEvents sb_labelCompressed As Label
     Friend WithEvents sb_FolderName As Label
     Friend WithEvents vis_dropshadowmain2 As Panel
     Friend WithEvents vis_dropshadowMain As Panel
@@ -1295,9 +1331,11 @@ Partial Class Compact
     Friend WithEvents Label12 As Label
     Friend WithEvents sb_lblGameIssues As Label
     Friend WithEvents sb_AnalysisPanel As Panel
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents sb_ResultsPanel As Panel
     Friend WithEvents Panel6 As Panel
     Friend WithEvents Label4 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents sb_compressedSizeVisual As Panel
+    Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
+    Friend WithEvents sb_SpaceSavedLabel As Label
 End Class

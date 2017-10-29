@@ -129,7 +129,7 @@ Public Class WikiHandler
             End If
 
         Next
-
+        Compact.sb_labelCompressed.Text = "Estimated Compressed"
         Try
             ratioavg = (ratioavg - 1) / gcount.Count
 
@@ -138,6 +138,7 @@ Public Class WikiHandler
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
             Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), Compact.wkPostSizeVal.Location.Y + 16)
             Compact.wkPostSizeUnit.Visible = True
+
         Catch ex As System.DivideByZeroException
 
             Compact.wkPostSizeVal.Text = "?"

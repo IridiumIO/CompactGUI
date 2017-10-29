@@ -48,8 +48,7 @@ Public Class Compact
     End Sub
 
 
-
-
+#Region "Format Messages by MUI Table"
     Private Const MSG_INDEX_TOTALFILES As String = "%1"
     Private Const MSG_INDEX_TOTALDIRECTORIES As String = "%2"
     Private Const MSG_INDEX_FILESCOMPRESSEDCOUNT As String = "%3"
@@ -133,6 +132,9 @@ Public Class Compact
         Dim FMTListing As String() = FMT_LISTING_MSG.Trim().Split(" ")
         Dim FMTUncompressed As String() = FMT_UNCOMPRESSED_MSG.Split(" ")
         Dim FMTCompressFinished As String() = FMT_COMPRESSED_MSG(FMT_COMPRESSED_MSG.Count - 1).Trim(vbCrLf).Split(" ")
+#End Region
+
+
 
 
         'LISTING - DIRECTORY COUNT
@@ -297,13 +299,24 @@ Public Class Compact
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         loadFromSettings()
-        ' Me.Width = 1000 - sb_Panel.Width
 
-        With dirChooser
+        If dirChooser.Text = "❯   Select Target Folder" Then
+            panel_topBar.Height = Me.Height - 1
 
-            .LinkColor = Color.White
-        End With
+            With topbar_title
+                .AutoSize = False
+                .TextAlign = ContentAlignment.MiddleCenter
+                .Font = New Font(topbar_title.Font.Name, 32, FontStyle.Regular)
+                .Width = panel_topBar.Width
+                .Height = topbar_title.Font.Height
+                .Location = New Point(0, panel_topBar.Height / 2 - 150)
+            End With
+            topbar_dirchooserContainer.Location = New Point(44, panel_topBar.Height / 2 - 22)
+        End If
+
+        dirChooser.LinkColor = Color.White
 
         comboChooseShutdown.SelectedItem = comboChooseShutdown.Items.Item(0)
 
@@ -325,7 +338,6 @@ Public Class Compact
     Private Sub ShowInfoPopup_Click(sender As Object, e As EventArgs) Handles showinfopopup.Click
         Info.semVersion.Text = "V " + version
         Info.Show()
-
     End Sub
 
 
@@ -379,7 +391,7 @@ Public Class Compact
             If isQueryMode And isQueryCalledByCompact = 0 Then
                 sb_progresslabel.Text = "This folder contains compressed items"
                 progresspercent.Visible = False
-
+                'sb_AnalysisPanel.Visible = False
 
             End If
 
@@ -405,7 +417,10 @@ Public Class Compact
             buttonCompress.Visible = True
             buttonRevert.Visible = False
             sb_progresslabel.Text = "Folder Uncompressed."
-            sb_compressedSizeVisual.Width = 301
+            sb_compressedSizeVisual.Height = 113
+            wkPostSizeVal = wkPreSizeVal
+            wkPostSizeUnit = wkPreSizeUnit
+            sb_ResultsPanel.Visible = False
             returnArrow.Visible = True
 
             If checkShutdownOnCompletion.Checked = True Then
@@ -439,32 +454,27 @@ Public Class Compact
 
 
 
-    'Set variables for the advanced compression checkboxes. 
-    Dim workingDir As String = ""
-    Dim recursiveScan As String = ""
-    Dim hiddenFiles As String = ""
-    Dim forceCompression As String = ""                                                         'Not actually implemented - yet
-
-
     'Set variables for minor security and error handling
     Dim overrideCompressFolderButton = 0
     Dim directorysizeexceptionCount = 0                                                         'Used in the DirectorySize() Function to ensure the error message only shows up once, even if multiple UnauthorizedAccessException errors get thrown
 
 
+
+
     Dim uncompressedfoldersize
+    Dim workingDir As String = ""
 
 
-    Private Sub SelectFolderToCompress _
-        (sender As Object, e As EventArgs) Handles dirChooser.LinkClicked
+
+
+    Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked
+
         sb_AnalysisPanel.Visible = False
         overrideCompressFolderButton = 0
 
         Dim folderChoice As New VistaFolderBrowserDialog
-
         folderChoice.ShowDialog()
-
         SelectFolder(folderChoice.SelectedPath, "button")
-
         folderChoice.Dispose()
 
     End Sub
@@ -476,7 +486,7 @@ Public Class Compact
 
         Dim wDString = selectedDir
 
-        If wDString.Contains("C:\Windows") Then                                                 'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
+        If wDString.Contains("C:\Windows") Then                                                                             'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
 
             MsgBox("Compressing items in the Windows folder using this program " _
                     & "is not recommended. Please use the command line if you still " _
@@ -488,67 +498,87 @@ Public Class Compact
 
         Else
 
-            If wDString.Length >= 3 Then                                                        'Makes sure the chosen folder isn't a null value or an exception
-
+            If wDString.Length >= 3 Then                                                                                    'Makes sure the chosen folder isn't a null value or an exception
 
                 Dim DIwDString = New DirectoryInfo(wDString)
-                directorysizeexceptionCount = 0
-                workingDir = wDString.ToString()
-                If DIwDString.Name.ToString.Length > 0 Then sb_FolderName.Text = DIwDString.Name.ToString.Substring(0, 1).ToUpper + DIwDString.Name.ToString.Substring(1)
 
+                directorysizeexceptionCount = 0
+
+                workingDir = wDString.ToString()
+
+                If DIwDString.Name.ToString.Length > 0 Then sb_FolderName.Text =
+                    DIwDString.Name.ToString.Substring(0, 1).ToUpper + DIwDString.Name.ToString.Substring(1)
 
                 Try
-                        If DIwDString.Parent.Parent.ToString <> Nothing Then
-                            dirChooser.Text = "❯ " + DIwDString.Parent.Parent.ToString + " ❯ " + DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
-                        Else
-                            dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") + " ❯ " + DIwDString.Parent.ToString + " ❯ " + DIwDString.Name.ToString
-                        End If
-
-                    Catch ex As Exception
-                        dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") + " ❯ " + DIwDString.Name.ToString
-                    End Try
-
-                    uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
-                    Dim rawpreSize = GetOutputSize _
-                    (Math.Round(DirectorySize(DIwDString, True), 1), True)
-                    preSize.Text = "Uncompressed Size: " + rawpreSize
-
-                    dirLabelResults = DIwDString.Name.ToString
-
-
-                    Try
-                        Dim directories() As String = System.IO.Directory.GetDirectories _
-                        (wDString, "*", IO.SearchOption.AllDirectories)
-
-                        dirCountTotal = directories.Length + 1
-
-                        Dim numberOfFiles As Int64 = Directory.GetFiles _
-                        (wDString, "*", IO.SearchOption.AllDirectories).Length
-
-                        fileCountTotal = numberOfFiles
-                        Form2.lblCompactIssues.Visible = False
-                        UnfurlTransition.UnfurlControl(Panel7, Panel7.Width, 603, 100)
-
-                        WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
-
-
-                    Catch ex As Exception
-                    End Try
-
-                    If overrideCompressFolderButton = 0 Then                                        'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
-                        buttonCompress.Enabled = True
+                    If DIwDString.Parent.Parent.ToString <> Nothing Then
+                        dirChooser.Text = "❯ " + DIwDString.Parent.Parent.ToString +
+                            " ❯ " + DIwDString.Parent.ToString +
+                            " ❯ " + DIwDString.Name.ToString
                     Else
-                        buttonCompress.Enabled = False
+                        dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") +
+                            " ❯ " + DIwDString.Parent.ToString +
+                            " ❯ " + DIwDString.Name.ToString
                     End If
 
+                Catch ex As Exception
+                    dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") +
+                        " ❯ " + DIwDString.Name.ToString
+                End Try
+
+                uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
+
+                Dim rawpreSize = GetOutputSize _
+                   (Math.Round(DirectorySize(DIwDString, True), 1), True)
+
+                preSize.Text = "Uncompressed Size: " + rawpreSize
+
+                dirLabelResults = DIwDString.Name.ToString
+
+                Try
+                    Dim directories() As String = Directory.GetDirectories _
+                        (wDString, "*", SearchOption.AllDirectories)
+
+                    dirCountTotal = directories.Length + 1
+
+                    Dim numberOfFiles As Int64 = Directory.GetFiles _
+                       (wDString, "*", SearchOption.AllDirectories).Length
+
+                    fileCountTotal = numberOfFiles
+                    Form2.lblCompactIssues.Visible = False
+                    sb_ResultsPanel.Visible = False
+
+                    UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, 603, 100)
+                    WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
+
+                    With topbar_title
+                        .AutoSize = True
+                        .TextAlign = ContentAlignment.MiddleLeft
+                        .Font = New Font(topbar_title.Font.Name, 15.75, FontStyle.Regular)
+                        .Location = New Point(59, 18)
+                    End With
+
+                    TabControl1.SelectedTab = InputPage
+
+                Catch ex As Exception
+                End Try
+
+                If overrideCompressFolderButton = 0 Then                                        'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
+                    buttonCompress.Enabled = True
                 Else
-                    If senderID = "button" Then Console.Write("No folder selected")
+                    buttonCompress.Enabled = False
+                End If
+
+            Else
+
+                If senderID = "button" Then Console.Write("No folder selected")
 
             End If
 
-
         End If
+
     End Sub
+
+
 
 
     Dim compactArgs As String
@@ -558,8 +588,8 @@ Public Class Compact
 
     Private Sub CompressFolder_Click(sender As System.Object, e As System.EventArgs) Handles buttonCompress.Click
         conOut.Items.Clear()
-        sb_AnalysisPanel.Visible = True
         CreateProcess("compact")
+        sb_AnalysisPanel.Visible = True
     End Sub
     Private Sub buttonQueryCompact_Click(sender As Object, e As EventArgs) Handles buttonQueryCompact.Click
         conOut.Items.Clear()
@@ -571,6 +601,7 @@ Public Class Compact
 
 
     Private Sub CreateProcess(passthrougharg As String)
+
         Try
             MyProcess.Kill()
         Catch ex As Exception
@@ -581,8 +612,6 @@ Public Class Compact
             If passthrougharg = "query" Then isQueryMode = 1
 
             progresspercent.Visible = True
-
-
 
             MyProcess = New Process
             With MyProcess.StartInfo
@@ -597,9 +626,11 @@ Public Class Compact
                 .RedirectStandardOutput = True
                 .RedirectStandardError = True
             End With
+
             MyProcess.Start()
             MyProcess.StandardInput.WriteLine("chcp")
             MyProcess.StandardInput.Flush()
+
             Dim Res = MyProcess.StandardOutput.ReadLine()
 
             Dim i = 0
@@ -608,7 +639,6 @@ Public Class Compact
                 i += 1
             Loop
 
-            'MsgBox(Res.Split(" ").Reverse().ElementAt(0))
             Dim CP = Integer.Parse(Regex.Replace(Res, "[^\d]", ""))
             MyProcess.StandardInput.WriteLine("exit")
             MyProcess.StandardInput.Flush()
@@ -618,13 +648,12 @@ Public Class Compact
 
 
             MyProcess = New Process
-
             With MyProcess.StartInfo
                 .FileName = "CMD.exe"
                 .Arguments = ""
-                .StandardOutputEncoding = Encoding.GetEncoding(CP)                             'Allow console output to use the System's encoding for localization support
+                .StandardOutputEncoding = Encoding.GetEncoding(CP)                              'Allow console output to use the System's encoding for localization support
                 .StandardErrorEncoding = Encoding.GetEncoding(CP)
-                .WorkingDirectory = workingDir                                      'Set working directory via argument, allows Encoding to be passed directly.
+                .WorkingDirectory = workingDir                                                  'Set working directory via argument, allows Encoding to be passed directly.
                 .UseShellExecute = False
                 .CreateNoWindow = True
                 .RedirectStandardInput = True
@@ -643,6 +672,7 @@ Public Class Compact
 
                 If passthrougharg = "compact" Then sb_progresslabel.Text = "Compressing, Please Wait"
                 If passthrougharg = "query" Then sb_progresslabel.Text = "Analyzing"
+
                 TabControl1.SelectedTab = ProgressPage
 
             Catch ex As Exception
@@ -661,6 +691,7 @@ Public Class Compact
         dirCountProgress = 0
         progresspercent.Visible = True
         CompResultsPanel.Visible = False
+
         buttonRevert.Visible = False
         sb_progresslabel.Text = "Reverting Changes, Please Wait"
 
@@ -702,6 +733,7 @@ Public Class Compact
         fileCountProgress = 0
         isQueryCalledByCompact = 0
         MyProcess.Kill()
+        sb_AnalysisPanel.Visible = False
     End Sub
 
 
@@ -813,8 +845,15 @@ Public Class Compact
                 origSizeLabel.Text = GetOutputSize(uncompressedfoldersize, True)
             End If
 
-            compressedSizeLabel.Text = GetOutputSize _
+            Dim PrintOutSize = GetOutputSize _
                 (uncompressedfoldersize - (oldFolderSize - newFolderSize), True)
+            Dim suffix = PrintOutSize.Split(" ")(1)
+            compressedSizeLabel.Text = PrintOutSize
+            wkPostSizeVal.Text = PrintOutSize.Split(" ")(0)
+            wkPostSizeUnit.Text = suffix
+            Dim wkPostSizeVal_Len = TextRenderer.MeasureText(wkPostSizeVal.Text, wkPostSizeVal.Font)
+            wkPostSizeUnit.Location = New Point(wkPostSizeVal.Location.X + (wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), wkPostSizeVal.Location.Y + 16)
+            sb_labelCompressed.Text = "Compressed"
 
             compRatioLabel.Text = Math.Round _
                 (oldFolderSize / newFolderSize, 1)
@@ -824,7 +863,7 @@ Public Class Compact
 
             spaceSavedLabel.Text = GetOutputSize _
                 ((oldFolderSize - newFolderSize), True) + " Saved"
-
+            sb_SpaceSavedLabel.Text = spaceSavedLabel.Text
             dirChosenLabel.Text = "❯ In " + dirLabelResults
 
             labelFilesCompressed.Text =
@@ -834,8 +873,8 @@ Public Class Compact
 
                 compressedSizeVisual.Width = CInt(368 / compRatioLabel.Text)
                 Callpercent = newFolderSize / oldFolderSize * 100
-                sb_compressedSizeVisual.Width = CInt(301 / compRatioLabel.Text)
-
+                sb_compressedSizeVisual.Height = CInt(113 / compRatioLabel.Text)
+                sb_compressedSizeVisual.Location = New Point(sb_compressedSizeVisual.Location.X, 5 + 113 - sb_compressedSizeVisual.Height)
                 'sb_Panel.Refresh()
 
                 If hasqueryfinished = 1 Then
@@ -846,13 +885,13 @@ Public Class Compact
 
             Catch ex As System.OverflowException
                 compressedSizeVisual.Width = 368
-                sb_compressedSizeVisual.Width = 301
+                sb_compressedSizeVisual.Height = 113
             End Try
 
             If isQueryCalledByCompact = 0 Then
 
                 CompResultsPanel.Visible = True
-
+                sb_ResultsPanel.Visible = True
 
             ElseIf isQueryCalledByCompact = 1 Then
 
@@ -860,7 +899,7 @@ Public Class Compact
 
                 buttonRevert.Visible = False
                 CompResultsPanel.Visible = False
-
+                sb_ResultsPanel.Visible = False
 
             End If
 
@@ -956,13 +995,13 @@ Public Class Compact
 
 
 
-    Public Function GetOutputSize(ByVal inputsize As Long, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
+    Public Function GetOutputSize(ByVal inputsize As Decimal, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
         Dim sizeType As String = ""
         If inputsize < 1024 Then
             sizeType = " B"
         Else
-            If inputsize < (1024 ^ 3) * 9 Then
-                If inputsize < (1024 ^ 2) * 9 Then
+            If inputsize < (1024 ^ 3) Then
+                If inputsize < (1024 ^ 2) Then
                     sizeType = " KB"
                     inputsize = inputsize / 1024
                 Else
@@ -976,9 +1015,9 @@ Public Class Compact
         End If
 
         If showSizeType = True Then
-            Return inputsize & sizeType
+            Return Math.Round(inputsize, 1) & sizeType
         Else
-            Return inputsize
+            Return Math.Round(inputsize, 1)
         End If
 
     End Function
@@ -1271,13 +1310,17 @@ Public Class Compact
     Private Sub sb_Panel_Paint(sender As Object, e As PaintEventArgs) Handles sb_Panel.Paint
         Dim p As New Pen(Brushes.DimGray, 1)
         e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias
-        e.Graphics.DrawLine(p, New Point(40, 180), New Point(313, 180))
-        e.Graphics.DrawLine(p, New Point(40, 285), New Point(313, 285))
+        'e.Graphics.DrawLine(p, New Point(40, 180), New Point(313, 180))
+
 
 
         DrawProgress(e.Graphics, New Rectangle(116, 300, 121, 121), Callpercent)
 
     End Sub
+
+
+
+
 
     Dim Callpercent As Single
 
@@ -1306,31 +1349,6 @@ Public Class Compact
         'End Using
     End Sub
 
-
-
-
-    Private Sub buttonCompress_EnabledChanged(sender As Object, e As EventArgs) Handles buttonCompress.EnabledChanged
-        Dim btn = DirectCast(sender, Button)
-        btn.ForeColor = If(btn.Enabled, Color.White, Color.Silver)
-    End Sub
-
-    Private Sub buttonCompress_Paint(sender As Object, e As PaintEventArgs) Handles buttonCompress.Paint
-        Dim btn = DirectCast(sender, Button)
-        Dim drawBrush = New SolidBrush(btn.ForeColor)
-        Dim sf = New StringFormat() With {
-            .Alignment = StringAlignment.Center,
-            .LineAlignment = StringAlignment.Center
-        }
-        buttonCompress.Text = String.Empty
-        e.Graphics.DrawString("Compress Folder", btn.Font, drawBrush, e.ClipRectangle, sf)
-        drawBrush.Dispose()
-        sf.Dispose()
-    End Sub
-
-
-
-
-
 #Region "Move And Resize"
 
     '//////////////////////////MOVE  AND  RESIZE  FORM//////////////////////////////////'
@@ -1356,6 +1374,7 @@ Public Class Compact
             MoveForm()
         End If
     End Sub
+
 
 
 
@@ -1486,6 +1505,43 @@ Public Class Compact
     '    End If
     'End Sub
 #End Region
+
+
+    Private Sub buttonCompress_EnabledChanged(sender As Object, e As EventArgs) Handles buttonCompress.EnabledChanged
+        Dim btn = DirectCast(sender, Button)
+        btn.ForeColor = If(btn.Enabled, Color.White, Color.Silver)
+    End Sub
+
+    Private Sub buttonCompress_Paint(sender As Object, e As PaintEventArgs) Handles buttonCompress.Paint
+        Dim btn = DirectCast(sender, Button)
+        Dim drawBrush = New SolidBrush(btn.ForeColor)
+        Dim sf = New StringFormat() With {
+            .Alignment = StringAlignment.Center,
+            .LineAlignment = StringAlignment.Center
+        }
+        buttonCompress.Text = String.Empty
+        e.Graphics.DrawString("Compress Folder", btn.Font, drawBrush, e.ClipRectangle, sf)
+        drawBrush.Dispose()
+        sf.Dispose()
+    End Sub
+
+
+    Private Sub sb_AnalysisPanel_Paint(sender As Object, e As PaintEventArgs) Handles sb_AnalysisPanel.Paint
+        Dim p As New Pen(Brushes.DimGray, 1)
+        e.Graphics.DrawLine(p, New Point(30, 0), New Point(303, 0))
+    End Sub
+
+    Private Sub sb_ResultsPanel_Paint(sender As Object, e As PaintEventArgs) Handles sb_ResultsPanel.Paint
+        Dim p As New Pen(Brushes.DimGray, 1)
+        Dim dotted As New Pen(Brushes.ForestGreen, 1)
+        dotted.DashPattern = New Single() {3, 3, 3, 3}
+        'e.Graphics.DrawLine(p, New Point(30, sb_ResultsPanel.Height - 1), New Point(303, sb_ResultsPanel.Height - 1))
+
+        e.Graphics.DrawRectangle(dotted, 226, 5, 39, 112)
+
+    End Sub
+
+
 
 
 
