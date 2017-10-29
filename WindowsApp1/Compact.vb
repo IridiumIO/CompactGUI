@@ -354,9 +354,12 @@ Public Class Compact
                     If sb_progressbar.Width >= 302 Then                                                 'Avoids a /r/softwaregore scenario
                         sb_progressbar.Width = 301
                         progresspercent.Text = "100 %"
+                        topbar_progress.Width = topbar_dirchooserContainer.Width
                     Else
                         sb_progressbar.Width = Math.Round _
                             ((fileCountProgress / fileCountTotal * 301), 0)
+                        topbar_progress.Width = Math.Round _
+                            ((fileCountProgress / fileCountTotal * topbar_dirchooserContainer.Width), 0)
                         progresspercent.Text = Math.Round _
                             ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
@@ -371,9 +374,12 @@ Public Class Compact
                     If sb_progressbar.Width >= 302 Then                                                 'Avoids a /r/softwaregore scenario
                         sb_progressbar.Width = 301
                         progresspercent.Text = "100 %"
+                        topbar_progress.Width = 603
                     Else
                         sb_progressbar.Width = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 301), 0)
+                        topbar_progress.Width = Math.Round _
+                            ((QdirCountProgress / dirCountTotal * topbar_dirchooserContainer.Width), 0)
                         progresspercent.Text = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                  'Generates an estimate of progress for the Query command.
                     End If
@@ -418,8 +424,9 @@ Public Class Compact
             buttonRevert.Visible = False
             sb_progresslabel.Text = "Folder Uncompressed."
             sb_compressedSizeVisual.Height = 113
-            wkPostSizeVal = wkPreSizeVal
-            wkPostSizeUnit = wkPreSizeUnit
+            wkPostSizeVal.Text = "?"
+            wkPostSizeUnit.Visible = False
+            sb_labelCompressed.Text = "Estimated Compressed"
             sb_ResultsPanel.Visible = False
             returnArrow.Visible = True
 
@@ -556,8 +563,17 @@ Public Class Compact
                         .Font = New Font(topbar_title.Font.Name, 15.75, FontStyle.Regular)
                         .Location = New Point(59, 18)
                     End With
-
+                    returnArrow.Visible = False
+                    buttonRevert.Visible = False
+                    CompResultsPanel.Visible = False
+                    checkShutdownOnCompletion.Checked = False
                     TabControl1.SelectedTab = InputPage
+                    dirCountProgress = 0
+                    fileCountProgress = 0
+                    isQueryCalledByCompact = 0
+                    MyProcess.Kill()
+                    sb_AnalysisPanel.Visible = False
+
 
                 Catch ex As Exception
                 End Try
@@ -693,7 +709,7 @@ Public Class Compact
         CompResultsPanel.Visible = False
 
         buttonRevert.Visible = False
-        sb_progresslabel.Text = "Reverting Changes, Please Wait"
+        sb_progresslabel.Text = "Uncompressing..."
 
         Try
             RunCompact("uncompact")
@@ -1314,7 +1330,7 @@ Public Class Compact
 
 
 
-        DrawProgress(e.Graphics, New Rectangle(116, 300, 121, 121), Callpercent)
+
 
     End Sub
 
@@ -1322,32 +1338,6 @@ Public Class Compact
 
 
 
-    Dim Callpercent As Single
-
-    Private Sub DrawProgress(g As Graphics, rect As Rectangle, percentage As Single)
-        'work out the angles for each arc
-        Dim progressAngle = CInt(180 / 100 * (percentage))
-        Dim remainderAngle = 180 - progressAngle
-
-        'create pens to use for the arcs
-        Using progressPen As New Pen(Color.FromArgb(255, 39, 174, 96), 17), remainderPen As New Pen(Color.FromArgb(255, 211, 84, 0), 17)
-            'set the smoothing to high quality for better output
-            'g.SmoothingMode = Drawing2D.SmoothingMode.HighSpeed
-            'draw the blue and white arcs
-
-            g.DrawArc(progressPen, rect, -180, progressAngle)
-            g.DrawArc(remainderPen, rect, progressAngle - 180, remainderAngle)
-        End Using
-
-        'draw the text in the centre by working out how big it is and adjusting the co-ordinates accordingly
-        'Using fnt As New Font(Me.Font.FontFamily, 14)
-        '    Dim text As String = Math.Round(percentage, 1) + "%"
-        '    Dim textSize = g.MeasureString(text, fnt)
-        '    Dim textPoint As New Point(CInt(rect.Left + (rect.Width / 2) - (textSize.Width / 2)), CInt(rect.Top + (rect.Height / 2) - (textSize.Height / 2)))
-        '    'now we have all the values draw the text
-        '    g.DrawString(text, fnt, Brushes.Black, textPoint)
-        'End Using
-    End Sub
 
 #Region "Move And Resize"
 
@@ -1535,14 +1525,71 @@ Public Class Compact
         Dim p As New Pen(Brushes.DimGray, 1)
         Dim dotted As New Pen(Brushes.ForestGreen, 1)
         dotted.DashPattern = New Single() {3, 3, 3, 3}
-        'e.Graphics.DrawLine(p, New Point(30, sb_ResultsPanel.Height - 1), New Point(303, sb_ResultsPanel.Height - 1))
+
 
         e.Graphics.DrawRectangle(dotted, 226, 5, 39, 112)
 
     End Sub
 
+    Private Sub results_arc_Paint(sender As Object, e As PaintEventArgs) Handles results_arc.Paint
+        Callpercent = (1 - (1 / CDec(ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO)))) * 100
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
+        DrawProgress(e.Graphics, New Rectangle(21, 21, 203, 203), Callpercent, ColorTranslator.FromHtml("#3B668E"), ColorTranslator.FromHtml("#9B9B9B"))
+
+    End Sub
+
+
+
+    Dim Callpercent As Single
+
+    Private Sub DrawProgress(g As Graphics, rect As Rectangle, percentage As Single, percColor As Color, remColor As Color)
+        'work out the angles for each arc
+        Dim progressAngle = CInt(183 / 100 * (percentage))
+        Dim remainderAngle = 185 - progressAngle
+
+        'create pens to use for the arcs
+        Using progressPen As New Pen(percColor, 41), remainderPen As New Pen(remColor, 41)
+            'set the smoothing to high quality for better output
+            'draw the blue and white arcs
+
+            g.DrawArc(progressPen, rect, -183, progressAngle)
+            g.DrawArc(remainderPen, rect, progressAngle - 184, remainderAngle)
+        End Using
+
+        'draw the text in the centre by working out how big it is and adjusting the co-ordinates accordingly
+        Dim fb = New SolidBrush(Color.FromArgb(48, 67, 84))
+        Using fnt As New Font("Segoe UI Light", 22)
+
+            Dim perc As String = Math.Round(percentage, 0)
+            Dim percSize = g.MeasureString(perc, fnt)
+            Dim percPoint As New Point(CInt(rect.Left + (rect.Width / 2) - (percSize.Width / 2)), CInt(rect.Top + (rect.Height / 2) - (percSize.Height * 0.85)))
+            'now we have all the values draw the text
+            g.DrawString(perc, fnt, fb, percPoint)
+            Using fnt2 As New Font("Segoe UI Light", 9)
+                Dim sign As String = "%"
+                Dim signPoint As New Point(percPoint.X + percSize.Width - 5, percPoint.Y + 10)
+                'now we have all the values draw the text
+                g.DrawString(sign, fnt2, fb, signPoint)
+            End Using
+            Using fnt3 As New Font("Segoe UI Light", 9)
+                Dim lbl As String = "Size Reduction"
+                Dim lblSize = g.MeasureString(lbl, fnt3)
+                Dim lblPoint As New Point(CInt(rect.Left + (rect.Width / 2) - (lblSize.Width / 2)), CInt(rect.Top + (rect.Height / 2) - (percSize.Height * 1.25)))
+                'now we have all the values draw the text
+                g.DrawString(lbl, fnt3, fb, lblPoint)
+            End Using
+        End Using
 
 
 
 
+
+
+    End Sub
+
+
+    Private Sub CompResultsPanel_Paint(sender As Object, e As PaintEventArgs) Handles CompResultsPanel.Paint
+        Dim p As New Pen(Brushes.Silver, 1)
+        e.Graphics.DrawLine(p, New Point(12, CompResultsPanel.Height - 1), New Point(panel_console.Width - 12, CompResultsPanel.Height - 1))
+    End Sub
 End Class
