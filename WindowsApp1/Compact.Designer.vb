@@ -92,7 +92,6 @@ Partial Class Compact
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
-        Me.FadeWikiInfo = New System.Windows.Forms.Timer(Me.components)
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
@@ -911,10 +910,6 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
-        'FadeWikiInfo
-        '
-        Me.FadeWikiInfo.Interval = 10
-        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1023,7 +1018,6 @@ Partial Class Compact
     Friend WithEvents submitToWiki As Label
     Friend WithEvents saveconlog As Button
     Friend WithEvents seecompest As Label
-    Friend WithEvents FadeWikiInfo As Timer
     Friend WithEvents comboChooseShutdown As ComboBox
     Friend WithEvents checkShutdownOnCompletion As CheckBox
 End Class

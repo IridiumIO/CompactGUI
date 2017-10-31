@@ -26,8 +26,17 @@ Public Class WikiHandler
             Console.WriteLine("Getting List")
             Dim wc As New WebClient
             wc.Encoding = Encoding.UTF8
-            Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
-            InputFromGitHub = Source.TrimEnd().Split(vbLf)
+            Try
+                Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
+                InputFromGitHub = Source.TrimEnd().Split(vbLf)
+            Catch ex As WebException
+                Form2.lblCompactIssues.Text = "! No Internet Connection"
+                Form2.lblCompactIssues.Visible = True
+                Form2.wkPostSizeVal.Text = "?"
+                Form2.wkPostSizeUnit.Text = ""
+                Form2.wkPostSizeUnit.Location = New Point(Form2.wkPostSizeVal.Location.X + Form2.wkPostSizeVal.Size.Width, Form2.wkPostSizeVal.Location.Y)
+            End Try
+
         End If
 
 
@@ -113,6 +122,7 @@ Public Class WikiHandler
             ratioavg += Decimal.Parse(InputFromGitHub(n).Split("|")(6))
             If InputFromGitHub(n).Split("|")(7).Contains("*") Then
                 Form2.lblCompactIssues.Visible = True
+                Form2.lblCompactIssues.Text = "! Game has issues"
             Else
                 Form2.lblCompactIssues.Visible = False
             End If
@@ -126,6 +136,7 @@ Public Class WikiHandler
             Form2.wkPostSizeVal.Text = Math.Round(folderSize * ratioavg, 1)
             Form2.wkPostSizeUnit.Text = suffix
             Form2.wkPostSizeUnit.Location = New Point(Form2.wkPostSizeVal.Location.X + Form2.wkPostSizeVal.Size.Width - 10, Form2.wkPostSizeVal.Location.Y + 10)
+            Form2.wkPostSizeUnit.Visible = True
         Catch ex As System.DivideByZeroException
             'Compact.seecompest.Text = "Compression Estimate: Unknown"
             Form2.wkPostSizeVal.Text = "?"
@@ -262,9 +273,8 @@ Public Class WikiHandler
             Form2.SetBounds(screenpos.X, screenpos.Y, Form2.GamesTable.Width + 35, Form2.GamesTable.Height + 200)
         End If
 
-        Form2.Show()
+        FadeTransition.FadeForm(Form2, 0, 0.96, 200)
 
-        Compact.FadeWikiInfo.Start()
 
     End Sub
 
