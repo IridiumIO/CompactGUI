@@ -474,7 +474,7 @@ Public Class Compact
 
 
 
-    Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked
+    Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
 
         sb_AnalysisPanel.Visible = False
         overrideCompressFolderButton = 0
