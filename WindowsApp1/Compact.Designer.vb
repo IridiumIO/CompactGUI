@@ -519,7 +519,7 @@ Partial Class Compact
         '
         'sb_progressbar
         '
-        Me.sb_progressbar.BackColor = System.Drawing.Color.Green
+        Me.sb_progressbar.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(96, Byte), Integer))
         Me.sb_progressbar.Location = New System.Drawing.Point(19, 55)
         Me.sb_progressbar.Name = "sb_progressbar"
         Me.sb_progressbar.Size = New System.Drawing.Size(301, 14)
@@ -639,6 +639,7 @@ Partial Class Compact
         Me.sb_FolderName.ForeColor = System.Drawing.Color.White
         Me.sb_FolderName.Location = New System.Drawing.Point(0, 27)
         Me.sb_FolderName.Name = "sb_FolderName"
+        Me.sb_FolderName.Padding = New System.Windows.Forms.Padding(10, 0, 10, 0)
         Me.sb_FolderName.Size = New System.Drawing.Size(354, 30)
         Me.sb_FolderName.TabIndex = 6
         Me.sb_FolderName.Text = "Portal 2"
@@ -1098,7 +1099,7 @@ Partial Class Compact
         'checkShowConOut
         '
         Me.checkShowConOut.AutoSize = True
-        Me.checkShowConOut.ForeColor = System.Drawing.Color.DimGray
+        Me.checkShowConOut.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.checkShowConOut.Location = New System.Drawing.Point(13, 17)
         Me.checkShowConOut.Name = "checkShowConOut"
         Me.checkShowConOut.Size = New System.Drawing.Size(129, 17)
@@ -1113,7 +1114,7 @@ Partial Class Compact
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.conOut.BackColor = System.Drawing.Color.White
         Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.conOut.ForeColor = System.Drawing.Color.DimGray
+        Me.conOut.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.conOut.FormattingEnabled = True
         Me.conOut.Location = New System.Drawing.Point(13, 39)
         Me.conOut.Name = "conOut"

@@ -1529,7 +1529,7 @@ Public Class Compact
         dotted.DashPattern = New Single() {3, 3, 3, 3}
 
 
-        e.Graphics.DrawRectangle(dotted, 226, 5, 39, 112)
+        e.Graphics.DrawRectangle(dotted, 225, 5, 39, 112)
 
     End Sub
 

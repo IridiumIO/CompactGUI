@@ -85,8 +85,9 @@ Partial Class Info
         'semVersion
         '
         Me.semVersion.AutoSize = True
+        Me.semVersion.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.semVersion.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.semVersion.ForeColor = System.Drawing.Color.DarkGray
+        Me.semVersion.ForeColor = System.Drawing.Color.Gainsboro
         Me.semVersion.Location = New System.Drawing.Point(3, 0)
         Me.semVersion.Name = "semVersion"
         Me.semVersion.Size = New System.Drawing.Size(57, 21)
@@ -96,7 +97,9 @@ Partial Class Info
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.SystemColors.MenuHighlight
         Me.LinkLabel1.Location = New System.Drawing.Point(66, 5)
         Me.LinkLabel1.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
@@ -115,7 +118,7 @@ Partial Class Info
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.TableLayoutPanel1.Controls.Add(Me.semVersion, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.LinkLabel1, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(152, 20)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(162, 23)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -175,9 +178,10 @@ Partial Class Info
         'Label4
         '
         Me.Label4.AutoSize = True
+        Me.Label4.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 16.0!)
-        Me.Label4.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label4.Location = New System.Drawing.Point(16, 13)
+        Me.Label4.ForeColor = System.Drawing.Color.White
+        Me.Label4.Location = New System.Drawing.Point(24, 15)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(136, 30)
         Me.Label4.TabIndex = 8
@@ -185,17 +189,22 @@ Partial Class Info
         '
         'Panel3
         '
+        Me.Panel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.Panel3.Controls.Add(Me.Label4)
         Me.Panel3.Controls.Add(Me.Label5)
         Me.Panel3.Controls.Add(Me.LinkLabel2)
-        Me.Panel3.Location = New System.Drawing.Point(-4, 59)
+        Me.Panel3.Controls.Add(Me.TableLayoutPanel1)
+        Me.Panel3.Location = New System.Drawing.Point(-4, -1)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(599, 44)
+        Me.Panel3.Size = New System.Drawing.Size(599, 120)
         Me.Panel3.TabIndex = 9
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(40, 13)
+        Me.Label5.ForeColor = System.Drawing.Color.White
+        Me.Label5.Location = New System.Drawing.Point(26, 73)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(185, 13)
         Me.Label5.TabIndex = 6
@@ -205,14 +214,15 @@ Partial Class Info
         '
         Me.LinkLabel2.AutoSize = True
         Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.SystemColors.MenuHighlight
-        Me.LinkLabel2.Location = New System.Drawing.Point(222, 13)
+        Me.LinkLabel2.Location = New System.Drawing.Point(213, 73)
         Me.LinkLabel2.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
         Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(43, 13)
+        Me.LinkLabel2.Size = New System.Drawing.Size(55, 13)
         Me.LinkLabel2.TabIndex = 5
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "Github"
+        Me.LinkLabel2.Text = "❯  Github"
         '
         'Info
         '
@@ -220,11 +230,10 @@ Partial Class Info
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(589, 371)
-        Me.Controls.Add(Me.Panel3)
-        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.Controls.Add(Me.Panel3)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(400, 300)
         Me.Name = "Info"
@@ -237,7 +246,6 @@ Partial Class Info
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
