@@ -2,7 +2,7 @@
   
 ----
 
-This tool is an open-source standalone visual interface to make using the Windows 10 compact.exe function more available to more people. 
+This tool is an open-source standalone visual interface to make using the Windows 10 compact.exe function more available to more people, allowing game and program installations to be compressed with minimal or no performance loss. 
 
 The compression used by compact.exe is similar to the built-in NTFS compression in that it is transparent. Compressed files and programs can still be accessed as if nothing has changed and show up in Explorer as they normally would — they'll just be decompressed on the fly at runtime. However, the newer algorithms used by Compact are much more efficient. 
 
@@ -32,11 +32,12 @@ For most modern computers there will be no (or very little) performance loss. Th
  - Analyze the status of existing folders
  - Integration into Explorer context menus for easier use.
  - Option to shutdown computer on completion
+ - Integration with the online [database](https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games) for analysis and compression estimates
 
 ## Screenshots
-<p align="left"><img src="https://i.imgur.com/f8yzhw2.png" alt="compactGUI"></p>
-<p align="left"><img src="https://i.imgur.com/4yhwOGm.png" alt="compactGUI"></p>
-<p align="left"><img src="https://i.imgur.com/7ip5SAA.png" alt="compactGUI"></p>
+<p align="left"><img src="https://i.imgur.com/3auMAtO.png" alt="compactGUI"></p>
+
+<p align="left"><img src="https://i.imgur.com/93fk8t0.png" alt="compactGUI"></p>
 
 ## Background
 Windows 10 includes a little-known but very useful tool called Compact that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU, this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
