@@ -136,7 +136,7 @@ Public Class WikiHandler
             Compact.wkPostSizeVal.Text = Math.Round(folderSize * ratioavg, 1)
             Compact.wkPostSizeUnit.Text = suffix
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
-            Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), Compact.wkPostSizeVal.Location.Y + 16)
+            Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), Compact.wkPostSizeVal.Location.Y + 16)
             Compact.wkPostSizeUnit.Visible = True
 
         Catch ex As System.DivideByZeroException
@@ -144,7 +144,7 @@ Public Class WikiHandler
             Compact.wkPostSizeVal.Text = "?"
             Compact.wkPostSizeUnit.Text = ""
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
-            Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), Compact.wkPostSizeVal.Location.Y + 16)
+            Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), Compact.wkPostSizeVal.Location.Y + 16)
         End Try
 
         If WikiPopup.GamesTable.RowCount > 1 Then
@@ -256,13 +256,13 @@ Public Class WikiHandler
             Compact.wkPreSizeVal.Text = Math.Round(folderSize, 1)
             Compact.wkPreSizeUnit.Text = suffix
             Dim wkPreSizeVal_Len = TextRenderer.MeasureText(Compact.wkPreSizeVal.Text, Compact.wkPreSizeVal.Font)
-            Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 4), Compact.wkPreSizeVal.Location.Y + 16)
+            Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 8), Compact.wkPreSizeVal.Location.Y + 16)
         Catch ex As System.DivideByZeroException
 
             Compact.wkPreSizeVal.Text = "?"
             Compact.wkPreSizeUnit.Text = ""
             Dim wkPreSizeVal_Len = TextRenderer.MeasureText(Compact.wkPreSizeVal.Text, Compact.wkPreSizeVal.Font)
-            Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 4), Compact.wkPreSizeVal.Location.Y + 16)
+            Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 8), Compact.wkPreSizeVal.Location.Y + 16)
         End Try
 
 

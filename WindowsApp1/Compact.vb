@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Dim version = "2.0.0α8"
+    Dim version = "2.0.0β1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -484,7 +484,6 @@ Public Class Compact
         folderChoice.ShowDialog()
         SelectFolder(folderChoice.SelectedPath, "button")
         folderChoice.Dispose()
-
     End Sub
 
     Dim dirLabelResults As String = ""
@@ -554,7 +553,7 @@ Public Class Compact
                     fileCountTotal = numberOfFiles
                     sb_ResultsPanel.Visible = False
 
-                    UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, 603, 100)
+                    UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 44, 100)
                     WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
 
                     With topbar_title
@@ -871,7 +870,7 @@ Public Class Compact
             wkPostSizeVal.Text = PrintOutSize.Split(" ")(0)
             wkPostSizeUnit.Text = suffix
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(wkPostSizeVal.Text, wkPostSizeVal.Font)
-            wkPostSizeUnit.Location = New Point(wkPostSizeVal.Location.X + (wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), wkPostSizeVal.Location.Y + 16)
+            wkPostSizeUnit.Location = New Point(wkPostSizeVal.Location.X + (wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), wkPostSizeVal.Location.Y + 16)
             sb_labelCompressed.Text = "Compressed"
 
             compRatioLabel.Text = Math.Round _

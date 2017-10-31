@@ -349,7 +349,7 @@ Partial Class Compact
         Me.Label14.AutoSize = True
         Me.Label14.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.Label14.Location = New System.Drawing.Point(173, 68)
+        Me.Label14.Location = New System.Drawing.Point(169, 66)
         Me.Label14.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(22, 17)
@@ -447,7 +447,7 @@ Partial Class Compact
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.Silver
-        Me.Label4.Location = New System.Drawing.Point(202, 126)
+        Me.Label4.Location = New System.Drawing.Point(201, 126)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(93, 13)
         Me.Label4.TabIndex = 26
@@ -460,7 +460,7 @@ Partial Class Compact
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.Color.Silver
-        Me.Label3.Location = New System.Drawing.Point(48, 126)
+        Me.Label3.Location = New System.Drawing.Point(50, 126)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(72, 13)
         Me.Label3.TabIndex = 26
@@ -470,7 +470,7 @@ Partial Class Compact
         'sb_compressedSizeVisual
         '
         Me.sb_compressedSizeVisual.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(96, Byte), Integer))
-        Me.sb_compressedSizeVisual.Location = New System.Drawing.Point(226, 5)
+        Me.sb_compressedSizeVisual.Location = New System.Drawing.Point(225, 5)
         Me.sb_compressedSizeVisual.Name = "sb_compressedSizeVisual"
         Me.sb_compressedSizeVisual.Size = New System.Drawing.Size(40, 113)
         Me.sb_compressedSizeVisual.TabIndex = 0
@@ -478,7 +478,7 @@ Partial Class Compact
         'Panel6
         '
         Me.Panel6.BackColor = System.Drawing.Color.FromArgb(CType(CType(211, Byte), Integer), CType(CType(84, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.Panel6.Location = New System.Drawing.Point(64, 5)
+        Me.Panel6.Location = New System.Drawing.Point(67, 5)
         Me.Panel6.Name = "Panel6"
         Me.Panel6.Size = New System.Drawing.Size(40, 113)
         Me.Panel6.TabIndex = 0
@@ -570,7 +570,7 @@ Partial Class Compact
         Me.wkPostSizeVal.BackColor = System.Drawing.Color.Transparent
         Me.wkPostSizeVal.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.wkPostSizeVal.ForeColor = System.Drawing.Color.White
-        Me.wkPostSizeVal.Location = New System.Drawing.Point(181, 112)
+        Me.wkPostSizeVal.Location = New System.Drawing.Point(184, 112)
         Me.wkPostSizeVal.Name = "wkPostSizeVal"
         Me.wkPostSizeVal.Size = New System.Drawing.Size(143, 50)
         Me.wkPostSizeVal.TabIndex = 6
@@ -592,15 +592,15 @@ Partial Class Compact
         'TableLayoutPanel3
         '
         Me.TableLayoutPanel3.ColumnCount = 3
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 87.73006!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.26994!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.Label19, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.sb_labelCompressed, 2, 0)
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(23, 92)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31.50685!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(307, 20)
         Me.TableLayoutPanel3.TabIndex = 7
         '
@@ -610,9 +610,10 @@ Partial Class Compact
         Me.Label19.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label19.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
-        Me.Label19.Location = New System.Drawing.Point(3, 0)
+        Me.Label19.Location = New System.Drawing.Point(0, 0)
+        Me.Label19.Margin = New System.Windows.Forms.Padding(0)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(126, 20)
+        Me.Label19.Size = New System.Drawing.Size(149, 20)
         Me.Label19.TabIndex = 8
         Me.Label19.Text = "Uncompressed"
         Me.Label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -623,9 +624,10 @@ Partial Class Compact
         Me.sb_labelCompressed.Dock = System.Windows.Forms.DockStyle.Fill
         Me.sb_labelCompressed.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.sb_labelCompressed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
-        Me.sb_labelCompressed.Location = New System.Drawing.Point(153, 0)
+        Me.sb_labelCompressed.Location = New System.Drawing.Point(157, 0)
+        Me.sb_labelCompressed.Margin = New System.Windows.Forms.Padding(0)
         Me.sb_labelCompressed.Name = "sb_labelCompressed"
-        Me.sb_labelCompressed.Size = New System.Drawing.Size(151, 20)
+        Me.sb_labelCompressed.Size = New System.Drawing.Size(150, 20)
         Me.sb_labelCompressed.TabIndex = 8
         Me.sb_labelCompressed.Text = "Estimated Compressed"
         Me.sb_labelCompressed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -657,9 +659,9 @@ Partial Class Compact
         Me.wkPreSizeVal.BackColor = System.Drawing.Color.Transparent
         Me.wkPreSizeVal.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.wkPreSizeVal.ForeColor = System.Drawing.Color.White
-        Me.wkPreSizeVal.Location = New System.Drawing.Point(27, 112)
+        Me.wkPreSizeVal.Location = New System.Drawing.Point(23, 112)
         Me.wkPreSizeVal.Name = "wkPreSizeVal"
-        Me.wkPreSizeVal.Size = New System.Drawing.Size(127, 50)
+        Me.wkPreSizeVal.Size = New System.Drawing.Size(149, 50)
         Me.wkPreSizeVal.TabIndex = 6
         Me.wkPreSizeVal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -710,7 +712,7 @@ Partial Class Compact
         Me.FlowLayoutPanel1.Controls.Add(Me.Panel3)
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(44, 21)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(574, 210)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(574, 216)
         Me.FlowLayoutPanel1.TabIndex = 22
         '
         'Panel4
@@ -732,9 +734,9 @@ Partial Class Compact
         Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.Label2.Location = New System.Drawing.Point(12, 7)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(230, 20)
+        Me.Label2.Size = New System.Drawing.Size(210, 20)
         Me.Label2.TabIndex = 18
-        Me.Label2.Text = "❯   Select Compression Algorithm"
+        Me.Label2.Text = "Select Compression Algorithm"
         '
         'compressX4
         '
@@ -835,9 +837,9 @@ Partial Class Compact
         Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.Label8.Location = New System.Drawing.Point(12, 7)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(219, 20)
+        Me.Label8.Size = New System.Drawing.Size(199, 20)
         Me.Label8.TabIndex = 18
-        Me.Label8.Text = "❯   Select Additional Arguments"
+        Me.Label8.Text = "Select Additional Arguments"
         '
         'checkForceCompression
         '
@@ -1264,7 +1266,7 @@ Partial Class Compact
         Me.ForeColor = System.Drawing.Color.DimGray
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(1002, 652)
+        Me.MinimumSize = New System.Drawing.Size(600, 652)
         Me.Name = "Compact"
         Me.panel_topBar.ResumeLayout(False)
         Me.panel_topBar.PerformLayout()
