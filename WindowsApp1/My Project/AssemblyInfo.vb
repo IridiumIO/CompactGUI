@@ -9,8 +9,8 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Compact GUI")>
-<Assembly: AssemblyDescription("GUI for the Windows Compact.exe cmdlet")>
+<Assembly: AssemblyTitle("CompactGUI²")>
+<Assembly: AssemblyDescription("GUI for the Windows 10 Compact.exe function")>
 <Assembly: AssemblyCompany("Fateful Productions")>
 <Assembly: AssemblyProduct("CompactGUI")>
 <Assembly: AssemblyCopyright("Copyright © 2017")>
@@ -32,6 +32,6 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.7.0.0")>
-<Assembly: AssemblyFileVersion("1.7.0.0")>
+<Assembly: AssemblyVersion("2.0.0.0001")>
+<Assembly: AssemblyFileVersion("2.0.0.0001")>
 <Assembly: NeutralResourcesLanguage("en")>

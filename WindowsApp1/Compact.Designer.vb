@@ -28,6 +28,7 @@ Partial Class Compact
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.topbar_title = New System.Windows.Forms.Label()
         Me.panel_topBar = New System.Windows.Forms.Panel()
+        Me.topbar_progress = New System.Windows.Forms.Panel()
         Me.buttonQueryCompact = New System.Windows.Forms.Button()
         Me.topbar_dirchooserContainer = New System.Windows.Forms.Panel()
         Me.dirChooser = New System.Windows.Forms.LinkLabel()
@@ -43,6 +44,7 @@ Partial Class Compact
         Me.Label14 = New System.Windows.Forms.Label()
         Me.panel_MainWindow = New System.Windows.Forms.Panel()
         Me.sb_Panel = New System.Windows.Forms.Panel()
+        Me.buttonRevert = New System.Windows.Forms.Button()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.sb_ResultsPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -100,7 +102,6 @@ Partial Class Compact
         Me.saveconlog = New System.Windows.Forms.Button()
         Me.checkShowConOut = New System.Windows.Forms.CheckBox()
         Me.conOut = New System.Windows.Forms.ListBox()
-        Me.buttonRevert = New System.Windows.Forms.Button()
         Me.returnArrow = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
@@ -113,7 +114,6 @@ Partial Class Compact
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.spaceSavedLabel = New System.Windows.Forms.Label()
-        Me.topbar_progress = New System.Windows.Forms.Panel()
         Me.panel_topBar.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
         CType(Me.topbar_icon, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -148,9 +148,9 @@ Partial Class Compact
         Me.topbar_title.ForeColor = System.Drawing.Color.White
         Me.topbar_title.Location = New System.Drawing.Point(59, 18)
         Me.topbar_title.Name = "topbar_title"
-        Me.topbar_title.Size = New System.Drawing.Size(135, 30)
+        Me.topbar_title.Size = New System.Drawing.Size(136, 30)
         Me.topbar_title.TabIndex = 13
-        Me.topbar_title.Text = "Compact GUI"
+        Me.topbar_title.Text = "CompactGUI²"
         '
         'panel_topBar
         '
@@ -170,6 +170,14 @@ Partial Class Compact
         Me.panel_topBar.Name = "panel_topBar"
         Me.panel_topBar.Size = New System.Drawing.Size(1000, 135)
         Me.panel_topBar.TabIndex = 14
+        '
+        'topbar_progress
+        '
+        Me.topbar_progress.BackColor = System.Drawing.Color.Green
+        Me.topbar_progress.Location = New System.Drawing.Point(44, 114)
+        Me.topbar_progress.Name = "topbar_progress"
+        Me.topbar_progress.Size = New System.Drawing.Size(0, 2)
+        Me.topbar_progress.TabIndex = 16
         '
         'buttonQueryCompact
         '
@@ -387,6 +395,23 @@ Partial Class Compact
         Me.sb_Panel.TabIndex = 15
         Me.sb_Panel.Visible = False
         '
+        'buttonRevert
+        '
+        Me.buttonRevert.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.buttonRevert.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonRevert.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonRevert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonRevert.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.buttonRevert.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.buttonRevert.ForeColor = System.Drawing.Color.White
+        Me.buttonRevert.Location = New System.Drawing.Point(71, 446)
+        Me.buttonRevert.Name = "buttonRevert"
+        Me.buttonRevert.Size = New System.Drawing.Size(208, 39)
+        Me.buttonRevert.TabIndex = 29
+        Me.buttonRevert.Text = "Uncompress"
+        Me.buttonRevert.UseVisualStyleBackColor = False
+        Me.buttonRevert.Visible = False
+        '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 1
@@ -567,7 +592,7 @@ Partial Class Compact
         Me.TableLayoutPanel3.ColumnCount = 3
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 87.73006!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.26994!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 154.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.Label19, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.sb_labelCompressed, 2, 0)
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(23, 92)
@@ -585,7 +610,7 @@ Partial Class Compact
         Me.Label19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
         Me.Label19.Location = New System.Drawing.Point(3, 0)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(128, 20)
+        Me.Label19.Size = New System.Drawing.Size(127, 20)
         Me.Label19.TabIndex = 8
         Me.Label19.Text = "Uncompressed"
         Me.Label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -596,9 +621,9 @@ Partial Class Compact
         Me.sb_labelCompressed.Dock = System.Windows.Forms.DockStyle.Fill
         Me.sb_labelCompressed.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.sb_labelCompressed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
-        Me.sb_labelCompressed.Location = New System.Drawing.Point(155, 0)
+        Me.sb_labelCompressed.Location = New System.Drawing.Point(154, 0)
         Me.sb_labelCompressed.Name = "sb_labelCompressed"
-        Me.sb_labelCompressed.Size = New System.Drawing.Size(149, 20)
+        Me.sb_labelCompressed.Size = New System.Drawing.Size(150, 20)
         Me.sb_labelCompressed.TabIndex = 8
         Me.sb_labelCompressed.Text = "Estimated Compressed"
         Me.sb_labelCompressed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1090,23 +1115,6 @@ Partial Class Compact
         Me.conOut.TabIndex = 30
         Me.conOut.Visible = False
         '
-        'buttonRevert
-        '
-        Me.buttonRevert.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
-        Me.buttonRevert.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonRevert.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonRevert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonRevert.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonRevert.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.buttonRevert.ForeColor = System.Drawing.Color.White
-        Me.buttonRevert.Location = New System.Drawing.Point(71, 446)
-        Me.buttonRevert.Name = "buttonRevert"
-        Me.buttonRevert.Size = New System.Drawing.Size(208, 39)
-        Me.buttonRevert.TabIndex = 29
-        Me.buttonRevert.Text = "Uncompress"
-        Me.buttonRevert.UseVisualStyleBackColor = False
-        Me.buttonRevert.Visible = False
-        '
         'returnArrow
         '
         Me.returnArrow.AutoSize = True
@@ -1239,14 +1247,6 @@ Partial Class Compact
         Me.spaceSavedLabel.Size = New System.Drawing.Size(147, 30)
         Me.spaceSavedLabel.TabIndex = 27
         Me.spaceSavedLabel.Text = "700MB Saved"
-        '
-        'topbar_progress
-        '
-        Me.topbar_progress.BackColor = System.Drawing.Color.Green
-        Me.topbar_progress.Location = New System.Drawing.Point(44, 114)
-        Me.topbar_progress.Name = "topbar_progress"
-        Me.topbar_progress.Size = New System.Drawing.Size(0, 2)
-        Me.topbar_progress.TabIndex = 16
         '
         'Compact
         '
