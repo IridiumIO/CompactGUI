@@ -7,13 +7,10 @@ This tool is an open-source standalone visual interface to make using the Window
 The compression used by compact.exe is similar to the built-in NTFS compression in that it is transparent. Compressed files and programs can still be accessed as if nothing has changed and show up in Explorer as they normally would — they'll just be decompressed on the fly at runtime. However, the newer algorithms used by Compact are much more efficient. 
 
 ## Installation
-~~**Note: Proceed with caution if your system language is *not* English. There are [potential issues](https://github.com/ImminentFate/CompactGUI/wiki/Important-Information#localization-issues-40) that may crop up if your language is set to anything else.~~** 
-
-**A fix for this has been released! Please post an issue if you have trouble with another language** 
 
 <p align = "center">Download the standalone program from <a href="https://github.com/ImminentFate/CompactGUI/releases">GitHub Releases</a></p>
 
-<p align = "center"><a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/badge/downloads-16k_total-brightgreen.svg""></a></p>
+<p align = "center"><a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/badge/downloads-22k_total-brightgreen.svg""></a></p>
 
 ## Uses
 Use this tool to: 
@@ -21,7 +18,7 @@ Use this tool to:
 - Compress game install folders (e.g. Portal 2: 11.8 GB --> 7.88 GB)
 - Compress any other folder on your computer. 
   
-<h3 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-1045-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-47-blue.svg"></a> that have been tested</b></h3>
+<h3 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-1509-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-76-blue.svg"></a> that have been tested</b></h3>
 <p>&nbsp;</p>
 
 
@@ -31,12 +28,15 @@ For most modern computers there will be no (or very little) performance loss. Th
 ## Extra Features
 
  - More accurate reporting than the built-in Windows command-line tool (as there are some bugs with parsing that Microsoft needs to fix)
+ - Get compression estimates for games based on results from the Wiki submissions
  - Analyze the status of existing folders
  - Integration into Explorer context menus for easier use.
+ - Option to shutdown computer on completion
 
 ## Screenshots
-<p align="center"><img src="https://i.imgur.com/BkDnVa4.png" alt="compactGUI"></p>
-<p align="center"><img src="https://i.imgur.com/4fThTKX.png" alt="compactGUI"></p>
+<p align="left"><img src="https://i.imgur.com/f8yzhw2.png" alt="compactGUI"></p>
+<p align="left"><img src="https://i.imgur.com/4yhwOGm.png" alt="compactGUI"></p>
+<p align="left"><img src="https://i.imgur.com/7ip5SAA.png" alt="compactGUI"></p>
 
 ## Background
 Windows 10 includes a little-known but very useful tool called Compact that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU, this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
@@ -55,7 +55,7 @@ The options available are:
 - XPRESS4K: Fastest, but doesn't compress as much
 - XPRESS8K: Decent balance between speed and compression
 - XPRESS16K: Slower, but compresses the most
-- LZX: Okay technically this one compresses the most, BUT it is for compressing folders that are hardly used and are just being stored. Please don't use this on game or program folders.
+- LZX: Technically this one compresses the most, BUT is not recommended for programs and games as the overhead is higher
 
 ### Additional Notes
 
