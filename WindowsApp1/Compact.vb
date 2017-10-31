@@ -19,7 +19,15 @@ Public Class Compact
     End Sub
 
 
+    Protected Overrides ReadOnly Property CreateParams() As System.Windows.Forms.CreateParams
+        Get
+            Const CS_DROPSHADOW = &H20000
+            Dim cp As CreateParams = MyBase.CreateParams
 
+            cp.ClassStyle = cp.ClassStyle Or CS_DROPSHADOW
+            Return cp
+        End Get
+    End Property
 
 
 
