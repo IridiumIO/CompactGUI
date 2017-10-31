@@ -40,7 +40,7 @@ Partial Class Compact
         Me.progressTimer = New System.Windows.Forms.Timer(Me.components)
         Me.seecompest = New System.Windows.Forms.Label()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Label13 = New System.Windows.Forms.Label()
+        Me.help_resultsFilesCompressed = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.panel_MainWindow = New System.Windows.Forms.Panel()
         Me.sb_Panel = New System.Windows.Forms.Panel()
@@ -331,19 +331,18 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
-        'Label13
+        'help_resultsFilesCompressed
         '
-        Me.Label13.AutoSize = True
-        Me.Label13.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.Label13.Location = New System.Drawing.Point(480, 168)
-        Me.Label13.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(22, 17)
-        Me.Label13.TabIndex = 31
-        Me.Label13.Text = "(?)"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.Label13, resources.GetString("Label13.ToolTip"))
-        Me.Label13.Visible = False
+        Me.help_resultsFilesCompressed.AutoSize = True
+        Me.help_resultsFilesCompressed.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.help_resultsFilesCompressed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.help_resultsFilesCompressed.Location = New System.Drawing.Point(480, 168)
+        Me.help_resultsFilesCompressed.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.help_resultsFilesCompressed.Name = "help_resultsFilesCompressed"
+        Me.help_resultsFilesCompressed.Size = New System.Drawing.Size(22, 17)
+        Me.help_resultsFilesCompressed.TabIndex = 31
+        Me.help_resultsFilesCompressed.Text = "(?)"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.help_resultsFilesCompressed, resources.GetString("help_resultsFilesCompressed.ToolTip"))
         '
         'Label14
         '
@@ -376,7 +375,6 @@ Partial Class Compact
         Me.sb_Panel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.sb_Panel.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.sb_Panel.Controls.Add(Me.buttonRevert)
         Me.sb_Panel.Controls.Add(Me.TableLayoutPanel2)
         Me.sb_Panel.Controls.Add(Me.sb_lblGameIssues)
         Me.sb_Panel.Controls.Add(Me.seecompest)
@@ -387,6 +385,8 @@ Partial Class Compact
         Me.sb_Panel.Controls.Add(Me.sb_FolderName)
         Me.sb_Panel.Controls.Add(Me.vis_dropshadowmain2)
         Me.sb_Panel.Controls.Add(Me.wkPreSizeVal)
+        Me.sb_Panel.Controls.Add(Me.buttonCompress)
+        Me.sb_Panel.Controls.Add(Me.buttonRevert)
         Me.sb_Panel.Location = New System.Drawing.Point(647, 135)
         Me.sb_Panel.Margin = New System.Windows.Forms.Padding(0)
         Me.sb_Panel.Name = "sb_Panel"
@@ -408,7 +408,7 @@ Partial Class Compact
         Me.buttonRevert.Name = "buttonRevert"
         Me.buttonRevert.Size = New System.Drawing.Size(208, 39)
         Me.buttonRevert.TabIndex = 29
-        Me.buttonRevert.Text = "Uncompress"
+        Me.buttonRevert.Text = "Uncompress Folder"
         Me.buttonRevert.UseVisualStyleBackColor = False
         Me.buttonRevert.Visible = False
         '
@@ -694,7 +694,6 @@ Partial Class Compact
         '
         Me.InputPage.BackColor = System.Drawing.Color.White
         Me.InputPage.Controls.Add(Me.FlowLayoutPanel1)
-        Me.InputPage.Controls.Add(Me.buttonCompress)
         Me.InputPage.Location = New System.Drawing.Point(4, 22)
         Me.InputPage.Name = "InputPage"
         Me.InputPage.Padding = New System.Windows.Forms.Padding(3)
@@ -880,15 +879,18 @@ Partial Class Compact
         '
         'buttonCompress
         '
-        Me.buttonCompress.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonCompress.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.buttonCompress.Enabled = False
+        Me.buttonCompress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonCompress.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonCompress.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
         Me.buttonCompress.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonCompress.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.buttonCompress.ForeColor = System.Drawing.Color.Silver
-        Me.buttonCompress.Location = New System.Drawing.Point(194, 237)
+        Me.buttonCompress.Location = New System.Drawing.Point(71, 446)
         Me.buttonCompress.Margin = New System.Windows.Forms.Padding(8, 3, 3, 3)
         Me.buttonCompress.Name = "buttonCompress"
-        Me.buttonCompress.Size = New System.Drawing.Size(243, 54)
+        Me.buttonCompress.Size = New System.Drawing.Size(208, 39)
         Me.buttonCompress.TabIndex = 3
         Me.buttonCompress.Text = "Compress Folder"
         Me.buttonCompress.UseVisualStyleBackColor = False
@@ -927,7 +929,7 @@ Partial Class Compact
         'CompResultsPanel
         '
         Me.CompResultsPanel.Controls.Add(Me.results_arc)
-        Me.CompResultsPanel.Controls.Add(Me.Label13)
+        Me.CompResultsPanel.Controls.Add(Me.help_resultsFilesCompressed)
         Me.CompResultsPanel.Controls.Add(Me.submitToWiki)
         Me.CompResultsPanel.Controls.Add(Me.labelFilesCompressed)
         Me.CompResultsPanel.Controls.Add(Me.dirChosenLabel)
@@ -1357,7 +1359,7 @@ Partial Class Compact
     Friend WithEvents submitToWiki As Label
     Friend WithEvents dirChosenLabel As Label
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents Label13 As Label
+    Friend WithEvents help_resultsFilesCompressed As Label
     Friend WithEvents labelFilesCompressed As Label
     Friend WithEvents compressedSizeVisual As Panel
     Friend WithEvents compressedSizeLabel As Label

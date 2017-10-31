@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Dim version = "2.0.0α1"
+    Dim version = "2.0.0α8"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -420,12 +420,12 @@ Public Class Compact
         If uncompressFinished = 1 Then                                                                      'Hides and shows certain UI elements when uncompression is finished 
 
             uncompressFinished = 0
-            buttonCompress.Visible = True
+
             buttonRevert.Visible = False
             sb_progresslabel.Text = "Folder Uncompressed."
             sb_compressedSizeVisual.Height = 113
             wkPostSizeVal.Text = "?"
-            wkPostSizeUnit.Visible = False
+            wkPostSizeUnit.Text = ""
             sb_labelCompressed.Text = "Estimated Compressed"
             sb_ResultsPanel.Visible = False
             returnArrow.Visible = True
@@ -477,6 +477,7 @@ Public Class Compact
     Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
 
         sb_AnalysisPanel.Visible = False
+        buttonCompress.Visible = True
         overrideCompressFolderButton = 0
 
         Dim folderChoice As New VistaFolderBrowserDialog
@@ -605,10 +606,12 @@ Public Class Compact
         conOut.Items.Clear()
         CreateProcess("compact")
         sb_AnalysisPanel.Visible = True
+        buttonCompress.Visible = False
     End Sub
     Private Sub buttonQueryCompact_Click(sender As Object, e As EventArgs) Handles buttonQueryCompact.Click
         conOut.Items.Clear()
         CreateProcess("query")
+        buttonCompress.Visible = False
         sb_AnalysisPanel.Visible = True
     End Sub
 
@@ -749,6 +752,7 @@ Public Class Compact
         isQueryCalledByCompact = 0
         MyProcess.Kill()
         sb_AnalysisPanel.Visible = False
+        buttonCompress.Visible = True
     End Sub
 
 
@@ -883,10 +887,10 @@ Public Class Compact
 
             labelFilesCompressed.Text =
                 numberFilesCompressed.ToString + " / " + fileCountTotal.ToString + " files compressed"
-
+            help_resultsFilesCompressed.Location = New Point(labelFilesCompressed.Location.X + labelFilesCompressed.Width + 2, labelFilesCompressed.Location.Y + 1)
             Try
 
-                compressedSizeVisual.Width = CInt(368 / compRatioLabel.Text)
+                compressedSizeVisual.Width = CInt(320 / compRatioLabel.Text)
                 Callpercent = newFolderSize / oldFolderSize * 100
                 sb_compressedSizeVisual.Height = CInt(113 / compRatioLabel.Text)
                 sb_compressedSizeVisual.Location = New Point(sb_compressedSizeVisual.Location.X, 5 + 113 - sb_compressedSizeVisual.Height)
@@ -899,7 +903,7 @@ Public Class Compact
                 End If
 
             Catch ex As System.OverflowException
-                compressedSizeVisual.Width = 368
+                compressedSizeVisual.Width = 320
                 sb_compressedSizeVisual.Height = 113
             End Try
 
