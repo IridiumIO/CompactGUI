@@ -551,7 +551,6 @@ Public Class Compact
                        (wDString, "*", SearchOption.AllDirectories).Length
 
                     fileCountTotal = numberOfFiles
-                    Form2.lblCompactIssues.Visible = False
                     sb_ResultsPanel.Visible = False
 
                     UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, 603, 100)
@@ -1264,7 +1263,7 @@ Public Class Compact
     Private Sub hideWikiRes(sender As Object, e As EventArgs) Handles MyBase.MouseEnter, TabControl1.MouseEnter,
                                 InputPage.MouseEnter, FlowLayoutPanel1.MouseEnter, Panel3.MouseEnter, Panel4.MouseEnter, seecompest.MouseLeave
         If isAlreadyFading = 0 Then
-            FadeTransition.FadeForm(Form2, 0.96, 0, 200)
+            FadeTransition.FadeForm(WikiPopup, 0.96, 0, 200)
             isAlreadyFading = 1
         End If
 
@@ -1591,5 +1590,9 @@ Public Class Compact
     Private Sub CompResultsPanel_Paint(sender As Object, e As PaintEventArgs) Handles CompResultsPanel.Paint
         Dim p As New Pen(Brushes.Silver, 1)
         e.Graphics.DrawLine(p, New Point(12, CompResultsPanel.Height - 1), New Point(panel_console.Width - 12, CompResultsPanel.Height - 1))
+    End Sub
+
+    Private Sub sb_lblGameIssues_Click(sender As Object, e As EventArgs) Handles sb_lblGameIssues.Click
+        Process.Start("https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games")
     End Sub
 End Class

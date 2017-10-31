@@ -74,10 +74,10 @@ Public Class WikiHandler
 
 
 
-        Form2.GamesTable.Visible = False
+        WikiPopup.GamesTable.Visible = False
 
-        Form2.GamesTable.Controls.Clear()
-        Form2.GamesTable.RowCount = 0
+        WikiPopup.GamesTable.Controls.Clear()
+        WikiPopup.GamesTable.RowCount = 0
 
 
 
@@ -97,16 +97,16 @@ Public Class WikiHandler
         GCompAlg.Text = "Algorithm"
 
 
-        Form2.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
-        Form2.GamesTable.RowCount += 1
-        Form2.GamesTable.Controls.Add(GName, 0, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GSizeU, 1, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GSizeC, 2, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GCompR, 3, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GCompAlg, 4, Form2.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
+        WikiPopup.GamesTable.RowCount += 1
+        WikiPopup.GamesTable.Controls.Add(GName, 0, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GSizeU, 1, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GSizeC, 2, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GCompR, 3, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GCompAlg, 4, WikiPopup.GamesTable.RowCount - 1)
 
 
-        For Each WikiHeader As Label In Form2.GamesTable.Controls
+        For Each WikiHeader As Label In WikiPopup.GamesTable.Controls
             WikiHeader.Font = New Font("Segoe UI", 11, FontStyle.Bold)
 
             WikiHeader.Dock = DockStyle.Right
@@ -147,14 +147,14 @@ Public Class WikiHandler
             Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 4), Compact.wkPostSizeVal.Location.Y + 16)
         End Try
 
-        If Form2.GamesTable.RowCount > 1 Then
+        If WikiPopup.GamesTable.RowCount > 1 Then
             Compact.seecompest.Visible = True
         Else
             Compact.seecompest.Visible = False
         End If
 
 
-        Form2.GamesTable.Visible = True
+        WikiPopup.GamesTable.Visible = True
 
 
 
@@ -194,15 +194,15 @@ Public Class WikiHandler
         GCompAlg.Dock = DockStyle.Right
         GCompAlg.Font = New Font("Segoe UI", 10, FontStyle.Regular)
 
-        Form2.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
-        Form2.GamesTable.RowCount += 1
-        Form2.GamesTable.Controls.Add(GName, 0, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GSizeU, 1, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GSizeC, 2, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GCompR, 3, Form2.GamesTable.RowCount - 1)
-        Form2.GamesTable.Controls.Add(GCompAlg, 4, Form2.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
+        WikiPopup.GamesTable.RowCount += 1
+        WikiPopup.GamesTable.Controls.Add(GName, 0, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GSizeU, 1, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GSizeC, 2, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GCompR, 3, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GCompAlg, 4, WikiPopup.GamesTable.RowCount - 1)
 
-        For Each ConC As Label In Form2.GamesTable.Controls
+        For Each ConC As Label In WikiPopup.GamesTable.Controls
             ConC.AutoSize = True
 
             ConC.Padding = New Padding(2, 4, 0, 0)
@@ -278,21 +278,21 @@ Public Class WikiHandler
 
         Dim screenpos As Point = Compact.PointToScreen(New Point(Compact.seecompest.Location.X + 670, Compact.seecompest.Location.Y + 135))
 
-        Form2.StartPosition = FormStartPosition.Manual
+        WikiPopup.StartPosition = FormStartPosition.Manual
 
-        If Form2.GamesTable.Width < 450 Then
-            If Form2.GamesTable.RowCount > 1 Then
-                Form2.SetBounds(screenpos.X, screenpos.Y, Form2.GamesTable.Width + 35, Form2.GamesTable.Height + 200)
+        'If WikiPopup.GamesTable.Width < 450 Then
+        '    If WikiPopup.GamesTable.RowCount > 1 Then
+        '        WikiPopup.SetBounds(screenpos.X, screenpos.Y, WikiPopup.GamesTable.Width + 35, WikiPopup.GamesTable.Height + 200)
 
-            Else
-                Form2.SetBounds(screenpos.X, screenpos.Y, 450, 130)
-            End If
+        '    Else
+        'WikiPopup.SetBounds(screenpos.X, screenpos.Y, 450, 130)
+        'End If
 
-        Else
-            Form2.SetBounds(screenpos.X, screenpos.Y, Form2.GamesTable.Width + 35, Form2.GamesTable.Height + 200)
-        End If
+        'Else
+        WikiPopup.SetBounds(screenpos.X, screenpos.Y, WikiPopup.GamesTable.Width + 35, WikiPopup.GamesTable.Height + 100)
+        'End If
 
-        FadeTransition.FadeForm(Form2, 0, 0.96, 200)
+        FadeTransition.FadeForm(WikiPopup, 0, 0.96, 200)
 
 
     End Sub

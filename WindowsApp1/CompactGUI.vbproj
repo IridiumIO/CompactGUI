@@ -101,10 +101,10 @@
     <Compile Include="ShutdownDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.vb">
-      <DependentUpon>Form2.vb</DependentUpon>
+    <Compile Include="WikiPopup.Designer.vb">
+      <DependentUpon>WikiPopup.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form2.vb">
+    <Compile Include="WikiPopup.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Info.Designer.vb">
@@ -139,8 +139,8 @@
     <EmbeddedResource Include="ShutdownDialog.resx">
       <DependentUpon>ShutdownDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.vb</DependentUpon>
+    <EmbeddedResource Include="WikiPopup.resx">
+      <DependentUpon>WikiPopup.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Info.resx">
       <DependentUpon>Info.vb</DependentUpon>

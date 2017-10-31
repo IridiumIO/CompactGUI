@@ -548,6 +548,8 @@ Partial Class Compact
         Me.sb_lblGameIssues.TabIndex = 23
         Me.sb_lblGameIssues.Text = "! Game Has Issues"
         Me.sb_lblGameIssues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.ToolTipFilesCompressed.SetToolTip(Me.sb_lblGameIssues, "This game has issues and compression is not recommended. Click to go to the Wiki " &
+        "for details. ")
         Me.sb_lblGameIssues.Visible = False
         '
         'wkPostSizeUnit
@@ -592,7 +594,7 @@ Partial Class Compact
         Me.TableLayoutPanel3.ColumnCount = 3
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 87.73006!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.26994!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.Label19, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.sb_labelCompressed, 2, 0)
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(23, 92)
@@ -610,7 +612,7 @@ Partial Class Compact
         Me.Label19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
         Me.Label19.Location = New System.Drawing.Point(3, 0)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(127, 20)
+        Me.Label19.Size = New System.Drawing.Size(126, 20)
         Me.Label19.TabIndex = 8
         Me.Label19.Text = "Uncompressed"
         Me.Label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -621,9 +623,9 @@ Partial Class Compact
         Me.sb_labelCompressed.Dock = System.Windows.Forms.DockStyle.Fill
         Me.sb_labelCompressed.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.sb_labelCompressed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(149, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(154, Byte), Integer))
-        Me.sb_labelCompressed.Location = New System.Drawing.Point(154, 0)
+        Me.sb_labelCompressed.Location = New System.Drawing.Point(153, 0)
         Me.sb_labelCompressed.Name = "sb_labelCompressed"
-        Me.sb_labelCompressed.Size = New System.Drawing.Size(150, 20)
+        Me.sb_labelCompressed.Size = New System.Drawing.Size(151, 20)
         Me.sb_labelCompressed.TabIndex = 8
         Me.sb_labelCompressed.Text = "Estimated Compressed"
         Me.sb_labelCompressed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
