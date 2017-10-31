@@ -648,7 +648,7 @@ Public Class Compact
         CompResultsPanel.Visible = False
         buttonRevert.Visible = False
         progressPageLabel.Text = "Reverting Changes, Please Wait"
-
+        returnArrow.Visible = False
         Try
             RunCompact("uncompact")
         Catch ex As Exception
@@ -936,13 +936,13 @@ Public Class Compact
 
 
 
-    Public Function GetOutputSize(ByVal inputsize As Long, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
+    Public Function GetOutputSize(ByVal inputsize As Decimal, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
         Dim sizeType As String = ""
         If inputsize < 1024 Then
             sizeType = " B"
         Else
-            If inputsize < (1024 ^ 3) * 9 Then
-                If inputsize < (1024 ^ 2) * 9 Then
+            If inputsize < (1024 ^ 3) Then
+                If inputsize < (1024 ^ 2) Then
                     sizeType = " KB"
                     inputsize = inputsize / 1024
                 Else
@@ -956,9 +956,9 @@ Public Class Compact
         End If
 
         If showSizeType = True Then
-            Return inputsize & sizeType
+            Return Math.Round(inputsize, 1) & sizeType
         Else
-            Return inputsize
+            Return Math.Round(inputsize, 1)
         End If
 
     End Function
