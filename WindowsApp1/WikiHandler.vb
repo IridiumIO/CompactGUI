@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Globalization
 Imports System.Net
 Imports System.Text
 Imports System.Text.RegularExpressions
@@ -79,7 +80,8 @@ Public Class WikiHandler
         WikiPopup.GamesTable.Controls.Clear()
         WikiPopup.GamesTable.RowCount = 0
 
-
+        Dim provider As CultureInfo
+        provider = New CultureInfo("en-US")
 
         Dim GName As New Label
         GName.Text = "Game"
@@ -120,7 +122,7 @@ Public Class WikiHandler
 
             FillTable(n)
 
-            ratioavg += Decimal.Parse(InputFromGitHub(n).Split("|")(6))
+            ratioavg += Decimal.Parse(InputFromGitHub(n).Split("|")(6), provider)
             If InputFromGitHub(n).Split("|")(7).Contains("*") Then
                 Compact.sb_lblGameIssues.Visible = True
                 Compact.sb_lblGameIssues.Text = "! Game has issues"
