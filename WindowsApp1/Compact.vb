@@ -312,7 +312,7 @@ Public Class Compact
 
         If dirChooser.Text = "❯   Select Target Folder" Then
             panel_topBar.Height = Me.Height - 1
-
+            panel_topBar.Anchor += AnchorStyles.Bottom
             With topbar_title
                 .AutoSize = False
                 .TextAlign = ContentAlignment.MiddleCenter
@@ -320,6 +320,7 @@ Public Class Compact
                 .Width = panel_topBar.Width
                 .Height = topbar_title.Font.Height
                 .Location = New Point(0, panel_topBar.Height / 2 - 150)
+                .Anchor += AnchorStyles.Right
             End With
             topbar_dirchooserContainer.Location = New Point(44, panel_topBar.Height / 2 - 22)
         End If
@@ -565,6 +566,7 @@ Public Class Compact
                     WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
 
                     With topbar_title
+                        .Anchor -= AnchorStyles.Right
                         .AutoSize = True
                         .TextAlign = ContentAlignment.MiddleLeft
                         .Font = New Font(topbar_title.Font.Name, 15.75, FontStyle.Regular)
