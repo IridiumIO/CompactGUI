@@ -1327,6 +1327,7 @@ Public Class Compact
 
     Private Sub btn_Mainmax_Click(sender As Object, e As EventArgs) Handles btn_Mainmax.Click
         If Me.WindowState = FormWindowState.Normal Then
+            Me.MaximumSize = Screen.FromControl(Me).WorkingArea.Size
             Me.WindowState = FormWindowState.Maximized
         ElseIf Me.WindowState = FormWindowState.Maximized Then
             Me.WindowState = FormWindowState.Normal
