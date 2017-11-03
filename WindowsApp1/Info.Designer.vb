@@ -156,10 +156,11 @@ Partial Class Info
         'checkEnableRCMenu
         '
         Me.checkEnableRCMenu.AutoSize = True
+        Me.checkEnableRCMenu.Font = New System.Drawing.Font("Segoe UI", 8.25!)
         Me.checkEnableRCMenu.ForeColor = System.Drawing.Color.Black
         Me.checkEnableRCMenu.Location = New System.Drawing.Point(43, 41)
         Me.checkEnableRCMenu.Name = "checkEnableRCMenu"
-        Me.checkEnableRCMenu.Size = New System.Drawing.Size(249, 17)
+        Me.checkEnableRCMenu.Size = New System.Drawing.Size(277, 17)
         Me.checkEnableRCMenu.TabIndex = 2
         Me.checkEnableRCMenu.Text = "Enable integration into Explorer right-click menu"
         Me.checkEnableRCMenu.UseVisualStyleBackColor = True
@@ -203,10 +204,11 @@ Partial Class Info
         'Label5
         '
         Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 8.25!)
         Me.Label5.ForeColor = System.Drawing.Color.White
         Me.Label5.Location = New System.Drawing.Point(26, 73)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(185, 13)
+        Me.Label5.Size = New System.Drawing.Size(207, 13)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "Help and information can be found on"
         '
@@ -216,7 +218,7 @@ Partial Class Info
         Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.SystemColors.MenuHighlight
-        Me.LinkLabel2.Location = New System.Drawing.Point(213, 73)
+        Me.LinkLabel2.Location = New System.Drawing.Point(233, 73)
         Me.LinkLabel2.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(55, 13)
