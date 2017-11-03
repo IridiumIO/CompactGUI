@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Dim version = "2.0.0β1"
+    Dim version = "2.0.0β2"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -619,6 +619,7 @@ Public Class Compact
         conOut.Items.Clear()
         CreateProcess("query")
         buttonCompress.Visible = False
+        sb_Panel.Show()                                 'Temporary Fix - go back and work out why #124 doesn't work with WikiParser()
         sb_AnalysisPanel.Visible = True
     End Sub
 
