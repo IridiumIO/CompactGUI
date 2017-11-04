@@ -42,9 +42,9 @@ Partial Class Compact
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
         Me.help_resultsFilesCompressed = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
+        Me.sb_lblGameIssues = New System.Windows.Forms.Label()
         Me.panel_MainWindow = New System.Windows.Forms.Panel()
         Me.sb_Panel = New System.Windows.Forms.Panel()
-        Me.buttonRevert = New System.Windows.Forms.Button()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.sb_ResultsPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -56,7 +56,6 @@ Partial Class Compact
         Me.sb_progresslabel = New System.Windows.Forms.Label()
         Me.sb_progressbar = New System.Windows.Forms.Panel()
         Me.progresspercent = New System.Windows.Forms.Label()
-        Me.sb_lblGameIssues = New System.Windows.Forms.Label()
         Me.wkPostSizeUnit = New System.Windows.Forms.Label()
         Me.wkPostSizeVal = New System.Windows.Forms.Label()
         Me.wkPreSizeUnit = New System.Windows.Forms.Label()
@@ -66,6 +65,8 @@ Partial Class Compact
         Me.sb_FolderName = New System.Windows.Forms.Label()
         Me.vis_dropshadowmain2 = New System.Windows.Forms.Panel()
         Me.wkPreSizeVal = New System.Windows.Forms.Label()
+        Me.buttonCompress = New System.Windows.Forms.Button()
+        Me.buttonRevert = New System.Windows.Forms.Button()
         Me.vis_dropshadowMain = New System.Windows.Forms.Panel()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.InputPage = New System.Windows.Forms.TabPage()
@@ -83,7 +84,6 @@ Partial Class Compact
         Me.checkForceCompression = New System.Windows.Forms.CheckBox()
         Me.checkHiddenFiles = New System.Windows.Forms.CheckBox()
         Me.checkRecursiveScan = New System.Windows.Forms.CheckBox()
-        Me.buttonCompress = New System.Windows.Forms.Button()
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
@@ -243,6 +243,7 @@ Partial Class Compact
         Me.btn_Mainmin.Name = "btn_Mainmin"
         Me.btn_Mainmin.Size = New System.Drawing.Size(45, 42)
         Me.btn_Mainmin.TabIndex = 17
+        Me.btn_Mainmin.TabStop = False
         Me.btn_Mainmin.Text = "—"
         Me.btn_Mainmin.UseVisualStyleBackColor = False
         '
@@ -261,6 +262,7 @@ Partial Class Compact
         Me.btn_Mainmax.Name = "btn_Mainmax"
         Me.btn_Mainmax.Size = New System.Drawing.Size(44, 42)
         Me.btn_Mainmax.TabIndex = 16
+        Me.btn_Mainmax.TabStop = False
         Me.btn_Mainmax.Text = "☐"
         Me.btn_Mainmax.UseVisualStyleBackColor = False
         '
@@ -279,6 +281,7 @@ Partial Class Compact
         Me.btn_Mainexit.Name = "btn_Mainexit"
         Me.btn_Mainexit.Size = New System.Drawing.Size(57, 42)
         Me.btn_Mainexit.TabIndex = 15
+        Me.btn_Mainexit.TabStop = False
         Me.btn_Mainexit.Text = "✕"
         Me.btn_Mainexit.UseVisualStyleBackColor = False
         '
@@ -357,6 +360,20 @@ Partial Class Compact
         Me.Label14.Text = "(?)"
         Me.ToolTipFilesCompressed.SetToolTip(Me.Label14, resources.GetString("Label14.ToolTip"))
         '
+        'sb_lblGameIssues
+        '
+        Me.sb_lblGameIssues.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.sb_lblGameIssues.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.sb_lblGameIssues.Location = New System.Drawing.Point(194, 153)
+        Me.sb_lblGameIssues.Name = "sb_lblGameIssues"
+        Me.sb_lblGameIssues.Size = New System.Drawing.Size(132, 20)
+        Me.sb_lblGameIssues.TabIndex = 23
+        Me.sb_lblGameIssues.Text = "! Game Has Issues"
+        Me.sb_lblGameIssues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.ToolTipFilesCompressed.SetToolTip(Me.sb_lblGameIssues, "This game has issues and compression is not recommended. Click to go to the Wiki " &
+        "for details. ")
+        Me.sb_lblGameIssues.Visible = False
+        '
         'panel_MainWindow
         '
         Me.panel_MainWindow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -394,23 +411,6 @@ Partial Class Compact
         Me.sb_Panel.Size = New System.Drawing.Size(353, 515)
         Me.sb_Panel.TabIndex = 15
         Me.sb_Panel.Visible = False
-        '
-        'buttonRevert
-        '
-        Me.buttonRevert.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
-        Me.buttonRevert.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonRevert.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonRevert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonRevert.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonRevert.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.buttonRevert.ForeColor = System.Drawing.Color.White
-        Me.buttonRevert.Location = New System.Drawing.Point(71, 446)
-        Me.buttonRevert.Name = "buttonRevert"
-        Me.buttonRevert.Size = New System.Drawing.Size(208, 39)
-        Me.buttonRevert.TabIndex = 29
-        Me.buttonRevert.Text = "Uncompress Folder"
-        Me.buttonRevert.UseVisualStyleBackColor = False
-        Me.buttonRevert.Visible = False
         '
         'TableLayoutPanel2
         '
@@ -538,20 +538,6 @@ Partial Class Compact
         Me.progresspercent.Text = "0%"
         Me.progresspercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'sb_lblGameIssues
-        '
-        Me.sb_lblGameIssues.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.sb_lblGameIssues.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.sb_lblGameIssues.Location = New System.Drawing.Point(194, 153)
-        Me.sb_lblGameIssues.Name = "sb_lblGameIssues"
-        Me.sb_lblGameIssues.Size = New System.Drawing.Size(132, 20)
-        Me.sb_lblGameIssues.TabIndex = 23
-        Me.sb_lblGameIssues.Text = "! Game Has Issues"
-        Me.sb_lblGameIssues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.ToolTipFilesCompressed.SetToolTip(Me.sb_lblGameIssues, "This game has issues and compression is not recommended. Click to go to the Wiki " &
-        "for details. ")
-        Me.sb_lblGameIssues.Visible = False
-        '
         'wkPostSizeUnit
         '
         Me.wkPostSizeUnit.AutoSize = True
@@ -594,7 +580,7 @@ Partial Class Compact
         Me.TableLayoutPanel3.ColumnCount = 3
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.Label19, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.sb_labelCompressed, 2, 0)
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(23, 92)
@@ -665,6 +651,41 @@ Partial Class Compact
         Me.wkPreSizeVal.Size = New System.Drawing.Size(149, 50)
         Me.wkPreSizeVal.TabIndex = 6
         Me.wkPreSizeVal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'buttonCompress
+        '
+        Me.buttonCompress.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.buttonCompress.Enabled = False
+        Me.buttonCompress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonCompress.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonCompress.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonCompress.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.buttonCompress.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.buttonCompress.ForeColor = System.Drawing.Color.Silver
+        Me.buttonCompress.Location = New System.Drawing.Point(71, 446)
+        Me.buttonCompress.Margin = New System.Windows.Forms.Padding(8, 3, 3, 3)
+        Me.buttonCompress.Name = "buttonCompress"
+        Me.buttonCompress.Size = New System.Drawing.Size(208, 39)
+        Me.buttonCompress.TabIndex = 3
+        Me.buttonCompress.Text = "Compress Folder"
+        Me.buttonCompress.UseVisualStyleBackColor = False
+        '
+        'buttonRevert
+        '
+        Me.buttonRevert.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.buttonRevert.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonRevert.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonRevert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.buttonRevert.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.buttonRevert.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.buttonRevert.ForeColor = System.Drawing.Color.White
+        Me.buttonRevert.Location = New System.Drawing.Point(71, 446)
+        Me.buttonRevert.Name = "buttonRevert"
+        Me.buttonRevert.Size = New System.Drawing.Size(208, 39)
+        Me.buttonRevert.TabIndex = 29
+        Me.buttonRevert.Text = "Uncompress Folder"
+        Me.buttonRevert.UseVisualStyleBackColor = False
+        Me.buttonRevert.Visible = False
         '
         'vis_dropshadowMain
         '
@@ -879,24 +900,6 @@ Partial Class Compact
         Me.checkRecursiveScan.TabIndex = 5
         Me.checkRecursiveScan.Text = "Compress Subfolders"
         Me.checkRecursiveScan.UseVisualStyleBackColor = True
-        '
-        'buttonCompress
-        '
-        Me.buttonCompress.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
-        Me.buttonCompress.Enabled = False
-        Me.buttonCompress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonCompress.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonCompress.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
-        Me.buttonCompress.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonCompress.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.buttonCompress.ForeColor = System.Drawing.Color.Silver
-        Me.buttonCompress.Location = New System.Drawing.Point(71, 446)
-        Me.buttonCompress.Margin = New System.Windows.Forms.Padding(8, 3, 3, 3)
-        Me.buttonCompress.Name = "buttonCompress"
-        Me.buttonCompress.Size = New System.Drawing.Size(208, 39)
-        Me.buttonCompress.TabIndex = 3
-        Me.buttonCompress.Text = "Compress Folder"
-        Me.buttonCompress.UseVisualStyleBackColor = False
         '
         'ProgressPage
         '
