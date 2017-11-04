@@ -1327,12 +1327,18 @@ Public Class Compact
         Me.WindowState = FormWindowState.Minimized
     End Sub
 
+
+    Dim isMaximised As Boolean = False
     Private Sub btn_Mainmax_Click(sender As Object, e As EventArgs) Handles btn_Mainmax.Click
-        If Me.WindowState = FormWindowState.Normal Then
+        If isMaximised = False Then
             Me.MaximumSize = Screen.FromControl(Me).WorkingArea.Size
-            Me.WindowState = FormWindowState.Maximized
-        ElseIf Me.WindowState = FormWindowState.Maximized Then
-            Me.WindowState = FormWindowState.Normal
+            Me.Bounds = Screen.GetWorkingArea(Me)
+            isMaximised = True
+        ElseIf isMaximised = True Then
+            Me.Height = 652
+            Me.Width = 1002
+            Me.CenterToScreen()
+            isMaximised = False
         End If
 
     End Sub
@@ -1374,9 +1380,7 @@ Public Class Compact
     End Sub
 
     Private Sub panel_topBar_MouseDown(sender As Object, e As MouseEventArgs) Handles panel_topBar.MouseDown
-        If e.Button = Windows.Forms.MouseButtons.Left Then
-            MoveForm()
-        End If
+        If e.Button = Windows.Forms.MouseButtons.Left And isMaximised = False Then MoveForm()
     End Sub
 
 
