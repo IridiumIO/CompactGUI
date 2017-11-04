@@ -421,8 +421,8 @@ Public Class Compact
             returnArrow.Visible = True
             CalculateSaving()
             QdirCountProgress = 0
-
-
+            buttonQueryCompact.Enabled = True
+            'dirChooser.Enabled = True
 
         End If
 
@@ -438,6 +438,8 @@ Public Class Compact
             sb_labelCompressed.Text = "Estimated Compressed"
             sb_ResultsPanel.Visible = False
             returnArrow.Visible = True
+            buttonQueryCompact.Enabled = True
+            ' dirChooser.Enabled = True
 
             If checkShutdownOnCompletion.Checked = True Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
@@ -484,15 +486,17 @@ Public Class Compact
 
 
     Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
+        If isActive = 0 And isQueryMode = 0 Then
+            sb_AnalysisPanel.Visible = False
+            buttonCompress.Visible = True
+            overrideCompressFolderButton = 0
 
-        sb_AnalysisPanel.Visible = False
-        buttonCompress.Visible = True
-        overrideCompressFolderButton = 0
+            Dim folderChoice As New VistaFolderBrowserDialog
+            folderChoice.ShowDialog()
+            SelectFolder(folderChoice.SelectedPath, "button")
+            folderChoice.Dispose()
+        End If
 
-        Dim folderChoice As New VistaFolderBrowserDialog
-        folderChoice.ShowDialog()
-        SelectFolder(folderChoice.SelectedPath, "button")
-        folderChoice.Dispose()
     End Sub
 
     Dim dirLabelResults As String = ""
@@ -616,6 +620,8 @@ Public Class Compact
         CreateProcess("compact")
         sb_AnalysisPanel.Visible = True
         buttonCompress.Visible = False
+        buttonQueryCompact.Enabled = False
+        'dirChooser.Enabled = False
     End Sub
     Private Sub buttonQueryCompact_Click(sender As Object, e As EventArgs) Handles buttonQueryCompact.Click
         conOut.Items.Clear()
@@ -623,6 +629,8 @@ Public Class Compact
         buttonCompress.Visible = False
         sb_Panel.Show()                                 'Temporary Fix - go back and work out why #124 doesn't work with WikiParser()
         sb_AnalysisPanel.Visible = True
+        buttonQueryCompact.Enabled = False
+        'dirChooser.Enabled = False
     End Sub
 
 
@@ -719,7 +727,8 @@ Public Class Compact
         dirCountProgress = 0
         progresspercent.Visible = True
         CompResultsPanel.Visible = False
-
+        buttonQueryCompact.Enabled = False
+        'dirChooser.Enabled = False
         buttonRevert.Visible = False
         sb_progresslabel.Text = "Uncompressing..."
 
@@ -763,6 +772,8 @@ Public Class Compact
         MyProcess.Kill()
         sb_AnalysisPanel.Visible = False
         buttonCompress.Visible = True
+        buttonQueryCompact.Enabled = True
+        'dirChooser.Enabled = True
     End Sub
 
 
