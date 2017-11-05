@@ -200,6 +200,7 @@ Partial Class Compact
         '
         'topbar_dirchooserContainer
         '
+        Me.topbar_dirchooserContainer.AllowDrop = True
         Me.topbar_dirchooserContainer.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.topbar_dirchooserContainer.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
@@ -213,6 +214,7 @@ Partial Class Compact
         'dirChooser
         '
         Me.dirChooser.ActiveLinkColor = System.Drawing.Color.White
+        Me.dirChooser.AllowDrop = True
         Me.dirChooser.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dirChooser.Font = New System.Drawing.Font("Segoe UI", 11.25!)
         Me.dirChooser.ForeColor = System.Drawing.Color.White

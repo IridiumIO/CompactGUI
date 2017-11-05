@@ -1625,4 +1625,25 @@ Public Class Compact
     Private Sub sb_lblGameIssues_Click(sender As Object, e As EventArgs) Handles sb_lblGameIssues.Click
         Process.Start("https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games")
     End Sub
+
+    Private Sub dirChooser_DragDrop(sender As Object, e As DragEventArgs) Handles dirChooser.DragDrop, topbar_dirchooserContainer.DragDrop
+        Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
+        If isActive = 0 And isQueryMode = 0 Then
+            sb_AnalysisPanel.Visible = False
+            buttonCompress.Visible = True
+            overrideCompressFolderButton = 0
+            SelectFolder(dropVar, "button")
+        End If
+    End Sub
+
+    Private Sub dirChooser_DragEnter(sender As Object, e As DragEventArgs) Handles dirChooser.DragEnter, topbar_dirchooserContainer.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
+            If System.IO.Directory.Exists(dropVar) Then
+                e.Effect = DragDropEffects.Copy
+            ElseIf System.IO.File.Exists(dropVar) Then
+                'MsgBox("it's a file")
+            End If
+        End If
+    End Sub
 End Class
