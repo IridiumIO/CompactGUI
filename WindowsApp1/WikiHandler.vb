@@ -36,6 +36,7 @@ Public Class WikiHandler
                 Compact.wkPostSizeVal.Text = "?"
                 Compact.wkPostSizeUnit.Text = ""
                 Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + Compact.wkPostSizeVal.Size.Width, Compact.wkPostSizeVal.Location.Y)
+                Compact.sb_Panel.Show()
             End Try
 
         End If
