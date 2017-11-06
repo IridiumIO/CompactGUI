@@ -360,7 +360,7 @@ Public Class Compact
 
 
                 Try
-                    If sb_progressbar.Width >= 302 Then                                                 'Avoids a /r/softwaregore scenario
+                    If sb_progressbar.Width >= 301 Then                                                 'Avoids a /r/softwaregore scenario
                         sb_progressbar.Width = 301
                         progresspercent.Text = "100 %"
                         topbar_progress.Width = topbar_dirchooserContainer.Width
@@ -380,7 +380,7 @@ Public Class Compact
 
 
                 Try
-                    If sb_progressbar.Width >= 302 Then                                                 'Avoids a /r/softwaregore scenario
+                    If sb_progressbar.Width >= 301 Then                                                 'Avoids a /r/softwaregore scenario
                         sb_progressbar.Width = 301
                         progresspercent.Text = "100 %"
                         topbar_progress.Width = 603
