@@ -895,11 +895,16 @@ Public Class Compact
             wkPostSizeUnit.Location = New Point(wkPostSizeVal.Location.X + (wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), wkPostSizeVal.Location.Y + 16)
             sb_labelCompressed.Text = "Compressed"
 
-            compRatioLabel.Text = Math.Round _
+            Try
+                compRatioLabel.Text = Math.Round _
                 (oldFolderSize / newFolderSize, 1)
 
-            compRatioLabel.Text = Math.Round _
+                compRatioLabel.Text = Math.Round _
                 (uncompressedfoldersize / (uncompressedfoldersize - (oldFolderSize - newFolderSize)), 1)
+            Catch ex As DivideByZeroException
+                MsgBox("Stop trying to compress empty folders")
+            End Try
+
 
             spaceSavedLabel.Text = GetOutputSize _
                 ((oldFolderSize - newFolderSize), True) + " Saved"
@@ -970,7 +975,7 @@ Public Class Compact
         If desiredfunction = "compact" Then
 
             isQueryCalledByCompact = 0
-            compactArgs = "compact /C"
+            compactArgs = "compact /C /I"
 
             If checkRecursiveScan.Checked = True Then
                 compactArgs = compactArgs + " /S"
@@ -1006,7 +1011,7 @@ Public Class Compact
 
             isQueryCalledByCompact = 0
 
-            compactArgs = "compact /U /S /EXE "
+            compactArgs = "compact /U /S /EXE /I"
 
             If checkForceCompression.Checked = True Then
                 compactArgs = compactArgs + " /F"
@@ -1023,7 +1028,7 @@ Public Class Compact
 
         ElseIf desiredfunction = "query" Then
 
-            compactArgs = "compact /S /Q /EXE"
+            compactArgs = "compact /S /Q /EXE /I"
 
             MyProcess.StandardInput.WriteLine(compactArgs)
             MyProcess.StandardInput.Flush()
