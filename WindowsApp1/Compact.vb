@@ -897,7 +897,7 @@ Public Class Compact
 
         If isQueryCalledByCompact = 1 Then Queryaftercompact()
         If isQueryCalledByCompact = 0 Then isQueryMode = 0
-        MsgBox("bing")
+
     End Sub
 
 
@@ -1084,7 +1084,6 @@ Public Class Compact
 
     Private Sub LetsKillStuffButSafelyNow()
         If MyProcess.HasExited = False Then
-            Console.WriteLine("Bingbong")
             MyProcess.Kill()
         End If
 
