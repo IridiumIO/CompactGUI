@@ -10,7 +10,7 @@ The compression used by compact.exe is similar to the built-in NTFS compression 
 
 <p align = "center">Download the standalone program from <a href="https://github.com/ImminentFate/CompactGUI/releases">GitHub Releases</a></p>
 
-<p align = "center"><a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/badge/downloads-27k_total-brightgreen.svg""></a></p>
+<p align = "center"><a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a></p>
 
 ## Uses
 Use this tool to: 
