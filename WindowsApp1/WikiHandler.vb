@@ -57,7 +57,7 @@ Public Class WikiHandler
 
 
         For Each a In strippedgameName
-            If a.ToString.StartsWith(workingname) Then
+            If a.ToString.Contains(workingname) Then
                 gcount.Add(i)
             End If
             i += 1
@@ -217,6 +217,9 @@ Public Class WikiHandler
             Case wnpatch.Contains("shadowofmordor")
                 workingname = "middleearthshadowofmordor"
 
+            Case wnpatch.Contains("shadowofwar")
+                workingname = "middleearthshadowofwar"
+
             Case wnpatch.Contains("pubg")
                 workingname = "playerunknownsbattlegrounds"
 
@@ -270,20 +273,6 @@ Public Class WikiHandler
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     Public Shared Function GetOutputSize(ByVal inputsize As Decimal, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
         Dim sizeType As String = ""
         If inputsize < 1024 Then
@@ -314,15 +303,11 @@ Public Class WikiHandler
     Private Shared Function WikiDirectorySize _
         (ByVal dInfo As IO.DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
 
-
         Try
-
             Dim totalSize As Long = dInfo.EnumerateFiles().Sum(Function(file) file.Length)
-
             If includeSubdirectories Then
                 totalSize += dInfo.EnumerateDirectories().Sum(Function(dir) WikiDirectorySize(dir, True))
             End If
-
             Return totalSize
 
         Catch generatedexceptionname As UnauthorizedAccessException
