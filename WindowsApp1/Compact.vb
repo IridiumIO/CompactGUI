@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Dim version = "2.0"
+    Dim version = "2.1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -246,8 +246,8 @@ Public Class Compact
 
         AppendOutputText(vbCrLf & e.Data)                                                               'Sends output to the embedded console
 
-
-        If MyProcess.HasExited = False Then
+        'NEEDS FIXING'
+        If e.Data <> Nothing Then
             If e.Data.Contains(CALC_OUTPUT(e.Data).ToString.Trim(" ")) And canProceed = 0 Then          'If the output line of the console is the "%files within" line then do stuff. Trim gets rid of the spaces before and after some lines
                 CON_FILESWITHINDIRECTORIESLINE = e.Data.Trim(" ")                                           ' This variable can't get set if the first criteria fails. This means that the console output is not parsing the russian properly. 
                 Console.WriteLine("Files: " +
@@ -257,7 +257,7 @@ Public Class Compact
             End If
         End If
 
-
+        '
 
         If OutputlineIndex = 1 And canProceed = 1 Then                                                  ' These all run after the one above is met, since if the one above is met then it means there's only 3 lines left. 
             CON_FILESCOMPRESSEDLINE = e.Data
@@ -635,7 +635,7 @@ Public Class Compact
 
 
 
-
+    Dim CP As Encoding = Console.OutputEncoding
     Private Sub CreateProcess(passthrougharg As String)
 
         Try
@@ -646,65 +646,11 @@ Public Class Compact
         Try
             If passthrougharg = "compact" Then isQueryMode = 0
             If passthrougharg = "query" Then isQueryMode = 1
-
+            If passthrougharg = "uncompact" Then isQueryMode = 0
             progresspercent.Visible = True
 
-            MyProcess = New Process
-            With MyProcess.StartInfo
-                .FileName = "CMD.exe"
-                .Arguments = ""
-                .UseShellExecute = False
-                .CreateNoWindow = True
-                .StandardOutputEncoding = Encoding.Default
-                .StandardErrorEncoding = Encoding.Default
-                .WorkingDirectory = workingDir
-                .RedirectStandardInput = True
-                .RedirectStandardOutput = True
-                .RedirectStandardError = True
-            End With
-
-            MyProcess.Start()
-            MyProcess.StandardInput.WriteLine("chcp")
-            MyProcess.StandardInput.Flush()
-
-            Dim Res = MyProcess.StandardOutput.ReadLine()
-
-            Dim i = 0
-            Do Until i = 4
-                Res = MyProcess.StandardOutput.ReadLine()
-                i += 1
-            Loop
-
-            Dim CP = Integer.Parse(Regex.Replace(Res, "[^\d]", ""))
-            MyProcess.StandardInput.WriteLine("exit")
-            MyProcess.StandardInput.Flush()
-            MyProcess.WaitForExit()
-
-
-
-
-            MyProcess = New Process
-            With MyProcess.StartInfo
-                .FileName = "CMD.exe"
-                .Arguments = ""
-                .StandardOutputEncoding = Encoding.GetEncoding(CP)                              'Allow console output to use the System's encoding for localization support
-                .StandardErrorEncoding = Encoding.GetEncoding(CP)
-                .WorkingDirectory = workingDir                                                  'Set working directory via argument, allows Encoding to be passed directly.
-                .UseShellExecute = False
-                .CreateNoWindow = True
-                .RedirectStandardInput = True
-                .RedirectStandardOutput = True
-                .RedirectStandardError = True
-            End With
-
-            MyProcess.Start()
-            MyProcess.PriorityClass = ProcessPriorityClass.BelowNormal
-            MyProcess.EnableRaisingEvents = True
-            MyProcess.BeginErrorReadLine()
-            MyProcess.BeginOutputReadLine()
-
             Try
-                RunCompact(passthrougharg)
+                RunCompact(passthrougharg, CP)
 
                 If passthrougharg = "compact" Then sb_progresslabel.Text = "Compressing, Please Wait"
                 If passthrougharg = "query" Then sb_progresslabel.Text = "Analyzing"
@@ -733,7 +679,7 @@ Public Class Compact
         sb_progresslabel.Text = "Uncompressing..."
 
         Try
-            RunCompact("uncompact")
+            RunCompact("uncompact", CP)
         Catch ex As Exception
         End Try
 
@@ -769,7 +715,7 @@ Public Class Compact
         dirCountProgress = 0
         fileCountProgress = 0
         isQueryCalledByCompact = 0
-        MyProcess.Kill()
+        'MyProcess.Kill()
         sb_AnalysisPanel.Visible = False
         buttonCompress.Visible = True
         buttonQueryCompact.Enabled = True
@@ -797,24 +743,23 @@ Public Class Compact
         If isActive = 1 Then
 
             If MessageBox.Show _
-                ("Are you sure you want to exit?" & vbCrLf & vbCrLf & "Quitting while the Compact function is running is potentially dangerous." _
-                 & "Continuing to close could lead to one of your files becoming stuck in a semi-compressed state." _
+                ("Are you sure you want to exit?" & vbCrLf & vbCrLf & "Quitting now will finish compressing the current file, then quit safely." _
                  & vbCrLf & vbCrLf &
-                 "If you do decide to force quit now, you can potentially fix any unreadable files by running Compact again," _
-                 & "selecting the 'Force Compression' Checkbox and then running uncompress on the folder." & vbCrLf & "Click Yes to continue exiting the program.",
+                 "If you do decide to quit now, you can resume compression by repeating the process later." _
+                 & vbCrLf & "Click Yes to continue exiting the program.",
                  "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) <> DialogResult.Yes Then
 
                 e.Cancel = True
 
             Else
                 Try
-                    LetsKillStuff()
+                    LetsKillStuffButSafelyNow()
                 Catch ex As Exception
                 End Try
             End If
         Else
             Try
-                LetsKillStuff()
+                LetsKillStuffButSafelyNow()
             Catch ex As Exception
             End Try
         End If
@@ -961,7 +906,7 @@ Public Class Compact
     Private Sub Queryaftercompact()
         isQueryMode = 1
         hasqueryfinished = 1
-        RunCompact("query")
+        RunCompact("query", CP)
     End Sub
 
 
@@ -970,12 +915,12 @@ Public Class Compact
     Dim hasqueryfinished = 0
 
 
-    Private Sub RunCompact(desiredfunction As String)
+    Private Sub RunCompact(desiredfunction As String, EC As Encoding)
 
         If desiredfunction = "compact" Then
 
             isQueryCalledByCompact = 0
-            compactArgs = "compact /C /I"
+            compactArgs = "/C /I"
 
             If checkRecursiveScan.Checked = True Then
                 compactArgs = compactArgs + " /S"
@@ -999,9 +944,7 @@ Public Class Compact
                 compactArgs = compactArgs + " /EXE:LZX"
             End If
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
-            MyProcess.StandardInput.Flush()
-
+            RunCompact_ProcessGen(compactArgs, EC)
 
             isQueryCalledByCompact = 1
             hasqueryfinished = 0
@@ -1011,7 +954,7 @@ Public Class Compact
 
             isQueryCalledByCompact = 0
 
-            compactArgs = "compact /U /S /EXE /I"
+            compactArgs = "/U /S /EXE /I"
 
             If checkForceCompression.Checked = True Then
                 compactArgs = compactArgs + " /F"
@@ -1020,24 +963,44 @@ Public Class Compact
                 compactArgs = compactArgs + " /A"
             End If
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
-            MyProcess.StandardInput.Flush()
+            RunCompact_ProcessGen(compactArgs, EC)
 
             isActive = 1
 
 
         ElseIf desiredfunction = "query" Then
 
-            compactArgs = "compact /S /Q /EXE /I"
+            compactArgs = "/S /Q /EXE /I"
 
-            MyProcess.StandardInput.WriteLine(compactArgs)
-            MyProcess.StandardInput.Flush()
+            RunCompact_ProcessGen(compactArgs, EC)
+
+
 
         End If
 
     End Sub
 
-
+    Private Sub RunCompact_ProcessGen(passthroughArgs As String, EC As Encoding)
+        MyProcess = New Process
+        With MyProcess.StartInfo
+            .FileName = "compact.exe"
+            .WorkingDirectory = workingDir                              'Set working directory via argument, allows Encoding to be passed directly.
+            .Arguments = passthroughArgs
+            .StandardOutputEncoding = CP                                'Allow console output to use the System's encoding for localization support
+            .StandardErrorEncoding = CP
+            .UseShellExecute = False
+            .CreateNoWindow = True
+            .RedirectStandardInput = True
+            .RedirectStandardOutput = True
+            .RedirectStandardError = True
+        End With
+        Console.WriteLine(MyProcess.StartInfo.Arguments)
+        MyProcess.Start()
+        MyProcess.PriorityClass = ProcessPriorityClass.BelowNormal
+        MyProcess.EnableRaisingEvents = True
+        MyProcess.BeginErrorReadLine()
+        MyProcess.BeginOutputReadLine()
+    End Sub
 
 
     Public Function GetOutputSize(ByVal inputsize As Decimal, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
@@ -1118,19 +1081,12 @@ Public Class Compact
 
 
 
-    Private WithEvents KillProc As Process
-    Private Sub LetsKillStuff()
 
-        KillProc = New Process
+    Private Sub LetsKillStuffButSafelyNow()
+        If MyProcess.HasExited = False Then
+            MyProcess.Kill()
+        End If
 
-        With KillProc.StartInfo
-            .FileName = "powershell.exe"
-            .Arguments = "taskkill /f /im compact.exe"
-            .UseShellExecute = False
-            .CreateNoWindow = True
-        End With
-
-        KillProc.Start()
 
     End Sub
 
