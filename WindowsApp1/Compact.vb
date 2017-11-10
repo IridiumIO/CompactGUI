@@ -309,7 +309,7 @@ Public Class Compact
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         loadFromSettings()
-            
+
         If dirChooser.Text = "❯   Select Target Folder" Then
             panel_topBar.Height = Me.Height - 1
             panel_topBar.Anchor += AnchorStyles.Bottom

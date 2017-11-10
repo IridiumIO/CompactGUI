@@ -9,18 +9,11 @@ Public Class WikiHandler
 
     Shared workingname As String = "testdir"
 
-
-    'Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-    '    WikiParser()
-
-    'End Sub
-
     Private Shared Sub WikiParser()
         Console.WriteLine(workingname)
 
         Dim stringSeparators() As String = {vbCrLf}
         Dim Source As String
-
         Dim gameName As New List(Of String)
 
         If InputFromGitHub Is Nothing Then
@@ -42,62 +35,46 @@ Public Class WikiHandler
         End If
 
 
-
         For Each s As String In InputFromGitHub
             Try
-                'ListBox1.Items.Add(s)
                 gameName.Add(s.Split("|")(2))
             Catch ex As Exception
-
             End Try
-
         Next
+
 
         Dim strippedgameName As New List(Of String)
 
+
         For Each s In gameName
             Dim n = Regex.Replace(s, "[^\p{L}a-zA-Z0-90]", "")
-            'ListBox2.Items.Add(n.ToLower)
             strippedgameName.Add(n.ToLower)
         Next
 
 
-
-
         Dim i = 0
         Dim gcount As New List(Of Integer)
+
+
         For Each a In strippedgameName
             If a.ToString.StartsWith(workingname) Then
-
                 gcount.Add(i)
             End If
             i += 1
         Next
 
 
-
         WikiPopup.GamesTable.Visible = False
-
         WikiPopup.GamesTable.Controls.Clear()
         WikiPopup.GamesTable.RowCount = 0
 
-        Dim provider As CultureInfo
-        provider = New CultureInfo("en-US")
+        Dim provider As CultureInfo = New CultureInfo("en-US")
 
-        Dim GName As New Label
-        GName.Text = "Game"
-
-        Dim GSizeU As New Label
-        GSizeU.Text = "Before"
-
-        Dim GSizeC As New Label
-        GSizeC.Text = "After"
-
-        Dim GCompR As New Label
-        GCompR.Text = "Ratio"
-
-        Dim GCompAlg As New Label
-        GCompAlg.Text = "Algorithm"
+        Dim GName As New Label With {.Text = "Game"}
+        Dim GSizeU As New Label With {.Text = "Before"}
+        Dim GSizeC As New Label With {.Text = "After"}
+        Dim GCompR As New Label With {.Text = "Ratio"}
+        Dim GCompAlg As New Label With {.Text = "Algorithm"}
 
 
         WikiPopup.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
@@ -108,22 +85,22 @@ Public Class WikiHandler
         WikiPopup.GamesTable.Controls.Add(GCompR, 3, WikiPopup.GamesTable.RowCount - 1)
         WikiPopup.GamesTable.Controls.Add(GCompAlg, 4, WikiPopup.GamesTable.RowCount - 1)
 
-
         For Each WikiHeader As Label In WikiPopup.GamesTable.Controls
             WikiHeader.Font = New Font("Segoe UI", 11, FontStyle.Bold)
-
             WikiHeader.Dock = DockStyle.Right
         Next
 
         GName.Dock = DockStyle.Left
 
+
         Dim ratioavg As Decimal = 1
         firstGame = 0
-        For Each n In gcount
 
+        For Each n In gcount
             FillTable(n)
 
             ratioavg += Decimal.Parse(InputFromGitHub(n).Split("|")(6), provider)
+
             If InputFromGitHub(n).Split("|")(7).Contains("*") Then
                 Compact.sb_lblGameIssues.Visible = True
                 Compact.sb_lblGameIssues.Text = "! Game has issues"
@@ -133,6 +110,7 @@ Public Class WikiHandler
 
         Next
         Compact.sb_labelCompressed.Text = "Estimated Compressed"
+
         Try
             ratioavg = (ratioavg - 1) / gcount.Count
 
@@ -143,12 +121,12 @@ Public Class WikiHandler
             Compact.wkPostSizeUnit.Visible = True
 
         Catch ex As System.DivideByZeroException
-
             Compact.wkPostSizeVal.Text = "?"
             Compact.wkPostSizeUnit.Text = ""
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
             Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), Compact.wkPostSizeVal.Location.Y + 16)
         End Try
+
 
         If WikiPopup.GamesTable.RowCount > 1 Then
             Compact.seecompest.Visible = True
@@ -156,10 +134,7 @@ Public Class WikiHandler
             Compact.seecompest.Visible = False
         End If
 
-
         WikiPopup.GamesTable.Visible = True
-
-
 
         Compact.sb_Panel.Show()
 
@@ -175,27 +150,31 @@ Public Class WikiHandler
         End If
 
 
-        Dim GName As New Label
-        GName.Text = InputFromGitHub(ps).Split("|")(2)
-        GName.Dock = DockStyle.Left
-        GName.Font = New Font("Segoe UI", 11, FontStyle.Regular)
-
-        Dim GSizeU As New Label
-        GSizeU.Text = InputFromGitHub(ps).Split("|")(3)
-        GSizeU.Dock = DockStyle.Right
-        GSizeU.Font = New Font("Segoe UI", 10, FontStyle.Regular)
-        Dim GSizeC As New Label
-        GSizeC.Text = InputFromGitHub(ps).Split("|")(4)
-        GSizeC.Dock = DockStyle.Right
-        GSizeC.Font = New Font("Segoe UI", 10, FontStyle.Regular)
-        Dim GCompR As New Label
-        GCompR.Text = InputFromGitHub(ps).Split("|")(6)
-        GCompR.Dock = DockStyle.Right
-        GCompR.Font = New Font("Segoe UI", 10, FontStyle.Regular)
-        Dim GCompAlg As New Label
-        GCompAlg.Text = InputFromGitHub(ps).Split("|")(1)
-        GCompAlg.Dock = DockStyle.Right
-        GCompAlg.Font = New Font("Segoe UI", 10, FontStyle.Regular)
+        Dim GName As New Label With {
+        .Text = InputFromGitHub(ps).Split("|")(2),
+        .Dock = DockStyle.Left,
+        .Font = New Font("Segoe UI", 11, FontStyle.Regular)
+        }
+        Dim GSizeU As New Label With {
+        .Text = InputFromGitHub(ps).Split("|")(3),
+        .Dock = DockStyle.Right,
+        .Font = New Font("Segoe UI", 10, FontStyle.Regular)
+        }
+        Dim GSizeC As New Label With {
+        .Text = InputFromGitHub(ps).Split("|")(4),
+        .Dock = DockStyle.Right,
+        .Font = New Font("Segoe UI", 10, FontStyle.Regular)
+        }
+        Dim GCompR As New Label With {
+        .Text = InputFromGitHub(ps).Split("|")(6),
+        .Dock = DockStyle.Right,
+        .Font = New Font("Segoe UI", 10, FontStyle.Regular)
+        }
+        Dim GCompAlg As New Label With {
+        .Text = InputFromGitHub(ps).Split("|")(1),
+        .Dock = DockStyle.Right,
+        .Font = New Font("Segoe UI", 10, FontStyle.Regular)
+        }
 
         WikiPopup.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
         WikiPopup.GamesTable.RowCount += 1
@@ -207,14 +186,13 @@ Public Class WikiHandler
 
         For Each ConC As Label In WikiPopup.GamesTable.Controls
             ConC.AutoSize = True
-
             ConC.Padding = New Padding(2, 4, 0, 0)
-
         Next
 
-
-
     End Sub
+
+
+
 
     Shared folderSize
     Shared suffix
@@ -223,36 +201,35 @@ Public Class WikiHandler
 
     Public Shared Sub localFolderParse(wdString As String, DIwDString As DirectoryInfo, rawPreSize As String)
 
+        Dim wnpatch As String = Regex.Replace(DIwDString.Name.ToString, "[^\p{L}a-zA-Z0-90]", "").ToLower.Trim()
+
+        Select Case True
+            Case wnpatch.Contains("callofduty")
+                workingname = wnpatch.Replace("callofduty", "cod")
+                If workingname.EndsWith("Modernwarfare") Then workingname = "cod4"
+
+            Case wnpatch.Contains("gameoftheyear")
+                workingname = wnpatch.Replace("gameoftheyear", "goty")
+
+            Case wnpatch.Contains("age2hd")
+                workingname = "ageofempiresiihd"
+
+            Case wnpatch.Contains("shadowofmordor")
+                workingname = "middleearthshadowofmordor"
+
+            Case wnpatch.Contains("pubg")
+                workingname = "playerunknownsbattlegrounds"
+
+            Case Else
+                workingname = wnpatch
+        End Select
 
 
-        Dim wnpatch As String
+        Dim folderSizeraw = GetOutputSize(WikiDirectorySize(DIwDString, True), True)
 
-        wnpatch = Regex.Replace(DIwDString.Name.ToString, "[^\p{L}a-zA-Z0-90]", "").ToLower
-        If wnpatch.Contains("callofduty") Then
-            Dim interm = wnpatch.Replace("callofduty", "cod")
-            If interm.Trim().EndsWith("modernwarfare") Then
-                workingname = "cod4"
-            Else
-                workingname = interm
-            End If
-
-        ElseIf wnpatch.Contains("gameoftheyear") Then
-            Dim interm = wnpatch.Replace("gameoftheyear", "goty")
-            workingname = interm
-        ElseIf wnpatch.Contains("shadowofmordor") Then
-            workingname = "middleearthshadowofmordor"
-        ElseIf wnpatch.Contains("age2hd") Then
-            workingname = "ageofempiresiihd"
-        ElseIf wnpatch.Contains("pubg") Then
-            workingname = "playerunknownsbattlegrounds"
-        Else
-            workingname = wnpatch
-        End If
-
-        Dim folderSizeraw = GetOutputSize _
-                    (WikiDirectorySize(DIwDString, True), True)
         folderSize = Math.Round(Decimal.Parse(folderSizeraw.Split(" ")(0)), 2)
         suffix = folderSizeraw.Split(" ")(1)
+
         Compact.preSize.Text = "Uncompressed Size: " & Math.Round(folderSize, 1) & " " & suffix
 
         Try
@@ -261,6 +238,8 @@ Public Class WikiHandler
             Compact.wkPreSizeUnit.Text = suffix
             Dim wkPreSizeVal_Len = TextRenderer.MeasureText(Compact.wkPreSizeVal.Text, Compact.wkPreSizeVal.Font)
             Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 8), Compact.wkPreSizeVal.Location.Y + 16)
+
+            ' I have no idea why this catch is needed
         Catch ex As System.DivideByZeroException
 
             Compact.wkPreSizeVal.Text = "?"
@@ -269,40 +248,25 @@ Public Class WikiHandler
             Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 8), Compact.wkPreSizeVal.Location.Y + 16)
         End Try
 
-
-
-
         WikiParser()
 
-
     End Sub
+
+
 
 
     Public Shared Sub showWikiRes()
 
-        Dim screenpos As Point = Compact.PointToScreen(New Point(Compact.seecompest.Location.X + 670, Compact.seecompest.Location.Y + 135))
+        Dim screenpos As Point = Compact.PointToScreen _
+            (New Point(Compact.seecompest.Location.X + 670, Compact.seecompest.Location.Y + 135))
 
         WikiPopup.StartPosition = FormStartPosition.Manual
-
-        'If WikiPopup.GamesTable.Width < 450 Then
-        '    If WikiPopup.GamesTable.RowCount > 1 Then
-        '        WikiPopup.SetBounds(screenpos.X, screenpos.Y, WikiPopup.GamesTable.Width + 35, WikiPopup.GamesTable.Height + 200)
-
-        '    Else
-        'WikiPopup.SetBounds(screenpos.X, screenpos.Y, 450, 130)
-        'End If
-
-        'Else
         WikiPopup.SetBounds(screenpos.X, screenpos.Y, WikiPopup.GamesTable.Width + 35, WikiPopup.GamesTable.Height + 100)
-        'End If
 
         FadeTransition.FadeForm(WikiPopup, 0, 0.96, 200)
 
-
     End Sub
 
-
-    'End Sub
 
 
 
