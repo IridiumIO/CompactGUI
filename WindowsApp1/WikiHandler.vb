@@ -243,7 +243,8 @@ Public Class WikiHandler
             workingname = "middleearthshadowofmordor"
         ElseIf wnpatch.Contains("age2hd") Then
             workingname = "ageofempiresiihd"
-
+        ElseIf wnpatch.Contains("pubg") Then
+            workingname = "playerunknownsbattlegrounds"
         Else
             workingname = wnpatch
         End If
