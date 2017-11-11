@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Dim version = "2.1"
+    Dim version = "2.2"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 

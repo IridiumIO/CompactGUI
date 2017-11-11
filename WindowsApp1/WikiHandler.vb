@@ -10,7 +10,7 @@ Public Class WikiHandler
     Shared workingname As String = "testdir"
 
     Private Shared Sub WikiParser()
-        Console.WriteLine(workingname)
+        Console.WriteLine("Working Name: " & workingname)
 
         Dim stringSeparators() As String = {vbCrLf}
         Dim Source As String
@@ -227,11 +227,8 @@ Public Class WikiHandler
                 workingname = wnpatch
         End Select
 
-
-        Dim folderSizeraw = GetOutputSize(WikiDirectorySize(DIwDString, True), True)
-
-        folderSize = Math.Round(Decimal.Parse(folderSizeraw.Split(" ")(0)), 2)
-        suffix = folderSizeraw.Split(" ")(1)
+        folderSize = Math.Round(Decimal.Parse(rawPreSize.Split(" ")(0)), 2)
+        suffix = rawPreSize.Split(" ")(1)
 
         Compact.preSize.Text = "Uncompressed Size: " & Math.Round(folderSize, 1) & " " & suffix
 
@@ -260,11 +257,19 @@ Public Class WikiHandler
 
     Public Shared Sub showWikiRes()
 
+        Dim w = WikiPopup.GamesTable.Width + 35
+        Dim h = WikiPopup.GamesTable.Height + 100
+        Dim sc_w = Screen.PrimaryScreen.Bounds.Width
+
         Dim screenpos As Point = Compact.PointToScreen _
             (New Point(Compact.seecompest.Location.X + 670, Compact.seecompest.Location.Y + 135))
 
-        WikiPopup.StartPosition = FormStartPosition.Manual
-        WikiPopup.SetBounds(screenpos.X, screenpos.Y, WikiPopup.GamesTable.Width + 35, WikiPopup.GamesTable.Height + 100)
+        'Checks to make sure the popup isn't going to go offscreen. 
+        If screenpos.X + w < sc_w Then
+            WikiPopup.SetBounds(screenpos.X, screenpos.Y, w, h)
+        Else
+            WikiPopup.SetBounds(screenpos.X - (w - (sc_w - screenpos.X)), screenpos.Y + 15, w, h)
+        End If
 
         FadeTransition.FadeForm(WikiPopup, 0, 0.96, 200)
 
@@ -272,33 +277,6 @@ Public Class WikiHandler
 
 
 
-
-    Public Shared Function GetOutputSize(ByVal inputsize As Decimal, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
-        Dim sizeType As String = ""
-        If inputsize < 1024 Then
-            sizeType = " B"
-        Else
-            If inputsize < (1024 ^ 3) Then
-                If inputsize < (1024 ^ 2) Then
-                    sizeType = " KB"
-                    inputsize = inputsize / 1024
-                Else
-                    sizeType = " MB"
-                    inputsize = inputsize / 1024 ^ 2
-                End If
-            Else
-                sizeType = " GB"
-                inputsize = inputsize / 1024 ^ 3
-            End If
-        End If
-
-        If showSizeType = True Then
-            Return inputsize & sizeType
-        Else
-            Return inputsize
-        End If
-
-    End Function
 
     Private Shared Function WikiDirectorySize _
         (ByVal dInfo As IO.DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
