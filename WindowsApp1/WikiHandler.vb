@@ -48,20 +48,36 @@ Public Class WikiHandler
 
         For Each s In gameName
             Dim n = Regex.Replace(s, "[^\p{L}a-zA-Z0-90]", "")
-            strippedgameName.Add(n.ToLower)
+            strippedgameName.Add(n.ToLower.Trim)
         Next
 
 
-        Dim i = 0
+
         Dim gcount As New List(Of Integer)
 
-
-        For Each a In strippedgameName
-            If a.ToString.Contains(workingname) Then
-                gcount.Add(i)
+        If ParseLogic(strippedgameName, workingname) = True Then
+            Dim i = 0
+            If isExactMatch = True Then
+                For Each a In strippedgameName
+                    If a.Equals(workingname) And workingname.Length > 1 Then gcount.Add(i)
+                    i += 1
+                Next
+            Else
+                For Each a In strippedgameName
+                    If a.ToString.StartsWith(workingname) And Math.Abs(a.ToString.Length - workingname.Length) < 5 And workingname.Length > 1 Then gcount.Add(i)
+                    i += 1
+                Next
             End If
-            i += 1
-        Next
+
+        Else
+            Dim i = 0
+            For Each a In strippedgameName
+                If workingname.Length > 5 Then
+                    If a.ToString.Contains(workingname) Then gcount.Add(i)
+                End If
+                i += 1
+            Next
+        End If
 
 
         WikiPopup.GamesTable.Visible = False
@@ -139,6 +155,27 @@ Public Class WikiHandler
         Compact.sb_Panel.Show()
 
     End Sub
+
+
+
+
+    Shared isExactMatch As Boolean
+    Shared Function ParseLogic(online_R As List(Of String), local_R As String) As Boolean
+        isExactMatch = False
+        Dim success = 0
+        For Each a In online_R
+            If a.StartsWith(local_R) And Math.Abs(a.Length - workingname.Length) < 5 Then
+                If a.Length = workingname.Length Then isExactMatch = True
+                success = 1
+                Return True
+                Exit For
+            End If
+        Next
+
+        If success = 0 Then Return False
+
+    End Function
+
 
 
     Shared firstGame As Integer = 0
