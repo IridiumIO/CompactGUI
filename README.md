@@ -1,4 +1,4 @@
-<p align="center"><img src="https://cdn.rawgit.com/imminentfate/compactgui/master/banner.svg" /</p>
+<p align="center"><img src="https://cdn.rawgit.com/imminentfate/compactgui/master/banner.svg" width="500"></p>
   
 ----
 
