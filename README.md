@@ -12,7 +12,9 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 <p align = "left"></p>  
 
 Download from **[GitHub Releases](https://github.com/ImminentFate/CompactGUI/releases)**
-  
+
+__*Or:*__
+
 Install with **Chocolatey** from Powershell or CMD:
 ```cs
 choco install compactgui
