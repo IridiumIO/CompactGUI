@@ -8,7 +8,7 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 
 <h2>Installation</h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>  <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
 
-## 
+ 
 <p>Download from <a href="https://github.com/ImminentFate/CompactGUI/releases"><b>GitHub Releases</b></a></p>
 
 __*Or:*__
