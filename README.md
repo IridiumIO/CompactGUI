@@ -26,10 +26,6 @@ Use this tool to:
 - Reduce the size of programs (e.g. Adobe Photoshop: 1.71GB > 886MB)
 - Compress any other folder on your computer
   
-<h3 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-2152-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-76-blue.svg"></a> that have been tested</b></h3>
-<p>&nbsp;</p>
-
-
 ## Extra Features
  - Visual feedback on compression progress and statistics
  - Online integration with community-sourced [database](https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games) to get compression estimates and analyses 
@@ -37,6 +33,9 @@ Use this tool to:
  - Drag-and-drop functionality
  - Analyze the status of existing folders
  - Shutdown/restart/sleep on completion. 
+
+<h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-2152-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-76-blue.svg"></a> that have been tested</b></h3>
+<p>&nbsp;</p>
 
 ## Screenshots
 <p align="left"><img src="https://i.imgur.com/3auMAtO.png" alt="compactGUI"></p>
