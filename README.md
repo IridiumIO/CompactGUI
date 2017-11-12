@@ -10,7 +10,7 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 
 &nbsp;
 
-Download from **[GitHub Releases](https://github.com/ImminentFate/CompactGUI/releases)**
+<p>Download from <a href="https://github.com/ImminentFate/CompactGUI/releases"><b>GitHub Releases</b></a></p>
 
 __*Or:*__
 
