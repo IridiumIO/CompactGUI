@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Dim version = "2.2"
+    Dim version = "2.2.1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -1230,7 +1230,7 @@ Public Class Compact
                           & "//////////////////////////////////////////////////////////////////////////////////" _
                           & "//////////////////////////////////////////////////////////////////////////////////" & vbCrLf & vbCrLf)
 
-            System.IO.File.WriteAllText(Application.StartupPath & "\CompactGUILog.txt", sb.ToString)
+            System.IO.File.WriteAllText(Application.StartupPath & "\CompactGUILog.txt", sb.ToString, CP)
 
             MsgBox("Saved log to " & Application.StartupPath & "\CompactGUILog.txt")
         End If
