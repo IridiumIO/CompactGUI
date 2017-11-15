@@ -1,0 +1,8 @@
+<!--- TESTING -->
+<Info>
+	<VersionMajor>2.2</VersionMajor>
+	<VersionMinor>3</VersionMinor>
+	<IsPrerelease>false</IsPrerelease>
+	<Changes></Changes>
+	<Fixes>Broke some localization in 2.1 - Fixed it again|Fixed output log encoding.</Fixes>
+</Info>
