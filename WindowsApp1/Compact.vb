@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Dim version = "2.2.1"
+    Shared version = "2.3.0"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -330,7 +330,7 @@ Public Class Compact
         comboChooseShutdown.SelectedItem = comboChooseShutdown.Items.Item(0)
 
         RCMenu.WriteLocRegistry()
-
+        VersionCheck.VC(version)
         progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
 
         For Each arg In My.Application.CommandLineArgs

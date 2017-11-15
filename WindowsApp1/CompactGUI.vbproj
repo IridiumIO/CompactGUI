@@ -101,6 +101,7 @@
     <Compile Include="ShutdownDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="VersionCheck.vb" />
     <Compile Include="WikiPopup.Designer.vb">
       <DependentUpon>WikiPopup.vb</DependentUpon>
     </Compile>
