@@ -3,7 +3,7 @@
 	<VersionMajor>2.3</VersionMajor>
 	<VersionMinor>1</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
-	<VersionStr>Release 2.3.1</VersionStr>
+	<VersionStr>V2.3.1</VersionStr>
 	<ChocolateyVStr>2.3.1</ChocolateyVStr>
 	<Changes></Changes>
 	<Fixes>Broke some localization in 2.1 - Fixed it again|Fixed output log encoding.</Fixes>
