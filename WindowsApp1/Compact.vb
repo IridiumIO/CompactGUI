@@ -1636,4 +1636,17 @@ Public Class Compact
             End If
         End If
     End Sub
+
+    Private Sub dlUpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles dlUpdateLink.LinkClicked
+        Process.Start("https://github.com/ImminentFate/CompactGUI/releases")
+    End Sub
+
+    Private Sub updateBanner_Paint(sender As Object, e As PaintEventArgs) Handles updateBanner.Paint
+        Dim p As New Pen(Brushes.DimGray, 1)
+        Dim x As Integer = updateBanner.Width
+        Dim y As Integer = updateBanner.Height
+        e.Graphics.FillPolygon(New SolidBrush(Color.FromArgb(255, 47, 66, 83)), New PointF() {New Point(0, 0), New Point(0, y), New Point(y, y)})
+        e.Graphics.FillPolygon(New SolidBrush(Color.FromArgb(255, 47, 66, 83)), New PointF() {New Point(x, 0), New Point(x, y), New Point(x - y, y)})
+
+    End Sub
 End Class

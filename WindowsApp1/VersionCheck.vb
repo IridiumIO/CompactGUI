@@ -7,34 +7,51 @@ Public Class VersionCheck
 
         Try
             Dim versionDoc As XDocument = XDocument.Load("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Version.xml")
-            If versionDoc.ToString <> Nothing Then XMLParse(versionDoc, version)
+            If versionDoc.ToString <> Nothing Then
+                If XMLParse(versionDoc, version) = True Then
+                    Compact.updateBanner.Visible = True
+                    Compact.dlUpdateLink.Text = "Update Available: Click to download " & xml_VersionStr
+                End If
+            End If
         Catch ex As WebException
         End Try
 
     End Sub
 
-    Shared Sub XMLParse(versionDoc As XDocument, version As String)
+    Shared xml_MajorVer As Single
+    Shared xml_MinorVer As Integer
+    Shared xml_VersionStr As String
+    Shared xml_ChocoVStr As String
+    Shared xml_IsPrerelease As Boolean
+    Shared xml_Changes()
+    Shared xml_Fixes()
+
+    Shared Function XMLParse(versionDoc As XDocument, version As String)
         Dim info As XElement = versionDoc.Root
 
-        Dim xml_MajorVer As Single = info.Element("VersionMajor").Value
-        Dim xml_MinorVer As Integer = info.Element("VersionMinor").Value
-        Dim xml_IsPrerelease As Boolean = info.Element("IsPrerelease").Value
-        Dim xml_Changes() = info.Element("Changes").Value.Split("|")
-        Dim xml_Fixes() = info.Element("Fixes").Value.Split("|")
-        Console.WriteLine(xml_MajorVer)
+        xml_MajorVer = info.Element("VersionMajor").Value
+        xml_MinorVer = info.Element("VersionMinor").Value
+        xml_VersionStr = info.Element("VersionStr").Value
+        xml_ChocoVStr = info.Element("ChocolateyVStr").Value
+        xml_IsPrerelease = info.Element("IsPrerelease").Value
+        xml_Changes = info.Element("Changes").Value.Split("|")
+        xml_Fixes = info.Element("Fixes").Value.Split("|")
+        Console.WriteLine(xml_VersionStr)
 
         Dim exe_MajorVer As Single = CSng(version.Substring(0, version.LastIndexOf(".")))
         Dim exe_MinorVer As Integer = CInt(version.Substring(version.LastIndexOf(".") + 1))
 
 
         If xml_MajorVer > exe_MajorVer Then
-            MsgBox("New Major")
+            Return True
         ElseIf xml_MajorVer = exe_MajorVer Then
             If xml_MinorVer > exe_MinorVer Then
-                MsgBox("New Minor")
+                Return True
             End If
+        Else
+            Return False
         End If
 
 
-    End Sub
+    End Function
 End Class

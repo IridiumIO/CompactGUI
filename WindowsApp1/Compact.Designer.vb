@@ -28,6 +28,7 @@ Partial Class Compact
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.topbar_title = New System.Windows.Forms.Label()
         Me.panel_topBar = New System.Windows.Forms.Panel()
+        Me.updateBanner = New System.Windows.Forms.Panel()
         Me.topbar_progress = New System.Windows.Forms.Panel()
         Me.buttonQueryCompact = New System.Windows.Forms.Button()
         Me.topbar_dirchooserContainer = New System.Windows.Forms.Panel()
@@ -114,7 +115,9 @@ Partial Class Compact
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.spaceSavedLabel = New System.Windows.Forms.Label()
+        Me.dlUpdateLink = New System.Windows.Forms.LinkLabel()
         Me.panel_topBar.SuspendLayout()
+        Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
         CType(Me.topbar_icon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panel_MainWindow.SuspendLayout()
@@ -157,6 +160,7 @@ Partial Class Compact
         Me.panel_topBar.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_topBar.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.panel_topBar.Controls.Add(Me.updateBanner)
         Me.panel_topBar.Controls.Add(Me.topbar_progress)
         Me.panel_topBar.Controls.Add(Me.buttonQueryCompact)
         Me.panel_topBar.Controls.Add(Me.topbar_dirchooserContainer)
@@ -170,6 +174,16 @@ Partial Class Compact
         Me.panel_topBar.Name = "panel_topBar"
         Me.panel_topBar.Size = New System.Drawing.Size(1000, 135)
         Me.panel_topBar.TabIndex = 14
+        '
+        'updateBanner
+        '
+        Me.updateBanner.BackColor = System.Drawing.Color.FromArgb(CType(CType(211, Byte), Integer), CType(CType(84, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.updateBanner.Controls.Add(Me.dlUpdateLink)
+        Me.updateBanner.Location = New System.Drawing.Point(310, 0)
+        Me.updateBanner.Name = "updateBanner"
+        Me.updateBanner.Size = New System.Drawing.Size(380, 21)
+        Me.updateBanner.TabIndex = 24
+        Me.updateBanner.Visible = False
         '
         'topbar_progress
         '
@@ -1260,6 +1274,21 @@ Partial Class Compact
         Me.spaceSavedLabel.TabIndex = 27
         Me.spaceSavedLabel.Text = "700MB Saved"
         '
+        'dlUpdateLink
+        '
+        Me.dlUpdateLink.BackColor = System.Drawing.Color.Transparent
+        Me.dlUpdateLink.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dlUpdateLink.Font = New System.Drawing.Font("Segoe UI", 8.0!)
+        Me.dlUpdateLink.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.dlUpdateLink.LinkColor = System.Drawing.Color.AliceBlue
+        Me.dlUpdateLink.Location = New System.Drawing.Point(0, 0)
+        Me.dlUpdateLink.Name = "dlUpdateLink"
+        Me.dlUpdateLink.Size = New System.Drawing.Size(380, 21)
+        Me.dlUpdateLink.TabIndex = 1
+        Me.dlUpdateLink.TabStop = True
+        Me.dlUpdateLink.Text = "Update Available: Click to download V2.3"
+        Me.dlUpdateLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1276,6 +1305,7 @@ Partial Class Compact
         Me.Name = "Compact"
         Me.panel_topBar.ResumeLayout(False)
         Me.panel_topBar.PerformLayout()
+        Me.updateBanner.ResumeLayout(False)
         Me.topbar_dirchooserContainer.ResumeLayout(False)
         CType(Me.topbar_icon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panel_MainWindow.ResumeLayout(False)
@@ -1400,4 +1430,6 @@ Partial Class Compact
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
     Friend WithEvents results_arc As Panel
     Friend WithEvents topbar_progress As Panel
+    Friend WithEvents updateBanner As Panel
+    Friend WithEvents dlUpdateLink As LinkLabel
 End Class
