@@ -635,7 +635,7 @@ Public Class Compact
 
 
 
-    Dim CP As Encoding = Console.OutputEncoding
+    Dim CP As Encoding
     Private Sub CreateProcess(passthrougharg As String)
 
         Try
@@ -648,6 +648,8 @@ Public Class Compact
             If passthrougharg = "query" Then isQueryMode = 1
             If passthrougharg = "uncompact" Then isQueryMode = 0
             progresspercent.Visible = True
+
+            If CP Is Nothing Then CP = getEncoding()
 
             Try
                 RunCompact(passthrougharg, CP)
@@ -665,6 +667,8 @@ Public Class Compact
         End Try
 
     End Sub
+
+
 
 
     Private Sub ButtonRevert_Click(sender As Object, e As EventArgs) Handles buttonRevert.Click             'Handles uncompressing. For now, uncompressing can only be done through the program only to revert a compression that's just been done.
@@ -1081,14 +1085,38 @@ Public Class Compact
 
 
 
+    Private Function getEncoding() As Encoding
+        Dim CPGet = New Process
+        With CPGet.StartInfo
+            .FileName = "cmd.exe"
+            .Arguments = "/c chcp"
+            .UseShellExecute = False
+            .CreateNoWindow = True
+            .StandardOutputEncoding = Encoding.Default
+            .StandardErrorEncoding = Encoding.Default
+            .WorkingDirectory = workingDir
+            .RedirectStandardInput = True
+            .RedirectStandardOutput = True
+            .RedirectStandardError = True
+        End With
+        CPGet.Start()
+
+        Dim Res = CPGet.StandardOutput.ReadLine()
+        Dim CPa = Integer.Parse(Regex.Replace(Res, "[^\d]", ""))
+        CPGet.StandardInput.WriteLine("exit")
+        CPGet.StandardInput.Flush()
+        CPGet.WaitForExit()
+        Return Encoding.GetEncoding(CPa)
+    End Function
+
+
+
 
     Private Sub LetsKillStuffButSafelyNow()
-        If MyProcess.HasExited = False Then
-            MyProcess.Kill()
-        End If
-
-
+        If MyProcess.HasExited = False Then MyProcess.Kill()
     End Sub
+
+
 
 
     '//////////////FORMAT MESSAGES FROM MUITABLE FOR LOCALISATION///////////////////////////////////////////
