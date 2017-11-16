@@ -4,6 +4,6 @@
 	<IsPrerelease>False</IsPrerelease>
 	<VersionStr>V2.3.0</VersionStr>
 	<ChocolateyVStr>2.3.0</ChocolateyVStr>
-	<Changes></Changes>
-	<Fixes>Broke some localization in 2.1 - Fixed it again|Fixed output log encoding.</Fixes>
+	<Changes>Added update checking capability</Changes>
+	<Fixes></Fixes>
 </Info>
