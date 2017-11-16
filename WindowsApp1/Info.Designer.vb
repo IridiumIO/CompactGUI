@@ -27,7 +27,7 @@ Partial Class Info
         Me.Label2 = New System.Windows.Forms.Label()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.semVersion = New System.Windows.Forms.Label()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.lbl_CheckUpdates = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -94,20 +94,20 @@ Partial Class Info
         Me.semVersion.TabIndex = 3
         Me.semVersion.Text = "V 1.2.2"
         '
-        'LinkLabel1
+        'lbl_CheckUpdates
         '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
-        Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.SystemColors.MenuHighlight
-        Me.LinkLabel1.Location = New System.Drawing.Point(66, 5)
-        Me.LinkLabel1.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(104, 13)
-        Me.LinkLabel1.TabIndex = 4
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Check For Updates"
+        Me.lbl_CheckUpdates.AutoSize = True
+        Me.lbl_CheckUpdates.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.lbl_CheckUpdates.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_CheckUpdates.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.lbl_CheckUpdates.LinkColor = System.Drawing.SystemColors.MenuHighlight
+        Me.lbl_CheckUpdates.Location = New System.Drawing.Point(66, 5)
+        Me.lbl_CheckUpdates.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
+        Me.lbl_CheckUpdates.Name = "lbl_CheckUpdates"
+        Me.lbl_CheckUpdates.Size = New System.Drawing.Size(104, 13)
+        Me.lbl_CheckUpdates.TabIndex = 4
+        Me.lbl_CheckUpdates.TabStop = True
+        Me.lbl_CheckUpdates.Text = "Check For Updates"
         '
         'TableLayoutPanel1
         '
@@ -117,8 +117,8 @@ Partial Class Info
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.TableLayoutPanel1.Controls.Add(Me.semVersion, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.LinkLabel1, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(162, 23)
+        Me.TableLayoutPanel1.Controls.Add(Me.lbl_CheckUpdates, 1, 0)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(162, 22)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -158,7 +158,7 @@ Partial Class Info
         Me.checkEnableRCMenu.AutoSize = True
         Me.checkEnableRCMenu.Font = New System.Drawing.Font("Segoe UI", 8.25!)
         Me.checkEnableRCMenu.ForeColor = System.Drawing.Color.Black
-        Me.checkEnableRCMenu.Location = New System.Drawing.Point(43, 41)
+        Me.checkEnableRCMenu.Location = New System.Drawing.Point(42, 52)
         Me.checkEnableRCMenu.Name = "checkEnableRCMenu"
         Me.checkEnableRCMenu.Size = New System.Drawing.Size(277, 17)
         Me.checkEnableRCMenu.TabIndex = 2
@@ -190,7 +190,8 @@ Partial Class Info
         '
         'Panel3
         '
-        Me.Panel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.Panel3.Controls.Add(Me.Label4)
         Me.Panel3.Controls.Add(Me.Label5)
@@ -216,7 +217,7 @@ Partial Class Info
         '
         Me.LinkLabel2.AutoSize = True
         Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.SystemColors.MenuHighlight
         Me.LinkLabel2.Location = New System.Drawing.Point(233, 73)
         Me.LinkLabel2.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
@@ -235,7 +236,7 @@ Partial Class Info
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel3)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(400, 300)
         Me.Name = "Info"
@@ -255,7 +256,7 @@ Partial Class Info
     Friend WithEvents Label2 As Label
     Friend WithEvents RichTextBox1 As RichTextBox
     Friend WithEvents semVersion As Label
-    Friend WithEvents LinkLabel1 As LinkLabel
+    Friend WithEvents lbl_CheckUpdates As LinkLabel
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Panel2 As Panel

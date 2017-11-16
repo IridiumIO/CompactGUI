@@ -26,6 +26,7 @@ Public Class WikiHandler
             Catch ex As WebException
                 Compact.sb_lblGameIssues.Text = "! No Internet Connection"
                 Compact.sb_lblGameIssues.Visible = True
+                Compact.ToolTipFilesCompressed.SetToolTip(Compact.sb_lblGameIssues, "")
                 Compact.wkPostSizeVal.Text = "?"
                 Compact.wkPostSizeUnit.Text = ""
                 Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + Compact.wkPostSizeVal.Size.Width, Compact.wkPostSizeVal.Location.Y)

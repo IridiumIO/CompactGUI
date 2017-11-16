@@ -29,6 +29,7 @@ Partial Class Compact
         Me.topbar_title = New System.Windows.Forms.Label()
         Me.panel_topBar = New System.Windows.Forms.Panel()
         Me.updateBanner = New System.Windows.Forms.Panel()
+        Me.dlUpdateLink = New System.Windows.Forms.LinkLabel()
         Me.topbar_progress = New System.Windows.Forms.Panel()
         Me.buttonQueryCompact = New System.Windows.Forms.Button()
         Me.topbar_dirchooserContainer = New System.Windows.Forms.Panel()
@@ -115,7 +116,6 @@ Partial Class Compact
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.spaceSavedLabel = New System.Windows.Forms.Label()
-        Me.dlUpdateLink = New System.Windows.Forms.LinkLabel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -177,13 +177,29 @@ Partial Class Compact
         '
         'updateBanner
         '
+        Me.updateBanner.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.updateBanner.BackColor = System.Drawing.Color.FromArgb(CType(CType(211, Byte), Integer), CType(CType(84, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.updateBanner.Controls.Add(Me.dlUpdateLink)
         Me.updateBanner.Location = New System.Drawing.Point(310, 0)
         Me.updateBanner.Name = "updateBanner"
-        Me.updateBanner.Size = New System.Drawing.Size(380, 21)
+        Me.updateBanner.Size = New System.Drawing.Size(380, 19)
         Me.updateBanner.TabIndex = 24
         Me.updateBanner.Visible = False
+        '
+        'dlUpdateLink
+        '
+        Me.dlUpdateLink.BackColor = System.Drawing.Color.Transparent
+        Me.dlUpdateLink.Font = New System.Drawing.Font("Segoe UI", 8.0!)
+        Me.dlUpdateLink.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.dlUpdateLink.LinkColor = System.Drawing.Color.AliceBlue
+        Me.dlUpdateLink.Location = New System.Drawing.Point(0, 0)
+        Me.dlUpdateLink.Margin = New System.Windows.Forms.Padding(0)
+        Me.dlUpdateLink.Name = "dlUpdateLink"
+        Me.dlUpdateLink.Size = New System.Drawing.Size(380, 18)
+        Me.dlUpdateLink.TabIndex = 1
+        Me.dlUpdateLink.TabStop = True
+        Me.dlUpdateLink.Text = "Update Available: Click to download V2.3"
+        Me.dlUpdateLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'topbar_progress
         '
@@ -380,7 +396,7 @@ Partial Class Compact
         '
         Me.sb_lblGameIssues.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.sb_lblGameIssues.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.sb_lblGameIssues.Location = New System.Drawing.Point(194, 153)
+        Me.sb_lblGameIssues.Location = New System.Drawing.Point(189, 153)
         Me.sb_lblGameIssues.Name = "sb_lblGameIssues"
         Me.sb_lblGameIssues.Size = New System.Drawing.Size(132, 20)
         Me.sb_lblGameIssues.TabIndex = 23
@@ -654,7 +670,7 @@ Partial Class Compact
         Me.vis_dropshadowmain2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.vis_dropshadowmain2.Location = New System.Drawing.Point(0, 0)
         Me.vis_dropshadowmain2.Name = "vis_dropshadowmain2"
-        Me.vis_dropshadowmain2.Size = New System.Drawing.Size(353, 4)
+        Me.vis_dropshadowmain2.Size = New System.Drawing.Size(353, 6)
         Me.vis_dropshadowmain2.TabIndex = 2
         '
         'wkPreSizeVal
@@ -712,7 +728,7 @@ Partial Class Compact
         Me.vis_dropshadowMain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.vis_dropshadowMain.Location = New System.Drawing.Point(0, 135)
         Me.vis_dropshadowMain.Name = "vis_dropshadowMain"
-        Me.vis_dropshadowMain.Size = New System.Drawing.Size(1000, 4)
+        Me.vis_dropshadowMain.Size = New System.Drawing.Size(998, 6)
         Me.vis_dropshadowMain.TabIndex = 16
         '
         'TabControl1
@@ -925,7 +941,7 @@ Partial Class Compact
         Me.ProgressPage.Location = New System.Drawing.Point(4, 22)
         Me.ProgressPage.Name = "ProgressPage"
         Me.ProgressPage.Padding = New System.Windows.Forms.Padding(3)
-        Me.ProgressPage.Size = New System.Drawing.Size(995, 509)
+        Me.ProgressPage.Size = New System.Drawing.Size(993, 507)
         Me.ProgressPage.TabIndex = 1
         Me.ProgressPage.Text = "ProgressPage"
         '
@@ -1167,7 +1183,7 @@ Partial Class Compact
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(995, 509)
+        Me.TabPage3.Size = New System.Drawing.Size(993, 507)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "TabPage3"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -1273,21 +1289,6 @@ Partial Class Compact
         Me.spaceSavedLabel.Size = New System.Drawing.Size(147, 30)
         Me.spaceSavedLabel.TabIndex = 27
         Me.spaceSavedLabel.Text = "700MB Saved"
-        '
-        'dlUpdateLink
-        '
-        Me.dlUpdateLink.BackColor = System.Drawing.Color.Transparent
-        Me.dlUpdateLink.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dlUpdateLink.Font = New System.Drawing.Font("Segoe UI", 8.0!)
-        Me.dlUpdateLink.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.dlUpdateLink.LinkColor = System.Drawing.Color.AliceBlue
-        Me.dlUpdateLink.Location = New System.Drawing.Point(0, 0)
-        Me.dlUpdateLink.Name = "dlUpdateLink"
-        Me.dlUpdateLink.Size = New System.Drawing.Size(380, 21)
-        Me.dlUpdateLink.TabIndex = 1
-        Me.dlUpdateLink.TabStop = True
-        Me.dlUpdateLink.Text = "Update Available: Click to download V2.3"
-        Me.dlUpdateLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Compact
         '
