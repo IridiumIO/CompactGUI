@@ -1,7 +1,6 @@
-<!--- TESTING -->
 <Info>
 	<VersionMajor>2.3</VersionMajor>
-	<VersionMinor>1</VersionMinor>
+	<VersionMinor>0</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
 	<VersionStr>V2.3.0</VersionStr>
 	<ChocolateyVStr>2.3.0</ChocolateyVStr>
