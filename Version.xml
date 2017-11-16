@@ -4,6 +4,6 @@
 	<IsPrerelease>False</IsPrerelease>
 	<VersionStr>V2.3</VersionStr>
 	<ChocolateyVStr>2.3.0</ChocolateyVStr>
-	<Changes>Added update checking capability</Changes>
-	<Fixes></Fixes>
+	<Changes>Added update checker for future updates - From this version onward, a banner will show at the top when a new version is available</Changes>
+	<Fixes>Minor UI alignment corrections</Fixes>
 </Info>
