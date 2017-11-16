@@ -1,5 +1,5 @@
-<p align="center"><img src="https://cdn.rawgit.com/imminentfate/compactgui/master/banner.svg" width="500"></p>
-  
+<p align="center"><img src="banner.svg" width="500"></p>
+
 &nbsp;
 
 CompactGUI is a standalone GUI to make using the Windows 10 compact.exe function easier to use. This allows games, programs and other folders to be compressed transparently (i.e they can still be used normally) with no performance loss.
