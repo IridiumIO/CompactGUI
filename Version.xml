@@ -1,0 +1,9 @@
+<Info>
+	<VersionMajor>2.3</VersionMajor>
+	<VersionMinor>0</VersionMinor>
+	<IsPrerelease>False</IsPrerelease>
+	<VersionStr>V2.3</VersionStr>
+	<ChocolateyVStr>2.3.0</ChocolateyVStr>
+	<Changes>Added update checking capability</Changes>
+	<Fixes></Fixes>
+</Info>
