@@ -1,9 +1,9 @@
 <Info>
 	<VersionMajor>2.3</VersionMajor>
-	<VersionMinor>0</VersionMinor>
+	<VersionMinor>1</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
-	<VersionStr>V2.3</VersionStr>
-	<ChocolateyVStr>2.3.0</ChocolateyVStr>
-	<Changes>Added update checker for future updates - From this version onward, a banner will show at the top when a new version is available</Changes>
-	<Fixes>Minor UI alignment corrections</Fixes>
+	<VersionStr>V2.3.1</VersionStr>
+	<ChocolateyVStr>2.3.1</ChocolateyVStr>
+	<Changes>Performance Improvements - Folder selection and estimation may be up to 50% faster in some situations </Changes>
+	<Fixes></Fixes>
 </Info>
