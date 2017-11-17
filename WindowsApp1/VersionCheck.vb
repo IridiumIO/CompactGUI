@@ -1,4 +1,5 @@
-﻿Imports System.Net
+﻿Imports System.Globalization
+Imports System.Net
 
 Public Class VersionCheck
     Shared Sub VC(version As String)
@@ -28,7 +29,7 @@ Public Class VersionCheck
     Shared Function XMLParse(versionDoc As XDocument, version As String)
         Dim info As XElement = versionDoc.Root
 
-        xml_MajorVer = info.Element("VersionMajor").Value
+        xml_MajorVer = Single.Parse(info.Element("VersionMajor").Value, CultureInfo.CurrentUICulture)
         xml_MinorVer = info.Element("VersionMinor").Value
         xml_VersionStr = info.Element("VersionStr").Value
         xml_ChocoVStr = info.Element("ChocolateyVStr").Value
@@ -36,7 +37,7 @@ Public Class VersionCheck
         xml_Changes = info.Element("Changes").Value.Split("|")
         xml_Fixes = info.Element("Fixes").Value.Split("|")
 
-        Dim exe_MajorVer As Single = CSng(version.Substring(0, version.LastIndexOf(".")))
+        Dim exe_MajorVer As Single = Single.Parse(version.Substring(0, version.LastIndexOf(".")), CultureInfo.CurrentUICulture)
         Dim exe_MinorVer As Integer = CInt(version.Substring(version.LastIndexOf(".") + 1))
 
         If xml_MajorVer > exe_MajorVer Then
