@@ -128,7 +128,7 @@ Public Class WikiHandler
         Next
         Compact.sb_labelCompressed.Text = "Estimated Compressed"
 
-        Try
+        If gcount.Count <> Nothing Then
             ratioavg = (ratioavg - 1) / gcount.Count
 
             Compact.wkPostSizeVal.Text = Math.Round(folderSize * ratioavg, 1)
@@ -136,14 +136,13 @@ Public Class WikiHandler
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
             Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), Compact.wkPostSizeVal.Location.Y + 16)
             Compact.wkPostSizeUnit.Visible = True
-
-        Catch ex As System.DivideByZeroException
+        Else
             Compact.wkPostSizeVal.Text = "?"
             Compact.wkPostSizeUnit.Text = ""
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(Compact.wkPostSizeVal.Text, Compact.wkPostSizeVal.Font)
             Compact.wkPostSizeUnit.Location = New Point(Compact.wkPostSizeVal.Location.X + (Compact.wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), Compact.wkPostSizeVal.Location.Y + 16)
-        End Try
 
+        End If
 
         If WikiPopup.GamesTable.RowCount > 1 Then
             Compact.seecompest.Visible = True

@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Shared version = "2.3.0"
+    Shared version = "2.3.1"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -246,7 +246,7 @@ Public Class Compact
 
         AppendOutputText(vbCrLf & e.Data)                                                               'Sends output to the embedded console
 
-        'NEEDS FIXING'
+
         If e.Data <> Nothing Then
             If e.Data.Contains(CALC_OUTPUT(e.Data).ToString.Trim(" ")) And canProceed = 0 Then          'If the output line of the console is the "%files within" line then do stuff. Trim gets rid of the spaces before and after some lines
                 CON_FILESWITHINDIRECTORIESLINE = e.Data.Trim(" ")                                           ' This variable can't get set if the first criteria fails. This means that the console output is not parsing the russian properly. 
@@ -257,7 +257,7 @@ Public Class Compact
             End If
         End If
 
-        '
+
 
         If OutputlineIndex = 1 And canProceed = 1 Then                                                  ' These all run after the one above is met, since if the one above is met then it means there's only 3 lines left. 
             CON_FILESCOMPRESSEDLINE = e.Data
@@ -545,10 +545,10 @@ Public Class Compact
                         " ❯ " + DIwDString.Name.ToString
                 End Try
 
-                uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 0)
+                uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 1)
 
                 Dim rawpreSize = GetOutputSize _
-                   (Math.Round(DirectorySize(DIwDString, True), 1), True)
+                   (uncompressedfoldersize, True)
 
                 preSize.Text = "Uncompressed Size: " + rawpreSize
 
