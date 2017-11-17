@@ -1,9 +1,9 @@
 <Info>
 	<VersionMajor>2.3</VersionMajor>
-	<VersionMinor>1</VersionMinor>
+	<VersionMinor>2</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
-	<VersionStr>V2.3.1</VersionStr>
-	<ChocolateyVStr>2.3.1</ChocolateyVStr>
-	<Changes>Performance Improvements - Folder selection and estimation may be up to 50% faster in some situations </Changes>
-	<Fixes></Fixes>
+	<VersionStr>V2.3.2</VersionStr>
+	<ChocolateyVStr>2.3.2</ChocolateyVStr>
+	<Changes></Changes>
+	<Fixes>Fixed error at startup for users who use ',' as a decimal separator</Fixes>
 </Info>
