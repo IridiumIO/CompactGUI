@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Shared version = "2.3.2"
+    Shared version = "2.3.3"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
