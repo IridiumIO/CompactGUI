@@ -15,8 +15,8 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 __*Or:*__
 
 Install with **Chocolatey** from Powershell or CMD:
-```cs
-choco install compactgui
+```coffeescript
+choco install compactgui --version x.x.x
 ```
 <p align = "left"><a href="https://chocolatey.org/packages/compactgui/"><img src="https://img.shields.io/chocolatey/v/compactgui.svg""></a></p>
 
