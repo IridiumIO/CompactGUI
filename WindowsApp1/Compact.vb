@@ -354,32 +354,32 @@ Public Class Compact
 
 
             Try
-                    If sb_progressbar.Width > 301 Then                                                 'Avoids a /r/softwaregore scenario
-                        sb_progressbar.Width = 301
-                        progresspercent.Text = "100 %"
-                        topbar_progress.Width = topbar_dirchooserContainer.Width
+                If sb_progressbar.Width > 301 Then                                                 'Avoids a /r/softwaregore scenario
+                    sb_progressbar.Width = 301
+                    progresspercent.Text = "100 %"
+                    topbar_progress.Width = topbar_dirchooserContainer.Width
 
-                    ElseIf isQueryMode = 0 Then
-                        sb_progressbar.Width = Math.Round _
+                ElseIf isQueryMode = 0 Then
+                    sb_progressbar.Width = Math.Round _
                             ((fileCountProgress / fileCountTotal * 301), 0)
-                        topbar_progress.Width = Math.Round _
+                    topbar_progress.Width = Math.Round _
                             ((fileCountProgress / fileCountTotal * topbar_dirchooserContainer.Width), 0)
-                        progresspercent.Text = Math.Round _
+                    progresspercent.Text = Math.Round _
                             ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
-                    ElseIf isQueryMode = 1 Then
-                        sb_progressbar.Width = Math.Round _
+                ElseIf isQueryMode = 1 Then
+                    sb_progressbar.Width = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 301), 0)
-                        topbar_progress.Width = Math.Round _
+                    topbar_progress.Width = Math.Round _
                             ((QdirCountProgress / dirCountTotal * topbar_dirchooserContainer.Width), 0)
-                        progresspercent.Text = Math.Round _
+                    progresspercent.Text = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                  'Generates an estimate of progress for the Query command.
-                    End If
-                Catch ex As Exception
-                    Console.WriteLine("PE: " + ex.Data.ToString)
-                End Try
+                End If
+            Catch ex As Exception
+                Console.WriteLine("PE: " + ex.Data.ToString)
+            End Try
 
-            End If
+        End If
 
 
 
@@ -485,7 +485,7 @@ Public Class Compact
                 End If
 
             End If
-                folderChoice.Dispose()
+            folderChoice.Dispose()
         End If
 
     End Sub
@@ -628,10 +628,10 @@ Public Class Compact
         buttonQueryCompact.Enabled = False
         'dirChooser.Enabled = False
         buttonRevert.Visible = False
-        sb_progresslabel.Text = "Uncompressing..."
+
 
         Try
-            RunCompact("uncompact", CP)
+            RunCompact("uncompact")
         Catch ex As Exception
         End Try
 
@@ -814,7 +814,7 @@ Public Class Compact
             Try
 
                 compressedSizeVisual.Width = CInt(320 / compRatioLabel.Text)
-                Callpercent = newFolderSize / oldFolderSize * 100
+                Callpercent = (1 - (1 / CDec(ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO)))) * 100
                 sb_compressedSizeVisual.Height = CInt(113 / compRatioLabel.Text)
                 sb_compressedSizeVisual.Location = New Point(sb_compressedSizeVisual.Location.X, 5 + 113 - sb_compressedSizeVisual.Height)
                 'sb_Panel.Refresh()
@@ -834,7 +834,7 @@ Public Class Compact
 
                 CompResultsPanel.Visible = True
                 sb_ResultsPanel.Visible = True
-
+                PaintPercentageTransition.PaintTarget(results_arc, Callpercent)
             ElseIf isQueryCalledByCompact = 1 Then
 
                 sb_progresslabel.Text = "Analyzing..."
@@ -1392,16 +1392,15 @@ Public Class Compact
 
     End Sub
 
-    Private Sub results_arc_Paint(sender As Object, e As PaintEventArgs) Handles results_arc.Paint
-        Callpercent = (1 - (1 / CDec(ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO)))) * 100
+    Public Sub results_arc_Paint(sender As Object, e As PaintEventArgs) Handles results_arc.Paint
+
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
-        DrawProgress(e.Graphics, New Rectangle(21, 21, 203, 203), Callpercent, ColorTranslator.FromHtml("#3B668E"), ColorTranslator.FromHtml("#9B9B9B"))
+        DrawProgress(e.Graphics, New Rectangle(21, 21, 203, 203), PaintPercentageTransition.callpercentstep, ColorTranslator.FromHtml("#3B668E"), ColorTranslator.FromHtml("#9B9B9B"))
 
     End Sub
 
 
-
-    Dim Callpercent As Single
+    Shared Callpercent As Single
 
     Private Sub DrawProgress(g As Graphics, rect As Rectangle, percentage As Single, percColor As Color, remColor As Color)
         'work out the angles for each arc
@@ -1441,12 +1440,12 @@ Public Class Compact
             End Using
         End Using
 
-
-
-
-
-
     End Sub
+
+
+
+
+
 
 
     Private Sub CompResultsPanel_Paint(sender As Object, e As PaintEventArgs) Handles CompResultsPanel.Paint
@@ -1529,4 +1528,21 @@ Public Class Compact
 
 
 
+End Class
+
+Public Class GraphicsPanel
+    Inherits Panel
+    Private Const WS_EX_COMPOSITED As Integer = &H2000000
+
+    Protected Overrides ReadOnly Property CreateParams() As CreateParams
+        Get
+            Dim cp As CreateParams = MyBase.CreateParams
+            cp.ExStyle = cp.ExStyle Or WS_EX_COMPOSITED
+            Return cp
+        End Get
+    End Property
+
+    Public Sub New()
+        Me.DoubleBuffered = True
+    End Sub
 End Class

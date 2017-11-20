@@ -135,3 +135,34 @@ Public Class UnfurlTransition
 
 End Class
 
+Public Class PaintPercentageTransition
+    Shared PaintTimer As New Timer With {.Interval = 5}
+    Shared isDrawing = False
+    Public Shared callpercentstep = 0
+    Shared PassthroughCallPercent As Single
+
+    Public Shared Sub PaintTarget(target As Panel, Callpercent As Single)
+        PassthroughCallPercent = Callpercent
+        callpercentstep = 0
+        AddHandler PaintTimer.Tick, AddressOf t_tick
+        PaintTimer.Start()
+    End Sub
+
+
+    Shared Sub t_tick(sender As Object, e As EventArgs)
+
+        If callpercentstep >= PassthroughCallPercent Then
+            PaintTimer.Stop()
+            callpercentstep = PassthroughCallPercent
+            Compact.results_arc.Invalidate()
+            Compact.results_arc.Update()
+            RemoveHandler PaintTimer.Tick, AddressOf t_tick
+            'MsgBox("Bing")
+        Else
+            callpercentstep += 0.4
+            Compact.results_arc.Invalidate()
+            Compact.results_arc.Update()
+        End If
+
+    End Sub
+End Class

@@ -5,28 +5,19 @@ Partial Class Compact
     Private Sub CreateProcess(passthrougharg As String)
 
         Try
-            MyProcess.Kill()
-        Catch ex As Exception
-        End Try
-
-        Try
-            If passthrougharg = "compact" Then isQueryMode = 0
+            If passthrougharg.Contains("compact") Then isQueryMode = 0      'also catches "uncompact"
             If passthrougharg = "query" Then isQueryMode = 1
-            If passthrougharg = "uncompact" Then isQueryMode = 0
             progresspercent.Visible = True
 
             If CP Is Nothing Then CP = getEncoding()
 
-            Try
-                RunCompact(passthrougharg, CP)
+            RunCompact(passthrougharg)
 
-                If passthrougharg = "compact" Then sb_progresslabel.Text = "Compressing, Please Wait"
-                If passthrougharg = "query" Then sb_progresslabel.Text = "Analyzing"
+            If passthrougharg = "compact" Then sb_progresslabel.Text = "Compressing, Please Wait"
+            If passthrougharg = "query" Then sb_progresslabel.Text = "Analyzing"
+            If passthrougharg = "uncompact" Then sb_progresslabel.Text = "Uncompressing..."
 
-                TabControl1.SelectedTab = ProgressPage
-
-            Catch ex As Exception
-            End Try
+            TabControl1.SelectedTab = ProgressPage
 
         Catch ex As Exception
             Console.WriteLine(ex.Data)
@@ -40,7 +31,7 @@ Partial Class Compact
     Private Sub Queryaftercompact()
         isQueryMode = 1
         hasqueryfinished = 1
-        RunCompact("query", CP)
+        RunCompact("query")
     End Sub
 
 
@@ -49,36 +40,23 @@ Partial Class Compact
     Dim hasqueryfinished = 0
 
 
-    Private Sub RunCompact(desiredfunction As String, EC As Encoding)
+    Private Sub RunCompact(desiredfunction As String)
 
         If desiredfunction = "compact" Then
 
             isQueryCalledByCompact = 0
             compactArgs = "/C /I"
 
-            If checkRecursiveScan.Checked = True Then
-                compactArgs = compactArgs + " /S"
-            End If
-            If checkForceCompression.Checked = True Then
-                compactArgs = compactArgs + " /F"
-            End If
-            If checkHiddenFiles.Checked = True Then
-                compactArgs = compactArgs + " /A"
-            End If
-            If compressX4.Checked = True Then
-                compactArgs = compactArgs + " /EXE:XPRESS4K"
-            End If
-            If compressX8.Checked = True Then
-                compactArgs = compactArgs + " /EXE:XPRESS8K"
-            End If
-            If compressX16.Checked = True Then
-                compactArgs = compactArgs + " /EXE:XPRESS16K"
-            End If
-            If compressLZX.Checked = True Then
-                compactArgs = compactArgs + " /EXE:LZX"
-            End If
+            If checkRecursiveScan.Checked = True Then compactArgs &= " /S"
+            If checkForceCompression.Checked = True Then compactArgs &= " /F"
+            If checkHiddenFiles.Checked = True Then compactArgs &= " /A"
+            If compressX4.Checked = True Then compactArgs &= " /EXE:XPRESS4K"
+            If compressX8.Checked = True Then compactArgs &= " /EXE:XPRESS8K"
+            If compressX16.Checked = True Then compactArgs &= " /EXE:XPRESS16K"
+            If compressLZX.Checked = True Then compactArgs &= " /EXE:LZX"
 
-            RunCompact_ProcessGen(compactArgs, EC)
+
+            RunCompact_ProcessGen(compactArgs)
 
             isQueryCalledByCompact = 1
             hasqueryfinished = 0
@@ -90,14 +68,12 @@ Partial Class Compact
 
             compactArgs = "/U /S /EXE /I"
 
-            If checkForceCompression.Checked = True Then
-                compactArgs = compactArgs + " /F"
-            End If
-            If checkHiddenFiles.Checked = True Then
-                compactArgs = compactArgs + " /A"
-            End If
+            If checkForceCompression.Checked = True Then compactArgs &= " /F"
 
-            RunCompact_ProcessGen(compactArgs, EC)
+            If checkHiddenFiles.Checked = True Then compactArgs &= " /A"
+
+
+            RunCompact_ProcessGen(compactArgs)
 
             isActive = 1
 
@@ -106,7 +82,7 @@ Partial Class Compact
 
             compactArgs = "/S /Q /EXE /I"
 
-            RunCompact_ProcessGen(compactArgs, EC)
+            RunCompact_ProcessGen(compactArgs)
 
 
 
@@ -117,13 +93,13 @@ Partial Class Compact
 
 
 
-    Private Sub RunCompact_ProcessGen(passthroughArgs As String, EC As Encoding)
+    Private Sub RunCompact_ProcessGen(passthroughArgs As String)
         MyProcess = New Process
         With MyProcess.StartInfo
             .FileName = "compact.exe"
-            .WorkingDirectory = workingDir                              'Set working directory via argument, allows Encoding to be passed directly.
+            .WorkingDirectory = workingDir
             .Arguments = passthroughArgs
-            .StandardOutputEncoding = CP                                'Allow console output to use the System's encoding for localization support
+            .StandardOutputEncoding = CP
             .StandardErrorEncoding = CP
             .UseShellExecute = False
             .CreateNoWindow = True
@@ -131,6 +107,7 @@ Partial Class Compact
             .RedirectStandardOutput = True
             .RedirectStandardError = True
         End With
+
         Console.WriteLine(MyProcess.StartInfo.Arguments)
         MyProcess.Start()
         MyProcess.PriorityClass = ProcessPriorityClass.BelowNormal

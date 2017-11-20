@@ -89,7 +89,7 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
-        Me.results_arc = New System.Windows.Forms.Panel()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.submitToWiki = New System.Windows.Forms.Label()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
@@ -941,7 +941,7 @@ Partial Class Compact
         Me.ProgressPage.Location = New System.Drawing.Point(4, 22)
         Me.ProgressPage.Name = "ProgressPage"
         Me.ProgressPage.Padding = New System.Windows.Forms.Padding(3)
-        Me.ProgressPage.Size = New System.Drawing.Size(993, 507)
+        Me.ProgressPage.Size = New System.Drawing.Size(995, 509)
         Me.ProgressPage.TabIndex = 1
         Me.ProgressPage.Text = "ProgressPage"
         '
@@ -988,7 +988,7 @@ Partial Class Compact
         Me.results_arc.Location = New System.Drawing.Point(13, 63)
         Me.results_arc.Name = "results_arc"
         Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 34
+        Me.results_arc.TabIndex = 35
         '
         'submitToWiki
         '
@@ -1183,7 +1183,7 @@ Partial Class Compact
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(993, 507)
+        Me.TabPage3.Size = New System.Drawing.Size(995, 509)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "TabPage3"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -1429,8 +1429,8 @@ Partial Class Compact
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents sb_SpaceSavedLabel As Label
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
-    Friend WithEvents results_arc As Panel
     Friend WithEvents topbar_progress As Panel
     Friend WithEvents updateBanner As Panel
     Friend WithEvents dlUpdateLink As LinkLabel
+    Friend WithEvents results_arc As GraphicsPanel
 End Class
