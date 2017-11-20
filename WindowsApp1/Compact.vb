@@ -37,8 +37,6 @@ Public Class Compact
     Dim isQueryMode = 0
     Dim isQueryCalledByCompact = 0
     Dim isActive = 0
-    Dim byteComparisonRaw As String = ""
-    Dim byteComparisonRawFilesCompressed As String = ""
     Dim dirCountProgress As Int64
     Dim dirCountTotal As Int64
     Dim fileCountTotal As Int64 = 0
@@ -128,7 +126,7 @@ Public Class Compact
 
     Dim REGEX_NUMBERFORMATTER As New Regex("(?<=\d+)\s+(?=\d+)")
 
-
+#End Region
 
     Public Function CALC_OUTPUT(edata As String)
         Dim CONINPUTDATA As String() = REGEX_NUMBERFORMATTER.Replace(edata, "").Trim().Split(" ")
@@ -140,7 +138,7 @@ Public Class Compact
         Dim FMTListing As String() = FMT_LISTING_MSG.Trim().Split(" ")
         Dim FMTUncompressed As String() = FMT_UNCOMPRESSED_MSG.Split(" ")
         Dim FMTCompressFinished As String() = FMT_COMPRESSED_MSG(FMT_COMPRESSED_MSG.Count - 1).Trim(vbCrLf).Split(" ")
-#End Region
+
 
 
 
@@ -262,7 +260,6 @@ Public Class Compact
         If OutputlineIndex = 1 And canProceed = 1 Then                                                  ' These all run after the one above is met, since if the one above is met then it means there's only 3 lines left. 
             CON_FILESCOMPRESSEDLINE = e.Data
             CALC_OUTPUT(e.Data)
-            byteComparisonRawFilesCompressed = e.Data
             Console.WriteLine("Compressed: " +
               ARR_FILESCOMPRESSED(CON_INDEX_FILESCOMPRESSEDCOUNT) + " Not Compressed: " +
               ARR_FILESCOMPRESSED(CON_INDEX_FILESNOTCOMPRESSEDCOUNT))
@@ -272,7 +269,6 @@ Public Class Compact
         If OutputlineIndex = 2 Then
             CON_TOTALBYTESLINE = e.Data
             CALC_OUTPUT(e.Data)
-            byteComparisonRaw = e.Data
             Console.WriteLine("Bytes Compressed: " +
                 ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED) + " In Total Bytes: " +
                 ARR_TOTALBYTES(CON_INDEX_TOTALBYTESCOMPRESSED))
@@ -356,15 +352,14 @@ Public Class Compact
 
         If fileCountTotal <> 0 Then                                                                         'Makes sure that there are actually files being counted before attempting a calculation
 
-            If isQueryMode = 0 Then
 
-
-                Try
+            Try
                     If sb_progressbar.Width > 301 Then                                                 'Avoids a /r/softwaregore scenario
                         sb_progressbar.Width = 301
                         progresspercent.Text = "100 %"
                         topbar_progress.Width = topbar_dirchooserContainer.Width
-                    Else
+
+                    ElseIf isQueryMode = 0 Then
                         sb_progressbar.Width = Math.Round _
                             ((fileCountProgress / fileCountTotal * 301), 0)
                         topbar_progress.Width = Math.Round _
@@ -372,19 +367,7 @@ Public Class Compact
                         progresspercent.Text = Math.Round _
                             ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
-                    End If
-                Catch ex As Exception
-                End Try
-
-            ElseIf isQueryMode = 1 Then
-
-
-                Try
-                    If sb_progressbar.Width > 301 Then                                                 'Avoids a /r/softwaregore scenario
-                        sb_progressbar.Width = 301
-                        progresspercent.Text = "100 %"
-                        topbar_progress.Width = 603
-                    Else
+                    ElseIf isQueryMode = 1 Then
                         sb_progressbar.Width = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 301), 0)
                         topbar_progress.Width = Math.Round _
@@ -393,12 +376,11 @@ Public Class Compact
                             ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                  'Generates an estimate of progress for the Query command.
                     End If
                 Catch ex As Exception
+                    Console.WriteLine("PE: " + ex.Data.ToString)
                 End Try
 
             End If
 
-
-        End If
 
 
         If compressFinished = 1 Then                                                                        'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
@@ -491,10 +473,19 @@ Public Class Compact
             buttonCompress.Visible = True
             overrideCompressFolderButton = 0
 
-            Dim folderChoice As New VistaFolderBrowserDialog
+            Dim folderChoice As New FileFolderDialog
             folderChoice.ShowDialog()
-            SelectFolder(folderChoice.SelectedPath, "button")
-            folderChoice.Dispose()
+            If Directory.Exists(folderChoice.SelectedPath) Then
+                SelectFolder(folderChoice.SelectedPath, "button")
+            ElseIf File.Exists(folderChoice.selectedpath) Then
+                If folderChoice.MultipleFiles IsNot Nothing Then
+                    MsgBox("Multiple Files Selected")
+                Else
+                    MsgBox("File selected")
+                End If
+
+            End If
+                folderChoice.Dispose()
         End If
 
     End Sub
@@ -506,25 +497,13 @@ Public Class Compact
 
         Dim wDString = selectedDir
 
-        If wDString.Contains("C:\Windows") Then                                                                             'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
-
-            MsgBox("Compressing items in the Windows folder using this program " _
-                    & "is not recommended. Please use the command line if you still " _
-                    & "wish to compress the Windows folder")
-
-        ElseIf wDString.EndsWith(":\") Then
-
-            MsgBox("Compressing an entire drive with this tool is not allowed")
-
+        If selectedDir.Contains("C:\Windows") Then : ThrowError(ERR_WINDOWSDIRNOTALLOWED)                                    'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
+        ElseIf selectedDir.EndsWith(":\") Then : ThrowError(ERR_WHOLEDRIVENOTALLOWED)
         Else
-
-            If wDString.Length >= 3 Then                                                                                    'Makes sure the chosen folder isn't a null value or an exception
-
-                Dim DIwDString = New DirectoryInfo(wDString)
-
+            If selectedDir.Length >= 3 Then                                                                                    'Makes sure the chosen folder isn't a null value or an exception
+                workingDir = selectedDir
+                Dim DIwDString = New DirectoryInfo(selectedDir)
                 directorysizeexceptionCount = 0
-
-                workingDir = wDString.ToString()
 
                 If DIwDString.Name.ToString.Length > 0 Then sb_FolderName.Text =
                     DIwDString.Name.ToString.Substring(0, 1).ToUpper + DIwDString.Name.ToString.Substring(1)
@@ -556,18 +535,18 @@ Public Class Compact
 
                 Try
                     Dim directories() As String = Directory.GetDirectories _
-                        (wDString, "*", SearchOption.AllDirectories)
+                        (selectedDir, "*", SearchOption.AllDirectories)
 
                     dirCountTotal = directories.Length + 1
 
                     Dim numberOfFiles As Int64 = Directory.GetFiles _
-                       (wDString, "*", SearchOption.AllDirectories).Length
+                       (selectedDir, "*", SearchOption.AllDirectories).Length
 
                     fileCountTotal = numberOfFiles
                     sb_ResultsPanel.Visible = False
 
                     UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 44, 100)
-                    WikiHandler.localFolderParse(wDString, DIwDString, rawpreSize)
+                    WikiHandler.localFolderParse(selectedDir, DIwDString, rawpreSize)
 
                     With topbar_title
                         .Anchor -= AnchorStyles.Right
@@ -932,18 +911,9 @@ Public Class Compact
                 directorysizeexceptionCount += 1
 
                 If My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) = False Then
-                    If MessageBox.Show("This directory contains a subfolder that you do not have permission to access. Please try running the program again as an Administrator." _
-                         & vbCrLf & vbCrLf & "If the problem persists, the subfolder is most likely protected by the System, and by design this program will refuse to let you proceed." _
-                        & vbCrLf & vbCrLf & " Would you like to restart the program as an Administrator?", "Permission Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.Yes Then
-
-                        RCMenu.RunAsAdmin()
-                        Me.Close()
-
-                    End If
-
+                    ThrowError(ERR_UNAUTHORISEDREQUIRESADMIN)
                 Else
-                    MsgBox("This directory contains a subfolder that you do not have permission To access." _
-                       & vbCrLf & vbCrLf & "The subfolder is most likely protected by the System, and by design this program will refuse to let you proceed.")
+                    ThrowError(ERR_UNAUTHORISEDREQUIRESSYSTEM)
                 End If
 
             End If
@@ -1521,4 +1491,42 @@ Public Class Compact
         e.Graphics.FillPolygon(New SolidBrush(Color.FromArgb(255, 47, 66, 83)), New PointF() {New Point(x, 0), New Point(x, y), New Point(x - y, y)})
 
     End Sub
+
+
+    Private Const ERR_WINDOWSDIRNOTALLOWED = 515
+    Private Const ERR_WHOLEDRIVENOTALLOWED = 516
+    Private Const ERR_UNAUTHORISEDREQUIRESADMIN = 517
+    Private Const ERR_UNAUTHORISEDREQUIRESSYSTEM = 518
+
+    Private Sub ThrowError(e As Integer)
+
+        Select Case e
+            Case ERR_WHOLEDRIVENOTALLOWED
+                MsgBox("Compressing an entire drive with this tool is not allowed")
+
+            Case ERR_WINDOWSDIRNOTALLOWED
+                MsgBox("Compressing items in the Windows folder using this program " _
+                & "is not recommended. Please use the command line instead")
+
+            Case ERR_UNAUTHORISEDREQUIRESADMIN
+                If MessageBox.Show("This directory contains a subfolder that you do not have permission to access. Please try running the program again as an Administrator." & vbCrLf & vbCrLf &
+                                   "If the problem persists, the subfolder is most likely protected by the System, and by design this program will refuse to let you proceed." & vbCrLf & vbCrLf &
+                                   "Would you like to restart the program as an Administrator?", "Permission Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.Yes Then
+                    RCMenu.RunAsAdmin()
+                    Me.Close()
+                End If
+
+            Case ERR_UNAUTHORISEDREQUIRESSYSTEM
+                MsgBox("This directory contains a subfolder that you do not have permission To access." & vbCrLf & vbCrLf &
+                       "The subfolder is most likely protected by the System, and by design this program will refuse to let you proceed.")
+
+        End Select
+    End Sub
+
+
+
+
+
+
+
 End Class
