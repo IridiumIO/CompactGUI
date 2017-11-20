@@ -95,6 +95,9 @@
       <DependentUpon>Compact.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FileFolderDialog.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RunCompact.vb">
       <SubType>Form</SubType>
     </Compile>
