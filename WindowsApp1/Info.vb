@@ -17,6 +17,7 @@
     End Sub
 
     Private Sub Info_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        semVersion.Text = "V " + Compact.version
         If My.Settings.IsContextMenuEnabled = True Then
             checkEnableRCMenu.Checked = True
         Else

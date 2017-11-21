@@ -12,11 +12,6 @@ Partial Class Compact
             If CP Is Nothing Then CP = getEncoding()
 
             RunCompact(passthrougharg)
-
-            If passthrougharg = "compact" Then sb_progresslabel.Text = "Compressing, Please Wait"
-            If passthrougharg = "query" Then sb_progresslabel.Text = "Analyzing"
-            If passthrougharg = "uncompact" Then sb_progresslabel.Text = "Uncompressing..."
-
             TabControl1.SelectedTab = ProgressPage
 
         Catch ex As Exception
@@ -42,7 +37,7 @@ Partial Class Compact
 
     Private Sub RunCompact(desiredfunction As String)
 
-        If desiredfunction = "compact" Then
+        If desiredfunction = "compact" Then : sb_progresslabel.Text = "Compressing, Please Wait"
 
             isQueryCalledByCompact = False
             compactArgs = "/C /I"
@@ -62,7 +57,7 @@ Partial Class Compact
             hasqueryfinished = 0
             isActive = True
 
-        ElseIf desiredfunction = "uncompact" Then
+        ElseIf desiredfunction = "uncompact" Then : sb_progresslabel.Text = "Uncompressing..."
 
             isQueryCalledByCompact = False
 
@@ -78,7 +73,7 @@ Partial Class Compact
             isActive = True
 
 
-        ElseIf desiredfunction = "query" Then
+        ElseIf desiredfunction = "query" Then : sb_progresslabel.Text = "Analyzing"
 
             compactArgs = "/S /Q /EXE /I"
 

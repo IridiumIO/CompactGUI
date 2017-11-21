@@ -30,7 +30,6 @@ Partial Class Compact
         Me.panel_topBar = New System.Windows.Forms.Panel()
         Me.updateBanner = New System.Windows.Forms.Panel()
         Me.dlUpdateLink = New System.Windows.Forms.LinkLabel()
-        Me.topbar_progress = New System.Windows.Forms.Panel()
         Me.buttonQueryCompact = New System.Windows.Forms.Button()
         Me.topbar_dirchooserContainer = New System.Windows.Forms.Panel()
         Me.dirChooser = New System.Windows.Forms.LinkLabel()
@@ -161,7 +160,6 @@ Partial Class Compact
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_topBar.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.panel_topBar.Controls.Add(Me.updateBanner)
-        Me.panel_topBar.Controls.Add(Me.topbar_progress)
         Me.panel_topBar.Controls.Add(Me.buttonQueryCompact)
         Me.panel_topBar.Controls.Add(Me.topbar_dirchooserContainer)
         Me.panel_topBar.Controls.Add(Me.btn_Mainmin)
@@ -200,14 +198,6 @@ Partial Class Compact
         Me.dlUpdateLink.TabStop = True
         Me.dlUpdateLink.Text = "Update Available: Click to download V2.3"
         Me.dlUpdateLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'topbar_progress
-        '
-        Me.topbar_progress.BackColor = System.Drawing.Color.Green
-        Me.topbar_progress.Location = New System.Drawing.Point(44, 114)
-        Me.topbar_progress.Name = "topbar_progress"
-        Me.topbar_progress.Size = New System.Drawing.Size(0, 2)
-        Me.topbar_progress.TabIndex = 16
         '
         'buttonQueryCompact
         '
@@ -1430,7 +1420,6 @@ Partial Class Compact
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents sb_SpaceSavedLabel As Label
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
-    Friend WithEvents topbar_progress As Panel
     Friend WithEvents updateBanner As Panel
     Friend WithEvents dlUpdateLink As LinkLabel
     Friend WithEvents results_arc As GraphicsPanel

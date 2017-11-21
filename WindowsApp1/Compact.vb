@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Shared version = "2.3.3"
+    Public Shared version = "2.3.3"
     Private WithEvents MyProcess As Process
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
@@ -39,13 +39,6 @@ Public Class Compact
     Dim QdirCountProgress As Int64
 
 
-    Private Sub MyProcess_ErrorDataReceived _
-        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
-        Handles MyProcess.ErrorDataReceived
-
-        AppendOutputText(vbCrLf & e.Data)                                                       'Ensures error data is printed to the output console
-
-    End Sub
 
 
 #Region "Format Messages by MUI Table"
@@ -230,13 +223,24 @@ Public Class Compact
 
 
 
+    Dim intervaltime As Double
+    Dim outputbuffer As New ArrayList
+    Private Sub MyProcess_OutputDataReceived(ByVal sender As Object, ByVal e As DataReceivedEventArgs) Handles MyProcess.OutputDataReceived
 
+        outputbuffer.Add(e.Data)
 
-    Private Sub MyProcess_OutputDataReceived _
-        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
-        Handles MyProcess.OutputDataReceived
-
-        AppendOutputText(vbCrLf & e.Data)                                                               'Sends output to the embedded console
+        If Math.Round(intervaltime + 0.1, 1) < Math.Round(Date.Now.TimeOfDay.TotalSeconds, 1) Then      'Buffers incoming strings, then outputs them to the listbox every 0.1s
+            Invoke(Sub()
+                       conOut.BeginUpdate()
+                       For Each str As String In outputbuffer
+                           AppendOutputText(vbCrLf & str)
+                       Next
+                       Console.WriteLine("Post: " & outputbuffer.Count)
+                       outputbuffer.Clear()
+                       intervaltime = Date.Now.TimeOfDay.TotalSeconds
+                       conOut.EndUpdate()
+                   End Sub)
+        End If
 
 
         If e.Data <> Nothing Then
@@ -280,6 +284,11 @@ Public Class Compact
             fileCountProgress = fileCountTotal
             isActive = False
 
+            For Each str As String In outputbuffer
+                AppendOutputText(vbCrLf & str)
+            Next
+            outputbuffer.Clear()
+
             canProceed = 0
             OutputlineIndex = 0
         End If
@@ -294,14 +303,23 @@ Public Class Compact
 
 
 
+    Private Sub MyProcess_ErrorDataReceived _
+        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
+        Handles MyProcess.ErrorDataReceived
+
+        AppendOutputText(vbCrLf & e.Data)                                                       'Ensures error data is printed to the output console
+
+    End Sub
 
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+
+    Private Sub Compact_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         loadFromSettings()
 
         If dirChooser.Text = "❯   Select Target Folder" Then
-            panel_topBar.Height = Me.Height - 1
+            panel_topBar.Height = Height - 1
             panel_topBar.Anchor += AnchorStyles.Bottom
             With topbar_title
                 .AutoSize = False
@@ -315,8 +333,6 @@ Public Class Compact
             topbar_dirchooserContainer.Location = New Point(44, panel_topBar.Height / 2 - 22)
         End If
 
-        dirChooser.LinkColor = Color.White
-
         comboChooseShutdown.SelectedItem = comboChooseShutdown.Items.Item(0)
 
         RCMenu.WriteLocRegistry()
@@ -324,9 +340,8 @@ Public Class Compact
         progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
 
         For Each arg In My.Application.CommandLineArgs
-            If arg.ToString IsNot Nothing Then
-                SelectFolder(arg, "cmdlineargs")
-            End If
+            If Directory.Exists(arg) _
+                Then SelectFolder(arg, "cmdlineargs")
         Next
 
     End Sub
@@ -334,63 +349,40 @@ Public Class Compact
 
 
 
-    Private Sub ShowInfoPopup_Click(sender As Object, e As EventArgs) Handles showinfopopup.Click
-        Info.semVersion.Text = "V " + version
-        Info.Show()
-    End Sub
-
-
-
-
     Private Sub ProgressTimer_Tick(sender As Object, e As EventArgs) Handles progressTimer.Tick
 
-        If fileCountTotal <> 0 Then                                                                         'Makes sure that there are actually files being counted before attempting a calculation
-
-
+        If fileCountTotal <> 0 Then
             Try
-                If sb_progressbar.Width > 301 Then                                                 'Avoids a /r/softwaregore scenario
+
+                If sb_progressbar.Width > 301 Then
                     sb_progressbar.Width = 301
                     progresspercent.Text = "100 %"
-                    topbar_progress.Width = topbar_dirchooserContainer.Width
 
-                ElseIf isQueryMode = False Then
-                    sb_progressbar.Width = Math.Round _
-                            ((fileCountProgress / fileCountTotal * 301), 0)
-                    topbar_progress.Width = Math.Round _
-                            ((fileCountProgress / fileCountTotal * topbar_dirchooserContainer.Width), 0)
-                    progresspercent.Text = Math.Round _
-                            ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
+                ElseIf Not isQueryMode Then
+                    sb_progressbar.Width = Math.Round((fileCountProgress / fileCountTotal * 301), 0)
+                    progresspercent.Text = Math.Round((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
-                ElseIf isQueryMode = True Then
-                    sb_progressbar.Width = Math.Round _
-                            ((QdirCountProgress / dirCountTotal * 301), 0)
-                    topbar_progress.Width = Math.Round _
-                            ((QdirCountProgress / dirCountTotal * topbar_dirchooserContainer.Width), 0)
-                    progresspercent.Text = Math.Round _
-                            ((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                  'Generates an estimate of progress for the Query command.
+                ElseIf isQueryMode Then
+                    sb_progressbar.Width = Math.Round((QdirCountProgress / dirCountTotal * 301), 0)
+                    progresspercent.Text = Math.Round((QdirCountProgress / dirCountTotal * 100), 0).ToString + " %"                  'Generates an estimate of progress for the Query command.
                 End If
+
             Catch ex As Exception
                 Console.WriteLine("PE: " + ex.Data.ToString)
             End Try
-
         End If
 
+        If compressfinished = True Then : compressfinished = False                                                                       'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
 
-
-        If compressfinished = True Then                                                                        'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
-
-            If isQueryMode And isQueryCalledByCompact = False Then
+            If isQueryMode And Not isQueryCalledByCompact Then
                 sb_progresslabel.Text = "This folder contains compressed items"
                 progresspercent.Visible = False
-                'sb_AnalysisPanel.Visible = False
-
+                conOut.Refresh()
             End If
 
-            compressfinished = False
-            If checkShutdownOnCompletion.Checked = True And isQueryMode = False Then
+            If checkShutdownOnCompletion.Checked And Not isQueryMode Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
                 FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 300, True)
-
             End If
 
             buttonRevert.Visible = True
@@ -398,13 +390,10 @@ Public Class Compact
             CalculateSaving()
             QdirCountProgress = 0
             buttonQueryCompact.Enabled = True
-            'dirChooser.Enabled = True
 
         End If
 
-        If uncompressfinished = True Then                                                                      'Hides and shows certain UI elements when uncompression is finished 
-
-            uncompressfinished = False
+        If uncompressfinished = True Then : uncompressfinished = False                                                                  'Hides and shows certain UI elements when uncompression is finished 
 
             buttonRevert.Visible = False
             sb_progresslabel.Text = "Folder Uncompressed."
@@ -415,16 +404,13 @@ Public Class Compact
             sb_ResultsPanel.Visible = False
             returnArrow.Visible = True
             buttonQueryCompact.Enabled = True
-            ' dirChooser.Enabled = True
+
 
             If checkShutdownOnCompletion.Checked = True Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
                 FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 200, True)
             End If
-
         End If
-
-
 
     End Sub
 
@@ -432,19 +418,12 @@ Public Class Compact
 
 
     Private Sub AppendOutputText(ByVal text As String)                                           'Attach output to the embedded console
-        Try
-            If conOut.InvokeRequired Then
-                Dim serverOutDelegate As New AppendOutputTextDelegate(AddressOf AppendOutputText)
-                Me.Invoke(serverOutDelegate, text)
-            Else
-                If text <> vbCrLf Then
-                    conOut.Items.Insert(0, text)
-                End If
-            End If
-        Catch ex As Exception
-        End Try
+        Me.Invoke(Sub()
+                      If text <> vbCrLf Then
+                          conOut.Items.Insert(0, text)
+                      End If
+                  End Sub)
     End Sub
-
 
 
 
@@ -1309,7 +1288,11 @@ Public Class Compact
     End Sub
 #End Region
 
-
+    Private Sub ViewReset()
+        sb_AnalysisPanel.Visible = False
+        buttonCompress.Visible = True
+        overrideCompressFolderButton = 0
+    End Sub
 
 
 
@@ -1340,6 +1323,13 @@ Public Class Compact
 
     Private Sub dlUpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles dlUpdateLink.LinkClicked
         Process.Start("https://github.com/ImminentFate/CompactGUI/releases")
+    End Sub
+
+
+
+
+    Private Sub ShowInfoPopup_Click(sender As Object, e As EventArgs) Handles showinfopopup.Click
+        Info.Show()
     End Sub
 
 
@@ -1383,19 +1373,3 @@ Public Class Compact
 
 End Class
 
-Public Class GraphicsPanel
-    Inherits Panel
-    Private Const WS_EX_COMPOSITED As Integer = &H2000000
-
-    Protected Overrides ReadOnly Property CreateParams() As CreateParams
-        Get
-            Dim cp As CreateParams = MyBase.CreateParams
-            cp.ExStyle = cp.ExStyle Or WS_EX_COMPOSITED
-            Return cp
-        End Get
-    End Property
-
-    Public Sub New()
-        Me.DoubleBuffered = True
-    End Sub
-End Class
