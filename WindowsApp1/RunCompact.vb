@@ -5,8 +5,8 @@ Partial Class Compact
     Private Sub CreateProcess(passthrougharg As String)
 
         Try
-            If passthrougharg.Contains("compact") Then isQueryMode = 0      'also catches "uncompact"
-            If passthrougharg = "query" Then isQueryMode = 1
+            If passthrougharg.Contains("compact") Then isQueryMode = False      'also catches "uncompact"
+            If passthrougharg = "query" Then isQueryMode = True
             progresspercent.Visible = True
 
             If CP Is Nothing Then CP = getEncoding()
@@ -29,7 +29,7 @@ Partial Class Compact
 
 
     Private Sub Queryaftercompact()
-        isQueryMode = 1
+        isQueryMode = True
         hasqueryfinished = 1
         RunCompact("query")
     End Sub
@@ -44,7 +44,7 @@ Partial Class Compact
 
         If desiredfunction = "compact" Then
 
-            isQueryCalledByCompact = 0
+            isQueryCalledByCompact = False
             compactArgs = "/C /I"
 
             If checkRecursiveScan.Checked = True Then compactArgs &= " /S"
@@ -58,13 +58,13 @@ Partial Class Compact
 
             RunCompact_ProcessGen(compactArgs)
 
-            isQueryCalledByCompact = 1
+            isQueryCalledByCompact = True
             hasqueryfinished = 0
-            isActive = 1
+            isActive = True
 
         ElseIf desiredfunction = "uncompact" Then
 
-            isQueryCalledByCompact = 0
+            isQueryCalledByCompact = False
 
             compactArgs = "/U /S /EXE /I"
 
@@ -75,7 +75,7 @@ Partial Class Compact
 
             RunCompact_ProcessGen(compactArgs)
 
-            isActive = 1
+            isActive = True
 
 
         ElseIf desiredfunction = "query" Then

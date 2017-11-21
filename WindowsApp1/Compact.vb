@@ -32,11 +32,11 @@ Public Class Compact
 
 
     'Status Monitors
-    Dim compressFinished = 0
-    Dim uncompressFinished = 0
-    Dim isQueryMode = 0
-    Dim isQueryCalledByCompact = 0
-    Dim isActive = 0
+    Dim compressfinished As Boolean = False
+    Dim uncompressfinished As Boolean = False
+    Dim isQueryMode As Boolean = False
+    Dim isQueryCalledByCompact As Boolean = False
+    Dim isActive As Boolean = False
     Dim dirCountProgress As Int64
     Dim dirCountTotal As Int64
     Dim fileCountTotal As Int64 = 0
@@ -162,8 +162,8 @@ Public Class Compact
 
             dirCountProgress = 0
             fileCountProgress = fileCountTotal
-            uncompressFinished = 1
-            isActive = 0
+            uncompressfinished = True
+            isActive = False
 
         End If
 
@@ -174,10 +174,10 @@ Public Class Compact
             And (FMTCompressFinished(FMTCompressFinished.Count - 1) = CONINPUTDATA(CONINPUTDATA.Count - 1) _
                 Or CONINPUTDATA(CONINPUTDATA.Count - 1).Contains("1.")) Then
 
-            compressFinished = 1
+            compressfinished = True
             dirCountProgress = dirCountTotal
             fileCountProgress = fileCountTotal
-            isActive = 0
+            isActive = False
 
         End If
 
@@ -281,10 +281,10 @@ Public Class Compact
             Console.WriteLine("Ratio: " +
                 ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO) + " to 1.")
 
-            compressFinished = 1
+            compressfinished = True
             dirCountProgress = dirCountTotal
             fileCountProgress = fileCountTotal
-            isActive = 0
+            isActive = False
 
             canProceed = 0
             OutputlineIndex = 0
@@ -359,7 +359,7 @@ Public Class Compact
                     progresspercent.Text = "100 %"
                     topbar_progress.Width = topbar_dirchooserContainer.Width
 
-                ElseIf isQueryMode = 0 Then
+                ElseIf isQueryMode = False Then
                     sb_progressbar.Width = Math.Round _
                             ((fileCountProgress / fileCountTotal * 301), 0)
                     topbar_progress.Width = Math.Round _
@@ -367,7 +367,7 @@ Public Class Compact
                     progresspercent.Text = Math.Round _
                             ((fileCountProgress / fileCountTotal * 100), 0).ToString + " %"                 'Generates an estimate of progress based on how many files have been processed out of the total. 
 
-                ElseIf isQueryMode = 1 Then
+                ElseIf isQueryMode = True Then
                     sb_progressbar.Width = Math.Round _
                             ((QdirCountProgress / dirCountTotal * 301), 0)
                     topbar_progress.Width = Math.Round _
@@ -383,17 +383,17 @@ Public Class Compact
 
 
 
-        If compressFinished = 1 Then                                                                        'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
+        If compressfinished = True Then                                                                        'Hides and shows certain UI elements when compression is finished or if a compression status is being checked
 
-            If isQueryMode And isQueryCalledByCompact = 0 Then
+            If isQueryMode And isQueryCalledByCompact = False Then
                 sb_progresslabel.Text = "This folder contains compressed items"
                 progresspercent.Visible = False
                 'sb_AnalysisPanel.Visible = False
 
             End If
 
-            compressFinished = 0
-            If checkShutdownOnCompletion.Checked = True And isQueryMode = 0 Then
+            compressfinished = False
+            If checkShutdownOnCompletion.Checked = True And isQueryMode = False Then
                 ShutdownDialog.SDProcIntent.Text = comboChooseShutdown.Text
                 FadeTransition.FadeForm(ShutdownDialog, 0, 0.98, 300, True)
 
@@ -408,9 +408,9 @@ Public Class Compact
 
         End If
 
-        If uncompressFinished = 1 Then                                                                      'Hides and shows certain UI elements when uncompression is finished 
+        If uncompressfinished = True Then                                                                      'Hides and shows certain UI elements when uncompression is finished 
 
-            uncompressFinished = 0
+            uncompressfinished = False
 
             buttonRevert.Visible = False
             sb_progresslabel.Text = "Folder Uncompressed."
@@ -468,7 +468,7 @@ Public Class Compact
 
 
     Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
-        If isActive = 0 And isQueryMode = 0 Then
+        If isActive = False And isQueryMode = False Then
             sb_AnalysisPanel.Visible = False
             buttonCompress.Visible = True
             overrideCompressFolderButton = 0
@@ -477,7 +477,7 @@ Public Class Compact
             folderChoice.ShowDialog()
             If Directory.Exists(folderChoice.SelectedPath) Then
                 SelectFolder(folderChoice.SelectedPath, "button")
-            ElseIf File.Exists(folderChoice.selectedpath) Then
+            ElseIf File.Exists(folderChoice.SelectedPath) Then
                 If folderChoice.MultipleFiles IsNot Nothing Then
                     MsgBox("Multiple Files Selected")
                 Else
@@ -545,7 +545,7 @@ Public Class Compact
                     fileCountTotal = numberOfFiles
                     sb_ResultsPanel.Visible = False
 
-                    UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 44, 100)
+                    UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 46, 100)
                     WikiHandler.localFolderParse(selectedDir, DIwDString, rawpreSize)
 
                     With topbar_title
@@ -562,7 +562,7 @@ Public Class Compact
                     TabControl1.SelectedTab = InputPage
                     dirCountProgress = 0
                     fileCountProgress = 0
-                    isQueryCalledByCompact = 0
+                    isQueryCalledByCompact = False
                     MyProcess.Kill()
                     sb_AnalysisPanel.Visible = False
 
@@ -620,7 +620,7 @@ Public Class Compact
 
 
     Private Sub ButtonRevert_Click(sender As Object, e As EventArgs) Handles buttonRevert.Click             'Handles uncompressing. For now, uncompressing can only be done through the program only to revert a compression that's just been done.
-        isQueryMode = 0
+        isQueryMode = False
         fileCountProgress = 0
         dirCountProgress = 0
         progresspercent.Visible = True
@@ -666,7 +666,7 @@ Public Class Compact
         TabControl1.SelectedTab = InputPage
         dirCountProgress = 0
         fileCountProgress = 0
-        isQueryCalledByCompact = 0
+        isQueryCalledByCompact = False
         'MyProcess.Kill()
         sb_AnalysisPanel.Visible = False
         buttonCompress.Visible = True
@@ -692,7 +692,7 @@ Public Class Compact
 
 
     Private Sub MyForm_Closing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        If isActive = 1 Then
+        If isActive = True Then
 
             If MessageBox.Show _
                 ("Are you sure you want to exit?" & vbCrLf & vbCrLf & "Quitting now will finish compressing the current file, then quit safely." _
@@ -742,7 +742,7 @@ Public Class Compact
         Dim querySize As Int64 = 0
 
 
-        'If isQueryMode = 0 Then querySize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
+        'If isQueryMode = False Then querySize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
 
 
         Dim oldFolderSize As Long = 999999999
@@ -766,17 +766,17 @@ Public Class Compact
         Catch ex As Exception
         End Try
 
-        If GetOutputSize((oldFolderSize - newFolderSize), False) = "0" And isQueryMode = 1 Then
+        If GetOutputSize((oldFolderSize - newFolderSize), False) = "0" And isQueryMode = True Then
 
             sb_progresslabel.Text = "Folder is not compressed"
             buttonRevert.Visible = False
-            isQueryCalledByCompact = 0
+            isQueryCalledByCompact = False
 
         Else
 
             sb_progresslabel.Text = "Folder is compressed"
 
-            If isQueryMode = 1 And isQueryCalledByCompact = 0 Then
+            If isQueryMode = True And isQueryCalledByCompact = False Then
                 origSizeLabel.Text = GetOutputSize(oldFolderSize, True)
             Else
                 origSizeLabel.Text = GetOutputSize(uncompressedfoldersize, True)
@@ -820,8 +820,8 @@ Public Class Compact
                 'sb_Panel.Refresh()
 
                 If hasqueryfinished = 1 Then
-                    isQueryCalledByCompact = 0
-                    isQueryMode = 0
+                    isQueryCalledByCompact = False
+                    isQueryMode = False
                     buttonRevert.Visible = True
                 End If
 
@@ -830,12 +830,12 @@ Public Class Compact
                 sb_compressedSizeVisual.Height = 113
             End Try
 
-            If isQueryCalledByCompact = 0 Then
+            If isQueryCalledByCompact = False Then
 
                 CompResultsPanel.Visible = True
                 sb_ResultsPanel.Visible = True
-                PaintPercentageTransition.PaintTarget(results_arc, Callpercent)
-            ElseIf isQueryCalledByCompact = 1 Then
+                PaintPercentageTransition.PaintTarget(results_arc, Callpercent, 5)
+            ElseIf isQueryCalledByCompact = True Then
 
                 sb_progresslabel.Text = "Analyzing..."
 
@@ -847,8 +847,8 @@ Public Class Compact
 
         End If
 
-        If isQueryCalledByCompact = 1 Then Queryaftercompact()
-        If isQueryCalledByCompact = 0 Then isQueryMode = 0
+        If isQueryCalledByCompact = True Then Queryaftercompact()
+        If isQueryCalledByCompact = False Then isQueryMode = False
 
     End Sub
 
@@ -1395,7 +1395,7 @@ Public Class Compact
     Public Sub results_arc_Paint(sender As Object, e As PaintEventArgs) Handles results_arc.Paint
 
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
-        DrawProgress(e.Graphics, New Rectangle(21, 21, 203, 203), PaintPercentageTransition.callpercentstep, ColorTranslator.FromHtml("#3B668E"), ColorTranslator.FromHtml("#9B9B9B"))
+        DrawProgress(e.Graphics, New Rectangle(21, 21, 203, 203), PaintPercentageTransition.callpercentstep, ColorTranslator.FromHtml("#3B668E"), ColorTranslator.FromHtml("#CFD8DC"))
 
     End Sub
 
@@ -1403,41 +1403,35 @@ Public Class Compact
     Shared Callpercent As Single
 
     Private Sub DrawProgress(g As Graphics, rect As Rectangle, percentage As Single, percColor As Color, remColor As Color)
-        'work out the angles for each arc
-        Dim progressAngle = CInt(183 / 100 * (percentage))
-        Dim remainderAngle = 185 - progressAngle
 
-        'create pens to use for the arcs
+        Dim progressAngle As Single = (183 / 100 * (percentage))
+        Dim remainderAngle As Single = (185 * percentage / PaintPercentageTransition.T) - progressAngle
+
         Using progressPen As New Pen(percColor, 41), remainderPen As New Pen(remColor, 41)
-            'set the smoothing to high quality for better output
-            'draw the blue and white arcs
-
-            g.DrawArc(progressPen, rect, -183, progressAngle)
             g.DrawArc(remainderPen, rect, progressAngle - 184, remainderAngle)
+            g.DrawArc(progressPen, rect, -183, progressAngle)
         End Using
 
-        'draw the text in the centre by working out how big it is and adjusting the co-ordinates accordingly
-        Dim fb = New SolidBrush(Color.FromArgb(48, 67, 84))
-        Using fnt As New Font("Segoe UI Light", 22)
+        Using fnt As New Font("Segoe UI Light", 22), fb As New SolidBrush(Color.FromArgb(48, 67, 84))
 
             Dim perc As String = Math.Round(percentage, 0)
             Dim percSize = g.MeasureString(perc, fnt)
-            Dim percPoint As New Point(CInt(rect.Left + (rect.Width / 2) - (percSize.Width / 2)), CInt(rect.Top + (rect.Height / 2) - (percSize.Height * 0.85)))
-            'now we have all the values draw the text
+            Dim percPoint As New Point(rect.Left + (rect.Width / 2) - (percSize.Width / 2), rect.Top + (rect.Height / 2) - (percSize.Height * 1.25))
             g.DrawString(perc, fnt, fb, percPoint)
+
             Using fnt2 As New Font("Segoe UI Light", 9)
                 Dim sign As String = "%"
                 Dim signPoint As New Point(percPoint.X + percSize.Width - 5, percPoint.Y + 10)
-                'now we have all the values draw the text
                 g.DrawString(sign, fnt2, fb, signPoint)
             End Using
-            Using fnt3 As New Font("Segoe UI Light", 9)
-                Dim lbl As String = "Size Reduction"
+
+            Using fnt3 As New Font("Segoe UI Light", 10)
+                Dim lbl As String = "Reduction in size"
                 Dim lblSize = g.MeasureString(lbl, fnt3)
-                Dim lblPoint As New Point(CInt(rect.Left + (rect.Width / 2) - (lblSize.Width / 2)), CInt(rect.Top + (rect.Height / 2) - (percSize.Height * 1.25)))
-                'now we have all the values draw the text
+                Dim lblPoint As New Point(rect.Left + (rect.Width / 2) - (lblSize.Width / 2), rect.Top + (rect.Height / 2) - (lblSize.Height * 0.75))
                 g.DrawString(lbl, fnt3, fb, lblPoint)
             End Using
+
         End Using
 
     End Sub
@@ -1459,7 +1453,7 @@ Public Class Compact
 
     Private Sub dirChooser_DragDrop(sender As Object, e As DragEventArgs) Handles dirChooser.DragDrop, topbar_dirchooserContainer.DragDrop
         Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
-        If isActive = 0 And isQueryMode = 0 Then
+        If isActive = False And isQueryMode = False Then
             sb_AnalysisPanel.Visible = False
             buttonCompress.Visible = True
             overrideCompressFolderButton = 0
@@ -1470,9 +1464,9 @@ Public Class Compact
     Private Sub dirChooser_DragEnter(sender As Object, e As DragEventArgs) Handles dirChooser.DragEnter, topbar_dirchooserContainer.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
-            If System.IO.Directory.Exists(dropVar) Then
+            If Directory.Exists(dropVar) Then
                 e.Effect = DragDropEffects.Copy
-            ElseIf System.IO.File.Exists(dropVar) Then
+            ElseIf File.Exists(dropVar) Then
                 'MsgBox("it's a file")
             End If
         End If
