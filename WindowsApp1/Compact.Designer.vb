@@ -1149,6 +1149,7 @@ Partial Class Compact
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.conOut.BackColor = System.Drawing.Color.White
         Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.conOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.conOut.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.conOut.FormattingEnabled = True
         Me.conOut.Location = New System.Drawing.Point(13, 39)
