@@ -12,12 +12,6 @@ Public Class Compact
     Private Delegate Sub AppendOutputTextDelegate(ByVal text As String)
 
 
-    Private Shared Sub Main()
-        Application.EnableVisualStyles()
-        Application.SetCompatibleTextRenderingDefault(False)
-        Application.Run(CompactGUI.Compact)
-    End Sub
-
 
     Protected Overrides ReadOnly Property CreateParams() As CreateParams
         Get
@@ -469,9 +463,7 @@ Public Class Compact
 
     Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
         If isActive = False And isQueryMode = False Then
-            sb_AnalysisPanel.Visible = False
-            buttonCompress.Visible = True
-            overrideCompressFolderButton = 0
+
 
             Dim folderChoice As New FileFolderDialog
             folderChoice.ShowDialog()
@@ -494,8 +486,9 @@ Public Class Compact
 
     Private Sub SelectFolder(selectedDir As String, senderID As String)
         Cursor.Current = Cursors.WaitCursor
-
-        Dim wDString = selectedDir
+        sb_AnalysisPanel.Visible = False
+        buttonCompress.Visible = True
+        overrideCompressFolderButton = 0
 
         If selectedDir.Contains("C:\Windows") Then : ThrowError(ERR_WINDOWSDIRNOTALLOWED)                                    'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
         ElseIf selectedDir.EndsWith(":\") Then : ThrowError(ERR_WHOLEDRIVENOTALLOWED)
@@ -1186,25 +1179,8 @@ Public Class Compact
 
     End Sub
 
-    Private Sub sb_Panel_Paint(sender As Object, e As PaintEventArgs) Handles sb_Panel.Paint
-        Dim p As New Pen(Brushes.DimGray, 1)
-        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias
-        'e.Graphics.DrawLine(p, New Point(40, 180), New Point(313, 180))
-
-
-
-
-
-    End Sub
-
-
-
-
-
 
 #Region "Move And Resize"
-
-    '//////////////////////////MOVE  AND  RESIZE  FORM//////////////////////////////////'
 
     <DllImport("user32.dll")>
     Public Shared Function ReleaseCapture() As Boolean
@@ -1214,9 +1190,6 @@ Public Class Compact
     Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal Msg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
     End Function
 
-
-
-
     Private Sub MoveForm()
         ReleaseCapture()
         SendMessage(Me.Handle, &HA1, 2, 0)
@@ -1225,136 +1198,6 @@ Public Class Compact
     Private Sub panel_topBar_MouseDown(sender As Object, e As MouseEventArgs) Handles panel_topBar.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Left And isMaximised = False Then MoveForm()
     End Sub
-
-
-
-
-    'Dim bordercapture As Integer = 8
-
-    'Public Enum ResizeDirection
-    '    Normal = 0
-    '    T = 1
-    '    TR = 2
-    '    R = 3
-    '    RB = 4
-    '    B = 5
-    '    LB = 6
-    '    L = 7
-    '    TL = 8
-    'End Enum
-
-    'Dim RD As ResizeDirection = ResizeDirection.Normal
-
-    'Public Property ResizeCursor() As ResizeDirection
-    '    Get
-    '        Return RD
-    '    End Get
-    '    Set(value As ResizeDirection)
-    '        RD = value
-    '        Select Case value
-    '            Case ResizeDirection.T
-    '                Me.Cursor = Cursors.SizeNS
-
-    '            Case ResizeDirection.TR
-    '                Me.Cursor = Cursors.SizeNESW
-
-    '            Case ResizeDirection.R
-    '                Me.Cursor = Cursors.SizeWE
-
-    '            Case ResizeDirection.RB
-    '                Me.Cursor = Cursors.SizeNWSE
-
-    '            Case ResizeDirection.B
-    '                Me.Cursor = Cursors.SizeNS
-
-    '            Case ResizeDirection.LB
-    '                Me.Cursor = Cursors.SizeNESW
-
-    '            Case ResizeDirection.L
-    '                Me.Cursor = Cursors.SizeWE
-
-    '            Case ResizeDirection.TL
-    '                Me.Cursor = Cursors.SizeNWSE
-
-    '            Case Else
-    '                Me.Cursor = Cursors.Default
-
-    '        End Select
-    '    End Set
-    'End Property
-
-    'Private Sub panel_MainWindow_MouseDown(sender As Object, e As MouseEventArgs) Handles panel_MainWindow.MouseDown, TabControl1.MouseDown, panel_topBar.MouseDown
-    '    If e.Button = Windows.Forms.MouseButtons.Left Then
-    '        ResizeForm(ResizeCursor)
-    '    End If
-    'End Sub
-
-    'Private Sub panel_MainWindow_MouseMove(sender As Object, e As MouseEventArgs) Handles panel_MainWindow.MouseMove, sb_Panel.MouseMove, panel_topBar.MouseMove, TabControl1.MouseMove
-    '    If e.Location.Y < bordercapture Then
-    '        ResizeCursor = ResizeDirection.T
-
-    '    ElseIf e.Location.X > Me.Width - bordercapture And e.Location.Y < bordercapture Then
-    '        ResizeCursor = ResizeDirection.TR
-
-    '    ElseIf e.Location.X > Me.Width - bordercapture Then
-    '        ResizeCursor = ResizeDirection.R
-
-    '    ElseIf e.Location.X > Me.Width - bordercapture And e.Location.Y > Me.Height - bordercapture Then
-    '        ResizeCursor = ResizeDirection.RB
-
-    '    ElseIf e.Location.Y > Me.Height - bordercapture Then
-    '        ResizeCursor = ResizeDirection.B
-
-    '    ElseIf e.Location.X < bordercapture And e.Location.Y > Me.Height - bordercapture Then
-    '        ResizeCursor = ResizeDirection.LB
-
-    '    ElseIf e.Location.X < bordercapture Then
-    '        ResizeCursor = ResizeDirection.L
-
-    '    ElseIf e.Location.X < bordercapture And e.Location.Y < bordercapture Then
-    '        ResizeCursor = ResizeDirection.TL
-
-    '    Else
-    '        ResizeCursor = ResizeDirection.Normal
-    '    End If
-    'End Sub
-
-
-
-
-    'Private Sub ResizeForm(ByVal resdirection As ResizeDirection)
-    '    Dim d As Integer = -1
-    '    Select Case resdirection
-    '        Case ResizeDirection.T
-    '            d = 12
-
-    '        Case ResizeDirection.TR
-    '            d = 14
-
-    '        Case ResizeDirection.R
-    '            d = 11
-
-    '        Case ResizeDirection.RB
-    '            d = 17
-
-    '        Case ResizeDirection.B
-    '            d = 15
-
-    '        Case ResizeDirection.LB
-    '            d = 16
-
-    '        Case ResizeDirection.L
-    '            d = 10
-
-    '        Case ResizeDirection.TL
-    '            d = 13
-    '    End Select
-
-    '    If d <> -1 Then
-    '        ReleaseCapture()
-    '        SendMessage(Me.Handle, &HA1, d, 0)
-    '    End If
-    'End Sub
 #End Region
 
 
@@ -1362,6 +1205,11 @@ Public Class Compact
         Dim btn = DirectCast(sender, Button)
         btn.ForeColor = If(btn.Enabled, Color.White, Color.Silver)
     End Sub
+
+
+
+
+#Region "Paint Events"
 
     Private Sub buttonCompress_Paint(sender As Object, e As PaintEventArgs) Handles buttonCompress.Paint
         Dim btn = DirectCast(sender, Button)
@@ -1377,35 +1225,41 @@ Public Class Compact
     End Sub
 
 
+
+
     Private Sub sb_AnalysisPanel_Paint(sender As Object, e As PaintEventArgs) Handles sb_AnalysisPanel.Paint
         Dim p As New Pen(Brushes.DimGray, 1)
         e.Graphics.DrawLine(p, New Point(30, 0), New Point(303, 0))
     End Sub
 
+
+
+
     Private Sub sb_ResultsPanel_Paint(sender As Object, e As PaintEventArgs) Handles sb_ResultsPanel.Paint
-        Dim p As New Pen(Brushes.DimGray, 1)
-        Dim dotted As New Pen(Brushes.ForestGreen, 1)
-        dotted.DashPattern = New Single() {3, 3, 3, 3}
-
-
-        e.Graphics.DrawRectangle(dotted, 225, 5, 39, 112)
-
+        Using dotted As New Pen(Brushes.ForestGreen, 1)
+            dotted.DashPattern = New Single() {3, 3, 3, 3}
+            e.Graphics.DrawRectangle(dotted, 225, 5, 39, 112)
+        End Using
     End Sub
 
-    Public Sub results_arc_Paint(sender As Object, e As PaintEventArgs) Handles results_arc.Paint
-
-        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
-        DrawProgress(e.Graphics, New Rectangle(21, 21, 203, 203), PaintPercentageTransition.callpercentstep, ColorTranslator.FromHtml("#3B668E"), ColorTranslator.FromHtml("#CFD8DC"))
-
-    End Sub
 
 
     Shared Callpercent As Single
+    Public Sub results_arc_Paint(sender As Object, e As PaintEventArgs) Handles results_arc.Paint
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
+        DrawProgress(e.Graphics, New Rectangle(21, 21, 203, 203),
+                     PaintPercentageTransition.callpercentstep,
+                     ColorTranslator.FromHtml("#3B668E"),
+                     ColorTranslator.FromHtml("#CFD8DC"))
+    End Sub
+
+
+
 
     Private Sub DrawProgress(g As Graphics, rect As Rectangle, percentage As Single, percColor As Color, remColor As Color)
 
         Dim progressAngle As Single = (183 / 100 * (percentage))
-        Dim remainderAngle As Single = (185 * percentage / PaintPercentageTransition.T) - progressAngle
+        Dim remainderAngle As Single = (185 * percentage / Callpercent) - progressAngle
 
         Using progressPen As New Pen(percColor, 41), remainderPen As New Pen(remColor, 41)
             g.DrawArc(remainderPen, rect, progressAngle - 184, remainderAngle)
@@ -1431,13 +1285,8 @@ Public Class Compact
                 Dim lblPoint As New Point(rect.Left + (rect.Width / 2) - (lblSize.Width / 2), rect.Top + (rect.Height / 2) - (lblSize.Height * 0.75))
                 g.DrawString(lbl, fnt3, fb, lblPoint)
             End Using
-
         End Using
-
     End Sub
-
-
-
 
 
 
@@ -1447,34 +1296,8 @@ Public Class Compact
         e.Graphics.DrawLine(p, New Point(12, CompResultsPanel.Height - 1), New Point(panel_console.Width - 12, CompResultsPanel.Height - 1))
     End Sub
 
-    Private Sub sb_lblGameIssues_Click(sender As Object, e As EventArgs) Handles sb_lblGameIssues.Click
-        Process.Start("https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games")
-    End Sub
 
-    Private Sub dirChooser_DragDrop(sender As Object, e As DragEventArgs) Handles dirChooser.DragDrop, topbar_dirchooserContainer.DragDrop
-        Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
-        If isActive = False And isQueryMode = False Then
-            sb_AnalysisPanel.Visible = False
-            buttonCompress.Visible = True
-            overrideCompressFolderButton = 0
-            SelectFolder(dropVar, "button")
-        End If
-    End Sub
 
-    Private Sub dirChooser_DragEnter(sender As Object, e As DragEventArgs) Handles dirChooser.DragEnter, topbar_dirchooserContainer.DragEnter
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
-            If Directory.Exists(dropVar) Then
-                e.Effect = DragDropEffects.Copy
-            ElseIf File.Exists(dropVar) Then
-                'MsgBox("it's a file")
-            End If
-        End If
-    End Sub
-
-    Private Sub dlUpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles dlUpdateLink.LinkClicked
-        Process.Start("https://github.com/ImminentFate/CompactGUI/releases")
-    End Sub
 
     Private Sub updateBanner_Paint(sender As Object, e As PaintEventArgs) Handles updateBanner.Paint
         Dim p As New Pen(Brushes.DimGray, 1)
@@ -1484,8 +1307,44 @@ Public Class Compact
         e.Graphics.FillPolygon(New SolidBrush(Color.FromArgb(255, 47, 66, 83)), New PointF() {New Point(x, 0), New Point(x, y), New Point(x - y, y)})
 
     End Sub
+#End Region
 
 
+
+
+
+
+
+    Private Sub sb_lblGameIssues_Click(sender As Object, e As EventArgs) Handles sb_lblGameIssues.Click
+        Process.Start("https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games")
+    End Sub
+
+    Private Sub dirChooser_DragDrop(sender As Object, e As DragEventArgs) Handles dirChooser.DragDrop, topbar_dirchooserContainer.DragDrop
+        Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
+
+        If isActive = False And isQueryMode = False _
+            Then SelectFolder(dropVar, "button")
+
+    End Sub
+
+    Private Sub dirChooser_DragEnter(sender As Object, e As DragEventArgs) Handles dirChooser.DragEnter, topbar_dirchooserContainer.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim dropVar = e.Data.GetData(DataFormats.FileDrop)(0)
+            If Directory.Exists(dropVar) Then
+                e.Effect = DragDropEffects.Copy
+            ElseIf File.Exists(dropVar) Then
+                'For use in file handling
+            End If
+        End If
+    End Sub
+
+    Private Sub dlUpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles dlUpdateLink.LinkClicked
+        Process.Start("https://github.com/ImminentFate/CompactGUI/releases")
+    End Sub
+
+
+
+#Region "Error Handling"
     Private Const ERR_WINDOWSDIRNOTALLOWED = 515
     Private Const ERR_WHOLEDRIVENOTALLOWED = 516
     Private Const ERR_UNAUTHORISEDREQUIRESADMIN = 517
@@ -1516,7 +1375,7 @@ Public Class Compact
         End Select
     End Sub
 
-
+#End Region
 
 
 
