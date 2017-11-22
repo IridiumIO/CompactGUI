@@ -229,7 +229,7 @@ Public Class Compact
 
         outputbuffer.Add(e.Data)
 
-        If Math.Round(intervaltime + 0.05, 2) < Math.Round(Date.Now.TimeOfDay.TotalSeconds, 2) Then      'Buffers incoming strings, then outputs them to the listbox every 0.1s
+        If Math.Round(intervaltime + 0.1, 1) < Math.Round(Date.Now.TimeOfDay.TotalSeconds, 1) Then      'Buffers incoming strings, then outputs them to the listbox every 0.1s
             Invoke(Sub()
                        conOut.BeginUpdate()
                        For Each str As String In outputbuffer
