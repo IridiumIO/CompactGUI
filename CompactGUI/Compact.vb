@@ -126,67 +126,45 @@ Public Class Compact
         Dim FMTUncompressed As String() = FMT_UNCOMPRESSED_MSG.Split(" ")
         Dim FMTCompressFinished As String() = FMT_COMPRESSED_MSG(FMT_COMPRESSED_MSG.Count - 1).Trim(vbCrLf).Split(" ")
 
-
-
-
-
         'LISTING - DIRECTORY COUNT
-        If FMTListing(0) = CONINPUTDATA(0) Then
-            QdirCountProgress += 1
-        End If
-
+        If FMTListing(0) = CONINPUTDATA(0) Then QdirCountProgress += 1
 
         'OK - FILE COUNT
-        If edata.EndsWith(fixedfmt1) Then
-            fileCountProgress += 1
-        End If
-
+        If edata.EndsWith(fixedfmt1) Then fileCountProgress += 1
 
         'Uncompressed - Checks if uncompression is finished
         If FMTUncompressed.Count = CONINPUTDATA.Count _
             And (FMTUncompressed(FMTUncompressed.Count - 1) = CONINPUTDATA(CONINPUTDATA.Count - 1) _
                 Or FMTUncompressed(FMTUncompressed.Count - 1).Contains("%2")) Then
-
             dirCountProgress = 0
             fileCountProgress = fileCountTotal
             uncompressfinished = True
             isActive = False
-
         End If
 
-
         'Compress Finished Ratio - Checks if compression is finished
-        If FMTCompressFinished.Count = CONINPUTDATA.Count _
-            And OutputlineIndex = 0 _
+        If FMTCompressFinished.Count = CONINPUTDATA.Count And OutputlineIndex = 0 _
             And (FMTCompressFinished(FMTCompressFinished.Count - 1) = CONINPUTDATA(CONINPUTDATA.Count - 1) _
                 Or CONINPUTDATA(CONINPUTDATA.Count - 1).Contains("1.")) Then
-
             compressfinished = True
             dirCountProgress = dirCountTotal
             fileCountProgress = fileCountTotal
             isActive = False
-
         End If
-
 
         'Analysis Complete - Gets the lines when analysing a folder is completed
-        If FMTFilesWithin.Count = CONINPUTDATA.Count _
-            And (FMTFilesWithin(0) = CONINPUTDATA(0) _
-                Or FMTFilesWithin(0).Contains("%1")) Then
-
+        If FMTFilesWithin.Count = CONINPUTDATA.Count And (FMTFilesWithin(0) = CONINPUTDATA(0) Or FMTFilesWithin(0).Contains("%1")) Then _
             Return OutputLines(FMTFilesWithin, CONINPUTDATA, CON_INDEX_TOTALFILES, CON_INDEX_TOTALDIRECTORIES, ARR_FILESWITHINDIRECTORIES, "%1", "%2")
 
-        End If
-
-        If OutputlineIndex = 1 Then
+        If OutputlineIndex = 1 Then _
             Return OutputLines(FMTCompNotComp, CONINPUTDATA, CON_INDEX_FILESCOMPRESSEDCOUNT, CON_INDEX_FILESNOTCOMPRESSEDCOUNT, ARR_FILESCOMPRESSED, "%3", "%4")
-        End If
-        If OutputlineIndex = 2 Then
+
+        If OutputlineIndex = 2 Then _
             Return OutputLines(FMTTotalBytes, CONINPUTDATA, CON_INDEX_TOTALBYTESNOTCOMPRESSED, CON_INDEX_TOTALBYTESCOMPRESSED, ARR_TOTALBYTES, "%5", "%6")
-        End If
-        If OutputlineIndex = 3 Then
+
+        If OutputlineIndex = 3 Then _
             Return OutputLines(FMTCompRatio, CONINPUTDATA, CON_INDEX_COMPRESSIONRATIO, CON_INDEX_COMPRESSIONRATIO, ARR_COMPRATIO, "%7")
-        End If
+
 
 
         Return ("Nothing")
@@ -194,14 +172,13 @@ Public Class Compact
     End Function
 
 
-    Public Function OutputLines(ByRef FMTVal As Object, ByRef CONVal As Object, ByRef CON_Index1 As Object, ByRef CON_Index2 As Object, ByRef ARRVal As Object, ByRef Val1 As String, Optional ByRef Val2 As String = "%xnull")
-
-        Dim i = 0
+    Public Function OutputLines(ByRef FMTVal As String(), ByRef CONVal As String(), ByRef CON_Index1 As Integer, ByRef CON_Index2 As Integer,
+                                ByRef ARRVal As String(), ByRef Val1 As String, Optional ByRef Val2 As String = "%xnull")
+        Dim i = 0, b = 0
         For Each c In FMTVal
             If c.Contains(Val1) Then
                 FMTVal(i) = CONVal(i)
                 CON_Index1 = i
-
             ElseIf c.Contains(Val2) Then
                 FMTVal(i) = CONVal(i)
                 CON_Index2 = i
@@ -210,16 +187,15 @@ Public Class Compact
         Next
 
         Dim builder As New StringBuilder
-        Dim b = 0
         For Each c In FMTVal
-            builder.Append(FMTVal(b))
-            builder.Append(" ")
+            builder.Append(FMTVal(b) & " ")     'Removed separate builder.Append(" ")
             b += 1
         Next
         ARRVal = FMTVal
         Return builder.ToString
 
     End Function
+
 
 
 
@@ -303,12 +279,8 @@ Public Class Compact
 
 
 
-    Private Sub MyProcess_ErrorDataReceived _
-        (ByVal sender As Object, ByVal e As System.Diagnostics.DataReceivedEventArgs) _
-        Handles MyProcess.ErrorDataReceived
-
-        AppendOutputText(vbCrLf & e.Data)                                                       'Ensures error data is printed to the output console
-
+    Private Sub MyProcess_ErrorDataReceived(ByVal sender As Object, ByVal e As DataReceivedEventArgs) Handles MyProcess.ErrorDataReceived
+        AppendOutputText(vbCrLf & e.Data)
     End Sub
 
 
@@ -340,8 +312,7 @@ Public Class Compact
         progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
 
         For Each arg In My.Application.CommandLineArgs
-            If Directory.Exists(arg) _
-                Then SelectFolder(arg, "cmdlineargs")
+            If Directory.Exists(arg) Then SelectFolder(arg, "cmdlineargs")
         Next
 
     End Sub
@@ -418,11 +389,9 @@ Public Class Compact
 
 
     Private Sub AppendOutputText(ByVal text As String)                                           'Attach output to the embedded console
-        Me.Invoke(Sub()
-                      If text <> vbCrLf Then
-                          conOut.Items.Insert(0, text)
-                      End If
-                  End Sub)
+        Invoke(Sub()
+                   If text <> vbCrLf Then conOut.Items.Insert(0, text)
+               End Sub)
     End Sub
 
 
@@ -442,7 +411,6 @@ Public Class Compact
 
     Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
         If isActive = False And isQueryMode = False Then
-
 
             Dim folderChoice As New FileFolderDialog
             folderChoice.ShowDialog()
@@ -474,51 +442,44 @@ Public Class Compact
         Else
             If selectedDir.Length >= 3 Then                                                                                    'Makes sure the chosen folder isn't a null value or an exception
                 workingDir = selectedDir
-                Dim DIwDString = New DirectoryInfo(selectedDir)
+                Dim DI_selectedDir = New DirectoryInfo(selectedDir)
                 directorysizeexceptionCount = 0
 
-                If DIwDString.Name.ToString.Length > 0 Then sb_FolderName.Text =
-                    DIwDString.Name.ToString.Substring(0, 1).ToUpper + DIwDString.Name.ToString.Substring(1)
+                If DI_selectedDir.Name.Length > 0 Then _
+                    sb_FolderName.Text = StrConv(DI_selectedDir.Name, VbStrConv.ProperCase)
 
                 Try
-                    If DIwDString.Parent.Parent.ToString <> Nothing Then
-                        dirChooser.Text = "❯ " + DIwDString.Parent.Parent.ToString +
-                            " ❯ " + DIwDString.Parent.ToString +
-                            " ❯ " + DIwDString.Name.ToString
+                    If DI_selectedDir.Parent.Parent.Name <> Nothing Then
+                        dirChooser.Text = "❯ " + DI_selectedDir.Parent.Parent.Name +
+                            " ❯ " + DI_selectedDir.Parent.Name +
+                            " ❯ " + DI_selectedDir.Name
                     Else
-                        dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") +
-                            " ❯ " + DIwDString.Parent.ToString +
-                            " ❯ " + DIwDString.Name.ToString
+                        dirChooser.Text = "❯ " + DI_selectedDir.Root.Name.Replace(":\", " ❯ ") +
+                             +DI_selectedDir.Parent.Name + " ❯ " + DI_selectedDir.Name
                     End If
 
                 Catch ex As Exception
-                    dirChooser.Text = "❯ " + DIwDString.Root.ToString.Replace(":\", "") +
-                        " ❯ " + DIwDString.Name.ToString
+                    dirChooser.Text = "❯ " + DI_selectedDir.Root.Name.Replace(":\", " ❯ ") + DI_selectedDir.Name
+                    Console.WriteLine("Folder error: " + ex.Data.ToString)
                 End Try
 
-                uncompressedfoldersize = Math.Round(DirectorySize(DIwDString, True), 1)
+                uncompressedfoldersize = Math.Round(DirectorySize(DI_selectedDir, True), 1)
 
-                Dim rawpreSize = GetOutputSize _
-                   (uncompressedfoldersize, True)
+                Dim rawpreSize = GetOutputSize(uncompressedfoldersize, True)
 
                 preSize.Text = "Uncompressed Size: " + rawpreSize
 
-                dirLabelResults = DIwDString.Name.ToString
+                dirLabelResults = DI_selectedDir.Name
 
                 Try
-                    Dim directories() As String = Directory.GetDirectories _
-                        (selectedDir, "*", SearchOption.AllDirectories)
+                    dirCountTotal = Directory.GetDirectories(selectedDir, "*", SearchOption.AllDirectories).Length + 1
 
-                    dirCountTotal = directories.Length + 1
+                    fileCountTotal = Directory.GetFiles(selectedDir, "*", SearchOption.AllDirectories).Length
 
-                    Dim numberOfFiles As Int64 = Directory.GetFiles _
-                       (selectedDir, "*", SearchOption.AllDirectories).Length
-
-                    fileCountTotal = numberOfFiles
                     sb_ResultsPanel.Visible = False
 
                     UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 46, 100)
-                    WikiHandler.localFolderParse(selectedDir, DIwDString, rawpreSize)
+                    WikiHandler.localFolderParse(selectedDir, DI_selectedDir, rawpreSize)
 
                     With topbar_title
                         .Anchor -= AnchorStyles.Right
