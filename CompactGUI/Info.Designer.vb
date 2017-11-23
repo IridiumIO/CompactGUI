@@ -29,38 +29,52 @@ Partial Class Info
         Me.semVersion = New System.Windows.Forms.Label()
         Me.lbl_CheckUpdates = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.checkMinimisetoTray = New System.Windows.Forms.CheckBox()
         Me.checkEnableRCMenu = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.panel_header = New System.Windows.Forms.Panel()
+        Me.btn_Mainexit = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.link_Github = New System.Windows.Forms.LinkLabel()
+        Me.InfoTabControl = New System.Windows.Forms.TabControl()
+        Me.Tab_Features = New System.Windows.Forms.TabPage()
+        Me.checkShowNotifications = New System.Windows.Forms.CheckBox()
+        Me.Tab_Licenses = New System.Windows.Forms.TabPage()
+        Me.Tab_Help = New System.Windows.Forms.TabPage()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.btn_options = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btn_help = New System.Windows.Forms.Button()
+        Me.btn_licenses = New System.Windows.Forms.Button()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.panel_header.SuspendLayout()
+        Me.InfoTabControl.SuspendLayout()
+        Me.Tab_Features.SuspendLayout()
+        Me.Tab_Licenses.SuspendLayout()
+        Me.Tab_Help.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.Black
-        Me.Label1.Location = New System.Drawing.Point(29, 19)
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 16.0!)
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(28, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(130, 21)
+        Me.Label1.Size = New System.Drawing.Size(174, 30)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "External Licenses:"
+        Me.Label1.Text = "External Licenses"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.Black
-        Me.Label2.Location = New System.Drawing.Point(39, 50)
+        Me.Label2.Location = New System.Drawing.Point(30, 77)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(87, 17)
         Me.Label2.TabIndex = 1
@@ -75,11 +89,11 @@ Partial Class Info
         Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.RichTextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RichTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame
-        Me.RichTextBox1.Location = New System.Drawing.Point(42, 82)
+        Me.RichTextBox1.Location = New System.Drawing.Point(33, 104)
         Me.RichTextBox1.Margin = New System.Windows.Forms.Padding(0)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.Size = New System.Drawing.Size(540, 55)
+        Me.RichTextBox1.Size = New System.Drawing.Size(284, 283)
         Me.RichTextBox1.TabIndex = 2
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
         '
@@ -109,6 +123,7 @@ Partial Class Info
         Me.lbl_CheckUpdates.TabIndex = 4
         Me.lbl_CheckUpdates.TabStop = True
         Me.lbl_CheckUpdates.Text = "Check For Updates"
+        Me.lbl_CheckUpdates.Visible = False
         '
         'TableLayoutPanel1
         '
@@ -119,7 +134,7 @@ Partial Class Info
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.TableLayoutPanel1.Controls.Add(Me.semVersion, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_CheckUpdates, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(162, 22)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(147, 32)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -127,42 +142,14 @@ Partial Class Info
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(173, 21)
         Me.TableLayoutPanel1.TabIndex = 5
         '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.BackColor = System.Drawing.Color.White
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.RichTextBox1)
-        Me.Panel1.Controls.Add(Me.Label2)
-        Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(-4, 224)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(599, 160)
-        Me.Panel1.TabIndex = 6
-        '
-        'Panel2
-        '
-        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel2.Controls.Add(Me.checkMinimisetoTray)
-        Me.Panel2.Controls.Add(Me.checkEnableRCMenu)
-        Me.Panel2.Controls.Add(Me.Label3)
-        Me.Panel2.Location = New System.Drawing.Point(-4, 109)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(599, 122)
-        Me.Panel2.TabIndex = 7
-        '
         'checkMinimisetoTray
         '
         Me.checkMinimisetoTray.AutoSize = True
-        Me.checkMinimisetoTray.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.checkMinimisetoTray.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.checkMinimisetoTray.ForeColor = System.Drawing.Color.Black
-        Me.checkMinimisetoTray.Location = New System.Drawing.Point(42, 75)
+        Me.checkMinimisetoTray.Location = New System.Drawing.Point(33, 70)
         Me.checkMinimisetoTray.Name = "checkMinimisetoTray"
-        Me.checkMinimisetoTray.Size = New System.Drawing.Size(108, 17)
+        Me.checkMinimisetoTray.Size = New System.Drawing.Size(129, 23)
         Me.checkMinimisetoTray.TabIndex = 2
         Me.checkMinimisetoTray.Text = "Minimise to Tray"
         Me.checkMinimisetoTray.UseVisualStyleBackColor = True
@@ -170,25 +157,25 @@ Partial Class Info
         'checkEnableRCMenu
         '
         Me.checkEnableRCMenu.AutoSize = True
-        Me.checkEnableRCMenu.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.checkEnableRCMenu.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.checkEnableRCMenu.ForeColor = System.Drawing.Color.Black
-        Me.checkEnableRCMenu.Location = New System.Drawing.Point(42, 52)
+        Me.checkEnableRCMenu.Location = New System.Drawing.Point(33, 128)
         Me.checkEnableRCMenu.Name = "checkEnableRCMenu"
-        Me.checkEnableRCMenu.Size = New System.Drawing.Size(277, 17)
+        Me.checkEnableRCMenu.Size = New System.Drawing.Size(230, 23)
         Me.checkEnableRCMenu.TabIndex = 2
-        Me.checkEnableRCMenu.Text = "Enable integration into Explorer right-click menu"
+        Me.checkEnableRCMenu.Text = "Add to Explorer Right-click Menu"
         Me.checkEnableRCMenu.UseVisualStyleBackColor = True
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.Black
-        Me.Label3.Location = New System.Drawing.Point(29, 12)
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 16.0!)
+        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.Label3.Location = New System.Drawing.Point(28, 28)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(110, 21)
+        Me.Label3.Size = New System.Drawing.Size(89, 30)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Extra Features:"
+        Me.Label3.Text = "Options"
         '
         'Label4
         '
@@ -196,72 +183,263 @@ Partial Class Info
         Me.Label4.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 16.0!)
         Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(24, 15)
+        Me.Label4.Location = New System.Drawing.Point(11, 25)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(136, 30)
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "CompactGUI"
         '
-        'Panel3
+        'panel_header
         '
-        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.panel_header.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
-        Me.Panel3.Controls.Add(Me.Label4)
-        Me.Panel3.Controls.Add(Me.Label5)
-        Me.Panel3.Controls.Add(Me.LinkLabel2)
-        Me.Panel3.Controls.Add(Me.TableLayoutPanel1)
-        Me.Panel3.Location = New System.Drawing.Point(-4, -1)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(599, 120)
-        Me.Panel3.TabIndex = 9
+        Me.panel_header.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.panel_header.Controls.Add(Me.btn_Mainexit)
+        Me.panel_header.Controls.Add(Me.Label4)
+        Me.panel_header.Controls.Add(Me.TableLayoutPanel1)
+        Me.panel_header.Location = New System.Drawing.Point(0, 0)
+        Me.panel_header.Name = "panel_header"
+        Me.panel_header.Size = New System.Drawing.Size(459, 76)
+        Me.panel_header.TabIndex = 9
+        '
+        'btn_Mainexit
+        '
+        Me.btn_Mainexit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_Mainexit.BackColor = System.Drawing.Color.Transparent
+        Me.btn_Mainexit.FlatAppearance.BorderSize = 0
+        Me.btn_Mainexit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Maroon
+        Me.btn_Mainexit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.btn_Mainexit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_Mainexit.Font = New System.Drawing.Font("Segoe UI Symbol", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_Mainexit.ForeColor = System.Drawing.Color.White
+        Me.btn_Mainexit.Location = New System.Drawing.Point(413, 0)
+        Me.btn_Mainexit.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Mainexit.Name = "btn_Mainexit"
+        Me.btn_Mainexit.Size = New System.Drawing.Size(45, 30)
+        Me.btn_Mainexit.TabIndex = 16
+        Me.btn_Mainexit.TabStop = False
+        Me.btn_Mainexit.Text = "✕"
+        Me.btn_Mainexit.UseVisualStyleBackColor = False
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(26, 73)
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.Label5.ForeColor = System.Drawing.Color.Black
+        Me.Label5.Location = New System.Drawing.Point(30, 67)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(207, 13)
+        Me.Label5.Size = New System.Drawing.Size(243, 19)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "Help and information can be found on"
         '
-        'LinkLabel2
+        'link_Github
         '
-        Me.LinkLabel2.AutoSize = True
-        Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel2.LinkColor = System.Drawing.SystemColors.MenuHighlight
-        Me.LinkLabel2.Location = New System.Drawing.Point(233, 73)
-        Me.LinkLabel2.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(55, 13)
-        Me.LinkLabel2.TabIndex = 5
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "❯  Github"
+        Me.link_Github.AutoSize = True
+        Me.link_Github.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.link_Github.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.link_Github.LinkColor = System.Drawing.SystemColors.MenuHighlight
+        Me.link_Github.Location = New System.Drawing.Point(30, 91)
+        Me.link_Github.Margin = New System.Windows.Forms.Padding(3, 5, 3, 0)
+        Me.link_Github.Name = "link_Github"
+        Me.link_Github.Size = New System.Drawing.Size(66, 19)
+        Me.link_Github.TabIndex = 5
+        Me.link_Github.TabStop = True
+        Me.link_Github.Text = "❯  Github"
+        '
+        'InfoTabControl
+        '
+        Me.InfoTabControl.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.InfoTabControl.Controls.Add(Me.Tab_Features)
+        Me.InfoTabControl.Controls.Add(Me.Tab_Licenses)
+        Me.InfoTabControl.Controls.Add(Me.Tab_Help)
+        Me.InfoTabControl.Location = New System.Drawing.Point(129, 47)
+        Me.InfoTabControl.Name = "InfoTabControl"
+        Me.InfoTabControl.SelectedIndex = 0
+        Me.InfoTabControl.Size = New System.Drawing.Size(333, 497)
+        Me.InfoTabControl.TabIndex = 10
+        '
+        'Tab_Features
+        '
+        Me.Tab_Features.BackColor = System.Drawing.Color.White
+        Me.Tab_Features.Controls.Add(Me.Label3)
+        Me.Tab_Features.Controls.Add(Me.checkShowNotifications)
+        Me.Tab_Features.Controls.Add(Me.checkMinimisetoTray)
+        Me.Tab_Features.Controls.Add(Me.checkEnableRCMenu)
+        Me.Tab_Features.Location = New System.Drawing.Point(4, 22)
+        Me.Tab_Features.Name = "Tab_Features"
+        Me.Tab_Features.Padding = New System.Windows.Forms.Padding(3)
+        Me.Tab_Features.Size = New System.Drawing.Size(325, 471)
+        Me.Tab_Features.TabIndex = 0
+        Me.Tab_Features.Text = "Features"
+        '
+        'checkShowNotifications
+        '
+        Me.checkShowNotifications.AutoSize = True
+        Me.checkShowNotifications.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.checkShowNotifications.ForeColor = System.Drawing.Color.Black
+        Me.checkShowNotifications.Location = New System.Drawing.Point(33, 99)
+        Me.checkShowNotifications.Name = "checkShowNotifications"
+        Me.checkShowNotifications.Size = New System.Drawing.Size(145, 23)
+        Me.checkShowNotifications.TabIndex = 2
+        Me.checkShowNotifications.Text = "Show Notifications "
+        Me.checkShowNotifications.UseVisualStyleBackColor = True
+        '
+        'Tab_Licenses
+        '
+        Me.Tab_Licenses.BackColor = System.Drawing.Color.White
+        Me.Tab_Licenses.Controls.Add(Me.RichTextBox1)
+        Me.Tab_Licenses.Controls.Add(Me.Label1)
+        Me.Tab_Licenses.Controls.Add(Me.Label2)
+        Me.Tab_Licenses.Location = New System.Drawing.Point(4, 22)
+        Me.Tab_Licenses.Name = "Tab_Licenses"
+        Me.Tab_Licenses.Padding = New System.Windows.Forms.Padding(3)
+        Me.Tab_Licenses.Size = New System.Drawing.Size(325, 471)
+        Me.Tab_Licenses.TabIndex = 1
+        Me.Tab_Licenses.Text = "Licenses"
+        '
+        'Tab_Help
+        '
+        Me.Tab_Help.Controls.Add(Me.Label6)
+        Me.Tab_Help.Controls.Add(Me.link_Github)
+        Me.Tab_Help.Controls.Add(Me.Label5)
+        Me.Tab_Help.Location = New System.Drawing.Point(4, 22)
+        Me.Tab_Help.Name = "Tab_Help"
+        Me.Tab_Help.Padding = New System.Windows.Forms.Padding(3)
+        Me.Tab_Help.Size = New System.Drawing.Size(325, 471)
+        Me.Tab_Help.TabIndex = 2
+        Me.Tab_Help.Text = "Help"
+        Me.Tab_Help.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 16.0!)
+        Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.Label6.Location = New System.Drawing.Point(28, 28)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(59, 30)
+        Me.Label6.TabIndex = 1
+        Me.Label6.Text = "Help"
+        '
+        'btn_options
+        '
+        Me.btn_options.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_options.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.btn_options.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btn_options.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.btn_options.FlatAppearance.BorderSize = 0
+        Me.btn_options.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.btn_options.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.btn_options.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_options.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.btn_options.ForeColor = System.Drawing.Color.White
+        Me.btn_options.Location = New System.Drawing.Point(0, 0)
+        Me.btn_options.Margin = New System.Windows.Forms.Padding(30, 3, 3, 3)
+        Me.btn_options.Name = "btn_options"
+        Me.btn_options.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.btn_options.Size = New System.Drawing.Size(145, 39)
+        Me.btn_options.TabIndex = 24
+        Me.btn_options.Text = "Options"
+        Me.btn_options.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btn_options.UseVisualStyleBackColor = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(75, Byte), Integer))
+        Me.Panel1.Controls.Add(Me.btn_help)
+        Me.Panel1.Controls.Add(Me.btn_licenses)
+        Me.Panel1.Controls.Add(Me.btn_options)
+        Me.Panel1.Location = New System.Drawing.Point(0, 75)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(143, 506)
+        Me.Panel1.TabIndex = 11
+        '
+        'btn_help
+        '
+        Me.btn_help.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_help.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(75, Byte), Integer))
+        Me.btn_help.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.btn_help.FlatAppearance.BorderSize = 0
+        Me.btn_help.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.btn_help.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.btn_help.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_help.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.btn_help.ForeColor = System.Drawing.Color.White
+        Me.btn_help.Location = New System.Drawing.Point(0, 80)
+        Me.btn_help.Margin = New System.Windows.Forms.Padding(30, 3, 3, 3)
+        Me.btn_help.Name = "btn_help"
+        Me.btn_help.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.btn_help.Size = New System.Drawing.Size(145, 39)
+        Me.btn_help.TabIndex = 24
+        Me.btn_help.Text = "Help"
+        Me.btn_help.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btn_help.UseVisualStyleBackColor = False
+        '
+        'btn_licenses
+        '
+        Me.btn_licenses.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_licenses.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(75, Byte), Integer))
+        Me.btn_licenses.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.btn_licenses.FlatAppearance.BorderSize = 0
+        Me.btn_licenses.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.btn_licenses.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
+        Me.btn_licenses.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_licenses.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.btn_licenses.ForeColor = System.Drawing.Color.White
+        Me.btn_licenses.Location = New System.Drawing.Point(0, 40)
+        Me.btn_licenses.Margin = New System.Windows.Forms.Padding(30, 3, 3, 3)
+        Me.btn_licenses.Name = "btn_licenses"
+        Me.btn_licenses.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.btn_licenses.Size = New System.Drawing.Size(145, 39)
+        Me.btn_licenses.TabIndex = 24
+        Me.btn_licenses.Text = "External Licenses"
+        Me.btn_licenses.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btn_licenses.UseVisualStyleBackColor = False
+        '
+        'Panel2
+        '
+        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.panel_header)
+        Me.Panel2.Controls.Add(Me.Panel1)
+        Me.Panel2.Controls.Add(Me.InfoTabControl)
+        Me.Panel2.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(460, 524)
+        Me.Panel2.TabIndex = 12
         '
         'Info
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(589, 371)
+        Me.ClientSize = New System.Drawing.Size(460, 524)
         Me.Controls.Add(Me.Panel2)
-        Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Panel3)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(400, 300)
         Me.Name = "Info"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
+        Me.panel_header.ResumeLayout(False)
+        Me.panel_header.PerformLayout()
+        Me.InfoTabControl.ResumeLayout(False)
+        Me.Tab_Features.ResumeLayout(False)
+        Me.Tab_Features.PerformLayout()
+        Me.Tab_Licenses.ResumeLayout(False)
+        Me.Tab_Licenses.PerformLayout()
+        Me.Tab_Help.ResumeLayout(False)
+        Me.Tab_Help.PerformLayout()
         Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -272,13 +450,23 @@ Partial Class Info
     Friend WithEvents semVersion As Label
     Friend WithEvents lbl_CheckUpdates As LinkLabel
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents Panel1 As Panel
-    Friend WithEvents Panel2 As Panel
     Friend WithEvents checkEnableRCMenu As CheckBox
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents Panel3 As Panel
+    Friend WithEvents panel_header As Panel
     Friend WithEvents Label5 As Label
-    Friend WithEvents LinkLabel2 As LinkLabel
+    Friend WithEvents link_Github As LinkLabel
     Friend WithEvents checkMinimisetoTray As CheckBox
+    Friend WithEvents InfoTabControl As TabControl
+    Friend WithEvents Tab_Features As TabPage
+    Friend WithEvents Tab_Licenses As TabPage
+    Friend WithEvents Tab_Help As TabPage
+    Friend WithEvents Label6 As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents btn_options As Button
+    Friend WithEvents btn_help As Button
+    Friend WithEvents btn_licenses As Button
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents btn_Mainexit As Button
+    Friend WithEvents checkShowNotifications As CheckBox
 End Class

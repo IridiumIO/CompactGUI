@@ -88,7 +88,6 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
-        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.submitToWiki = New System.Windows.Forms.Label()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
@@ -118,6 +117,7 @@ Partial Class Compact
         Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -163,6 +163,7 @@ Partial Class Compact
         Me.panel_topBar.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_topBar.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.panel_topBar.Controls.Add(Me.showinfopopup)
         Me.panel_topBar.Controls.Add(Me.updateBanner)
         Me.panel_topBar.Controls.Add(Me.buttonQueryCompact)
         Me.panel_topBar.Controls.Add(Me.topbar_dirchooserContainer)
@@ -170,7 +171,6 @@ Partial Class Compact
         Me.panel_topBar.Controls.Add(Me.btn_Mainmax)
         Me.panel_topBar.Controls.Add(Me.btn_Mainexit)
         Me.panel_topBar.Controls.Add(Me.topbar_icon)
-        Me.panel_topBar.Controls.Add(Me.showinfopopup)
         Me.panel_topBar.Controls.Add(Me.topbar_title)
         Me.panel_topBar.Location = New System.Drawing.Point(0, 0)
         Me.panel_topBar.Name = "panel_topBar"
@@ -325,13 +325,13 @@ Partial Class Compact
         '
         Me.showinfopopup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.showinfopopup.AutoSize = True
-        Me.showinfopopup.Font = New System.Drawing.Font("Segoe UI Symbol", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.showinfopopup.Font = New System.Drawing.Font("Segoe MDL2 Assets", 11.0!)
         Me.showinfopopup.ForeColor = System.Drawing.Color.White
-        Me.showinfopopup.Location = New System.Drawing.Point(791, 8)
+        Me.showinfopopup.Location = New System.Drawing.Point(798, 15)
         Me.showinfopopup.Name = "showinfopopup"
-        Me.showinfopopup.Size = New System.Drawing.Size(28, 25)
+        Me.showinfopopup.Size = New System.Drawing.Size(22, 15)
         Me.showinfopopup.TabIndex = 14
-        Me.showinfopopup.Text = "ⓘ"
+        Me.showinfopopup.Text = ""
         '
         'progressTimer
         '
@@ -977,17 +977,9 @@ Partial Class Compact
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 35
-        '
         'submitToWiki
         '
         Me.submitToWiki.AutoSize = True
-        Me.submitToWiki.Cursor = System.Windows.Forms.Cursors.Hand
         Me.submitToWiki.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.submitToWiki.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.submitToWiki.Location = New System.Drawing.Point(475, 192)
@@ -1298,14 +1290,21 @@ Partial Class Compact
         Me.TrayMenu.Name = "TrayMenu"
         Me.TrayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.TrayMenu.ShowImageMargin = False
-        Me.TrayMenu.Size = New System.Drawing.Size(128, 48)
+        Me.TrayMenu.Size = New System.Drawing.Size(79, 26)
         '
         'Tray_ShowMain
         '
         Me.Tray_ShowMain.BackColor = System.Drawing.Color.White
         Me.Tray_ShowMain.Name = "Tray_ShowMain"
-        Me.Tray_ShowMain.Size = New System.Drawing.Size(127, 22)
+        Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
         Me.Tray_ShowMain.Text = "Show"
+        '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
         '
         'Compact
         '

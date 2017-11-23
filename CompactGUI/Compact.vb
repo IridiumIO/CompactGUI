@@ -700,7 +700,8 @@ Public Class Compact
                     isQueryMode = False
                     buttonRevert.Visible = True
                     Callpercent = (1 - (1 / CDec(ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO)))) * 100
-                    TrayIcon.ShowBalloonTip(1, "Compressed: " & StrConv(sb_FolderName.Text, VbStrConv.ProperCase), vbCrLf & "▸ " & spaceSavedLabel.Text & vbCrLf & "▸ " & Math.Round(Callpercent, 1) & "% Smaller", ToolTipIcon.None)
+                    If My.Settings.ShowNotifications Then _
+                        TrayIcon.ShowBalloonTip(1, "Compressed: " & StrConv(sb_FolderName.Text, VbStrConv.ProperCase), vbCrLf & "▸ " & spaceSavedLabel.Text & vbCrLf & "▸ " & Math.Round(Callpercent, 1) & "% Smaller", ToolTipIcon.None)
                 End If
 
             Catch ex As OverflowException

@@ -11,6 +11,7 @@ Public Class VersionCheck
                     Compact.updateBanner.Visible = True
                     Compact.dlUpdateLink.Text = "Update Available: Click to download " & xml_VersionStr
                     Info.lbl_CheckUpdates.Text = "Update to " & xml_VersionStr
+                    Info.lbl_CheckUpdates.Visible = True
                 End If
             End If
         Catch ex As WebException
