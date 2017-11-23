@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports System.Text.RegularExpressions
 
 Partial Class Compact
     Dim CP As Encoding
@@ -30,9 +31,8 @@ Partial Class Compact
     End Sub
 
 
-
-
     Dim hasqueryfinished = 0
+    Dim compactArgs As String
 
 
     Private Sub RunCompact(desiredfunction As String)
@@ -110,6 +110,33 @@ Partial Class Compact
         MyProcess.BeginErrorReadLine()
         MyProcess.BeginOutputReadLine()
     End Sub
+
+
+
+
+    Private Function getEncoding() As Encoding
+        Dim CPGet = New Process
+        With CPGet.StartInfo
+            .FileName = "cmd.exe"
+            .Arguments = "/c chcp"
+            .UseShellExecute = False
+            .CreateNoWindow = True
+            .StandardOutputEncoding = Encoding.Default
+            .StandardErrorEncoding = Encoding.Default
+            .WorkingDirectory = workingDir
+            .RedirectStandardInput = True
+            .RedirectStandardOutput = True
+            .RedirectStandardError = True
+        End With
+        CPGet.Start()
+
+        Dim Res = CPGet.StandardOutput.ReadLine()
+        Dim CPa = Integer.Parse(Regex.Replace(Res, "[^\d]", ""))
+        CPGet.StandardInput.WriteLine("exit")
+        CPGet.StandardInput.Flush()
+        CPGet.WaitForExit()
+        Return Encoding.GetEncoding(CPa)
+    End Function
 
 
 

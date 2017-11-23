@@ -24,5 +24,18 @@
             checkEnableRCMenu.Checked = False
         End If
 
+        If My.Settings.MinimisetoTray = True Then
+            checkMinimisetoTray.Checked = True
+        Else
+            checkMinimisetoTray.Checked = False
+        End If
+    End Sub
+
+    Private Sub checkMinimisetoTray_CheckedChanged(sender As Object, e As EventArgs) Handles checkMinimisetoTray.CheckedChanged
+        If checkMinimisetoTray.Checked Then
+            My.Settings.MinimisetoTray = True
+        Else
+            My.Settings.MinimisetoTray = False
+        End If
     End Sub
 End Class

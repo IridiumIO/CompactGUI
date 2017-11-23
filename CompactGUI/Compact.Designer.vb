@@ -115,6 +115,9 @@ Partial Class Compact
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.spaceSavedLabel = New System.Windows.Forms.Label()
+        Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -137,6 +140,7 @@ Partial Class Compact
         Me.Panel5.SuspendLayout()
         Me.panel_console.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.TrayMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'OpenFileDialog1
@@ -1281,6 +1285,28 @@ Partial Class Compact
         Me.spaceSavedLabel.TabIndex = 27
         Me.spaceSavedLabel.Text = "700MB Saved"
         '
+        'TrayIcon
+        '
+        Me.TrayIcon.ContextMenuStrip = Me.TrayMenu
+        Me.TrayIcon.Icon = CType(resources.GetObject("TrayIcon.Icon"), System.Drawing.Icon)
+        Me.TrayIcon.Text = "CompactGUI"
+        Me.TrayIcon.Visible = True
+        '
+        'TrayMenu
+        '
+        Me.TrayMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Tray_ShowMain})
+        Me.TrayMenu.Name = "TrayMenu"
+        Me.TrayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.TrayMenu.ShowImageMargin = False
+        Me.TrayMenu.Size = New System.Drawing.Size(128, 48)
+        '
+        'Tray_ShowMain
+        '
+        Me.Tray_ShowMain.BackColor = System.Drawing.Color.White
+        Me.Tray_ShowMain.Name = "Tray_ShowMain"
+        Me.Tray_ShowMain.Size = New System.Drawing.Size(127, 22)
+        Me.Tray_ShowMain.Text = "Show"
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1328,6 +1354,7 @@ Partial Class Compact
         Me.panel_console.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
+        Me.TrayMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1423,4 +1450,7 @@ Partial Class Compact
     Friend WithEvents updateBanner As Panel
     Friend WithEvents dlUpdateLink As LinkLabel
     Friend WithEvents results_arc As GraphicsPanel
+    Friend WithEvents TrayIcon As NotifyIcon
+    Friend WithEvents TrayMenu As ContextMenuStrip
+    Friend WithEvents Tray_ShowMain As ToolStripMenuItem
 End Class

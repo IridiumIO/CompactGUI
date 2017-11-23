@@ -31,6 +31,7 @@ Partial Class Info
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.checkMinimisetoTray = New System.Windows.Forms.CheckBox()
         Me.checkEnableRCMenu = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -78,7 +79,7 @@ Partial Class Info
         Me.RichTextBox1.Margin = New System.Windows.Forms.Padding(0)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.Size = New System.Drawing.Size(540, 77)
+        Me.RichTextBox1.Size = New System.Drawing.Size(540, 55)
         Me.RichTextBox1.TabIndex = 2
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
         '
@@ -136,9 +137,9 @@ Partial Class Info
         Me.Panel1.Controls.Add(Me.RichTextBox1)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(-4, 202)
+        Me.Panel1.Location = New System.Drawing.Point(-4, 224)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(599, 182)
+        Me.Panel1.Size = New System.Drawing.Size(599, 160)
         Me.Panel1.TabIndex = 6
         '
         'Panel2
@@ -146,12 +147,25 @@ Partial Class Info
         Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.checkMinimisetoTray)
         Me.Panel2.Controls.Add(Me.checkEnableRCMenu)
         Me.Panel2.Controls.Add(Me.Label3)
         Me.Panel2.Location = New System.Drawing.Point(-4, 109)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(599, 100)
+        Me.Panel2.Size = New System.Drawing.Size(599, 122)
         Me.Panel2.TabIndex = 7
+        '
+        'checkMinimisetoTray
+        '
+        Me.checkMinimisetoTray.AutoSize = True
+        Me.checkMinimisetoTray.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.checkMinimisetoTray.ForeColor = System.Drawing.Color.Black
+        Me.checkMinimisetoTray.Location = New System.Drawing.Point(42, 75)
+        Me.checkMinimisetoTray.Name = "checkMinimisetoTray"
+        Me.checkMinimisetoTray.Size = New System.Drawing.Size(108, 17)
+        Me.checkMinimisetoTray.TabIndex = 2
+        Me.checkMinimisetoTray.Text = "Minimise to Tray"
+        Me.checkMinimisetoTray.UseVisualStyleBackColor = True
         '
         'checkEnableRCMenu
         '
@@ -266,4 +280,5 @@ Partial Class Info
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Label5 As Label
     Friend WithEvents LinkLabel2 As LinkLabel
+    Friend WithEvents checkMinimisetoTray As CheckBox
 End Class

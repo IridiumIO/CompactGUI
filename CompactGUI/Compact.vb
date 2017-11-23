@@ -179,7 +179,7 @@ Public Class Compact
             If c.Contains(Val1) Then
                 FMTVal(i) = CONVal(i)
                 CON_Index1 = i
-            ElseIf c.Contains(Val2) Then
+            ElseIf val2 <> "%xnull" And c.Contains(Val2) Then
                 FMTVal(i) = CONVal(i)
                 CON_Index2 = i
             End If
@@ -498,8 +498,6 @@ Public Class Compact
                     isQueryCalledByCompact = False
                     MyProcess.Kill()
                     sb_AnalysisPanel.Visible = False
-
-
                 Catch ex As Exception
                 End Try
 
@@ -508,21 +506,11 @@ Public Class Compact
                 Else
                     buttonCompress.Enabled = False
                 End If
-
             Else
-
                 If senderID = "button" Then Console.Write("No folder selected")
-
             End If
-
         End If
-
     End Sub
-
-
-
-
-    Dim compactArgs As String
 
 
 
@@ -533,7 +521,6 @@ Public Class Compact
         sb_AnalysisPanel.Visible = True
         buttonCompress.Visible = False
         buttonQueryCompact.Enabled = False
-        'dirChooser.Enabled = False
     End Sub
     Private Sub buttonQueryCompact_Click(sender As Object, e As EventArgs) Handles buttonQueryCompact.Click
         conOut.Items.Clear()
@@ -542,7 +529,6 @@ Public Class Compact
         sb_Panel.Show()                                 'Temporary Fix - go back and work out why #124 doesn't work with WikiParser()
         sb_AnalysisPanel.Visible = True
         buttonQueryCompact.Enabled = False
-        'dirChooser.Enabled = False
     End Sub
 
 
@@ -559,32 +545,13 @@ Public Class Compact
         progresspercent.Visible = True
         CompResultsPanel.Visible = False
         buttonQueryCompact.Enabled = False
-        'dirChooser.Enabled = False
         buttonRevert.Visible = False
-
 
         Try
             RunCompact("uncompact")
         Catch ex As Exception
         End Try
 
-    End Sub
-
-
-
-
-    Private Sub compressLZX_CheckedChanged(sender As Object, e As EventArgs) Handles compressLZX.CheckedChanged     'Cautions the user if they're about to use LZX compression
-
-        If compressLZX.Checked = True Then
-
-            If MsgBox("LZX is recommended only for folders that are not going to be used very often. Do not use this on program or game folders!" _
-                      & vbCrLf & vbCrLf & "Do you wish to continue?", MsgBoxStyle.YesNo, "Warning") = MsgBoxResult.No Then
-
-                compressX8.Checked = True
-
-            End If
-
-        End If
     End Sub
 
 
@@ -600,11 +567,10 @@ Public Class Compact
         dirCountProgress = 0
         fileCountProgress = 0
         isQueryCalledByCompact = False
-        'MyProcess.Kill()
         sb_AnalysisPanel.Visible = False
         buttonCompress.Visible = True
         buttonQueryCompact.Enabled = True
-        'dirChooser.Enabled = True
+
     End Sub
 
 
@@ -638,31 +604,18 @@ Public Class Compact
 
             Else
                 Try
-                    LetsKillStuffButSafelyNow()
+                    If MyProcess.HasExited = False Then MyProcess.Kill()
                 Catch ex As Exception
                 End Try
             End If
         Else
             Try
-                LetsKillStuffButSafelyNow()
+                If MyProcess.HasExited = False Then MyProcess.Kill()
             Catch ex As Exception
             End Try
         End If
 
     End Sub
-
-
-
-
-    Private Sub dirChooser_MouseEnter(sender As Object, e As EventArgs) Handles dirChooser.MouseEnter
-        dirChooser.LinkColor = Color.FromArgb(200, 200, 200)
-    End Sub
-    Private Sub dirChooser_MouseLeave(sender As Object, e As EventArgs) Handles dirChooser.MouseLeave
-        dirChooser.LinkColor = Color.White
-    End Sub
-
-
-
 
 
 
@@ -674,13 +627,8 @@ Public Class Compact
         Dim numberFilesCompressed = 0
         Dim querySize As Int64 = 0
 
-
-        'If isQueryMode = False Then querySize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
-
-
-        Dim oldFolderSize As Long = 999999999
-
-        Dim newFolderSize As Long = 999999999
+        Dim oldFolderSize As Long = uncompressedfoldersize
+        Dim newFolderSize As Long = uncompressedfoldersize
         Try
             oldFolderSize = Long.Parse(Regex.Replace(ARR_TOTALBYTES(CON_INDEX_TOTALBYTESNOTCOMPRESSED), "[^\d]", ""))
         Catch ex As Exception
@@ -715,50 +663,47 @@ Public Class Compact
                 origSizeLabel.Text = GetOutputSize(uncompressedfoldersize, True)
             End If
 
-            Dim PrintOutSize = GetOutputSize _
-                (uncompressedfoldersize - (oldFolderSize - newFolderSize), True)
-            Dim suffix = PrintOutSize.Split(" ")(1)
+            Dim PrintOutSize = GetOutputSize(uncompressedfoldersize - (oldFolderSize - newFolderSize), True)
+
             compressedSizeLabel.Text = PrintOutSize
             wkPostSizeVal.Text = PrintOutSize.Split(" ")(0)
-            wkPostSizeUnit.Text = suffix
+            wkPostSizeUnit.Text = PrintOutSize.Split(" ")(1)
+
             Dim wkPostSizeVal_Len = TextRenderer.MeasureText(wkPostSizeVal.Text, wkPostSizeVal.Font)
             wkPostSizeUnit.Location = New Point(wkPostSizeVal.Location.X + (wkPostSizeVal.Size.Width / 2) + (wkPostSizeVal_Len.Width / 2 - 8), wkPostSizeVal.Location.Y + 16)
             sb_labelCompressed.Text = "Compressed"
 
             Try
-                compRatioLabel.Text = Math.Round _
-                (oldFolderSize / newFolderSize, 1)
-
-                compRatioLabel.Text = Math.Round _
-                (uncompressedfoldersize / (uncompressedfoldersize - (oldFolderSize - newFolderSize)), 1)
+                compRatioLabel.Text = Math.Round(oldFolderSize / newFolderSize, 1)
+                compRatioLabel.Text = Math.Round(uncompressedfoldersize / (uncompressedfoldersize - (oldFolderSize - newFolderSize)), 1)
             Catch ex As DivideByZeroException
                 MsgBox("Stop trying to compress empty folders")
             End Try
 
 
-            spaceSavedLabel.Text = GetOutputSize _
-                ((oldFolderSize - newFolderSize), True) + " Saved"
+            spaceSavedLabel.Text = GetOutputSize((oldFolderSize - newFolderSize), True) + " Saved"
             sb_SpaceSavedLabel.Text = spaceSavedLabel.Text
-            dirChosenLabel.Text = "❯ In " + dirLabelResults
 
             labelFilesCompressed.Text =
                 numberFilesCompressed.ToString + " / " + fileCountTotal.ToString + " files compressed"
-            help_resultsFilesCompressed.Location = New Point(labelFilesCompressed.Location.X + labelFilesCompressed.Width + 2, labelFilesCompressed.Location.Y + 1)
+            help_resultsFilesCompressed.Location =
+                New Point(labelFilesCompressed.Location.X + labelFilesCompressed.Width + 2, labelFilesCompressed.Location.Y + 1)
             Try
 
                 compressedSizeVisual.Width = CInt(320 / compRatioLabel.Text)
-                Callpercent = (1 - (1 / CDec(ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO)))) * 100
                 sb_compressedSizeVisual.Height = CInt(113 / compRatioLabel.Text)
                 sb_compressedSizeVisual.Location = New Point(sb_compressedSizeVisual.Location.X, 5 + 113 - sb_compressedSizeVisual.Height)
-                'sb_Panel.Refresh()
+
 
                 If hasqueryfinished = 1 Then
                     isQueryCalledByCompact = False
                     isQueryMode = False
                     buttonRevert.Visible = True
+                    Callpercent = (1 - (1 / CDec(ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO)))) * 100
+                    TrayIcon.ShowBalloonTip(1, "Compressed: " & StrConv(sb_FolderName.Text, VbStrConv.ProperCase), vbCrLf & "▸ " & spaceSavedLabel.Text & vbCrLf & "▸ " & Math.Round(Callpercent, 1) & "% Smaller", ToolTipIcon.None)
                 End If
 
-            Catch ex As System.OverflowException
+            Catch ex As OverflowException
                 compressedSizeVisual.Width = 320
                 sb_compressedSizeVisual.Height = 113
             End Try
@@ -769,8 +714,6 @@ Public Class Compact
                 sb_ResultsPanel.Visible = True
                 PaintPercentageTransition.PaintTarget(results_arc, Callpercent, 5)
             ElseIf isQueryCalledByCompact = True Then
-
-                sb_progresslabel.Text = "Analyzing..."
 
                 buttonRevert.Visible = False
                 CompResultsPanel.Visible = False
@@ -784,9 +727,6 @@ Public Class Compact
         If isQueryCalledByCompact = False Then isQueryMode = False
 
     End Sub
-
-
-
 
 
 
@@ -820,26 +760,18 @@ Public Class Compact
 
 
 
-    Private Function DirectorySize _
-        (ByVal dInfo As IO.DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
-
+    Private Function DirectorySize(ByVal dInfo As DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
 
         Try
-
             Dim totalSize As Long = dInfo.EnumerateFiles().Sum(Function(file) file.Length)
-
             If includeSubdirectories Then
                 totalSize += dInfo.EnumerateDirectories().Sum(Function(dir) DirectorySize(dir, True))
             End If
-
             Return totalSize
 
         Catch generatedexceptionname As UnauthorizedAccessException
             directorysizeexceptionCount += 1
-
-
             If directorysizeexceptionCount = 1 Then
-
                 overrideCompressFolderButton = 1
                 directorysizeexceptionCount += 1
 
@@ -848,48 +780,11 @@ Public Class Compact
                 Else
                     ThrowError(ERR_UNAUTHORISEDREQUIRESSYSTEM)
                 End If
-
             End If
-
         Catch ex As Exception
-
         End Try
 
     End Function
-
-
-
-
-    Private Function getEncoding() As Encoding
-        Dim CPGet = New Process
-        With CPGet.StartInfo
-            .FileName = "cmd.exe"
-            .Arguments = "/c chcp"
-            .UseShellExecute = False
-            .CreateNoWindow = True
-            .StandardOutputEncoding = Encoding.Default
-            .StandardErrorEncoding = Encoding.Default
-            .WorkingDirectory = workingDir
-            .RedirectStandardInput = True
-            .RedirectStandardOutput = True
-            .RedirectStandardError = True
-        End With
-        CPGet.Start()
-
-        Dim Res = CPGet.StandardOutput.ReadLine()
-        Dim CPa = Integer.Parse(Regex.Replace(Res, "[^\d]", ""))
-        CPGet.StandardInput.WriteLine("exit")
-        CPGet.StandardInput.Flush()
-        CPGet.WaitForExit()
-        Return Encoding.GetEncoding(CPa)
-    End Function
-
-
-
-
-    Private Sub LetsKillStuffButSafelyNow()
-        If MyProcess.HasExited = False Then MyProcess.Kill()
-    End Sub
 
 
 
@@ -933,7 +828,6 @@ Public Class Compact
         Dim bufferStr As String
         Dim hModule As Integer
 
-        'hModule = LoadLibraryEx("kernel32.dll", IntPtr.Zero, &H2)
         hModule = LoadLibraryA(strModuleName)
 
         If hModule <> 0 Then
@@ -965,17 +859,12 @@ Public Class Compact
 
         Dim posA As Integer = value.IndexOf(a)
         Dim posB As Integer = value.LastIndexOf(b)
-        If posA = -1 Then
-            Return ""
-        End If
-        If posB = -1 Then
-            Return ""
-        End If
+
+        If posA = -1 Then Return ""
+        If posB = -1 Then Return ""
 
         Dim adjustedPosA As Integer = posA + a.Length
-        If adjustedPosA >= posB Then
-            Return ""
-        End If
+        If adjustedPosA >= posB Then Return ""
 
         Return value.Substring(adjustedPosA, posB - adjustedPosA)
 
@@ -983,25 +872,18 @@ Public Class Compact
 
 
     Function Before(value As String, a As String) As String
-
         Dim posA As Integer = value.IndexOf(a)
-        If posA = -1 Then
-            Return ""
-        End If
+        If posA = -1 Then Return ""
+
         Return value.Substring(0, posA)
     End Function
 
 
     Function After(value As String, a As String) As String
-
         Dim posA As Integer = value.LastIndexOf(a)
-        If posA = -1 Then
-            Return ""
-        End If
+        If posA = -1 Then Return ""
         Dim adjustedPosA As Integer = posA + a.Length
-        If adjustedPosA >= value.Length Then
-            Return ""
-        End If
+        If adjustedPosA >= value.Length Then Return ""
         Return value.Substring(adjustedPosA)
     End Function
 
@@ -1013,69 +895,38 @@ Public Class Compact
 
     Private Sub Saveconlog_Click(sender As Object, e As EventArgs) Handles saveconlog.Click
         If MsgBox("Save console output?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-            Dim reverseCon As New List(Of Object)
-            Dim sb As New System.Text.StringBuilder()
+            Dim reverseCon As New ArrayList
+            Dim sb As New StringBuilder()
 
-            For Each ln As Object In conOut.Items
-                reverseCon.Add(ln)
+            For Each ln As String In conOut.Items
+                reverseCon.Add(ln.Trim())
             Next
 
             reverseCon.Reverse()
-            sb.AppendLine("CompactGUI: Log at " & System.DateTime.Now & vbCrLf _
-                          & "//////////////////////////////////////////////////////////////////////////////////" _
-                          & "//////////////////////////////////////////////////////////////////////////////////")
+            sb.AppendLine("CompactGUI: Log at " & System.DateTime.Now & vbCrLf & StrDup(50, "/"))
 
-            For Each ln As Object In reverseCon
+            For Each ln As String In reverseCon
                 sb.AppendLine(ln)
             Next
 
-            sb.AppendLine("End Log at " & System.DateTime.Now & vbCrLf _
-                          & "//////////////////////////////////////////////////////////////////////////////////" _
-                          & "//////////////////////////////////////////////////////////////////////////////////" & vbCrLf & vbCrLf)
+            sb.AppendLine("End Log at " & System.DateTime.Now & vbCrLf & StrDup(100, "/") & vbCrLf & vbCrLf)
 
-            System.IO.File.WriteAllText(Application.StartupPath & "\CompactGUILog.txt", sb.ToString, CP)
+            File.AppendAllText(Application.StartupPath & "\CompactGUILog.txt", sb.ToString, CP)
 
             MsgBox("Saved log to " & Application.StartupPath & "\CompactGUILog.txt")
+            Process.Start(Application.StartupPath & "\CompactGUILog.txt")
         End If
     End Sub
 
 
-
-
-    Private Sub seecompest_MouseHover(sender As Object, e As EventArgs) Handles seecompest.MouseHover
-        topbar_title.Select()
-        WikiHandler.showWikiRes()
-        isAlreadyFading = 0
-
-    End Sub
-
-    Dim isAlreadyFading = 2
-    Private Sub hideWikiRes(sender As Object, e As EventArgs) Handles MyBase.MouseEnter, TabControl1.MouseEnter,
-                                InputPage.MouseEnter, FlowLayoutPanel1.MouseEnter, Panel3.MouseEnter, Panel4.MouseEnter, seecompest.MouseLeave
-        If isAlreadyFading = 0 Then
-            FadeTransition.FadeForm(WikiPopup, 0.96, 0, 200)
-            isAlreadyFading = 1
-        End If
-
-
-
-
-    End Sub
 
 
     Private Sub submitToWiki_Click(sender As Object, e As EventArgs) Handles submitToWiki.Click
         Process.Start("https://goo.gl/forms/Udi5SUkMdCOMG3m23")
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboChooseShutdown.SelectedIndexChanged
-        InputPage.Focus()
 
-    End Sub
 
-    Private Sub ComboBox1_MouseLeave(sender As Object, e As EventArgs) Handles comboChooseShutdown.MouseLeave
-        InputPage.Focus()
-
-    End Sub
 
     Private Sub compressX8_CheckedChanged(sender As Object, e As EventArgs) Handles compressX4.Click, compressX8.Click, compressX16.Click, compressLZX.Click
 
@@ -1088,27 +939,30 @@ Public Class Compact
 
     Private Sub loadFromSettings()
 
-        If My.Settings.SavedCompressionOption = 0 Then compressX4.Checked = True
-        If My.Settings.SavedCompressionOption = 1 Then compressX8.Checked = True
-        If My.Settings.SavedCompressionOption = 2 Then compressX16.Checked = True
-        If My.Settings.SavedCompressionOption = 3 Then compressLZX.Checked = True
+        Select Case My.Settings.SavedCompressionOption
+            Case 0 : compressX4.Checked = True
+            Case 1 : compressX8.Checked = True
+            Case 2 : compressX16.Checked = True
+            Case 3 : compressLZX.Checked = True
+        End Select
 
     End Sub
 
     Private Sub btn_Mainexit_Click(sender As Object, e As EventArgs) Handles btn_Mainexit.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub btn_Mainmin_Click(sender As Object, e As EventArgs) Handles btn_Mainmin.Click
-        Me.WindowState = FormWindowState.Minimized
+        WindowState = FormWindowState.Minimized
+        If My.Settings.MinimisetoTray = True Then Hide()
     End Sub
 
 
     Dim isMaximised As Boolean = False
     Private Sub btn_Mainmax_Click(sender As Object, e As EventArgs) Handles btn_Mainmax.Click
         If isMaximised = False Then
-            Me.MaximumSize = Screen.FromControl(Me).WorkingArea.Size
-            Me.Bounds = Screen.GetWorkingArea(Me)
+            MaximumSize = Screen.FromControl(Me).WorkingArea.Size
+            Bounds = Screen.GetWorkingArea(Me)
             isMaximised = True
         ElseIf isMaximised = True Then
             Me.Height = 652
@@ -1141,15 +995,9 @@ Public Class Compact
 #End Region
 
 
-    Private Sub buttonCompress_EnabledChanged(sender As Object, e As EventArgs) Handles buttonCompress.EnabledChanged
-        Dim btn = DirectCast(sender, Button)
-        btn.ForeColor = If(btn.Enabled, Color.White, Color.Silver)
-    End Sub
 
 
-
-
-#Region "Paint Events"
+#Region "Paint Events and Other Visuals"
 
     Private Sub buttonCompress_Paint(sender As Object, e As PaintEventArgs) Handles buttonCompress.Paint
         Dim btn = DirectCast(sender, Button)
@@ -1247,6 +1095,55 @@ Public Class Compact
         e.Graphics.FillPolygon(New SolidBrush(Color.FromArgb(255, 47, 66, 83)), New PointF() {New Point(x, 0), New Point(x, y), New Point(x - y, y)})
 
     End Sub
+
+
+
+    Private Sub dirChooser_MouseEnter(sender As Object, e As EventArgs) Handles dirChooser.MouseEnter
+        dirChooser.LinkColor = Color.FromArgb(200, 200, 200)
+    End Sub
+    Private Sub dirChooser_MouseLeave(sender As Object, e As EventArgs) Handles dirChooser.MouseLeave
+        dirChooser.LinkColor = Color.White
+    End Sub
+
+
+
+
+    Dim isAlreadyFading = 2
+    Private Sub seecompest_MouseHover(sender As Object, e As EventArgs) Handles seecompest.MouseHover, sb_labelCompressed.MouseHover
+        topbar_title.Select()
+        WikiHandler.showWikiRes()
+        isAlreadyFading = 0
+    End Sub
+    Private Sub hideWikiRes(sender As Object, e As EventArgs) Handles seecompest.MouseLeave, sb_labelCompressed.MouseLeave
+        If isAlreadyFading = 0 Then
+            FadeTransition.FadeForm(WikiPopup, 0.96, 0, 200)
+            isAlreadyFading = 1
+        End If
+    End Sub
+
+
+
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboChooseShutdown.SelectedIndexChanged
+        InputPage.Focus()
+    End Sub
+
+    Private Sub ComboBox1_MouseLeave(sender As Object, e As EventArgs) Handles comboChooseShutdown.MouseLeave
+        InputPage.Focus()
+    End Sub
+
+
+
+
+    Private Sub buttonCompress_EnabledChanged(sender As Object, e As EventArgs) Handles buttonCompress.EnabledChanged
+        Dim btn = DirectCast(sender, Button)
+        btn.ForeColor = If(btn.Enabled, Color.White, Color.Silver)
+    End Sub
+
+
+
+
+
 #End Region
 
     Private Sub ViewReset()
@@ -1327,6 +1224,11 @@ Public Class Compact
     End Sub
 
 #End Region
+
+
+    Private Sub TrayIcon_BalloonTipClicked(sender As Object, e As EventArgs) Handles TrayIcon.BalloonTipClicked, Tray_ShowMain.Click, TrayIcon.DoubleClick
+        Show() : TopMost = True : Focus() : WindowState = FormWindowState.Normal : TopMost = False
+    End Sub
 
 
 

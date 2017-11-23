@@ -66,7 +66,8 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
@@ -193,7 +194,7 @@
     <EmbeddedResource Include="Resources\Ookii.Dialogs.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
+    <Content Include="Resources\iconbright.ico" />
     <None Include="Resources\iconbright.png" />
     <None Include="Resources\dsmask.png" />
   </ItemGroup>
