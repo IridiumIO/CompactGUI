@@ -713,6 +713,7 @@ Public Class Compact
 
                 CompResultsPanel.Visible = True
                 sb_ResultsPanel.Visible = True
+                Callpercent = (1 - (1 / CDec(ARR_COMPRATIO(CON_INDEX_COMPRESSIONRATIO)))) * 100
                 PaintPercentageTransition.PaintTarget(results_arc, Callpercent, 5)
             ElseIf isQueryCalledByCompact = True Then
 

@@ -11,6 +11,7 @@
 
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
         Dim p As New Pen(Color.Gray, 1)
-        e.Graphics.DrawLine(p, 20, 100, GamesTable.Width + 10, 100)
+        'e.Graphics.DrawLine(p, 20, 100, GamesTable.Width + 10, 100)
+        e.Graphics.FillRectangle(Brushes.White, 0, 100, Panel1.Width, Panel1.Height)
     End Sub
 End Class
