@@ -16,7 +16,7 @@ __*Or:*__
 
 Install with **Chocolatey** from Powershell or CMD:
 ```coffeescript
-choco install compactgui --version x.x.x
+choco install compactgui
 ```
 <p align = "left"><a href="https://chocolatey.org/packages/compactgui/"><img src="https://img.shields.io/chocolatey/v/compactgui.svg""></a></p>
 
