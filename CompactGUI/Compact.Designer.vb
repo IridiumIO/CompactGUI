@@ -28,6 +28,7 @@ Partial Class Compact
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.topbar_title = New System.Windows.Forms.Label()
         Me.panel_topBar = New System.Windows.Forms.Panel()
+        Me.showinfopopup = New System.Windows.Forms.Label()
         Me.updateBanner = New System.Windows.Forms.Panel()
         Me.dlUpdateLink = New System.Windows.Forms.LinkLabel()
         Me.buttonQueryCompact = New System.Windows.Forms.Button()
@@ -37,7 +38,6 @@ Partial Class Compact
         Me.btn_Mainmax = New System.Windows.Forms.Button()
         Me.btn_Mainexit = New System.Windows.Forms.Button()
         Me.topbar_icon = New System.Windows.Forms.PictureBox()
-        Me.showinfopopup = New System.Windows.Forms.Label()
         Me.progressTimer = New System.Windows.Forms.Timer(Me.components)
         Me.seecompest = New System.Windows.Forms.Label()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
@@ -176,6 +176,18 @@ Partial Class Compact
         Me.panel_topBar.Name = "panel_topBar"
         Me.panel_topBar.Size = New System.Drawing.Size(1000, 135)
         Me.panel_topBar.TabIndex = 14
+        '
+        'showinfopopup
+        '
+        Me.showinfopopup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.showinfopopup.AutoSize = True
+        Me.showinfopopup.Font = New System.Drawing.Font("Segoe MDL2 Assets", 11.0!)
+        Me.showinfopopup.ForeColor = System.Drawing.Color.White
+        Me.showinfopopup.Location = New System.Drawing.Point(798, 15)
+        Me.showinfopopup.Name = "showinfopopup"
+        Me.showinfopopup.Size = New System.Drawing.Size(22, 15)
+        Me.showinfopopup.TabIndex = 14
+        Me.showinfopopup.Text = ""
         '
         'updateBanner
         '
@@ -320,18 +332,6 @@ Partial Class Compact
         Me.topbar_icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.topbar_icon.TabIndex = 15
         Me.topbar_icon.TabStop = False
-        '
-        'showinfopopup
-        '
-        Me.showinfopopup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.showinfopopup.AutoSize = True
-        Me.showinfopopup.Font = New System.Drawing.Font("Segoe MDL2 Assets", 11.0!)
-        Me.showinfopopup.ForeColor = System.Drawing.Color.White
-        Me.showinfopopup.Location = New System.Drawing.Point(798, 15)
-        Me.showinfopopup.Name = "showinfopopup"
-        Me.showinfopopup.Size = New System.Drawing.Size(22, 15)
-        Me.showinfopopup.TabIndex = 14
-        Me.showinfopopup.Text = ""
         '
         'progressTimer
         '
