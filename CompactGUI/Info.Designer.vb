@@ -48,6 +48,8 @@ Partial Class Info
         Me.btn_help = New System.Windows.Forms.Button()
         Me.btn_licenses = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.checkExperimentalBrowser = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.panel_header.SuspendLayout()
         Me.InfoTabControl.SuspendLayout()
@@ -263,9 +265,11 @@ Partial Class Info
         'Tab_Features
         '
         Me.Tab_Features.BackColor = System.Drawing.Color.White
+        Me.Tab_Features.Controls.Add(Me.Label7)
         Me.Tab_Features.Controls.Add(Me.Label3)
         Me.Tab_Features.Controls.Add(Me.checkShowNotifications)
         Me.Tab_Features.Controls.Add(Me.checkMinimisetoTray)
+        Me.Tab_Features.Controls.Add(Me.checkExperimentalBrowser)
         Me.Tab_Features.Controls.Add(Me.checkEnableRCMenu)
         Me.Tab_Features.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Features.Name = "Tab_Features"
@@ -416,6 +420,29 @@ Partial Class Info
         Me.Panel2.Size = New System.Drawing.Size(460, 524)
         Me.Panel2.TabIndex = 12
         '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 16.0!)
+        Me.Label7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.Label7.Location = New System.Drawing.Point(28, 183)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(138, 30)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "Experimental"
+        '
+        'checkExperimentalBrowser
+        '
+        Me.checkExperimentalBrowser.AutoSize = True
+        Me.checkExperimentalBrowser.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.checkExperimentalBrowser.ForeColor = System.Drawing.Color.Black
+        Me.checkExperimentalBrowser.Location = New System.Drawing.Point(33, 225)
+        Me.checkExperimentalBrowser.Name = "checkExperimentalBrowser"
+        Me.checkExperimentalBrowser.Size = New System.Drawing.Size(253, 23)
+        Me.checkExperimentalBrowser.TabIndex = 2
+        Me.checkExperimentalBrowser.Text = "Use Experimental File/Folder Browser"
+        Me.checkExperimentalBrowser.UseVisualStyleBackColor = True
+        '
         'Info
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -469,4 +496,6 @@ Partial Class Info
     Friend WithEvents Panel2 As Panel
     Friend WithEvents btn_Mainexit As Button
     Friend WithEvents checkShowNotifications As CheckBox
+    Friend WithEvents Label7 As Label
+    Friend WithEvents checkExperimentalBrowser As CheckBox
 End Class

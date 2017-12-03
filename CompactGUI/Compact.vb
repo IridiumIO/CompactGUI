@@ -411,8 +411,13 @@ Public Class Compact
 
     Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
         If isActive = False And isQueryMode = False Then
+            Dim folderChoice
+            If My.Settings.ExperimentalBrowser = True Then
+                folderChoice = New FileFolderDialog
+            Else
+                folderChoice = New VistaFolderBrowserDialog
+            End If
 
-            Dim folderChoice As New FileFolderDialog
             folderChoice.ShowDialog()
             If Directory.Exists(folderChoice.SelectedPath) Then
                 SelectFolder(folderChoice.SelectedPath, "button")

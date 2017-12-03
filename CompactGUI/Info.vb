@@ -31,6 +31,8 @@ Public Class Info
 
         If My.Settings.ShowNotifications = True Then checkShowNotifications.Checked = True
 
+        If My.Settings.ExperimentalBrowser = True Then checkExperimentalBrowser.Checked = True
+
     End Sub
 
 
@@ -45,6 +47,15 @@ Public Class Info
             RCMenu.WriteRCMenuRegistry()
         ElseIf checkEnableRCMenu.Checked = False Then
             RCMenu.DeleteRCMenuRegistry()
+        End If
+    End Sub
+
+
+    Private Sub checkExperimentalBrowser_CheckedChanged(sender As Object, e As EventArgs) Handles checkExperimentalBrowser.CheckedChanged
+        If checkExperimentalBrowser.Checked = True Then
+            My.Settings.ExperimentalBrowser = True
+        ElseIf checkExperimentalBrowser.Checked = False Then
+            My.Settings.ExperimentalBrowser = True
         End If
     End Sub
 
@@ -91,6 +102,5 @@ Public Class Info
     Private Sub btn_Mainexit_Click(sender As Object, e As EventArgs) Handles btn_Mainexit.Click
         Me.Close()
     End Sub
-
 
 End Class
