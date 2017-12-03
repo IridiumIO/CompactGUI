@@ -188,27 +188,27 @@ Public Class WikiHandler
 
 
         Dim GName As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(2),
+        .Text = InputFromGitHub(ps).Split("|")(2), .ForeColor = Color.DimGray,
         .Dock = DockStyle.Left,
         .Font = New Font("Segoe UI", 11, FontStyle.Regular)
         }
         Dim GSizeU As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(3),
+        .Text = InputFromGitHub(ps).Split("|")(3), .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }
         Dim GSizeC As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(4),
+        .Text = InputFromGitHub(ps).Split("|")(4), .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }
         Dim GCompR As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(6),
+        .Text = InputFromGitHub(ps).Split("|")(6), .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }
         Dim GCompAlg As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(1),
+        .Text = InputFromGitHub(ps).Split("|")(1), .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }

@@ -28,9 +28,9 @@ Partial Class Compact
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.topbar_title = New System.Windows.Forms.Label()
         Me.panel_topBar = New System.Windows.Forms.Panel()
+        Me.showinfopopup = New System.Windows.Forms.Label()
         Me.updateBanner = New System.Windows.Forms.Panel()
         Me.dlUpdateLink = New System.Windows.Forms.LinkLabel()
-        Me.topbar_progress = New System.Windows.Forms.Panel()
         Me.buttonQueryCompact = New System.Windows.Forms.Button()
         Me.topbar_dirchooserContainer = New System.Windows.Forms.Panel()
         Me.dirChooser = New System.Windows.Forms.LinkLabel()
@@ -38,7 +38,6 @@ Partial Class Compact
         Me.btn_Mainmax = New System.Windows.Forms.Button()
         Me.btn_Mainexit = New System.Windows.Forms.Button()
         Me.topbar_icon = New System.Windows.Forms.PictureBox()
-        Me.showinfopopup = New System.Windows.Forms.Label()
         Me.progressTimer = New System.Windows.Forms.Timer(Me.components)
         Me.seecompest = New System.Windows.Forms.Label()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
@@ -89,7 +88,6 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
-        Me.results_arc = New System.Windows.Forms.Panel()
         Me.submitToWiki = New System.Windows.Forms.Label()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
@@ -116,6 +114,10 @@ Partial Class Compact
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.spaceSavedLabel = New System.Windows.Forms.Label()
+        Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -138,6 +140,7 @@ Partial Class Compact
         Me.Panel5.SuspendLayout()
         Me.panel_console.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.TrayMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'OpenFileDialog1
@@ -160,20 +163,31 @@ Partial Class Compact
         Me.panel_topBar.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_topBar.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.panel_topBar.Controls.Add(Me.showinfopopup)
         Me.panel_topBar.Controls.Add(Me.updateBanner)
-        Me.panel_topBar.Controls.Add(Me.topbar_progress)
         Me.panel_topBar.Controls.Add(Me.buttonQueryCompact)
         Me.panel_topBar.Controls.Add(Me.topbar_dirchooserContainer)
         Me.panel_topBar.Controls.Add(Me.btn_Mainmin)
         Me.panel_topBar.Controls.Add(Me.btn_Mainmax)
         Me.panel_topBar.Controls.Add(Me.btn_Mainexit)
         Me.panel_topBar.Controls.Add(Me.topbar_icon)
-        Me.panel_topBar.Controls.Add(Me.showinfopopup)
         Me.panel_topBar.Controls.Add(Me.topbar_title)
         Me.panel_topBar.Location = New System.Drawing.Point(0, 0)
         Me.panel_topBar.Name = "panel_topBar"
         Me.panel_topBar.Size = New System.Drawing.Size(1000, 135)
         Me.panel_topBar.TabIndex = 14
+        '
+        'showinfopopup
+        '
+        Me.showinfopopup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.showinfopopup.AutoSize = True
+        Me.showinfopopup.Font = New System.Drawing.Font("Segoe MDL2 Assets", 11.0!)
+        Me.showinfopopup.ForeColor = System.Drawing.Color.White
+        Me.showinfopopup.Location = New System.Drawing.Point(798, 15)
+        Me.showinfopopup.Name = "showinfopopup"
+        Me.showinfopopup.Size = New System.Drawing.Size(22, 15)
+        Me.showinfopopup.TabIndex = 14
+        Me.showinfopopup.Text = ""
         '
         'updateBanner
         '
@@ -200,14 +214,6 @@ Partial Class Compact
         Me.dlUpdateLink.TabStop = True
         Me.dlUpdateLink.Text = "Update Available: Click to download V2.3"
         Me.dlUpdateLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'topbar_progress
-        '
-        Me.topbar_progress.BackColor = System.Drawing.Color.Green
-        Me.topbar_progress.Location = New System.Drawing.Point(44, 114)
-        Me.topbar_progress.Name = "topbar_progress"
-        Me.topbar_progress.Size = New System.Drawing.Size(0, 2)
-        Me.topbar_progress.TabIndex = 16
         '
         'buttonQueryCompact
         '
@@ -326,18 +332,6 @@ Partial Class Compact
         Me.topbar_icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.topbar_icon.TabIndex = 15
         Me.topbar_icon.TabStop = False
-        '
-        'showinfopopup
-        '
-        Me.showinfopopup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.showinfopopup.AutoSize = True
-        Me.showinfopopup.Font = New System.Drawing.Font("Segoe UI Symbol", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.showinfopopup.ForeColor = System.Drawing.Color.White
-        Me.showinfopopup.Location = New System.Drawing.Point(791, 8)
-        Me.showinfopopup.Name = "showinfopopup"
-        Me.showinfopopup.Size = New System.Drawing.Size(28, 25)
-        Me.showinfopopup.TabIndex = 14
-        Me.showinfopopup.Text = "ⓘ"
         '
         'progressTimer
         '
@@ -941,7 +935,7 @@ Partial Class Compact
         Me.ProgressPage.Location = New System.Drawing.Point(4, 22)
         Me.ProgressPage.Name = "ProgressPage"
         Me.ProgressPage.Padding = New System.Windows.Forms.Padding(3)
-        Me.ProgressPage.Size = New System.Drawing.Size(993, 507)
+        Me.ProgressPage.Size = New System.Drawing.Size(995, 509)
         Me.ProgressPage.TabIndex = 1
         Me.ProgressPage.Text = "ProgressPage"
         '
@@ -983,17 +977,9 @@ Partial Class Compact
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 34
-        '
         'submitToWiki
         '
         Me.submitToWiki.AutoSize = True
-        Me.submitToWiki.Cursor = System.Windows.Forms.Cursors.Hand
         Me.submitToWiki.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.submitToWiki.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
         Me.submitToWiki.Location = New System.Drawing.Point(475, 192)
@@ -1149,6 +1135,7 @@ Partial Class Compact
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.conOut.BackColor = System.Drawing.Color.White
         Me.conOut.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.conOut.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.conOut.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.conOut.FormattingEnabled = True
         Me.conOut.Location = New System.Drawing.Point(13, 39)
@@ -1183,7 +1170,7 @@ Partial Class Compact
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(993, 507)
+        Me.TabPage3.Size = New System.Drawing.Size(995, 509)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "TabPage3"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -1290,6 +1277,35 @@ Partial Class Compact
         Me.spaceSavedLabel.TabIndex = 27
         Me.spaceSavedLabel.Text = "700MB Saved"
         '
+        'TrayIcon
+        '
+        Me.TrayIcon.ContextMenuStrip = Me.TrayMenu
+        Me.TrayIcon.Icon = CType(resources.GetObject("TrayIcon.Icon"), System.Drawing.Icon)
+        Me.TrayIcon.Text = "CompactGUI"
+        Me.TrayIcon.Visible = True
+        '
+        'TrayMenu
+        '
+        Me.TrayMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Tray_ShowMain})
+        Me.TrayMenu.Name = "TrayMenu"
+        Me.TrayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.TrayMenu.ShowImageMargin = False
+        Me.TrayMenu.Size = New System.Drawing.Size(79, 26)
+        '
+        'Tray_ShowMain
+        '
+        Me.Tray_ShowMain.BackColor = System.Drawing.Color.White
+        Me.Tray_ShowMain.Name = "Tray_ShowMain"
+        Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
+        Me.Tray_ShowMain.Text = "Show"
+        '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1337,6 +1353,7 @@ Partial Class Compact
         Me.panel_console.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
+        Me.TrayMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1429,8 +1446,10 @@ Partial Class Compact
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents sb_SpaceSavedLabel As Label
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
-    Friend WithEvents results_arc As Panel
-    Friend WithEvents topbar_progress As Panel
     Friend WithEvents updateBanner As Panel
     Friend WithEvents dlUpdateLink As LinkLabel
+    Friend WithEvents results_arc As GraphicsPanel
+    Friend WithEvents TrayIcon As NotifyIcon
+    Friend WithEvents TrayMenu As ContextMenuStrip
+    Friend WithEvents Tray_ShowMain As ToolStripMenuItem
 End Class

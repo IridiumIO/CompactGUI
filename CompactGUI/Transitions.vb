@@ -49,8 +49,7 @@
     End Sub
 
     Shared Sub FadeTimer_Tick(sender As Object, e As EventArgs)
-        'If FadeObj.opacity > 0 Then FadeObj.show
-        'If FadeObj.opacity = 0 Then FadeObj.hide
+
         If FadeObj.opacity < FadeStopOp + Bounds And FadeObj.opacity > FadeStopOp - Bounds Then
             FadeTimer.Stop()
             FadeObj.opacity = FadeStopOp
@@ -74,64 +73,89 @@ Public Class UnfurlTransition
     Shared UnfurlStartWidth As Integer
     Shared UnfurlEndWidth As Integer
     Shared UnfurlDuration As Integer
-    Shared UnfurlTimer As New Timer
     Shared Modifier As Decimal = 16 + 2 / 3
+    Shared UnfurlTimer As New Timer With {.Interval = Modifier}
     Shared UnfurlTickcount
     Shared Bounds As Decimal
 
     Public Shared Sub UnfurlControl(target As Control, startwidth As Integer, endwidth As Integer, duration As Integer)
         If endwidth - startwidth <> 0 Then
-
-            UnfurlTimer.Interval = Modifier
-
             UnfurlObj = target
             UnfurlStartWidth = startwidth
             UnfurlEndWidth = endwidth
             UnfurlDuration = duration
             UnfurlTickcount = ((endwidth - startwidth)) / (duration / Modifier)
+
             If endwidth - startwidth < 0 Then
                 Bounds = -UnfurlTickcount
-
             Else
                 Bounds = UnfurlTickcount
             End If
-
 
             UnfurlObj.Width = startwidth
             UnfurlObj.Show()
             AddHandler UnfurlTimer.Tick, AddressOf UnfurlTimer_Tick
             UnfurlTimer.Start()
-
         End If
-
-
     End Sub
 
 
     Shared Sub UnfurlTimer_Tick(sender As Object, e As EventArgs)
         If UnfurlObj.Width < UnfurlEndWidth + Bounds And UnfurlObj.Width > UnfurlEndWidth - Bounds Then
-
             UnfurlTimer.Stop()
-
             UnfurlObj.Width = UnfurlEndWidth
 
             If UnfurlObj Is Compact.topbar_dirchooserContainer Then
                 Compact.buttonQueryCompact.Visible = True
                 Compact.panel_topBar.Anchor -= AnchorStyles.Bottom
                 Compact.panel_topBar.Height = 135
-                Compact.topbar_dirchooserContainer.Location = New Point(44, 69)
+                UnfurlObj.Location = New Point(44, 69)
             End If
 
             RemoveHandler UnfurlTimer.Tick, AddressOf UnfurlTimer_Tick
         Else
-
-
             UnfurlObj.Width += UnfurlTickcount
-
-
         End If
     End Sub
 
 
 End Class
 
+Public Class PaintPercentageTransition
+    Shared TargetControl As Panel
+    Shared PaintTimer As New Timer With {.Interval = 5}
+    Shared isDrawing = False
+    Public Shared callpercentstep = 0
+    Shared x = 1
+    Public Shared T As Single
+
+    Public Shared Sub PaintTarget(target As Panel, targetpercentage As Single, speed As Integer)
+        TargetControl = target
+        T = targetpercentage
+        callpercentstep = 0
+        x = 1
+        AddHandler PaintTimer.Tick, AddressOf t_tick
+        PaintTimer.Interval = speed
+        PaintTimer.Start()
+    End Sub
+
+
+    Shared Sub t_tick(sender As Object, e As EventArgs)
+
+        If callpercentstep >= T Then
+            PaintTimer.Stop()
+            callpercentstep = T
+            TargetControl.Invalidate()
+            TargetControl.Update()
+            RemoveHandler PaintTimer.Tick, AddressOf t_tick
+        Else
+            callpercentstep += 1.6 * x
+            x -= T / (1.25 * T ^ 2)
+            TargetControl.Invalidate()
+            TargetControl.Update()
+        End If
+    End Sub
+
+
+
+End Class

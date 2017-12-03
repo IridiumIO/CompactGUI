@@ -77,6 +77,42 @@ Namespace My
                 Me("SavedCompressionOption") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property MinimisetoTray() As Boolean
+            Get
+                Return CType(Me("MinimisetoTray"),Boolean)
+            End Get
+            Set
+                Me("MinimisetoTray") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property ShowNotifications() As Boolean
+            Get
+                Return CType(Me("ShowNotifications"),Boolean)
+            End Get
+            Set
+                Me("ShowNotifications") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property ExperimentalBrowser() As Boolean
+            Get
+                Return CType(Me("ExperimentalBrowser"),Boolean)
+            End Get
+            Set
+                Me("ExperimentalBrowser") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
