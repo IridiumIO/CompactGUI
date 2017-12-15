@@ -1,16 +1,9 @@
 <Info>
 	<VersionMajor>2.4</VersionMajor>
-	<VersionMinor>0</VersionMinor>
+	<VersionMinor>1</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
-	<VersionStr>V2.4.0</VersionStr>
-	<ChocolateyVStr>2.4.0</ChocolateyVStr>
-	<Changes>Added a flyout notification when compression is finished|
-    CompactGUI can now be minimised to the system tray|
-    Redesigned Info popup to be an Options window to accommodate more features|
-    Redesigned the Online Results flyout for compression estimates|
-    Implemented experimental custom file + folder browser|
-    Animated the percentage arc on the results page|
-    Multiple other minor UI tweaks (mainly just realignments and color changes)|
-  </Changes>
-	<Fixes>Added a buffer to compact.exe's output. This outputs to the console at maximum 20 times per second, which fixes the massive slowdowns that occurred if you tried compressing while the Console Output is visible and compact.exe was processing hundreds of files per second.</Fixes>
+	<VersionStr>V2.4.1</VersionStr>
+	<ChocolateyVStr>2.4.1</ChocolateyVStr>
+	<Changes></Changes>
+	<Fixes>Fixed experimental browser not being disabled when unchecked</Fixes>
 </Info>
