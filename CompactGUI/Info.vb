@@ -55,7 +55,7 @@ Public Class Info
         If checkExperimentalBrowser.Checked = True Then
             My.Settings.ExperimentalBrowser = True
         ElseIf checkExperimentalBrowser.Checked = False Then
-            My.Settings.ExperimentalBrowser = True
+            My.Settings.ExperimentalBrowser = False
         End If
     End Sub
 
