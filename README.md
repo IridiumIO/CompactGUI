@@ -27,7 +27,7 @@ choco install compactgui
 
 ## Uses
 Use this tool to: 
-- Reduce the size of games (e.g. Nioh: 73.9GB > 20.7GB)
+- Reduce the size of games (e.g. Nioh: 73.9GB > 65GB)
 - Reduce the size of programs (e.g. Adobe Photoshop: 1.71GB > 886MB)
 - Compress any other folder on your computer
   
