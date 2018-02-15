@@ -39,7 +39,13 @@ Partial Class Info
         Me.link_Github = New System.Windows.Forms.LinkLabel()
         Me.InfoTabControl = New System.Windows.Forms.TabControl()
         Me.Tab_Features = New System.Windows.Forms.TabPage()
+        Me.btnDefaultNonCompressable = New System.Windows.Forms.Button()
+        Me.btnSaveNonCompressable = New System.Windows.Forms.Button()
+        Me.TxtBoxNonCompressable = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.checkShowNotifications = New System.Windows.Forms.CheckBox()
+        Me.checkExperimentalBrowser = New System.Windows.Forms.CheckBox()
+        Me.checkEnableNonCompressable = New System.Windows.Forms.CheckBox()
         Me.Tab_Licenses = New System.Windows.Forms.TabPage()
         Me.Tab_Help = New System.Windows.Forms.TabPage()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -48,8 +54,6 @@ Partial Class Info
         Me.btn_help = New System.Windows.Forms.Button()
         Me.btn_licenses = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.checkExperimentalBrowser = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.panel_header.SuspendLayout()
         Me.InfoTabControl.SuspendLayout()
@@ -201,7 +205,7 @@ Partial Class Info
         Me.panel_header.Controls.Add(Me.TableLayoutPanel1)
         Me.panel_header.Location = New System.Drawing.Point(0, 0)
         Me.panel_header.Name = "panel_header"
-        Me.panel_header.Size = New System.Drawing.Size(459, 76)
+        Me.panel_header.Size = New System.Drawing.Size(494, 76)
         Me.panel_header.TabIndex = 9
         '
         'btn_Mainexit
@@ -214,7 +218,7 @@ Partial Class Info
         Me.btn_Mainexit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_Mainexit.Font = New System.Drawing.Font("Segoe UI Symbol", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_Mainexit.ForeColor = System.Drawing.Color.White
-        Me.btn_Mainexit.Location = New System.Drawing.Point(413, 0)
+        Me.btn_Mainexit.Location = New System.Drawing.Point(448, 0)
         Me.btn_Mainexit.Margin = New System.Windows.Forms.Padding(0)
         Me.btn_Mainexit.Name = "btn_Mainexit"
         Me.btn_Mainexit.Size = New System.Drawing.Size(45, 30)
@@ -259,24 +263,69 @@ Partial Class Info
         Me.InfoTabControl.Location = New System.Drawing.Point(129, 47)
         Me.InfoTabControl.Name = "InfoTabControl"
         Me.InfoTabControl.SelectedIndex = 0
-        Me.InfoTabControl.Size = New System.Drawing.Size(333, 497)
+        Me.InfoTabControl.Size = New System.Drawing.Size(368, 590)
         Me.InfoTabControl.TabIndex = 10
         '
         'Tab_Features
         '
         Me.Tab_Features.BackColor = System.Drawing.Color.White
+        Me.Tab_Features.Controls.Add(Me.btnDefaultNonCompressable)
+        Me.Tab_Features.Controls.Add(Me.btnSaveNonCompressable)
+        Me.Tab_Features.Controls.Add(Me.TxtBoxNonCompressable)
         Me.Tab_Features.Controls.Add(Me.Label7)
         Me.Tab_Features.Controls.Add(Me.Label3)
         Me.Tab_Features.Controls.Add(Me.checkShowNotifications)
         Me.Tab_Features.Controls.Add(Me.checkMinimisetoTray)
         Me.Tab_Features.Controls.Add(Me.checkExperimentalBrowser)
+        Me.Tab_Features.Controls.Add(Me.checkEnableNonCompressable)
         Me.Tab_Features.Controls.Add(Me.checkEnableRCMenu)
         Me.Tab_Features.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Features.Name = "Tab_Features"
         Me.Tab_Features.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_Features.Size = New System.Drawing.Size(325, 471)
+        Me.Tab_Features.Size = New System.Drawing.Size(360, 564)
         Me.Tab_Features.TabIndex = 0
         Me.Tab_Features.Text = "Features"
+        '
+        'btnDefaultNonCompressable
+        '
+        Me.btnDefaultNonCompressable.Location = New System.Drawing.Point(50, 354)
+        Me.btnDefaultNonCompressable.Name = "btnDefaultNonCompressable"
+        Me.btnDefaultNonCompressable.Size = New System.Drawing.Size(75, 23)
+        Me.btnDefaultNonCompressable.TabIndex = 4
+        Me.btnDefaultNonCompressable.Text = "Default"
+        Me.btnDefaultNonCompressable.UseVisualStyleBackColor = True
+        '
+        'btnSaveNonCompressable
+        '
+        Me.btnSaveNonCompressable.Location = New System.Drawing.Point(267, 354)
+        Me.btnSaveNonCompressable.Name = "btnSaveNonCompressable"
+        Me.btnSaveNonCompressable.Size = New System.Drawing.Size(75, 23)
+        Me.btnSaveNonCompressable.TabIndex = 4
+        Me.btnSaveNonCompressable.Text = "Save"
+        Me.btnSaveNonCompressable.UseVisualStyleBackColor = True
+        '
+        'TxtBoxNonCompressable
+        '
+        Me.TxtBoxNonCompressable.AcceptsTab = True
+        Me.TxtBoxNonCompressable.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtBoxNonCompressable.ForeColor = System.Drawing.Color.DimGray
+        Me.TxtBoxNonCompressable.Location = New System.Drawing.Point(50, 186)
+        Me.TxtBoxNonCompressable.Multiline = True
+        Me.TxtBoxNonCompressable.Name = "TxtBoxNonCompressable"
+        Me.TxtBoxNonCompressable.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TxtBoxNonCompressable.Size = New System.Drawing.Size(292, 162)
+        Me.TxtBoxNonCompressable.TabIndex = 3
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 16.0!)
+        Me.Label7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.Label7.Location = New System.Drawing.Point(28, 416)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(138, 30)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "Experimental"
         '
         'checkShowNotifications
         '
@@ -290,6 +339,30 @@ Partial Class Info
         Me.checkShowNotifications.Text = "Show Notifications "
         Me.checkShowNotifications.UseVisualStyleBackColor = True
         '
+        'checkExperimentalBrowser
+        '
+        Me.checkExperimentalBrowser.AutoSize = True
+        Me.checkExperimentalBrowser.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.checkExperimentalBrowser.ForeColor = System.Drawing.Color.Black
+        Me.checkExperimentalBrowser.Location = New System.Drawing.Point(33, 458)
+        Me.checkExperimentalBrowser.Name = "checkExperimentalBrowser"
+        Me.checkExperimentalBrowser.Size = New System.Drawing.Size(253, 23)
+        Me.checkExperimentalBrowser.TabIndex = 2
+        Me.checkExperimentalBrowser.Text = "Use Experimental File/Folder Browser"
+        Me.checkExperimentalBrowser.UseVisualStyleBackColor = True
+        '
+        'checkEnableNonCompressable
+        '
+        Me.checkEnableNonCompressable.AutoSize = True
+        Me.checkEnableNonCompressable.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.checkEnableNonCompressable.ForeColor = System.Drawing.Color.Black
+        Me.checkEnableNonCompressable.Location = New System.Drawing.Point(33, 157)
+        Me.checkEnableNonCompressable.Name = "checkEnableNonCompressable"
+        Me.checkEnableNonCompressable.Size = New System.Drawing.Size(267, 23)
+        Me.checkEnableNonCompressable.TabIndex = 2
+        Me.checkEnableNonCompressable.Text = "Skip Files that are Poorly Compressable"
+        Me.checkEnableNonCompressable.UseVisualStyleBackColor = True
+        '
         'Tab_Licenses
         '
         Me.Tab_Licenses.BackColor = System.Drawing.Color.White
@@ -299,7 +372,7 @@ Partial Class Info
         Me.Tab_Licenses.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Licenses.Name = "Tab_Licenses"
         Me.Tab_Licenses.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_Licenses.Size = New System.Drawing.Size(325, 471)
+        Me.Tab_Licenses.Size = New System.Drawing.Size(325, 564)
         Me.Tab_Licenses.TabIndex = 1
         Me.Tab_Licenses.Text = "Licenses"
         '
@@ -311,7 +384,7 @@ Partial Class Info
         Me.Tab_Help.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Help.Name = "Tab_Help"
         Me.Tab_Help.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_Help.Size = New System.Drawing.Size(325, 471)
+        Me.Tab_Help.Size = New System.Drawing.Size(325, 564)
         Me.Tab_Help.TabIndex = 2
         Me.Tab_Help.Text = "Help"
         Me.Tab_Help.UseVisualStyleBackColor = True
@@ -360,7 +433,7 @@ Partial Class Info
         Me.Panel1.Controls.Add(Me.btn_options)
         Me.Panel1.Location = New System.Drawing.Point(0, 75)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(143, 506)
+        Me.Panel1.Size = New System.Drawing.Size(143, 599)
         Me.Panel1.TabIndex = 11
         '
         'btn_help
@@ -417,38 +490,15 @@ Partial Class Info
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(460, 524)
+        Me.Panel2.Size = New System.Drawing.Size(495, 617)
         Me.Panel2.TabIndex = 12
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 16.0!)
-        Me.Label7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.Label7.Location = New System.Drawing.Point(28, 183)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(138, 30)
-        Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Experimental"
-        '
-        'checkExperimentalBrowser
-        '
-        Me.checkExperimentalBrowser.AutoSize = True
-        Me.checkExperimentalBrowser.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.checkExperimentalBrowser.ForeColor = System.Drawing.Color.Black
-        Me.checkExperimentalBrowser.Location = New System.Drawing.Point(33, 225)
-        Me.checkExperimentalBrowser.Name = "checkExperimentalBrowser"
-        Me.checkExperimentalBrowser.Size = New System.Drawing.Size(253, 23)
-        Me.checkExperimentalBrowser.TabIndex = 2
-        Me.checkExperimentalBrowser.Text = "Use Experimental File/Folder Browser"
-        Me.checkExperimentalBrowser.UseVisualStyleBackColor = True
         '
         'Info
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(460, 524)
+        Me.ClientSize = New System.Drawing.Size(495, 617)
         Me.Controls.Add(Me.Panel2)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -498,4 +548,8 @@ Partial Class Info
     Friend WithEvents checkShowNotifications As CheckBox
     Friend WithEvents Label7 As Label
     Friend WithEvents checkExperimentalBrowser As CheckBox
+    Friend WithEvents TxtBoxNonCompressable As TextBox
+    Friend WithEvents checkEnableNonCompressable As CheckBox
+    Friend WithEvents btnDefaultNonCompressable As Button
+    Friend WithEvents btnSaveNonCompressable As Button
 End Class

@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.Text.RegularExpressions
 
 Public Class Info
 
@@ -32,6 +33,12 @@ Public Class Info
         If My.Settings.ShowNotifications = True Then checkShowNotifications.Checked = True
 
         If My.Settings.ExperimentalBrowser = True Then checkExperimentalBrowser.Checked = True
+
+        If My.Settings.SkipNonCompressable = True Then checkEnableNonCompressable.Checked = True
+
+        populateNonCompressable()
+
+
 
     End Sub
 
@@ -77,6 +84,14 @@ Public Class Info
         End If
     End Sub
 
+    Private Sub checkEnableNonCompressable_CheckedChanged(sender As Object, e As EventArgs) Handles checkEnableNonCompressable.CheckedChanged
+        If checkEnableNonCompressable.Checked Then
+            My.Settings.SkipNonCompressable = True
+        Else
+            My.Settings.SkipNonCompressable = False
+        End If
+    End Sub
+
 
     Private Sub btn_options_Click(sender As Object, e As EventArgs) Handles btn_options.Click, btn_licenses.Click, btn_help.Click
         Dim btn = sender
@@ -101,6 +116,26 @@ Public Class Info
 
     Private Sub btn_Mainexit_Click(sender As Object, e As EventArgs) Handles btn_Mainexit.Click
         Me.Close()
+    End Sub
+
+    Private Sub btnSaveNonCompressable_Click(sender As Object, e As EventArgs) Handles btnSaveNonCompressable.Click
+        My.Settings.NonCompressableList = Regex.Replace(TxtBoxNonCompressable.Text, "\s+", ";").Replace(".", "")
+        populateNonCompressable()
+    End Sub
+
+    Private Sub btnDefaultNonCompressable_Click(sender As Object, e As EventArgs) Handles btnDefaultNonCompressable.Click
+        My.Settings.NonCompressableList = "dl_; gif; jpg; jpeg; bmp; png; mkv; mp4; wmv; avi; bik; flv; ogg; mpg; m2v; m4v; vob; mp3; aac; wma; flac; zip; rar; 7z; cab; lzx"
+
+        populateNonCompressable()
+    End Sub
+
+    Private Sub populateNonCompressable()
+        Dim NonCompressableFileTypes As String() = My.Settings.NonCompressableList.Replace(" ", "").Split(";"c)
+        TxtBoxNonCompressable.Text = ""
+        For Each i In NonCompressableFileTypes
+            TxtBoxNonCompressable.Text &= i & vbTab
+
+        Next
     End Sub
 
 End Class

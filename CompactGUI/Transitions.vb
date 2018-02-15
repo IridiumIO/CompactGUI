@@ -106,7 +106,7 @@ Public Class UnfurlTransition
             UnfurlObj.Width = UnfurlEndWidth
 
             If UnfurlObj Is Compact.topbar_dirchooserContainer Then
-                Compact.buttonQueryCompact.Visible = True
+                Compact.btnAnalyze.Visible = True
                 Compact.panel_topBar.Anchor -= AnchorStyles.Bottom
                 Compact.panel_topBar.Height = 135
                 UnfurlObj.Location = New Point(44, 69)

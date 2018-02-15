@@ -276,7 +276,7 @@ Public Class WikiHandler
             Dim wkPreSizeVal_Len = TextRenderer.MeasureText(Compact.wkPreSizeVal.Text, Compact.wkPreSizeVal.Font)
             Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 8), Compact.wkPreSizeVal.Location.Y + 16)
 
-            ' I have no idea why this catch is needed
+            ' I still have no idea why this catch is needed but I'm scared to delete it
         Catch ex As System.DivideByZeroException
 
             Compact.wkPreSizeVal.Text = "?"
@@ -312,27 +312,6 @@ Public Class WikiHandler
 
     End Sub
 
-
-
-
-    Private Shared Function WikiDirectorySize _
-        (ByVal dInfo As IO.DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
-
-        Try
-            Dim totalSize As Long = dInfo.EnumerateFiles().Sum(Function(file) file.Length)
-            If includeSubdirectories Then
-                totalSize += dInfo.EnumerateDirectories().Sum(Function(dir) WikiDirectorySize(dir, True))
-            End If
-            Return totalSize
-
-        Catch generatedexceptionname As UnauthorizedAccessException
-
-
-        Catch ex As Exception
-
-        End Try
-
-    End Function
 
 
 End Class
