@@ -251,6 +251,7 @@ Partial Class Compact
         '
         Me.dirChooser.ActiveLinkColor = System.Drawing.Color.White
         Me.dirChooser.AllowDrop = True
+        Me.dirChooser.AutoEllipsis = True
         Me.dirChooser.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dirChooser.Font = New System.Drawing.Font("Segoe UI", 11.25!)
         Me.dirChooser.ForeColor = System.Drawing.Color.White

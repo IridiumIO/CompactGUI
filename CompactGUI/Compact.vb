@@ -33,21 +33,256 @@ Public Class Compact
 
     Dim intervaltime As Double
     Dim outputbuffer As New ArrayList
-    Private Sub MyProcess_OutputDataReceived(ByVal sender As Object, ByVal e As DataReceivedEventArgs) Handles MyProcess.OutputDataReceived
 
-        'outputbuffer.Add(e.Data)
+    Dim oldFolderSize As UInt64
+    Dim workingDir As String = ""
+
+
+    Private Sub Compact_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        loadFromSettings()
+
+        If dirChooser.Text = "❯   Select Target Folder" Then
+            panel_topBar.Height = Height - 1
+            panel_topBar.Anchor += AnchorStyles.Bottom
+            With topbar_title
+                .AutoSize = False
+                .TextAlign = ContentAlignment.MiddleCenter
+                .Font = New Font(topbar_title.Font.Name, 32, FontStyle.Regular)
+                .Width = panel_topBar.Width
+                .Height = topbar_title.Font.Height
+                .Location = New Point(0, panel_topBar.Height / 2 - 150)
+                .Anchor += AnchorStyles.Right
+            End With
+            topbar_dirchooserContainer.Location = New Point(44, panel_topBar.Height / 2 - 22)
+        End If
+
+        comboChooseShutdown.SelectedItem = comboChooseShutdown.Items.Item(0)
+
+        RCMenu.WriteLocRegistry()
+        VersionCheck.VC(version)
+
+        For Each arg In My.Application.CommandLineArgs
+            If Directory.Exists(arg) Then SelectFolder(arg, "cmdlineargs")
+        Next
+
+    End Sub
+
+
+
+
+    'Set variables for minor security and error handling
+    Dim overrideCompressFolderButton = 0
+    Dim directorysizeexceptionCount = 0                                                         'Used in the DirectorySize() Function to ensure the error message only shows up once, even if multiple UnauthorizedAccessException errors get thrown
+
+
+
+
+    Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
+        If isActive = False And isQueryMode = False Then
+            Dim folderChoice
+            If My.Settings.ExperimentalBrowser = True Then
+                folderChoice = New FileFolderDialog
+            Else
+                folderChoice = New VistaFolderBrowserDialog
+            End If
+
+            folderChoice.ShowDialog()
+            If Directory.Exists(folderChoice.SelectedPath) Then
+                SelectFolder(folderChoice.SelectedPath, "button")
+
+            ElseIf File.Exists(folderChoice.SelectedPath) Then
+                If folderChoice.MultipleFiles IsNot Nothing Then
+                    MsgBox("Multiple Files Selected")
+                Else
+                    MsgBox("File selected")
+                End If
+
+            End If
+            folderChoice.Dispose()
+        End If
+
+    End Sub
+
+
+
+
+    Private Sub SelectFolder(selectedDir As String, senderID As String)
+        Cursor.Current = Cursors.WaitCursor
+        sb_AnalysisPanel.Visible = False
+        btnCompress.Visible = True
+        overrideCompressFolderButton = 0
+
+        If selectedDir.Contains("C:\Windows") Then : ThrowError(ERR_WINDOWSDIRNOTALLOWED)                                    'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
+        ElseIf selectedDir.EndsWith(":\") Then : ThrowError(ERR_WHOLEDRIVENOTALLOWED)
+        Else
+            If selectedDir.Length >= 3 Then                                                                                    'Makes sure the chosen folder isn't a null value or an exception
+                Dim DI_selectedDir = New DirectoryInfo(selectedDir)
+                workingDir = DI_selectedDir.FullName.TrimEnd("\", "/")
+
+                ListOfFiles.Clear()
+                AllFiles.Clear()
+                TreeData.Clear()
+
+                directorysizeexceptionCount = 0
+
+                If DI_selectedDir.Name.Length > 0 Then _
+                    sb_FolderName.Text = StrConv(DI_selectedDir.Name, VbStrConv.ProperCase)
+
+                If Directory.GetParent(DI_selectedDir.Parent.FullName) IsNot Nothing Then
+                    dirChooser.Text = "❯ " + DI_selectedDir.Parent.Parent.Name.Replace(":\", "") +
+                            " ❯ " + DI_selectedDir.Parent.Name + " ❯ " + DI_selectedDir.Name
+
+                ElseIf Directory.GetParent(DI_selectedDir.FullName) IsNot Nothing Then
+                    dirChooser.Text = "❯ " + DI_selectedDir.Parent.Name.Replace(":\", " ❯ ") +
+                        +DI_selectedDir.Name
+                Else
+                    dirChooser.Text = "❯ " + DI_selectedDir.Parent.Name.Replace(":\", " ❯ ") + DI_selectedDir.Name
+
+                End If
+
+
+                oldFolderSize = Math.Round(DirectorySize(DI_selectedDir, True), 1)
+
+                Dim oldFolderSize_Formatted = GetOutputSize(oldFolderSize, True)
+
+                preSize.Text = "Uncompressed Size: " + oldFolderSize_Formatted
+
+
+
+                'Try
+
+                GetFilesToCompress(workingDir, ListOfFiles, My.Settings.SkipNonCompressable)
+
+                sb_ResultsPanel.Visible = False
+
+
+
+                UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 46, 100)
+                WikiHandler.localFolderParse(selectedDir, DI_selectedDir, oldFolderSize_Formatted)
+
+                With topbar_title
+                    .Anchor -= AnchorStyles.Right
+                    .AutoSize = True
+                    .TextAlign = ContentAlignment.MiddleLeft
+                    .Font = New Font(topbar_title.Font.Name, 15.75, FontStyle.Regular)
+                    .Location = New Point(59, 18)
+                End With
+                returnArrow.Visible = False
+                btnUncompress.Visible = False
+                CompResultsPanel.Visible = False
+                checkShutdownOnCompletion.Checked = False
+                TabControl1.SelectedTab = InputPage
+                btnAnalyze.Enabled = True
+                'MyProcess.Kill()
+                sb_AnalysisPanel.Visible = False
+                'Catch ex As Exception
+                'End Try
+
+                If overrideCompressFolderButton = 0 Then                                        'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
+                    btnCompress.Enabled = True
+                Else
+                    btnCompress.Enabled = False
+                End If
+            Else
+                If senderID = "button" Then Console.Write("No folder selected")
+            End If
+        End If
+    End Sub
+
+
+
+
+    Shared NonCompressableSet As New List(Of String)(Regex.Replace(My.Settings.NonCompressableList, "\s+", "").Split(";"c))
+
+
+    Dim ListOfFiles As New List(Of String)
+    Dim FileIndex As Integer = 0
+
+    Private Sub GetFilesToCompress(ByVal targetDirectory As String, targetOutputList As List(Of String), LimitSelectedFiles As Boolean)
+
+        Dim fileEntries As String() = Directory.GetFiles(targetDirectory)
+        Dim fileName As String                                                              ' Process the list of files found in the directory.
+
+        For Each fileName In fileEntries
+            If LimitSelectedFiles = True Then
+                If Path.GetExtension(fileName) = "" OrElse NonCompressableSet.Contains(Path.GetExtension(fileName).TrimStart(".")) = False Then
+                    targetOutputList.Add(fileName)
+                Else
+                    Console.WriteLine(Path.GetExtension(fileName))
+                End If
+            Else : targetOutputList.Add(fileName)
+            End If
+        Next fileName
+
+        Dim subdirectoryEntries As String() = Directory.GetDirectories(targetDirectory)     ' Recurse into subdirectories
+        Dim subdirectory As String
+        For Each subdirectory In subdirectoryEntries
+            GetFilesToCompress(subdirectory, targetOutputList, LimitSelectedFiles)
+        Next subdirectory
+
+    End Sub
+
+
+
+
+    Private Sub BtnAnalyze_Click(sender As Object, e As EventArgs) Handles btnAnalyze.Click
+        conOut.Items.Clear()
+        isQueryMode = True
+        btnCompress.Visible = False
+        sb_Panel.Show()                                 'Temporary Fix - go back and work out why #124 doesn't work with WikiParser()
+        sb_AnalysisPanel.Visible = True
+        sb_progresslabel.Text = "Analyzing..."
+        btnAnalyze.Enabled = False
+        CalculateSaving()
+    End Sub
+
+
+
+    Private Sub BtnCompress_Click(sender As System.Object, e As System.EventArgs) Handles btnCompress.Click
+        conOut.Items.Clear()
+        WorkingList = New List(Of String)(ListOfFiles)
+        'ProcessDirectory(workingDir, ListOfFiles, True)
+        CurrentMode = "compact"
+        CreateProcess()
+        sb_AnalysisPanel.Visible = True
+        btnCompress.Visible = False
+        btnAnalyze.Enabled = False
+    End Sub
+
+
+
+
+    Private Sub BtnUncompress_Click(sender As Object, e As EventArgs) Handles btnUncompress.Click             'Handles uncompressing. For now, uncompressing can only be done through the program only to revert a compression that's just been done.
+        isQueryMode = False
+
+        progresspercent.Visible = True
+        CompResultsPanel.Visible = False
+        btnAnalyze.Enabled = False
+        btnUncompress.Visible = False
+        FileIndex = 0
+        CurrentMode = "uncompact"
+        WorkingList = New List(Of String)(AllFiles)
+        Try
+            RunCompact(WorkingList(0))
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+
+
+
+    Private Sub MyProcess_OutputDataReceived(ByVal sender As Object, ByVal e As DataReceivedEventArgs) Handles MyProcess.OutputDataReceived
 
         If Math.Round(intervaltime + 0.05, 2) < Math.Round(Date.Now.TimeOfDay.TotalSeconds, 2) Then      'Buffers incoming strings, then outputs them to the listbox every 0.1s
             Invoke(Sub()
                        conOut.BeginUpdate()
-                       Try
-                           For Each str As String In outputbuffer
-                               AppendOutputText(vbCrLf & str)
-                           Next
-                       Catch ex As Exception
-                       End Try
-                       outputbuffer.Clear()
+                       For Each str As String In outputbuffer
+                           AppendOutputText(vbCrLf & str)
+                       Next
 
+                       outputbuffer.Clear()
                        intervaltime = Date.Now.TimeOfDay.TotalSeconds
                        conOut.EndUpdate()
                    End Sub)
@@ -80,6 +315,35 @@ Public Class Compact
                    End Sub)
         End If
     End Sub
+
+
+
+
+    Private Sub SxSCompactIterator(SxSCount As Integer)
+        For v As Integer = 1 To SxSCount
+            If FileIndex >= WorkingList.Count Then
+                Exit For
+            End If
+            RunCompact(WorkingList(FileIndex))
+
+            v += 1
+        Next
+    End Sub
+
+
+
+
+    Private Sub AppendOutputText(ByVal text As String)                                           'Attach output to the embedded console
+
+        Invoke(Sub()
+                   If text <> vbCrLf Then
+                       conOut.Items.Insert(0, text)
+                       sb_progressbar.Width = FileIndex / WorkingList.Count * 301
+                       progresspercent.Text = Math.Round(FileIndex / WorkingList.Count * 100, 0) & "%"
+                   End If
+               End Sub)
+    End Sub
+
 
 
 
@@ -119,285 +383,6 @@ Public Class Compact
 
 
 
-
-
-    Private Function SxSCompactIterator(SxSCount As Integer)
-        For v As Integer = 1 To SxSCount
-            If FileIndex >= WorkingList.Count Then
-                Exit For
-            End If
-            RunCompact(WorkingList(FileIndex))
-
-            v += 1
-        Next
-    End Function
-
-
-
-
-
-
-
-
-    Private Sub Compact_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        loadFromSettings()
-
-        If dirChooser.Text = "❯   Select Target Folder" Then
-            panel_topBar.Height = Height - 1
-            panel_topBar.Anchor += AnchorStyles.Bottom
-            With topbar_title
-                .AutoSize = False
-                .TextAlign = ContentAlignment.MiddleCenter
-                .Font = New Font(topbar_title.Font.Name, 32, FontStyle.Regular)
-                .Width = panel_topBar.Width
-                .Height = topbar_title.Font.Height
-                .Location = New Point(0, panel_topBar.Height / 2 - 150)
-                .Anchor += AnchorStyles.Right
-            End With
-            topbar_dirchooserContainer.Location = New Point(44, panel_topBar.Height / 2 - 22)
-        End If
-
-        comboChooseShutdown.SelectedItem = comboChooseShutdown.Items.Item(0)
-
-        RCMenu.WriteLocRegistry()
-        VersionCheck.VC(version)
-        progressTimer.Start()                                                                   'Starts a timer that keeps track of changes during any operation.
-
-        For Each arg In My.Application.CommandLineArgs
-            If Directory.Exists(arg) Then SelectFolder(arg, "cmdlineargs")
-        Next
-
-    End Sub
-
-
-
-
-    Private Sub AppendOutputText(ByVal text As String)                                           'Attach output to the embedded console
-
-        Invoke(Sub()
-                   If text <> vbCrLf Then
-                       conOut.Items.Insert(0, text)
-                       sb_progressbar.Width = FileIndex / WorkingList.Count * 301
-                       progresspercent.Text = Math.Round(FileIndex / WorkingList.Count * 100, 0) & "%"
-                   End If
-               End Sub)
-    End Sub
-
-
-
-    'Set variables for minor security and error handling
-    Dim overrideCompressFolderButton = 0
-    Dim directorysizeexceptionCount = 0                                                         'Used in the DirectorySize() Function to ensure the error message only shows up once, even if multiple UnauthorizedAccessException errors get thrown
-
-
-
-
-    Dim oldFolderSize
-    Dim workingDir As String = ""
-
-
-
-
-    Private Sub SelectFolderToCompress(sender As Object, e As EventArgs) Handles dirChooser.LinkClicked, dirChooser.Click
-        If isActive = False And isQueryMode = False Then
-            Dim folderChoice
-            If My.Settings.ExperimentalBrowser = True Then
-                folderChoice = New FileFolderDialog
-            Else
-                folderChoice = New VistaFolderBrowserDialog
-            End If
-
-            folderChoice.ShowDialog()
-            If Directory.Exists(folderChoice.SelectedPath) Then
-                SelectFolder(folderChoice.SelectedPath, "button")
-
-            ElseIf File.Exists(folderChoice.SelectedPath) Then
-                If folderChoice.MultipleFiles IsNot Nothing Then
-                    MsgBox("Multiple Files Selected")
-                Else
-                    MsgBox("File selected")
-                End If
-
-            End If
-            folderChoice.Dispose()
-        End If
-
-    End Sub
-
-    Dim dirLabelResults As String = ""
-
-    Private Sub SelectFolder(selectedDir As String, senderID As String)
-        Cursor.Current = Cursors.WaitCursor
-        sb_AnalysisPanel.Visible = False
-        btnCompress.Visible = True
-        overrideCompressFolderButton = 0
-
-        If selectedDir.Contains("C:\Windows") Then : ThrowError(ERR_WINDOWSDIRNOTALLOWED)                                    'Makes sure you're not trying to compact the Windows directory. I should Regex this to catch all possible drives hey?
-        ElseIf selectedDir.EndsWith(":\") Then : ThrowError(ERR_WHOLEDRIVENOTALLOWED)
-        Else
-            If selectedDir.Length >= 3 Then                                                                                    'Makes sure the chosen folder isn't a null value or an exception
-                Dim DI_selectedDir = New DirectoryInfo(selectedDir)
-                workingDir = DI_selectedDir.FullName.TrimEnd("\", "/")
-
-                ListOfFiles.Clear()
-                AllFiles.Clear()
-                TreeData.Clear()
-
-                directorysizeexceptionCount = 0
-
-                If DI_selectedDir.Name.Length > 0 Then _
-                    sb_FolderName.Text = StrConv(DI_selectedDir.Name, VbStrConv.ProperCase)
-
-                Try
-                    If DI_selectedDir.Parent.Parent.Name <> Nothing Then
-                        dirChooser.Text = "❯ " + DI_selectedDir.Parent.Parent.Name +
-                            " ❯ " + DI_selectedDir.Parent.Name +
-                            " ❯ " + DI_selectedDir.Name
-                    Else
-                        dirChooser.Text = "❯ " + DI_selectedDir.Root.Name.Replace(":\", " ❯ ") +
-                             +DI_selectedDir.Parent.Name + " ❯ " + DI_selectedDir.Name
-                    End If
-
-                Catch ex As Exception
-                    dirChooser.Text = "❯ " + DI_selectedDir.Root.Name.Replace(":\", " ❯ ") + DI_selectedDir.Name
-                    Console.WriteLine("Folder error: " + ex.Data.ToString)
-                End Try
-
-                oldFolderSize = Math.Round(DirectorySize(DI_selectedDir, True), 1)
-
-                Dim oldFolderSize_Formatted = GetOutputSize(oldFolderSize, True)
-
-                preSize.Text = "Uncompressed Size: " + oldFolderSize_Formatted
-
-                dirLabelResults = DI_selectedDir.Name
-
-                'Try
-
-                ListOfFiles.Clear()
-                GetFilesToCompress(workingDir, ListOfFiles, My.Settings.SkipNonCompressable)
-
-                sb_ResultsPanel.Visible = False
-
-
-
-                    UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 46, 100)
-                    WikiHandler.localFolderParse(selectedDir, DI_selectedDir, oldFolderSize_Formatted)
-
-                    With topbar_title
-                        .Anchor -= AnchorStyles.Right
-                        .AutoSize = True
-                        .TextAlign = ContentAlignment.MiddleLeft
-                        .Font = New Font(topbar_title.Font.Name, 15.75, FontStyle.Regular)
-                        .Location = New Point(59, 18)
-                    End With
-                    returnArrow.Visible = False
-                    btnUncompress.Visible = False
-                    CompResultsPanel.Visible = False
-                    checkShutdownOnCompletion.Checked = False
-                    TabControl1.SelectedTab = InputPage
-                    btnAnalyze.Enabled = True
-                    'MyProcess.Kill()
-                    sb_AnalysisPanel.Visible = False
-                    'Catch ex As Exception
-                    'End Try
-
-                    If overrideCompressFolderButton = 0 Then                                        'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
-                    btnCompress.Enabled = True
-                Else
-                    btnCompress.Enabled = False
-                End If
-            Else
-                If senderID = "button" Then Console.Write("No folder selected")
-            End If
-        End If
-    End Sub
-
-
-
-
-    Private Sub BtnCompress_Click(sender As System.Object, e As System.EventArgs) Handles btnCompress.Click
-        conOut.Items.Clear()
-        WorkingList = New List(Of String)(ListOfFiles)
-        'ProcessDirectory(workingDir, ListOfFiles, True)
-        CurrentMode = "compact"
-        CreateProcess()
-        sb_AnalysisPanel.Visible = True
-        btnCompress.Visible = False
-        btnAnalyze.Enabled = False
-    End Sub
-
-    Private Sub BtnAnalyze_Click(sender As Object, e As EventArgs) Handles btnAnalyze.Click
-        conOut.Items.Clear()
-        isQueryMode = True
-        btnCompress.Visible = False
-        sb_Panel.Show()                                 'Temporary Fix - go back and work out why #124 doesn't work with WikiParser()
-        sb_AnalysisPanel.Visible = True
-        sb_progresslabel.Text = "Analyzing..."
-        btnAnalyze.Enabled = False
-        CalculateSaving()
-
-
-    End Sub
-
-
-
-
-
-    Shared NonCompressableSet As New List(Of String)(Regex.Replace(My.Settings.NonCompressableList, "\s+", "").Split(";"c))
-
-
-    Dim ListOfFiles As New List(Of String)
-    Dim FileIndex As Integer = 0
-
-    Private Sub GetFilesToCompress(ByVal targetDirectory As String, targetOutputList As List(Of String), LimitSelectedFiles As Boolean)
-
-        Dim fileEntries As String() = Directory.GetFiles(targetDirectory)
-        Dim fileName As String                                                              ' Process the list of files found in the directory.
-
-        For Each fileName In fileEntries
-            If LimitSelectedFiles = True Then
-                If Path.GetExtension(fileName) = "" OrElse NonCompressableSet.Contains(Path.GetExtension(fileName).TrimStart(".")) = False Then
-                    targetOutputList.Add(fileName)
-                Else
-                    Console.WriteLine(Path.GetExtension(fileName))
-                End If
-            Else : targetOutputList.Add(fileName)
-            End If
-        Next fileName
-
-        Dim subdirectoryEntries As String() = Directory.GetDirectories(targetDirectory)     ' Recurse into subdirectories
-        Dim subdirectory As String
-        For Each subdirectory In subdirectoryEntries
-            GetFilesToCompress(subdirectory, targetOutputList, LimitSelectedFiles)
-        Next subdirectory
-
-    End Sub
-
-
-
-
-
-    Private Sub BtnUncompress_Click(sender As Object, e As EventArgs) Handles btnUncompress.Click             'Handles uncompressing. For now, uncompressing can only be done through the program only to revert a compression that's just been done.
-        isQueryMode = False
-
-        progresspercent.Visible = True
-        CompResultsPanel.Visible = False
-        btnAnalyze.Enabled = False
-        btnUncompress.Visible = False
-        FileIndex = 0
-        CurrentMode = "uncompact"
-        WorkingList = New List(Of String)(AllFiles)
-        Try
-            RunCompact(WorkingList(0))
-        Catch ex As Exception
-        End Try
-
-    End Sub
-
-
-
-
     Private Sub ReturnArrow_Click(sender As Object, e As EventArgs) Handles returnArrow.Click                       'Returns you to the first screen and cleans up some stuff
 
         returnArrow.Visible = False
@@ -424,7 +409,6 @@ Public Class Compact
             saveconlog.Visible = False
         End If
     End Sub
-
 
 
 
