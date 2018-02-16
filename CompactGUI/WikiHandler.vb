@@ -4,7 +4,7 @@ Imports System.Net
 Imports System.Text
 Imports System.Text.RegularExpressions
 
-Public Class WikiHandler
+Class WikiHandler
     Shared InputFromGitHub() As String
 
     Shared workingname As String = "testdir"
@@ -12,14 +12,12 @@ Public Class WikiHandler
     Private Shared Sub WikiParser()
         Console.WriteLine("Working Name: " & workingname)
 
-        Dim stringSeparators() As String = {vbCrLf}
         Dim Source As String
         Dim gameName As New List(Of String)
 
         If InputFromGitHub Is Nothing Then
             Console.WriteLine("Getting List")
-            Dim wc As New WebClient
-            wc.Encoding = Encoding.UTF8
+            Dim wc = New WebClient With {.Encoding = Encoding.UTF8}
             Try
                 Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
                 InputFromGitHub = Source.TrimEnd().Split(vbLf)
@@ -236,7 +234,7 @@ Public Class WikiHandler
 
 
 
-    Public Shared Sub localFolderParse(wdString As String, DIwDString As DirectoryInfo, rawPreSize As String)
+    Public Shared Sub localFolderParse(DIwDString As DirectoryInfo, rawPreSize As String)
 
         Dim wnpatch As String = Regex.Replace(DIwDString.Name.ToString, "[^\p{L}a-zA-Z0-90]", "").ToLower.Trim()
 

@@ -111,6 +111,7 @@
     <Compile Include="CustomControls.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CommonActions.vb" />
     <Compile Include="RunCompact.vb">
       <SubType>Form</SubType>
     </Compile>

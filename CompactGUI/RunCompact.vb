@@ -2,41 +2,26 @@
 Imports System.Text.RegularExpressions
 
 Partial Class Compact
+
     Dim CP As Encoding
-    Private Sub CreateProcess()
 
-        Try
-            isQueryMode = False
-            progresspercent.Visible = True
-
-            If CP Is Nothing Then CP = getEncoding()
-
-            RunCompact(WorkingList.Item(0))
-            TabControl1.SelectedTab = ProgressPage
-
-        Catch ex As Exception
-            Console.WriteLine(ex.Data)
-        End Try
-
+    Private Sub CreateProcess(TargetMode As String)
+        If CP Is Nothing Then CP = getEncoding()
+        RunCompact(WorkingList.Item(0))
+        ActionBegun(TargetMode)
     End Sub
 
 
 
 
-    Private Sub Queryaftercompact()
-        isQueryMode = True
-        hasqueryfinished = 1
-        ' RunCompact("query")
-    End Sub
-
-
-    Dim hasqueryfinished = 0
     Dim compactArgs As String
+
+
 
 
     Private Sub RunCompact(desiredFile As String)
 
-        If CurrentMode = "compact" Then : sb_progresslabel.Text = "Compressing, Please Wait"
+        If CurrentMode = "compact" Then
 
             outputbuffer.Add("Compressing: " & vbTab & desiredFile)
             compactArgs = "/C /I"
@@ -49,26 +34,17 @@ Partial Class Compact
             If compressX16.Checked = True Then compactArgs &= " /EXE:XPRESS16K"
             If compressLZX.Checked = True Then compactArgs &= " /EXE:LZX"
 
-
             RunCompact_ProcessGen(compactArgs, desiredFile)
 
-            hasqueryfinished = 0
-            isActive = True
-
-        ElseIf CurrentMode = "uncompact" Then : sb_progresslabel.Text = "Uncompressing..."
+        ElseIf CurrentMode = "uncompact" Then
 
             outputbuffer.Add("Uncompressing: " & vbTab & desiredFile)
-
             compactArgs = "/U /EXE /I"
 
             If checkForceCompression.Checked = True Then compactArgs &= " /F"
-
             If checkHiddenFiles.Checked = True Then compactArgs &= " /A"
 
-
             RunCompact_ProcessGen(compactArgs, desiredFile)
-
-            isActive = True
 
         End If
 

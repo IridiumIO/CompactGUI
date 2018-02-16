@@ -1,4 +1,4 @@
-﻿Public Class FadeTransition
+﻿Class FadeTransition
 
     Shared FadeObj
     Shared FadeStartOp
@@ -10,7 +10,6 @@
     Shared Bounds As Decimal
     Shared FadeTickCumulation
     Shared FadeTimer As New Timer
-    Shared SW As New Stopwatch
 
 
     ''' <summary>
@@ -20,7 +19,7 @@
     ''' <param name="startopacity">Set start opacity as a decimal between 0 and 1</param>
     ''' <param name="endopacity">Set end opacity as a decimal between 0 and 1</param>
     ''' <param name="duration">Set duration of transition in milliseconds</param>
-    Public Shared Sub FadeForm(targetForm As Form, startopacity As Decimal, endopacity As Decimal, duration As Integer, Optional closeonFinish As Boolean = False)
+    Shared Sub FadeForm(targetForm As Form, startopacity As Decimal, endopacity As Decimal, duration As Integer, Optional closeonFinish As Boolean = False)
 
         If duration <= 30 Then Modifier = 10
         If duration > 30 And duration < 1000 Then Modifier = 25
@@ -67,7 +66,7 @@
 End Class
 
 
-Public Class UnfurlTransition
+Class UnfurlTransition
 
     Shared UnfurlObj As Control
     Shared UnfurlStartWidth As Integer
@@ -124,10 +123,9 @@ End Class
 Public Class PaintPercentageTransition
     Shared TargetControl As Panel
     Shared PaintTimer As New Timer With {.Interval = 5}
-    Shared isDrawing = False
     Public Shared callpercentstep = 0
     Shared x = 1
-    Public Shared T As Single
+    Shared T As Single
 
     Public Shared Sub PaintTarget(target As Panel, targetpercentage As Single, speed As Integer)
         TargetControl = target

@@ -56,7 +56,7 @@ Partial Class Compact
         Me.sb_AnalysisPanel = New System.Windows.Forms.Panel()
         Me.sb_progresslabel = New System.Windows.Forms.Label()
         Me.sb_progressbar = New System.Windows.Forms.Panel()
-        Me.progresspercent = New System.Windows.Forms.Label()
+        Me.sb_progresspercent = New System.Windows.Forms.Label()
         Me.wkPostSizeUnit = New System.Windows.Forms.Label()
         Me.wkPostSizeVal = New System.Windows.Forms.Label()
         Me.wkPreSizeUnit = New System.Windows.Forms.Label()
@@ -88,6 +88,7 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.submitToWiki = New System.Windows.Forms.Label()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
@@ -117,7 +118,6 @@ Partial Class Compact
         Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
-        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -526,7 +526,7 @@ Partial Class Compact
         '
         Me.sb_AnalysisPanel.Controls.Add(Me.sb_progresslabel)
         Me.sb_AnalysisPanel.Controls.Add(Me.sb_progressbar)
-        Me.sb_AnalysisPanel.Controls.Add(Me.progresspercent)
+        Me.sb_AnalysisPanel.Controls.Add(Me.sb_progresspercent)
         Me.sb_AnalysisPanel.Location = New System.Drawing.Point(3, 150)
         Me.sb_AnalysisPanel.Name = "sb_AnalysisPanel"
         Me.sb_AnalysisPanel.Size = New System.Drawing.Size(332, 96)
@@ -552,18 +552,18 @@ Partial Class Compact
         Me.sb_progressbar.Size = New System.Drawing.Size(301, 14)
         Me.sb_progressbar.TabIndex = 10
         '
-        'progresspercent
+        'sb_progresspercent
         '
-        Me.progresspercent.BackColor = System.Drawing.Color.Transparent
-        Me.progresspercent.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.progresspercent.ForeColor = System.Drawing.Color.White
-        Me.progresspercent.Location = New System.Drawing.Point(107, 72)
-        Me.progresspercent.Name = "progresspercent"
-        Me.progresspercent.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.progresspercent.Size = New System.Drawing.Size(122, 14)
-        Me.progresspercent.TabIndex = 22
-        Me.progresspercent.Text = "0%"
-        Me.progresspercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.sb_progresspercent.BackColor = System.Drawing.Color.Transparent
+        Me.sb_progresspercent.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.sb_progresspercent.ForeColor = System.Drawing.Color.White
+        Me.sb_progresspercent.Location = New System.Drawing.Point(107, 72)
+        Me.sb_progresspercent.Name = "sb_progresspercent"
+        Me.sb_progresspercent.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.sb_progresspercent.Size = New System.Drawing.Size(122, 14)
+        Me.sb_progresspercent.TabIndex = 22
+        Me.sb_progresspercent.Text = "0%"
+        Me.sb_progresspercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'wkPostSizeUnit
         '
@@ -978,6 +978,13 @@ Partial Class Compact
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
+        '
         'submitToWiki
         '
         Me.submitToWiki.AutoSize = True
@@ -1301,13 +1308,6 @@ Partial Class Compact
         Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
         Me.Tray_ShowMain.Text = "Show"
         '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 35
-        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1427,7 +1427,7 @@ Partial Class Compact
     Friend WithEvents Label11 As Label
     Friend WithEvents spaceSavedLabel As Label
     Friend WithEvents btnUncompress As Button
-    Friend WithEvents progresspercent As Label
+    Friend WithEvents sb_progresspercent As Label
     Friend WithEvents TabPage3 As TabPage
     Friend WithEvents testFileArgs As Button
     Friend WithEvents Label10 As Label

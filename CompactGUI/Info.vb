@@ -94,7 +94,7 @@ Public Class Info
 
 
     Private Sub btn_options_Click(sender As Object, e As EventArgs) Handles btn_options.Click, btn_licenses.Click, btn_help.Click
-        Dim btn = sender
+
         Select Case True
             Case sender Is btn_options
                 InfoTabControl.SelectedTab = Tab_Features
