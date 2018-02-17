@@ -29,9 +29,9 @@ Public Class Compact
     Public isQueryMode As Boolean = False
     Public isActive As Boolean = False
 
-    Dim intervaltime As Double
+    Dim intervaltime As Decimal
     Dim outputbuffer As New ArrayList
-
+    Dim newFolderSize As UInt64
     Dim oldFolderSize As UInt64
     Dim workingDir As String = ""
 
@@ -196,6 +196,7 @@ Public Class Compact
 
 
 
+    Public WorkingList = New List(Of String)
 
     Private Sub BtnAnalyze_Click(sender As Object, e As EventArgs) Handles btnAnalyze.Click
         conOut.Items.Clear()
@@ -224,8 +225,10 @@ Public Class Compact
     End Sub
 
 
-    Private Sub ConsoleWriter()
-        If Math.Round(intervaltime + 0.05, 2) < Math.Round(Date.Now.TimeOfDay.TotalSeconds, 2) Then      'Buffers incoming strings, then outputs them to the listbox every 0.1s
+
+
+    Private Sub OutputBufferDelegate()
+        If Math.Round(intervaltime + 0.1, 2) < Math.Round(Date.Now.TimeOfDay.TotalSeconds, 2) Then      'Buffers incoming strings, then outputs them to the listbox every 0.1s
             Invoke(Sub()
                        conOut.BeginUpdate()
                        For Each str As String In outputbuffer
@@ -239,19 +242,18 @@ Public Class Compact
         End If
     End Sub
 
-    Private Sub MyProcess_OutputDataReceived(ByVal sender As Object, ByVal e As DataReceivedEventArgs) Handles MyProcess.OutputDataReceived
-        ConsoleWriter()
-    End Sub
 
 
-    Public WorkingList = New List(Of String)
 
     Private Sub ProcessExited(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyProcess.Exited
+
+        OutputBufferDelegate()
 
         FileIndex += 1
 
         If FileIndex < WorkingList.Count And WorkingList.Count > 1 Then
-            SxSCompactIterator(1)
+            outputbuffer.Add("Compressing: " & vbTab & WorkingList(FileIndex))
+            RunCompact(WorkingList(FileIndex))
         Else
             Console.WriteLine("Done")
             Threading.Thread.Sleep(100)
@@ -260,7 +262,7 @@ Public Class Compact
             For Each str As String In outputbuffer
                 AppendOutputText(str)
             Next
-
+            outputbuffer.Clear()
             FileIndex = 0
 
             Invoke(Sub()
@@ -385,8 +387,6 @@ Public Class Compact
         Dim numberFilesCompressed = 0
 
 
-        Dim sw As New Stopwatch
-        sw.Start()
         Dim SizeAfterCompression As UInt64
         Dim SizeBeforeCompression As UInt64 = oldFolderSize
         Dim progressVal As Decimal
@@ -478,13 +478,14 @@ Public Class Compact
             Console.WriteLine(vbTab & grp(0) & ": " & grp.Count & "/" & AllFiles.Where(Function(value) New FileInfo(value).Extension = grp(0)).Count)
         Next
 
+        newFolderSize = SizeAfterCompression
+
         If CLng(SizeBeforeCompression) - CLng(SizeAfterCompression) < 0 And isQueryMode = True Then 'Checks if the Folder is NOT compressed
 
             ActionCompleted("A", False)
         Else
 
             origSizeLabel.Text = GetOutputSize(SizeBeforeCompression, True)
-
             Dim PrintOutSize = GetOutputSize(CLng(SizeBeforeCompression) - (CLng(SizeBeforeCompression) - CLng(SizeAfterCompression)), True)
 
             compressedSizeLabel.Text = PrintOutSize
@@ -563,11 +564,9 @@ Public Class Compact
     <DllImport("kernel32.dll")>
     Private Shared Function GetCompressedFileSizeW(
         <[In](), MarshalAs(UnmanagedType.LPWStr)> lpFileName As String,
-        <Out(), MarshalAs(UnmanagedType.U4)> lpFileSizeHigh As UInteger) _
+        <Out(), MarshalAs(UnmanagedType.U4)> ByRef lpFileSizeHigh As UInteger) _
         As UInteger
     End Function
-
-
 
 
     Shared Function GetOutputSize(ByVal byteCount As Long, Optional ByVal showSizeType As Boolean = False) As String            'Function for converting from Bytes into various units
@@ -689,7 +688,23 @@ Public Class Compact
 
 
     Private Sub submitToWiki_Click(sender As Object, e As EventArgs) Handles submitToWiki.Click
-        Process.Start("https://goo.gl/forms/Udi5SUkMdCOMG3m23")
+        WikiSubmission.Folder_Submit = New DirectoryInfo(workingDir).Name
+
+        If compressX4.Checked = True Then WikiSubmission.CompMode_Submit = "X4"
+        If compressX8.Checked = True Then WikiSubmission.CompMode_Submit = "X8"
+        If compressX16.Checked = True Then WikiSubmission.CompMode_Submit = "X16"
+        If compressLZX.Checked = True Then WikiSubmission.CompMode_Submit = "LZX"
+
+        WikiSubmission.BeforeSize_Submit = oldFolderSize
+        WikiSubmission.AfterSize_Submit = newFolderSize
+
+
+        Console.WriteLine(WikiSubmission.Folder_Submit)
+        Console.WriteLine(WikiSubmission.CompMode_Submit)
+        Console.WriteLine(WikiSubmission.BeforeSize_Submit)
+        Console.WriteLine(WikiSubmission.AfterSize_Submit)
+
+        WikiSubmission.Show()
     End Sub
 
 

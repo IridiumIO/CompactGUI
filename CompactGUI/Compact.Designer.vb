@@ -88,8 +88,6 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
-        Me.results_arc = New CompactGUI.GraphicsPanel()
-        Me.submitToWiki = New System.Windows.Forms.Label()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -104,6 +102,7 @@ Partial Class Compact
         Me.checkShowConOut = New System.Windows.Forms.CheckBox()
         Me.conOut = New System.Windows.Forms.ListBox()
         Me.returnArrow = New System.Windows.Forms.Label()
+        Me.submitToWiki = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -118,6 +117,7 @@ Partial Class Compact
         Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -933,6 +933,7 @@ Partial Class Compact
         Me.ProgressPage.BackColor = System.Drawing.Color.White
         Me.ProgressPage.Controls.Add(Me.TableLayoutPanel4)
         Me.ProgressPage.Controls.Add(Me.returnArrow)
+        Me.ProgressPage.Controls.Add(Me.submitToWiki)
         Me.ProgressPage.Location = New System.Drawing.Point(4, 22)
         Me.ProgressPage.Name = "ProgressPage"
         Me.ProgressPage.Padding = New System.Windows.Forms.Padding(3)
@@ -963,7 +964,6 @@ Partial Class Compact
         '
         Me.CompResultsPanel.Controls.Add(Me.results_arc)
         Me.CompResultsPanel.Controls.Add(Me.help_resultsFilesCompressed)
-        Me.CompResultsPanel.Controls.Add(Me.submitToWiki)
         Me.CompResultsPanel.Controls.Add(Me.labelFilesCompressed)
         Me.CompResultsPanel.Controls.Add(Me.dirChosenLabel)
         Me.CompResultsPanel.Controls.Add(Me.TableLayoutPanel1)
@@ -977,25 +977,6 @@ Partial Class Compact
         Me.CompResultsPanel.Size = New System.Drawing.Size(624, 219)
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
-        '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 35
-        '
-        'submitToWiki
-        '
-        Me.submitToWiki.AutoSize = True
-        Me.submitToWiki.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.submitToWiki.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.submitToWiki.Location = New System.Drawing.Point(475, 192)
-        Me.submitToWiki.Name = "submitToWiki"
-        Me.submitToWiki.Padding = New System.Windows.Forms.Padding(3, 5, 3, 5)
-        Me.submitToWiki.Size = New System.Drawing.Size(138, 23)
-        Me.submitToWiki.TabIndex = 33
-        Me.submitToWiki.Text = "❯ Submit Results to Wiki"
         '
         'labelFilesCompressed
         '
@@ -1165,6 +1146,20 @@ Partial Class Compact
         Me.returnArrow.Text = "❮   Return To Selection Screen"
         Me.returnArrow.Visible = False
         '
+        'submitToWiki
+        '
+        Me.submitToWiki.AutoSize = True
+        Me.submitToWiki.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.submitToWiki.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.submitToWiki.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
+        Me.submitToWiki.Location = New System.Drawing.Point(439, 19)
+        Me.submitToWiki.Name = "submitToWiki"
+        Me.submitToWiki.Padding = New System.Windows.Forms.Padding(3, 5, 3, 5)
+        Me.submitToWiki.Size = New System.Drawing.Size(179, 30)
+        Me.submitToWiki.TabIndex = 33
+        Me.submitToWiki.Text = "❯  Submit Results to Wiki"
+        Me.submitToWiki.Visible = False
+        '
         'TabPage3
         '
         Me.TabPage3.Controls.Add(Me.testFileArgs)
@@ -1307,6 +1302,13 @@ Partial Class Compact
         Me.Tray_ShowMain.Name = "Tray_ShowMain"
         Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
         Me.Tray_ShowMain.Text = "Show"
+        '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
         '
         'Compact
         '

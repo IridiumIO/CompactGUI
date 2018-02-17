@@ -117,13 +117,83 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="ImportantToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="Label2.ToolTip" xml:space="preserve">
-    <value>For games that contain files &gt;4GB in size, these estimates are likely to be inaccurate (for now). 
+  <data name="txtbox_Name.ToolTip" xml:space="preserve">
+    <value>Name should be formatted in Sentence Case, and additional unecessary data in the title should be removed. 
 
-An update will fix this once more community submissions are made. To speed up the acquisition of new results,
-please submit your own results after compression. </value>
+Do not use the shorthand of game names: Please type them out in full, i.e do not type "GTA V"
+
+For example, these names are acceptable:                These names are not acceptable and will be discarded: 
+
+    •  Middle-earth: Shadow of War			•  Middle-earth: Shadow of War + DLC 
+    •  Far Cry 3                                                                        	•  Far Cry ® 3
+    •  The Elder Scrolls V: Skyrim                           	•  Skyrim
+    •  Grand Theft Auto V                            	        	•  GTA V
+    •  Ark: Survival Evolved				•  Ark surival evolved (modded)
+</value>
+  </data>
+  <data name="lbl_GameorProgram.ToolTip" xml:space="preserve">
+    <value>Name should be formatted in Sentence Case, and additional unecessary data in the title should be removed. 
+
+Do not use the shorthand of game names: Please type them out in full, i.e do not type "GTA V"
+
+For example, these names are acceptable:                These names are not acceptable and will be discarded: 
+
+    •  Middle-earth: Shadow of War			•  Middle-earth: Shadow of War + DLC 
+    •  Far Cry 3                                                                        	•  Far Cry ® 3
+    •  The Elder Scrolls V: Skyrim                           	•  Skyrim
+    •  Grand Theft Auto V                            	        	•  GTA V
+    •  Ark: Survival Evolved				•  Ark surival evolved (modded)
+
+</value>
+  </data>
+  <data name="lbl_SteamID.ToolTip" xml:space="preserve">
+    <value>The Steam ID is the number that can be found in the URL of the store page for the game. 
+
+If you own the game on another store, you can still post the STEAM version's ID here. 
+
+For example:
+http://store.steampowered.com/app/220240/Far_Cry_3/
+				     ^
+			The Steam ID is 220240
+</value>
+  </data>
+  <data name="lbl_optional.ToolTip" xml:space="preserve">
+    <value>The Steam ID is the number that can be found in the URL of the store page for the game. 
+
+If you own the game on another store, you can still post the STEAM version's ID here. 
+
+For example:
+http://store.steampowered.com/app/220240/Far_Cry_3/
+				     ^
+			The Steam ID is 220240
+</value>
+  </data>
+  <data name="txtbox_SteamID.ToolTip" xml:space="preserve">
+    <value>The Steam ID is the number that can be found in the URL of the store page for the game. 
+
+If you own the game on another store, you can still post the STEAM version's ID here. 
+
+For example:
+http://store.steampowered.com/app/220240/Far_Cry_3/
+				     ^
+			The Steam ID is 220240</value>
+  </data>
+  <data name="Label2.ToolTip" xml:space="preserve">
+    <value>Name should be formatted in Sentence Case, and additional unecessary data in the title should be removed. 
+
+Do not use the shorthand of game names: Please type them out in full, i.e do not type "GTA V"
+
+For example, these names are acceptable:                These names are not acceptable and will be discarded: 
+
+    •  Middle-earth: Shadow of War			•  Middle-earth: Shadow of War + DLC 
+    •  Far Cry 3                                                                        	•  Far Cry ® 3
+    •  The Elder Scrolls V: Skyrim                           	•  Skyrim
+    •  Grand Theft Auto V                            	        	•  GTA V
+    •  Ark: Survival Evolved				•  Ark surival evolved (modded)
+
+</value>
   </data>
 </root>

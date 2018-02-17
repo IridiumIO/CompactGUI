@@ -8,6 +8,7 @@ Partial Class Compact
     Private Sub CreateProcess(TargetMode As String)
         If CP Is Nothing Then CP = getEncoding()
         RunCompact(WorkingList.Item(0))
+        outputbuffer.Add("Compressing: " & vbTab & WorkingList.item(0))
         ActionBegun(TargetMode)
     End Sub
 
@@ -23,7 +24,6 @@ Partial Class Compact
 
         If CurrentMode = "compact" Then
 
-            outputbuffer.Add("Compressing: " & vbTab & desiredFile)
             compactArgs = "/C /I"
 
             'If checkRecursiveScan.Checked = True Then compactArgs &= " /S"

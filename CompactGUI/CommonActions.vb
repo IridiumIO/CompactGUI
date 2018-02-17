@@ -4,7 +4,7 @@
 
         With Compact
 
-            .btnCompress.Visible = True
+            .btnCompress.Visible = True : .btnCompress.Enabled = True
             .btnAnalyze.Enabled = True
             .btnUncompress.Visible = False
 
@@ -12,6 +12,7 @@
             .checkShutdownOnCompletion.Checked = False
 
             .CompResultsPanel.Visible = False
+            .submitToWiki.Visible = False
             .sb_AnalysisPanel.Visible = False
             .sb_ResultsPanel.Visible = False
             .TabControl1.SelectedTab = .InputPage
@@ -52,6 +53,7 @@
                     .sb_progresspercent.Visible = True
 
                     .CompResultsPanel.Visible = False
+                    .submitToWiki.Visible = False
 
                 Case "A"
                     .isQueryMode = True
@@ -106,6 +108,7 @@
                         .btnUncompress.Visible = True
 
                         .CompResultsPanel.Visible = True
+                        .submitToWiki.Visible = True
                         .sb_ResultsPanel.Visible = True
 
                     Else

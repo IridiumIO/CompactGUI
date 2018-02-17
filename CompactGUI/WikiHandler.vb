@@ -13,7 +13,6 @@ Class WikiHandler
         Console.WriteLine("Working Name: " & workingname)
 
         Dim Source As String
-        Dim gameName As New List(Of String)
 
         If InputFromGitHub Is Nothing Then
             Console.WriteLine("Getting List")
@@ -21,6 +20,9 @@ Class WikiHandler
             Try
                 Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
                 InputFromGitHub = Source.TrimEnd().Split(vbLf)
+
+                ParseData()
+
             Catch ex As WebException
                 Compact.sb_lblGameIssues.Text = "! No Internet Connection"
                 Compact.sb_lblGameIssues.Visible = True
@@ -33,12 +35,14 @@ Class WikiHandler
 
         End If
 
+    End Sub
+
+    Private Shared Sub ParseData()
+        Dim gameName As New List(Of String)
+
 
         For Each s As String In InputFromGitHub
-            Try
-                gameName.Add(s.Split("|")(2))
-            Catch ex As Exception
-            End Try
+            gameName.Add(s.Split("|")(2))
         Next
 
 
