@@ -1118,7 +1118,7 @@ Partial Class Compact
         Me.conOut.ItemHeight = 15
         Me.conOut.Location = New System.Drawing.Point(13, 4)
         Me.conOut.Name = "conOut"
-        Me.conOut.Size = New System.Drawing.Size(595, 135)
+        Me.conOut.Size = New System.Drawing.Size(595, 165)
         Me.conOut.TabIndex = 30
         '
         'returnArrow

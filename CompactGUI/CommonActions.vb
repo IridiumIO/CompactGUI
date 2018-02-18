@@ -40,8 +40,6 @@
 
                     .sb_AnalysisPanel.Visible = True
 
-                    .TabControl1.SelectedTab = .ProgressPage
-                    .TableLayoutPanel4.Location = New Point(7, 24)
 
                 Case "U"
                     .isActive = True
@@ -56,7 +54,6 @@
                     .CompResultsPanel.Visible = False
                     .submitToWiki.Visible = False
 
-                    .TableLayoutPanel4.Location = New Point(7, 24)
                 Case "A"
                     .isQueryMode = True
 
@@ -72,10 +69,11 @@
                     .AllFiles.Clear()
                     .TreeData.Clear()
 
-                    .TabControl1.SelectedTab = .ProgressPage
-                    .TableLayoutPanel4.Location = New Point(7, 24)
-
             End Select
+
+            .TabControl1.SelectedTab = .ProgressPage
+            .TableLayoutPanel4.Location = New Point(7, 24)
+            .TableLayoutPanel4.Height = .TableLayoutPanel4.Height + 30
 
         End With
 
@@ -120,6 +118,7 @@
             End Select
 
             .TableLayoutPanel4.Location = New Point(7, 54)
+            .TableLayoutPanel4.Height = .TableLayoutPanel4.Height - 30
             .isActive = False
             .WorkingList.Clear()
         End With
