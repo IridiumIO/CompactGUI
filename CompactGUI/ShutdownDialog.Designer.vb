@@ -23,6 +23,7 @@ Partial Class ShutdownDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ShutdownDialog))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.shutdownTimer = New System.Windows.Forms.Timer(Me.components)
@@ -117,6 +118,7 @@ Partial Class ShutdownDialog
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SDProcIntent)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ShutdownDialog"

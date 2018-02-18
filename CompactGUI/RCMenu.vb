@@ -1,11 +1,11 @@
-﻿Public Class RCMenu
+﻿Class RCMenu
 
-    Public Shared Sub WriteLocRegistry()
+    Shared Sub WriteLocRegistry()
         My.Computer.Registry.SetValue("HKEY_CURRENT_USER\software\CompactGUI", "Executable Path", IO.Directory.GetCurrentDirectory)
     End Sub
 
 
-    Public Shared Sub WriteRCMenuRegistry()
+    Shared Sub WriteRCMenuRegistry()
 
         My.Computer.Registry.SetValue _
             ("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "", "Compact Folder")
@@ -40,11 +40,8 @@
             .Verb = "runas"
         }
 
-        Try
-            Dim p As Process = Process.Start(startInfo)
-        Catch ex As Exception
-            Return
-        End Try
+        Process.Start(startInfo)
+
         Application.Exit()
 
     End Sub

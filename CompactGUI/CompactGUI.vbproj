@@ -39,6 +39,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>CompactGUI.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,6 +79,7 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -110,6 +112,7 @@
     <Compile Include="CustomControls.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CommonActions.vb" />
     <Compile Include="RunCompact.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -150,6 +153,12 @@
     <Compile Include="RCMenu.vb" />
     <Compile Include="Transitions.vb" />
     <Compile Include="WikiHandler.vb" />
+    <Compile Include="WikiSubmission.Designer.vb">
+      <DependentUpon>WikiSubmission.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WikiSubmission.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Compact.resx">
@@ -170,6 +179,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WikiSubmission.resx">
+      <DependentUpon>WikiSubmission.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

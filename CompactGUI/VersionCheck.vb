@@ -1,7 +1,7 @@
 ﻿Imports System.Globalization
 Imports System.Net
 
-Public Class VersionCheck
+Class VersionCheck
     Shared Sub VC(version As String)
 
         Try

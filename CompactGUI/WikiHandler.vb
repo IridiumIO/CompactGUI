@@ -4,7 +4,7 @@ Imports System.Net
 Imports System.Text
 Imports System.Text.RegularExpressions
 
-Public Class WikiHandler
+Class WikiHandler
     Shared InputFromGitHub() As String
 
     Shared workingname As String = "testdir"
@@ -12,17 +12,16 @@ Public Class WikiHandler
     Private Shared Sub WikiParser()
         Console.WriteLine("Working Name: " & workingname)
 
-        Dim stringSeparators() As String = {vbCrLf}
         Dim Source As String
-        Dim gameName As New List(Of String)
 
         If InputFromGitHub Is Nothing Then
             Console.WriteLine("Getting List")
-            Dim wc As New WebClient
-            wc.Encoding = Encoding.UTF8
+            Dim wc = New WebClient With {.Encoding = Encoding.UTF8}
             Try
                 Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
                 InputFromGitHub = Source.TrimEnd().Split(vbLf)
+                ParseData()
+
             Catch ex As WebException
                 Compact.sb_lblGameIssues.Text = "! No Internet Connection"
                 Compact.sb_lblGameIssues.Visible = True
@@ -33,14 +32,18 @@ Public Class WikiHandler
                 Compact.sb_Panel.Show()
             End Try
 
+        Else
+            ParseData()
         End If
+
+    End Sub
+
+    Private Shared Sub ParseData()
+        Dim gameName As New List(Of String)
 
 
         For Each s As String In InputFromGitHub
-            Try
-                gameName.Add(s.Split("|")(2))
-            Catch ex As Exception
-            End Try
+            gameName.Add(s.Split("|")(2))
         Next
 
 
@@ -236,7 +239,7 @@ Public Class WikiHandler
 
 
 
-    Public Shared Sub localFolderParse(wdString As String, DIwDString As DirectoryInfo, rawPreSize As String)
+    Public Shared Sub localFolderParse(DIwDString As DirectoryInfo, rawPreSize As String)
 
         Dim wnpatch As String = Regex.Replace(DIwDString.Name.ToString, "[^\p{L}a-zA-Z0-90]", "").ToLower.Trim()
 
@@ -267,8 +270,6 @@ Public Class WikiHandler
         folderSize = Math.Round(Decimal.Parse(rawPreSize.Split(" ")(0)), 2)
         suffix = rawPreSize.Split(" ")(1)
 
-        Compact.preSize.Text = "Uncompressed Size: " & Math.Round(folderSize, 1) & " " & suffix
-
         Try
 
             Compact.wkPreSizeVal.Text = Math.Round(folderSize, 1)
@@ -276,7 +277,7 @@ Public Class WikiHandler
             Dim wkPreSizeVal_Len = TextRenderer.MeasureText(Compact.wkPreSizeVal.Text, Compact.wkPreSizeVal.Font)
             Compact.wkPreSizeUnit.Location = New Point(Compact.wkPreSizeVal.Location.X + (Compact.wkPreSizeVal.Size.Width / 2) + (wkPreSizeVal_Len.Width / 2 - 8), Compact.wkPreSizeVal.Location.Y + 16)
 
-            ' I have no idea why this catch is needed
+            ' I still have no idea why this catch is needed but I'm scared to delete it
         Catch ex As System.DivideByZeroException
 
             Compact.wkPreSizeVal.Text = "?"
@@ -312,27 +313,6 @@ Public Class WikiHandler
 
     End Sub
 
-
-
-
-    Private Shared Function WikiDirectorySize _
-        (ByVal dInfo As IO.DirectoryInfo, ByVal includeSubdirectories As Boolean) As Long
-
-        Try
-            Dim totalSize As Long = dInfo.EnumerateFiles().Sum(Function(file) file.Length)
-            If includeSubdirectories Then
-                totalSize += dInfo.EnumerateDirectories().Sum(Function(dir) WikiDirectorySize(dir, True))
-            End If
-            Return totalSize
-
-        Catch generatedexceptionname As UnauthorizedAccessException
-
-
-        Catch ex As Exception
-
-        End Try
-
-    End Function
 
 
 End Class
