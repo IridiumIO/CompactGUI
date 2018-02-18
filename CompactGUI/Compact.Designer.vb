@@ -1114,6 +1114,7 @@ Partial Class Compact
         Me.conOut.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.conOut.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.conOut.FormattingEnabled = True
+        Me.conOut.HorizontalScrollbar = True
         Me.conOut.ItemHeight = 15
         Me.conOut.Location = New System.Drawing.Point(13, 4)
         Me.conOut.Name = "conOut"
