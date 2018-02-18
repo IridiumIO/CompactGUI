@@ -16,8 +16,6 @@ Transparent compression means that files can still be used normally on the compu
 **How is this different from the built-in compression in older versions of Windows?**
 This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10 are far superior, resulting in greater compression ratios with almost no performance impact.Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.[More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
 
-**Important Note**: Due to [a bug in Windows](https://github.com/ImminentFate/CompactGUI/issues/167), many of the Wiki results for larger games are inaccurate. Please consider submitting new results from within CompactGUI 2.5.0+ to rebuild the database of results
-
 
 <h2>Installation  </h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>  <a href="https://chocolatey.org/packages/compactgui/"><img src="https://img.shields.io/chocolatey/v/compactgui.svg""></a>  <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
 
@@ -49,6 +47,9 @@ Use this tool to:
 
 <h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-2152-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-76-blue.svg"></a> that have been tested</b></h3>
 <p>&nbsp;</p>
+
+**Important Note**: Due to [a bug in Windows](https://github.com/ImminentFate/CompactGUI/issues/167), many of the Wiki results for larger games are inaccurate. Please consider submitting new results from within CompactGUI 2.5.0+ to rebuild the database of results
+
 
 ## Screenshots
 <p align="left"><img src="https://i.imgur.com/3auMAtO.png" alt="compactGUI"></p>
