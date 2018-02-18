@@ -1,4 +1,5 @@
-﻿Imports System.Management
+﻿Imports System.IO
+Imports System.Management
 Imports System.Runtime.InteropServices
 Imports System.Security.Policy
 Imports System.Text.RegularExpressions
@@ -23,18 +24,67 @@ Public Class WikiSubmission
         e.Graphics.DrawRectangle(New Pen(Color.White), rect)
     End Sub
 
+    Private Sub ParseforSteamData()
 
+        Dim steamID As Integer = 0
+        Dim steamName As String = ""
+
+        Dim targetACFFile As FileInfo = ParseACFFiles()
+
+        If targetACFFile IsNot Nothing Then
+            Dim ACFText As String() = File.ReadAllText(targetACFFile.FullName).Split({vbCrLf, vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+            For Each l In ACFText
+                Dim lf = l.TrimStart()
+                If lf.StartsWith("""" & "appid" & """") Then
+                    steamID = lf.Substring(lf.LastIndexOf(vbTab) + 1).Replace("""", "")
+                End If
+                If lf.StartsWith("""" & "name" & """") Then
+                    steamName = lf.Substring(lf.LastIndexOf(vbTab) + 1).Replace("""", "")
+                    GoTo Assignment
+                End If
+            Next
+        End If
+
+Assignment:
+
+        Dim rx As New Regex("[\?&|%™®©]")
+
+        txtbox_Name.Text = rx.Replace(steamName, "")
+        txtbox_SteamID.Value = steamID
+
+    End Sub
+
+
+    Private Function ParseACFFiles() As FileInfo
+        Dim dI As DirectoryInfo = New DirectoryInfo(Compact.workingDir)
+        If Directory.GetParent(dI.Parent.FullName) IsNot Nothing AndAlso Directory.GetParent(dI.Parent.FullName).Name = "steamapps" Then
+            For Each f As FileInfo In Directory.GetParent(dI.Parent.FullName).GetFiles
+                If f.Extension = ".acf" Then
+                    Dim ACFText As String() = File.ReadAllText(f.FullName).Split({vbCrLf, vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+
+                    For Each l In ACFText
+                        Dim lf = l.TrimStart()
+                        If lf.StartsWith("""" & "installdir" & """") AndAlso Folder_Submit = lf.Substring(lf.LastIndexOf(vbTab) + 1).Replace("""", "") Then
+                            Return f
+                        End If
+                    Next
+
+                End If
+            Next
+        End If
+
+    End Function
 
 
     Private Sub btn_NextPage_Click(sender As Object, e As EventArgs) Handles btn_NextPage.Click
         If TabControl1.SelectedTab Is Page1 Then
             If Radio_Game.Checked Then
-
+                ParseforSteamData()
                 Type_Submit = "Game"
 
                 panel_SteamID.Visible = True
                 lbl_GameorProgram.Text = "Game Name:"
-                lbl_SteamID.Location = New Point(41, 20)
+
                 TabControl1.SelectedTab = Page2
 
             ElseIf Radio_Program.Checked Then
@@ -43,18 +93,19 @@ Public Class WikiSubmission
 
                 panel_SteamID.Visible = False
                 lbl_GameorProgram.Text = "Program Name:"
-                lbl_SteamID.Location = New Point(59, 20)
+
                 TabControl1.SelectedTab = Page2
 
             End If
 
         ElseIf TabControl1.SelectedTab Is Page2 Then
 
-            Dim rx As New Regex("[\?&|%]")
+            Dim rx As New Regex("[\?&|%™®©]")
 
 
             If rx.Match(txtbox_Name.Text).Success Then
-                MsgBox("Name cannot contain " & """" & "?" & """" & ", " & """" & "&" & """" & ", " & """" & "|" & """" & " or " & """" & "%" & """")
+                MsgBox("Name cannot contain '?', '&', '|', '%', '™', '®', or '©'")
+
             Else
 
                 Name_Submit = HttpUtility.UrlPathEncode(txtbox_Name.Text.Trim())

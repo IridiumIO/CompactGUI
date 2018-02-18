@@ -33,7 +33,7 @@ Public Class Compact
     Dim outputbuffer As New ArrayList
     Dim newFolderSize As UInt64
     Dim oldFolderSize As UInt64
-    Dim workingDir As String = ""
+    Friend workingDir As String = ""
 
 
     Private Sub Compact_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -209,8 +209,13 @@ Public Class Compact
     Private Sub BtnCompress_Click(sender As System.Object, e As System.EventArgs) Handles btnCompress.Click
         conOut.Items.Clear()
         WorkingList = New List(Of String)(ListOfFiles)
-        CurrentMode = "compact"
-        CreateProcess("C")
+        If WorkingList.count > 0 Then
+            CurrentMode = "compact"
+            CreateProcess("C")
+        Else
+            MsgBox("There are no compressable files in this folder. Check the CompactGUI settings to see if you have chosen to ignore certain files from being compressed.")
+        End If
+
     End Sub
 
 

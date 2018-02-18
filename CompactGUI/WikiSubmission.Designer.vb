@@ -94,16 +94,16 @@ Partial Class WikiSubmission
         Me.lbl_GameorProgram.Font = New System.Drawing.Font("Segoe UI", 11.0!)
         Me.lbl_GameorProgram.Location = New System.Drawing.Point(37, 48)
         Me.lbl_GameorProgram.Name = "lbl_GameorProgram"
-        Me.lbl_GameorProgram.Size = New System.Drawing.Size(113, 20)
+        Me.lbl_GameorProgram.Size = New System.Drawing.Size(95, 20)
         Me.lbl_GameorProgram.TabIndex = 2
-        Me.lbl_GameorProgram.Text = "Program Name:"
+        Me.lbl_GameorProgram.Text = "Game Name:"
         Me.ToolTip1.SetToolTip(Me.lbl_GameorProgram, resources.GetString("lbl_GameorProgram.ToolTip"))
         '
         'lbl_SteamID
         '
         Me.lbl_SteamID.AutoSize = True
         Me.lbl_SteamID.Font = New System.Drawing.Font("Segoe UI", 11.0!)
-        Me.lbl_SteamID.Location = New System.Drawing.Point(59, 20)
+        Me.lbl_SteamID.Location = New System.Drawing.Point(41, 20)
         Me.lbl_SteamID.Name = "lbl_SteamID"
         Me.lbl_SteamID.Size = New System.Drawing.Size(73, 20)
         Me.lbl_SteamID.TabIndex = 2
