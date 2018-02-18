@@ -1,9 +1,16 @@
 <Info>
-	<VersionMajor>2.4</VersionMajor>
-	<VersionMinor>1</VersionMinor>
+	<VersionMajor>2.5</VersionMajor>
+	<VersionMinor>0</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
-	<VersionStr>V2.4.1</VersionStr>
-	<ChocolateyVStr>2.4.1</ChocolateyVStr>
-	<Changes></Changes>
-	<Fixes>Fixed experimental browser not being disabled when unchecked</Fixes>
+	<VersionStr>V2.5.0</VersionStr>
+	<ChocolateyVStr>2.5.0</ChocolateyVStr>
+	<Changes>
+    Major Rework to Backend - compact.exe is now called per file.|
+    Poorly compressable files can be skipped (configurable from options menu)|
+    Implemented workaround for the Windows Size on Disk bug for files >4GB|
+    Added a check to make sure files outside the working directory are not compressed|
+    Added Wiki Submission Form - submits results directly to google forms.|
+    Multiple UI design tweaks and changes|
+  </Changes>
+	<Fixes>Multiple backend usability and performance changes</Fixes>
 </Info>
