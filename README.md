@@ -5,6 +5,7 @@
 <h4 align="center">CompactGUI is a standalone user interface that makes the Windows 10 compact.exe function easier to use.</h> 
 
 ------
+&nbsp;
 
 **What is the Windows 10 compact.exe function?**
 It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss.
