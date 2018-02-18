@@ -2,14 +2,19 @@
 
 &nbsp;
 
-**Important Note**: @NekuSoul has [determined the error](https://github.com/ImminentFate/CompactGUI/issues/167) in Windows that causes incorrect file size readings which means that many games with high compression ratios are false results. I am working on a fix so that it's not misleading anymore, but just keep this in mind - a lot of results that seem too good to be true are probably too good to be true. You can still get really good savings on lots of games and programs, but not quite as high as the program (and Windows) would have you believe. For example, Nioh saves 7GB, not 45GB. There's a Reddit thread discussing this [here](https://www.reddit.com/r/pcgaming/comments/7vfdr5/pro_tip_if_you_have_final_fantasy_xii_on_pc/?st=jdbfoddk&sh=d9f2d5b6)
+**Important Note**: Due to [a bug in Windows](https://github.com/ImminentFate/CompactGUI/issues/167), many of the Wiki results for larger games are inaccurate. Please consider submitting new results from within CompactGUI 2.5.0+ to rebuild the database of results
 
 ----
-CompactGUI is a standalone GUI to make using the Windows 10 compact.exe function easier to use. This allows games, programs and other folders to be compressed transparently (i.e they can still be used normally) with no performance loss.
+CompactGUI is a standalone user interface that makes the Windows 10 compact.exe function easier to use. 
 
+**What is the Windows 10 compact.exe function?**
+It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss.
 
+**Transparently? What does that mean?**
+Transparent compression means that files can still be used normally on the computer as if nothing had happened - they don't get repackaged like Zip and Rar files do. 
 
-This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms that CompactGUI use were introduced in Windows 10 and are much more efficient, multi-threaded, and designed for use on executable programs resulting in greater compression ratios with almost no performance impact.Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.[More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
+**How is this different from the built-in compression in older versions of Windows?**
+This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10 are far superior, resulting in greater compression ratios with almost no performance impact.Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.[More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
 
 <h2>Installation  </h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>  <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
 
@@ -33,6 +38,7 @@ Use this tool to:
   
 ## Extra Features
  - Visual feedback on compression progress and statistics
+ - Configurable list of poorly-compressed filetypes that can be skipped.
  - Online integration with community-sourced [database](https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games) to get compression estimates and analyses 
  - Integration into Windows Explorer context menus for easier use.
  - Drag-and-drop functionality
@@ -48,7 +54,7 @@ Use this tool to:
 <p align="left"><img src="https://i.imgur.com/93fk8t0.png" alt="compactGUI"></p>
 
 ## Background
-Windows 10 includes a little-known but very useful tool called Compact that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU, this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
+Windows 10 includes a little-known but very useful tool called Compact.exe that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU, this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
 
 As program folders and games can be shrunk by up to 60%, this has the added bonus of potentially reducing load times - especially on slower HDDs. 
 
