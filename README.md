@@ -2,10 +2,9 @@
 
 &nbsp;
 
-**Important Note**: Due to [a bug in Windows](https://github.com/ImminentFate/CompactGUI/issues/167), many of the Wiki results for larger games are inaccurate. Please consider submitting new results from within CompactGUI 2.5.0+ to rebuild the database of results
+<h4 align="center">CompactGUI is a standalone user interface that makes the Windows 10 compact.exe function easier to use.</h> 
 
-----
-CompactGUI is a standalone user interface that makes the Windows 10 compact.exe function easier to use. 
+------
 
 **What is the Windows 10 compact.exe function?**
 It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss.
@@ -15,6 +14,9 @@ Transparent compression means that files can still be used normally on the compu
 
 **How is this different from the built-in compression in older versions of Windows?**
 This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10 are far superior, resulting in greater compression ratios with almost no performance impact.Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.[More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
+
+**Important Note**: Due to [a bug in Windows](https://github.com/ImminentFate/CompactGUI/issues/167), many of the Wiki results for larger games are inaccurate. Please consider submitting new results from within CompactGUI 2.5.0+ to rebuild the database of results
+
 
 <h2>Installation  </h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>  <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
 
