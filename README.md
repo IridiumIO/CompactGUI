@@ -19,7 +19,7 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 **Important Note**: Due to [a bug in Windows](https://github.com/ImminentFate/CompactGUI/issues/167), many of the Wiki results for larger games are inaccurate. Please consider submitting new results from within CompactGUI 2.5.0+ to rebuild the database of results
 
 
-<h2>Installation  </h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>  <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
+<h2>Installation  </h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>  <a href="https://chocolatey.org/packages/compactgui/"><img src="https://img.shields.io/chocolatey/v/compactgui.svg""></a>  <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
 
 ####
  
@@ -31,7 +31,6 @@ Install with **Chocolatey** from Powershell or CMD:
 ```coffeescript
 choco install compactgui
 ```
-<p align = "left"><a href="https://chocolatey.org/packages/compactgui/"><img src="https://img.shields.io/chocolatey/v/compactgui.svg""></a></p>
 
 ## Uses
 Use this tool to: 
