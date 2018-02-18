@@ -1298,6 +1298,7 @@ Partial Class Compact
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(600, 652)
         Me.Name = "Compact"
+        Me.Text = "CompactGUI"
         Me.panel_topBar.ResumeLayout(False)
         Me.panel_topBar.PerformLayout()
         Me.updateBanner.ResumeLayout(False)
