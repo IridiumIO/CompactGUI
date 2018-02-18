@@ -134,8 +134,29 @@ Public Class Info
         TxtBoxNonCompressable.Text = ""
         For Each i In NonCompressableFileTypes
             TxtBoxNonCompressable.Text &= i & vbTab
-
         Next
+        TxtBoxNonCompressable.Text = TxtBoxNonCompressable.Text.Trim()
     End Sub
 
+    Private Sub btn_Paint(sender As Object, e As PaintEventArgs) Handles btn_options.Paint, btn_help.Paint, btn_licenses.Paint
+
+        If sender.backcolor = Color.FromArgb(255, 102, 121, 138) Then
+            Dim trianglePtsArray As PointF() = {New PointF(sender.width - 1, 10), New PointF(sender.width - 1, sender.height - 10),
+                New PointF(sender.width - 10, sender.height / 2), New PointF(sender.width - 1, 10)}
+            Dim gp As New Drawing2D.GraphicsPath(Drawing2D.FillMode.Alternate)
+            e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
+            gp.AddLines(trianglePtsArray)
+            gp.CloseFigure()
+
+            e.Graphics.FillPath(Brushes.White, gp)
+
+            e.Graphics.DrawLines(Pens.White, trianglePtsArray)
+        End If
+    End Sub
+
+    Private Sub Tab_Features_Paint(sender As Object, e As PaintEventArgs) Handles Tab_Features.Paint
+        Dim p As New Pen(Color.LightGray)
+
+        e.Graphics.DrawLine(p, New Point(46, 220), New Point(sender.width - 46, 220))
+    End Sub
 End Class

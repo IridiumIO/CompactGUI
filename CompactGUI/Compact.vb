@@ -139,7 +139,7 @@ Public Class Compact
 
                 oldFolderSize = DirectorySize(DI_selectedDir, True)
                 Dim oldFolderSize_Formatted = GetOutputSize(oldFolderSize, True)
-                preSize.Text = "Uncompressed Size: " + oldFolderSize_Formatted
+
                 GetFilesToCompress(workingDir, ListOfFiles, My.Settings.SkipNonCompressable)
                 PrepareforCompact()
 
@@ -252,10 +252,20 @@ Public Class Compact
         FileIndex += 1
 
         If FileIndex < WorkingList.Count And WorkingList.Count > 1 Then
-            outputbuffer.Add("Compressing: " & vbTab & WorkingList(FileIndex))
-            RunCompact(WorkingList(FileIndex))
+            If WorkingList(FileIndex).ToString.Contains(workingDir) Then
+                outputbuffer.Add("Compressing: " & vbTab & WorkingList(FileIndex))
+                RunCompact(WorkingList(FileIndex))
+            Else
+                MsgBox("A file that is not contained within your selected folder has been queued for compression. To prevent damage to your system, the program will halt." _
+                & vbCrLf & "The file in question is: " & WorkingList(FileIndex))
+                isActive = False
+                Invoke(Sub()
+                           Me.Close()
+                       End Sub)
+            End If
+
         Else
-            Console.WriteLine("Done")
+                Console.WriteLine("Done")
             Threading.Thread.Sleep(100)
             outputbuffer.Add("Completed:" & vbTab & "Processed " & ListOfFiles.Count & " files")
 
@@ -329,19 +339,6 @@ Public Class Compact
 
     Private Sub ReturnArrow_Click(sender As Object, e As EventArgs) Handles returnArrow.Click                       'Returns you to the first screen and cleans up some stuff
         PrepareforCompact()
-    End Sub
-
-
-
-
-    Private Sub CheckShowConOut_CheckedChanged(sender As Object, e As EventArgs) Handles checkShowConOut.CheckedChanged     'Handles showing the embedded console
-        If checkShowConOut.Checked Then
-            conOut.Visible = True
-            saveconlog.Visible = True
-        Else
-            conOut.Visible = False
-            saveconlog.Visible = False
-        End If
     End Sub
 
 
@@ -521,7 +518,7 @@ Public Class Compact
                 compressedSizeVisual.Width = 320
                 sb_compressedSizeVisual.Height = 113
             End Try
-
+            outputbuffer.Clear()
             ActionCompleted("A", True)
 
             Callpercent = (CDec(1 - (SizeAfterCompression / SizeBeforeCompression))) * 100

@@ -20,7 +20,6 @@ Class WikiHandler
             Try
                 Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
                 InputFromGitHub = Source.TrimEnd().Split(vbLf)
-
                 ParseData()
 
             Catch ex As WebException
@@ -33,6 +32,8 @@ Class WikiHandler
                 Compact.sb_Panel.Show()
             End Try
 
+        Else
+            ParseData()
         End If
 
     End Sub
@@ -268,8 +269,6 @@ Class WikiHandler
 
         folderSize = Math.Round(Decimal.Parse(rawPreSize.Split(" ")(0)), 2)
         suffix = rawPreSize.Split(" ")(1)
-
-        Compact.preSize.Text = "Uncompressed Size: " & Math.Round(folderSize, 1) & " " & suffix
 
         Try
 

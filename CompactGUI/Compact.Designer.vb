@@ -99,14 +99,12 @@ Partial Class Compact
         Me.Label11 = New System.Windows.Forms.Label()
         Me.panel_console = New System.Windows.Forms.Panel()
         Me.saveconlog = New System.Windows.Forms.Button()
-        Me.checkShowConOut = New System.Windows.Forms.CheckBox()
         Me.conOut = New System.Windows.Forms.ListBox()
         Me.returnArrow = New System.Windows.Forms.Label()
         Me.submitToWiki = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.testFileArgs = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.preSize = New System.Windows.Forms.Label()
         Me.OldconOut = New System.Windows.Forms.RichTextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.testcompactargs = New System.Windows.Forms.Button()
@@ -348,6 +346,7 @@ Partial Class Compact
         Me.seecompest.Size = New System.Drawing.Size(16, 13)
         Me.seecompest.TabIndex = 21
         Me.seecompest.Text = "❯ "
+        Me.ToolTipFilesCompressed.SetToolTip(Me.seecompest, resources.GetString("seecompest.ToolTip"))
         Me.seecompest.Visible = False
         '
         'ToolTipFilesCompressed
@@ -358,6 +357,7 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.InitialDelay = 200
         Me.ToolTipFilesCompressed.IsBalloon = True
         Me.ToolTipFilesCompressed.ReshowDelay = 100
+        Me.ToolTipFilesCompressed.ShowAlways = True
         Me.ToolTipFilesCompressed.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipFilesCompressed.ToolTipTitle = "Information"
         '
@@ -1085,7 +1085,6 @@ Partial Class Compact
         'panel_console
         '
         Me.panel_console.Controls.Add(Me.saveconlog)
-        Me.panel_console.Controls.Add(Me.checkShowConOut)
         Me.panel_console.Controls.Add(Me.conOut)
         Me.panel_console.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panel_console.Location = New System.Drawing.Point(3, 228)
@@ -1104,18 +1103,6 @@ Partial Class Compact
         Me.saveconlog.TabIndex = 33
         Me.saveconlog.Text = "Save Log"
         Me.saveconlog.UseVisualStyleBackColor = False
-        Me.saveconlog.Visible = False
-        '
-        'checkShowConOut
-        '
-        Me.checkShowConOut.AutoSize = True
-        Me.checkShowConOut.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.checkShowConOut.Location = New System.Drawing.Point(13, 17)
-        Me.checkShowConOut.Name = "checkShowConOut"
-        Me.checkShowConOut.Size = New System.Drawing.Size(129, 17)
-        Me.checkShowConOut.TabIndex = 32
-        Me.checkShowConOut.Text = "Show Console Output"
-        Me.checkShowConOut.UseVisualStyleBackColor = True
         '
         'conOut
         '
@@ -1128,11 +1115,10 @@ Partial Class Compact
         Me.conOut.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.conOut.FormattingEnabled = True
         Me.conOut.ItemHeight = 15
-        Me.conOut.Location = New System.Drawing.Point(13, 39)
+        Me.conOut.Location = New System.Drawing.Point(13, 4)
         Me.conOut.Name = "conOut"
         Me.conOut.Size = New System.Drawing.Size(595, 135)
         Me.conOut.TabIndex = 30
-        Me.conOut.Visible = False
         '
         'returnArrow
         '
@@ -1164,7 +1150,6 @@ Partial Class Compact
         '
         Me.TabPage3.Controls.Add(Me.testFileArgs)
         Me.TabPage3.Controls.Add(Me.Label10)
-        Me.TabPage3.Controls.Add(Me.preSize)
         Me.TabPage3.Controls.Add(Me.OldconOut)
         Me.TabPage3.Controls.Add(Me.TextBox1)
         Me.TabPage3.Controls.Add(Me.testcompactargs)
@@ -1198,18 +1183,6 @@ Partial Class Compact
         Me.Label10.Size = New System.Drawing.Size(171, 25)
         Me.Label10.TabIndex = 23
         Me.Label10.Text = "Testing Grounds"
-        '
-        'preSize
-        '
-        Me.preSize.AutoSize = True
-        Me.preSize.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.preSize.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.preSize.Location = New System.Drawing.Point(312, 146)
-        Me.preSize.Name = "preSize"
-        Me.preSize.Size = New System.Drawing.Size(60, 13)
-        Me.preSize.TabIndex = 21
-        Me.preSize.Text = "FolderSize"
-        Me.preSize.Visible = False
         '
         'OldconOut
         '
@@ -1354,7 +1327,6 @@ Partial Class Compact
         Me.Panel5.ResumeLayout(False)
         Me.Panel5.PerformLayout()
         Me.panel_console.ResumeLayout(False)
-        Me.panel_console.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
         Me.TrayMenu.ResumeLayout(False)
@@ -1413,7 +1385,6 @@ Partial Class Compact
     Friend WithEvents returnArrow As Label
     Friend WithEvents panel_console As Panel
     Friend WithEvents saveconlog As Button
-    Friend WithEvents checkShowConOut As CheckBox
     Friend WithEvents conOut As ListBox
     Friend WithEvents CompResultsPanel As Panel
     Friend WithEvents submitToWiki As Label
@@ -1433,7 +1404,6 @@ Partial Class Compact
     Friend WithEvents TabPage3 As TabPage
     Friend WithEvents testFileArgs As Button
     Friend WithEvents Label10 As Label
-    Friend WithEvents preSize As Label
     Friend WithEvents OldconOut As RichTextBox
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents testcompactargs As Button

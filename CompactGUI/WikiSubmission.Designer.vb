@@ -32,6 +32,7 @@ Partial Class WikiSubmission
         Me.lbl_optional = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.txtbox_SteamID = New System.Windows.Forms.NumericUpDown()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.btn_NextPage = New System.Windows.Forms.Button()
         Me.btn_Cancel = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -42,11 +43,10 @@ Partial Class WikiSubmission
         Me.Page2 = New System.Windows.Forms.TabPage()
         Me.panel_SteamID = New System.Windows.Forms.Panel()
         Me.Page3 = New System.Windows.Forms.TabPage()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel1.SuspendLayout()
         CType(Me.txtbox_SteamID, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
@@ -146,6 +146,17 @@ Partial Class WikiSubmission
         Me.txtbox_SteamID.TabIndex = 4
         Me.ToolTip1.SetToolTip(Me.txtbox_SteamID, resources.GetString("txtbox_SteamID.ToolTip"))
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 11.0!)
+        Me.Label2.Location = New System.Drawing.Point(31, 19)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(235, 20)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "The following data has been sent. "
+        Me.ToolTip1.SetToolTip(Me.Label2, resources.GetString("Label2.ToolTip"))
+        '
         'btn_NextPage
         '
         Me.btn_NextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
@@ -162,6 +173,7 @@ Partial Class WikiSubmission
         'btn_Cancel
         '
         Me.btn_Cancel.BackColor = System.Drawing.Color.Maroon
+        Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_Cancel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.btn_Cancel.ForeColor = System.Drawing.Color.White
@@ -265,28 +277,6 @@ Partial Class WikiSubmission
         Me.Page3.Text = "Page3"
         Me.Page3.UseVisualStyleBackColor = True
         '
-        'Panel2
-        '
-        Me.Panel2.BackColor = System.Drawing.Color.White
-        Me.Panel2.Controls.Add(Me.btn_NextPage)
-        Me.Panel2.Controls.Add(Me.btn_Cancel)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 244)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(590, 49)
-        Me.Panel2.TabIndex = 5
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 11.0!)
-        Me.Label2.Location = New System.Drawing.Point(31, 19)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(235, 20)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "The following data has been sent. "
-        Me.ToolTip1.SetToolTip(Me.Label2, resources.GetString("Label2.ToolTip"))
-        '
         'ListView1
         '
         Me.ListView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -311,11 +301,24 @@ Partial Class WikiSubmission
         Me.ColumnHeader2.Text = "Value"
         Me.ColumnHeader2.Width = 700
         '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.Color.White
+        Me.Panel2.Controls.Add(Me.btn_NextPage)
+        Me.Panel2.Controls.Add(Me.btn_Cancel)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel2.Location = New System.Drawing.Point(0, 244)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(590, 49)
+        Me.Panel2.TabIndex = 5
+        '
         'WikiSubmission
         '
+        Me.AcceptButton = Me.btn_NextPage
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
+        Me.CancelButton = Me.btn_Cancel
         Me.ClientSize = New System.Drawing.Size(590, 293)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel2)

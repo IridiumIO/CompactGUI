@@ -41,6 +41,7 @@
                     .sb_AnalysisPanel.Visible = True
 
                     .TabControl1.SelectedTab = .ProgressPage
+                    .TableLayoutPanel4.Location = New Point(7, 24)
 
                 Case "U"
                     .isActive = True
@@ -55,15 +56,12 @@
                     .CompResultsPanel.Visible = False
                     .submitToWiki.Visible = False
 
+                    .TableLayoutPanel4.Location = New Point(7, 24)
                 Case "A"
                     .isQueryMode = True
 
                     .btnCompress.Visible = False
                     .btnAnalyze.Enabled = False
-
-
-                    .conOut.Visible = True
-                    .checkShowConOut.Checked = True
 
                     .sb_progresslabel.Text = "Analyzing..."
                     .sb_progressbar.Width = 0
@@ -75,6 +73,7 @@
                     .TreeData.Clear()
 
                     .TabControl1.SelectedTab = .ProgressPage
+                    .TableLayoutPanel4.Location = New Point(7, 24)
 
             End Select
 
@@ -120,6 +119,7 @@
 
             End Select
 
+            .TableLayoutPanel4.Location = New Point(7, 54)
             .isActive = False
             .WorkingList.Clear()
         End With

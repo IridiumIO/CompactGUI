@@ -96,6 +96,7 @@ Partial Class WikiPopup
         Me.ImportantToolTip.BackColor = System.Drawing.Color.White
         Me.ImportantToolTip.InitialDelay = 100
         Me.ImportantToolTip.ReshowDelay = 20
+        Me.ImportantToolTip.ShowAlways = True
         Me.ImportantToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         '
         'WikiPopup
