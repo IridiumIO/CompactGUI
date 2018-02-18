@@ -2,7 +2,7 @@
 
 &nbsp;
 
-<h4 align="center">CompactGUI is a standalone user interface that makes the Windows 10 compact.exe function easier to use.</h> 
+<p align="center"><b>CompactGUI is a standalone user interface that makes the Windows 10 compact.exe function easier to use.</b></p> 
 
 ------
 &nbsp;
