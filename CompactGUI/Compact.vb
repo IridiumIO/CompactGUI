@@ -179,7 +179,7 @@ Public Class Compact
 
         For Each fileName In fileEntries
             If LimitSelectedFiles = True Then
-                If Path.GetExtension(fileName) = "" OrElse NonCompressableSet.Contains(Path.GetExtension(fileName).TrimStart(".")) = False Then
+                If Path.GetExtension(fileName) = "" OrElse NonCompressableSet.Contains(Path.GetExtension(fileName).TrimStart(".").ToLowerInvariant) = False Then
                     targetOutputList.Add(fileName)
                 End If
             Else : targetOutputList.Add(fileName)
