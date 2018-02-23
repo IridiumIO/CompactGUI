@@ -679,7 +679,7 @@ Public Class Compact
 
             sb.AppendLine("End Log at " & System.DateTime.Now & vbCrLf & StrDup(100, "/") & vbCrLf & vbCrLf)
 
-            File.AppendAllText(Application.StartupPath & "\CompactGUILog.txt", sb.ToString, CP)
+            File.AppendAllText(Application.StartupPath & "\CompactGUILog.txt", sb.ToString, Encoding.UTF8)
 
             MsgBox("Saved log to " & Application.StartupPath & "\CompactGUILog.txt")
             Process.Start(Application.StartupPath & "\CompactGUILog.txt")
