@@ -108,29 +108,8 @@ Assignment:
 
             Else
 
-                Name_Submit = HttpUtility.UrlPathEncode(txtbox_Name.Text.Trim())
-                Folder_Submit = HttpUtility.UrlPathEncode(Folder_Submit)
-                SteamID_Submit = txtbox_SteamID.Text
-                UniqueID_Submit = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(getMacAddress()))
+                PrepareSubmission()
 
-                Console.WriteLine(Name_Submit)
-
-                FillDataCollection()
-
-                Dim URL_First As String = "https://docs.google.com/forms/d/e/1FAIpQLSfAzlQAhyPEueFyQiTEmpudcKaVLnpRPmzrIuBZxnR8f7PjPg/formResponse?&ifq&entry.630201004=%3CCompactGUI%3E"
-
-                Dim URL_Last As String = "&submit=Submit"
-
-                Dim URL_All As String = URL_First & UniqueID_Submit & "%7C" & Type_Submit & "%7C" & Name_Submit & "%7C" & Folder_Submit & "%7C" & SteamID_Submit & "%7C" & CompMode_Submit & "%7C" & BeforeSize_Submit & "%7C" & AfterSize_Submit & URL_Last
-                lbl_Title.Text = "Sending Results"
-                Panel1.Refresh()
-
-                SendPageRequest(URL_All)
-
-                lbl_Title.Text = "Results Sent"
-                TabControl1.SelectedTab = Page3
-                btn_NextPage.Text = "Close"
-                btn_Cancel.Visible = False
 
             End If
 
@@ -142,6 +121,46 @@ Assignment:
     End Sub
 
 
+    Private Sub PrepareSubmission()
+        Dim alreadyExists As Boolean
+        For Each res As Result In WikiHandler.allResults
+            If CInt(txtbox_SteamID.Value) = If(res.SteamID = 0, 999999, res.SteamID) OrElse Folder_Submit = res.Folder OrElse txtbox_Name.Text.Trim() = res.Name Then
+                If CompMode_Submit = res.Algorithm Then
+                    If BeforeSize_Submit >= res.BeforeSize * 0.92 AndAlso BeforeSize_Submit <= res.BeforeSize * 1.08 Then
+                        alreadyExists = True
+                    End If
+                End If
+            End If
+        Next
+
+
+        Name_Submit = HttpUtility.UrlPathEncode(txtbox_Name.Text.Trim())
+        Folder_Submit = HttpUtility.UrlPathEncode(Folder_Submit)
+        SteamID_Submit = txtbox_SteamID.Text
+        UniqueID_Submit = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(getMacAddress()))
+
+        FillDataCollection()
+
+
+        If alreadyExists = False Then
+            Dim URL_First As String = "https://docs.google.com/forms/d/e/1FAIpQLSfAzlQAhyPEueFyQiTEmpudcKaVLnpRPmzrIuBZxnR8f7PjPg/formResponse?&ifq&entry.630201004=%3CCompactGUI%3E"
+
+            Dim URL_Last As String = "&submit=Submit"
+
+            Dim URL_All As String = URL_First & UniqueID_Submit & "%7C" & Type_Submit & "%7C" & Name_Submit & "%7C" & Folder_Submit & "%7C" & SteamID_Submit & "%7C" & CompMode_Submit & "%7C" & BeforeSize_Submit & "%7C" & AfterSize_Submit & URL_Last
+            lbl_Title.Text = "Sending Results"
+            Panel1.Refresh()
+
+            SendPageRequest(URL_All)
+        Else
+
+        End If
+
+        lbl_Title.Text = "Results Sent"
+        TabControl1.SelectedTab = Page3
+        btn_NextPage.Text = "Close"
+        btn_Cancel.Visible = False
+    End Sub
 
     Private Sub SendPageRequest(ByVal URL As String, Optional ByVal proxy As Net.WebProxy = Nothing)
         Try
