@@ -140,7 +140,7 @@ Partial Class Compact
         Me.topbar_title.AutoSize = True
         Me.topbar_title.Font = New System.Drawing.Font("Segoe UI Semilight", 15.75!)
         Me.topbar_title.ForeColor = System.Drawing.Color.White
-        Me.topbar_title.Location = New System.Drawing.Point(59, 18)
+        Me.topbar_title.Location = New System.Drawing.Point(39, 20)
         Me.topbar_title.Name = "topbar_title"
         Me.topbar_title.Size = New System.Drawing.Size(136, 30)
         Me.topbar_title.TabIndex = 13
@@ -180,7 +180,7 @@ Partial Class Compact
         'updateBanner
         '
         Me.updateBanner.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.updateBanner.BackColor = System.Drawing.Color.FromArgb(CType(CType(211, Byte), Integer), CType(CType(84, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.updateBanner.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(174, Byte), Integer), CType(CType(96, Byte), Integer))
         Me.updateBanner.Controls.Add(Me.dlUpdateLink)
         Me.updateBanner.Location = New System.Drawing.Point(310, 0)
         Me.updateBanner.Name = "updateBanner"
@@ -200,7 +200,7 @@ Partial Class Compact
         Me.dlUpdateLink.Size = New System.Drawing.Size(380, 18)
         Me.dlUpdateLink.TabIndex = 1
         Me.dlUpdateLink.TabStop = True
-        Me.dlUpdateLink.Text = "Update Available: Click to download V2.3"
+        Me.dlUpdateLink.Text = "Update Available: Click to download V2.X"
         Me.dlUpdateLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'btnAnalyze
@@ -315,7 +315,7 @@ Partial Class Compact
         'topbar_icon
         '
         Me.topbar_icon.Image = Global.CompactGUI.My.Resources.Resources.iconbright
-        Me.topbar_icon.Location = New System.Drawing.Point(19, 19)
+        Me.topbar_icon.Location = New System.Drawing.Point(11, 25)
         Me.topbar_icon.Name = "topbar_icon"
         Me.topbar_icon.Size = New System.Drawing.Size(25, 25)
         Me.topbar_icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom

@@ -150,7 +150,7 @@ Public Class Compact
                     .AutoSize = True
                     .TextAlign = ContentAlignment.MiddleLeft
                     .Font = New Font(topbar_title.Font.Name, 15.75, FontStyle.Regular)
-                    .Location = New Point(59, 18)
+                    .Location = New Point(39, 20)
                 End With
 
                 If overrideCompressFolderButton <> 0 Then btnCompress.Enabled = False               'Used as a security measure to stop accidental compression of folders that should not be compressed - even though the compact.exe process will throw an error if you try, I'd prefer to catch it here anyway. 
