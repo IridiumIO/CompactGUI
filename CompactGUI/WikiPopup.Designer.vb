@@ -27,7 +27,6 @@ Partial Class WikiPopup
         Me.GamesTable = New System.Windows.Forms.TableLayoutPanel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.ImportantToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -68,7 +67,6 @@ Partial Class WikiPopup
         '
         Me.Panel1.BackColor = System.Drawing.Color.Transparent
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.GamesTable)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
@@ -77,17 +75,6 @@ Partial Class WikiPopup
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(430, 375)
         Me.Panel1.TabIndex = 9
-        '
-        'Label2
-        '
-        Me.Label2.ForeColor = System.Drawing.Color.IndianRed
-        Me.Label2.Location = New System.Drawing.Point(160, 18)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(247, 48)
-        Me.Label2.TabIndex = 9
-        Me.Label2.Text = "Hover over this text to see an important note"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ImportantToolTip.SetToolTip(Me.Label2, resources.GetString("Label2.ToolTip"))
         '
         'ImportantToolTip
         '
@@ -123,6 +110,5 @@ Partial Class WikiPopup
     Friend WithEvents GamesTable As TableLayoutPanel
     Friend WithEvents Label1 As Label
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents Label2 As Label
     Friend WithEvents ImportantToolTip As ToolTip
 End Class

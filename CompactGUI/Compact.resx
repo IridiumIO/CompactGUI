@@ -129,13 +129,6 @@
   <metadata name="ToolTipFilesCompressed.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>460, 17</value>
   </metadata>
-  <data name="seecompest.ToolTip" xml:space="preserve">
-    <value>For games that contain files &gt;4GB in size, these estimates are likely to be inaccurate (for now). 
-
-An update will fix this once more community submissions are made. To speed up the acquisition of new results,
-please submit your own results after compression. 
-</value>
-  </data>
   <data name="help_resultsFilesCompressed.ToolTip" xml:space="preserve">
     <value>The number of files compressed may not necessarily equal the total number of files in the folder. 
 This is often normal, as some files cannot be compressed, or are protected by the system. 

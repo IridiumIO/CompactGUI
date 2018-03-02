@@ -5,21 +5,23 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 
 Class WikiHandler
-    Shared InputFromGitHub() As String
 
+    Shared InputFromGitHub As IEnumerable(Of XElement)
+    Friend Shared allResults As New List(Of Result)
     Shared workingname As String = "testdir"
 
     Private Shared Sub WikiParser()
         Console.WriteLine("Working Name: " & workingname)
 
-        Dim Source As String
+        allResults.Clear()
+        Dim SRC As XElement
 
         If InputFromGitHub Is Nothing Then
             Console.WriteLine("Getting List")
             Dim wc = New WebClient With {.Encoding = Encoding.UTF8}
             Try
-                Source = wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/WikiDB_Games")
-                InputFromGitHub = Source.TrimEnd().Split(vbLf)
+                SRC = XElement.Parse(wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/Database.xml"))
+                InputFromGitHub = SRC.Elements()
                 ParseData()
 
             Catch ex As WebException
@@ -39,94 +41,57 @@ Class WikiHandler
     End Sub
 
     Private Shared Sub ParseData()
-        Dim gameName As New List(Of String)
+
+        For Each result In InputFromGitHub
+            Dim itemName As String = result.Element("itemName").Value
+            Dim itemFolder As String = result.Element("itemFolder").Value
+            Dim itemSteamID As String = result.Element("itemSteamID").Value
+            Dim itemAlgorithm As String = result.Element("itemAlgorithm").Value
+            Dim itemBeforeSize As UInt64 = result.Element("itemBefore").Value
+            Dim itemAfterSize As UInt64 = result.Element("itemAfter").Value
+
+            Dim res As New Result(itemName, itemFolder, itemSteamID, itemAlgorithm, itemBeforeSize, itemAfterSize)
+
+            allResults.Add(res)
+        Next result
 
 
-        For Each s As String In InputFromGitHub
-            gameName.Add(s.Split("|")(2))
-        Next
+        Dim gcount As New List(Of Result)
 
 
-        Dim strippedgameName As New List(Of String)
-
-
-        For Each s In gameName
-            Dim n = Regex.Replace(s, "[^\p{L}a-zA-Z0-90]", "")
-            strippedgameName.Add(n.ToLower.Trim)
-        Next
-
-
-
-        Dim gcount As New List(Of Integer)
-
-        If ParseLogic(strippedgameName, workingname) = True Then
-            Dim i = 0
-            If isExactMatch = True Then
-                For Each a In strippedgameName
-                    If a.Equals(workingname) And workingname.Length > 1 Then gcount.Add(i)
-                    i += 1
-                Next
-            Else
-                For Each a In strippedgameName
-                    If a.ToString.StartsWith(workingname) And Math.Abs(a.ToString.Length - workingname.Length) < 5 And workingname.Length > 1 Then gcount.Add(i)
-                    i += 1
-                Next
+        Dim matches As Integer = 0
+        For Each r As Result In allResults
+            If r.Folder.Equals(workingname) Then
+                gcount.Add(r)
+                matches += 1
             End If
 
-        Else
-            Dim i = 0
-            For Each a In strippedgameName
-                If workingname.Length > 5 Then
-                    If a.ToString.Contains(workingname) Then gcount.Add(i)
+        Next
+        Console.WriteLine(vbCrLf)
+        If matches = 0 Then
+            For Each r As Result In allResults
+                If r.Name_Sanitised.Contains(workingname) Then
+                    gcount.Add(r)
+                    matches += 1
                 End If
-                i += 1
+
             Next
         End If
-
-
-        WikiPopup.GamesTable.Visible = False
-        WikiPopup.GamesTable.Controls.Clear()
-        WikiPopup.GamesTable.RowCount = 0
-
-        Dim provider As CultureInfo = New CultureInfo("en-US")
-
-        Dim GName As New Label With {.Text = "Game"}
-        Dim GSizeU As New Label With {.Text = "Before"}
-        Dim GSizeC As New Label With {.Text = "After"}
-        Dim GCompR As New Label With {.Text = "Ratio"}
-        Dim GCompAlg As New Label With {.Text = "Algorithm"}
-
-
-        WikiPopup.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
-        WikiPopup.GamesTable.RowCount += 1
-        WikiPopup.GamesTable.Controls.Add(GName, 0, WikiPopup.GamesTable.RowCount - 1)
-        WikiPopup.GamesTable.Controls.Add(GSizeU, 1, WikiPopup.GamesTable.RowCount - 1)
-        WikiPopup.GamesTable.Controls.Add(GSizeC, 2, WikiPopup.GamesTable.RowCount - 1)
-        WikiPopup.GamesTable.Controls.Add(GCompR, 3, WikiPopup.GamesTable.RowCount - 1)
-        WikiPopup.GamesTable.Controls.Add(GCompAlg, 4, WikiPopup.GamesTable.RowCount - 1)
-
-        For Each WikiHeader As Label In WikiPopup.GamesTable.Controls
-            WikiHeader.Font = New Font("Segoe UI", 11, FontStyle.Bold)
-            WikiHeader.Dock = DockStyle.Right
-        Next
-
-        GName.Dock = DockStyle.Left
 
 
         Dim ratioavg As Decimal = 1
         firstGame = 0
 
-        For Each n In gcount
-            FillTable(n)
 
-            ratioavg += Decimal.Parse(InputFromGitHub(n).Split("|")(6), provider)
+        PrepareTable()
 
-            If InputFromGitHub(n).Split("|")(7).Contains("*") Then
-                Compact.sb_lblGameIssues.Visible = True
-                Compact.sb_lblGameIssues.Text = "! Game has issues"
-            Else
-                Compact.sb_lblGameIssues.Visible = False
-            End If
+        For Each r In gcount
+            FillTable(r)
+
+            ratioavg += Decimal.Parse(r.Ratio)
+
+            Compact.sb_lblGameIssues.Visible = False   'Add check for game issues at later date
+
 
         Next
         Compact.sb_labelCompressed.Text = "Estimated Compressed"
@@ -160,58 +125,69 @@ Class WikiHandler
     End Sub
 
 
+    Private Shared Sub PrepareTable()
+        WikiPopup.GamesTable.Visible = False
+        WikiPopup.GamesTable.Controls.Clear()
+        WikiPopup.GamesTable.RowCount = 0
 
+        Dim provider As CultureInfo = New CultureInfo("en-US")
 
-    Shared isExactMatch As Boolean
-    Shared Function ParseLogic(online_R As List(Of String), local_R As String) As Boolean
-        isExactMatch = False
-        Dim success = 0
-        For Each a In online_R
-            If a.StartsWith(local_R) And Math.Abs(a.Length - workingname.Length) < 5 Then
-                If a.Length = workingname.Length Then isExactMatch = True
-                success = 1
-                Return True
-                Exit For
-            End If
+        Dim GName As New Label With {.Text = "Game"}
+        Dim GSizeU As New Label With {.Text = "Before"}
+        Dim GSizeC As New Label With {.Text = "After"}
+        Dim GCompR As New Label With {.Text = "Ratio"}
+        Dim GCompAlg As New Label With {.Text = "Algorithm"}
+        Console.WriteLine(WikiPopup.GamesTable.RowCount)
+
+        WikiPopup.GamesTable.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
+        WikiPopup.GamesTable.RowCount += 1
+        WikiPopup.GamesTable.Controls.Add(GName, 0, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GSizeU, 1, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GSizeC, 2, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GCompR, 3, WikiPopup.GamesTable.RowCount - 1)
+        WikiPopup.GamesTable.Controls.Add(GCompAlg, 4, WikiPopup.GamesTable.RowCount - 1)
+
+        For Each WikiHeader As Label In WikiPopup.GamesTable.Controls
+            WikiHeader.Font = New Font("Segoe UI", 11, FontStyle.Bold)
+            WikiHeader.Dock = DockStyle.Right
         Next
 
-        If success = 0 Then Return False
+        GName.Dock = DockStyle.Left
 
-    End Function
-
+    End Sub
 
 
     Shared firstGame As Integer = 0
-    Private Shared Sub FillTable(ps As Integer)
+    Private Shared Sub FillTable(ps As Result)
 
         If firstGame = 0 Then
-            Compact.sb_FolderName.Text = InputFromGitHub(ps).Split("|")(2)
+            Compact.sb_FolderName.Text = ps.Name
             firstGame = 1
         End If
 
 
         Dim GName As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(2), .ForeColor = Color.DimGray,
+        .Text = ps.Name, .ForeColor = Color.DimGray,
         .Dock = DockStyle.Left,
         .Font = New Font("Segoe UI", 11, FontStyle.Regular)
         }
         Dim GSizeU As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(3), .ForeColor = Color.DimGray,
+        .Text = ps.BeforeSize_Formatted, .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }
         Dim GSizeC As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(4), .ForeColor = Color.DimGray,
+        .Text = ps.AfterSize_Formatted, .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }
         Dim GCompR As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(6), .ForeColor = Color.DimGray,
+        .Text = ps.Ratio, .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }
         Dim GCompAlg As New Label With {
-        .Text = InputFromGitHub(ps).Split("|")(1), .ForeColor = Color.DimGray,
+        .Text = ps.Algorithm, .ForeColor = Color.DimGray,
         .Dock = DockStyle.Right,
         .Font = New Font("Segoe UI", 10, FontStyle.Regular)
         }
@@ -243,29 +219,8 @@ Class WikiHandler
 
         Dim wnpatch As String = Regex.Replace(DIwDString.Name.ToString, "[^\p{L}a-zA-Z0-90]", "").ToLower.Trim()
 
-        Select Case True
-            Case wnpatch.Contains("callofduty")
-                workingname = wnpatch.Replace("callofduty", "cod")
-                If workingname.EndsWith("Modernwarfare") Then workingname = "cod4"
+        workingname = wnpatch
 
-            Case wnpatch.Contains("gameoftheyear")
-                workingname = wnpatch.Replace("gameoftheyear", "goty")
-
-            Case wnpatch.Contains("age2hd")
-                workingname = "ageofempiresiihd"
-
-            Case wnpatch.Contains("shadowofmordor")
-                workingname = "middleearthshadowofmordor"
-
-            Case wnpatch.Contains("shadowofwar")
-                workingname = "middleearthshadowofwar"
-
-            Case wnpatch.Contains("pubg")
-                workingname = "playerunknownsbattlegrounds"
-
-            Case Else
-                workingname = wnpatch
-        End Select
 
         folderSize = Math.Round(Decimal.Parse(rawPreSize.Split(" ")(0)), 2)
         suffix = rawPreSize.Split(" ")(1)
@@ -314,5 +269,47 @@ Class WikiHandler
     End Sub
 
 
+
+End Class
+
+
+
+Public Class Result
+
+    Property Name As String
+    Property Name_Sanitised As String
+    Property Folder As String
+    Property SteamID As Integer
+    Property Algorithm As String
+    Property BeforeSize As UInt64
+    Property BeforeSize_Formatted As String
+    Property AfterSize As UInt64
+    Property AfterSize_Formatted As String
+    Property Ratio As Decimal
+
+    Public ReadOnly Property AllData()
+        Get
+            Return Name & Folder & SteamID & Algorithm & AfterSize
+        End Get
+    End Property
+
+    Public Sub New(ByVal nm As String,
+                   ByVal fl As String,
+                   ByVal stID As Integer,
+                   ByVal alg As String,
+                   ByVal bef As UInt64,
+                   ByVal aft As UInt64)
+
+        Name = nm
+        Name_Sanitised = Regex.Replace(nm.ToLower, "[^\p{L}a-zA-Z0-90]", "")
+        Folder = Regex.Replace(fl.ToLower, "[^\p{L}a-zA-Z0-90]", "")
+        SteamID = stID
+        Algorithm = alg
+        BeforeSize = bef
+        BeforeSize_Formatted = Compact.GetOutputSize(bef, True)
+        AfterSize = aft
+        AfterSize_Formatted = Compact.GetOutputSize(aft, True)
+        Ratio = Math.Round(AfterSize / BeforeSize, 2)
+    End Sub
 
 End Class

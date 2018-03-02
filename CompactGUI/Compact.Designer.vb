@@ -88,6 +88,7 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -102,20 +103,10 @@ Partial Class Compact
         Me.conOut = New System.Windows.Forms.ListBox()
         Me.returnArrow = New System.Windows.Forms.Label()
         Me.submitToWiki = New System.Windows.Forms.Label()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.testFileArgs = New System.Windows.Forms.Button()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.OldconOut = New System.Windows.Forms.RichTextBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.testcompactargs = New System.Windows.Forms.Button()
-        Me.compRatioLabel = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label12 = New System.Windows.Forms.Label()
         Me.spaceSavedLabel = New System.Windows.Forms.Label()
         Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
-        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -137,7 +128,6 @@ Partial Class Compact
         Me.compressedSizeVisual.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.panel_console.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
         Me.TrayMenu.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -346,7 +336,6 @@ Partial Class Compact
         Me.seecompest.Size = New System.Drawing.Size(16, 13)
         Me.seecompest.TabIndex = 21
         Me.seecompest.Text = "❯ "
-        Me.ToolTipFilesCompressed.SetToolTip(Me.seecompest, resources.GetString("seecompest.ToolTip"))
         Me.seecompest.Visible = False
         '
         'ToolTipFilesCompressed
@@ -733,7 +722,6 @@ Partial Class Compact
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.InputPage)
         Me.TabControl1.Controls.Add(Me.ProgressPage)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Location = New System.Drawing.Point(0, 116)
         Me.TabControl1.MinimumSize = New System.Drawing.Size(503, 200)
         Me.TabControl1.Name = "TabControl1"
@@ -978,6 +966,13 @@ Partial Class Compact
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
+        '
         'labelFilesCompressed
         '
         Me.labelFilesCompressed.AutoSize = True
@@ -1147,103 +1142,6 @@ Partial Class Compact
         Me.submitToWiki.Text = "❯  Submit Results to Wiki"
         Me.submitToWiki.Visible = False
         '
-        'TabPage3
-        '
-        Me.TabPage3.Controls.Add(Me.testFileArgs)
-        Me.TabPage3.Controls.Add(Me.Label10)
-        Me.TabPage3.Controls.Add(Me.OldconOut)
-        Me.TabPage3.Controls.Add(Me.TextBox1)
-        Me.TabPage3.Controls.Add(Me.testcompactargs)
-        Me.TabPage3.Controls.Add(Me.compRatioLabel)
-        Me.TabPage3.Controls.Add(Me.Button1)
-        Me.TabPage3.Controls.Add(Me.Label12)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(995, 509)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "TabPage3"
-        Me.TabPage3.UseVisualStyleBackColor = True
-        '
-        'testFileArgs
-        '
-        Me.testFileArgs.Location = New System.Drawing.Point(278, 74)
-        Me.testFileArgs.Name = "testFileArgs"
-        Me.testFileArgs.Size = New System.Drawing.Size(75, 23)
-        Me.testFileArgs.TabIndex = 29
-        Me.testFileArgs.Text = "Test FileArgs"
-        Me.testFileArgs.UseVisualStyleBackColor = True
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.ForeColor = System.Drawing.SystemColors.HotTrack
-        Me.Label10.Location = New System.Drawing.Point(10, 24)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(171, 25)
-        Me.Label10.TabIndex = 23
-        Me.Label10.Text = "Testing Grounds"
-        '
-        'OldconOut
-        '
-        Me.OldconOut.BackColor = System.Drawing.Color.White
-        Me.OldconOut.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.OldconOut.ForeColor = System.Drawing.Color.DimGray
-        Me.OldconOut.Location = New System.Drawing.Point(32, 308)
-        Me.OldconOut.Name = "OldconOut"
-        Me.OldconOut.ReadOnly = True
-        Me.OldconOut.Size = New System.Drawing.Size(375, 161)
-        Me.OldconOut.TabIndex = 0
-        Me.OldconOut.Text = ""
-        Me.OldconOut.Visible = False
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(32, 243)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(340, 20)
-        Me.TextBox1.TabIndex = 1
-        '
-        'testcompactargs
-        '
-        Me.testcompactargs.Location = New System.Drawing.Point(32, 75)
-        Me.testcompactargs.Name = "testcompactargs"
-        Me.testcompactargs.Size = New System.Drawing.Size(113, 23)
-        Me.testcompactargs.TabIndex = 28
-        Me.testcompactargs.Text = "Test CompactArgs"
-        Me.testcompactargs.UseVisualStyleBackColor = True
-        '
-        'compRatioLabel
-        '
-        Me.compRatioLabel.AutoSize = True
-        Me.compRatioLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.compRatioLabel.Location = New System.Drawing.Point(28, 178)
-        Me.compRatioLabel.Name = "compRatioLabel"
-        Me.compRatioLabel.Size = New System.Drawing.Size(85, 21)
-        Me.compRatioLabel.TabIndex = 27
-        Me.compRatioLabel.Text = "compRatio"
-        Me.compRatioLabel.Visible = False
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(378, 243)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "SendCMD"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(29, 156)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(35, 13)
-        Me.Label12.TabIndex = 26
-        Me.Label12.Text = "Ratio:"
-        Me.Label12.Visible = False
-        '
         'spaceSavedLabel
         '
         Me.spaceSavedLabel.AutoSize = True
@@ -1276,13 +1174,6 @@ Partial Class Compact
         Me.Tray_ShowMain.Name = "Tray_ShowMain"
         Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
         Me.Tray_ShowMain.Text = "Show"
-        '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 35
         '
         'Compact
         '
@@ -1329,8 +1220,6 @@ Partial Class Compact
         Me.Panel5.ResumeLayout(False)
         Me.Panel5.PerformLayout()
         Me.panel_console.ResumeLayout(False)
-        Me.TabPage3.ResumeLayout(False)
-        Me.TabPage3.PerformLayout()
         Me.TrayMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -1403,15 +1292,6 @@ Partial Class Compact
     Friend WithEvents spaceSavedLabel As Label
     Friend WithEvents btnUncompress As Button
     Friend WithEvents sb_progresspercent As Label
-    Friend WithEvents TabPage3 As TabPage
-    Friend WithEvents testFileArgs As Button
-    Friend WithEvents Label10 As Label
-    Friend WithEvents OldconOut As RichTextBox
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents testcompactargs As Button
-    Friend WithEvents compRatioLabel As Label
-    Friend WithEvents Button1 As Button
-    Friend WithEvents Label12 As Label
     Friend WithEvents sb_lblGameIssues As Label
     Friend WithEvents sb_AnalysisPanel As Panel
     Friend WithEvents sb_ResultsPanel As Panel

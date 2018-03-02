@@ -499,7 +499,7 @@ Public Class Compact
 
 
 
-            compRatioLabel.Text = Math.Round(SizeBeforeCompression / SizeAfterCompression, 1)
+            Dim compRatio = Math.Round(SizeBeforeCompression / SizeAfterCompression, 1)
 
 
             spaceSavedLabel.Text = GetOutputSize((SizeBeforeCompression - SizeAfterCompression), True) + " Saved"
@@ -511,13 +511,13 @@ Public Class Compact
 
             Try
 
-                compressedSizeVisual.Width = CInt(320 / compRatioLabel.Text)
-                sb_compressedSizeVisual.Height = CInt(113 / compRatioLabel.Text)
+                compressedSizeVisual.Width = CInt(320 / compRatio)
+                sb_compressedSizeVisual.Height = CInt(113 / compRatio)
                 sb_compressedSizeVisual.Location = New Point(sb_compressedSizeVisual.Location.X, 5 + 113 - sb_compressedSizeVisual.Height)
 
                 Callpercent = (CDec(1 - (SizeAfterCompression / SizeBeforeCompression))) * 100
                 If My.Settings.ShowNotifications Then _
-                        TrayIcon.ShowBalloonTip(1, "Compressed: " & StrConv(sb_FolderName.Text, VbStrConv.ProperCase), vbCrLf & "▸ " & spaceSavedLabel.Text & vbCrLf & "▸ " & Math.Round(Callpercent, 1) & "% Smaller", ToolTipIcon.None)
+                        TrayIcon.ShowBalloonTip(1, "Compressed: " & sb_FolderName.Text, vbCrLf & "▸ " & spaceSavedLabel.Text & vbCrLf & "▸ " & Math.Round(Callpercent, 1) & "% Smaller", ToolTipIcon.None)
 
             Catch ex As OverflowException
                 compressedSizeVisual.Width = 320
