@@ -52,7 +52,6 @@ Partial Class Compact
         Me.Label3 = New System.Windows.Forms.Label()
         Me.sb_compressedSizeVisual = New System.Windows.Forms.Panel()
         Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.sb_SpaceSavedLabel = New System.Windows.Forms.Label()
         Me.sb_AnalysisPanel = New System.Windows.Forms.Panel()
         Me.sb_progresslabel = New System.Windows.Forms.Label()
         Me.sb_progressbar = New System.Windows.Forms.Panel()
@@ -88,6 +87,7 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -106,7 +106,6 @@ Partial Class Compact
         Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
-        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -449,7 +448,6 @@ Partial Class Compact
         Me.sb_ResultsPanel.Controls.Add(Me.Label3)
         Me.sb_ResultsPanel.Controls.Add(Me.sb_compressedSizeVisual)
         Me.sb_ResultsPanel.Controls.Add(Me.Panel6)
-        Me.sb_ResultsPanel.Controls.Add(Me.sb_SpaceSavedLabel)
         Me.sb_ResultsPanel.Location = New System.Drawing.Point(3, 3)
         Me.sb_ResultsPanel.Name = "sb_ResultsPanel"
         Me.sb_ResultsPanel.Padding = New System.Windows.Forms.Padding(40, 0, 40, 0)
@@ -498,18 +496,6 @@ Partial Class Compact
         Me.Panel6.Name = "Panel6"
         Me.Panel6.Size = New System.Drawing.Size(40, 113)
         Me.Panel6.TabIndex = 0
-        '
-        'sb_SpaceSavedLabel
-        '
-        Me.sb_SpaceSavedLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.sb_SpaceSavedLabel.ForeColor = System.Drawing.Color.White
-        Me.sb_SpaceSavedLabel.Location = New System.Drawing.Point(110, 91)
-        Me.sb_SpaceSavedLabel.Name = "sb_SpaceSavedLabel"
-        Me.sb_SpaceSavedLabel.Size = New System.Drawing.Size(113, 27)
-        Me.sb_SpaceSavedLabel.TabIndex = 27
-        Me.sb_SpaceSavedLabel.Text = "700MB Saved"
-        Me.sb_SpaceSavedLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.sb_SpaceSavedLabel.Visible = False
         '
         'sb_AnalysisPanel
         '
@@ -967,6 +953,13 @@ Partial Class Compact
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
         '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
+        '
         'labelFilesCompressed
         '
         Me.labelFilesCompressed.AutoSize = True
@@ -1169,13 +1162,6 @@ Partial Class Compact
         Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
         Me.Tray_ShowMain.Text = "Show"
         '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 35
-        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1301,7 +1287,6 @@ Partial Class Compact
     Friend WithEvents Label3 As Label
     Friend WithEvents sb_compressedSizeVisual As Panel
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
-    Friend WithEvents sb_SpaceSavedLabel As Label
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
     Friend WithEvents updateBanner As Panel
     Friend WithEvents dlUpdateLink As LinkLabel

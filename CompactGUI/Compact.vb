@@ -502,7 +502,6 @@ Public Class Compact
 
 
             spaceSavedLabel.Text = GetOutputSize((SizeBeforeCompression - SizeAfterCompression), True) + " Saved"
-            sb_SpaceSavedLabel.Text = spaceSavedLabel.Text
 
             labelFilesCompressed.Text = numberFilesCompressed & " / " & AllFiles.Count & " files compressed"
             help_resultsFilesCompressed.Location = New Point(labelFilesCompressed.Location.X + labelFilesCompressed.Width + 2, labelFilesCompressed.Location.Y + 1)
