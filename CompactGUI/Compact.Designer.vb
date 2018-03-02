@@ -42,7 +42,6 @@ Partial Class Compact
         Me.seecompest = New System.Windows.Forms.Label()
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
         Me.help_resultsFilesCompressed = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
         Me.sb_lblGameIssues = New System.Windows.Forms.Label()
         Me.panel_MainWindow = New System.Windows.Forms.Panel()
         Me.sb_Panel = New System.Windows.Forms.Panel()
@@ -70,6 +69,9 @@ Partial Class Compact
         Me.vis_dropshadowMain = New System.Windows.Forms.Panel()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.InputPage = New System.Windows.Forms.TabPage()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.SelectedFiles = New System.Windows.Forms.ListBox()
         Me.FlowPanel_CompressionOptions = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -87,7 +89,6 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
-        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -106,6 +107,7 @@ Partial Class Compact
         Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -118,6 +120,7 @@ Partial Class Compact
         Me.TableLayoutPanel3.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.InputPage.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.FlowPanel_CompressionOptions.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -361,19 +364,6 @@ Partial Class Compact
         Me.help_resultsFilesCompressed.TabIndex = 31
         Me.help_resultsFilesCompressed.Text = "(?)"
         Me.ToolTipFilesCompressed.SetToolTip(Me.help_resultsFilesCompressed, resources.GetString("help_resultsFilesCompressed.ToolTip"))
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(152, Byte), Integer), CType(CType(219, Byte), Integer))
-        Me.Label14.Location = New System.Drawing.Point(169, 66)
-        Me.Label14.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(22, 17)
-        Me.Label14.TabIndex = 32
-        Me.Label14.Text = "(?)"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.Label14, resources.GetString("Label14.ToolTip"))
         '
         'sb_lblGameIssues
         '
@@ -656,6 +646,7 @@ Partial Class Compact
         '
         'btnCompress
         '
+        Me.btnCompress.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCompress.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.btnCompress.Enabled = False
         Me.btnCompress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
@@ -674,6 +665,7 @@ Partial Class Compact
         '
         'btnUncompress
         '
+        Me.btnUncompress.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnUncompress.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(83, Byte), Integer))
         Me.btnUncompress.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(121, Byte), Integer), CType(CType(138, Byte), Integer))
         Me.btnUncompress.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(72, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(138, Byte), Integer))
@@ -718,6 +710,7 @@ Partial Class Compact
         'InputPage
         '
         Me.InputPage.BackColor = System.Drawing.Color.White
+        Me.InputPage.Controls.Add(Me.Panel1)
         Me.InputPage.Controls.Add(Me.FlowPanel_CompressionOptions)
         Me.InputPage.Location = New System.Drawing.Point(4, 22)
         Me.InputPage.Name = "InputPage"
@@ -725,6 +718,47 @@ Partial Class Compact
         Me.InputPage.Size = New System.Drawing.Size(995, 509)
         Me.InputPage.TabIndex = 0
         Me.InputPage.Text = "InputPage"
+        '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.SelectedFiles)
+        Me.Panel1.Location = New System.Drawing.Point(44, 214)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(574, 287)
+        Me.Panel1.TabIndex = 24
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 11.25!)
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(15, 35)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(99, 20)
+        Me.Label1.TabIndex = 18
+        Me.Label1.Text = "Selected Files"
+        '
+        'SelectedFiles
+        '
+        Me.SelectedFiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SelectedFiles.BackColor = System.Drawing.Color.White
+        Me.SelectedFiles.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SelectedFiles.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable
+        Me.SelectedFiles.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.SelectedFiles.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.SelectedFiles.FormattingEnabled = True
+        Me.SelectedFiles.ItemHeight = 25
+        Me.SelectedFiles.Location = New System.Drawing.Point(40, 59)
+        Me.SelectedFiles.Name = "SelectedFiles"
+        Me.SelectedFiles.Size = New System.Drawing.Size(534, 200)
+        Me.SelectedFiles.TabIndex = 23
+        Me.SelectedFiles.TabStop = False
         '
         'FlowPanel_CompressionOptions
         '
@@ -735,7 +769,7 @@ Partial Class Compact
         Me.FlowPanel_CompressionOptions.Controls.Add(Me.Panel3)
         Me.FlowPanel_CompressionOptions.Location = New System.Drawing.Point(44, 21)
         Me.FlowPanel_CompressionOptions.Name = "FlowPanel_CompressionOptions"
-        Me.FlowPanel_CompressionOptions.Size = New System.Drawing.Size(574, 216)
+        Me.FlowPanel_CompressionOptions.Size = New System.Drawing.Size(574, 174)
         Me.FlowPanel_CompressionOptions.TabIndex = 22
         '
         'Panel4
@@ -747,7 +781,7 @@ Partial Class Compact
         Me.Panel4.Controls.Add(Me.compressX16)
         Me.Panel4.Location = New System.Drawing.Point(3, 3)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(266, 181)
+        Me.Panel4.Size = New System.Drawing.Size(266, 160)
         Me.Panel4.TabIndex = 24
         '
         'Label2
@@ -768,9 +802,10 @@ Partial Class Compact
         Me.compressX4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.compressX4.Location = New System.Drawing.Point(37, 38)
         Me.compressX4.Name = "compressX4"
-        Me.compressX4.Size = New System.Drawing.Size(74, 17)
+        Me.compressX4.Size = New System.Drawing.Size(77, 17)
         Me.compressX4.TabIndex = 9
-        Me.compressX4.Text = "XPRESS4K"
+        Me.compressX4.Text = "XPRESS 4K"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX4, "Fastest, Low Compression")
         Me.compressX4.UseVisualStyleBackColor = True
         '
         'compressLZX
@@ -783,6 +818,7 @@ Partial Class Compact
         Me.compressLZX.Size = New System.Drawing.Size(45, 17)
         Me.compressLZX.TabIndex = 12
         Me.compressLZX.Text = "LZX "
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressLZX, "Slowest, Very High Compression (Not Recommended for Games/Programs)")
         Me.compressLZX.UseVisualStyleBackColor = True
         '
         'compressX8
@@ -793,10 +829,11 @@ Partial Class Compact
         Me.compressX8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.compressX8.Location = New System.Drawing.Point(37, 68)
         Me.compressX8.Name = "compressX8"
-        Me.compressX8.Size = New System.Drawing.Size(74, 17)
+        Me.compressX8.Size = New System.Drawing.Size(77, 17)
         Me.compressX8.TabIndex = 10
         Me.compressX8.TabStop = True
-        Me.compressX8.Text = "XPRESS8K"
+        Me.compressX8.Text = "XPRESS 8K"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX8, "Fast, Medium Compression (Recommended)")
         Me.compressX8.UseVisualStyleBackColor = True
         '
         'compressX16
@@ -806,9 +843,10 @@ Partial Class Compact
         Me.compressX16.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.compressX16.Location = New System.Drawing.Point(37, 98)
         Me.compressX16.Name = "compressX16"
-        Me.compressX16.Size = New System.Drawing.Size(80, 17)
+        Me.compressX16.Size = New System.Drawing.Size(83, 17)
         Me.compressX16.TabIndex = 11
-        Me.compressX16.Text = "XPRESS16K"
+        Me.compressX16.Text = "XPRESS 16K"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX16, "Slow, High Compression")
         Me.compressX16.UseVisualStyleBackColor = True
         '
         'Panel3
@@ -817,13 +855,12 @@ Partial Class Compact
         Me.Panel3.Controls.Add(Me.checkShutdownOnCompletion)
         Me.Panel3.Controls.Add(Me.Label8)
         Me.Panel3.Controls.Add(Me.checkForceCompression)
-        Me.Panel3.Controls.Add(Me.Label14)
         Me.Panel3.Controls.Add(Me.checkHiddenFiles)
         Me.Panel3.Controls.Add(Me.checkRecursiveScan)
         Me.FlowPanel_CompressionOptions.SetFlowBreak(Me.Panel3, True)
         Me.Panel3.Location = New System.Drawing.Point(275, 3)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(290, 181)
+        Me.Panel3.Size = New System.Drawing.Size(290, 160)
         Me.Panel3.TabIndex = 23
         '
         'comboChooseShutdown
@@ -874,6 +911,7 @@ Partial Class Compact
         Me.checkForceCompression.Size = New System.Drawing.Size(133, 17)
         Me.checkForceCompression.TabIndex = 7
         Me.checkForceCompression.Text = "Force Action on Files"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.checkForceCompression, resources.GetString("checkForceCompression.ToolTip"))
         Me.checkForceCompression.UseVisualStyleBackColor = True
         '
         'checkHiddenFiles
@@ -886,6 +924,7 @@ Partial Class Compact
         Me.checkHiddenFiles.Size = New System.Drawing.Size(192, 17)
         Me.checkHiddenFiles.TabIndex = 6
         Me.checkHiddenFiles.Text = "Process Hidden and System Files"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.checkHiddenFiles, resources.GetString("checkHiddenFiles.ToolTip"))
         Me.checkHiddenFiles.UseVisualStyleBackColor = True
         '
         'checkRecursiveScan
@@ -901,6 +940,7 @@ Partial Class Compact
         Me.checkRecursiveScan.Size = New System.Drawing.Size(135, 17)
         Me.checkRecursiveScan.TabIndex = 5
         Me.checkRecursiveScan.Text = "Compress Subfolders"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.checkRecursiveScan, "This option is now checked by default and cannot be changed. ")
         Me.checkRecursiveScan.UseVisualStyleBackColor = True
         '
         'ProgressPage
@@ -952,13 +992,6 @@ Partial Class Compact
         Me.CompResultsPanel.Size = New System.Drawing.Size(624, 219)
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
-        '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 35
         '
         'labelFilesCompressed
         '
@@ -1162,6 +1195,13 @@ Partial Class Compact
         Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
         Me.Tray_ShowMain.Text = "Show"
         '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
+        '
         'Compact
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1192,6 +1232,8 @@ Partial Class Compact
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.InputPage.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.FlowPanel_CompressionOptions.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
@@ -1255,7 +1297,6 @@ Partial Class Compact
     Friend WithEvents checkShutdownOnCompletion As CheckBox
     Friend WithEvents Label8 As Label
     Friend WithEvents checkForceCompression As CheckBox
-    Friend WithEvents Label14 As Label
     Friend WithEvents checkHiddenFiles As CheckBox
     Friend WithEvents checkRecursiveScan As CheckBox
     Friend WithEvents btnCompress As Button
@@ -1294,4 +1335,7 @@ Partial Class Compact
     Friend WithEvents TrayIcon As NotifyIcon
     Friend WithEvents TrayMenu As ContextMenuStrip
     Friend WithEvents Tray_ShowMain As ToolStripMenuItem
+    Friend WithEvents SelectedFiles As ListBox
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Panel1 As Panel
 End Class

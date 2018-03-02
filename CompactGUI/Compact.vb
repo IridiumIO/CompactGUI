@@ -120,7 +120,7 @@ Public Class Compact
                 ListOfFiles.Clear()
                 AllFiles.Clear()
                 TreeData.Clear()
-
+                SelectedFiles.Items.Clear()
                 directorysizeexceptionCount = 0
 
                 If DI_selectedDir.Name.Length > 0 Then _
@@ -140,6 +140,15 @@ Public Class Compact
                 Dim oldFolderSize_Formatted = GetOutputSize(oldFolderSize, True)
 
                 GetFilesToCompress(workingDir, ListOfFiles, My.Settings.SkipNonCompressable)
+
+                For Each fileName In ListOfFiles
+                    Dim fN_Listable = fileName.Replace(workingDir, "").Replace("\", " ❯ ")
+                    If fN_Listable.Count(Function(x) x = "❯") = 1 Then fN_Listable = fN_Listable.Replace(" ❯ ", "")
+                    SelectedFiles.Items.Add(fN_Listable)
+                Next
+
+
+
                 PrepareforCompact()
 
                 UnfurlTransition.UnfurlControl(topbar_dirchooserContainer, topbar_dirchooserContainer.Width, Me.Width - sb_Panel.Width - 46, 100)
@@ -165,7 +174,7 @@ Public Class Compact
 
 
 
-    Shared NonCompressableSet As New List(Of String)(Regex.Replace(My.Settings.NonCompressableList, "\s+", "").Split(";"c))
+
 
 
     Public ListOfFiles As New List(Of String)
@@ -173,10 +182,13 @@ Public Class Compact
 
     Private Sub GetFilesToCompress(ByVal targetDirectory As String, targetOutputList As List(Of String), LimitSelectedFiles As Boolean)
 
+        Dim NonCompressableSet As New List(Of String)(Regex.Replace(My.Settings.NonCompressableList, "\s+", "").Split(";"c))
+
         Dim fileEntries As String() = Directory.GetFiles(targetDirectory)
         Dim fileName As String                                                              ' Process the list of files found in the directory.
 
         For Each fileName In fileEntries
+
             If LimitSelectedFiles = True Then
                 If Path.GetExtension(fileName) = "" OrElse NonCompressableSet.Contains(Path.GetExtension(fileName).TrimStart(".").ToLowerInvariant) = False Then
                     targetOutputList.Add(fileName)
@@ -879,6 +891,24 @@ Public Class Compact
         e.Graphics.FillPolygon(New SolidBrush(Color.FromArgb(255, 47, 66, 83)), New PointF() {New Point(x, 0), New Point(x, y), New Point(x - y, y)})
 
     End Sub
+
+
+
+
+    Private Sub ListBox1_DrawItem(ByVal sender As Object, ByVal e As DrawItemEventArgs) Handles SelectedFiles.DrawItem
+        e.DrawBackground()
+        e.Graphics.DrawString(SelectedFiles.Items(e.Index).ToString, SelectedFiles.Font, Brushes.Gray, e.Bounds.Left, ((e.Bounds.Height - SelectedFiles.Font.Height) \ 2) + e.Bounds.Top)
+    End Sub
+
+    Private Sub ListBox1_MeasureItem(ByVal sender As Object, ByVal e As MeasureItemEventArgs) Handles SelectedFiles.MeasureItem
+        e.ItemHeight = 22
+    End Sub
+
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+        Dim p As New Pen(Brushes.Silver, 1)
+        e.Graphics.DrawLine(p, New Point(15, 0), New Point(Panel1.Width, 0))
+    End Sub
+
 
 
 

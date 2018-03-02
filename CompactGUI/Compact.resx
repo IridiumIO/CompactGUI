@@ -138,15 +138,18 @@ If the number of compressed files appears too small:
     •  Try running CompactGUI as an Administrator
 </value>
   </data>
-  <data name="Label14.ToolTip" xml:space="preserve">
+  <data name="checkForceCompression.ToolTip" xml:space="preserve">
     <value>Forces compression or uncompression of the specified directory or file. This is used in the case of a file that was 
 partly compressed when the operation was program was closed halfway through an operation.
 
 If you select this option: 
     •  Press "Compress Folder", to compress all the files in the folder, fixing the interrupted file in the process. 
 
-    •  Press "Analys
-e Folder" then decompress all the files in the folder, fixing the interrupted file in the process. </value>
+    •  Press "Analyse Folder" then decompress all the files in the folder, fixing the interrupted file in the process. </value>
+  </data>
+  <data name="checkHiddenFiles.ToolTip" xml:space="preserve">
+    <value>Compresses/Uncompresses hidden and system files in addition to the normal files in a folder. 
+You can leave this unselected in most cases, but some programs may need it checked to fully compress their contents. </value>
   </data>
   <metadata name="TrayIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>644, 17</value>

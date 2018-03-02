@@ -4,6 +4,6 @@
 	<IsPrerelease>False</IsPrerelease>
 	<VersionStr>V2.6.0</VersionStr>
 	<ChocolateyVStr>2.6.0</ChocolateyVStr>
-	<Changes>Reworked Wiki Parser to be compatible with new database. | Added check to avoid duplicate submissions of results | Tweaked layout of title and colour of update banner</Changes>
-	<Fixes>Removed redundant code</Fixes>
+	<Changes>Reworked Wiki Parser to be compatible with new database. | Added check to avoid duplicate submissions of results | Added list of files to be compressed to the main page | Tweaked layout of title and colour of update banner</Changes>
+	<Fixes>Removed redundant code and controls</Fixes>
 </Info>

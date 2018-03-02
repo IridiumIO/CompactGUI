@@ -221,7 +221,6 @@ Class WikiHandler
 
         workingname = wnpatch
 
-
         folderSize = Math.Round(Decimal.Parse(rawPreSize.Split(" ")(0)), 2)
         suffix = rawPreSize.Split(" ")(1)
 
