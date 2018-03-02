@@ -88,7 +88,6 @@ Partial Class Compact
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
-        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.labelFilesCompressed = New System.Windows.Forms.Label()
         Me.dirChosenLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -107,6 +106,7 @@ Partial Class Compact
         Me.TrayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TrayMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Tray_ShowMain = New System.Windows.Forms.ToolStripMenuItem()
+        Me.results_arc = New CompactGUI.GraphicsPanel()
         Me.panel_topBar.SuspendLayout()
         Me.updateBanner.SuspendLayout()
         Me.topbar_dirchooserContainer.SuspendLayout()
@@ -639,10 +639,10 @@ Partial Class Compact
         Me.sb_FolderName.BackColor = System.Drawing.Color.Transparent
         Me.sb_FolderName.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.sb_FolderName.ForeColor = System.Drawing.Color.White
-        Me.sb_FolderName.Location = New System.Drawing.Point(0, 27)
+        Me.sb_FolderName.Location = New System.Drawing.Point(0, 17)
         Me.sb_FolderName.Name = "sb_FolderName"
         Me.sb_FolderName.Padding = New System.Windows.Forms.Padding(10, 0, 10, 0)
-        Me.sb_FolderName.Size = New System.Drawing.Size(354, 30)
+        Me.sb_FolderName.Size = New System.Drawing.Size(354, 60)
         Me.sb_FolderName.TabIndex = 6
         Me.sb_FolderName.Text = "Portal 2"
         Me.sb_FolderName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -897,9 +897,9 @@ Partial Class Compact
         Me.checkHiddenFiles.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.checkHiddenFiles.Location = New System.Drawing.Point(37, 98)
         Me.checkHiddenFiles.Name = "checkHiddenFiles"
-        Me.checkHiddenFiles.Size = New System.Drawing.Size(204, 17)
+        Me.checkHiddenFiles.Size = New System.Drawing.Size(192, 17)
         Me.checkHiddenFiles.TabIndex = 6
-        Me.checkHiddenFiles.Text = "Action on Hidden and System Files"
+        Me.checkHiddenFiles.Text = "Process Hidden and System Files"
         Me.checkHiddenFiles.UseVisualStyleBackColor = True
         '
         'checkRecursiveScan
@@ -907,6 +907,7 @@ Partial Class Compact
         Me.checkRecursiveScan.AutoSize = True
         Me.checkRecursiveScan.Checked = True
         Me.checkRecursiveScan.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.checkRecursiveScan.Enabled = False
         Me.checkRecursiveScan.Font = New System.Drawing.Font("Segoe UI", 8.25!)
         Me.checkRecursiveScan.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.checkRecursiveScan.Location = New System.Drawing.Point(37, 38)
@@ -965,13 +966,6 @@ Partial Class Compact
         Me.CompResultsPanel.Size = New System.Drawing.Size(624, 219)
         Me.CompResultsPanel.TabIndex = 31
         Me.CompResultsPanel.Visible = False
-        '
-        'results_arc
-        '
-        Me.results_arc.Location = New System.Drawing.Point(13, 63)
-        Me.results_arc.Name = "results_arc"
-        Me.results_arc.Size = New System.Drawing.Size(265, 122)
-        Me.results_arc.TabIndex = 35
         '
         'labelFilesCompressed
         '
@@ -1174,6 +1168,13 @@ Partial Class Compact
         Me.Tray_ShowMain.Name = "Tray_ShowMain"
         Me.Tray_ShowMain.Size = New System.Drawing.Size(78, 22)
         Me.Tray_ShowMain.Text = "Show"
+        '
+        'results_arc
+        '
+        Me.results_arc.Location = New System.Drawing.Point(13, 63)
+        Me.results_arc.Name = "results_arc"
+        Me.results_arc.Size = New System.Drawing.Size(265, 122)
+        Me.results_arc.TabIndex = 35
         '
         'Compact
         '
