@@ -43,6 +43,13 @@ Partial Class Compact
         Me.ToolTipFilesCompressed = New System.Windows.Forms.ToolTip(Me.components)
         Me.help_resultsFilesCompressed = New System.Windows.Forms.Label()
         Me.sb_lblGameIssues = New System.Windows.Forms.Label()
+        Me.compressX4 = New System.Windows.Forms.RadioButton()
+        Me.compressLZX = New System.Windows.Forms.RadioButton()
+        Me.compressX8 = New System.Windows.Forms.RadioButton()
+        Me.compressX16 = New System.Windows.Forms.RadioButton()
+        Me.checkForceCompression = New System.Windows.Forms.CheckBox()
+        Me.checkHiddenFiles = New System.Windows.Forms.CheckBox()
+        Me.checkRecursiveScan = New System.Windows.Forms.CheckBox()
         Me.panel_MainWindow = New System.Windows.Forms.Panel()
         Me.sb_Panel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
@@ -75,17 +82,10 @@ Partial Class Compact
         Me.FlowPanel_CompressionOptions = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.compressX4 = New System.Windows.Forms.RadioButton()
-        Me.compressLZX = New System.Windows.Forms.RadioButton()
-        Me.compressX8 = New System.Windows.Forms.RadioButton()
-        Me.compressX16 = New System.Windows.Forms.RadioButton()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.comboChooseShutdown = New System.Windows.Forms.ComboBox()
         Me.checkShutdownOnCompletion = New System.Windows.Forms.CheckBox()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.checkForceCompression = New System.Windows.Forms.CheckBox()
-        Me.checkHiddenFiles = New System.Windows.Forms.CheckBox()
-        Me.checkRecursiveScan = New System.Windows.Forms.CheckBox()
         Me.ProgressPage = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.CompResultsPanel = New System.Windows.Forms.Panel()
@@ -378,6 +378,102 @@ Partial Class Compact
         Me.ToolTipFilesCompressed.SetToolTip(Me.sb_lblGameIssues, "This game has issues and compression is not recommended. Click to go to the Wiki " &
         "for details. ")
         Me.sb_lblGameIssues.Visible = False
+        '
+        'compressX4
+        '
+        Me.compressX4.AutoSize = True
+        Me.compressX4.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.compressX4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.compressX4.Location = New System.Drawing.Point(37, 38)
+        Me.compressX4.Name = "compressX4"
+        Me.compressX4.Size = New System.Drawing.Size(77, 17)
+        Me.compressX4.TabIndex = 9
+        Me.compressX4.Text = "XPRESS 4K"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX4, "Fastest, Low Compression")
+        Me.compressX4.UseVisualStyleBackColor = True
+        '
+        'compressLZX
+        '
+        Me.compressLZX.AutoSize = True
+        Me.compressLZX.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.compressLZX.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.compressLZX.Location = New System.Drawing.Point(37, 128)
+        Me.compressLZX.Name = "compressLZX"
+        Me.compressLZX.Size = New System.Drawing.Size(45, 17)
+        Me.compressLZX.TabIndex = 12
+        Me.compressLZX.Text = "LZX "
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressLZX, "Slowest, Very High Compression (Not Recommended for Games/Programs)")
+        Me.compressLZX.UseVisualStyleBackColor = True
+        '
+        'compressX8
+        '
+        Me.compressX8.AutoSize = True
+        Me.compressX8.Checked = True
+        Me.compressX8.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.compressX8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.compressX8.Location = New System.Drawing.Point(37, 68)
+        Me.compressX8.Name = "compressX8"
+        Me.compressX8.Size = New System.Drawing.Size(77, 17)
+        Me.compressX8.TabIndex = 10
+        Me.compressX8.TabStop = True
+        Me.compressX8.Text = "XPRESS 8K"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX8, "Fast, Medium Compression (Recommended)")
+        Me.compressX8.UseVisualStyleBackColor = True
+        '
+        'compressX16
+        '
+        Me.compressX16.AutoSize = True
+        Me.compressX16.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.compressX16.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.compressX16.Location = New System.Drawing.Point(37, 98)
+        Me.compressX16.Name = "compressX16"
+        Me.compressX16.Size = New System.Drawing.Size(83, 17)
+        Me.compressX16.TabIndex = 11
+        Me.compressX16.Text = "XPRESS 16K"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX16, "Slow, High Compression")
+        Me.compressX16.UseVisualStyleBackColor = True
+        '
+        'checkForceCompression
+        '
+        Me.checkForceCompression.AutoSize = True
+        Me.checkForceCompression.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.checkForceCompression.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.checkForceCompression.Location = New System.Drawing.Point(37, 68)
+        Me.checkForceCompression.Name = "checkForceCompression"
+        Me.checkForceCompression.Size = New System.Drawing.Size(133, 17)
+        Me.checkForceCompression.TabIndex = 7
+        Me.checkForceCompression.Text = "Force Action on Files"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.checkForceCompression, resources.GetString("checkForceCompression.ToolTip"))
+        Me.checkForceCompression.UseVisualStyleBackColor = True
+        '
+        'checkHiddenFiles
+        '
+        Me.checkHiddenFiles.AutoSize = True
+        Me.checkHiddenFiles.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.checkHiddenFiles.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.checkHiddenFiles.Location = New System.Drawing.Point(37, 98)
+        Me.checkHiddenFiles.Name = "checkHiddenFiles"
+        Me.checkHiddenFiles.Size = New System.Drawing.Size(192, 17)
+        Me.checkHiddenFiles.TabIndex = 6
+        Me.checkHiddenFiles.Text = "Process Hidden and System Files"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.checkHiddenFiles, resources.GetString("checkHiddenFiles.ToolTip"))
+        Me.checkHiddenFiles.UseVisualStyleBackColor = True
+        '
+        'checkRecursiveScan
+        '
+        Me.checkRecursiveScan.AutoSize = True
+        Me.checkRecursiveScan.Checked = True
+        Me.checkRecursiveScan.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.checkRecursiveScan.Enabled = False
+        Me.checkRecursiveScan.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.checkRecursiveScan.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
+        Me.checkRecursiveScan.Location = New System.Drawing.Point(37, 38)
+        Me.checkRecursiveScan.Name = "checkRecursiveScan"
+        Me.checkRecursiveScan.Size = New System.Drawing.Size(135, 17)
+        Me.checkRecursiveScan.TabIndex = 5
+        Me.checkRecursiveScan.Text = "Compress Subfolders"
+        Me.ToolTipFilesCompressed.SetToolTip(Me.checkRecursiveScan, "This option is now checked by default and cannot be changed. ")
+        Me.checkRecursiveScan.UseVisualStyleBackColor = True
         '
         'panel_MainWindow
         '
@@ -754,9 +850,9 @@ Partial Class Compact
         Me.SelectedFiles.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
         Me.SelectedFiles.FormattingEnabled = True
         Me.SelectedFiles.ItemHeight = 25
-        Me.SelectedFiles.Location = New System.Drawing.Point(40, 59)
+        Me.SelectedFiles.Location = New System.Drawing.Point(19, 59)
         Me.SelectedFiles.Name = "SelectedFiles"
-        Me.SelectedFiles.Size = New System.Drawing.Size(534, 200)
+        Me.SelectedFiles.Size = New System.Drawing.Size(555, 200)
         Me.SelectedFiles.TabIndex = 23
         Me.SelectedFiles.TabStop = False
         '
@@ -794,60 +890,6 @@ Partial Class Compact
         Me.Label2.Size = New System.Drawing.Size(210, 20)
         Me.Label2.TabIndex = 18
         Me.Label2.Text = "Select Compression Algorithm"
-        '
-        'compressX4
-        '
-        Me.compressX4.AutoSize = True
-        Me.compressX4.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.compressX4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.compressX4.Location = New System.Drawing.Point(37, 38)
-        Me.compressX4.Name = "compressX4"
-        Me.compressX4.Size = New System.Drawing.Size(77, 17)
-        Me.compressX4.TabIndex = 9
-        Me.compressX4.Text = "XPRESS 4K"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX4, "Fastest, Low Compression")
-        Me.compressX4.UseVisualStyleBackColor = True
-        '
-        'compressLZX
-        '
-        Me.compressLZX.AutoSize = True
-        Me.compressLZX.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.compressLZX.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.compressLZX.Location = New System.Drawing.Point(37, 128)
-        Me.compressLZX.Name = "compressLZX"
-        Me.compressLZX.Size = New System.Drawing.Size(45, 17)
-        Me.compressLZX.TabIndex = 12
-        Me.compressLZX.Text = "LZX "
-        Me.ToolTipFilesCompressed.SetToolTip(Me.compressLZX, "Slowest, Very High Compression (Not Recommended for Games/Programs)")
-        Me.compressLZX.UseVisualStyleBackColor = True
-        '
-        'compressX8
-        '
-        Me.compressX8.AutoSize = True
-        Me.compressX8.Checked = True
-        Me.compressX8.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.compressX8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.compressX8.Location = New System.Drawing.Point(37, 68)
-        Me.compressX8.Name = "compressX8"
-        Me.compressX8.Size = New System.Drawing.Size(77, 17)
-        Me.compressX8.TabIndex = 10
-        Me.compressX8.TabStop = True
-        Me.compressX8.Text = "XPRESS 8K"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX8, "Fast, Medium Compression (Recommended)")
-        Me.compressX8.UseVisualStyleBackColor = True
-        '
-        'compressX16
-        '
-        Me.compressX16.AutoSize = True
-        Me.compressX16.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.compressX16.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.compressX16.Location = New System.Drawing.Point(37, 98)
-        Me.compressX16.Name = "compressX16"
-        Me.compressX16.Size = New System.Drawing.Size(83, 17)
-        Me.compressX16.TabIndex = 11
-        Me.compressX16.Text = "XPRESS 16K"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.compressX16, "Slow, High Compression")
-        Me.compressX16.UseVisualStyleBackColor = True
         '
         'Panel3
         '
@@ -900,48 +942,6 @@ Partial Class Compact
         Me.Label8.Size = New System.Drawing.Size(199, 20)
         Me.Label8.TabIndex = 18
         Me.Label8.Text = "Select Additional Arguments"
-        '
-        'checkForceCompression
-        '
-        Me.checkForceCompression.AutoSize = True
-        Me.checkForceCompression.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.checkForceCompression.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.checkForceCompression.Location = New System.Drawing.Point(37, 68)
-        Me.checkForceCompression.Name = "checkForceCompression"
-        Me.checkForceCompression.Size = New System.Drawing.Size(133, 17)
-        Me.checkForceCompression.TabIndex = 7
-        Me.checkForceCompression.Text = "Force Action on Files"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.checkForceCompression, resources.GetString("checkForceCompression.ToolTip"))
-        Me.checkForceCompression.UseVisualStyleBackColor = True
-        '
-        'checkHiddenFiles
-        '
-        Me.checkHiddenFiles.AutoSize = True
-        Me.checkHiddenFiles.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.checkHiddenFiles.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.checkHiddenFiles.Location = New System.Drawing.Point(37, 98)
-        Me.checkHiddenFiles.Name = "checkHiddenFiles"
-        Me.checkHiddenFiles.Size = New System.Drawing.Size(192, 17)
-        Me.checkHiddenFiles.TabIndex = 6
-        Me.checkHiddenFiles.Text = "Process Hidden and System Files"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.checkHiddenFiles, resources.GetString("checkHiddenFiles.ToolTip"))
-        Me.checkHiddenFiles.UseVisualStyleBackColor = True
-        '
-        'checkRecursiveScan
-        '
-        Me.checkRecursiveScan.AutoSize = True
-        Me.checkRecursiveScan.Checked = True
-        Me.checkRecursiveScan.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.checkRecursiveScan.Enabled = False
-        Me.checkRecursiveScan.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.checkRecursiveScan.ForeColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(67, Byte), Integer), CType(CType(84, Byte), Integer))
-        Me.checkRecursiveScan.Location = New System.Drawing.Point(37, 38)
-        Me.checkRecursiveScan.Name = "checkRecursiveScan"
-        Me.checkRecursiveScan.Size = New System.Drawing.Size(135, 17)
-        Me.checkRecursiveScan.TabIndex = 5
-        Me.checkRecursiveScan.Text = "Compress Subfolders"
-        Me.ToolTipFilesCompressed.SetToolTip(Me.checkRecursiveScan, "This option is now checked by default and cannot be changed. ")
-        Me.checkRecursiveScan.UseVisualStyleBackColor = True
         '
         'ProgressPage
         '

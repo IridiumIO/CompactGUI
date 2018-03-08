@@ -1,9 +1,9 @@
 <Info>
 	<VersionMajor>2.6</VersionMajor>
-	<VersionMinor>0</VersionMinor>
+	<VersionMinor>1</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
-	<VersionStr>V2.6.0</VersionStr>
-	<ChocolateyVStr>2.6.0</ChocolateyVStr>
-	<Changes>Reworked Wiki Parser to be compatible with new database. | Added check to avoid duplicate submissions of results | Added list of files to be compressed to the main page | Tweaked layout of title and colour of update banner</Changes>
-	<Fixes>Removed redundant code and controls</Fixes>
+	<VersionStr>V2.6.1</VersionStr>
+	<ChocolateyVStr>2.6.1</ChocolateyVStr>
+	<Changes></Changes>
+	<Fixes>Fixed hanging in certain cases where symbols are present in folder names or the folder length is less than 3 characters long.</Fixes>
 </Info>

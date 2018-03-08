@@ -7,7 +7,7 @@ Imports System.Management
 
 
 Public Class Compact
-    Public Shared version = "2.6.0"
+    Public Shared version = "2.6.1"
     Private WithEvents MyProcess As Process
 
 

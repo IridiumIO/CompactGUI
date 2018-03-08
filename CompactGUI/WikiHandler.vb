@@ -70,7 +70,7 @@ Class WikiHandler
         Console.WriteLine(vbCrLf)
         If matches = 0 Then
             For Each r As Result In allResults
-                If r.Name_Sanitised.Contains(workingname) Then
+                If workingname.Length > 2 AndAlso r.Name_Sanitised.StartsWith(workingname) Then
                     gcount.Add(r)
                     matches += 1
                 End If
@@ -217,7 +217,7 @@ Class WikiHandler
 
     Public Shared Sub localFolderParse(DIwDString As DirectoryInfo, rawPreSize As String)
 
-        Dim wnpatch As String = Regex.Replace(DIwDString.Name.ToString, "[^\p{L}a-zA-Z0-90]", "").ToLower.Trim()
+        Dim wnpatch As String = Regex.Replace(DIwDString.Name.ToString, "\s+", "").ToLower.Trim()
 
         workingname = wnpatch
 
@@ -301,7 +301,7 @@ Public Class Result
 
         Name = nm
         Name_Sanitised = Regex.Replace(nm.ToLower, "[^\p{L}a-zA-Z0-90]", "")
-        Folder = Regex.Replace(fl.ToLower, "[^\p{L}a-zA-Z0-90]", "")
+        Folder = Regex.Replace(fl.ToLower, "\s+", "")
         SteamID = stID
         Algorithm = alg
         BeforeSize = bef
