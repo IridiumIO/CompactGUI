@@ -116,8 +116,9 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("dl_; gif; jpg; jpeg; bmp; png; mkv; mp4; wmv; avi; bik; flv; ogg; mpg; m2v; m4v; "& _ 
-            "vob; mp3; aac; wma; flac; zip; rar; 7z; cab; lzx")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("dl_; gif; jpg; jpeg; bmp; png; wmf; mkv; mp4; wmv; avi; bik; flv; ogg; mpg; m2v; "& _ 
+            "m4v; vob; mp3; aac; wma; flac; zip; xap; rar; 7z; cab; lzx; docx; xlsx; pptx; vs"& _ 
+            "sx; vstx; onepkg")>  _
         Public Property NonCompressableList() As String
             Get
                 Return CType(Me("NonCompressableList"),String)
