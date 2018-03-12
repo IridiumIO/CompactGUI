@@ -9,20 +9,24 @@ Class WikiHandler
     Shared InputFromGitHub As IEnumerable(Of XElement)
     Friend Shared allResults As New List(Of Result)
     Shared workingname As String = "testdir"
+    Shared DBZipFileLoc As String = AppDomain.CurrentDomain.BaseDirectory & "\CompactGUI.zxm"
 
     Private Shared Sub WikiParser()
         Console.WriteLine("Working Name: " & workingname)
 
         allResults.Clear()
-        Dim SRC As XElement
 
-        If InputFromGitHub Is Nothing Then
-            Console.WriteLine("Getting List")
+        Console.WriteLine(New FileInfo(DBZipFileLoc).LastWriteTime)
+        If InputFromGitHub Is Nothing AndAlso File.Exists(DBZipFileLoc) AndAlso Date.Now < (New FileInfo(DBZipFileLoc).LastWriteTime.AddHours(24)) Then
+            Console.WriteLine("Using existing DB")
+            InitialiseInputFromGithub()
+
+        ElseIf InputFromGitHub Is Nothing Then
+            Console.WriteLine("Fetching New DB")
             Dim wc = New WebClient With {.Encoding = Encoding.UTF8}
             Try
-                SRC = XElement.Parse(wc.DownloadString("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/Database.xml"))
-                InputFromGitHub = SRC.Elements()
-                ParseData()
+                wc.DownloadFile("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/Database.zip", DBZipFileLoc)
+                InitialiseInputFromGithub()
 
             Catch ex As WebException
                 Compact.sb_lblGameIssues.Text = "! No Internet Connection"
@@ -35,9 +39,19 @@ Class WikiHandler
             End Try
 
         Else
+            Console.WriteLine("Using Memory DB")
             ParseData()
         End If
 
+    End Sub
+
+    Private Shared Sub InitialiseInputFromGithub()
+        Dim SRC As XElement
+        Dim x As Compression.ZipArchive = Compression.ZipFile.OpenRead(DBZipFileLoc)
+        Dim stre As StreamReader = New StreamReader(x.Entries(0).Open())
+        SRC = XElement.Parse(stre.ReadToEnd)
+        InputFromGitHub = SRC.Elements()
+        ParseData()
     End Sub
 
     Private Shared Sub ParseData()

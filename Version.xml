@@ -1,9 +1,9 @@
 <Info>
 	<VersionMajor>2.6</VersionMajor>
-	<VersionMinor>1</VersionMinor>
+	<VersionMinor>2</VersionMinor>
 	<IsPrerelease>False</IsPrerelease>
-	<VersionStr>V2.6.1</VersionStr>
-	<ChocolateyVStr>2.6.1</ChocolateyVStr>
-	<Changes></Changes>
-	<Fixes>Fixed hanging in certain cases where symbols are present in folder names or the folder length is less than 3 characters long.</Fixes>
+	<VersionStr>V2.6.2</VersionStr>
+	<ChocolateyVStr>2.6.2</ChocolateyVStr>
+	<Changes>Added support for zipped database.xml file|Results DB now only downloads a new copy if the current version is more than a day old.</Changes>
+	<Fixes></Fixes>
 </Info>
