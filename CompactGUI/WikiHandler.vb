@@ -9,23 +9,28 @@ Class WikiHandler
     Shared InputFromGitHub As IEnumerable(Of XElement)
     Friend Shared allResults As New List(Of Result)
     Shared workingname As String = "testdir"
-    Shared DBZipFileLoc As String = AppDomain.CurrentDomain.BaseDirectory & "\CompactGUI.zxm"
+    Shared DBZipFileLoc As String = Path.GetTempPath & "CompactGUI.zxm"
 
     Private Shared Sub WikiParser()
         Console.WriteLine("Working Name: " & workingname)
-
+        Console.WriteLine(DBZipFileLoc)
         allResults.Clear()
 
-        Console.WriteLine(New FileInfo(DBZipFileLoc).LastWriteTime)
-        If InputFromGitHub Is Nothing AndAlso File.Exists(DBZipFileLoc) AndAlso Date.Now < (New FileInfo(DBZipFileLoc).LastWriteTime.AddHours(24)) Then
+        Console.WriteLine(My.Settings.ResultsDB_Date)
+        If InputFromGitHub Is Nothing AndAlso My.Settings.ResultsDB IsNot Nothing AndAlso Date.Now < My.Settings.ResultsDB_Date.AddHours(12) Then
             Console.WriteLine("Using existing DB")
             InitialiseInputFromGithub()
 
         ElseIf InputFromGitHub Is Nothing Then
             Console.WriteLine("Fetching New DB")
+
             Dim wc = New WebClient With {.Encoding = Encoding.UTF8}
             Try
                 wc.DownloadFile("https://raw.githubusercontent.com/ImminentFate/CompactGUI/master/Wiki/Database.zip", DBZipFileLoc)
+                Dim x As Compression.ZipArchive = Compression.ZipFile.OpenRead(DBZipFileLoc)
+                Dim stre As StreamReader = New StreamReader(x.Entries(0).Open())
+                My.Settings.ResultsDB = stre.ReadToEnd
+                My.Settings.ResultsDB_Date = Date.Now
                 InitialiseInputFromGithub()
 
             Catch ex As WebException
@@ -47,9 +52,7 @@ Class WikiHandler
 
     Private Shared Sub InitialiseInputFromGithub()
         Dim SRC As XElement
-        Dim x As Compression.ZipArchive = Compression.ZipFile.OpenRead(DBZipFileLoc)
-        Dim stre As StreamReader = New StreamReader(x.Entries(0).Open())
-        SRC = XElement.Parse(stre.ReadToEnd)
+        SRC = XElement.Parse(My.Settings.ResultsDB)
         InputFromGitHub = SRC.Elements()
         ParseData()
     End Sub
