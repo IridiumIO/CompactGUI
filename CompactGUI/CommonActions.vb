@@ -90,6 +90,12 @@
                     .btnAnalyze.Enabled = True
                     .btnUncompress.Visible = True
                     .isActive = False
+
+                    If My.Settings.PlaySoundOnCompletion Then
+                        '"UI Confirmation Alert, A2.wav" by InspectorJ (www.jshaw.co.uk) of Freesound.org
+                        'https://freesound.org/people/InspectorJ/sounds/403007/
+                        My.Computer.Audio.Play(My.Resources.inspectorj, AudioPlayMode.WaitToComplete)
+                    End If
                 Case "U"
                     .returnArrow.Visible = True
                     .btnAnalyze.Enabled = True
@@ -97,6 +103,12 @@
                     .sb_ResultsPanel.Visible = False
 
                     .sb_progresslabel.Text = "Finished Uncompressing"
+
+                    If My.Settings.PlaySoundOnCompletion Then
+                        '"UI Confirmation Alert, A2.wav" by InspectorJ (www.jshaw.co.uk) of Freesound.org
+                        'https://freesound.org/people/InspectorJ/sounds/403007/
+                        My.Computer.Audio.Play(My.Resources.inspectorj, AudioPlayMode.WaitToComplete)
+                    End If
                 Case "A"
                     If AnalysisShowsFolderIsCompressed Then
                         .sb_progresslabel.Text = "This Folder Contains Compressed Files"
@@ -121,6 +133,7 @@
             .TableLayoutPanel4.Height = .TableLayoutPanel4.Height - 30
             .isActive = False
             .WorkingList.Clear()
+
         End With
 
     End Sub

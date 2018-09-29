@@ -40,6 +40,8 @@ Public Class Info
 
         SetIgnoreFileSizeLimit(My.Settings.IgnoreFileSizeLimit) 'Set the Ignore File Size Settings
 
+        CheckBoxPlaySound.Checked = My.Settings.PlaySoundOnCompletion
+
     End Sub
 
 
@@ -194,5 +196,9 @@ Public Class Info
         End While
         ComboBox1.SelectedIndex = magnitude
         NumericUpDown1.Value = num2
+    End Sub
+
+    Private Sub CheckBoxPlaySound_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPlaySound.CheckedChanged
+        My.Settings.PlaySoundOnCompletion = CheckBoxPlaySound.Checked
     End Sub
 End Class

@@ -59,6 +59,7 @@ Partial Class Info
         Me.btn_help = New System.Windows.Forms.Button()
         Me.btn_licenses = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.CheckBoxPlaySound = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.panel_header.SuspendLayout()
         Me.InfoTabControl.SuspendLayout()
@@ -287,6 +288,7 @@ Partial Class Info
         'Tab_Features
         '
         Me.Tab_Features.BackColor = System.Drawing.Color.White
+        Me.Tab_Features.Controls.Add(Me.CheckBoxPlaySound)
         Me.Tab_Features.Controls.Add(Me.ComboBox1)
         Me.Tab_Features.Controls.Add(Me.Label10)
         Me.Tab_Features.Controls.Add(Me.NumericUpDown1)
@@ -317,7 +319,7 @@ Partial Class Info
         Me.ComboBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"B", "KB", "MB", "GB"})
-        Me.ComboBox1.Location = New System.Drawing.Point(761, 416)
+        Me.ComboBox1.Location = New System.Drawing.Point(760, 411)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(60, 28)
         Me.ComboBox1.TabIndex = 9
@@ -327,7 +329,7 @@ Partial Class Info
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.Label10.ForeColor = System.Drawing.Color.DimGray
-        Me.Label10.Location = New System.Drawing.Point(524, 376)
+        Me.Label10.Location = New System.Drawing.Point(524, 375)
         Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(168, 20)
@@ -337,7 +339,7 @@ Partial Class Info
         'NumericUpDown1
         '
         Me.NumericUpDown1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown1.Location = New System.Drawing.Point(528, 416)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(527, 411)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {-1, -1, -1, 0})
         Me.NumericUpDown1.Name = "NumericUpDown1"
         Me.NumericUpDown1.Size = New System.Drawing.Size(227, 27)
@@ -599,6 +601,19 @@ Partial Class Info
         Me.Panel2.Size = New System.Drawing.Size(1121, 663)
         Me.Panel2.TabIndex = 12
         '
+        'CheckBoxPlaySound
+        '
+        Me.CheckBoxPlaySound.AutoSize = True
+        Me.CheckBoxPlaySound.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.CheckBoxPlaySound.ForeColor = System.Drawing.Color.DimGray
+        Me.CheckBoxPlaySound.Location = New System.Drawing.Point(528, 447)
+        Me.CheckBoxPlaySound.Margin = New System.Windows.Forms.Padding(4)
+        Me.CheckBoxPlaySound.Name = "CheckBoxPlaySound"
+        Me.CheckBoxPlaySound.Size = New System.Drawing.Size(254, 24)
+        Me.CheckBoxPlaySound.TabIndex = 10
+        Me.CheckBoxPlaySound.Text = "Play Sound on Action Completion"
+        Me.CheckBoxPlaySound.UseVisualStyleBackColor = True
+        '
         'Info
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -665,4 +680,5 @@ Partial Class Info
     Friend WithEvents NumericUpDown1 As NumericUpDown
     Friend WithEvents Label10 As Label
     Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents CheckBoxPlaySound As CheckBox
 End Class

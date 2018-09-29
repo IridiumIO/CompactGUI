@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\403007__inspectorj__ui-confirmation-alert-a2.wav" />
     <Content Include="Resources\iconbright.ico" />
     <None Include="Resources\iconbright.png" />
     <None Include="Resources\dsmask.png" />

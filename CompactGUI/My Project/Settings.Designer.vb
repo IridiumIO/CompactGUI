@@ -174,6 +174,18 @@ Namespace My
                 Me("IgnoreFileSizeLimit") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property PlaySoundOnCompletion() As Boolean
+            Get
+                Return CType(Me("PlaySoundOnCompletion"),Boolean)
+            End Get
+            Set
+                Me("PlaySoundOnCompletion") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
