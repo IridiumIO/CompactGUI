@@ -38,7 +38,7 @@ Public Class Info
 
         populateNonCompressable()
 
-
+        SetIgnoreFileSizeLimit(My.Settings.IgnoreFileSizeLimit) 'Set the Ignore File Size Settings
 
     End Sub
 
@@ -157,5 +157,42 @@ Public Class Info
         Dim p As New Pen(Color.LightGray)
 
         e.Graphics.DrawLine(p, New Point(46, 220), New Point(sender.width - 46, 220))
+    End Sub
+
+    Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
+        CalcIgnoreFileSizeLimit(Math.Round(NumericUpDown1.Value), ComboBox1.SelectedItem.ToString())
+    End Sub
+
+    Private Sub ComboBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedValueChanged
+        CalcIgnoreFileSizeLimit(Math.Round(NumericUpDown1.Value), ComboBox1.SelectedItem.ToString())
+    End Sub
+
+    'Convert user input into bytes and store in settings
+    Private Sub CalcIgnoreFileSizeLimit(num As UInt64, unit As String)
+        Select Case unit
+            Case "B"
+                My.Settings.IgnoreFileSizeLimit = NumericUpDown1.Value
+            Case "KB"
+                My.Settings.IgnoreFileSizeLimit = NumericUpDown1.Value * 1024
+            Case "MB"
+                My.Settings.IgnoreFileSizeLimit = NumericUpDown1.Value * 1024 * 1024
+            Case "GB"
+                My.Settings.IgnoreFileSizeLimit = NumericUpDown1.Value * 1024 * 1024 * 1024
+        End Select
+    End Sub
+
+    'Set the values in the combo boxes appropriately according to settings
+    Private Sub SetIgnoreFileSizeLimit(num As UInt64)
+        Dim magnitude As Integer = 0
+        Dim num2 As UInt64 = num
+        While num2 >= 1024 And magnitude < 4    '0=Byte, 1=Kilobyte, 2=Megabyte, 3=Gigabyte
+            If num2 Mod 1024 > 0 Then
+                Exit While
+            End If
+            magnitude = magnitude + 1
+            num2 = num2 / 1024
+        End While
+        ComboBox1.SelectedIndex = magnitude
+        NumericUpDown1.Value = num2
     End Sub
 End Class

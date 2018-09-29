@@ -121,6 +121,7 @@ Public Class Compact
                 AllFiles.Clear()
                 TreeData.Clear()
                 SelectedFiles.Items.Clear()
+                ExcludedFilesSizes = 0
                 directorysizeexceptionCount = 0
 
                 If DI_selectedDir.Name.Length > 0 Then _
@@ -136,9 +137,6 @@ Public Class Compact
                     dirChooser.Text = "❯ " + DI_selectedDir.Parent.Name.Replace(":\", " ❯ ") + DI_selectedDir.Name
                 End If
 
-                oldFolderSize = DirectorySize(DI_selectedDir, True)
-                Dim oldFolderSize_Formatted = GetOutputSize(oldFolderSize, True)
-
                 GetFilesToCompress(workingDir, ListOfFiles, My.Settings.SkipNonCompressable)
 
                 For Each fileName In ListOfFiles
@@ -147,7 +145,8 @@ Public Class Compact
                     SelectedFiles.Items.Add(fN_Listable)
                 Next
 
-
+                oldFolderSize = DirectorySize(DI_selectedDir, True) - ExcludedFilesSizes    'Do not count excluded files as part of "compressed"
+                Dim oldFolderSize_Formatted = GetOutputSize(oldFolderSize, True)
 
                 PrepareforCompact()
 
@@ -178,6 +177,7 @@ Public Class Compact
 
 
     Public ListOfFiles As New List(Of String)
+    Public ExcludedFilesSizes As Decimal = 0
     Dim FileIndex As Integer = 0
 
     Private Sub GetFilesToCompress(ByVal targetDirectory As String, targetOutputList As List(Of String), LimitSelectedFiles As Boolean)
@@ -191,9 +191,20 @@ Public Class Compact
 
             If LimitSelectedFiles = True Then
                 If Path.GetExtension(fileName) = "" OrElse NonCompressableSet.Contains(Path.GetExtension(fileName).TrimStart(".").ToLowerInvariant) = False Then
-                    targetOutputList.Add(fileName)
+                    Dim fi As FileInfo = New FileInfo(fileName)
+                    If fi.Length >= My.Settings.IgnoreFileSizeLimit Then
+                        targetOutputList.Add(fileName)
+                    Else
+                        ExcludedFilesSizes += fi.Length
+                    End If
                 End If
-            Else : targetOutputList.Add(fileName)
+            Else
+                Dim fi As FileInfo = New FileInfo(fileName)
+                If fi.Length >= My.Settings.IgnoreFileSizeLimit Then
+                    targetOutputList.Add(fileName)
+                Else
+                    ExcludedFilesSizes += fi.Length
+                End If
             End If
         Next fileName
 
