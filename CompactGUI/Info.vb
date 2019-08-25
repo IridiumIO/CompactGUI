@@ -124,7 +124,7 @@ Public Class Info
     End Sub
 
     Private Sub btnDefaultNonCompressable_Click(sender As Object, e As EventArgs) Handles btnDefaultNonCompressable.Click
-        My.Settings.NonCompressableList = "dl_; gif; jpg; jpeg; bmp; png; wmf; mkv; mp4; wmv; avi; bik; flv; ogg; mpg; m2v; m4v; vob; mp3; aac; wma; flac; zip; xap; rar; 7z; cab; lzx; docx; xlsx; pptx; vssx; vstx; onepkg"
+        My.Settings.NonCompressableList = "dl_; gif; jpg; jpeg; png; wmf; mkv; mp4; wmv; avi; bik; flv; ogg; mpg; m2v; m4v; vob; mp3; aac; wma; flac; zip; xap; rar; 7z; cab; lzx; docx; xlsx; pptx; vssx; vstx; onepkg"
         populateNonCompressable()
     End Sub
 

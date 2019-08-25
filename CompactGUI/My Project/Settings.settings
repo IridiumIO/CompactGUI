@@ -18,7 +18,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="NonCompressableList" Type="System.String" Scope="User">
-      <Value Profile="(Default)">dl_; gif; jpg; jpeg; bmp; png; wmf; mkv; mp4; wmv; avi; bik; flv; ogg; mpg; m2v; m4v; vob; mp3; aac; wma; flac; zip; xap; rar; 7z; cab; lzx; docx; xlsx; pptx; vssx; vstx; onepkg</Value>
+      <Value Profile="(Default)">dl_; gif; jpg; jpeg; png; wmf; mkv; mp4; wmv; avi; bik; flv; ogg; mpg; m2v; m4v; vob; mp3; aac; wma; flac; zip; xap; rar; 7z; cab; lzx; docx; xlsx; pptx; vssx; vstx; onepkg</Value>
     </Setting>
     <Setting Name="SkipNonCompressable" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
