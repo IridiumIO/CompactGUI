@@ -13,24 +13,26 @@ Public Class Compactor
     Private _filesList As List(Of String)
     Private _workingDir As String
     Private _compressionLevel As String
+    Private _excludedFileTypes As List(Of String)
 
-    Sub New(folder As String, compressionLevel As String)
+    Sub New(folder As String, compressionLevel As String, excludedfiletypes As List(Of String))
 
         If Not verifyFolder(folder) Then : Return : End If
 
         _workingDir = folder
-        _filesList = IO.Directory.GetFiles(folder, "*.*", IO.SearchOption.AllDirectories).ToList
-        _compressionLevel = compressionLevel
+        _filesList = IO.Directory.GetFiles(folder, "*.*", IO.SearchOption.AllDirectories).Where(Function(st) excludedfiletypes.Contains(New IO.FileInfo(st).Extension) = False).ToList
 
+        _compressionLevel = compressionLevel
+        _excludedFileTypes = excludedfiletypes
     End Sub
 
 
-    Private Sub GenerateThread(compactArgs)
+    Friend Shared Sub GenerateThread(workingdir, compactArgs)
 
         Dim myProc = New Process
         With myProc.StartInfo
             .FileName = "compact.exe"
-            .WorkingDirectory = _workingDir
+            .WorkingDirectory = workingdir
             .UseShellExecute = False
             .CreateNoWindow = True
             .Arguments = compactArgs
@@ -45,12 +47,11 @@ Public Class Compactor
     Async Function RunCompactAsync(progress As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task
 
         Dim compactArgs = "/C /I " & _compressionLevel
-
         Dim totalFiles As Integer = _filesList.Count
         Dim count As Integer = 0
         Await Parallel.ForEachAsync(_filesList,
                                     Function(file, _ctx)
-                                        GenerateThread(compactArgs & " " & """" & file & """")
+                                        GenerateThread(_workingDir, compactArgs & " " & """" & file & """")
                                         Dim result = Interlocked.Increment(count)
                                         progress.Report((CInt(((result / totalFiles) * 100)), file))
                                     End Function).ConfigureAwait(False)
@@ -79,11 +80,8 @@ Public Class Compactor
         Dim uncompressedFiles As Integer
 
         Dim allFiles = IO.Directory.EnumerateFiles(folder, "*.*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True})
-
         Dim fDetails As New Concurrent.ConcurrentBag(Of FileDetails)
-
         Dim GetRawFileSizes = Task.Run(Sub() uncompressedFiles = allFiles.Count)
-
         Dim GetCompressedFileSizes = Parallel.ForEachAsync(allFiles,
                                         Function(file, ctx)
 
@@ -95,16 +93,32 @@ Public Class Compactor
                                             If compSize < uncompSize Then Interlocked.Increment(compressedFiles)
                                         End Function)
 
-
         Await Task.WhenAll(GetRawFileSizes, GetCompressedFileSizes)
-
-        Debug.WriteLine($"{compressedFiles} / {uncompressedFiles} Compressed")
-
-
         Return (uncompressedBytes, compressedBytes, If(compressedFiles = 0, False, True), fDetails.ToList())
+
+    End Function
+
+
+    Friend Shared Async Function UncompressFolder(workingDir As String, filesList As List(Of String), progress As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task
+
+        Dim compactArgs = "/U /EXE "
+        Dim totalFiles As Integer = filesList.Count
+        Dim count As Integer = 0
+        Await Parallel.ForEachAsync(filesList,
+                                    Function(file, _ctx)
+                                        GenerateThread(workingDir, compactArgs & " " & """" & file & """")
+                                        Dim result = Interlocked.Increment(count)
+                                        progress.Report((CInt(((result / totalFiles) * 100)), file))
+                                    End Function).ConfigureAwait(False)
+        Return
 
 
     End Function
+
+
+
+
+
 
 End Class
 

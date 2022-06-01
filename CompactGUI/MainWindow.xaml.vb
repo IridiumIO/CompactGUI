@@ -16,6 +16,7 @@ Class MainWindow
 
     End Sub
 
+    Dim analysisResults As List(Of FileDetails)
 
     Private Sub SearchClicked(sender As Object, e As MouseButtonEventArgs)
 
@@ -62,6 +63,8 @@ Class MainWindow
         Dim bytesData = Await Compactor.AnalyseFolder(_searchBar.DataPath, hasCompressionRun)
         Dim appid = Await Task.Run(Function() GetSteamIDFromFolder(_searchBar.DataPath))
 
+        analysisResults = bytesData.fileCompressionDetailsList
+
         uiAnalysisResultsSxS.SetLeftValue(bytesData.uncompressed)
         uiAnalysisResultsSxS.SetRightValue(bytesData.compressed)
 
@@ -76,6 +79,7 @@ Class MainWindow
 
             If hasCompressionRun = True Then
                 Dim poorlyCompressedExtensions = Await GetPoorlyCompressedExtensions(bytesData.fileCompressionDetailsList)
+                'TODO: Add ability to save poor extensions for next time, and also submit them online
 
             End If
 
@@ -104,7 +108,7 @@ Class MainWindow
 
                              Dim fInfo As New IO.FileInfo(fl.FileName)
                              Dim xt = fInfo.Extension
-
+                             If fl.UncompressedSize = 0 Then Return Nothing
                              extensionsResults.AddOrUpdate(xt,
                                             (fl.CompressedSize / fl.UncompressedSize, 1),
                                             Function(k, v)
@@ -159,11 +163,34 @@ Class MainWindow
                  uiCurrentFileCompress.Text = val.Item2.Replace(selectedFolder, "")
              End Sub)
 
+        Dim exclist As New List(Of String)({".vanim_c", ".vmat_c", ".vxml_c", ".vjs_c", ".res", ".vcfg", ".vphys_c", ".vseq_c", ".vpcf_c", ".cab", ".webm"})
 
-        Dim cm As New Compactor(selectedFolder, selectedCompressionMode)
+        Dim cm As New Compactor(selectedFolder, selectedCompressionMode, exclist)
         Await cm.RunCompactAsync(progress)
 
         AnalyseBegin(True)
 
     End Sub
+
+    Private Async Sub UncompressClicked()
+
+        VisualStateManager.GoToElementState(BaseView, "CurrentlyCompressing", True)
+
+        Dim selectedFolder As String = _searchBar.DataPath
+
+        Dim progress As IProgress(Of (Integer, String)) = New Progress(Of (Integer, String)) _
+            (Sub(val)
+                 uiProgBarCompress.Value = val.Item1
+                 uiProgPercentage.Text = val.Item1 & "%"
+                 uiCurrentFileCompress.Text = val.Item2.Replace(selectedFolder, "")
+             End Sub)
+
+        Dim compressedFilesList = analysisResults.Where(Function(res) res.CompressedSize < res.UncompressedSize).Select(Of String)(Function(f) f.FileName)
+
+        Await Compactor.UncompressFolder(selectedFolder, compressedFilesList.ToList, progress)
+
+        AnalyseBegin(True)
+
+    End Sub
+
 End Class

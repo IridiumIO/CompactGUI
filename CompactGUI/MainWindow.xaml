@@ -399,7 +399,7 @@
                     <TextBlock x:Name="uiResultsPercentSmaller" d:Text="44 %" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
                     <TextBlock Text="smaller" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Click="btnChooseCompressionOptions_Click"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Click="UncompressClicked"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
                 <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Click="btnChooseCompressionOptions_Click"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
 
             </Grid>
@@ -448,7 +448,7 @@
 
             <!--progress area while actively compressing-->
             <Grid x:Name="grid2">
-                <TextBlock Text="compressing..." Margin="0,92,0,0" Foreground="#73808C" FontSize="20"/>
+                <TextBlock Text="working..." Margin="0,92,0,0" Foreground="#73808C" FontSize="20"/>
                 <TextBlock x:Name="uiProgPercentage" d:Text="49%" Margin="0,92,0,0" Foreground="#73808C" FontSize="20" HorizontalAlignment="Right"/>
 
                 <ui:ProgressBar x:Name="uiProgBarCompress" Background="#4498A9B9" Width="auto" Height="14" CornerRadius="7" VerticalAlignment="Top" Margin="0,143,0,0" Foreground="#92F1AB" Value="40" BorderThickness="0,0,0,0" >
