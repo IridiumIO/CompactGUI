@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>CompactGUI</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <OptionStrict>Off</OptionStrict>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <Version>3.0.0</Version>
+    <Authors>ImminentFate</Authors>
+    <Company>IridiumIO</Company>
+    <Description>GUI for the Windows compact.exe command-line tool.</Description>
+    <Copyright>Copyright © 2022</Copyright>
+    <PackageProjectUrl>https://github.com/IridiumIO/CompactGUI/</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors></WarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors></WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Import Include="System.Windows" />
+    <Import Include="System.Windows.Controls" />
+    <Import Include="System.Windows.Data" />
+    <Import Include="System.Windows.Documents" />
+    <Import Include="System.Windows.Input" />
+    <Import Include="System.Windows.Media" />
+    <Import Include="System.Windows.Media.Imaging" />
+    <Import Include="System.Windows.Navigation" />
+    <Import Include="System.Windows.Shapes" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.6.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.2.0" />
+    <PackageReference Include="ModernWpfUis" Version="1.4.0" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+    <PackageReference Include="ValueConverters" Version="2.2.10" />
+  </ItemGroup>
+
+</Project>

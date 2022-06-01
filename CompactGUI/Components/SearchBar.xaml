@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="SearchBar" Height="42" Width="291"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CompactGUI"
+             mc:Ignorable="d" Cursor="Hand" x:Name="root"
+             d:DesignHeight="42" d:DesignWidth="291" MinWidth="291">
+    <UserControl.Resources>
+        <Storyboard x:Key="OnMouseEnter">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00.3000000" Value="#FFEEEEEE">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OnMouseLeave">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00.3000000" Value="#FFFFFFFF">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OnMouseDown">
+        <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+            <EasingColorKeyFrame KeyTime="00:00:00.1000000" Value="#FFDDDDDD">
+                <EasingColorKeyFrame.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </EasingColorKeyFrame.EasingFunction>
+            </EasingColorKeyFrame>
+        </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OnMouseUp">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00.1000000" Value="#FFEEEEEE">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Grid.MouseEnter">
+                <BeginStoryboard Storyboard="{StaticResource OnMouseEnter}"/>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Grid.MouseLeave">
+                <BeginStoryboard Storyboard="{StaticResource OnMouseLeave}"/>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Grid.MouseDown">
+                <BeginStoryboard Storyboard="{StaticResource OnMouseDown}"/>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Grid.MouseUp">
+                <BeginStoryboard Storyboard="{StaticResource OnMouseUp}"/>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Rectangle x:Name="rectangle" Fill="White" RadiusX="21" RadiusY="21" >
+            <Rectangle.Effect>
+                <DropShadowEffect Opacity="0.16" Direction="-90" ShadowDepth="3" BlurRadius="6"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Label Content="&#xE721;" FontFamily="Segoe Fluent Icons" FontSize="21" VerticalAlignment="Center" Padding="20,0,0,0" Foreground="#FF757575"/>
+        <TextBlock Text="{Binding SearchText, ElementName=root}" d:Text="select target folder" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="45,-2,45,0" Foreground="#FF757575" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
+
+    </Grid>
+</UserControl>

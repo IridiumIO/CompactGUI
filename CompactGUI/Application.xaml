@@ -1,0 +1,112 @@
+﻿<Application x:Class="Application"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CompactGUI"
+             xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeResources />
+                <ui:XamlControlsResources />
+                <!-- Other merged dictionaries here -->
+                
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
+                <Style.Setters>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="button" CornerRadius="24" BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                                    
+                                    <TextBlock  Text="{TemplateBinding Button.Content}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Border.Effect>
+                                        <DropShadowEffect Opacity="0.16" Direction="-90" BlurRadius="6" ShadowDepth="3"/>
+                                    </Border.Effect>
+
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="Common">
+                                            <VisualState x:Name="MouseOver">
+                                                <Storyboard>
+                                                    <ColorAnimation  Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#FF597186" Duration="0:00:0.3" />
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="Normal">
+                                                <Storyboard>
+                                                    <ColorAnimation  Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{TemplateBinding Background}" Duration="0:00:0.3" />
+                                                </Storyboard>
+                                            </VisualState>
+
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Border>
+
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="button"  Property="Background" Value="#FF4B6175"/>
+                                    </Trigger>
+
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="button" Property="Opacity" Value="0.7" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style.Setters>
+            </Style>
+
+            <Style TargetType="CheckBox" x:Key="RoundedCheckBox">
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="Content" Value=""></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <Grid>
+                              
+                                <Border x:Name="cBox" Background="Transparent" BorderBrush="#98A9B9" BorderThickness="2" CornerRadius="18" Width="36" Height="36" VerticalAlignment="Center"  >
+                                    <Grid>
+                                        <Ellipse x:Name="outerEllipse" Grid.Column="0" Fill="#FFFFFF" Margin="3">
+                                        </Ellipse>
+                                    </Grid>
+                                </Border>
+                                <ContentPresenter Grid.Column="1" x:Name="content" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="outerEllipse"
+                                                        Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+                                                        From="#FFFFFF" To="#98A9B9" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="outerEllipse"
+                                                        Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+                                                        From="#98A9B9" To="#FFFFFF" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                                
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <!-- Other app resources here -->
+
+        </ResourceDictionary>
+       
+    </Application.Resources>
+</Application>
