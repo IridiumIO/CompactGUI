@@ -2,17 +2,15 @@
 Imports Ookii.Dialogs.Wpf
 Imports MethodTimer
 Imports System.Windows.Media.Animation
+Imports System.Net.Http
 
 Class MainWindow
 
     Sub New()
 
-        ' This call is required by the designer.
         InitializeComponent()
 
         VisualStateManager.GoToElementState(BaseView, "FreshLaunch", True)
-
-        ' Add any initialization after the InitializeComponent() call.
 
     End Sub
 
@@ -31,27 +29,42 @@ Class MainWindow
 
     End Sub
 
+
     Private Async Sub FireAndForgetGetSteamHeader()
+        steamBG.Opacity = 0
         Dim appid = Await Task.Run(Function() GetSteamIDFromFolder(_searchBar.DataPath))
 
-        Dim bImg As New BitmapImage(New Uri($"https://steamcdn-a.akamaihd.net/steam/apps/{appid}/page_bg_generated_v6b.jpg"))
+        Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{appid}/page_bg_generated_v6b.jpg"
 
-        If Not steamBG.Source Is Nothing AndAlso TryCast(steamBG.Source, BitmapImage).UriSource = bImg.UriSource Then
+        Dim bImg As New BitmapImage(New Uri(url))
+
+        VisualOutputDebug.AppendText(url & vbCrLf)
+
+        If Not steamBG.Source Is Nothing AndAlso TryCast(steamBG.Source, BitmapImage)?.UriSource = bImg.UriSource Then
             Return
         End If
 
         Dim fadeInAnimation = New DoubleAnimation(0.6, New Duration(New TimeSpan(0, 0, 2)))
         Dim fadeOutAnimation = New DoubleAnimation(0, New Duration(New TimeSpan(0, 0, 0, 0, 500)))
 
-        AddHandler fadeOutAnimation.Completed, Sub(o, e)
-                                                   steamBG.Source = bImg
-                                                   steamBG.BeginAnimation(Image.OpacityProperty, fadeInAnimation)
-                                               End Sub
+        AddHandler bImg.DownloadCompleted,
+            Sub()
+                AddHandler fadeOutAnimation.Completed,
+                        Sub(o, e)
+                            steamBG.Source = bImg
 
-        steamBG.BeginAnimation(Image.OpacityProperty, fadeOutAnimation)
+                            VisualOutputDebug.AppendText("Bing" & vbCrLf)
+                            steamBG.BeginAnimation(Image.OpacityProperty, fadeInAnimation)
+                        End Sub
+                VisualOutputDebug.AppendText("Bing" & vbCrLf)
+
+                steamBG.Source = bImg
+                steamBG.Opacity = 1
+                'steamBG.BeginAnimation(Image.OpacityProperty, fadeOutAnimation)
+            End Sub
+
 
     End Sub
-
 
 
     <Time>

@@ -340,6 +340,8 @@
                 </LinearGradientBrush>
             </Grid.Background>
 
+            <TextBox Panel.ZIndex="100" x:Name="VisualOutputDebug" Width="400" Height="80" Margin="10,10,0,0" VerticalAlignment="Top"/>
+
             <Image x:Name="steamBG" Height="{Binding Height, ElementName=grid}" Stretch="UniformToFill" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
             <!--Program Title-->
