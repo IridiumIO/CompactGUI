@@ -1,5 +1,7 @@
 ﻿Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
+Imports System.Text
 Imports Gameloop.Vdf
 Imports MethodTimer
 
@@ -47,5 +49,46 @@ Module Helper
 
     End Function
 
+    <Extension()>
+    Function AsShortPathNames(filesList As IEnumerable(Of String)) As IEnumerable(Of String)
+
+        Return filesList.Select(Of String)(Function(fl)
+                                               If fl.Length >= 255 Then
+                                                   Dim sfp = GetShortPath(fl)
+                                                   If sfp IsNot Nothing Then Return sfp
+                                               End If
+                                               Return fl
+                                           End Function)
+
+
+    End Function
+
+
+    Function GetShortPath(filePath As String) As String
+
+        If String.IsNullOrWhiteSpace(filePath) Then Return Nothing
+
+        Dim hasPrefix As Boolean = False
+
+        If filePath.Length >= 255 AndAlso Not filePath.StartsWith("\\?\") Then
+            filePath = "\\?\" & filePath
+            hasPrefix = True
+        End If
+
+        Dim shortPath = New StringBuilder(1024)
+        Dim res As Integer = GetShortPathName(filePath, shortPath, 1024)
+        If res = 0 Then Return Nothing
+        filePath = shortPath.ToString()
+        If hasPrefix Then filePath = filePath.Substring(4)
+        Return filePath
+
+    End Function
+
+    <DllImport("kernel32.dll", CharSet:=CharSet.Auto)>
+    Private Function GetShortPathName(
+    <MarshalAs(UnmanagedType.LPTStr)> ByVal path As String,
+    <MarshalAs(UnmanagedType.LPTStr)> ByVal shortPath As StringBuilder, ByVal shortPathLength As Integer) As Integer
+
+    End Function
 
 End Module

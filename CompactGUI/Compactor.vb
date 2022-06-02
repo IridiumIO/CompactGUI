@@ -20,7 +20,8 @@ Public Class Compactor
         If Not verifyFolder(folder) Then : Return : End If
 
         _workingDir = folder
-        _filesList = IO.Directory.GetFiles(folder, "*.*", IO.SearchOption.AllDirectories).Where(Function(st) excludedfiletypes.Contains(New IO.FileInfo(st).Extension) = False).ToList
+        _filesList = IO.Directory.GetFiles(folder, "*.*", IO.SearchOption.AllDirectories).AsShortPathNames.Where(Function(st) excludedfiletypes.Contains(New IO.FileInfo(st).Extension) = False).ToList
+
 
         _compressionLevel = compressionLevel
         _excludedFileTypes = excludedfiletypes
@@ -79,7 +80,7 @@ Public Class Compactor
         Dim uncompressedBytes As Long
         Dim uncompressedFiles As Integer
 
-        Dim allFiles = IO.Directory.EnumerateFiles(folder, "*.*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True})
+        Dim allFiles = IO.Directory.EnumerateFiles(folder, "*.*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True}).AsShortPathNames
         Dim fDetails As New Concurrent.ConcurrentBag(Of FileDetails)
         Dim GetRawFileSizes = Task.Run(Sub() uncompressedFiles = allFiles.Count)
         Dim GetCompressedFileSizes = Parallel.ForEachAsync(allFiles,

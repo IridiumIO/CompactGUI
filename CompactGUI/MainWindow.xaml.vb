@@ -74,7 +74,7 @@ Class MainWindow
             uiAnalysisResultsSxS.leftLabel = "before"
             uiAnalysisResultsSxS.rightLabel = "after"
             uiResultsBarAfterSize.Value = CInt(bytesData.compressed / bytesData.uncompressed * 100)
-            uiResultsPercentSmaller.Text = CInt(bytesData.compressed / bytesData.uncompressed * 100) & "%"
+            uiResultsPercentSmaller.Text = CInt(100 - (bytesData.compressed / bytesData.uncompressed * 100)) & "%"
             VisualStateManager.GoToElementState(BaseView, "FolderCompressedResults", True)
 
             If hasCompressionRun = True Then
