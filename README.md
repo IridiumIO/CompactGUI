@@ -7,6 +7,10 @@
 ------
 &nbsp;
 
+**Complete rewrite underway as of May 2022 using .NET 6.0 and WPF. See the [v3alpha branch](https://github.com/IridiumIO/CompactGUI/tree/v3alpha)**
+
+&nbsp;
+
 **What is the Windows 10 compact.exe function?**
 It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss.
 
