@@ -80,7 +80,7 @@ Public Class Compactor
         Dim uncompressedBytes As Long
         Dim uncompressedFiles As Integer
 
-        Dim allFiles = IO.Directory.EnumerateFiles(folder, "*.*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True}).AsShortPathNames
+        Dim allFiles = IO.Directory.EnumerateFiles(folder, "*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True}).AsShortPathNames
         Dim fDetails As New Concurrent.ConcurrentBag(Of FileDetails)
         Dim GetRawFileSizes = Task.Run(Sub() uncompressedFiles = allFiles.Count)
         Dim GetCompressedFileSizes = Parallel.ForEachAsync(allFiles,

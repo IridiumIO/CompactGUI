@@ -3,6 +3,7 @@ Imports Ookii.Dialogs.Wpf
 Imports MethodTimer
 Imports System.Windows.Media.Animation
 Imports System.Net.Http
+Imports ModernWpf.Controls
 
 Class MainWindow
 
@@ -14,7 +15,10 @@ Class MainWindow
 
     End Sub
 
+
+    'TODO: Turn these globals into their own class >> ActiveFolder.vb
     Dim analysisResults As List(Of FileDetails)
+    Dim poorlyCompressedFiles As Dictionary(Of String, Integer)
 
     Private Sub SearchClicked(sender As Object, e As MouseButtonEventArgs)
 
@@ -29,7 +33,7 @@ Class MainWindow
 
     End Sub
 
-
+    <Time>
     Private Async Sub FireAndForgetGetSteamHeader()
         steamBG.Opacity = 0
         Dim appid = Await Task.Run(Function() GetSteamIDFromFolder(_searchBar.DataPath))
@@ -37,8 +41,6 @@ Class MainWindow
         Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{appid}/page_bg_generated_v6b.jpg"
 
         Dim bImg As New BitmapImage(New Uri(url))
-
-        VisualOutputDebug.AppendText(url & vbCrLf)
 
         If Not steamBG.Source Is Nothing AndAlso TryCast(steamBG.Source, BitmapImage)?.UriSource = bImg.UriSource Then
             Return
@@ -52,15 +54,9 @@ Class MainWindow
                 AddHandler fadeOutAnimation.Completed,
                         Sub(o, e)
                             steamBG.Source = bImg
-
-                            VisualOutputDebug.AppendText("Bing" & vbCrLf)
                             steamBG.BeginAnimation(Image.OpacityProperty, fadeInAnimation)
                         End Sub
-                VisualOutputDebug.AppendText("Bing" & vbCrLf)
-
-                steamBG.Source = bImg
-                steamBG.Opacity = 1
-                'steamBG.BeginAnimation(Image.OpacityProperty, fadeOutAnimation)
+                steamBG.BeginAnimation(Image.OpacityProperty, fadeOutAnimation)
             End Sub
 
 
@@ -84,14 +80,13 @@ Class MainWindow
 
         If bytesData.containsCompressedFiles Then
 
-            uiAnalysisResultsSxS.leftLabel = "before"
-            uiAnalysisResultsSxS.rightLabel = "after"
             uiResultsBarAfterSize.Value = CInt(bytesData.compressed / bytesData.uncompressed * 100)
             uiResultsPercentSmaller.Text = CInt(100 - (bytesData.compressed / bytesData.uncompressed * 100)) & "%"
+            btnSubmitToWiki.IsEnabled = hasCompressionRun
             VisualStateManager.GoToElementState(BaseView, "FolderCompressedResults", True)
 
-            If hasCompressionRun = True Then
-                Dim poorlyCompressedExtensions = Await GetPoorlyCompressedExtensions(bytesData.fileCompressionDetailsList)
+            If hasCompressionRun Then
+                poorlyCompressedFiles = Await GetPoorlyCompressedExtensions(bytesData.fileCompressionDetailsList)
                 'TODO: Add ability to save poor extensions for next time, and also submit them online
 
             End If
@@ -100,8 +95,7 @@ Class MainWindow
 
             Dim compRatioEstimate = Await GetWikiResults(bytesData.uncompressed, appid)
             uiAnalysisResultsSxS.SetRightValue(compRatioEstimate)
-            uiAnalysisResultsSxS.leftLabel = "current size"
-            uiAnalysisResultsSxS.rightLabel = "estimated size"
+
             VisualStateManager.GoToElementState(BaseView, "FolderAnalysedResults", True)
 
         End If
@@ -203,6 +197,27 @@ Class MainWindow
         Await Compactor.UncompressFolder(selectedFolder, compressedFilesList.ToList, progress)
 
         AnalyseBegin(True)
+
+    End Sub
+
+    Private Async Sub submitToWikiClicked()
+
+        Dim activeFolder = _searchBar.DataPath
+        Dim appid = Await Task.Run(Function() GetSteamIDFromFolder(_searchBar.DataPath))
+
+        Dim before = analysisResults.Sum(Function(res) res.UncompressedSize)
+        Dim after = analysisResults.Sum(Function(res) res.CompressedSize)
+
+        Debug.WriteLine(comboBoxSelectCompressionMode.SelectedIndex)
+
+        Dim msgError As New ContentDialog With {
+            .Title = "Not Implemented Yet",
+            .Content = "Coming soon",
+            .CloseButtonText = "OK"
+            }
+
+        msgError.ShowAsync()
+
 
     End Sub
 

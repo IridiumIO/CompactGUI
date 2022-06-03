@@ -143,6 +143,12 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid3" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="leftLabel" >
+                            <DiscreteStringKeyFrame Value="current size"  KeyTime="0:0:0" />
+                        </StringAnimationUsingKeyFrames>
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="rightLabel" >
+                            <DiscreteStringKeyFrame Value="estimated size"  KeyTime="0:0:0" />
+                        </StringAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="AnalysingFolderSelected">
@@ -324,6 +330,13 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid1" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="leftLabel" >
+                            <DiscreteStringKeyFrame Value="before"  KeyTime="0:0:0" />
+                        </StringAnimationUsingKeyFrames>
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="rightLabel" >
+                            <DiscreteStringKeyFrame Value="after"  KeyTime="0:0:0" />
+                        </StringAnimationUsingKeyFrames>
+
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
@@ -339,8 +352,6 @@
                     <GradientStop Color="#FF6B8399" Offset="0"/>
                 </LinearGradientBrush>
             </Grid.Background>
-
-            <TextBox Panel.ZIndex="100" x:Name="VisualOutputDebug" Width="400" Height="80" Margin="10,10,0,0" VerticalAlignment="Top"/>
 
             <Image x:Name="steamBG" Height="{Binding Height, ElementName=grid}" Stretch="UniformToFill" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
@@ -361,7 +372,7 @@
 
 
             <!--Folder Size, estimated size and post-compression view-->
-            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top" leftLabel="current size" rightLabel="estimated size"/>
+            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top"/>
 
             <!--Analysis Results comparison bars if folder is compressed-->
             <Grid x:Name="grid3" Margin="0,480,0,0">
@@ -402,7 +413,7 @@
                     <TextBlock Text="smaller" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Click="UncompressClicked"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
-                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Click="btnChooseCompressionOptions_Click"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Click="submitToWikiClicked"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
 
             </Grid>
 
