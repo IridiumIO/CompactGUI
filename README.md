@@ -41,7 +41,6 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 ####
  
 <p>Download from <a href="https://github.com/ImminentFate/CompactGUI/releases"><b>GitHub Releases</b></a></p>
-Note that v3.0a is not available from the releases tab yet (soon)
 
 Coming soon: Download from Windows 10/11 Store
   
