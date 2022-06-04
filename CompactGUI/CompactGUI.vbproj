@@ -13,6 +13,7 @@
     <Description>GUI for the Windows compact.exe command-line tool.</Description>
     <Copyright>Copyright © 2022</Copyright>
     <PackageProjectUrl>https://github.com/IridiumIO/CompactGUI/</PackageProjectUrl>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
