@@ -11,6 +11,10 @@ Class MainWindow
 
         VisualStateManager.GoToElementState(BaseView, "FreshLaunch", True)
 
+        SettingsHandler.InitialiseSettings()
+
+        WikiHandler.GetUpdatedJSON()
+
     End Sub
 
 
@@ -178,11 +182,9 @@ Class MainWindow
     End Sub
 
     Private Async Sub submitToWikiClicked()
-
         btnSubmitToWiki.IsEnabled = False
         Dim successfullySent = Await WikiHandler.SubmitToWiki(activeFolder.folderName, activeFolder.analysisResults, activeFolder.poorlyCompressedFiles, comboBoxSelectCompressionMode.SelectedIndex)
         If Not successfullySent Then btnSubmitToWiki.IsEnabled = True
-
     End Sub
 
 End Class

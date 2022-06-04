@@ -35,6 +35,7 @@ Public Class SteamResultsData
     Public FolderName As String
     Public Confidence As Integer '0=Low, 1=Moderate, 2=High
     Public CompressionResults As New List(Of CompressionResult)
+    Public PoorlyCompressedExtensions As New List(Of String)
 
 End Class
 

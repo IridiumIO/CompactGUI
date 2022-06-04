@@ -3,11 +3,37 @@ Imports System.Text.Json
 
 Public Class WikiHandler
 
-    Shared filePath As String = "./CGUI.json"
+    Shared filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "database.json")
+
+    Shared Async Function GetUpdatedJSON() As Task
+
+        Dim dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
+
+        Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
+
+        If Not JSONFile.Exists OrElse SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(12) < DateTime.Now Then
+
+            Dim httpClient As New HttpClient
+            Dim res = Await httpClient.GetStreamAsync(dlPath)
+
+            Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
+                Await res.CopyToAsync(fs)
+            End Using
+
+            SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
+            SettingsHandler.AppSettings.Save()
+
+        End If
+
+
+    End Function
 
     Shared Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer))
 
-        Dim jStream As IO.FileStream = IO.File.OpenRead(filePath)
+        Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
+        If Not JSONFile.Exists Then Return Nothing
+
+        Dim jStream As IO.FileStream = JSONFile.OpenRead
         Dim parsedSteamWikiResults = Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(jStream, New JsonSerializerOptions With {.IncludeFields = True}).ConfigureAwait(False)
         Dim workingGame = parsedSteamWikiResults.Find(Function(game) game.SteamID = appid)
 
