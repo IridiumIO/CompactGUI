@@ -1,0 +1,9 @@
+<Info>
+	<VersionMajor>3.0</VersionMajor>
+	<VersionMinor>0</VersionMinor>
+	<IsPrerelease>True</IsPrerelease>
+	<VersionStr>V3.0.0</VersionStr>
+	<ChocolateyVStr>2.6.2</ChocolateyVStr>
+	<Changes>Complete application rewrite using WPF and .NET 6|Smoother, simpler UI.|Major speed improvements with asynchronous and parallel processing of files </Changes>
+	<Fixes></Fixes>
+</Info>
