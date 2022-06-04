@@ -28,7 +28,7 @@ Public Class Compactor
 
         Dim clusterSize As Integer = GetClusterSize(_workingDir)
 
-        _filesList = Await Task.Run(Function() IO.Directory.EnumerateFiles(_workingDir, "*", IO.SearchOption.AllDirectories) _
+        _filesList = Await Task.Run(Function() IO.Directory.EnumerateFiles(_workingDir, "*", New IO.EnumerationOptions With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}) _
             .AsShortPathNames.Where(Function(st)
                                         Dim ft = New IO.FileInfo(st)
                                         If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize Then Return True
@@ -92,7 +92,7 @@ Public Class Compactor
         Dim uncompressedBytes As Long
         Dim uncompressedFiles As Integer
 
-        Dim allFiles = IO.Directory.EnumerateFiles(folder, "*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True}).AsShortPathNames
+        Dim allFiles = IO.Directory.EnumerateFiles(folder, "*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}).AsShortPathNames
         Dim fDetails As New Concurrent.ConcurrentBag(Of FileDetails)
         Dim GetRawFileSizes = Task.Run(Sub() uncompressedFiles = allFiles.Count)
 
