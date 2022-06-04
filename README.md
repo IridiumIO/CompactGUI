@@ -7,7 +7,7 @@
 ------
 &nbsp;
 
-**Complete rewrite underway as of May 2022 using .NET 6.0 and WPF. See the [v3alpha branch](https://github.com/IridiumIO/CompactGUI/tree/v3alpha)**
+**Complete rewrite underway as of June 2022 using .NET 6.0 and WPF. See the [v3alpha branch](https://github.com/IridiumIO/CompactGUI/tree/v3alpha)**
 
 &nbsp;
 
@@ -43,16 +43,14 @@ Use this tool to:
 ## Extra Features
  - Visual feedback on compression progress and statistics
  - Configurable list of poorly-compressed filetypes that can be skipped.
- - Online integration with community-sourced [database](https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games) to get compression estimates and analyses 
+ - Online integration with community-sourced [database](https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results) to get compression estimates and analyses 
  - Integration into Windows Explorer context menus for easier use.
  - Drag-and-drop functionality
  - Analyze the status of existing folders
  - Shutdown/restart/sleep on completion. 
 
-<h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Games"><img src="https://img.shields.io/badge/Games-2152-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Compression-Results:-Programs"><img src="https://img.shields.io/badge/Programs-76-blue.svg"></a> that have been tested</b></h3>
+<h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/Games-5085-blue.svg"></a> and <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/Programs-76-blue.svg"></a> that have been tested</b></h3>
 <p>&nbsp;</p>
-
-**Important Note**: Due to [a bug in Windows](https://github.com/ImminentFate/CompactGUI/issues/167), many of the Wiki results for larger games are inaccurate. Please consider submitting new results from within CompactGUI 2.5.0+ to rebuild the database of results
 
 
 ## Screenshots
