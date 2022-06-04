@@ -1,8 +1,6 @@
-﻿Imports System.Threading
-Imports Ookii.Dialogs.Wpf
+﻿Imports Ookii.Dialogs.Wpf
 Imports MethodTimer
 Imports System.Windows.Media.Animation
-Imports System.Net.Http
 Imports ModernWpf.Controls
 
 Class MainWindow
@@ -16,9 +14,8 @@ Class MainWindow
     End Sub
 
 
-    'TODO: Turn these globals into their own class >> ActiveFolder.vb
-    Dim analysisResults As List(Of FileDetails)
-    Dim poorlyCompressedFiles As Dictionary(Of String, Integer)
+    Property activeFolder As ActiveFolder
+
 
     Private Sub SearchClicked(sender As Object, e As MouseButtonEventArgs)
 
@@ -26,25 +23,28 @@ Class MainWindow
         folderSelector.ShowDialog()
 
         If folderSelector.SelectedPath = "" Then Return
-        _searchBar.SetDataPathAndReturn(folderSelector.SelectedPath)
+        Dim validFolder = _searchBar.SetDataPathAndReturn(folderSelector.SelectedPath)
+        If Not validFolder Then Return
+
+        activeFolder = New ActiveFolder
+        activeFolder.folderName = folderSelector.SelectedPath
+        activeFolder.steamAppID = GetSteamIDFromFolder(_searchBar.DataPath)
+
         VisualStateManager.GoToElementState(BaseView, "ValidFolderSelected", True)
 
         FireAndForgetGetSteamHeader()
 
     End Sub
 
-    <Time>
-    Private Async Sub FireAndForgetGetSteamHeader()
+
+    Private Sub FireAndForgetGetSteamHeader()
+
         steamBG.Opacity = 0
-        Dim appid = Await Task.Run(Function() GetSteamIDFromFolder(_searchBar.DataPath))
-
+        Dim appid = activeFolder.steamAppID
         Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{appid}/page_bg_generated_v6b.jpg"
-
         Dim bImg As New BitmapImage(New Uri(url))
 
-        If Not steamBG.Source Is Nothing AndAlso TryCast(steamBG.Source, BitmapImage)?.UriSource = bImg.UriSource Then
-            Return
-        End If
+        If Not steamBG.Source Is Nothing AndAlso TryCast(steamBG.Source, BitmapImage)?.UriSource = bImg.UriSource Then Return
 
         Dim fadeInAnimation = New DoubleAnimation(0.6, New Duration(New TimeSpan(0, 0, 2)))
         Dim fadeOutAnimation = New DoubleAnimation(0, New Duration(New TimeSpan(0, 0, 0, 0, 500)))
@@ -59,79 +59,66 @@ Class MainWindow
                 steamBG.BeginAnimation(Image.OpacityProperty, fadeOutAnimation)
             End Sub
 
-
     End Sub
 
 
-    <Time>
     Private Async Sub AnalyseBegin(hasCompressionRun As Boolean)
 
         VisualStateManager.GoToElementState(BaseView, "AnalysingFolderSelected", True)
-
-
-        Dim bytesData = Await Compactor.AnalyseFolder(_searchBar.DataPath, hasCompressionRun)
-        Dim appid = Await Task.Run(Function() GetSteamIDFromFolder(_searchBar.DataPath))
-
-        analysisResults = bytesData.fileCompressionDetailsList
-
+        Dim bytesData = Await Compactor.AnalyseFolder(activeFolder.folderName, hasCompressionRun)
+        Dim appid = activeFolder.steamAppID
+        activeFolder.analysisResults = bytesData.fileCompressionDetailsList
         uiAnalysisResultsSxS.SetLeftValue(bytesData.uncompressed)
         uiAnalysisResultsSxS.SetRightValue(bytesData.compressed)
 
-
-        If bytesData.containsCompressedFiles Then
+        If bytesData.containsCompressedFiles OrElse hasCompressionRun Then
 
             uiResultsBarAfterSize.Value = CInt(bytesData.compressed / bytesData.uncompressed * 100)
             uiResultsPercentSmaller.Text = CInt(100 - (bytesData.compressed / bytesData.uncompressed * 100)) & "%"
-            btnSubmitToWiki.IsEnabled = hasCompressionRun
+            btnSubmitToWiki.IsEnabled = hasCompressionRun AndAlso activeFolder.steamAppID <> 0
             VisualStateManager.GoToElementState(BaseView, "FolderCompressedResults", True)
 
             If hasCompressionRun Then
-                poorlyCompressedFiles = Await GetPoorlyCompressedExtensions(bytesData.fileCompressionDetailsList)
-                'TODO: Add ability to save poor extensions for next time, and also submit them online
-
+                activeFolder.poorlyCompressedFiles = Await GetPoorlyCompressedExtensions(bytesData.fileCompressionDetailsList)
+                'TODO: Add ability to save poor extensions for next time
             End If
 
         Else
 
             Dim compRatioEstimate = Await GetWikiResults(bytesData.uncompressed, appid)
             uiAnalysisResultsSxS.SetRightValue(compRatioEstimate)
-
             VisualStateManager.GoToElementState(BaseView, "FolderAnalysedResults", True)
 
         End If
-
-
-
     End Sub
 
-    'TODO: Move this to a WikiSubmission Class
-    <Time>
-    Private Async Function GetPoorlyCompressedExtensions(FilesList As List(Of FileDetails)) As Task(Of Dictionary(Of String, Integer))
 
-        Dim extensionsResults As New Concurrent.ConcurrentDictionary(Of String, (cRatio As Decimal, cCount As Integer))
+    Private Async Function GetPoorlyCompressedExtensions(FilesList As List(Of FileDetails)) As Task(Of List(Of ExtensionResults))
 
-        Await Parallel.ForEachAsync(FilesList,
-                         Function(fl, ct)
+        Dim extClassResults As List(Of ExtensionResults) = Await Task.Run(
+            Function()
+                Dim extRes As New List(Of ExtensionResults)
+                For Each fl In FilesList
+                    Dim fInfo As New IO.FileInfo(fl.FileName)
+                    Dim xt = fInfo.Extension
+                    If fl.UncompressedSize = 0 Then Continue For
+                    Dim obj = extRes.FirstOrDefault(Function(x) x.extension = xt, Nothing)
+                    If obj Is Nothing Then
+                        extRes.Add(New ExtensionResults With {.extension = xt, .totalFiles = 1, .uncompressedBytes = fl.UncompressedSize, .compressedBytes = fl.CompressedSize})
+                        Continue For
+                    End If
+                    obj.uncompressedBytes += fl.UncompressedSize
+                    obj.compressedBytes += fl.CompressedSize
+                    obj.totalFiles += 1
+                Next
+                Return extRes
+            End Function)
 
-                             Dim fInfo As New IO.FileInfo(fl.FileName)
-                             Dim xt = fInfo.Extension
-                             If fl.UncompressedSize = 0 Then Return Nothing
-                             extensionsResults.AddOrUpdate(xt,
-                                            (fl.CompressedSize / fl.UncompressedSize, 1),
-                                            Function(k, v)
-                                                Return (((v.cRatio + (fl.CompressedSize / fl.UncompressedSize)) / 2), v.cCount + 1)
-                                            End Function)
-
-                         End Function)
-
-        Return extensionsResults.Where(Function(x) x.Value.Item1 > 0.95).ToDictionary(Of String, Integer)(Function(k) k.Key, Function(v) v.Value.cCount)
-
-
+        Return extClassResults.Where(Function(f) f.cRatio > 0.95).ToList()
 
     End Function
 
 
-    <Time>
     Private Async Function GetWikiResults(beforeBytes As Long, appid As Integer) As Task(Of Long)
 
         If appid = 0 Then Return 1010101010101010
@@ -153,27 +140,17 @@ Class MainWindow
     Private Async Sub btnCompress_Click(sender As Object, e As RoutedEventArgs)
         VisualStateManager.GoToElementState(BaseView, "CurrentlyCompressing", True)
 
-        Dim selectedCompressionMode As String = Compactor.CompressionLevel.XPRESS4K
-        Dim selectedFolder As String = _searchBar.DataPath
-
-        Select Case comboBoxSelectCompressionMode.SelectedIndex
-            Case 0 : selectedCompressionMode = Compactor.CompressionLevel.XPRESS4K
-            Case 1 : selectedCompressionMode = Compactor.CompressionLevel.XPRESS8K
-            Case 2 : selectedCompressionMode = Compactor.CompressionLevel.XPRESS16K
-            Case 3 : selectedCompressionMode = Compactor.CompressionLevel.LZX
-        End Select
-
         Dim progress As IProgress(Of (Integer, String)) = New Progress(Of (Integer, String)) _
             (Sub(val)
                  uiProgBarCompress.Value = val.Item1
                  uiProgPercentage.Text = val.Item1 & "%"
-                 uiCurrentFileCompress.Text = val.Item2.Replace(selectedFolder, "")
+                 uiCurrentFileCompress.Text = val.Item2.Replace(activeFolder.folderName, "")
              End Sub)
 
         Dim exclist As New List(Of String)({".vanim_c", ".vmat_c", ".vxml_c", ".vjs_c", ".res", ".vcfg", ".vphys_c", ".vseq_c", ".vpcf_c", ".cab", ".webm"})
 
-        Dim cm As New Compactor(selectedFolder, selectedCompressionMode, exclist)
-        Await cm.RunCompactAsync(progress)
+        Dim cm As New Compactor(activeFolder.folderName, comboBoxSelectCompressionMode.SelectedIndex, exclist)
+        Dim res = Await cm.RunCompactAsync(progress)
 
         AnalyseBegin(True)
 
@@ -183,7 +160,7 @@ Class MainWindow
 
         VisualStateManager.GoToElementState(BaseView, "CurrentlyCompressing", True)
 
-        Dim selectedFolder As String = _searchBar.DataPath
+        Dim selectedFolder As String = activeFolder.folderName
 
         Dim progress As IProgress(Of (Integer, String)) = New Progress(Of (Integer, String)) _
             (Sub(val)
@@ -192,32 +169,19 @@ Class MainWindow
                  uiCurrentFileCompress.Text = val.Item2.Replace(selectedFolder, "")
              End Sub)
 
-        Dim compressedFilesList = analysisResults.Where(Function(res) res.CompressedSize < res.UncompressedSize).Select(Of String)(Function(f) f.FileName)
+        Dim compressedFilesList = activeFolder.analysisResults.Where(Function(res) res.CompressedSize < res.UncompressedSize).Select(Of String)(Function(f) f.FileName)
 
-        Await Compactor.UncompressFolder(selectedFolder, compressedFilesList.ToList, progress)
+        Await Compactor.UncompressFolder(activeFolder.folderName, compressedFilesList.ToList, progress)
 
-        AnalyseBegin(True)
+        AnalyseBegin(False)
 
     End Sub
 
     Private Async Sub submitToWikiClicked()
 
-        Dim activeFolder = _searchBar.DataPath
-        Dim appid = Await Task.Run(Function() GetSteamIDFromFolder(_searchBar.DataPath))
-
-        Dim before = analysisResults.Sum(Function(res) res.UncompressedSize)
-        Dim after = analysisResults.Sum(Function(res) res.CompressedSize)
-
-        Debug.WriteLine(comboBoxSelectCompressionMode.SelectedIndex)
-
-        Dim msgError As New ContentDialog With {
-            .Title = "Not Implemented Yet",
-            .Content = "Coming soon",
-            .CloseButtonText = "OK"
-            }
-
-        msgError.ShowAsync()
-
+        btnSubmitToWiki.IsEnabled = False
+        Dim successfullySent = Await WikiHandler.SubmitToWiki(activeFolder.folderName, activeFolder.analysisResults, activeFolder.poorlyCompressedFiles, comboBoxSelectCompressionMode.SelectedIndex)
+        If Not successfullySent Then btnSubmitToWiki.IsEnabled = True
 
     End Sub
 

@@ -3,30 +3,39 @@ Imports MethodTimer
 
 Public Class Compactor
 
-    Structure CompressionLevel
-        Const XPRESS4K = "/EXE:XPRESS4K"
-        Const XPRESS8K = "/EXE:XPRESS8K"
-        Const XPRESS16K = "/EXE:XPRESS16K"
-        Const LZX = "/EXE:LZX"
-    End Structure
+    Friend Shared CompressionLevel As New Dictionary(Of Integer, String) From {
+        {0, "XPRESS4K"},
+        {1, "XPRESS8K"},
+        {2, "XPRESS16K"},
+        {3, "LZX"}}
 
-    Private _filesList As List(Of String)
+    Private _filesList As IEnumerable(Of String)
     Private _workingDir As String
     Private _compressionLevel As String
     Private _excludedFileTypes As List(Of String)
 
-    Sub New(folder As String, compressionLevel As String, excludedfiletypes As List(Of String))
+    Sub New(folder As String, cLevelIndex As Integer, excludedfiletypes As List(Of String))
 
         If Not verifyFolder(folder) Then : Return : End If
 
         _workingDir = folder
-        _filesList = IO.Directory.GetFiles(folder, "*.*", IO.SearchOption.AllDirectories).AsShortPathNames.Where(Function(st) excludedfiletypes.Contains(New IO.FileInfo(st).Extension) = False).ToList
-
-
-        _compressionLevel = compressionLevel
         _excludedFileTypes = excludedfiletypes
+        _compressionLevel = CompressionLevel(cLevelIndex)
+
     End Sub
 
+    Async Function BuildWorkingFilesList() As Task
+
+        Dim clusterSize As Integer = GetClusterSize(_workingDir)
+
+        _filesList = Await Task.Run(Function() IO.Directory.EnumerateFiles(_workingDir, "*", IO.SearchOption.AllDirectories) _
+            .AsShortPathNames.Where(Function(st)
+                                        Dim ft = New IO.FileInfo(st)
+                                        If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize Then Return True
+                                        Return False
+                                    End Function))
+
+    End Function
 
     Friend Shared Sub GenerateThread(workingdir, compactArgs)
 
@@ -44,19 +53,22 @@ Public Class Compactor
 
     End Sub
 
+    <Time>
+    Async Function RunCompactAsync(progress As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task(Of Boolean)
 
-    Async Function RunCompactAsync(progress As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task
+        Await BuildWorkingFilesList()
 
-        Dim compactArgs = "/C /I " & _compressionLevel
-        Dim totalFiles As Integer = _filesList.Count
+        Dim compactArgs = "/C /I /EXE:" & _compressionLevel
+        Dim totalFiles As Integer = Await Task.Run(Function() _filesList.Count)
         Dim count As Integer = 0
+
         Await Parallel.ForEachAsync(_filesList,
                                     Function(file, _ctx)
                                         GenerateThread(_workingDir, compactArgs & " " & """" & file & """")
                                         Dim result = Interlocked.Increment(count)
                                         progress.Report((CInt(((result / totalFiles) * 100)), file))
                                     End Function).ConfigureAwait(False)
-        Return
+        Return True
 
     End Function
 
@@ -83,18 +95,22 @@ Public Class Compactor
         Dim allFiles = IO.Directory.EnumerateFiles(folder, "*", New IO.EnumerationOptions() With {.RecurseSubdirectories = True}).AsShortPathNames
         Dim fDetails As New Concurrent.ConcurrentBag(Of FileDetails)
         Dim GetRawFileSizes = Task.Run(Sub() uncompressedFiles = allFiles.Count)
-        Dim GetCompressedFileSizes = Parallel.ForEachAsync(allFiles,
-                                        Function(file, ctx)
 
-                                            Dim compSize = GetFileSizeOnDisk(file)
-                                            Dim uncompSize = New IO.FileInfo(file).Length
-                                            Interlocked.Add(compressedBytes, compSize)
-                                            Interlocked.Add(uncompressedBytes, uncompSize)
-                                            fDetails.Add(New FileDetails With {.FileName = file, .CompressedSize = compSize, .UncompressedSize = uncompSize})
-                                            If compSize < uncompSize Then Interlocked.Increment(compressedFiles)
-                                        End Function)
+        Dim GetCompressedFileSizes = Task.Run(
+            Function() Parallel.ForEach(allFiles,
+                          Sub(file)
+                              Dim compSize = GetFileSizeOnDisk(file)
+                              Dim uncompSize = New IO.FileInfo(file).Length
+                              Interlocked.Add(compressedBytes, compSize)
+                              Interlocked.Add(uncompressedBytes, uncompSize)
+                              fDetails.Add(New FileDetails With {.FileName = file, .CompressedSize = compSize, .UncompressedSize = uncompSize})
+                              If compSize < uncompSize Then Interlocked.Increment(compressedFiles)
+                          End Sub))
 
         Await Task.WhenAll(GetRawFileSizes, GetCompressedFileSizes)
+
+
+
         Return (uncompressedBytes, compressedBytes, If(compressedFiles = 0, False, True), fDetails.ToList())
 
     End Function
@@ -119,15 +135,6 @@ Public Class Compactor
 
 
 
-
-
-End Class
-
-Class FileDetails
-
-    Public FileName As String
-    Public UncompressedSize As Long
-    Public CompressedSize As Long
 
 
 End Class
