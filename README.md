@@ -2,11 +2,11 @@
 
 &nbsp;
 
-<p align="center"><b>CompactGUI is a standalone user interface that makes the Windows 10 compact.exe function easier to use.</b></p> 
+<p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It is a standalone user interface that makes the Windows 10 compact.exe function easier to use.</b></p> 
 
 ------
 
-**Note - v3.0 Complete rewrite is underway as of May 2022 with the following features:**
+**Note - v3.0 Complete rewrite is underway as of June 2022 with the following features:**
  - Rebuilt from scratch in .NET 6 using WPF
  - Smoother, simplified UI
  - Parallelised and asynchronous programming resulting in _at least_ an order of magnitude speed improvement. Using ARK as a worst case scenario (160GB with 105,000 files)
@@ -45,7 +45,7 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 Coming soon: Download from Windows 10/11 Store
   
 ## Uses
-Use this tool to: 
+Use this tool to compress folders while still being able to use/run them normally: 
 - Reduce the size of games (e.g. ARK-Survival Evolved: 169 GB > 91.2 GB)
 - Reduce the size of programs (e.g. Adobe Photoshop: 1.71 GB > 886 MB)
 - Compress any other folder on your computer
@@ -63,12 +63,13 @@ Use this tool to:
 
 
 
-## Screenshots (v3.0a)
+## Screenshots
 
-<img src="https://user-images.githubusercontent.com/1491536/171412294-4be4f920-decf-4dc4-94d7-e9f65f9a299b.png" width="300"/><img src="https://user-images.githubusercontent.com/1491536/171412299-9b17884a-1046-485b-8f32-4b018856bfd1.png" width="300"/><img src="https://user-images.githubusercontent.com/1491536/171412306-12ba42a1-fcd4-40cf-a11c-64ac6f139c5e.png" width="300"/>
+<p align="center"><img src="https://user-images.githubusercontent.com/1491536/172040389-62932137-11ae-49c8-8749-95c0b67f3aab.png" width="300"/><img src="https://user-images.githubusercontent.com/1491536/172040455-6cd06756-6323-44da-b350-daa47f31c5e3.png" width="300"/><img src="https://user-images.githubusercontent.com/1491536/172040456-09c069e3-093a-4c5e-8d69-f52d4dc2f982.png" width="300"/></>
 
- 
+
 ## Background
+
 Windows 10 includes a little-known but very useful tool called Compact.exe that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU (I have tested as old as an i3-370M from 2010 with negligible impact), this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
 
 As program folders and games can be shrunk by up to 60%, this has the added bonus of potentially reducing load times - especially on slower HDDs. 
@@ -87,4 +88,10 @@ The options available are:
 - XPRESS16K: Slower, but stronger
 - LZX: Slowest, but strongest - note it has a higher overhead, so use it on programs/games only if your CPU is reasonably strong or the program/game is older. 
 
+ 
+ -----
+ ### Like this project?
+ Please consider leaving a tip on Ko-Fi :) 
+ 
+ <p align="center"><a href='https://ko-fi.com/iridiumio' target='_blank'><img height='42' style='border:0px;height:42px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></p>
   
