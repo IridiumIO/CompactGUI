@@ -3,7 +3,7 @@ Imports System.Text.Json
 
 Public Class WikiHandler
 
-    Shared filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "database.json")
+    Shared filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
 
     Shared Async Function GetUpdatedJSON() As Task
 
@@ -11,7 +11,7 @@ Public Class WikiHandler
 
         Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
 
-        If Not JSONFile.Exists OrElse SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(12) < DateTime.Now Then
+        If Not JSONFile.Exists OrElse SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) < DateTime.Now Then
 
             Dim httpClient As New HttpClient
             Dim res = Await httpClient.GetStreamAsync(dlPath)

@@ -35,7 +35,7 @@ Public Class SteamResultsData
     Public FolderName As String
     Public Confidence As Integer '0=Low, 1=Moderate, 2=High
     Public CompressionResults As New List(Of CompressionResult)
-    Public PoorlyCompressedExtensions As New List(Of String)
+    Public PoorlyCompressedExtensions As Dictionary(Of String, Integer)
 
 End Class
 
@@ -43,7 +43,7 @@ End Class
 ' Used to hold compression results from parsed existing wiki file (above)
 Public Class CompressionResult
 
-    Public CompType As String
+    Public CompType As Integer
     Public BeforeBytes As Long
     Public AfterBytes As Long
     Public TotalResults As Integer
