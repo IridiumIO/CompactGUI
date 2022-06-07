@@ -82,7 +82,7 @@ Use this tool to compress folders while still being able to use/run them normall
 
 ## Screenshots
 
-<p align="center"><img src="https://user-images.githubusercontent.com/1491536/172040389-62932137-11ae-49c8-8749-95c0b67f3aab.png" width="300"/><img src="https://user-images.githubusercontent.com/1491536/172040455-6cd06756-6323-44da-b350-daa47f31c5e3.png" width="300"/><img src="https://user-images.githubusercontent.com/1491536/172040456-09c069e3-093a-4c5e-8d69-f52d4dc2f982.png" width="300"/></>
+<p align="center"><img src="https://user-images.githubusercontent.com/1491536/172040389-62932137-11ae-49c8-8749-95c0b67f3aab.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040455-6cd06756-6323-44da-b350-daa47f31c5e3.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040456-09c069e3-093a-4c5e-8d69-f52d4dc2f982.png" width="250"/></>
 
 
 ## Background
