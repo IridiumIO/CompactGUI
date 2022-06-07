@@ -1,4 +1,6 @@
-﻿Imports System.Threading
+﻿Imports System.IO
+Imports System.Runtime.InteropServices
+Imports System.Threading
 Imports MethodTimer
 
 Public Class Compactor
@@ -13,6 +15,10 @@ Public Class Compactor
     Private _workingDir As String
     Private _compressionLevel As String
     Private _excludedFileTypes As List(Of String)
+    Private _WOFcompressionLevel As ULong
+
+    Private _EFInfo As _WOF_FILE_COMPRESSION_INFO_V1
+    Private _EFInfoPtr As IntPtr
 
     Sub New(folder As String, cLevelIndex As Integer, excludedfiletypes As List(Of String))
 
@@ -21,6 +27,10 @@ Public Class Compactor
         _workingDir = folder
         _excludedFileTypes = excludedfiletypes
         _compressionLevel = CompressionLevel(cLevelIndex)
+        _WOFcompressionLevel = WOFConvertCompressionLevel(cLevelIndex)
+        _EFInfo = New _WOF_FILE_COMPRESSION_INFO_V1 With {.Algorithm = _WOFcompressionLevel, .Flags = 0}
+        _EFInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(_EFInfo))
+        Marshal.StructureToPtr(_EFInfo, _EFInfoPtr, True)
 
     End Sub
 
@@ -53,6 +63,36 @@ Public Class Compactor
 
     End Sub
 
+
+    Shared Function DetectCompression(path As String)
+
+        Dim isextFile As Integer
+        Dim prov As ULong
+        Dim info As _WOF_FILE_COMPRESSION_INFO_V1
+        Dim buf As UInt16 = 8
+        Dim ret = WofIsExternalFile(path, isextFile, prov, info, buf)
+
+    End Function
+
+
+    Sub WOFCompressFile(path As String)
+
+        Dim length As ULong = Marshal.SizeOf(_EFInfoPtr)
+
+        Using fs As FileStream = New FileStream(path, FileMode.Open)
+            Dim hFile = fs.SafeFileHandle.DangerousGetHandle()
+            Dim res = WofSetFileDataLocation(hFile, WOF_PROVIDER_FILE, _EFInfoPtr, length)
+            If res <> 0 Then
+                If res <> -2147024552 Then
+                    Debug.WriteLine("spaghetti")
+                End If
+
+            End If
+        End Using
+
+    End Sub
+
+
     <Time>
     Async Function RunCompactAsync(progress As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task(Of Boolean)
 
@@ -64,7 +104,8 @@ Public Class Compactor
 
         Await Parallel.ForEachAsync(_filesList,
                                     Function(file, _ctx)
-                                        GenerateThread(_workingDir, compactArgs & " " & """" & file & """")
+                                        WOFCompressFile(file)
+                                        'GenerateThread(_workingDir, compactArgs & " " & """" & file & """")
                                         Dim result = Interlocked.Increment(count)
                                         progress.Report((CInt(((result / totalFiles) * 100)), file))
                                     End Function).ConfigureAwait(False)
