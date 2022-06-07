@@ -75,23 +75,27 @@ Public Class Compactor
     End Function
 
 
-    Sub WOFCompressFile(path As String)
+    Function WOFCompressFile(path As String)
 
         Dim length As ULong = Marshal.SizeOf(_EFInfoPtr)
 
         Using fs As FileStream = New FileStream(path, FileMode.Open)
             Dim hFile = fs.SafeFileHandle.DangerousGetHandle()
             Dim res = WofSetFileDataLocation(hFile, WOF_PROVIDER_FILE, _EFInfoPtr, length)
-            If res <> 0 Then
-                If res <> -2147024552 Then
-                    Debug.WriteLine("spaghetti")
-                End If
-
-            End If
+            Return res
         End Using
 
-    End Sub
+    End Function
 
+    Shared Function WOFDecompressFile(path As String)
+
+        Using fs As FileStream = New FileStream(path, FileMode.Open)
+            Dim hDevice = fs.SafeFileHandle.DangerousGetHandle
+            Dim res = DeviceIoControl(hDevice, FSCTL_DELETE_EXTERNAL_BACKING, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero)
+            Return res
+        End Using
+
+    End Function
 
     <Time>
     Async Function RunCompactAsync(progress As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task(Of Boolean)
@@ -104,7 +108,7 @@ Public Class Compactor
 
         Await Parallel.ForEachAsync(_filesList,
                                     Function(file, _ctx)
-                                        WOFCompressFile(file)
+                                        Dim res = WOFCompressFile(file)
                                         'GenerateThread(_workingDir, compactArgs & " " & """" & file & """")
                                         Dim result = Interlocked.Increment(count)
                                         progress.Report((CInt(((result / totalFiles) * 100)), file))
@@ -164,7 +168,8 @@ Public Class Compactor
         Dim count As Integer = 0
         Await Parallel.ForEachAsync(filesList,
                                     Function(file, _ctx)
-                                        GenerateThread(workingDir, compactArgs & " " & """" & file & """")
+                                        Dim res = WOFDecompressFile(file)
+                                        'GenerateThread(workingDir, compactArgs & " " & """" & file & """")
                                         Dim result = Interlocked.Increment(count)
                                         progress.Report((CInt(((result / totalFiles) * 100)), file))
                                     End Function).ConfigureAwait(False)

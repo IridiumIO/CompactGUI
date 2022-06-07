@@ -7,6 +7,7 @@ Module WOFHelper
     Public Const FILE_PROVIDER_COMPRESSION_LZX As ULong = 1
     Public Const FILE_PROVIDER_COMPRESSION_XPRESS8K As ULong = 2
     Public Const FILE_PROVIDER_COMPRESSION_XPRESS16K As ULong = 3
+    Public Const FSCTL_DELETE_EXTERNAL_BACKING As UInteger = &H90314
 
 
     Public Function WOFConvertCompressionLevel(compressionlevel As Integer) As ULong
@@ -43,4 +44,19 @@ Module WOFHelper
         ExternalFileInfo As IntPtr,
         Length As ULong) As Integer
     End Function
+
+    'Most of these should be optional if MS Docs are to be believed -.-
+    <DllImport("kernel32.dll")>
+    Public Function DeviceIoControl(
+        hDevice As IntPtr,
+        dwIoControlCode As UInteger,
+        lpInBuffer As IntPtr,
+        nInBufferSize As UInteger,
+        lpOutBuffer As IntPtr,
+        nOutBufferSize As UInteger,
+        <Out> lpBytesReturned As IntPtr,
+        <Out> lpOverlapped As IntPtr) As Integer
+
+    End Function
+
 End Module
