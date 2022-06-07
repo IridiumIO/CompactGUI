@@ -1,13 +1,26 @@
 {
-    "Major": 3,
-    "Minor": 0,
-    "Patch": 0,
-    "PreRelease": "alpha",
-    "PreReleaseMinor": 2,
-    "VersionString": "3.0.0-alpha.2",
-    "FriendlyString": "3.0 alpha 2",
-    "Changes": [],
-    "Fixes": [
-        "While updating the backend database formats, the last alpha release got broken resulting in crashing when analysing a folder.This has been fixed in this version. Going forward, new backend changes will be versioned to avoid similar incidences until major release."
-    ]
+    "Latest": {
+        "Major": 3,
+        "Minor": 0,
+        "Patch": 0,
+        "PreRelease": "alpha",
+        "PreReleaseMinor": 2,
+        "VersionString": "3.0.0-alpha.2",
+        "FriendlyString": "3.0 alpha 2",
+        "Changes": [],
+        "Fixes": [
+            "While updating the backend database formats, the last alpha release got broken resulting in crashing when analysing a folder.This has been fixed in this version. Going forward, new backend changes will be versioned to avoid similar incidences until major release."
+        ]
+    },
+    "LatestNonPreRelease": {
+        "Major": 2,
+        "Minor": 6,
+        "Patch": 2,
+        "PreRelease": "",
+        "PreReleaseMinor": 0,
+        "VersionString": "2.6.2",
+        "FriendlyString": "2.6.2",
+        "Changes": [],
+        "Fixes": []
+    }
 }
