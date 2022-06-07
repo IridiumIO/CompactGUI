@@ -1,6 +1,7 @@
 {
-    "Major": 3.0,
+    "Major": 3,
     "Minor": 0,
+    "Patch": 0,
     "IsPrerelease": true,
     "PrereleaseType": "alpha",
     "PrereleaseVersion": 2,
