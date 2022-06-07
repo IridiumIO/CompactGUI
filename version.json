@@ -4,13 +4,11 @@
         "Minor": 0,
         "Patch": 0,
         "PreRelease": "alpha",
-        "PreReleaseMinor": 2,
-        "VersionString": "3.0.0-alpha.2",
-        "FriendlyString": "3.0 alpha 2",
+        "PreReleaseMinor": 3,
+        "VersionString": "3.0.0-alpha.3",
+        "FriendlyString": "3.0 alpha 3",
         "Changes": [],
-        "Fixes": [
-            "While updating the backend database formats, the last alpha release got broken resulting in crashing when analysing a folder.This has been fixed in this version. Going forward, new backend changes will be versioned to avoid similar incidences until major release."
-        ]
+        "Fixes": []
     },
     "LatestNonPreRelease": {
         "Major": 2,
