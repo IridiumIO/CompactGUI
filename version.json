@@ -5,6 +5,7 @@
     "PrereleaseType": "alpha",
     "PrereleaseVersion": 2,
     "VersionString": "3.0.0-alpha.2",
+    "FriendlyString": "3.0 alpha 2",
     "Changes": [],
     "Fixes": [
         "While updating the backend database formats, the last alpha release got broken resulting in crashing when analysing a folder.This has been fixed in this version. Going forward, new backend changes will be versioned to avoid similar incidences until major release."
