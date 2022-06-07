@@ -15,6 +15,8 @@ Class MainWindow
 
         WikiHandler.GetUpdatedJSON()
 
+        FireAndForgetCheckForUpdates()
+
     End Sub
 
 
@@ -40,6 +42,14 @@ Class MainWindow
 
     End Sub
 
+    Private Async Sub FireAndForgetCheckForUpdates()
+
+        Dim ret = Await UpdateHandler.CheckForUpdate(True)
+        If ret Then
+            uiUpdateBanner.Visibility = Visibility.Visible
+            uiUpdateText.Text = "update available  -  v" & UpdateHandler.NewVersion.ToString
+        End If
+    End Sub
 
     Private Sub FireAndForgetGetSteamHeader()
 
@@ -150,7 +160,7 @@ Class MainWindow
                  uiProgPercentage.Text = val.Item1 & "%"
                  uiCurrentFileCompress.Text = val.Item2.Replace(activeFolder.folderName, "")
              End Sub)
-
+        progress.Report((0, ""))
         Dim exclist As New List(Of String)({".vanim_c", ".vmat_c", ".vxml_c", ".vjs_c", ".res", ".vcfg", ".vphys_c", ".vseq_c", ".vpcf_c", ".cab", ".webm"})
 
         Dim cm As New Compactor(activeFolder.folderName, comboBoxSelectCompressionMode.SelectedIndex, exclist)
@@ -172,6 +182,7 @@ Class MainWindow
                  uiProgPercentage.Text = val.Item1 & "%"
                  uiCurrentFileCompress.Text = val.Item2.Replace(selectedFolder, "")
              End Sub)
+        progress.Report((0, ""))
 
         Dim compressedFilesList = activeFolder.analysisResults.Where(Function(res) res.CompressedSize < res.UncompressedSize).Select(Of String)(Function(f) f.FileName)
 
@@ -187,4 +198,9 @@ Class MainWindow
         If Not successfullySent Then btnSubmitToWiki.IsEnabled = True
     End Sub
 
+    Private Sub uiUpdateBanner_MouseUp(sender As Object, e As MouseButtonEventArgs)
+
+        Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI/releases/") With {.UseShellExecute = True})
+
+    End Sub
 End Class

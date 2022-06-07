@@ -340,10 +340,18 @@
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
-            
+
         </VisualStateManager.VisualStateGroups>
 
+        <!--Update Banner-->
+        <Grid x:Name="uiUpdateBanner" VerticalAlignment="Bottom" Height="30" Panel.ZIndex="2" Background="#FF468E56" Visibility="Collapsed"  d:Visibility="Visible"  Cursor="Hand" MouseUp="uiUpdateBanner_MouseUp">
+            <Grid.Effect>
+                <DropShadowEffect Direction="90" Opacity="0.15" BlurRadius="6"/>
+            </Grid.Effect>
 
+            <TextBlock x:Name="uiUpdateText" d:Text="update available  -  v3.0a2" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+        </Grid>
+        
         <!--Main information section / results of analysis-->
         <Grid x:Name="grid" Height="800" VerticalAlignment="Top" Panel.ZIndex="1">
             <Grid.Background>
