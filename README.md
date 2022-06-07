@@ -2,26 +2,43 @@
 
 &nbsp;
 
-<p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It is a standalone user interface that makes the Windows 10 compact.exe function easier to use.</b></p> 
+<p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It used to use the Windows 10 <code>compact.exe</code> function but now works directly with the Win32 API to be much more efficient.</b></p> 
 
 ------
 
 **Note - v3.0 Complete rewrite is underway as of June 2022 with the following features:**
  - Rebuilt from scratch in .NET 6 using WPF
  - Smoother, simplified UI
- - Parallelised and asynchronous programming resulting in _at least_ an order of magnitude speed improvement. Using ARK as a worst case scenario (160GB with 105,000 files)
-     - Analysing: 6.3 seconds (down from 104 seconds)
-     - Compressing: 8 minutes (down from 20+ minutes if it didn't just crash first)
+ - Removed dependency on `compact.exe` and directly accesses the Win32 API
+ - Parallelised and asynchronous programming resulting in over an order of magnitude speed improvement in some cases.
+ 
+    ```yml
+    ARK Survival Evolved | 170 GB | 108000 Files
+    
+    compact.exe:         9m18s   
+    CompactGUI v3 a3:    4m42s    49%  faster  # compact.exe yields system resources and checks files which is why this is so much faster
+    CompactGUI v3 a2:    8m17s    11%  faster
+    CompactGUI v2.6.2:   23m6s    248% slower
+        
+    Stardew Valley       | 700 MB | 6800 Files
+
+    compact.exe:         17.34s   
+    CompactGUI v3 a3:    12.95s   25%  faster
+    CompactGUI v3 a2:    17.82s   2.7% slower
+    CompactGUI v2.6.2:   81.79s   471% slower
+    ```
  - Automatic skipping of files that are smaller than the disk's cluster size, 4kb by default
  - Saving of poorly compressed filetypes per directory to skip on next run
 
-**Features not implemented yet:**
- - Skipping global poorly compressed filetypes (Settings menu not built yet; folder results can still be submitted)
- - Skipping online-sourced poorly compressed filetypes per game/folder based on previous users (soon)
- - Force action on files / compress sytem files (these radiobuttons are implemented but don't do anything)
- - Compress an already compressed folder to patch files that have changed in the meantime
- - Automatically checking for updates
- - Integration into Explorer context menus
+&nbsp;
+
+**Old features pending implementation:**
+ * [ ] Skipping global poorly compressed filetypes (Settings menu not built yet; folder results can still be submitted)
+ * [ ] Skipping online-sourced poorly compressed filetypes per game/folder based on previous users (soon)
+ * [ ] Force action on files / compress sytem files (these radiobuttons are implemented but don't do anything)
+ * [ ] Compress an already compressed folder to patch files that have changed in the meantime
+ * [X] Checking for online updates
+ * [ ] Integration into Explorer context menus
 ------
 &nbsp;
 
@@ -32,7 +49,7 @@ It's a commandlet with a collection of new algorithms introduced in Windows 10 t
 Transparent compression means that files can still be used normally on the computer as if nothing had happened - they don't get repackaged like Zip and Rar files do. 
 
 **How is this different from the built-in compression in older versions of Windows?**
-This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10 are far superior, resulting in greater compression ratios with almost no performance impact.Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM.[More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
+This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact.Those with older HDDs may even see a decent performance gain in the form of reduced loading times as the smaller files means it takes less time to read programs and games into RAM. [More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
 
 
 
@@ -40,7 +57,7 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 
 ####
  
-<p>Download from <a href="https://github.com/ImminentFate/CompactGUI/releases"><b>GitHub Releases</b></a></p>
+<p>Download from <a href="https://github.com/IridiumIO/CompactGUI/releases"><b>GitHub Releases</b></a></p>
 
 Coming soon: Download from Windows 10/11 Store
   
