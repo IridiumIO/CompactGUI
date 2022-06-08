@@ -17,11 +17,24 @@ Class MainWindow
 
         FireAndForgetCheckForUpdates()
 
+
     End Sub
 
 
     Property activeFolder As ActiveFolder
 
+    Sub SelectFolder(path As String)
+        Dim validFolder = _searchBar.SetDataPathAndReturn(path)
+        If Not validFolder Then Return
+
+        activeFolder = New ActiveFolder
+        activeFolder.folderName = path
+        activeFolder.steamAppID = GetSteamIDFromFolder(_searchBar.DataPath)
+
+        VisualStateManager.GoToElementState(BaseView, "ValidFolderSelected", True)
+
+        FireAndForgetGetSteamHeader()
+    End Sub
 
     Private Sub SearchClicked(sender As Object, e As MouseButtonEventArgs)
 
@@ -29,16 +42,7 @@ Class MainWindow
         folderSelector.ShowDialog()
 
         If folderSelector.SelectedPath = "" Then Return
-        Dim validFolder = _searchBar.SetDataPathAndReturn(folderSelector.SelectedPath)
-        If Not validFolder Then Return
-
-        activeFolder = New ActiveFolder
-        activeFolder.folderName = folderSelector.SelectedPath
-        activeFolder.steamAppID = GetSteamIDFromFolder(_searchBar.DataPath)
-
-        VisualStateManager.GoToElementState(BaseView, "ValidFolderSelected", True)
-
-        FireAndForgetGetSteamHeader()
+        SelectFolder(folderSelector.SelectedPath)
 
     End Sub
 
@@ -210,6 +214,14 @@ Class MainWindow
     Private Sub uiUpdateBanner_MouseUp(sender As Object, e As MouseButtonEventArgs)
 
         Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI/releases/") With {.UseShellExecute = True})
+
+    End Sub
+
+    Private Sub uiBtnOptions_Click(sender As Object, e As RoutedEventArgs) Handles uiBtnOptions.Click
+
+        Dim settingsDialog As New ContentDialog With {.Content = New SettingsControl}
+        settingsDialog.PrimaryButtonText = "save and close"
+        settingsDialog.ShowAsync()
 
     End Sub
 End Class

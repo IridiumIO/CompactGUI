@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:ValueConverters;assembly=ValueConverters"
         mc:Ignorable="d" xmlns:ui="http://schemas.modernwpf.com/2019" RenderOptions.ClearTypeHint="Enabled"
 
-    ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True"
+    ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True" 
         Title="CompactGUI" Height="800" Width="500" WindowStyle="SingleBorderWindow" Background="White">
 
     <Window.Resources>
@@ -342,6 +342,20 @@
             </VisualStateGroup>
 
         </VisualStateManager.VisualStateGroups>
+
+        <Grid x:Name="titleBar" Height="{Binding ElementName=Window, Path=(ui:TitleBar.Height)}" Panel.ZIndex="2" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+            
+            <ui:TitleBarButton x:Name="uiBtnOptions" HorizontalAlignment="Right" 
+               Foreground="White"
+                Grid.Column="0"
+                Content="&#xE713;" FontSize="16"
+                ContentTemplate="{x:Null}" />
+        </Grid>
+
 
         <!--Update Banner-->
         <Grid x:Name="uiUpdateBanner" VerticalAlignment="Bottom" Height="30" Panel.ZIndex="2" Background="#FF468E56" Visibility="Collapsed"  d:Visibility="Visible"  Cursor="Hand" MouseUp="uiUpdateBanner_MouseUp">

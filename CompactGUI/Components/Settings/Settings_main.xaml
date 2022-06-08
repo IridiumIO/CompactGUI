@@ -1,0 +1,48 @@
+﻿<Page x:Class="Settings_main"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CompactGUI" xmlns:ui="http://schemas.modernwpf.com/2019" 
+      mc:Ignorable="d" d:Height="500" Width="400" Tag="main"
+ d:Background="White"
+      Title="Settings_main">
+    <StackPanel>
+        <Label Content="Filetype Management" FontWeight="SemiBold"/>
+
+        <StackPanel Margin="10,20,0,10">
+                <Grid Margin="0,0,0,10">
+                <CheckBox x:Name="uiSkipFiletypes" IsEnabled="False">skip selected filetypes</CheckBox>
+
+                <ui:SplitButton IsEnabled="False" HorizontalAlignment="Right" Width="100" Margin="0,0,100,0"  BorderThickness="0">
+                    <ui:SplitButton.Content>
+                        <TextBlock Text="edit"/>
+                    </ui:SplitButton.Content>
+                    <ui:SplitButton.Flyout>
+                        <ui:MenuFlyout Placement="BottomEdgeAlignedLeft">
+                            <MenuItem Header="reset">
+                                <MenuItem.Icon>
+                                    <ui:FontIcon Glyph="&#xE75C;" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+
+                        </ui:MenuFlyout>
+                    </ui:SplitButton.Flyout>
+                </ui:SplitButton>
+   
+            </Grid>
+
+            <CheckBox IsEnabled="False">skip game-specific files using submitted results</CheckBox>
+        </StackPanel>
+
+        <Separator Margin="0,10,0,20"/>
+        <Label Content="Explorer Integration" FontWeight="SemiBold"/>
+        <StackPanel Margin="10,20,0,10">
+            <CheckBox x:Name="uiIsContextEnabled" Margin="0,0,0,10">add to right-click context menu</CheckBox>
+            <CheckBox x:Name="uiIsStartMenuEnabled" IsEnabled="False">add to start menu</CheckBox>
+
+
+        </StackPanel>
+
+    </StackPanel>
+</Page>
