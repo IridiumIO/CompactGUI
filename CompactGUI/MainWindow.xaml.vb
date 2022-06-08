@@ -83,7 +83,7 @@ Class MainWindow
     Private Async Sub AnalyseBegin(hasCompressionRun As Boolean)
 
         VisualStateManager.GoToElementState(BaseView, "AnalysingFolderSelected", True)
-        Dim bytesData = Await Compactor.AnalyseFolder(activeFolder.folderName, hasCompressionRun)
+        Dim bytesData = Await Compactor.AnalyseFolder(activeFolder.folderName)
         Dim appid = activeFolder.steamAppID
         activeFolder.analysisResults = bytesData.fileCompressionDetailsList
         uiAnalysisResultsSxS.SetLeftValue(bytesData.uncompressed)
@@ -170,7 +170,7 @@ Class MainWindow
                  uiCurrentFileCompress.Text = val.Item2.Replace(activeFolder.folderName, "")
              End Sub)
         progress.Report((0, ""))
-        Dim exclist As New List(Of String)({".vanim_c", ".vmat_c", ".vxml_c", ".vjs_c", ".res", ".vcfg", ".vphys_c", ".vseq_c", ".vpcf_c", ".cab", ".webm"})
+        Dim exclist() As String = {".vanim_c"}
 
         Dim cm As New Compactor(activeFolder.folderName, comboBoxSelectCompressionMode.SelectedIndex, exclist)
         Dim res = Await cm.RunCompactAsync(progress)

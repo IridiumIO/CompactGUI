@@ -1,22 +1,26 @@
 ﻿Imports System.Runtime.InteropServices
 
-Module WOFHelper
+Public Module WOFHelper
 
     Public Const WOF_PROVIDER_FILE As ULong = 2
-    Public Const FILE_PROVIDER_COMPRESSION_XPRESS4K As ULong = 0
-    Public Const FILE_PROVIDER_COMPRESSION_LZX As ULong = 1
-    Public Const FILE_PROVIDER_COMPRESSION_XPRESS8K As ULong = 2
-    Public Const FILE_PROVIDER_COMPRESSION_XPRESS16K As ULong = 3
     Public Const FSCTL_DELETE_EXTERNAL_BACKING As UInteger = &H90314
 
+    Public Enum Algorithms
+        NO_COMPRESSION = -2
+        LZNT1 = -1
+        XPRESS4K = 0
+        LZX = 1
+        XPRESS8K = 2
+        XPRESS16K = 3
+    End Enum
 
-    Public Function WOFConvertCompressionLevel(compressionlevel As Integer) As ULong
+    Public Function WOFConvertCompressionLevel(compressionlevel As Integer) As Integer
 
         Select Case compressionlevel
-            Case 0 : Return FILE_PROVIDER_COMPRESSION_XPRESS4K
-            Case 1 : Return FILE_PROVIDER_COMPRESSION_XPRESS8K
-            Case 2 : Return FILE_PROVIDER_COMPRESSION_XPRESS16K
-            Case 3 : Return FILE_PROVIDER_COMPRESSION_LZX
+            Case 0 : Return Algorithms.XPRESS4K
+            Case 1 : Return Algorithms.XPRESS8K
+            Case 2 : Return Algorithms.XPRESS16K
+            Case 3 : Return Algorithms.LZX
         End Select
 
     End Function
@@ -24,7 +28,7 @@ Module WOFHelper
 
 
     Public Structure _WOF_FILE_COMPRESSION_INFO_V1
-        Public Algorithm As ULong
+        Public Algorithm As Algorithms
         Public Flags As ULong
     End Structure
 

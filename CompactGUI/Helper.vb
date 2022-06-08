@@ -44,7 +44,7 @@ Module Helper
 
 
     <Extension()>
-    Function AsShortPathNames(filesList As IEnumerable(Of String)) As IEnumerable(Of String)
+    Function AsShortPathNames(filesList As IEnumerable(Of String)) As List(Of String)
 
         Return filesList.Select(Of String) _
             (Function(fl)
@@ -53,7 +53,7 @@ Module Helper
                      If sfp IsNot Nothing Then Return sfp
                  End If
                  Return fl
-             End Function)
+             End Function).ToList
 
     End Function
 

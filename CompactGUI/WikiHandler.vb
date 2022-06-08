@@ -89,7 +89,7 @@ Public Class WikiHandler
 
         Dim msgSuccess As New ModernWpf.Controls.ContentDialog With {
             .Title = "Thank you for submitting your result",
-            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {Compactor.CompressionLevel(steamsubmitdata.CompressionMode)}",
+            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Algorithms), WOFConvertCompressionLevel(compressionMode))}",
             .CloseButtonText = "OK"
             }
 

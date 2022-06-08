@@ -57,7 +57,7 @@ Public Class FileDetails
     Public FileName As String
     Public UncompressedSize As Long
     Public CompressedSize As Long
-
+    Public CompressionMode As Algorithms
 
 End Class
 
