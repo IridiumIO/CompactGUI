@@ -94,7 +94,12 @@ Class MainWindow
 
             If hasCompressionRun Then
                 activeFolder.poorlyCompressedFiles = Await GetPoorlyCompressedExtensions(bytesData.fileCompressionDetailsList)
+                btnSubmitToWiki.Content = "submit results"
+                btnSubmitToWiki.IsEnabled = activeFolder.steamAppID <> 0
                 'TODO: Add ability to save poor extensions for next time
+            Else
+                btnSubmitToWiki.Content = "compress again"
+                btnSubmitToWiki.IsEnabled = True
             End If
 
         Else
@@ -193,6 +198,10 @@ Class MainWindow
     End Sub
 
     Private Async Sub submitToWikiClicked()
+        If btnSubmitToWiki.Content = "compress again" Then
+            VisualStateManager.GoToElementState(BaseView, "ChooseCompressionOptions", True)
+            Return
+        End If
         btnSubmitToWiki.IsEnabled = False
         Dim successfullySent = Await WikiHandler.SubmitToWiki(activeFolder.folderName, activeFolder.analysisResults, activeFolder.poorlyCompressedFiles, comboBoxSelectCompressionMode.SelectedIndex)
         If Not successfullySent Then btnSubmitToWiki.IsEnabled = True
