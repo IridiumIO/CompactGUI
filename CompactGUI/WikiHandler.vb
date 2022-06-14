@@ -20,6 +20,8 @@ Public Class WikiHandler
                 Await res.CopyToAsync(fs)
             End Using
 
+            httpClient.Dispose()
+
             SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
             SettingsHandler.AppSettings.Save()
 

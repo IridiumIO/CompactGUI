@@ -2,18 +2,22 @@
 Imports System.Text.Json
 Public Class UpdateHandler
 
-    Public Shared CurrentVersion As New SemVersion(3, 0, 0, "alpha", 4)
+    Public Shared CurrentVersion As New SemVersion(3, 0, 0, "alpha", 5)
     Public Shared NewVersion As SemVersion
     Shared UpdateURL As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/version.json"
     Shared Async Function CheckForUpdate(includePrerelease As Boolean) As Task(Of Boolean)
+        Try
+            Using httpclient As New HttpClient
+                Dim ret = Await httpclient.GetStringAsync(UpdateURL)
+                Dim jVer = JsonSerializer.Deserialize(Of Dictionary(Of String, SemVersion))(ret)
+                Dim newV As SemVersion = If(includePrerelease, jVer("Latest"), jVer("LatestNonPreRelease"))
+                NewVersion = newV
+                If newV > CurrentVersion Then Return True
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine(ex.Message)
+        End Try
 
-        Using httpclient As New HttpClient
-            Dim ret = Await httpclient.GetStringAsync(UpdateURL)
-            Dim jVer = JsonSerializer.Deserialize(Of Dictionary(Of String, SemVersion))(ret)
-            Dim newV As SemVersion = If(includePrerelease, jVer("Latest"), jVer("LatestNonPreRelease"))
-            NewVersion = newV
-            If newV > CurrentVersion Then Return True
-        End Using
         Return False
 
     End Function
