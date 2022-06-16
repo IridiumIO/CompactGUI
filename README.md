@@ -4,6 +4,13 @@
 
 <p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It used to use the Windows 10 <code>compact.exe</code> function but now works directly with the Win32 API to be much more efficient.</b></p> 
 
+&nbsp;
+&nbsp;
+
+<p align="center"><img src="https://user-images.githubusercontent.com/1491536/172040389-62932137-11ae-49c8-8749-95c0b67f3aab.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040455-6cd06756-6323-44da-b350-daa47f31c5e3.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040456-09c069e3-093a-4c5e-8d69-f52d4dc2f982.png" width="250"/></>
+
+
+
 ------
 
 **Note - v3.0 Complete rewrite is underway as of June 2022 with the following features:**
@@ -35,10 +42,9 @@
 **Old features pending implementation:**
  * [ ] Skipping global poorly compressed filetypes (Settings menu not built yet; folder results can still be submitted)
  * [ ] Skipping online-sourced poorly compressed filetypes per game/folder based on previous users (soon)
- * [ ] Force action on files / compress sytem files (these radiobuttons are implemented but don't do anything)
- * [ ] Compress an already compressed folder to patch files that have changed in the meantime
+ * [x] Compress an already compressed folder to patch files that have changed in the meantime
  * [X] Checking for online updates
- * [ ] Integration into Explorer context menus
+ * [X] Integration into Explorer context menus
 ------
 &nbsp;
 
@@ -79,10 +85,6 @@ Use this tool to compress folders while still being able to use/run them normall
 <p>&nbsp;</p>
 
 
-
-## Screenshots
-
-<p align="center"><img src="https://user-images.githubusercontent.com/1491536/172040389-62932137-11ae-49c8-8749-95c0b67f3aab.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040455-6cd06756-6323-44da-b350-daa47f31c5e3.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040456-09c069e3-093a-4c5e-8d69-f52d4dc2f982.png" width="250"/></>
 
 
 ## Background
