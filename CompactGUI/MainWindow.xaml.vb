@@ -270,6 +270,7 @@ Class MainWindow
     Private Sub uiChkSkipUserPoorlyCompressed_Checked(sender As Object, e As RoutedEventArgs)
         SettingsHandler.AppSettings.SkipUserNonCompressable = True
         SettingsHandler.AppSettings.Save()
+        If activeFolder.WikiPoorlyCompressedFiles Is Nothing Then Return
         Dim skippableCount = activeFolder.analysisResults.Where(Function(fl) activeFolder.WikiPoorlyCompressedFiles.Contains(New IO.FileInfo(fl.FileName).Extension))
 
         If skippableCount.Count = 0 Then
