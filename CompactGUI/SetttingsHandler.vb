@@ -38,10 +38,12 @@ Public Class Settings
 
     Public Property ResultsDBLastUpdated As DateTime
     Public Property SkipNonCompressable As Boolean
-    Public Property NonCompressableList As New List(Of String) From {".dl_", ".gif", ".jpg", ".jpeg", ".png", ".wmf", ".mkv", ".mp4", ".wmv", ".avi", ".bik", ".flv", ".ogg", ".mpg", ".m2v", ".m4v", ".vob", ".mp3", ".aac", ".wma", ".flac", ".zip", ".xap", ".rar", ".7z", ".cab", ".lzx", ".docx", ".xlsx", ".pptx", ".vssx", ".vstx", ".onepkg"}
+    Public Property SkipUserNonCompressable As Boolean
+    Public Property NonCompressableList As New List(Of String) From {".dl_", ".gif", ".jpg", ".jpeg", ".png", ".wmf", ".mkv", ".mp4", ".wmv", ".avi", ".bik", ".bk2", ".flv", ".ogg", ".mpg", ".m2v", ".m4v", ".vob", ".mp3", ".aac", ".wma", ".flac", ".zip", ".xap", ".rar", ".7z", ".cab", ".lzx", ".docx", ".xlsx", ".pptx", ".vssx", ".vstx", ".onepkg"}
 
     Public Property IsContextIntegrated As Boolean
     Public Property IsStartMenuEnabled As Boolean
+    Public Property SkipUserFileTypesLevel As Integer
 
     'TODO: Add local saving of per-folder skip list
 

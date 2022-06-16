@@ -1,4 +1,6 @@
 ﻿
+Imports ModernWpf.Controls.Primitives
+
 Class Settings_main
 
     Sub New()
@@ -10,7 +12,7 @@ Class Settings_main
 
         uiIsContextEnabled.IsChecked = SettingsHandler.AppSettings.IsContextIntegrated
         uiIsStartMenuEnabled.IsChecked = SettingsHandler.AppSettings.IsStartMenuEnabled
-        uiSkipFiletypes.IsChecked = SettingsHandler.AppSettings.SkipNonCompressable
+        comboBoxSkipUserResultsAggression.SelectedIndex = SettingsHandler.AppSettings.SkipUserFileTypesLevel
 
     End Sub
 
@@ -40,4 +42,15 @@ Class Settings_main
         SettingsHandler.AppSettings.Save()
 
     End Sub
+
+
+    Private Sub uiEditSkipListBTN_Click()
+        Dim fl As New Settings_skiplistflyout
+        fl.ShowDialog()
+    End Sub
+
+    Private Sub skipHelpIcon_MouseEnter(sender As Object, e As MouseEventArgs)
+        FlyoutBase.ShowAttachedFlyout(sender)
+    End Sub
+
 End Class

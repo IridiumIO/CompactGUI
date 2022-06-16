@@ -9,11 +9,11 @@
 
     <Grid x:Name="uiAnalysisResultsRegion">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -22,7 +22,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="{Binding rightValue, ElementName=root}"  d:Text="29.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding rightValue, ElementName=root}"  d:Text="29.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center"/>
             <TextBlock Text="{Binding rightLabel, ElementName=root}" d:Text="estimated size" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
         </StackPanel>
 

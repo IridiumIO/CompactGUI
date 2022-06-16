@@ -11,28 +11,35 @@
         <Label Content="Filetype Management" FontWeight="SemiBold"/>
 
         <StackPanel Margin="10,20,0,10">
-                <Grid Margin="0,0,0,10">
-                <CheckBox x:Name="uiSkipFiletypes" IsEnabled="False">skip selected filetypes</CheckBox>
-
-                <ui:SplitButton IsEnabled="False" HorizontalAlignment="Right" Width="100" Margin="0,0,100,0"  BorderThickness="0">
-                    <ui:SplitButton.Content>
-                        <TextBlock Text="edit"/>
-                    </ui:SplitButton.Content>
-                    <ui:SplitButton.Flyout>
-                        <ui:MenuFlyout Placement="BottomEdgeAlignedLeft">
-                            <MenuItem Header="reset">
-                                <MenuItem.Icon>
-                                    <ui:FontIcon Glyph="&#xE75C;" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-
-                        </ui:MenuFlyout>
-                    </ui:SplitButton.Flyout>
-                </ui:SplitButton>
-   
+            <Grid Margin="0,0,0,10">
+                <TextBlock  FontSize="14" VerticalAlignment="Center">manage local skipped filetypes</TextBlock>
+                <Button x:Name="uiEditSkipListBTN" IsEnabled="True" HorizontalAlignment="Right" Width="100" Margin="0,0,25,0" Height="36" BorderThickness="0" Click="uiEditSkipListBTN_Click" Content="edit"></Button>
             </Grid>
 
-            <CheckBox IsEnabled="False">skip game-specific files using submitted results</CheckBox>
+            <Grid>
+                <TextBlock  FontSize="14" VerticalAlignment="Center">aggression of online skiplist</TextBlock>
+                <TextBlock x:Name="skipHelpIcon"  FontSize="14" VerticalAlignment="Center" Foreground="#FF98A9B9" Margin="175,0,0,0" Cursor="Hand" Text="(?)" TextDecorations="Underline" MouseUp="skipHelpIcon_MouseEnter">
+                    <ui:FlyoutBase.AttachedFlyout>
+                        <ui:Flyout Placement="Top" >
+                            <TextBlock Width="200" TextWrapping="Wrap" Text="For Steam games only.&#x0a;When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well."  />
+                        </ui:Flyout>
+                    </ui:FlyoutBase.AttachedFlyout>
+                </TextBlock>
+
+                <ComboBox x:Name="comboBoxSkipUserResultsAggression" IsEnabled="False" SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="100" Height="36" Margin="0,0,25,0" Background="Transparent" Foreground="#98A9B9" BorderBrush="#98A9B9" BorderThickness="1">
+                    <ComboBoxItem>
+                        <TextBlock Text="low" FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <TextBlock Text="medium" FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9"/>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <TextBlock Text="high" FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9"/>
+                    </ComboBoxItem>
+                </ComboBox>
+
+            </Grid>
+
         </StackPanel>
 
         <Separator Margin="0,10,0,20"/>

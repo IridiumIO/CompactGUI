@@ -9,6 +9,7 @@ Public Class ActiveFolder
     Public analysisResults As List(Of FileDetails)
     Public poorlyCompressedFiles As List(Of ExtensionResults)
     Public steamAppID As Integer
+    Public WikiPoorlyCompressedFiles As List(Of String)
 
 End Class
 

@@ -468,12 +468,18 @@
                     </Grid>
 
                     <Grid Height="65">
-                        <TextBlock Text="force action on files" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                        <CheckBox HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}"/>
+                        <TextBlock Text="skip poorly compressed filetypes" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                        <CheckBox x:Name="uiChkSkipPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" Checked="uiChkSkipPoorlyCompressed_Checked" Unchecked="uiChkSkipPoorlyCompressed_Unchecked"/>
+                        <TextBlock x:Name="uiSkipGlobalFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
+
                     </Grid>
                     <Grid Height="65">
-                        <TextBlock Text="compress hidden/system files" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                        <CheckBox HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}"/>
+                        <TextBlock Text="skip user-submitted filetypes" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                        <Border CornerRadius="10" Height="20" Width="40" Background="#FF98A9B9" Margin="190,4,0,0">
+                            <TextBlock Text="beta" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <CheckBox x:Name="uiChkSkipUserPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" Checked="uiChkSkipUserPoorlyCompressed_Checked" Unchecked="uiChkSkipUserPoorlyCompressed_Unchecked"/>
+                        <TextBlock x:Name="uiSkipFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
                     </Grid>
 
                 </StackPanel>
