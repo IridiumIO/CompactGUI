@@ -57,7 +57,7 @@ Public Class WikiHandler
     End Function
 
 
-    Shared Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of FileDetails), poorlyCompressedFiles As List(Of ExtensionResults), compressionMode As Integer) As Task(Of Boolean)
+    Shared Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of ExtensionResults), compressionMode As Integer) As Task(Of Boolean)
 
         Dim wikiSubmitURI = "https://docs.google.com/forms/d/e/1FAIpQLSdQyMwHIfldsuKKdDYBE9DNEyro8bidBDInq8EafGogFu382A/formResponse?entry.1019946248=%3CCompactGUI3%3E"
 
@@ -94,7 +94,7 @@ Public Class WikiHandler
 
         Dim msgSuccess As New ModernWpf.Controls.ContentDialog With {
             .Title = "Thank you for submitting your result",
-            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Algorithms), WOFConvertCompressionLevel(compressionMode))}",
+            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Core.CompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}",
             .CloseButtonText = "OK"
             }
 

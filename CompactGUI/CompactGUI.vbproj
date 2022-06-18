@@ -45,10 +45,19 @@
     </PackageReference>
     <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.0" />
+    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
     <PackageReference Include="ModernWpfUis" Version="1.4.0" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="System.Management" Version="6.0.0" />
     <PackageReference Include="ValueConverters" Version="2.2.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>

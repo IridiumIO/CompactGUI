@@ -6,7 +6,7 @@
 Public Class ActiveFolder
 
     Public folderName As String
-    Public analysisResults As List(Of FileDetails)
+    Public analysisResults As List(Of Core.AnalysedFileDetails)
     Public poorlyCompressedFiles As List(Of ExtensionResults)
     Public steamAppID As Integer
     Public WikiPoorlyCompressedFiles As List(Of String)
@@ -51,16 +51,6 @@ Public Class CompressionResult
 
 End Class
 
-
-' For each file in a folder, holds both pre-and post-compression results
-Public Class FileDetails
-
-    Public FileName As String
-    Public UncompressedSize As Long
-    Public CompressedSize As Long
-    Public CompressionMode As Algorithms
-
-End Class
 
 'Used to track efficiency of compression and built results for submission to wiki
 Public Class ExtensionResults

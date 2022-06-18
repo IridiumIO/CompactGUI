@@ -2,6 +2,7 @@
 Imports MethodTimer
 Imports System.Windows.Media.Animation
 Imports ModernWpf.Controls
+Imports CompactGUI.Core
 
 Class MainWindow
 
@@ -83,21 +84,23 @@ Class MainWindow
     Private Async Sub AnalyseBegin(hasCompressionRun As Boolean)
 
         VisualStateManager.GoToElementState(BaseView, "AnalysingFolderSelected", True)
-        Dim bytesData = Await Compactor.AnalyseFolder(activeFolder.folderName)
+
+        Dim analyser As New Analyser(activeFolder.folderName)
+        Dim containsCompressedFiles = Await analyser.AnalyseFolder()
         Dim appid = activeFolder.steamAppID
-        activeFolder.analysisResults = bytesData.fileCompressionDetailsList
-        uiAnalysisResultsSxS.SetLeftValue(bytesData.uncompressed)
-        uiAnalysisResultsSxS.SetRightValue(bytesData.compressed)
+        activeFolder.analysisResults = analyser.FileCompressionDetailsList
+        uiAnalysisResultsSxS.SetLeftValue(analyser.UncompressedBytes)
+        uiAnalysisResultsSxS.SetRightValue(analyser.CompressedBytes)
 
-        If bytesData.containsCompressedFiles OrElse hasCompressionRun Then
+        If containsCompressedFiles OrElse hasCompressionRun Then
 
-            uiResultsBarAfterSize.Value = CInt(bytesData.compressed / bytesData.uncompressed * 100)
-            uiResultsPercentSmaller.Text = CInt(100 - (bytesData.compressed / bytesData.uncompressed * 100)) & "%"
+            uiResultsBarAfterSize.Value = CInt(analyser.CompressedBytes / analyser.UncompressedBytes * 100)
+            uiResultsPercentSmaller.Text = CInt(100 - (analyser.CompressedBytes / analyser.UncompressedBytes * 100)) & "%"
             btnSubmitToWiki.IsEnabled = hasCompressionRun AndAlso activeFolder.steamAppID <> 0
             VisualStateManager.GoToElementState(BaseView, "FolderCompressedResults", True)
 
             If hasCompressionRun Then
-                activeFolder.poorlyCompressedFiles = Await GetPoorlyCompressedExtensions(bytesData.fileCompressionDetailsList)
+                activeFolder.poorlyCompressedFiles = Await GetPoorlyCompressedExtensions(analyser.FileCompressionDetailsList)
                 btnSubmitToWiki.Content = "submit results"
                 btnSubmitToWiki.IsEnabled = activeFolder.steamAppID <> 0
 
@@ -107,14 +110,14 @@ Class MainWindow
 
                 'TODO: Add ability to save poor extensions for next time
             Else
-                Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList(bytesData.uncompressed, appid)
+                Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList(analyser.UncompressedBytes, appid)
                 btnSubmitToWiki.Content = "compress again"
                 btnSubmitToWiki.IsEnabled = True
             End If
 
         Else
 
-            Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList(bytesData.uncompressed, appid)
+            Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList(analyser.UncompressedBytes, appid)
             uiAnalysisResultsSxS.SetRightValue(compRatioEstimate)
             VisualStateManager.GoToElementState(BaseView, "FolderAnalysedResults", True)
 
@@ -122,7 +125,7 @@ Class MainWindow
     End Sub
 
 
-    Private Async Function GetPoorlyCompressedExtensions(FilesList As List(Of FileDetails)) As Task(Of List(Of ExtensionResults))
+    Private Async Function GetPoorlyCompressedExtensions(FilesList As List(Of Core.AnalysedFileDetails)) As Task(Of List(Of ExtensionResults))
 
         Dim extClassResults As List(Of ExtensionResults) = Await Task.Run(
             Function()
@@ -191,7 +194,7 @@ Class MainWindow
             '  exclist = exclist.Union(activeFolder.WikiPoorlyCompressedFiles).ToArray
         End If
 
-        Dim cm As New Compactor(activeFolder.folderName, comboBoxSelectCompressionMode.SelectedIndex, exclist)
+        Dim cm As New Core.Compactor(activeFolder.folderName, Core.WOFConvertCompressionLevel(comboBoxSelectCompressionMode.SelectedIndex), exclist)
         Dim res = Await cm.RunCompactAsync(progress)
 
         AnalyseBegin(True)
@@ -212,9 +215,9 @@ Class MainWindow
              End Sub)
         progress.Report((0, ""))
 
-        Dim compressedFilesList = activeFolder.analysisResults.Where(Function(res) res.CompressedSize < res.UncompressedSize).Select(Of String)(Function(f) f.FileName)
-
-        Await Compactor.UncompressFolder(activeFolder.folderName, compressedFilesList.ToList, progress)
+        Dim compressedFilesList = activeFolder.analysisResults.Where(Function(res) res.CompressedSize < res.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
+        Dim uncompactor As New Uncompactor
+        Await uncompactor.UncompactFiles(compressedFilesList, progress)
 
         AnalyseBegin(False)
 
