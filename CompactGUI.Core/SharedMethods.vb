@@ -2,9 +2,19 @@
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Text
-Module SharedMethods
+Public Module SharedMethods
 
 
+    Function verifyFolder(folder As String) As Boolean
+
+        If Not IO.Directory.Exists(folder) Then : Return False
+        ElseIf folder.Contains(":\Windows") Then : Return False
+        ElseIf folder.EndsWith(":\") Then : Return False
+        End If
+
+        Return True
+
+    End Function
 
     Function GetFileSizeOnDisk(file As String) As Long
         Dim hosize As UInteger

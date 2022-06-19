@@ -3,7 +3,7 @@
 
         Dim mainWindow = New MainWindow()
         If e.Args.Length = 1 Then
-            mainWindow.SelectFolder(e.Args(0))
+            mainWindow.ViewModel.SelectFolder(e.Args(0))
         End If
         mainWindow.Show()
 

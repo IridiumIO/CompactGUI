@@ -1,12 +1,21 @@
-﻿Imports ModernWpf.Controls
+﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
+Imports ModernWpf.Controls
 Imports Ookii.Dialogs.Wpf
 
 Public Class SearchBar
 
 
-    Public ReadOnly SearchTextProperty As DependencyProperty = DependencyProperty.Register("SearchText", GetType(String), GetType(SearchBar), New PropertyMetadata(Nothing))
+    Public Shared Property SearchTextProperty As DependencyProperty = DependencyProperty.Register("SearchText", GetType(String), GetType(SearchBar), New PropertyMetadata(Nothing, AddressOf SearchTextChangedCallback))
 
-    Public ReadOnly IsValidPathProperty As DependencyProperty = DependencyProperty.Register("IsValidPath", GetType(Boolean), GetType(SearchBar), New PropertyMetadata(Nothing))
+    Public Shared Property IsValidPathProperty As DependencyProperty = DependencyProperty.Register("IsValidPath", GetType(Boolean), GetType(SearchBar), New PropertyMetadata(Nothing))
+
+    Private Shared Sub SearchTextChangedCallback(ByVal target As DependencyObject, ByVal args As DependencyPropertyChangedEventArgs)
+
+        Dim str = TryCast(args.NewValue, String)
+        Dim tg = CType(target, SearchBar)
+        tg.SearchText = str.Substring(str.LastIndexOf("\") + 1)
+
+    End Sub
 
     Public Property IsValidPath As Boolean
         Get
@@ -16,6 +25,7 @@ Public Class SearchBar
             SetValue(IsValidPathProperty, value)
         End Set
     End Property
+
 
     Public Property SearchText As String
         Get
@@ -35,50 +45,10 @@ Public Class SearchBar
 
     End Property
 
-    Public Function SetDataPathAndReturn(dirPath) As Boolean
-
-        If dirPath = "" Then Return False
-
-        If Not verifyFolder(dirPath) Then
-            Dim msgError As New ContentDialog With {
-            .Title = "Invalid Folder",
-            .Content = "For safety, this folder cannot be chosen.",
-            .CloseButtonText = "OK"
-            }
-
-            msgError.ShowAsync()
-
-            Return False
-        End If
-
-        _DataPath = dirPath
-        SearchText = dirPath.Substring(dirPath.LastIndexOf("\") + 1)
-        IsValidPath = True
-
-        Return True
-
-
-    End Function
 
     Sub New()
-
-        ' This call is required by the designer.
         InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-
     End Sub
 
-
-    Shared Function verifyFolder(folder As String) As Boolean
-
-        If Not IO.Directory.Exists(folder) Then : Return False
-        ElseIf folder.Contains(":\Windows") Then : Return False
-        ElseIf folder.EndsWith(":\") Then : Return False
-        End If
-
-        Return True
-
-    End Function
 
 End Class

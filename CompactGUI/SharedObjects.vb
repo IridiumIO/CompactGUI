@@ -1,15 +1,15 @@
-﻿''' <summary>
+﻿
+Imports Microsoft.Toolkit.Mvvm.ComponentModel
+''' <summary>
 ''' Shared objects between multiple code regions
 ''' </summary>
+Public Class ActiveFolder : Inherits ObservableObject
 
-
-Public Class ActiveFolder
-
-    Public folderName As String
-    Public analysisResults As List(Of Core.AnalysedFileDetails)
-    Public poorlyCompressedFiles As List(Of ExtensionResults)
-    Public steamAppID As Integer
-    Public WikiPoorlyCompressedFiles As List(Of String)
+    Public Property folderName As String
+    Public Property analysisResults As List(Of Core.AnalysedFileDetails)
+    Public Property poorlyCompressedFiles As List(Of ExtensionResults)
+    Public Property steamAppID As Integer
+    Public Property WikiPoorlyCompressedFiles As List(Of String)
 
 End Class
 

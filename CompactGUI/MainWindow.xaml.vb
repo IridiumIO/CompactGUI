@@ -10,75 +10,23 @@ Class MainWindow
 
         InitializeComponent()
 
-        VisualStateManager.GoToElementState(BaseView, "FreshLaunch", True)
-
-        SettingsHandler.InitialiseSettings()
-
-        WikiHandler.GetUpdatedJSON()
-
-        FireAndForgetCheckForUpdates()
-
+        Me.DataContext = ViewModel
+        _searchBar.DataContext = ViewModel
+        ' VisualStateManager.GoToElementState(BaseView, "FreshLaunch", True)
+        ViewModel.State = "FreshLaunch"
 
     End Sub
 
+    Public Property ViewModel As New MainViewModel
 
     Property activeFolder As ActiveFolder
 
-    Sub SelectFolder(path As String)
-        Dim validFolder = _searchBar.SetDataPathAndReturn(path)
-        If Not validFolder Then Return
-
-        activeFolder = New ActiveFolder
-        activeFolder.folderName = path
-        activeFolder.steamAppID = GetSteamIDFromFolder(_searchBar.DataPath)
-
-        VisualStateManager.GoToElementState(BaseView, "ValidFolderSelected", True)
-
-        FireAndForgetGetSteamHeader()
-    End Sub
-
     Private Sub SearchClicked(sender As Object, e As MouseButtonEventArgs)
 
-        Dim folderSelector As New VistaFolderBrowserDialog
-        folderSelector.ShowDialog()
-
-        If folderSelector.SelectedPath = "" Then Return
-        SelectFolder(folderSelector.SelectedPath)
+        ViewModel.SelectFolder()
 
     End Sub
 
-    Private Async Sub FireAndForgetCheckForUpdates()
-
-        Dim ret = Await UpdateHandler.CheckForUpdate(True)
-        If ret Then
-            uiUpdateBanner.Visibility = Visibility.Visible
-            uiUpdateText.Text = "update available  -  v" & UpdateHandler.NewVersion.ToString
-        End If
-    End Sub
-
-    Private Sub FireAndForgetGetSteamHeader()
-
-        steamBG.Opacity = 0
-        Dim appid = activeFolder.steamAppID
-        Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{appid}/page_bg_generated_v6b.jpg"
-        Dim bImg As New BitmapImage(New Uri(url))
-
-        If Not steamBG.Source Is Nothing AndAlso TryCast(steamBG.Source, BitmapImage)?.UriSource = bImg.UriSource Then Return
-
-        Dim fadeInAnimation = New DoubleAnimation(0.6, New Duration(New TimeSpan(0, 0, 2)))
-        Dim fadeOutAnimation = New DoubleAnimation(0, New Duration(New TimeSpan(0, 0, 0, 0, 500)))
-
-        AddHandler bImg.DownloadCompleted,
-            Sub()
-                AddHandler fadeOutAnimation.Completed,
-                        Sub(o, e)
-                            steamBG.Source = bImg
-                            steamBG.BeginAnimation(Image.OpacityProperty, fadeInAnimation)
-                        End Sub
-                steamBG.BeginAnimation(Image.OpacityProperty, fadeOutAnimation)
-            End Sub
-
-    End Sub
 
 
     Private Async Sub AnalyseBegin(hasCompressionRun As Boolean)
