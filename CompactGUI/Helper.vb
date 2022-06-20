@@ -1,7 +1,5 @@
 ﻿Imports System.IO
 Imports System.Management
-Imports System.Runtime.CompilerServices
-Imports System.Runtime.InteropServices
 Imports System.Text
 Imports Gameloop.Vdf
 

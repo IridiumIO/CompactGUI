@@ -5,10 +5,10 @@ Imports Microsoft.Toolkit.Mvvm.ComponentModel
 ''' </summary>
 Public Class ActiveFolder : Inherits ObservableObject
 
-    Public Property folderName As String
-    Public Property analysisResults As List(Of Core.AnalysedFileDetails)
-    Public Property poorlyCompressedFiles As List(Of Core.ExtensionResult)
-    Public Property steamAppID As Integer
+    Public Property FolderName As String
+    Public Property AnalysisResults As List(Of Core.AnalysedFileDetails)
+    Public Property PoorlyCompressedFiles As List(Of Core.ExtensionResult)
+    Public Property SteamAppID As Integer
     Public Property WikiPoorlyCompressedFiles As List(Of String)
     Public Property UncompressedBytes As Long
     Public Property CompressedBytes As Long
@@ -20,6 +20,18 @@ Public Class ActiveFolder : Inherits ObservableObject
         Get
             If UncompressedBytes = 0 OrElse CompressedBytes = 0 Then Return 0
             Return CompressedBytes / UncompressedBytes
+        End Get
+    End Property
+    Public ReadOnly Property GlobalPoorlyCompressedFilesCount As Integer
+        Get
+            If AnalysisResults Is Nothing OrElse SettingsHandler.AppSettings.NonCompressableList.Count = 0 Then Return 0
+            Return AnalysisResults.Where(Function(fl) SettingsHandler.AppSettings.NonCompressableList.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
+        End Get
+    End Property
+    Public ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
+        Get
+            If AnalysisResults Is Nothing OrElse WikiPoorlyCompressedFiles Is Nothing Then Return 0
+            Return AnalysisResults.Where(Function(fl) WikiPoorlyCompressedFiles.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
         End Get
     End Property
 

@@ -395,7 +395,7 @@
             <Label x:Name="label" Content="CompactGUI" FontFamily="Segoe UI" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0,100,0,0" RenderOptions.ClearTypeHint="Enabled"/>
 
             <!--Search Bar-->
-            <local:SearchBar x:Name="_searchBar" SearchText="{Binding ActiveFolder.folderName, Mode=TwoWay, TargetNullValue='select target folder'}" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
+            <local:SearchBar x:Name="_searchBar" SearchText="{Binding ActiveFolder.FolderName, Mode=TwoWay, TargetNullValue='select target folder'}" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
 
             <!--Analyse Button and Progress Ring-->
             <Grid x:Name="uiAnalysisButtonRegion" Margin="0,560,0,0" Width="138" Height="48" VerticalAlignment="Top" >
@@ -513,7 +513,18 @@
                     <Grid Height="65">
                         <TextBlock Text="skip poorly compressed filetypes" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
                         <CheckBox x:Name="uiChkSkipPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" IsChecked="{Binding BindableSettings.SkipNonCompressable}"/>
-                        <TextBlock x:Name="uiSkipGlobalFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
+                        <TextBlock x:Name="uiSkipGlobalFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value=""/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipPoorlyCompressed}" Value="True">
+                                            <Setter Property="Text" Value="{Binding ActiveFolder.GlobalPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
 
                     </Grid>
                     <Grid Height="65">
@@ -522,7 +533,18 @@
                             <TextBlock Text="beta" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <CheckBox x:Name="uiChkSkipUserPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" IsChecked="{Binding BindableSettings.SkipUserNonCompressable}"/>
-                        <TextBlock x:Name="uiSkipFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
+                        <TextBlock x:Name="uiSkipFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value=""/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipUserPoorlyCompressed}" Value="True">
+                                            <Setter Property="Text" Value="{Binding ActiveFolder.WikiPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped, TargetNullValue=not enough user submissions to build skiplist}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Grid>
 
                 </StackPanel>

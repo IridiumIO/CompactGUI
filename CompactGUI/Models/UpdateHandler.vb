@@ -5,6 +5,7 @@ Public Class UpdateHandler
     Public Shared CurrentVersion As New SemVersion(3, 0, 0, "alpha", 4)
     Public Shared NewVersion As SemVersion
     Shared UpdateURL As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/version.json"
+
     Shared Async Function CheckForUpdate(includePrerelease As Boolean) As Task(Of Boolean)
         Try
             Using httpclient As New HttpClient
