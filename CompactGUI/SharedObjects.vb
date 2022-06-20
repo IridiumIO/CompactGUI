@@ -7,9 +7,21 @@ Public Class ActiveFolder : Inherits ObservableObject
 
     Public Property folderName As String
     Public Property analysisResults As List(Of Core.AnalysedFileDetails)
-    Public Property poorlyCompressedFiles As List(Of ExtensionResults)
+    Public Property poorlyCompressedFiles As List(Of Core.ExtensionResult)
     Public Property steamAppID As Integer
     Public Property WikiPoorlyCompressedFiles As List(Of String)
+    Public Property UncompressedBytes As Long
+    Public Property CompressedBytes As Long
+    Public Property SelectedCompressionMode = 0
+
+    Public Property IsFreshlyCompressed As Boolean = False
+
+    Public ReadOnly Property CompressionRatio As Decimal
+        Get
+            If UncompressedBytes = 0 OrElse CompressedBytes = 0 Then Return 0
+            Return CompressedBytes / UncompressedBytes
+        End Get
+    End Property
 
 End Class
 
@@ -23,7 +35,7 @@ Public Class SteamSubmissionData
     Public Property CompressionMode As Integer
     Public Property BeforeBytes As Long
     Public Property AfterBytes As Long
-    Public Property PoorlyCompressedExt As List(Of ExtensionResults)
+    Public Property PoorlyCompressedExt As List(Of Core.ExtensionResult)
 
 End Class
 
@@ -51,18 +63,3 @@ Public Class CompressionResult
 
 End Class
 
-
-'Used to track efficiency of compression and built results for submission to wiki
-Public Class ExtensionResults
-
-    Public Property extension As String
-    Public Property uncompressedBytes As Long
-    Public Property compressedBytes As Long
-    Public Property totalFiles As Integer
-    ReadOnly Property cRatio As Decimal
-        Get
-            Return Math.Round(compressedBytes / uncompressedBytes, 2)
-        End Get
-    End Property
-
-End Class

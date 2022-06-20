@@ -13,6 +13,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter"/>
+            <local:DecimalToPercentageConverter x:Key="DecimalToPercentageConverter"/>
         </ResourceDictionary>
 
     </Window.Resources>
@@ -398,16 +399,16 @@
 
             <!--Analyse Button and Progress Ring-->
             <Grid x:Name="uiAnalysisButtonRegion" Margin="0,560,0,0" Width="138" Height="48" VerticalAlignment="Top" >
-                <Button x:Name="btnAnalyse" Width="138" Height="48" Content="analyse" Foreground="White"  Background="#FF6B8399" Click="AnalyseClicked" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnAnalyse" Width="138" Height="48" Content="analyse" Foreground="White"  Background="#FF6B8399" Command="{Binding AnalyseFolderCommand}" Style="{StaticResource RoundedButton}"/>
                 <ui:ProgressRing x:Name="progRingAnalyse" IsActive="False" Width="40" Height="40" Foreground="White"/>
             </Grid>
 
             <!--Choose compression options button-->
-            <Button x:Name="btnChooseCompressionOptions" Margin="0,560,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Click="btnChooseCompressionOptions_Click"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
+            <Button x:Name="btnChooseCompressionOptions" Margin="0,560,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding ChooseCompressionCommand}"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
 
 
             <!--Folder Size, estimated size and post-compression view-->
-            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top"/>
+            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top" leftValue="{Binding ActiveFolder.UncompressedBytes}" rightValue="{Binding ActiveFolder.CompressedBytes}"/>
 
             <!--Analysis Results comparison bars if folder is compressed-->
             <Grid x:Name="grid3" Margin="0,480,0,0">
@@ -428,7 +429,7 @@
                 </ui:ProgressBar>
 
                 <!--bar after compression-->
-                <ui:ProgressBar x:Name="uiResultsBarAfterSize" Height="32" CornerRadius="16" Width="108" Value="43" RenderTransformOrigin="0.5,0.5" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" Margin="210,38,0,0">
+                <ui:ProgressBar x:Name="uiResultsBarAfterSize" Height="32" CornerRadius="16" Width="108" Value="{Binding ActiveFolder.CompressionRatio, Converter={StaticResource DecimalToPercentageConverter}, Mode=OneWay}" RenderTransformOrigin="0.5,0.5" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" Margin="210,38,0,0">
                     <ui:ProgressBar.Effect>
                         <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="6"/>
                     </ui:ProgressBar.Effect>
@@ -444,11 +445,40 @@
 
                 <!--percent size reduction-->
                 <StackPanel Orientation="Vertical" Margin="0,27,0,0" VerticalAlignment="Top" >
-                    <TextBlock x:Name="uiResultsPercentSmaller" d:Text="44 %" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="uiResultsPercentSmaller" d:Text="44 %" Text="{Binding ActiveFolder.CompressionRatio, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF', Mode=OneWay}" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
                     <TextBlock Text="smaller" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Click="UncompressClicked"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
-                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Click="submitToWikiClicked"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Command="{Binding UncompressFolderCommand}"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Command="{Binding SubmitToWikiCommand}"  Background="#84A2BD" >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+
+                    </Button.Style>
+                </Button>
+                <Button x:Name="btnCompressAgain" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress again" Foreground="White" Command="{Binding ChooseCompressionCommand}" Background="#84A2BD" >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                        
+                    </Button.Style>
+                </Button>
 
             </Grid>
 
@@ -464,7 +494,7 @@
                 <StackPanel Orientation="Vertical" Height="195" VerticalAlignment="Top" Margin="0,77,0,0">
                     <Grid Height="65">
                         <TextBlock Text="compression mode" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                        <ComboBox x:Name="comboBoxSelectCompressionMode" SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Center" Width="156" Height="38" Background="Transparent" Foreground="#98A9B9" BorderBrush="#98A9B9" BorderThickness="2">
+                        <ComboBox x:Name="comboBoxSelectCompressionMode" SelectedIndex="{Binding ActiveFolder.SelectedCompressionMode, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="156" Height="38" Background="Transparent" Foreground="#98A9B9" BorderBrush="#98A9B9" BorderThickness="2">
                             <ComboBoxItem>
                                 <TextBlock Text="XPRESS 4K" FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
                             </ComboBoxItem>
@@ -482,7 +512,7 @@
 
                     <Grid Height="65">
                         <TextBlock Text="skip poorly compressed filetypes" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                        <CheckBox x:Name="uiChkSkipPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" Checked="uiChkSkipPoorlyCompressed_Checked" Unchecked="uiChkSkipPoorlyCompressed_Unchecked"/>
+                        <CheckBox x:Name="uiChkSkipPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" IsChecked="{Binding BindableSettings.SkipNonCompressable}"/>
                         <TextBlock x:Name="uiSkipGlobalFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
 
                     </Grid>
@@ -491,27 +521,27 @@
                         <Border CornerRadius="10" Height="20" Width="40" Background="#FF98A9B9" Margin="190,4,0,0">
                             <TextBlock Text="beta" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <CheckBox x:Name="uiChkSkipUserPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" Checked="uiChkSkipUserPoorlyCompressed_Checked" Unchecked="uiChkSkipUserPoorlyCompressed_Unchecked"/>
+                        <CheckBox x:Name="uiChkSkipUserPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" IsChecked="{Binding BindableSettings.SkipUserNonCompressable}"/>
                         <TextBlock x:Name="uiSkipFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
                     </Grid>
 
                 </StackPanel>
 
-                <Button x:Name="btnCompress" Margin="0,366,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Click="btnCompress_Click"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnCompress" Margin="0,366,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding CompressFolderCommand}"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
             </Grid>
 
             <!--progress area while actively compressing-->
             <Grid x:Name="grid2">
                 <TextBlock Text="working..." Margin="0,92,0,0" Foreground="#73808C" FontSize="20"/>
-                <TextBlock x:Name="uiProgPercentage" d:Text="49%" Margin="0,92,0,0" Foreground="#73808C" FontSize="20" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="uiProgPercentage" d:Text="49%" Text="{Binding WorkingProgress.Item1, Mode=OneWay, StringFormat={}{0}%}"  Margin="0,92,0,0" Foreground="#73808C" FontSize="20" HorizontalAlignment="Right"/>
 
-                <ui:ProgressBar x:Name="uiProgBarCompress" Background="#4498A9B9" Width="auto" Height="14" CornerRadius="7" VerticalAlignment="Top" Margin="0,143,0,0" Foreground="#92F1AB" d:Value="40" BorderThickness="0,0,0,0" >
+                <ui:ProgressBar x:Name="uiProgBarCompress" Background="#4498A9B9" Width="auto" Height="14" CornerRadius="7" VerticalAlignment="Top" Margin="0,143,0,0" Foreground="#92F1AB" d:Value="40" Value="{Binding WorkingProgress.Item1, Mode=OneWay}" BorderThickness="0,0,0,0" >
                     <ui:ProgressBar.Effect>
                         <DropShadowEffect Direction="-45" Opacity="0.2"/>
                     </ui:ProgressBar.Effect>
                 </ui:ProgressBar>
 
-                <TextBlock x:Name="uiCurrentFileCompress" d:Text="/test/folder/gamefile.bin" Margin="0,187,0,0" Foreground="#73808C" Opacity="0.4" FontSize="20" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                <TextBlock x:Name="uiCurrentFileCompress" d:Text="/test/folder/gamefile.bin" Text="{Binding WorkingProgress.Item2, Mode=OneWay}" Margin="0,187,0,0" Foreground="#73808C" Opacity="0.4" FontSize="20" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
 
 
             </Grid>

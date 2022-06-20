@@ -1,12 +1,13 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports System.Text.Json
+Imports Microsoft.Toolkit.Mvvm.ComponentModel
 
-Public Class SettingsHandler
+Public Class SettingsHandler : Inherits ObservableObject
 
     Public Shared Property DataFolder As IO.DirectoryInfo = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
     Public Shared Property SettingsJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(DataFolder.FullName, "settings.json"))
 
-    Public Shared AppSettings As Settings
+    Public Shared Property AppSettings As Settings
 
     Shared Async Sub InitialiseSettings()
 
@@ -34,7 +35,7 @@ Public Class SettingsHandler
 
 End Class
 
-Public Class Settings
+Public Class Settings : Inherits ObservableObject
 
     Public Property ResultsDBLastUpdated As DateTime
     Public Property SkipNonCompressable As Boolean

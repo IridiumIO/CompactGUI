@@ -2,10 +2,25 @@
 
 
 
-    Public ReadOnly leftValueProperty As DependencyProperty = DependencyProperty.Register("leftValue", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing))
+    Public ReadOnly leftValueProperty As DependencyProperty = DependencyProperty.Register("leftValue", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing, Nothing, AddressOf CoerceLeftValue))
+
+
+
     Public ReadOnly leftLabelProperty As DependencyProperty = DependencyProperty.Register("leftLabel", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing))
-    Public ReadOnly rightValueProperty As DependencyProperty = DependencyProperty.Register("rightValue", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing))
+    Public ReadOnly rightValueProperty As DependencyProperty = DependencyProperty.Register("rightValue", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing, Nothing, AddressOf coerceRightValue))
+
+
     Public ReadOnly rightLabelProperty As DependencyProperty = DependencyProperty.Register("rightLabel", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing))
+
+
+    Private Function CoerceLeftValue(d As DependencyObject, baseValue As Object) As Object
+        Return ConvertBytesToReadable(baseValue)
+    End Function
+    Private Function coerceRightValue(d As DependencyObject, baseValue As Object) As Object
+        If baseValue = 1010101010101010 Then Return "?"
+        Return ConvertBytesToReadable(baseValue)
+    End Function
+
 
     Public Property leftValue As String
         Get
