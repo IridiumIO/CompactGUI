@@ -7,6 +7,22 @@
 
 End Class
 
+
+'Used to track efficiency of compression and built results for submission to wiki
+Public Class ExtensionResult
+
+    Public Property extension As String
+    Public Property uncompressedBytes As Long
+    Public Property compressedBytes As Long
+    Public Property totalFiles As Integer
+    ReadOnly Property cRatio As Decimal
+        Get
+            Return Math.Round(compressedBytes / uncompressedBytes, 2)
+        End Get
+    End Property
+
+End Class
+
 Public Enum CompressionAlgorithm
     NO_COMPRESSION = -2
     LZNT1 = -1
