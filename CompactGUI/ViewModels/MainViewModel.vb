@@ -1,6 +1,4 @@
-﻿Imports System.Windows.Input
-Imports System.Windows.Media.Animation
-Imports Microsoft.Toolkit.Mvvm.ComponentModel
+﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports Microsoft.Toolkit.Mvvm.Input
 Imports ModernWpf.Controls
 Imports Ookii.Dialogs.Wpf
@@ -48,7 +46,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Private Sub FireAndForgetGetSteamHeader()
         Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{ActiveFolder.SteamAppID}/page_bg_generated_v6b.jpg"
         Dim bImg As New BitmapImage(New Uri(url))
-        If Not SteamBGImage?.UriSource Is Nothing AndAlso SteamBGImage.UriSource = bImg.UriSource Then Return
+        If SteamBGImage?.UriSource IsNot Nothing AndAlso SteamBGImage.UriSource = bImg.UriSource Then Return
         SteamBGImage = bImg
     End Sub
 

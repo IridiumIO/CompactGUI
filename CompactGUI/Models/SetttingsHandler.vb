@@ -1,5 +1,4 @@
-﻿Imports System.Runtime.CompilerServices
-Imports System.Text.Json
+﻿Imports System.Text.Json
 Imports Microsoft.Toolkit.Mvvm.ComponentModel
 
 Public Class SettingsHandler : Inherits ObservableObject

@@ -3,29 +3,27 @@ Imports System.Text.Json
 
 Public Class WikiHandler
 
-    Shared filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
+    Shared ReadOnly filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
 
     Shared Async Function GetUpdatedJSON() As Task
 
         Dim dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
 
-        Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
+        Dim JSONFile As New IO.FileInfo(filePath)
 
-        If Not JSONFile.Exists OrElse SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) < DateTime.Now Then
+        If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
 
-            Dim httpClient As New HttpClient
-            Dim res = Await httpClient.GetStreamAsync(dlPath)
+        Dim httpClient As New HttpClient
+        Dim res = Await httpClient.GetStreamAsync(dlPath)
 
-            Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
-                Await res.CopyToAsync(fs)
-            End Using
+        Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
+            Await res.CopyToAsync(fs)
+        End Using
 
-            httpClient.Dispose()
+        httpClient.Dispose()
 
-            SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
-            SettingsHandler.AppSettings.Save()
-
-        End If
+        SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
+        SettingsHandler.AppSettings.Save()
 
 
     End Function
