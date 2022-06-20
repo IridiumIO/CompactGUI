@@ -16,7 +16,6 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Async Sub FireAndForgetCheckForUpdates()
-        Await Task.Delay(2000)
         Dim ret = Await UpdateHandler.CheckForUpdate(True)
         If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdateHandler.NewVersion.ToString)
     End Sub
