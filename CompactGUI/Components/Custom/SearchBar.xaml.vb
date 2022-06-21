@@ -5,9 +5,9 @@ Imports Ookii.Dialogs.Wpf
 Public Class SearchBar
 
 
-    Public Shared Property SearchTextProperty As DependencyProperty = DependencyProperty.Register("SearchText", GetType(String), GetType(SearchBar), New PropertyMetadata(Nothing, AddressOf SearchTextChangedCallback))
+    Public Shared SearchTextProperty As DependencyProperty = DependencyProperty.Register("SearchText", GetType(Object), GetType(SearchBar), New PropertyMetadata(Nothing, New PropertyChangedCallback(AddressOf SearchTextChangedCallback)))
 
-    Public Shared Property IsValidPathProperty As DependencyProperty = DependencyProperty.Register("IsValidPath", GetType(Boolean), GetType(SearchBar), New PropertyMetadata(Nothing))
+    Public Shared IsValidPathProperty As DependencyProperty = DependencyProperty.Register("IsValidPath", GetType(Boolean), GetType(SearchBar), New PropertyMetadata(Nothing))
 
     Private Shared Sub SearchTextChangedCallback(ByVal target As DependencyObject, ByVal args As DependencyPropertyChangedEventArgs)
 

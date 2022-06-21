@@ -2,32 +2,32 @@
 
 
 
-    Public ReadOnly leftValueProperty As DependencyProperty = DependencyProperty.Register("leftValue", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing, Nothing, AddressOf CoerceLeftValue))
+    Public Shared ReadOnly LeftValueProperty As DependencyProperty = DependencyProperty.Register(NameOf(LeftValue), GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing, Nothing, New CoerceValueCallback(AddressOf CoerceLeftValue)))
 
 
 
-    Public ReadOnly leftLabelProperty As DependencyProperty = DependencyProperty.Register("leftLabel", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing))
-    Public ReadOnly rightValueProperty As DependencyProperty = DependencyProperty.Register("rightValue", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing, Nothing, AddressOf coerceRightValue))
+    Public ReadOnly leftLabelProperty As DependencyProperty = DependencyProperty.Register("leftLabel", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(String.Empty))
+    Public Shared ReadOnly RightValueProperty As DependencyProperty = DependencyProperty.Register(NameOf(RightValue), GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing, Nothing, New CoerceValueCallback(AddressOf CoerceRightValue)))
 
 
-    Public ReadOnly rightLabelProperty As DependencyProperty = DependencyProperty.Register("rightLabel", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(Nothing))
+    Public ReadOnly rightLabelProperty As DependencyProperty = DependencyProperty.Register("rightLabel", GetType(String), GetType(ResultsDataSxS), New PropertyMetadata(String.Empty))
 
 
-    Private Function CoerceLeftValue(d As DependencyObject, baseValue As Object) As Object
+    Shared Function CoerceLeftValue(d As DependencyObject, baseValue As Object) As String
         Return ConvertBytesToReadable(baseValue)
     End Function
-    Private Function coerceRightValue(d As DependencyObject, baseValue As Object) As Object
+    Shared Function CoerceRightValue(d As DependencyObject, baseValue As Object) As String
         If baseValue = 1010101010101010 Then Return "?"
         Return ConvertBytesToReadable(baseValue)
     End Function
 
 
-    Public Property leftValue As String
+    Public Property LeftValue As String
         Get
-            Return GetValue(leftValueProperty)
+            Return GetValue(LeftValueProperty)
         End Get
         Set(value As String)
-            SetValue(leftValueProperty, value)
+            SetValue(LeftValueProperty, value)
         End Set
     End Property
 
@@ -40,12 +40,12 @@
         End Set
     End Property
 
-    Public Property rightValue As String
+    Public Property RightValue As String
         Get
-            Return GetValue(rightValueProperty)
+            Return GetValue(RightValueProperty)
         End Get
         Set(value As String)
-            SetValue(rightValueProperty, value)
+            SetValue(RightValueProperty, value)
         End Set
     End Property
     Public Property rightLabel As String
@@ -58,17 +58,6 @@
     End Property
 
 
-    Sub SetLeftValue(bytes As Long)
-        SetValue(leftValueProperty, ConvertBytesToReadable(bytes))
-    End Sub
-
-    Sub SetRightValue(bytes As Long)
-        If bytes = 1010101010101010 Then
-            SetValue(rightValueProperty, "?")
-            Return
-        End If
-        SetValue(rightValueProperty, ConvertBytesToReadable(bytes))
-    End Sub
 
     Sub New()
 
@@ -80,7 +69,7 @@
     End Sub
 
 
-    Private Function ConvertBytesToReadable(byteCount As Long) As String
+    Shared Function ConvertBytesToReadable(byteCount As Long) As String
 
         Dim suf As String() = {" B", " KB", " MB", " GB", " TB", " PB", " EB"}
         If byteCount = 0 Then Return "0" & suf(0)

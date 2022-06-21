@@ -408,7 +408,7 @@
 
 
             <!--Folder Size, estimated size and post-compression view-->
-            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top" leftValue="{Binding ActiveFolder.UncompressedBytes}" rightValue="{Binding ActiveFolder.CompressedBytes}"/>
+            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top" LeftValue="{Binding ActiveFolder.UncompressedBytes}" RightValue="{Binding ActiveFolder.CompressedBytes}"/>
 
             <!--Analysis Results comparison bars if folder is compressed-->
             <Grid x:Name="grid3" Margin="0,480,0,0">

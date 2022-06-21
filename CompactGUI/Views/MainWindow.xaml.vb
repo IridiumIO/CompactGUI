@@ -11,7 +11,6 @@ Class MainWindow
         InitializeComponent()
 
         Me.DataContext = ViewModel
-        _searchBar.DataContext = ViewModel
 
         ViewModel.State = "FreshLaunch"
 
