@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
+﻿Imports System.Threading
+Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports Microsoft.Toolkit.Mvvm.Input
 Imports ModernWpf.Controls
 Imports Ookii.Dialogs.Wpf
@@ -46,6 +47,8 @@ Public Class MainViewModel : Inherits ObservableObject
 
         FireAndForgetGetSteamHeader()
 
+        AnalyseFolderCommand.Execute(Nothing)
+
     End Sub
 
     Private Sub FireAndForgetGetSteamHeader()
@@ -55,13 +58,24 @@ Public Class MainViewModel : Inherits ObservableObject
         SteamBGImage = bImg
     End Sub
 
+    Dim _cancellationTokenSource As CancellationTokenSource
+
+    Public Property CancelCommand As RelayCommand = New RelayCommand(Sub() _cancellationTokenSource.Cancel())
+
 
     Private Async Sub AnalyseBegin()
 
         State = "AnalysingFolderSelected"
 
+        _cancellationTokenSource = New CancellationTokenSource
+        Dim token = _cancellationTokenSource.Token
+
         Dim Analyser As New Core.Analyser(ActiveFolder.FolderName)
-        Dim containsCompressedFiles = Await Analyser.AnalyseFolder()
+        Dim containsCompressedFiles = Await Analyser.AnalyseFolder(token)
+        If _cancellationTokenSource.IsCancellationRequested Then
+            State = "ValidFolderSelected"
+            Return
+        End If
         ActiveFolder.AnalysisResults = Analyser.FileCompressionDetailsList
         ActiveFolder.CompressedBytes = Analyser.CompressedBytes
         ActiveFolder.UncompressedBytes = Analyser.UncompressedBytes

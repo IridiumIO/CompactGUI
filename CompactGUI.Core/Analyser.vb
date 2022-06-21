@@ -14,14 +14,18 @@ Public Class Analyser
     Public Property FileCompressionDetailsList As List(Of AnalysedFileDetails)
     Private _testField As Integer = 0
 
-    Public Async Function AnalyseFolder() As Task(Of Boolean)
+    Public Async Function AnalyseFolder(cancellationToken As CancellationToken) As Task(Of Boolean)
 
-        Dim allFiles = Directory.EnumerateFiles(FolderName, "*", New EnumerationOptions() With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}).AsShortPathNames
+        Dim allFiles = Await Task.Run(Function() Directory.EnumerateFiles(FolderName, "*", New EnumerationOptions() With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}).AsShortPathNames, cancellationToken).ConfigureAwait(False)
         Dim compressedFilesCount As Integer
-
         Dim fileDetails As New Concurrent.ConcurrentBag(Of AnalysedFileDetails)
 
-        Await Task.Run(Function() Parallel.ForEach(allFiles, Sub(file) AnalyseFile(file, compressedFilesCount, fileDetails)))
+        Try
+            Dim res = Await Task.Run(Function() Parallel.ForEach(allFiles, New ParallelOptions With {.CancellationToken = cancellationToken}, Sub(file) AnalyseFile(file, compressedFilesCount, fileDetails)))
+        Catch ex As OperationCanceledException
+            Debug.WriteLine(ex.Message)
+            Return Nothing
+        End Try
 
         ContainsCompressedFiles = compressedFilesCount <> 0
         FileCompressionDetailsList = fileDetails.ToList
