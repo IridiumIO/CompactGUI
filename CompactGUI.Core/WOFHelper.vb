@@ -5,32 +5,22 @@ Public Module WOFHelper
     Public Const WOF_PROVIDER_FILE As ULong = 2
     Public Const FSCTL_DELETE_EXTERNAL_BACKING As UInteger = &H90314
 
-    Public Enum Algorithms
-        NO_COMPRESSION = -2
-        LZNT1 = -1
-        XPRESS4K = 0
-        LZX = 1
-        XPRESS8K = 2
-        XPRESS16K = 3
-    End Enum
-
     Public Function WOFConvertCompressionLevel(compressionlevel As Integer) As Integer
 
         Select Case compressionlevel
-            Case 0 : Return Algorithms.XPRESS4K
-            Case 1 : Return Algorithms.XPRESS8K
-            Case 2 : Return Algorithms.XPRESS16K
-            Case 3 : Return Algorithms.LZX
+            Case 0 : Return CompressionAlgorithm.XPRESS4K
+            Case 1 : Return CompressionAlgorithm.XPRESS8K
+            Case 2 : Return CompressionAlgorithm.XPRESS16K
+            Case 3 : Return CompressionAlgorithm.LZX
         End Select
 
     End Function
 
-
-
     Public Structure _WOF_FILE_COMPRESSION_INFO_V1
-        Public Algorithm As Algorithms
+        Public Algorithm As CompressionAlgorithm
         Public Flags As ULong
     End Structure
+
 
     <DllImport("WofUtil.dll")>
     Public Function WofIsExternalFile(

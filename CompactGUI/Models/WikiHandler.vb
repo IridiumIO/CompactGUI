@@ -3,29 +3,27 @@ Imports System.Text.Json
 
 Public Class WikiHandler
 
-    Shared filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
+    Shared ReadOnly filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
 
     Shared Async Function GetUpdatedJSON() As Task
 
         Dim dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
 
-        Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
+        Dim JSONFile As New IO.FileInfo(filePath)
 
-        If Not JSONFile.Exists OrElse SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) < DateTime.Now Then
+        If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
 
-            Dim httpClient As New HttpClient
-            Dim res = Await httpClient.GetStreamAsync(dlPath)
+        Dim httpClient As New HttpClient
+        Dim res = Await httpClient.GetStreamAsync(dlPath)
 
-            Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
-                Await res.CopyToAsync(fs)
-            End Using
+        Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
+            Await res.CopyToAsync(fs)
+        End Using
 
-            httpClient.Dispose()
+        httpClient.Dispose()
 
-            SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
-            SettingsHandler.AppSettings.Save()
-
-        End If
+        SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
+        SettingsHandler.AppSettings.Save()
 
 
     End Function
@@ -57,7 +55,7 @@ Public Class WikiHandler
     End Function
 
 
-    Shared Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of FileDetails), poorlyCompressedFiles As List(Of ExtensionResults), compressionMode As Integer) As Task(Of Boolean)
+    Shared Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean)
 
         Dim wikiSubmitURI = "https://docs.google.com/forms/d/e/1FAIpQLSdQyMwHIfldsuKKdDYBE9DNEyro8bidBDInq8EafGogFu382A/formResponse?entry.1019946248=%3CCompactGUI3%3E"
 
@@ -94,7 +92,7 @@ Public Class WikiHandler
 
         Dim msgSuccess As New ModernWpf.Controls.ContentDialog With {
             .Title = "Thank you for submitting your result",
-            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Algorithms), WOFConvertCompressionLevel(compressionMode))}",
+            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Core.CompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}",
             .CloseButtonText = "OK"
             }
 

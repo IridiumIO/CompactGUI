@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompactGUI", "CompactGUI\CompactGUI.vbproj", "{8AB10E7A-1B63-455C-A2A4-0E94475363CC}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompactGUI.Core", "CompactGUI.Core\CompactGUI.Core.vbproj", "{BE387BBC-10F1-4D18-A648-35325B29CFBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,26 @@ Global
 		{8AB10E7A-1B63-455C-A2A4-0E94475363CC}.Release|x64.Build.0 = Release|Any CPU
 		{8AB10E7A-1B63-455C-A2A4-0E94475363CC}.Release|x86.ActiveCfg = Release|Any CPU
 		{8AB10E7A-1B63-455C-A2A4-0E94475363CC}.Release|x86.Build.0 = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|x64.Build.0 = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Debug|x86.Build.0 = Debug|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|ARM.Build.0 = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|ARM64.Build.0 = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|x64.ActiveCfg = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|x64.Build.0 = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE387BBC-10F1-4D18-A648-35325B29CFBF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

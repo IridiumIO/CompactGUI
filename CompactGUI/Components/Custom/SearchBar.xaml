@@ -65,7 +65,7 @@
             </Rectangle.Effect>
         </Rectangle>
         <Label Content="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="21" VerticalAlignment="Center" Padding="20,0,0,0" Foreground="#FF757575"/>
-        <TextBlock Text="{Binding SearchText, ElementName=root}" d:Text="select target folder" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="45,-2,45,0" Foreground="#FF757575" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
+        <TextBlock Text="{Binding SearchText, ElementName=root, Mode=TwoWay}" d:Text="select target folder" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="45,-2,45,0" Foreground="#FF757575" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
 
     </Grid>
 </UserControl>

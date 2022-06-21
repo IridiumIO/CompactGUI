@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CompactGUI" ResizeMode="NoResize"
         xmlns:converters="clr-namespace:ValueConverters;assembly=ValueConverters"
-        mc:Ignorable="d" xmlns:ui="http://schemas.modernwpf.com/2019" RenderOptions.ClearTypeHint="Enabled"
+        mc:Ignorable="d" xmlns:ui="http://schemas.modernwpf.com/2019" d:DataContext="{d:DesignInstance Type=local:MainViewModel}" RenderOptions.ClearTypeHint="Enabled"
 
     ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True" 
         Title="CompactGUI" Height="800" Width="500" WindowStyle="SingleBorderWindow" Background="White">
@@ -13,15 +13,17 @@
     <Window.Resources>
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter"/>
+            <local:DecimalToPercentageConverter x:Key="DecimalToPercentageConverter"/>
         </ResourceDictionary>
 
     </Window.Resources>
 
     <Grid x:Name="BaseView">
+        <local:VisualStateApplier.VisualState>
+            <Binding Path="State" Mode="OneWay"/>
+        </local:VisualStateApplier.VisualState>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualStateGroup.Transitions>
-                </VisualStateGroup.Transitions>
                 <VisualState x:Name="FreshLaunch">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisButtonRegion" Storyboard.TargetProperty="(UIElement.Visibility)">
@@ -33,7 +35,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
                             <EasingDoubleKeyFrame KeyTime="00:00:00" Value="800"/>
                         </DoubleAnimationUsingKeyFrames>
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
@@ -76,24 +78,45 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Height)">
-                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="800"/>
-                        </DoubleAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,100,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,280,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisButtonRegion" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
+
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,100,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,280,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="800">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,395,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,395,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid2" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -116,24 +139,46 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Height)">
-                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="800"/>
-                        </DoubleAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,100,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,280,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisButtonRegion" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
+
+
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,100,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,280,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="800">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,395,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,395,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid2" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -165,24 +210,48 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
                             <EasingDoubleKeyFrame KeyTime="00:00:00" Value="800"/>
                         </DoubleAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,100,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,280,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisButtonRegion" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
+
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,100,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,280,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="800">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,395,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,395,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid2" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -191,6 +260,9 @@
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid3" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="uiCancelAnalysisButton" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:05" Value="{x:Static Visibility.Visible}"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
@@ -219,7 +291,7 @@
                                 </EasingThicknessKeyFrame.EasingFunction>
                             </EasingThicknessKeyFrame>
                         </ThicknessAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
                             <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="300">
                                 <EasingDoubleKeyFrame.EasingFunction>
                                     <CubicEase EasingMode="EaseOut"/>
@@ -269,7 +341,7 @@
                                 </EasingThicknessKeyFrame.EasingFunction>
                             </EasingThicknessKeyFrame>
                         </ThicknessAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
                             <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="300">
                                 <EasingDoubleKeyFrame.EasingFunction>
                                     <CubicEase EasingMode="EaseOut"/>
@@ -306,24 +378,53 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Height)">
-                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="800"/>
-                        </DoubleAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,100,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,280,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisButtonRegion" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
+
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,100,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,280,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="800">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,395,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+
+
                         <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                             <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,560,0,0"/>
                         </ThicknessAnimationUsingKeyFrames>
-                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                            <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,395,0,0"/>
-                        </ThicknessAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid3" Storyboard.TargetProperty="(UIElement.Opacity)">
+                            <DiscreteDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                            <DiscreteDoubleKeyFrame KeyTime="00:00:00.5" Value="0"/>
+                            <EasingDoubleKeyFrame KeyTime="00:00:01.2" Value="1">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CircleEase EasingMode="EaseOut"/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid2" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -348,7 +449,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
-            
+
             <ui:TitleBarButton x:Name="uiBtnOptions" HorizontalAlignment="Right" 
                Foreground="White"
                 Grid.Column="0"
@@ -356,18 +457,17 @@
                 ContentTemplate="{x:Null}" />
         </Grid>
 
-
         <!--Update Banner-->
-        <Grid x:Name="uiUpdateBanner" VerticalAlignment="Bottom" Height="30" Panel.ZIndex="2" Background="#FF468E56" Visibility="Collapsed"  d:Visibility="Visible"  Cursor="Hand" MouseUp="uiUpdateBanner_MouseUp">
+        <Grid x:Name="uiUpdateBanner" VerticalAlignment="Bottom" Height="30" Panel.ZIndex="2" Background="#FF468E56" Visibility="{Binding UpdateAvailable.Item1, Converter={StaticResource BoolToVisConverter}}"  Cursor="Hand" MouseUp="uiUpdateBanner_MouseUp">
             <Grid.Effect>
                 <DropShadowEffect Direction="90" Opacity="0.15" BlurRadius="6"/>
             </Grid.Effect>
 
-            <TextBlock x:Name="uiUpdateText" d:Text="update available  -  v3.0a2" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+            <TextBlock x:Name="uiUpdateText" d:Text="update available  -  v3.0a2" Text="{Binding UpdateAvailable.Item2}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
         </Grid>
-        
+
         <!--Main information section / results of analysis-->
-        <Grid x:Name="grid" Height="800" VerticalAlignment="Top" Panel.ZIndex="1">
+        <Grid x:Name="mainSection" Height="800" VerticalAlignment="Top" Panel.ZIndex="1">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="300,350" StartPoint="150,150" MappingMode="Absolute" >
                     <GradientStop Color="#FF98A9B9" Offset="1"/>
@@ -375,26 +475,74 @@
                 </LinearGradientBrush>
             </Grid.Background>
 
-            <Image x:Name="steamBG" Height="{Binding Height, ElementName=grid}" Stretch="UniformToFill" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <local:ImageControl x:Name="steamBG" Height="{Binding Height, ElementName=mainSection}" Stretch="UniformToFill" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding SteamBGImage}">
+                <local:ImageControl.Triggers>
+                    <EventTrigger RoutedEvent="local:ImageControl.SourceChanged">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.8" Duration="0:0:1.4" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </local:ImageControl.Triggers>
+            </local:ImageControl>
 
             <!--Program Title-->
             <Label x:Name="label" Content="CompactGUI" FontFamily="Segoe UI" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0,100,0,0" RenderOptions.ClearTypeHint="Enabled"/>
 
             <!--Search Bar-->
-            <local:SearchBar x:Name="_searchBar" SearchText="select target folder" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
+            <local:SearchBar x:Name="_searchBar" SearchText="{Binding ActiveFolder.DisplayName, Mode=TwoWay, TargetNullValue='select target folder'}" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
 
             <!--Analyse Button and Progress Ring-->
             <Grid x:Name="uiAnalysisButtonRegion" Margin="0,560,0,0" Width="138" Height="48" VerticalAlignment="Top" >
-                <Button x:Name="btnAnalyse" Width="138" Height="48" Content="analyse" Foreground="White"  Background="#FF6B8399" Click="AnalyseClicked" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnAnalyse" Width="138" Height="48" Content="analyse" Foreground="White"  Background="#FF6B8399" Command="{Binding AnalyseFolderCommand}" Style="{StaticResource RoundedButton}"/>
                 <ui:ProgressRing x:Name="progRingAnalyse" IsActive="False" Width="40" Height="40" Foreground="White"/>
             </Grid>
 
+            <Button x:Name="uiCancelAnalysisButton" Margin="0,640,0,0" Visibility="Collapsed" VerticalAlignment="Top" Foreground="White" Height="30" Width="30" Content="X" Background="#33252525"  BorderThickness="12" Command="{Binding CancelCommand}" Panel.ZIndex="4" >
+                <Button.Effect>
+                    <DropShadowEffect Direction="-90" Opacity="0.16" />
+                </Button.Effect>
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+                        <Style.Triggers>
+                            <Trigger Property="Visibility" Value="Visible">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="00:00:00.5"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+
             <!--Choose compression options button-->
-            <Button x:Name="btnChooseCompressionOptions" Margin="0,560,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Click="btnChooseCompressionOptions_Click"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
+            <Button x:Name="btnChooseCompressionOptions" Margin="0,560,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding ChooseCompressionCommand}"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
 
 
             <!--Folder Size, estimated size and post-compression view-->
-            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top"/>
+            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top" LeftValue="{Binding ActiveFolder.UncompressedBytes}" RightValue="{Binding ActiveFolder.CompressedBytes}">
+                <local:ResultsDataSxS.Style>
+                    <Style TargetType="local:ResultsDataSxS">
+                        <Style.Triggers>
+                            <Trigger Property="Visibility" Value="Visible">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="00:00:00.5"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </local:ResultsDataSxS.Style>
+            </local:ResultsDataSxS>
 
             <!--Analysis Results comparison bars if folder is compressed-->
             <Grid x:Name="grid3" Margin="0,480,0,0">
@@ -415,7 +563,7 @@
                 </ui:ProgressBar>
 
                 <!--bar after compression-->
-                <ui:ProgressBar x:Name="uiResultsBarAfterSize" Height="32" CornerRadius="16" Width="108" Value="43" RenderTransformOrigin="0.5,0.5" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" Margin="210,38,0,0">
+                <ui:ProgressBar x:Name="uiResultsBarAfterSize" Height="32" CornerRadius="16" Width="108" Value="{Binding ActiveFolder.CompressionRatio, Converter={StaticResource DecimalToPercentageConverter}, Mode=OneWay}" RenderTransformOrigin="0.5,0.5" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" Margin="210,38,0,0">
                     <ui:ProgressBar.Effect>
                         <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="6"/>
                     </ui:ProgressBar.Effect>
@@ -429,13 +577,43 @@
                     </ui:ProgressBar.RenderTransform>
                 </ui:ProgressBar>
 
+
                 <!--percent size reduction-->
                 <StackPanel Orientation="Vertical" Margin="0,27,0,0" VerticalAlignment="Top" >
-                    <TextBlock x:Name="uiResultsPercentSmaller" d:Text="44 %" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="uiResultsPercentSmaller" d:Text="44 %" Text="{Binding ActiveFolder.CompressionRatio, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF', Mode=OneWay}" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
                     <TextBlock Text="smaller" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Click="UncompressClicked"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
-                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Click="submitToWikiClicked"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Command="{Binding UncompressFolderCommand}"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Command="{Binding SubmitToWikiCommand}"  Background="#84A2BD" >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+
+                    </Button.Style>
+                </Button>
+                <Button x:Name="btnCompressAgain" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress again" Foreground="White" Command="{Binding ChooseCompressionCommand}" Background="#84A2BD" >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+
+                    </Button.Style>
+                </Button>
 
             </Grid>
 
@@ -451,7 +629,7 @@
                 <StackPanel Orientation="Vertical" Height="195" VerticalAlignment="Top" Margin="0,77,0,0">
                     <Grid Height="65">
                         <TextBlock Text="compression mode" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                        <ComboBox x:Name="comboBoxSelectCompressionMode" SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Center" Width="156" Height="38" Background="Transparent" Foreground="#98A9B9" BorderBrush="#98A9B9" BorderThickness="2">
+                        <ComboBox x:Name="comboBoxSelectCompressionMode" SelectedIndex="{Binding ActiveFolder.SelectedCompressionMode, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="156" Height="38" Background="Transparent" Foreground="#98A9B9" BorderBrush="#98A9B9" BorderThickness="2">
                             <ComboBoxItem>
                                 <TextBlock Text="XPRESS 4K" FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
                             </ComboBoxItem>
@@ -469,8 +647,19 @@
 
                     <Grid Height="65">
                         <TextBlock Text="skip poorly compressed filetypes" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                        <CheckBox x:Name="uiChkSkipPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" Checked="uiChkSkipPoorlyCompressed_Checked" Unchecked="uiChkSkipPoorlyCompressed_Unchecked"/>
-                        <TextBlock x:Name="uiSkipGlobalFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
+                        <CheckBox x:Name="uiChkSkipPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" IsChecked="{Binding BindableSettings.SkipNonCompressable}"/>
+                        <TextBlock x:Name="uiSkipGlobalFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value=""/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipPoorlyCompressed}" Value="True">
+                                            <Setter Property="Text" Value="{Binding ActiveFolder.GlobalPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
 
                     </Grid>
                     <Grid Height="65">
@@ -478,27 +667,38 @@
                         <Border CornerRadius="10" Height="20" Width="40" Background="#FF98A9B9" Margin="190,4,0,0">
                             <TextBlock Text="beta" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <CheckBox x:Name="uiChkSkipUserPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" Checked="uiChkSkipUserPoorlyCompressed_Checked" Unchecked="uiChkSkipUserPoorlyCompressed_Unchecked"/>
-                        <TextBlock x:Name="uiSkipFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped"/>
+                        <CheckBox x:Name="uiChkSkipUserPoorlyCompressed" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" IsChecked="{Binding BindableSettings.SkipUserNonCompressable}"/>
+                        <TextBlock x:Name="uiSkipFiles_Count" FontSize="14" Foreground="#FF98A9B9" Margin="0,45,30,0" d:Text="106 files will be skipped">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value=""/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipUserPoorlyCompressed}" Value="True">
+                                            <Setter Property="Text" Value="{Binding ActiveFolder.WikiPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped, TargetNullValue=not enough user submissions to build skiplist}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Grid>
 
                 </StackPanel>
 
-                <Button x:Name="btnCompress" Margin="0,366,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Click="btnCompress_Click"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnCompress" Margin="0,366,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding CompressFolderCommand}"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
             </Grid>
 
             <!--progress area while actively compressing-->
             <Grid x:Name="grid2">
                 <TextBlock Text="working..." Margin="0,92,0,0" Foreground="#73808C" FontSize="20"/>
-                <TextBlock x:Name="uiProgPercentage" d:Text="49%" Margin="0,92,0,0" Foreground="#73808C" FontSize="20" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="uiProgPercentage" d:Text="49%" Text="{Binding WorkingProgress.Item1, Mode=OneWay, StringFormat={}{0}%}"  Margin="0,92,0,0" Foreground="#73808C" FontSize="20" HorizontalAlignment="Right"/>
 
-                <ui:ProgressBar x:Name="uiProgBarCompress" Background="#4498A9B9" Width="auto" Height="14" CornerRadius="7" VerticalAlignment="Top" Margin="0,143,0,0" Foreground="#92F1AB" d:Value="40" BorderThickness="0,0,0,0" >
+                <ui:ProgressBar x:Name="uiProgBarCompress" Background="#4498A9B9" Width="auto" Height="14" CornerRadius="7" VerticalAlignment="Top" Margin="0,143,0,0" Foreground="#92F1AB" d:Value="40" Value="{Binding WorkingProgress.Item1, Mode=OneWay}" BorderThickness="0,0,0,0" >
                     <ui:ProgressBar.Effect>
                         <DropShadowEffect Direction="-45" Opacity="0.2"/>
                     </ui:ProgressBar.Effect>
                 </ui:ProgressBar>
 
-                <TextBlock x:Name="uiCurrentFileCompress" d:Text="/test/folder/gamefile.bin" Margin="0,187,0,0" Foreground="#73808C" Opacity="0.4" FontSize="20" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                <TextBlock x:Name="uiCurrentFileCompress" d:Text="/test/folder/gamefile.bin" Text="{Binding WorkingProgress.Item2, Mode=OneWay}" Margin="0,187,0,0" Foreground="#73808C" Opacity="0.4" FontSize="20" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
 
 
             </Grid>
