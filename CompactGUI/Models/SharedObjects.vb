@@ -19,7 +19,7 @@ Public Class ActiveFolder : Inherits ObservableObject
 
     Public ReadOnly Property CompressionRatio As Decimal
         Get
-            If UncompressedBytes = 0 OrElse CompressedBytes = 0 Then Return 0
+            If UncompressedBytes = 0 OrElse (CompressedBytes = 0 OrElse CompressedBytes = 1010101010101010) Then Return 0
             Return CompressedBytes / UncompressedBytes
         End Get
     End Property
