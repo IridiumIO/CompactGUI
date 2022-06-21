@@ -10,7 +10,7 @@ Public Class ActiveFolder : Inherits ObservableObject
     Public Property AnalysisResults As List(Of Core.AnalysedFileDetails)
     Public Property PoorlyCompressedFiles As List(Of Core.ExtensionResult)
     Public Property SteamAppID As Integer
-    Public Property WikiPoorlyCompressedFiles As List(Of String)
+    Public Property WikiPoorlyCompressedFiles As New List(Of String)
     Public Property UncompressedBytes As Long
     Public Property CompressedBytes As Long
     Public Property SelectedCompressionMode = 0
