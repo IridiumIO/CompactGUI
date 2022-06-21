@@ -395,7 +395,7 @@
             <Label x:Name="label" Content="CompactGUI" FontFamily="Segoe UI" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0,100,0,0" RenderOptions.ClearTypeHint="Enabled"/>
 
             <!--Search Bar-->
-            <local:SearchBar x:Name="_searchBar" SearchText="{Binding ActiveFolder.FolderName, Mode=TwoWay, TargetNullValue='select target folder'}" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
+            <local:SearchBar x:Name="_searchBar" SearchText="{Binding ActiveFolder.DisplayName, Mode=TwoWay, TargetNullValue='select target folder'}" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
 
             <!--Analyse Button and Progress Ring-->
             <Grid x:Name="uiAnalysisButtonRegion" Margin="0,560,0,0" Width="138" Height="48" VerticalAlignment="Top" >

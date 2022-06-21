@@ -35,7 +35,12 @@ Public Class MainViewModel : Inherits ObservableObject
 
         ActiveFolder = New ActiveFolder
         ActiveFolder.FolderName = path
-        ActiveFolder.SteamAppID = GetSteamIDFromFolder(path)
+
+        Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
+
+        ActiveFolder.SteamAppID = SteamFolderData.appID
+        ActiveFolder.DisplayName = If(SteamFolderData.gameName, path)
+
 
         State = "ValidFolderSelected"
 

@@ -6,6 +6,7 @@ Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Public Class ActiveFolder : Inherits ObservableObject
 
     Public Property FolderName As String
+    Public Property DisplayName As String
     Public Property AnalysisResults As List(Of Core.AnalysedFileDetails)
     Public Property PoorlyCompressedFiles As List(Of Core.ExtensionResult)
     Public Property SteamAppID As Integer
