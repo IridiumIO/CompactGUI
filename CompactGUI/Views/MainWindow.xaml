@@ -362,7 +362,7 @@
 
 
         <!--Update Banner-->
-        <Grid x:Name="uiUpdateBanner" VerticalAlignment="Bottom" Height="30" Panel.ZIndex="2" Background="#FF468E56" Visibility="{Binding UpdateAvailable.Item1, Converter={StaticResource BoolToVisConverter}}"  d:Visibility="Visible"  Cursor="Hand" MouseUp="uiUpdateBanner_MouseUp">
+        <Grid x:Name="uiUpdateBanner" VerticalAlignment="Bottom" Height="30" Panel.ZIndex="2" Background="#FF468E56" Visibility="{Binding UpdateAvailable.Item1, Converter={StaticResource BoolToVisConverter}}"  Cursor="Hand" MouseUp="uiUpdateBanner_MouseUp">
             <Grid.Effect>
                 <DropShadowEffect Direction="90" Opacity="0.15" BlurRadius="6"/>
             </Grid.Effect>
