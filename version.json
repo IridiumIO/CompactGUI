@@ -4,9 +4,9 @@
         "Minor": 0,
         "Patch": 0,
         "PreRelease": "alpha",
-        "PreReleaseMinor": 5,
-        "VersionString": "3.0.0-alpha.5",
-        "FriendlyString": "3.0 alpha 5",
+        "PreReleaseMinor": 6,
+        "VersionString": "3.0.0-alpha.6",
+        "FriendlyString": "3.0 alpha 6",
         "Changes": [],
         "Fixes": []
     },
