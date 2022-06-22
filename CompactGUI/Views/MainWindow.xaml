@@ -487,8 +487,20 @@
                 </local:ImageControl.Triggers>
             </local:ImageControl>
 
-            <!--Program Title-->
-            <Label x:Name="label" Content="CompactGUI" FontFamily="Segoe UI" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0,100,0,0" RenderOptions.ClearTypeHint="Enabled"/>
+            <!--Title-->
+            <Label x:Name="label" FontFamily="Segoe UI" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0,100,0,0" RenderOptions.ClearTypeHint="Enabled">
+
+                <Grid>
+                    <TextBlock Text="CompactGUI"/>
+                    <Border CornerRadius="11" Background="#FF996B6B" Margin="0,55,0,0" Height="22" Width="60" Visibility="{Binding IsAdministrator, Converter={StaticResource BoolToVisConverter}}">
+                        <Border.Effect>
+                            <DropShadowEffect Direction="-90" Opacity="0.16" ShadowDepth="2"/>
+                        </Border.Effect>
+                        <TextBlock Text="admin" Foreground="White" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                    </Border>
+                </Grid>
+                
+            </Label>
 
             <!--Search Bar-->
             <local:SearchBar x:Name="_searchBar" SearchText="{Binding ActiveFolder.DisplayName, Mode=TwoWay, TargetNullValue='select target folder'}" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
@@ -499,6 +511,7 @@
                 <ui:ProgressRing x:Name="progRingAnalyse" IsActive="False" Width="40" Height="40" Foreground="White"/>
             </Grid>
 
+            <!--Cancel Analysis-->
             <Button x:Name="uiCancelAnalysisButton" Margin="0,640,0,0" Visibility="Collapsed" VerticalAlignment="Top" Foreground="White" Height="30" Width="30" Content="X" Background="#33252525"  BorderThickness="12" Command="{Binding CancelCommand}" Panel.ZIndex="4" >
                 <Button.Effect>
                     <DropShadowEffect Direction="-90" Opacity="0.16" />

@@ -1,4 +1,5 @@
 Imports System.IO
+Imports System.Security.AccessControl
 Imports System.Threading
 
 Public Class Analyser
@@ -83,6 +84,38 @@ Public Class Analyser
         If isextFile = 0 Then info.Algorithm = CompressionAlgorithm.NO_COMPRESSION
         If (fInfo.Attributes And 2048) <> 0 Then info.Algorithm = CompressionAlgorithm.LZNT1
         Return info.Algorithm
+
+    End Function
+
+
+    Public Function HasDirectoryWritePermission() As Boolean
+
+        Try
+            Dim writeAllow = False
+
+            Dim ACRules = New DirectoryInfo(FolderName).GetAccessControl().GetAccessRules(True, True, GetType(Security.Principal.NTAccount))
+            If ACRules Is Nothing Then Return False
+
+            Dim identity = Security.Principal.WindowsIdentity.GetCurrent
+            Dim principal = New Security.Principal.WindowsPrincipal(identity)
+            For Each FSRule As FileSystemAccessRule In ACRules
+
+                If (FSRule.FileSystemRights And FileSystemRights.Write) <= 0 Then Continue For
+                Dim ntAccount As Security.Principal.NTAccount = FSRule.IdentityReference
+                If ntAccount Is Nothing Then Continue For
+                If Not principal.IsInRole(ntAccount.Value) Then Continue For
+                If FSRule.AccessControlType = AccessControlType.Deny Then Return False
+                writeAllow = True
+
+            Next
+
+            Return writeAllow
+
+        Catch ex As System.UnauthorizedAccessException
+
+            Return False
+
+        End Try
 
     End Function
 

@@ -71,6 +71,11 @@ Public Class MainViewModel : Inherits ObservableObject
         Dim token = _cancellationTokenSource.Token
 
         Dim Analyser As New Core.Analyser(ActiveFolder.FolderName)
+
+        If Not Analyser.HasDirectoryWritePermission Then
+            InsufficientPermissionHandler()
+        End If
+
         Dim containsCompressedFiles = Await Analyser.AnalyseFolder(token)
         If _cancellationTokenSource.IsCancellationRequested Then
             State = "ValidFolderSelected"
@@ -182,6 +187,38 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
+    Private Sub InsufficientPermissionHandler()
+
+        Dim msg As New ContentDialog
+        msg.Title = "Permissions Error"
+        If IsAdministrator() Then
+            msg.Content = "You are running as Administrator, however, you do not have permission to make changes to this folder - it is likely protected by the system. " & Environment.NewLine & "Analysis results are probably inaccurate and compression will likely fail or cause issues."
+            msg.CloseButtonText = "OK"
+        Else
+            msg.Content = "You do not have permission to make changes to this folder. Would you like to try restarting as administrator?"
+            msg.CloseButtonText = "No"
+            msg.IsSecondaryButtonEnabled = True
+            msg.SecondaryButtonText = "Restart App"
+            msg.SecondaryButtonCommand = New RelayCommand(AddressOf RunAsAdmin)
+        End If
+        msg.ShowAsync()
+    End Sub
+
+    Private Sub RunAsAdmin()
+        Dim myproc As New Process With {
+            .StartInfo = New ProcessStartInfo With {
+                .FileName = Environment.ProcessPath,
+                .UseShellExecute = True,
+                .Arguments = $"""{ActiveFolder.FolderName}""",
+                .Verb = "runas"}
+        }
+
+        myproc.Start()
+        Application.Current.Shutdown()
+
+    End Sub
+
+
 #Region "Properties"
 
     Public Property UpdateAvailable As New Tuple(Of Boolean, String)(False, Nothing)
@@ -194,6 +231,14 @@ Public Class MainViewModel : Inherits ObservableObject
             Return SettingsHandler.AppSettings
         End Get
     End Property
+    Public ReadOnly Property IsAdministrator() As Boolean
+        Get
+            Dim principal = New Security.Principal.WindowsPrincipal(Security.Principal.WindowsIdentity.GetCurrent())
+            Return principal.IsInRole(Security.Principal.WindowsBuiltInRole.Administrator)
+        End Get
+    End Property
+
+
 
 #End Region
 
