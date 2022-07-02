@@ -38,7 +38,10 @@ Public Class Watcher : Inherits ObservableObject
         If WatchedFolders.Count > 0 Then
             Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "CompactGUI", Process.GetCurrentProcess().MainModule.FileName & " -tray")
         Else
-            Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True).DeleteValue("CompactGUI")
+            Try
+                Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True).DeleteValue("CompactGUI")
+            Catch ex As Exception
+            End Try
         End If
 
     End Sub

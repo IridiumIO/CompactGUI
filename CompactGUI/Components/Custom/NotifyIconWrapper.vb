@@ -25,10 +25,10 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
 
 
     Public Sub New()
-
+        Debug.WriteLine(Assembly.GetExecutingAssembly().Location)
         If DesignerProperties.GetIsInDesignMode(Me) Then Return
         _notifyIcon = New NotifyIcon With {
-            .Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location),
+            .Icon = Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName),
             .Visible = True,
             .ContextMenuStrip = CreateContextMenu()}
 
