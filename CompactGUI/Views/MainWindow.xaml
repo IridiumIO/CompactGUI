@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CompactGUI" ResizeMode="NoResize"
+        xmlns:local="clr-namespace:CompactGUI" ResizeMode="NoResize" PreviewKeyDown="Window_PreviewKeyDown" KeyDown="Window_PreviewKeyDown"
+        xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:converters="clr-namespace:ValueConverters;assembly=ValueConverters"
-        mc:Ignorable="d" xmlns:ui="http://schemas.modernwpf.com/2019" d:DataContext="{d:DesignInstance Type=local:MainViewModel}" RenderOptions.ClearTypeHint="Enabled"
+        mc:Ignorable="d" xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" d:DataContext="{d:DesignInstance Type=local:MainViewModel}" RenderOptions.ClearTypeHint="Enabled"
+        WindowState="{Binding WindowState}" ShowInTaskbar="{Binding ShowInTaskbar}"
 
     ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True" 
         Title="CompactGUI" Height="800" Width="500" WindowStyle="SingleBorderWindow" Background="White">
@@ -14,11 +16,15 @@
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter"/>
             <local:DecimalToPercentageConverter x:Key="DecimalToPercentageConverter"/>
+            <local:BytesToReadableConverter x:Key="BytesToReadableConverter"/>
+            <local:StrippedFolderPathConverter x:Key="StrippedFolderPathConverter"/>
+            <local:RelativeDateConverter x:Key="RelativeDateConverter"/>
         </ResourceDictionary>
 
     </Window.Resources>
 
     <Grid x:Name="BaseView">
+
         <local:VisualStateApplier.VisualState>
             <Binding Path="State" Mode="OneWay"/>
         </local:VisualStateApplier.VisualState>
@@ -188,10 +194,10 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid3" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="leftLabel" >
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="LeftLabel" Storyboard.TargetProperty="(TextBlock.Text)" >
                             <DiscreteStringKeyFrame Value="current size"  KeyTime="0:0:0" />
                         </StringAnimationUsingKeyFrames>
-                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="rightLabel" >
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="RightLabel" Storyboard.TargetProperty="(TextBlock.Text)" >
                             <DiscreteStringKeyFrame Value="estimated size"  KeyTime="0:0:0" />
                         </StringAnimationUsingKeyFrames>
                     </Storyboard>
@@ -431,13 +437,72 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid1" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="leftLabel" >
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="LeftLabel" Storyboard.TargetProperty="(TextBlock.Text)"  >
                             <DiscreteStringKeyFrame Value="before"  KeyTime="0:0:0" />
                         </StringAnimationUsingKeyFrames>
-                        <StringAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="rightLabel" >
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="RightLabel" Storyboard.TargetProperty="(TextBlock.Text)"  >
                             <DiscreteStringKeyFrame Value="after"  KeyTime="0:0:0" />
                         </StringAnimationUsingKeyFrames>
 
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="FolderWatcherView">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisButtonRegion" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnChooseCompressionOptions" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="label" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,50,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="_searchBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,130,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="150">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="uiAnalysisResultsSxS" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                            <EasingThicknessKeyFrame KeyTime="00:00:00.5" Value="0,195,0,0">
+                                <EasingThicknessKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingThicknessKeyFrame.EasingFunction>
+                            </EasingThicknessKeyFrame>
+                        </ThicknessAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid1" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid2" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid3" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="titleText" Storyboard.TargetProperty="(TextBlock.Text)" >
+                            <DiscreteStringKeyFrame Value="Watched Folders"  KeyTime="0:0:0" />
+                        </StringAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
@@ -491,7 +556,7 @@
             <Label x:Name="label" FontFamily="Segoe UI" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0,100,0,0" RenderOptions.ClearTypeHint="Enabled">
 
                 <Grid>
-                    <TextBlock Text="CompactGUI"/>
+                    <TextBlock x:Name="titleText" Text="CompactGUI"/>
                     <Border CornerRadius="11" Background="#FF996B6B" Margin="0,55,0,0" Height="22" Width="60" Visibility="{Binding IsAdministrator, Converter={StaticResource BoolToVisConverter}}">
                         <Border.Effect>
                             <DropShadowEffect Direction="-90" Opacity="0.16" ShadowDepth="2"/>
@@ -499,11 +564,77 @@
                         <TextBlock Text="admin" Foreground="White" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
                     </Border>
                 </Grid>
-                
+
             </Label>
 
             <!--Search Bar-->
-            <local:SearchBar x:Name="_searchBar" SearchText="{Binding ActiveFolder.DisplayName, Mode=TwoWay, TargetNullValue='select target folder'}" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" d:IsValidPath="True"/>
+            <Border x:Name="_searchBar" Margin="0,280,0,0" VerticalAlignment="Top" Width="291" MouseUp="SearchClicked" Height="42">
+                <Border.Resources>
+                    <Storyboard x:Key="OnMouseEnter">
+                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                            <EasingColorKeyFrame KeyTime="00:00:00.3000000" Value="#FFEEEEEE">
+                                <EasingColorKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingColorKeyFrame.EasingFunction>
+                            </EasingColorKeyFrame>
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                    <Storyboard x:Key="OnMouseLeave">
+                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                            <EasingColorKeyFrame KeyTime="00:00:00.3000000" Value="#FFFFFFFF">
+                                <EasingColorKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseIn"/>
+                                </EasingColorKeyFrame.EasingFunction>
+                            </EasingColorKeyFrame>
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                    <Storyboard x:Key="OnMouseDown">
+                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                            <EasingColorKeyFrame KeyTime="00:00:00.1000000" Value="#FFDDDDDD">
+                                <EasingColorKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut"/>
+                                </EasingColorKeyFrame.EasingFunction>
+                            </EasingColorKeyFrame>
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                    <Storyboard x:Key="OnMouseUp">
+                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                            <EasingColorKeyFrame KeyTime="00:00:00.1000000" Value="#FFEEEEEE">
+                                <EasingColorKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseIn"/>
+                                </EasingColorKeyFrame.EasingFunction>
+                            </EasingColorKeyFrame>
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                </Border.Resources>
+
+                <Grid>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Grid.MouseEnter">
+                            <BeginStoryboard Storyboard="{StaticResource OnMouseEnter}"/>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Grid.MouseLeave">
+                            <BeginStoryboard Storyboard="{StaticResource OnMouseLeave}"/>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Grid.MouseDown">
+                            <BeginStoryboard Storyboard="{StaticResource OnMouseDown}"/>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Grid.MouseUp">
+                            <BeginStoryboard Storyboard="{StaticResource OnMouseUp}"/>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                    <Rectangle x:Name="rectangle" Fill="White" RadiusX="21" RadiusY="21" >
+                        <Rectangle.Effect>
+                            <DropShadowEffect Opacity="0.16" Direction="-90" ShadowDepth="3" BlurRadius="6"/>
+                        </Rectangle.Effect>
+                    </Rectangle>
+                    <Label Content="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="21" VerticalAlignment="Center" Padding="20,0,0,0" Foreground="#FF757575"/>
+                    <TextBlock Text="{Binding ActiveFolder.DisplayName, Mode=TwoWay, TargetNullValue='select target folder', Converter={StaticResource StrippedFolderPathConverter}}" d:Text="select target folder" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="45,-2,45,0" Foreground="#FF757575" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
+
+                </Grid>
+
+            </Border>
+
 
             <!--Analyse Button and Progress Ring-->
             <Grid x:Name="uiAnalysisButtonRegion" Margin="0,560,0,0" Width="138" Height="48" VerticalAlignment="Top" >
@@ -539,9 +670,9 @@
 
 
             <!--Folder Size, estimated size and post-compression view-->
-            <local:ResultsDataSxS Margin="0,395,0,0" x:Name="uiAnalysisResultsSxS" VerticalAlignment="Top" LeftValue="{Binding ActiveFolder.UncompressedBytes}" RightValue="{Binding ActiveFolder.CompressedBytes}">
-                <local:ResultsDataSxS.Style>
-                    <Style TargetType="local:ResultsDataSxS">
+            <Border Margin="0,395,0,0" VerticalAlignment="Top" x:Name="uiAnalysisResultsSxS">
+                <Border.Style>
+                    <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="Visibility" Value="Visible">
                                 <Trigger.EnterActions>
@@ -554,8 +685,30 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                </local:ResultsDataSxS.Style>
-            </local:ResultsDataSxS>
+                </Border.Style>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding ActiveFolder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" d:Text="21.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="LeftLabel" Text="current size" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding ActiveFolder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"  d:Text="29.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="RightLabel" Text="estimated size" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+
 
             <!--Analysis Results comparison bars if folder is compressed-->
             <Grid x:Name="grid3" Margin="0,480,0,0">
@@ -639,7 +792,7 @@
 
             <!--Selection of compression settings-->
             <Grid x:Name="grid1">
-                <StackPanel Orientation="Vertical" Height="195" VerticalAlignment="Top" Margin="0,77,0,0">
+                <StackPanel Orientation="Vertical" Height="250" VerticalAlignment="Top" Margin="0,77,0,0">
                     <Grid Height="65">
                         <TextBlock Text="compression mode" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
                         <ComboBox x:Name="comboBoxSelectCompressionMode" SelectedIndex="{Binding ActiveFolder.SelectedCompressionMode, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="156" Height="38" Background="Transparent" Foreground="#98A9B9" BorderBrush="#98A9B9" BorderThickness="2">
@@ -694,6 +847,12 @@
                             </TextBlock.Style>
                         </TextBlock>
                     </Grid>
+                    <Grid Height="65">
+                        <TextBlock Text="watch folder for changes" FontSize="20" Foreground="#73808C" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+
+                        <CheckBox x:Name="uiChkWatchFolder" HorizontalAlignment="Right" Style="{StaticResource RoundedCheckBox}" IsChecked="{Binding BindableSettings.WatchFolderForChanges}" />
+
+                    </Grid>
 
                 </StackPanel>
 
@@ -720,6 +879,163 @@
         </Grid>
 
 
+        <!--Folder Watcher Region-->
+        <Grid x:Name="grid"  VerticalAlignment="Bottom"  Height="540" Margin="20,0,20,80" Visibility="Collapsed">
+            <Grid.Resources>
+                <CollectionViewSource x:Key='src' Source="{Binding Watcher.WatchedFolders}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription PropertyName="DisplayName" />
+                    </CollectionViewSource.SortDescriptions>
+
+                </CollectionViewSource>
+
+            </Grid.Resources>
+            <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
+            <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,2,35,220"/>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE">
+                <ui:FontIcon Glyph="&#xE9F3;" FontSize="14" />
+            </Button>
+            
+            <ui:ListView x:Name="uiWatcherListView" Margin="-10,60,0,0" Padding="0" Width="480" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{d:SampleData}"   KeyboardNavigation.TabNavigation="None">
+                <ui:ListView.ItemContainerStyle>
+                    <Style TargetType="ui:ListViewItem">
+                        <Setter Property="Margin" Value="0,0,0,10"/>
+                    </Style>
+                </ui:ListView.ItemContainerStyle>
+                <ui:ListView.ItemTemplate >
+                    <DataTemplate >
+                        <Border Padding="6" Background="WhiteSmoke" d:Height="100" Height="50" Width="470"  KeyboardNavigation.TabNavigation="None">
+
+                            <Grid >
+                                <Label>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Viewbox Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}" 
+                         Width="12"
+                         Height="12"
+                         Margin="0,0,5,0"
+                         HorizontalAlignment="Left">
+                                            <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#73808C" />
+                                        </Viewbox>
+                                        <TextBlock Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}" FontSize="16" Foreground="#73808C" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,-2,0,0"/>
+                                    </StackPanel>
+
+                                </Label>
+
+                                <TextBlock Width="300" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#73808C"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+                                <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#73808C"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
+
+                                <ui:ProgressBar Height="6" Width="108" CornerRadius="3" Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" >
+                                    <ui:ProgressBar.Effect>
+                                        <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="6"/>
+                                    </ui:ProgressBar.Effect>
+
+                                </ui:ProgressBar>
+
+                                <Separator Background="#DDDDDD" VerticalAlignment="Top" Margin="0,40,30,0"/>
+
+                                <Grid Margin="0,45,30,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last compressed:" Margin="0,0,10,0"/>
+                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last modified:" Margin="0,0,27,0"/>
+                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"/>
+                                    </StackPanel>
+                                    <Button HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
+                                        <ui:FontIcon Glyph="&#xE74D;" FontSize="14"/>
+                                    </Button>
+
+                                    <Button HorizontalAlignment="Right" Margin="0,0,35,0" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.ReCompressWatchedCommand}" CommandParameter="{Binding}" Background="#6B8399" Foreground="White">
+                                        <ui:FontIcon Glyph="&#xE92C;" FontSize="14" RenderTransformOrigin="0.5,0.5">
+                                            <ui:FontIcon.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </ui:FontIcon.RenderTransform>
+                                        </ui:FontIcon>
+                                    </Button>
+                                </Grid>
+
+
+                            </Grid>
+                            <bh:Interaction.Triggers>
+                                <bh:EventTrigger  EventName="MouseEnter">
+                                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}}" PropertyName="Height" Value="100" Duration="00:00:00.2"/>
+                                </bh:EventTrigger>
+                                <bh:EventTrigger  EventName="MouseLeave">
+                                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}}" PropertyName="Height" Value="50" Duration="00:00:00.2"/>
+                                </bh:EventTrigger>
+
+                            </bh:Interaction.Triggers>
+
+                        </Border>
+                    </DataTemplate>
+                </ui:ListView.ItemTemplate>
+
+            </ui:ListView>
+
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Panel.ZIndex="1" Background="#FF6B8399" VerticalAlignment="Bottom" Height="40" Opacity="0">
+            <StackPanel.Effect>
+                <DropShadowEffect Direction="90" BlurRadius="9" Opacity="0.2"/>
+            </StackPanel.Effect>
+
+            <ui:AppBarButton Width="100" Command="{Binding MenuCompressionAreaCommand}" Margin="100,0,0,0" KeyboardNavigation.TabNavigation="None">
+                <ui:AppBarButton.Icon>
+                    <ui:FontIcon Glyph="&#xE92C;" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+                        <ui:FontIcon.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ui:FontIcon.RenderTransform>
+                    </ui:FontIcon>
+                </ui:AppBarButton.Icon>
+            </ui:AppBarButton>
+            <ui:AppBarButton Width="100" Command="{Binding MenuWatcherAreaCommand}" Margin="105,0,0,0"  KeyboardNavigation.TabNavigation="None">
+                <ui:AppBarButton.Icon>
+                    <ui:FontIcon Glyph="&#xE823;" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+
+                    </ui:FontIcon>
+                </ui:AppBarButton.Icon>
+            </ui:AppBarButton>
+            <bh:Interaction.Triggers>
+                <bh:EventTrigger EventName="MouseEnter">
+                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}}" PropertyName="Opacity" Value="1"
+                                             Duration="00:00:00.1"/>
+                </bh:EventTrigger>
+                <bh:EventTrigger EventName="MouseLeave">
+                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}}" PropertyName="Opacity" Value="0" 
+                                             Duration="00:00:00.5"/>
+                </bh:EventTrigger>
+            </bh:Interaction.Triggers>
+
+        </StackPanel>
+
+
+        <local:NotifyIconWrapper NotifyRequest="{Binding NotifyRequest}">
+            <bh:Interaction.Triggers>
+                <bh:EventTrigger EventName="OpenSelected">
+                    <bh:InvokeCommandAction Command="{Binding NotifyIconOpenCommand}"/>
+                </bh:EventTrigger>
+                <bh:EventTrigger EventName="ExitSelected">
+                    <bh:InvokeCommandAction Command="{Binding NotifyIconExitCommand}"/>
+                </bh:EventTrigger>
+            </bh:Interaction.Triggers>
+        </local:NotifyIconWrapper>
 
     </Grid>
+    <bh:Interaction.Triggers>
+
+        <bh:EventTrigger EventName="Closing">
+            <bh:InvokeCommandAction Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+        </bh:EventTrigger>
+    </bh:Interaction.Triggers>
 </Window>

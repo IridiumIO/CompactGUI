@@ -103,6 +103,11 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="{x:Static SystemParameters.FocusVisualStyleKey}">
+                <Setter Property="Control.Template" Value="{x:Null}" />
+            </Style>
+
+
 
             <!-- Other app resources here -->
 

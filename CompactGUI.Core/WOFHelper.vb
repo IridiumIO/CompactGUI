@@ -16,6 +16,19 @@ Public Module WOFHelper
 
     End Function
 
+
+    Public Function WOFConvertBackCompressionLevel(WOFCompressionLevel As CompressionAlgorithm) As Integer
+
+        Select Case WOFCompressionLevel
+            Case CompressionAlgorithm.XPRESS4K : Return 0
+            Case CompressionAlgorithm.XPRESS8K : Return 1
+            Case CompressionAlgorithm.XPRESS16K : Return 2
+            Case CompressionAlgorithm.LZX : Return 3
+            Case Else : Return 0
+        End Select
+
+    End Function
+
     Public Structure _WOF_FILE_COMPRESSION_INFO_V1
         Public Algorithm As CompressionAlgorithm
         Public Flags As ULong

@@ -36,4 +36,9 @@ Class MainWindow
 
     End Sub
 
+    Private Sub Window_PreviewKeyDown(sender As Object, e As KeyEventArgs)
+
+        If e.Key = Key.System Then e.Handled = True
+
+    End Sub
 End Class

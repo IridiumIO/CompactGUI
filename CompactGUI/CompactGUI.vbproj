@@ -46,6 +46,7 @@
     <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.0" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="ModernWpfUis" Version="1.4.0" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
@@ -55,6 +56,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.vbproj" />
+    <ProjectReference Include="..\CompactGUI.Watcher\CompactGUI.Watcher.vbproj" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ Public Class SettingsHandler : Inherits ObservableObject
     Public Shared Property DataFolder As IO.DirectoryInfo = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
     Public Shared Property SettingsJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(DataFolder.FullName, "settings.json"))
     Public Shared Property AppSettings As Settings
-    Private Shared Property SettingsVersion As Decimal = 1.1
+    Private Shared Property SettingsVersion As Decimal = 1.2
 
     Shared Async Sub InitialiseSettings()
 
@@ -45,6 +45,7 @@ Public Class Settings : Inherits ObservableObject
     Public Property ResultsDBLastUpdated As DateTime = DateTime.UnixEpoch
     Public Property SkipNonCompressable As Boolean = False
     Public Property SkipUserNonCompressable As Boolean = False
+    Public Property WatchFolderForChanges As Boolean = False
     Public Property NonCompressableList As New List(Of String) From {".dl_", ".gif", ".jpg", ".jpeg", ".png", ".wmf", ".mkv", ".mp4", ".wmv", ".avi", ".bik", ".bk2", ".flv", ".ogg", ".mpg", ".m2v", ".m4v", ".vob", ".mp3", ".aac", ".wma", ".flac", ".zip", ".xap", ".rar", ".7z", ".cab", ".lzx", ".docx", ".xlsx", ".pptx", ".vssx", ".vstx", ".onepkg"}
     Public Property IsContextIntegrated As Boolean = False
     Public Property IsStartMenuEnabled As Boolean = False

@@ -3,6 +3,7 @@ Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports Microsoft.Toolkit.Mvvm.Input
 Imports ModernWpf.Controls
 Imports Ookii.Dialogs.Wpf
+Imports CompactGUI.Watcher
 
 Public Class MainViewModel : Inherits ObservableObject
 
@@ -11,6 +12,10 @@ Public Class MainViewModel : Inherits ObservableObject
         SettingsHandler.InitialiseSettings()
         WikiHandler.GetUpdatedJSON()
         FireAndForgetCheckForUpdates()
+        InitialiseNotificationTray()
+        Watcher = New Watcher.Watcher   'This naming isn't going to get confusing at all...
+
+
     End Sub
 
 
@@ -21,6 +26,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Public Sub SelectFolder(Optional path As String = Nothing)
+
         If path Is Nothing Then
             Dim folderSelector As New VistaFolderBrowserDialog
             folderSelector.ShowDialog()
@@ -66,7 +72,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Private Async Sub AnalyseBegin()
 
         State = "AnalysingFolderSelected"
-
+        Watcher.IsActive = True
         _cancellationTokenSource = New CancellationTokenSource
         Dim token = _cancellationTokenSource.Token
 
@@ -90,8 +96,15 @@ Public Class MainViewModel : Inherits ObservableObject
 
             If ActiveFolder.IsFreshlyCompressed Then
                 ActiveFolder.PoorlyCompressedFiles = Await Analyser.GetPoorlyCompressedExtensions()
+                If SettingsHandler.AppSettings.WatchFolderForChanges Then AddFolderToWatcher()
             Else
                 Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList()
+
+                Dim allCompressionsInFolder = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).GroupBy(Function(f) f).OrderByDescending(Function(f) f.Count).ToList
+                Dim mainCompressionLVL = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).Max
+
+                ActiveFolder.SelectedCompressionMode = Core.WOFConvertBackCompressionLevel(mainCompressionLVL)
+
             End If
         Else
 
@@ -101,10 +114,27 @@ Public Class MainViewModel : Inherits ObservableObject
         End If
         SubmitToWikiCommand.NotifyCanExecuteChanged()
         ChooseCompressionCommand.NotifyCanExecuteChanged()
-
+        Watcher.IsActive = False
 
     End Sub
 
+
+    Private Sub AddFolderToWatcher()
+
+        Dim newWatched = New Watcher.WatchedFolder With {
+            .Folder = ActiveFolder.FolderName,
+            .DisplayName = ActiveFolder.DisplayName,
+            .IsSteamGame = ActiveFolder.SteamAppID <> 0,
+            .LastCompressedSize = ActiveFolder.CompressedBytes,
+            .LastUncompressedSize = ActiveFolder.UncompressedBytes,
+            .LastCompressedDate = DateTime.Now,
+            .LastCheckedDate = DateTime.Now,
+            .LastCheckedSize = ActiveFolder.CompressedBytes,
+            .LastSystemModifiedDate = DateTime.Now}
+
+        Watcher.AddOrUpdateWatched(newWatched)
+
+    End Sub
 
     Private Sub ChooseCompression()
 
@@ -121,6 +151,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Private Async Sub CompressBegin()
 
         State = "CurrentlyCompressing"
+        Watcher.IsActive = True
         CProgress.Report((0, ""))
 
         Dim exclist() As String = {}
@@ -212,7 +243,7 @@ Public Class MainViewModel : Inherits ObservableObject
                 .Arguments = $"""{ActiveFolder.FolderName}""",
                 .Verb = "runas"}
         }
-
+        Application.mutex.Dispose()
         myproc.Start()
         Application.Current.Shutdown()
 
@@ -223,9 +254,21 @@ Public Class MainViewModel : Inherits ObservableObject
 
     Public Property UpdateAvailable As New Tuple(Of Boolean, String)(False, Nothing)
     Public Property ActiveFolder As New ActiveFolder
+    Public Property LastState As String
+    Private _State As String
     Public Property State As String
+        Get
+            Return _State
+        End Get
+        Set(value As String)
+            If State <> "FolderWatcherView" Then LastState = State
+            _State = value
+        End Set
+    End Property
     Public Property SteamBGImage As BitmapImage = Nothing
     Public Property WorkingProgress As New Tuple(Of Integer, String)(0, "")
+    Public Property Watcher As CompactGUI.Watcher.Watcher
+    Public ReadOnly Property IsAdmin As Boolean = (New Security.Principal.WindowsPrincipal(Security.Principal.WindowsIdentity.GetCurrent()).IsInRole(Security.Principal.WindowsBuiltInRole.Administrator))
     Public ReadOnly Property BindableSettings As Settings
         Get
             Return SettingsHandler.AppSettings
@@ -248,6 +291,12 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Property ChooseCompressionCommand As RelayCommand = New RelayCommand(AddressOf ChooseCompression, Function() Not SubmitToWikiCommand.CanExecute(Nothing))
     Public Property CompressFolderCommand As RelayCommand = New RelayCommand(AddressOf CompressBegin)
     Public Property UncompressFolderCommand As RelayCommand = New RelayCommand(AddressOf UncompressBegin)
+    Public Property MenuCompressionAreaCommand As RelayCommand = New RelayCommand(Sub() State = If(State = "FolderWatcherView", LastState, State))
+    Public Property MenuWatcherAreaCommand As RelayCommand = New RelayCommand(Sub() State = "FolderWatcherView")
+    Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
+    Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolder(f.Folder))
+    Property RefreshWatchedCommand As ICommand = New RelayCommand(Sub() Task.Run(Function() Watcher.ParseWatchers(True)))
+
 
 #End Region
 

@@ -64,13 +64,18 @@ Public Class Compactor
 
         Dim clusterSize As Integer = GetClusterSize(_workingDir)
 
-        Dim _filesList = Await Task.Run(Function() Directory.EnumerateFiles(_workingDir, "*", New EnumerationOptions With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}) _
-                                                .Where(Function(st)
-                                                           Dim ft = New FileInfo(st)
-                                                           If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize Then Return True
-                                                           Return False
-                                                       End Function).AsShortPathNames)
-        Return _filesList
+        Dim _filesList As New Concurrent.ConcurrentBag(Of String)
+        'TODO: if the user has already analysed within the last minute, then skip creating a new one and use the old one
+        Dim ax As New Analyser(_workingDir)
+        Dim ret = Await ax.AnalyseFolder(Nothing)
+
+        Parallel.ForEach(ax.FileCompressionDetailsList, Sub(fl)
+                                                            Dim ft = New FileInfo(fl.FileName)
+                                                            If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize AndAlso fl.CompressionMode <> _WOFCompressionLevel Then _filesList.Add(fl.FileName)
+                                                        End Sub)
+
+
+        Return _filesList.ToList
     End Function
 
 
