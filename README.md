@@ -17,6 +17,7 @@
  - Rebuilt from scratch in .NET 6 using WPF
  - Smoother, simplified UI
  - Removed dependency on `compact.exe` and directly accesses the Win32 API
+ - Background monitoring of compressed folders to keep track of size changes with e.g. Steam updates. 
  - Parallelised and asynchronous programming resulting in over an order of magnitude speed improvement in some cases.
  
     ```yml
@@ -39,12 +40,6 @@
 
 &nbsp;
 
-**Old features pending implementation:**
- * [ ] Skipping global poorly compressed filetypes (Settings menu not built yet; folder results can still be submitted)
- * [ ] Skipping online-sourced poorly compressed filetypes per game/folder based on previous users (soon)
- * [x] Compress an already compressed folder to patch files that have changed in the meantime
- * [X] Checking for online updates
- * [X] Integration into Explorer context menus
 ------
 &nbsp;
 
@@ -79,6 +74,7 @@ Use this tool to compress folders while still being able to use/run them normall
  - Online integration with community-sourced [database](https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results) to get compression estimates
  - Integration into Windows Explorer context menus for easier use.
  - Analyze the status of existing folders
+ - Background monitor to keep track of compressed folders and easily see / recompress them if they've been recently updated (such as Steam games) or decompressed. 
  
 
 <h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/Games-5085-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-34923-lightgrey.svg"></a> submissions</b></h3>
