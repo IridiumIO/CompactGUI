@@ -11,7 +11,7 @@ Public Class IdleDetector
 
 
     Sub New()
-        _idletimer = New PeriodicTimer(TimeSpan.FromMilliseconds(5000))
+        _idletimer = New PeriodicTimer(TimeSpan.FromMilliseconds(30000))
     End Sub
 
     Public Sub Start()
