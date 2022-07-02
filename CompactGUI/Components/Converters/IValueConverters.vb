@@ -77,3 +77,22 @@ Public Class RelativeDateConverter : Implements IValueConverter
         Throw New NotImplementedException()
     End Function
 End Class
+
+Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim clvl = CType(value, Core.CompressionAlgorithm)
+        Select Case clvl
+            Case Core.CompressionAlgorithm.NO_COMPRESSION : Return "NIL"
+            Case Core.CompressionAlgorithm.LZNT1 : Return "NT"
+            Case Core.CompressionAlgorithm.XPRESS4K : Return "X4"
+            Case Core.CompressionAlgorithm.XPRESS8K : Return "X8"
+            Case Core.CompressionAlgorithm.XPRESS16K : Return "X16"
+            Case Core.CompressionAlgorithm.LZX : Return "LZX"
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class

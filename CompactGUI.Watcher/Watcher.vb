@@ -72,6 +72,7 @@ Public Class Watcher : Inherits ObservableObject
                 .LastCheckedDate = DateTime.Now
                 .LastCheckedSize = item.LastCheckedSize
                 .LastSystemModifiedDate = DateTime.Now
+                .CompressionLevel = item.CompressionLevel
             End With
 
         End If
@@ -163,6 +164,8 @@ Public Class Watcher : Inherits ObservableObject
         watched.LastCheckedDate = DateTime.Now
         watched.LastCheckedSize = analyser.CompressedBytes
         watched.LastSystemModifiedDate = Watchers.First(Function(f) f.Folder = folder).LastChangedDate
+        Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
+        watched.CompressionLevel = mainCompressionLVL
         If checkDiskModified Then
             Dim lastDiskWriteTime = analyser.FileCompressionDetailsList.Select(Function(fl)
                                                                                    Dim finfo As New IO.FileInfo(fl.FileName)
@@ -193,6 +196,7 @@ Public Class WatchedFolder : Inherits ObservableObject
     Public Property LastSystemModifiedDate As DateTime
     Public Property LastCheckedDate As DateTime
     Public Property LastCheckedSize As Long
+    Public Property CompressionLevel As Core.CompressionAlgorithm
 
     Public ReadOnly Property DecayPercentage As Decimal
         Get
