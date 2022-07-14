@@ -10,20 +10,20 @@ Public Class Compactor
 
         _workingDir = folder
         _excludedFileTypes = excludedFilesTypes
-        _WOFCompressionLevel = cLevel
+        _WofCompressionLevel = cLevel
 
-        _EFInfo = New _WOF_FILE_COMPRESSION_INFO_V1 With {.Algorithm = _WOFCompressionLevel, .Flags = 0}
+        _EFInfo = New WofFILECOMPRESSIONINFOV1 With {._algorithm = _WofCompressionLevel, ._flags = 0}
         _EFInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(_EFInfo))
         Marshal.StructureToPtr(_EFInfo, _EFInfoPtr, True)
 
     End Sub
 
-    Private _workingDir As String
-    Private _excludedFileTypes() As String
-    Private _WOFCompressionLevel As CompressionAlgorithm
+    Private ReadOnly _workingDir As String
+    Private ReadOnly _excludedFileTypes As String()
+    Private ReadOnly _WofCompressionLevel As CompressionAlgorithm
 
-    Private _EFInfo As _WOF_FILE_COMPRESSION_INFO_V1
-    Private _EFInfoPtr As IntPtr
+    Private _EFInfo As WofFILECOMPRESSIONINFOV1
+    Private ReadOnly _EFInfoPtr As IntPtr
 
 
 
@@ -35,22 +35,23 @@ Public Class Compactor
 
         Await Parallel.ForEachAsync(FilesList,
                                     Function(file, _ctx)
-                                        Dim res = WOFCompressFile(file)
+                                        WofCompressFile(file)
                                         Dim incremented = Interlocked.Increment(processedFileCount)
-                                        progressMonitor.Report((CInt(((incremented / totalFiles) * 100)), file))
+                                        progressMonitor.Report((CInt(incremented / totalFiles * 100), file))
                                     End Function).ConfigureAwait(False)
 
         Return True
     End Function
 
 
-    Private Function WOFCompressFile(path As String)
+    Private Function WofCompressFile(path As String) As Integer
 
-        Dim length As ULong = Marshal.SizeOf(_EFInfoPtr)
+        Dim length As Integer = Marshal.SizeOf(_EFInfoPtr)
         Try
-            Using fs As FileStream = New FileStream(path, FileMode.Open)
+            Using fs As New FileStream(path, FileMode.Open)
+                ' TODO: https://rules.sonarsource.com/vbnet/RSPEC-3869
                 Dim hFile = fs.SafeFileHandle.DangerousGetHandle()
-                Dim res = WofSetFileDataLocation(hFile, WOF_PROVIDER_FILE, _EFInfoPtr, length)
+                Dim res = WofSetFileDataLocation(hFile, WofPROVIDERFILE, _EFInfoPtr, length)
                 Return res
             End Using
         Catch ex As Exception
@@ -62,16 +63,16 @@ Public Class Compactor
 
     Private Async Function BuildWorkingFilesList() As Task(Of IEnumerable(Of String))
 
-        Dim clusterSize As Integer = GetClusterSize(_workingDir)
+        Dim clusterSize As Long = GetClusterSize(_workingDir)
 
         Dim _filesList As New Concurrent.ConcurrentBag(Of String)
-        'TODO: if the user has already analysed within the last minute, then skip creating a new one and use the old one
+        ' TODO: if the user has already analysed within the last minute, then skip creating a new one and use the old one
         Dim ax As New Analyser(_workingDir)
-        Dim ret = Await ax.AnalyseFolder(Nothing)
+        Await ax.AnalyseFolder(Nothing)
 
         Parallel.ForEach(ax.FileCompressionDetailsList, Sub(fl)
                                                             Dim ft = New FileInfo(fl.FileName)
-                                                            If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize AndAlso fl.CompressionMode <> _WOFCompressionLevel Then _filesList.Add(fl.FileName)
+                                                            If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize AndAlso fl.CompressionMode <> _WofCompressionLevel Then _filesList.Add(fl.FileName)
                                                         End Sub)
 
 

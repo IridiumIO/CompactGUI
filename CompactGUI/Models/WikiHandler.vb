@@ -2,16 +2,15 @@
 Imports System.Text.Json
 
 Public Class WikiHandler
+    Private Shared ReadOnly filePath As String = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
 
-    Shared ReadOnly filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
-
-    Shared Async Function GetUpdatedJSON() As Task
+    Public Shared Async Function GetUpdatedJSON() As Task
 
         Dim dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
 
         Dim JSONFile As New IO.FileInfo(filePath)
 
-        If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
+        If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= Date.Now Then Return
 
         Dim httpClient As New HttpClient
         Dim res = Await httpClient.GetStreamAsync(dlPath)
@@ -22,15 +21,15 @@ Public Class WikiHandler
 
         httpClient.Dispose()
 
-        SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
-        SettingsHandler.AppSettings.Save()
+        SettingsHandler.AppSettings.ResultsDBLastUpdated = Date.Now
+        Settings.Save()
 
 
     End Function
 
-    Shared Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer)))
+    Public Shared Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Double, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer)))
 
-        Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
+        Dim JSONFile As New IO.FileInfo(filePath)
         If Not JSONFile.Exists Then Return Nothing
 
         Dim jStream As IO.FileStream = JSONFile.OpenRead
@@ -38,15 +37,15 @@ Public Class WikiHandler
         Dim workingGame = parsedSteamWikiResults.Find(Function(game) game.SteamID = appid)
 
         If workingGame Is Nothing Then Return Nothing
-        Dim estimatedRatio As Decimal
+        Dim estimatedRatio As Double
         Dim totaldataPoints As Integer = workingGame.CompressionResults.Sum(Function(x) x.TotalResults)
 
         For Each compressionResult In workingGame.CompressionResults
-            Dim ratio = compressionResult.AfterBytes / compressionResult.BeforeBytes
+            Dim ratio As Double = compressionResult.AfterBytes / compressionResult.BeforeBytes
             estimatedRatio += ratio * compressionResult.TotalResults
         Next
 
-        'TODO: Adjust this return to account for selected level of aggressiveness in settings
+        ' TODO: Adjust this return to account for selected level of aggressiveness in settings
         'Dim poorlyCompressedExt = workingGame.PoorlyCompressedExtensions.Where(Function(k) k.Value > 100).Select(Function(k) k.Key)
 
         estimatedRatio /= totaldataPoints
@@ -54,19 +53,18 @@ Public Class WikiHandler
 
     End Function
 
-
-    Shared Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean)
+    Public Shared Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean)
 
         Dim wikiSubmitURI = "https://docs.google.com/forms/d/e/1FAIpQLSdQyMwHIfldsuKKdDYBE9DNEyro8bidBDInq8EafGogFu382A/formResponse?entry.1019946248=%3CCompactGUI3%3E"
 
         Dim activeFolder = folderpath
         Dim ret = Await Task.Run(Function() GetSteamNameAndIDFromFolder(folderpath))
 
-        Dim before = analysisResults.Sum(Function(res) res.UncompressedSize)
-        Dim after = analysisResults.Sum(Function(res) res.CompressedSize)
+        Dim before As Long = analysisResults.Sum(Function(res) res.UncompressedSize)
+        Dim after As Long = analysisResults.Sum(Function(res) res.CompressedSize)
 
         Dim steamsubmitdata As New SteamSubmissionData With {
-            .UID = getUID(),
+            .UID = GetUID(),
             .SteamID = ret.appID,
             .GameName = ret.gameName,
             .FolderName = ret.installDir,
@@ -92,7 +90,7 @@ Public Class WikiHandler
 
         Dim msgSuccess As New ModernWpf.Controls.ContentDialog With {
             .Title = "Thank you for submitting your result",
-            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Core.CompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}",
+            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Core.CompressionAlgorithm), Core.WofConvertCompressionLevel(compressionMode))}",
             .CloseButtonText = "OK"
             }
 
@@ -102,17 +100,15 @@ Public Class WikiHandler
 
     End Function
 
-
-    Shared Async Function SubmitURLForm(url As String, submissionstring As String) As Task(Of Boolean)
+    Public Shared Async Function SubmitURLForm(url As String, submissionstring As String) As Task(Of Boolean)
         Try
 
             Dim httpC As New HttpClient
             Dim resp = Await httpC.GetAsync(New Uri(url & submissionstring))
-            Return resp.StatusCode
             If resp.StatusCode <> 200 Then Return False
             Return True
         Catch ex As Exception
-            Return 0
+            Return False
         End Try
 
     End Function

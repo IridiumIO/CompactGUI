@@ -2,11 +2,11 @@
 Imports System.Text.Json
 Public Class UpdateHandler
 
-    Public Shared CurrentVersion As New SemVersion(3, 0, 0, "alpha", 7)
+    Public Shared ReadOnly CurrentVersion As New SemVersion(3, 0, 0, "alpha", 7)
     Public Shared NewVersion As SemVersion
-    Shared UpdateURL As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/version.json"
+    Private Shared ReadOnly UpdateURL As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/version.json"
 
-    Shared Async Function CheckForUpdate(includePrerelease As Boolean) As Task(Of Boolean)
+    Public Shared Async Function CheckForUpdate(includePrerelease As Boolean) As Task(Of Boolean)
         Try
             Using httpclient As New HttpClient
                 Dim ret = Await httpclient.GetStringAsync(UpdateURL)
@@ -27,22 +27,23 @@ Public Class UpdateHandler
 End Class
 
 Public Class SemVersion : Implements IComparable(Of SemVersion)
-    Property Major As Integer
-    Property Minor As Integer
-    Property Patch As Integer
-    Property PreRelease As String
-    Property PreReleaseMinor As Integer
 
-    Sub New()
+    Public Property Major As Integer
+    Public Property Minor As Integer
+    Public Property Patch As Integer
+    Public Property PreRelease As String
+    Public Property PreReleaseMinor As Integer
+
+    Public Sub New()
     End Sub
 
-    Sub New(major As Integer, minor As Integer, patch As Integer)
+    Public Sub New(major As Integer, minor As Integer, patch As Integer)
         Me.Major = major
         Me.Minor = minor
         Me.Patch = patch
     End Sub
 
-    Sub New(major As Integer, minor As Integer, patch As Integer, prerelease As String, prereleaseminor As Integer)
+    Public Sub New(major As Integer, minor As Integer, patch As Integer, prerelease As String, prereleaseminor As Integer)
         Me.Major = major
         Me.Minor = minor
         Me.Patch = patch
@@ -64,13 +65,13 @@ Public Class SemVersion : Implements IComparable(Of SemVersion)
 
     End Function
 
-    Public Shared Operator <(ByVal lhs As SemVersion, ByVal rhs As SemVersion) As Boolean
+    Public Shared Operator <(lhs As SemVersion, rhs As SemVersion) As Boolean
         Dim comparer = lhs.CompareTo(rhs)
         If comparer <= 0 Then Return False
         Return True
     End Operator
 
-    Public Shared Operator >(ByVal lhs As SemVersion, ByVal rhs As SemVersion) As Boolean
+    Public Shared Operator >(lhs As SemVersion, rhs As SemVersion) As Boolean
         Dim comparer = lhs.CompareTo(rhs)
         If comparer >= 0 Then Return False
         Return True

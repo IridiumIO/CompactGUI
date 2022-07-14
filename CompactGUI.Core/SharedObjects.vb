@@ -15,16 +15,17 @@ Public Class ExtensionResult
     Public Property uncompressedBytes As Long
     Public Property compressedBytes As Long
     Public Property totalFiles As Integer
-    ReadOnly Property cRatio As Decimal
+
+    Public ReadOnly Property cRatio As Decimal
         Get
-            Return Math.Round(compressedBytes / uncompressedBytes, 2)
+            Return CDec(Math.Round(compressedBytes / uncompressedBytes, 2))
         End Get
     End Property
 
 End Class
 
 Public Enum CompressionAlgorithm
-    NO_COMPRESSION = -2
+    NOCOMPRESSION = -2
     LZNT1 = -1
     XPRESS4K = 0
     LZX = 1

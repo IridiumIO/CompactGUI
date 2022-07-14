@@ -19,7 +19,8 @@ Partial Public Class MainViewModel
             ShowInTaskbar = value <> WindowState.Minimized
         End Set
     End Property
-    Public Property ShowInTaskbar
+    Public Property ShowInTaskbar As Boolean
+
     Public Property NotifyRequest As NotifyIconWrapper.NotifyRequestRecord
 
     Private Sub InitialiseNotificationTray()

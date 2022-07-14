@@ -1,4 +1,4 @@
-Imports System.IO
+﻿Imports System.IO
 Imports System.Security.AccessControl
 Imports System.Threading
 
@@ -22,7 +22,7 @@ Public Class Analyser
         Dim fileDetails As New Concurrent.ConcurrentBag(Of AnalysedFileDetails)
 
         Try
-            Dim res = Await Task.Run(Function() Parallel.ForEach(allFiles, New ParallelOptions With {.CancellationToken = cancellationToken}, Sub(file) AnalyseFile(file, compressedFilesCount, fileDetails)))
+            Await Task.Run(Function() Parallel.ForEach(allFiles, New ParallelOptions With {.CancellationToken = cancellationToken}, Sub(file) AnalyseFile(file, compressedFilesCount, fileDetails)))
         Catch ex As OperationCanceledException
             Debug.WriteLine(ex.Message)
             Return Nothing
@@ -39,14 +39,14 @@ Public Class Analyser
         Dim fInfo As New FileInfo(file)
         Dim unCompSize = fInfo.Length
         Dim compSize = GetFileSizeOnDisk(file)
-        Dim cLevel As CompressionAlgorithm = If(compSize = unCompSize, CompressionAlgorithm.NO_COMPRESSION, DetectCompression(fInfo))
+        Dim cLevel As CompressionAlgorithm = If(compSize = unCompSize, CompressionAlgorithm.NOCOMPRESSION, DetectCompression(fInfo))
 
         'Sets the backing private fields directly because Interlocked doesn't play nice with properties!
         Interlocked.Add(_CompressedBytes, compSize)
         Interlocked.Add(_UncompressedBytes, unCompSize)
         Interlocked.Add(_testField, 1)
         fileDetails.Add(New AnalysedFileDetails With {.FileName = file, .CompressedSize = compSize, .UncompressedSize = unCompSize, .CompressionMode = cLevel})
-        If cLevel <> CompressionAlgorithm.NO_COMPRESSION Then Interlocked.Increment(compressedFilesCount)
+        If cLevel <> CompressionAlgorithm.NOCOMPRESSION Then Interlocked.Increment(compressedFilesCount)
     End Sub
 
 
@@ -73,17 +73,17 @@ Public Class Analyser
         Return extClassResults.Where(Function(f) f.cRatio > 0.95).ToList()
     End Function
 
-    Private Function DetectCompression(fInfo As FileInfo) As CompressionAlgorithm
+    Private Shared Function DetectCompression(fInfo As FileInfo) As CompressionAlgorithm
 
         Dim isextFile As Integer
-        Dim prov As ULong
-        Dim info As _WOF_FILE_COMPRESSION_INFO_V1
-        Dim buf As UInt16 = 8
+        Dim prov As UInteger
+        Dim info As WofFILECOMPRESSIONINFOV1
+        Dim buf As UInteger = 8
 
-        Dim ret = WofIsExternalFile(fInfo.FullName, isextFile, prov, info, buf)
-        If isextFile = 0 Then info.Algorithm = CompressionAlgorithm.NO_COMPRESSION
-        If (fInfo.Attributes And 2048) <> 0 Then info.Algorithm = CompressionAlgorithm.LZNT1
-        Return info.Algorithm
+        WofIsExternalFile(fInfo.FullName, isextFile, prov, info, buf)
+        If isextFile = 0 Then info._algorithm = CompressionAlgorithm.NOCOMPRESSION
+        If (fInfo.Attributes And 2048) <> 0 Then info._algorithm = CompressionAlgorithm.LZNT1
+        Return info._algorithm
 
     End Function
 
@@ -101,7 +101,7 @@ Public Class Analyser
             For Each FSRule As FileSystemAccessRule In ACRules
 
                 If (FSRule.FileSystemRights And FileSystemRights.Write) <= 0 Then Continue For
-                Dim ntAccount As Security.Principal.NTAccount = FSRule.IdentityReference
+                Dim ntAccount As Security.Principal.NTAccount = CType(FSRule.IdentityReference, Security.Principal.NTAccount)
                 If ntAccount Is Nothing Then Continue For
                 If Not principal.IsInRole(ntAccount.Value) Then Continue For
                 If FSRule.AccessControlType = AccessControlType.Deny Then Return False

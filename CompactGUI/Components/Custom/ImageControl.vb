@@ -7,12 +7,12 @@
     End Sub
 
     Public Custom Event SourceChanged As RoutedEventHandler
-        AddHandler(ByVal value As RoutedEventHandler)
+        AddHandler(value As RoutedEventHandler)
             Task.Delay(1000)
 
             [AddHandler](SourceChangedEvent, value)
         End AddHandler
-        RemoveHandler(ByVal value As RoutedEventHandler)
+        RemoveHandler(value As RoutedEventHandler)
             [RemoveHandler](SourceChangedEvent, value)
         End RemoveHandler
         RaiseEvent(sender As Object, e As RoutedEventArgs)
@@ -21,7 +21,7 @@
         End RaiseEvent
     End Event
 
-    Private Shared Sub SourcePropertyChanged(ByVal obj As DependencyObject, ByVal e As DependencyPropertyChangedEventArgs)
+    Private Shared Sub SourcePropertyChanged(obj As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim image As Image = TryCast(obj, Image)
         If image IsNot Nothing Then
             image.[RaiseEvent](New RoutedEventArgs(SourceChangedEvent))

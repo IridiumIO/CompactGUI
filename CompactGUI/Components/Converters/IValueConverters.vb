@@ -5,9 +5,9 @@ Public Class DecimalToPercentageConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
 
         'IF = invert and format, to show the "percentage smaller" text
-        If parameter = "IF" Then Return CInt(100 - (CType(value, Decimal) * 100)) & "%"
+        If parameter Is "IF" Then Return 100 - (CType(value, Decimal) * 100) & "%"
 
-        If parameter = "I" Then Return CInt(100 - (CType(value, Decimal) * 100))
+        If parameter Is "I" Then Return CInt(100 - (CType(value, Decimal) * 100))
 
         Return CInt(CType(value, Decimal) * 100)
     End Function
@@ -23,14 +23,14 @@ Public Class BytesToReadableConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim suf As String() = {" B", " KB", " MB", " GB", " TB", " PB", " EB"}
 
-        If value = 1010101010101010 Then Return "?"
+        If CStr(value) = "1010101010101010" Then Return "?"
+        If CStr(value) = "0" Then Return "0" & suf(0)
 
-        If value = 0 Then Return "0" & suf(0)
-        Dim bytes As Long = Math.Abs(value)
+        Dim bytes As Double = Math.Abs(CDbl(value))
         Dim place As Integer = CInt(Math.Floor(Math.Log(bytes, 1024)))
         Dim num As Double = Math.Round(bytes / Math.Pow(1024, place), 1)
 
-        Return (Math.Sign(value) * num).ToString() & suf(place)
+        Return (Math.Sign(CDbl(value)) * num).ToString() & suf(place)
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
@@ -83,13 +83,13 @@ Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim clvl = CType(value, Core.CompressionAlgorithm)
         Select Case clvl
-            Case Core.CompressionAlgorithm.NO_COMPRESSION : Return "NIL"
             Case Core.CompressionAlgorithm.LZNT1 : Return "NT"
             Case Core.CompressionAlgorithm.XPRESS4K : Return "X4"
             Case Core.CompressionAlgorithm.XPRESS8K : Return "X8"
             Case Core.CompressionAlgorithm.XPRESS16K : Return "X16"
             Case Core.CompressionAlgorithm.LZX : Return "LZX"
         End Select
+        Return "NIL"
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack

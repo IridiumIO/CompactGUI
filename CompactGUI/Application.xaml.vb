@@ -1,7 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Threading
 
-Class Application
+Public Class Application
 
     Public Shared ReadOnly mutex As New Mutex(False, "Global\CompactGUI")
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs)

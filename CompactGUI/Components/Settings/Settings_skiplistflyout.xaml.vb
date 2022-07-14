@@ -1,6 +1,5 @@
 ﻿Public Class Settings_skiplistflyout
-
-    Sub New()
+    Public Sub New()
 
         InitializeComponent()
 
@@ -16,25 +15,25 @@
         Next
     End Sub
 
-    Private Sub uiReset_Click(sender As Object, e As RoutedEventArgs)
+    Private Sub UiReset_Click(sender As Object, e As RoutedEventArgs)
         SettingsHandler.AppSettings.NonCompressableList = New Settings().NonCompressableList
-        SettingsHandler.AppSettings.Save()
+        Settings.Save()
         PopulateTokens()
     End Sub
 
-    Private Sub uiSave_Click(sender As Object, e As RoutedEventArgs)
+    Private Sub UiSave_Click(sender As Object, e As RoutedEventArgs)
         Dim items = uiTokenizedText.Document.Blocks
 
-        Dim inlineI As Paragraph = items(0)
-        Dim allObj = inlineI.Inlines _
+        Dim inlineI As Paragraph = CType(items(0), Paragraph)
+        Dim allObj As List(Of String) = inlineI.Inlines _
             .Where(Function(c) c.GetType = GetType(InlineUIContainer)) _
-            .Select(Function(f As InlineUIContainer)
-                        Dim cl As ContentPresenter = f.Child
-                        Return cl.Content.ToString
-                    End Function).ToList
+            .Select(CType(Function(f As InlineUIContainer)
+                              Dim cl As ContentPresenter = CType(f.Child, ContentPresenter)
+                              Return cl.Content.ToString
+                          End Function, Func(Of Inline, String))).ToList
 
         SettingsHandler.AppSettings.NonCompressableList = allObj.Where(Function(c) c.StartsWith(".") AndAlso c.Length > 1).Distinct().ToList
-        SettingsHandler.AppSettings.Save()
+        Settings.Save()
 
         PopulateTokens()
 

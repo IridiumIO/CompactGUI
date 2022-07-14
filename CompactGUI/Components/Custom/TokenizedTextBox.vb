@@ -5,7 +5,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
     Public Shared ReadOnly TokenTemplateProperty As DependencyProperty = DependencyProperty.Register("TokenTemplate", GetType(DataTemplate), GetType(TokenizedTextBox))
     Public Property TokenTemplate As DataTemplate
         Get
-            Return GetValue(TokenTemplateProperty)
+            Return CType(GetValue(TokenTemplateProperty), DataTemplate)
         End Get
         Set(value As DataTemplate)
             SetValue(TokenTemplateProperty, value)
@@ -32,7 +32,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
     End Sub
 
     Public Sub InsertText(text As String)
-        text = text & " "
+        text &= " "
         MyBase.AppendText(text)
         If TokenMatcher Is Nothing Then Return
         Dim token = TokenMatcher(text)
@@ -47,10 +47,10 @@ Public Class TokenizedTextBox : Inherits RichTextBox
 
         Dim para = CaretPosition.Paragraph
 
-        Dim matchedRun As Run = para.Inlines.FirstOrDefault(Function(inline)
-                                                                Dim run = TryCast(inline, Run)
-                                                                Return (run IsNot Nothing AndAlso run.Text.EndsWith(inputText))
-                                                            End Function)
+        Dim matchedRun As Run = CType(para.Inlines.FirstOrDefault(Function(inline)
+                                                                      Dim run = TryCast(inline, Run)
+                                                                      Return run IsNot Nothing AndAlso run.Text.EndsWith(inputText)
+                                                                  End Function), Run)
 
         If matchedRun IsNot Nothing Then
 

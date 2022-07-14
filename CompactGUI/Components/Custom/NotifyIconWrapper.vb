@@ -28,7 +28,7 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
         Debug.WriteLine(Assembly.GetExecutingAssembly().Location)
         If DesignerProperties.GetIsInDesignMode(Me) Then Return
         _notifyIcon = New NotifyIcon With {
-            .Icon = Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName),
+            .Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath),
             .Visible = True,
             .ContextMenuStrip = CreateContextMenu()}
 
@@ -41,7 +41,7 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
 
     Public Property Text As String
         Get
-            Return GetValue(TextProperty)
+            Return CStr(GetValue(TextProperty))
         End Get
         Set(value As String)
             SetValue(TextProperty, value)
@@ -50,7 +50,7 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
 
     Public Property NotifyRequest As NotifyRequestRecord
         Get
-            Return GetValue(NotifyRequestProperty)
+            Return CType(GetValue(NotifyRequestProperty), NotifyRequestRecord)
         End Get
         Set(value As NotifyRequestRecord)
             SetValue(NotifyRequestProperty, value)
@@ -64,10 +64,10 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
 
 
     Public Custom Event OpenSelected As RoutedEventHandler
-        AddHandler(ByVal value As RoutedEventHandler)
+        AddHandler(value As RoutedEventHandler)
             [AddHandler](OpenSelectedEvent, value)
         End AddHandler
-        RemoveHandler(ByVal value As RoutedEventHandler)
+        RemoveHandler(value As RoutedEventHandler)
             [RemoveHandler](OpenSelectedEvent, value)
         End RemoveHandler
         RaiseEvent(sender As Object, e As RoutedEventArgs)
@@ -76,10 +76,10 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
     End Event
 
     Public Custom Event ExitSelected As RoutedEventHandler
-        AddHandler(ByVal value As RoutedEventHandler)
+        AddHandler(value As RoutedEventHandler)
             [AddHandler](ExitSelectedEvent, value)
         End AddHandler
-        RemoveHandler(ByVal value As RoutedEventHandler)
+        RemoveHandler(value As RoutedEventHandler)
             [RemoveHandler](ExitSelectedEvent, value)
         End RemoveHandler
         RaiseEvent(sender As Object, e As RoutedEventArgs)

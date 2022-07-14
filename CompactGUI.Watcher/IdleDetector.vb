@@ -6,11 +6,10 @@ Public Class IdleDetector
     Public Event IsIdle As EventHandler
 
     Private _timerTask As Task
-    Private _idletimer As PeriodicTimer
+    Private ReadOnly _idletimer As PeriodicTimer
     Private ReadOnly _cts As New CancellationTokenSource
 
-
-    Sub New()
+    Public Sub New()
         _idletimer = New PeriodicTimer(TimeSpan.FromMilliseconds(30000))
     End Sub
 
@@ -32,15 +31,15 @@ Public Class IdleDetector
 
     End Function
 
-    Public Shared Function GetIdleTime()
+    Public Shared Function GetIdleTime() As Double
 
         Dim idleTicks = 0
 
-        Dim lastInputInfo As LASTINPUTINFO = New LASTINPUTINFO()
+        Dim lastInputInfo As New LASTINPUTINFO()
         lastInputInfo.cbSize = CType(Marshal.SizeOf(lastInputInfo), UInteger)
         lastInputInfo.dwTime = 0
 
-        If GetLastInputInfo(lastInputInfo) Then idleTicks = Environment.TickCount64 - CLng(lastInputInfo.dwTime)
+        If GetLastInputInfo(lastInputInfo) Then idleTicks = CInt(Environment.TickCount64 - lastInputInfo.dwTime)
         Return TimeSpan.FromMilliseconds(idleTicks).TotalSeconds
 
     End Function

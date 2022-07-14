@@ -13,12 +13,12 @@
         <StackPanel Margin="10,20,0,10">
             <Grid Margin="0,0,0,10">
                 <TextBlock  FontSize="14" VerticalAlignment="Center">manage local skipped filetypes</TextBlock>
-                <Button x:Name="uiEditSkipListBTN" IsEnabled="True" HorizontalAlignment="Right" Width="100" Margin="0,0,25,0" Height="36" BorderThickness="0" Click="uiEditSkipListBTN_Click" Content="edit"></Button>
+                <Button x:Name="uiEditSkipListBTN" IsEnabled="True" HorizontalAlignment="Right" Width="100" Margin="0,0,25,0" Height="36" BorderThickness="0" Click="UiEditSkipListBTN_Click" Content="edit"></Button>
             </Grid>
 
             <Grid>
                 <TextBlock  FontSize="14" VerticalAlignment="Center">aggression of online skiplist</TextBlock>
-                <TextBlock x:Name="skipHelpIcon"  FontSize="14" VerticalAlignment="Center" Foreground="#FF98A9B9" Margin="175,0,0,0" Cursor="Hand" Text="(?)" TextDecorations="Underline" MouseUp="skipHelpIcon_MouseEnter">
+                <TextBlock x:Name="skipHelpIcon"  FontSize="14" VerticalAlignment="Center" Foreground="#FF98A9B9" Margin="175,0,0,0" Cursor="Hand" Text="(?)" TextDecorations="Underline" MouseUp="SkipHelpIcon_MouseEnter">
                     <ui:FlyoutBase.AttachedFlyout>
                         <ui:Flyout Placement="Top" >
                             <TextBlock Width="200" TextWrapping="Wrap" Text="For Steam games only.&#x0a;When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well."  />

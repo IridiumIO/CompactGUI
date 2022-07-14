@@ -13,13 +13,13 @@ Public Class ActiveFolder : Inherits ObservableObject
     Public Property WikiPoorlyCompressedFiles As New List(Of String)
     Public Property UncompressedBytes As Long
     Public Property CompressedBytes As Long
-    Public Property SelectedCompressionMode = 0
+    Public Property SelectedCompressionMode As Integer = 0
 
     Public Property IsFreshlyCompressed As Boolean = False
 
-    Public ReadOnly Property CompressionRatio As Decimal
+    Public ReadOnly Property CompressionRatio As Double
         Get
-            If UncompressedBytes = 0 OrElse (CompressedBytes = 0 OrElse CompressedBytes = 1010101010101010) Then Return 0
+            If UncompressedBytes = 0 OrElse CompressedBytes = 0 OrElse CompressedBytes = 1010101010101010 Then Return 0
             Return CompressedBytes / UncompressedBytes
         End Get
     End Property

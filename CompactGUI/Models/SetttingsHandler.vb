@@ -6,9 +6,9 @@ Public Class SettingsHandler : Inherits ObservableObject
     Public Shared Property DataFolder As IO.DirectoryInfo = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
     Public Shared Property SettingsJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(DataFolder.FullName, "settings.json"))
     Public Shared Property AppSettings As Settings
-    Private Shared Property SettingsVersion As Decimal = 1.2
+    Private Shared Property SettingsVersion As Decimal = CDec(1.2)
 
-    Shared Async Sub InitialiseSettings()
+    Public Shared Async Sub InitialiseSettings()
 
         If Not DataFolder.Exists Then DataFolder.Create()
         If Not SettingsJSONFile.Exists Then Await SettingsJSONFile.Create().DisposeAsync()
@@ -19,8 +19,9 @@ Public Class SettingsHandler : Inherits ObservableObject
         AppSettings = JsonSerializer.Deserialize(Of Settings)(SettingsJSON, New JsonSerializerOptions With {.IncludeFields = True})
 
         If AppSettings.SettingsVersion = 0 OrElse SettingsVersion > AppSettings.SettingsVersion Then
-            AppSettings = New Settings
-            AppSettings.SettingsVersion = SettingsVersion
+            AppSettings = New Settings With {
+                .SettingsVersion = SettingsVersion
+            }
 
             Dim msgError As New ModernWpf.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
             Await msgError.ShowAsync()
@@ -31,7 +32,7 @@ Public Class SettingsHandler : Inherits ObservableObject
 
     End Sub
 
-    Shared Sub WriteToFile()
+    Public Shared Sub WriteToFile()
         Dim output = JsonSerializer.Serialize(AppSettings)
         IO.File.WriteAllText(SettingsJSONFile.FullName, output)
     End Sub
@@ -42,7 +43,7 @@ End Class
 Public Class Settings : Inherits ObservableObject
 
     Public Property SettingsVersion As Decimal
-    Public Property ResultsDBLastUpdated As DateTime = DateTime.UnixEpoch
+    Public Property ResultsDBLastUpdated As Date = Date.UnixEpoch
     Public Property SkipNonCompressable As Boolean = False
     Public Property SkipUserNonCompressable As Boolean = False
     Public Property WatchFolderForChanges As Boolean = False
@@ -51,8 +52,8 @@ Public Class Settings : Inherits ObservableObject
     Public Property IsStartMenuEnabled As Boolean = False
     Public Property SkipUserFileTypesLevel As Integer = 0
 
-    'TODO: Add local saving of per-folder skip list
-    Public Sub Save()
+    ' TODO: Add local saving of per-folder skip list
+    Public Shared Sub Save()
         SettingsHandler.WriteToFile()
     End Sub
 

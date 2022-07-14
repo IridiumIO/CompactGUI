@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Blend for Visual Studio Version 17
+# Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompactGUI", "CompactGUI\CompactGUI.vbproj", "{8AB10E7A-1B63-455C-A2A4-0E94475363CC}"
@@ -10,6 +10,11 @@ EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompactGUI.Watcher", "CompactGUI.Watcher\CompactGUI.Watcher.vbproj", "{6ED72FB7-AD4F-4392-8221-F26C60E59E93}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BE387BBC-10F1-4D18-A648-35325B29CFBF} = {BE387BBC-10F1-4D18-A648-35325B29CFBF}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0222FD5F-17F1-428D-9BE7-24F6B9AC3526}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global

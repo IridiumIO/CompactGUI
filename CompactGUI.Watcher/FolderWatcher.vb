@@ -3,18 +3,19 @@
 Public Class FolderWatcher : Implements IDisposable
 
     Private WithEvents FSWatcher As FileSystemWatcher
-    Private disposedValue As Boolean
+    Private _disposedValue As Boolean
     Public Property Folder As String
     Public Property HasTargetChanged As Boolean = False
-    Public Property LastChangedDate As DateTime
+    Public Property LastChangedDate As Date
 
-    Sub New(_folder As String)
-        Folder = _folder
-        FSWatcher = New FileSystemWatcher(Folder)
-        FSWatcher.NotifyFilter = NotifyFilters.Size Or NotifyFilters.CreationTime Or NotifyFilters.LastWrite Or NotifyFilters.FileName
-        FSWatcher.IncludeSubdirectories = True
-        FSWatcher.Filter = ""
-        FSWatcher.EnableRaisingEvents = True
+    Public Sub New(folder As String)
+        Me.Folder = folder
+        FSWatcher = New FileSystemWatcher(Me.Folder) With {
+            .NotifyFilter = NotifyFilters.Size Or NotifyFilters.CreationTime Or NotifyFilters.LastWrite Or NotifyFilters.FileName,
+            .IncludeSubdirectories = True,
+            .Filter = "",
+            .EnableRaisingEvents = True
+        }
 
     End Sub
 
@@ -27,11 +28,11 @@ Public Class FolderWatcher : Implements IDisposable
     Private Sub WatcherModifiedEvent(sender As Object, e As FileSystemEventArgs) Handles FSWatcher.Created, FSWatcher.Changed, FSWatcher.Renamed, FSWatcher.Deleted
         If Not HasTargetChanged Then Debug.WriteLine($"{Folder} has been modified")
         HasTargetChanged = True
-        LastChangedDate = DateTime.Now
+        LastChangedDate = Date.Now
     End Sub
 
     Protected Overridable Sub Dispose(disposing As Boolean)
-        If Not disposedValue Then
+        If Not _disposedValue Then
             If disposing Then
                 FSWatcher.Dispose()
 
@@ -39,7 +40,7 @@ Public Class FolderWatcher : Implements IDisposable
 
             ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
             ' TODO: set large fields to null
-            disposedValue = True
+            _disposedValue = True
         End If
     End Sub
 

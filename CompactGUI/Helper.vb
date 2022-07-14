@@ -3,19 +3,17 @@ Imports System.Management
 Imports System.Text
 Imports Gameloop.Vdf
 
-Module Helper
-
-
-    Function GetSteamIDFromFolder(path As String) As Integer
+Friend Module Helper
+    Public Function GetSteamIDFromFolder(path As String) As Integer
         Return GetSteamNameAndIDFromFolder(path).appID
     End Function
 
-    Function GetSteamNameAndIDFromFolder(path As String) As (appID As Integer, gameName As String, installDir As String)
+    Public Function GetSteamNameAndIDFromFolder(path As String) As (appID As Integer, gameName As String, installDir As String)
 
         Dim workingDir = New IO.DirectoryInfo(path)
         Dim parentfolder = workingDir.Parent.Parent
 
-        If Not parentfolder?.Name = "steamapps" Then Return Nothing
+        If parentfolder?.Name <> "steamapps" Then Return Nothing
 
         For Each fl In parentfolder.EnumerateFiles("*.acf").Where(Function(f) f.Length > 0)
             Dim vConv = VdfConvert.Deserialize(File.ReadAllText(fl.FullName))
@@ -24,7 +22,7 @@ Module Helper
                 Dim sName = vConv.Value.Item("name").ToString
                 Dim sInstallDir = vConv.Value.Item("installdir").ToString
                 Return (appID, sName, sInstallDir)
-                'TODO: Maybe add check to see when game was last updated?
+                ' TODO: Maybe add check to see when game was last updated?
             End If
         Next
 
@@ -32,18 +30,17 @@ Module Helper
 
     End Function
 
+    Public Function GetUID() As String
 
-    Function getUID() As String
-
-        Dim MacID As String = String.Empty
-        Dim mc As ManagementClass = New ManagementClass("Win32_NetworkAdapterConfiguration")
+        Dim macID As String = String.Empty
+        Dim mc As New ManagementClass("Win32_NetworkAdapterConfiguration")
         Dim moc As ManagementObjectCollection = mc.GetInstances()
         For Each mo As ManagementObject In moc
-            If (MacID = String.Empty And CBool(mo.Properties("IPEnabled").Value) = True) Then
-                MacID = mo.Properties("MacAddress").Value.ToString()
+            If macID = String.Empty AndAlso CBool(mo.Properties("IPEnabled").Value) Then
+                macID = mo.Properties("MacAddress").Value.ToString()
             End If
         Next
-        Return Convert.ToBase64String(Encoding.UTF8.GetBytes(MacID))
+        Return Convert.ToBase64String(Encoding.UTF8.GetBytes(macID))
 
     End Function
 

@@ -1,6 +1,5 @@
 ﻿Public Class SettingsControl
-
-    Sub New()
+    Public Sub New()
 
         InitializeComponent()
         uiSettingsNavView.SelectedItem = uiSettingsNavView.MenuItems(0)
@@ -15,14 +14,14 @@
 
         Dim navItemTag = args.SelectedItemContainer.Tag
 
-        If navItemTag = "main" Then
+        If navItemTag Is "main" Then
             ContentFrame.Content = New Settings_main
         End If
 
 
     End Sub
 
-    Shared Sub AddExecutableToRegistry()
+    Public Shared Sub AddExecutableToRegistry()
         Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\software\IridiumIO\CompactGUI\", "Executable Path", IO.Directory.GetCurrentDirectory)
     End Sub
 
