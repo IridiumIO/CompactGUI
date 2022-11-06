@@ -8,7 +8,7 @@ Public Module SharedMethods
     Function verifyFolder(folder As String) As Boolean
 
         If Not IO.Directory.Exists(folder) Then : Return False
-        ElseIf folder.Contains(":\Windows") Then : Return False
+        ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return False
         ElseIf folder.EndsWith(":\") Then : Return False
         End If
 
