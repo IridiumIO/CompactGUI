@@ -97,6 +97,7 @@ Public Class MainViewModel : Inherits ObservableObject
             If ActiveFolder.IsFreshlyCompressed Then
                 ActiveFolder.PoorlyCompressedFiles = Await Analyser.GetPoorlyCompressedExtensions()
                 If SettingsHandler.AppSettings.WatchFolderForChanges Then AddFolderToWatcher()
+                Notify_Compressed(ActiveFolder.DisplayName, ActiveFolder.UncompressedBytes - ActiveFolder.CompressedBytes, ActiveFolder.CompressionRatio)
             Else
                 Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList()
 
@@ -157,10 +158,10 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Dim exclist() As String = {}
         If SettingsHandler.AppSettings.SkipNonCompressable AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
-            '  exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
+            exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
         End If
         If SettingsHandler.AppSettings.SkipUserNonCompressable AndAlso ActiveFolder.WikiPoorlyCompressedFiles.Count <> 0 Then
-            '  exclist = exclist.Union(activeFolder.WikiPoorlyCompressedFiles).ToArray
+            exclist = exclist.Union(ActiveFolder.WikiPoorlyCompressedFiles).ToArray
         End If
 
 
@@ -214,7 +215,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Function CanSubmitToWiki() As Boolean
-        Return ActiveFolder.SteamAppID <> 0 AndAlso ActiveFolder.IsFreshlyCompressed
+        Return ActiveFolder.SteamAppID <> 0 AndAlso ActiveFolder.IsFreshlyCompressed AndAlso SettingsHandler.AppSettings.SkipUserNonCompressable = False AndAlso SettingsHandler.AppSettings.SkipNonCompressable = False
         'NEED TO RE-ADD CHECK TO NOT LET YOU SUBMIT IF YOU'RE SKIPPING FILES!!!!
     End Function
 

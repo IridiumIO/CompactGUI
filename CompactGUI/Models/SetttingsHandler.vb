@@ -50,6 +50,7 @@ Public Class Settings : Inherits ObservableObject
     Public Property IsContextIntegrated As Boolean = False
     Public Property IsStartMenuEnabled As Boolean = False
     Public Property SkipUserFileTypesLevel As Integer = 0
+    Public Property ShowNotifications As Boolean = False
 
     'TODO: Add local saving of per-folder skip list
     Public Sub Save()

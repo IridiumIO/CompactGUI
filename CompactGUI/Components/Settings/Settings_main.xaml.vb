@@ -12,6 +12,7 @@ Class Settings_main
 
         uiIsContextEnabled.IsChecked = SettingsHandler.AppSettings.IsContextIntegrated
         uiIsStartMenuEnabled.IsChecked = SettingsHandler.AppSettings.IsStartMenuEnabled
+        uiShowNotifications.IsChecked = SettingsHandler.AppSettings.ShowNotifications
         comboBoxSkipUserResultsAggression.SelectedIndex = SettingsHandler.AppSettings.SkipUserFileTypesLevel
 
         SetEnv()
@@ -59,4 +60,15 @@ Class Settings_main
         FlyoutBase.ShowAttachedFlyout(sender)
     End Sub
 
+    Private Sub uiShowNotifications_Checked(sender As Object, e As RoutedEventArgs)
+        SettingsHandler.AppSettings.ShowNotifications = True
+        SettingsHandler.AppSettings.Save()
+
+    End Sub
+
+    Private Sub uiShowNotifications_Unchecked(sender As Object, e As RoutedEventArgs)
+        SettingsHandler.AppSettings.ShowNotifications = False
+        SettingsHandler.AppSettings.Save()
+
+    End Sub
 End Class
