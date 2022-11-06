@@ -10,6 +10,7 @@ Public Module SharedMethods
         If Not IO.Directory.Exists(folder) Then : Return False
         ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return False
         ElseIf folder.EndsWith(":\") Then : Return False
+        ElseIf DriveInfo.GetDrives().First(Function(f) folder.startswith(f.Name)).DriveFormat <> "NTFS" Then : Return False
         End If
 
         Return True

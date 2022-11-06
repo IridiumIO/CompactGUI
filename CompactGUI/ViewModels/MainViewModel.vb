@@ -35,7 +35,7 @@ Public Class MainViewModel : Inherits ObservableObject
         End If
         Dim validFolder = Core.verifyFolder(path)
         If Not validFolder Then
-            Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = "For safety, this folder cannot be chosen.", .CloseButtonText = "OK"}
+            Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = "This is either a system folder, root directory or a non-NTFS drive and cannot be selected.", .CloseButtonText = "OK"}
             msgError.ShowAsync()
             Return
         End If
