@@ -7,7 +7,7 @@
         xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:converters="clr-namespace:ValueConverters;assembly=ValueConverters"
         mc:Ignorable="d" xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" d:DataContext="{d:DesignInstance Type=local:MainViewModel}" RenderOptions.ClearTypeHint="Enabled"
-        WindowState="{Binding WindowState}" ShowInTaskbar="{Binding ShowInTaskbar}"
+        WindowState="{Binding WindowState}" ShowInTaskbar="{Binding ShowInTaskbar}" AllowDrop="True" Drop="Window_Drop"
 
     ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True" 
         Title="CompactGUI" Height="800" Width="500" WindowStyle="SingleBorderWindow" Background="White">

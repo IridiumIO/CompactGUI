@@ -41,4 +41,18 @@ Class MainWindow
         If e.Key = Key.System Then e.Handled = True
 
     End Sub
+
+    Private Sub Window_Drop(sender As Object, e As DragEventArgs)
+        Dim xs As String() = e.Data.GetData(DataFormats.FileDrop, True)
+        If xs.Length > 1 Then
+            MessageBox.Show("You can only select one folder at a time")
+            Return
+        End If
+
+        If IO.Directory.Exists(xs(0)) Then
+            ViewModel.SelectFolder(xs(0))
+        End If
+
+
+    End Sub
 End Class
