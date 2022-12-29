@@ -29,6 +29,13 @@ Public Class Watcher : Inherits ObservableObject
         WriteToFile()
 
         If WatchedFolders Is Nothing Then Return
+
+        Dim nonExist = WatchedFolders.Where(Function(f) IO.Directory.Exists(f.Folder) <> True).ToList
+        For Each nE In nonExist
+            WatchedFolders.Remove(WatchedFolders.First(Function(f) f.Folder = nE.Folder))
+            WriteToFile()
+        Next
+
         For Each watched In WatchedFolders
             Watchers.Add(New FolderWatcher(watched.Folder) With {.LastChangedDate = watched.LastSystemModifiedDate})
         Next

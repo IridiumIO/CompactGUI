@@ -115,7 +115,7 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
         Public Property Title As String = ""
         Public Property Text As String = ""
         Public Property Duration As Integer = 1000
-        Public Property Icon As ToolTipIcon = ToolTipIcon.Info
+        Public Property Icon As ToolTipIcon = ToolTipIcon.None
 
     End Class
 

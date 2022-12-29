@@ -43,10 +43,11 @@
         </StackPanel>
 
         <Separator Margin="0,10,0,20"/>
-        <Label Content="Explorer Integration" FontWeight="SemiBold"/>
+        <Label Content="System Integration" FontWeight="SemiBold"/>
         <StackPanel Margin="10,20,0,10">
             <CheckBox x:Name="uiIsContextEnabled" Margin="0,0,0,10">add to right-click context menu</CheckBox>
             <CheckBox x:Name="uiIsStartMenuEnabled" IsEnabled="False">add to start menu</CheckBox>
+            <CheckBox x:Name="uiShowNotifications" IsEnabled="True" Checked="uiShowNotifications_Checked" Unchecked="uiShowNotifications_Unchecked">show notifications</CheckBox>
 
 
         </StackPanel>

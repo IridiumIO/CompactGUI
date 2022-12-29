@@ -25,7 +25,7 @@ Partial Public Class MainViewModel
 
     Private Sub InitialiseNotificationTray()
         ClosingCommand = New RelayCommand(Of CancelEventArgs)(AddressOf Closing)
-        NotifyCommand = New RelayCommand(Sub() Notify("Hello World"))
+        NotifyCommand = New RelayCommand(Sub() Notify("Hello", "World"))
         NotifyIconOpenCommand = New RelayCommand(Sub() WindowState = WindowState.Normal)
         NotifyIconExitCommand = New RelayCommand(AddressOf NotifyExit)
     End Sub
@@ -39,11 +39,23 @@ Partial Public Class MainViewModel
 
     End Sub
 
-    Private Sub Notify(message As String)
+    Private Sub Notify(title As String, message As String)
+
+        If Not SettingsHandler.AppSettings.ShowNotifications Then Return
+
         NotifyRequest = New NotifyIconWrapper.NotifyRequestRecord With {
-            .Title = "Notification",
+            .Title = title,
             .Text = message,
             .Duration = 1000}
+    End Sub
+
+    Private Sub Notify_Compressed(DisplayName As String, BytesSaved As Long, CompressionRatio As Decimal)
+
+        Dim title = $"{DisplayName}"
+        Dim readableSaved = $"{New BytesToReadableConverter().Convert(ActiveFolder.UncompressedBytes - ActiveFolder.CompressedBytes, GetType(Long), Nothing, Globalization.CultureInfo.CurrentCulture)} saved"
+        Dim percentCompressed = $"{100 - CInt(CompressionRatio * 100)}% smaller"
+        Notify(title, $"▸ {readableSaved}{Environment.NewLine}▸ {percentCompressed}")
+
     End Sub
 
     Private Sub Closing(e As CancelEventArgs)
