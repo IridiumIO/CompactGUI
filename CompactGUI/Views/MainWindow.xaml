@@ -20,6 +20,8 @@
             <local:StrippedFolderPathConverter x:Key="StrippedFolderPathConverter"/>
             <local:RelativeDateConverter x:Key="RelativeDateConverter"/>
             <local:CompressionLevelAbbreviatedConverter x:Key="CompressionLevelAbbreviatedConverter"/>
+            <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter"/>
+            <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter"/>
         </ResourceDictionary>
 
     </Window.Resources>
@@ -201,6 +203,9 @@
                         <StringAnimationUsingKeyFrames Storyboard.TargetName="RightLabel" Storyboard.TargetProperty="(TextBlock.Text)" >
                             <DiscreteStringKeyFrame Value="estimated size"  KeyTime="0:0:0" />
                         </StringAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Confidence" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                        </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="AnalysingFolderSelected">
@@ -371,6 +376,9 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="grid3" Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Confidence" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
 
                     </Storyboard>
                 </VisualState>
@@ -444,6 +452,9 @@
                         <StringAnimationUsingKeyFrames Storyboard.TargetName="RightLabel" Storyboard.TargetProperty="(TextBlock.Text)"  >
                             <DiscreteStringKeyFrame Value="after"  KeyTime="0:0:0" />
                         </StringAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Confidence" Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames>
 
                     </Storyboard>
                 </VisualState>
@@ -687,7 +698,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <Grid >
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="*"/>
@@ -695,6 +706,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock Text="{Binding ActiveFolder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" d:Text="21.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center"/>
@@ -704,8 +719,19 @@
                     <StackPanel Orientation="Vertical" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock Text="{Binding ActiveFolder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"  d:Text="29.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center"/>
                         <TextBlock x:Name="RightLabel" Text="estimated size" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
+                        
                     </StackPanel>
-
+                    <Grid Margin="0,3,0,0" x:Name="Confidence"  Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="1" HorizontalAlignment="Center" Width="110">
+                        <TextBlock HorizontalAlignment="Left" Text="confidence" FontFamily="Segoe UI " FontSize="13" Foreground="#50BAC2CA" />
+                        <TextBlock HorizontalAlignment="Right" Text="{Binding ActiveFolder.CompressionConfidence, Converter={StaticResource ConfidenceIntToStringConverter}}" FontFamily="Segoe UI SemiBold" FontSize="13" Foreground="{Binding ActiveFolder.CompressionConfidence, Converter={StaticResource ConfidenceIntToColorConverter}}" />
+                        <Grid.ToolTip>
+                            <ToolTip>
+                                <!-- Your tooltip content goes here -->
+                                <TextBlock Text="Confidence of the estimated size, determined by number of submitted user results" />
+                            </ToolTip>
+                        </Grid.ToolTip>
+                    </Grid>
+                    
                 </Grid>
             </Border>
 

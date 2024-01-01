@@ -14,6 +14,7 @@ Public Class ActiveFolder : Inherits ObservableObject
     Public Property UncompressedBytes As Long
     Public Property CompressedBytes As Long
     Public Property SelectedCompressionMode = 0
+    Public Property CompressionConfidence = -1
 
     Public Property IsFreshlyCompressed As Boolean = False
 

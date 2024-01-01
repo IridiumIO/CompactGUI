@@ -96,3 +96,43 @@ Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
         Throw New NotImplementedException()
     End Function
 End Class
+
+Public Class ConfidenceIntToStringConverter : Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Select Case value
+            Case 0
+                Return "▬"
+            Case 1
+                Return "▬▬"
+            Case 2
+                Return "▬▬▬"
+            Case Else
+                Return "▭▭▭"
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class ConfidenceIntToColorConverter : Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Select Case value
+            Case 0
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#FF996B6B"))
+            Case 1
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#F1CE92"))
+            Case 2
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#92F1AB"))
+            Case Else
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#BAC2CA"))
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
