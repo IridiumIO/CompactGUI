@@ -4,7 +4,7 @@
 
         InitializeComponent()
 
-        uiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" "), text.Substring(0, text.Length - 1).Trim(), Nothing)
+        uiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" ") OrElse text.EndsWith(";") OrElse text.EndsWith(","), text.Substring(0, text.Length - 1).Trim(), Nothing)
         PopulateTokens()
 
     End Sub
