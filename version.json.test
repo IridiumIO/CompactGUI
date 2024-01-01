@@ -3,7 +3,7 @@
         "Major": 3,
         "Minor": 0,
         "Patch": 1,
-        "PreRelease": "",
+        "PreRelease": None,
         "PreReleaseMinor": 0,
         "VersionString": "3.0.0",
         "FriendlyString": "3.0",
