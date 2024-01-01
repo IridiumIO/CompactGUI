@@ -1,0 +1,24 @@
+{
+    "Latest": {
+        "Major": 3,
+        "Minor": 0,
+        "Patch": 0,
+        "PreRelease": "",
+        "PreReleaseMinor": ,
+        "VersionString": "3.0.0",
+        "FriendlyString": "3.0",
+        "Changes": [],
+        "Fixes": []
+    },
+    "LatestNonPreRelease": {
+        "Major": 2,
+        "Minor": 6,
+        "Patch": 2,
+        "PreRelease": "",
+        "PreReleaseMinor": 0,
+        "VersionString": "2.6.2",
+        "FriendlyString": "2.6.2",
+        "Changes": [],
+        "Fixes": []
+    }
+}
