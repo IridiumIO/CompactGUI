@@ -4,7 +4,7 @@
         "Minor": 0,
         "Patch": 1,
         "PreRelease": "",
-        "PreReleaseMinor": -1,
+        "PreReleaseMinor": 0,
         "VersionString": "3.0.0",
         "FriendlyString": "3.0",
         "Changes": [],
