@@ -13,7 +13,6 @@ Class MainWindow
         Me.DataContext = ViewModel
 
         ViewModel.State = "FreshLaunch"
-
     End Sub
 
     Public Property ViewModel As New MainViewModel
@@ -31,7 +30,9 @@ Class MainWindow
     Private Sub uiBtnOptions_Click(sender As Object, e As RoutedEventArgs) Handles uiBtnOptions.Click
 
         Dim settingsDialog As New ContentDialog With {.Content = New SettingsControl}
+
         settingsDialog.PrimaryButtonText = "save and close"
+
         settingsDialog.ShowAsync()
 
     End Sub

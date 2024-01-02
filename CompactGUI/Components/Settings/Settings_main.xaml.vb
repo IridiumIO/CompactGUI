@@ -14,10 +14,11 @@ Class Settings_main
         uiIsStartMenuEnabled.IsChecked = SettingsHandler.AppSettings.IsStartMenuEnabled
         uiShowNotifications.IsChecked = SettingsHandler.AppSettings.ShowNotifications
         comboBoxSkipUserResultsAggression.SelectedIndex = SettingsHandler.AppSettings.SkipUserFileTypesLevel
-
+        uiScalingFactor.Value = SettingsHandler.AppSettings.WindowScalingFactor
         SetEnv()
 
     End Sub
+
 
     Private Async Sub SetEnv()
         Await Task.Run(Sub() Environment.SetEnvironmentVariable("IridiumIO", IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO"), EnvironmentVariableTarget.User))
@@ -69,6 +70,26 @@ Class Settings_main
     Private Sub uiShowNotifications_Unchecked(sender As Object, e As RoutedEventArgs)
         SettingsHandler.AppSettings.ShowNotifications = False
         SettingsHandler.AppSettings.Save()
+
+    End Sub
+
+    Private Sub uiScalingFactor_PreviewMouseUp(sender As Object, e As MouseButtonEventArgs)
+        SettingsHandler.AppSettings.WindowScalingFactor = uiScalingFactor.Value
+        SettingsHandler.AppSettings.Save()
+
+    End Sub
+
+    Private Sub uiScalingFactor_PreviewKeyUp(sender As Object, e As KeyEventArgs)
+        SettingsHandler.AppSettings.WindowScalingFactor = uiScalingFactor.Value
+        SettingsHandler.AppSettings.Save()
+    End Sub
+
+    Private Sub Canvas_MouseUp(sender As Object, e As MouseButtonEventArgs)
+        Process.Start(New ProcessStartInfo("https://ko-fi.com/IridiumIO") With {.UseShellExecute = True})
+    End Sub
+
+    Private Sub Canvas_MouseUp_1(sender As Object, e As MouseButtonEventArgs)
+        Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI") With {.UseShellExecute = True})
 
     End Sub
 End Class

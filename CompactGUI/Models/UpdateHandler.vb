@@ -2,7 +2,7 @@
 Imports System.Text.Json
 Public Class UpdateHandler
 
-    Public Shared CurrentVersion As New SemVersion(3, 0, 0)
+    Public Shared CurrentVersion As New SemVersion(3, 0, 1)
     Public Shared NewVersion As SemVersion
     Shared UpdateURL As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/version.json"
 
@@ -83,6 +83,16 @@ Public Class SemVersion : Implements IComparable(Of SemVersion)
     Public Function IsPreRelease() As Boolean
         If PreRelease = "" Then Return True
         Return False
+    End Function
+
+    Public Function Friendly() As String
+        If PreRelease = "" OrElse PreRelease = Nothing OrElse PreRelease = "r" Then
+            Return $"{Major}.{Minor}.{Patch}"
+        Else
+            Return $"{Major}.{Minor}.{Patch} - {PreRelease} {PreReleaseMinor}"
+
+        End If
+
     End Function
 
 End Class

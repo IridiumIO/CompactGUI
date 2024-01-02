@@ -29,7 +29,7 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </Window.Resources>
-    <Grid Margin="20">
+    <Grid x:Name="MainGrid">
         <TextBlock Text="edit skipped filetypes" FontSize="22" FontWeight="SemiBold" Margin="10"/>
         <local:TokenizedTextBox Margin="10,50,10,80" x:Name="uiTokenizedText" TokenTemplate="{DynamicResource NameTokenTemplate}" VerticalScrollBarVisibility="Visible">
             <FlowDocument>

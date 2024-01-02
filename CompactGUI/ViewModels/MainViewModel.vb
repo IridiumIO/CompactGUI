@@ -15,13 +15,12 @@ Public Class MainViewModel : Inherits ObservableObject
         InitialiseNotificationTray()
         Watcher = New Watcher.Watcher   'This naming isn't going to get confusing at all...
 
-
     End Sub
 
 
     Private Async Sub FireAndForgetCheckForUpdates()
         Dim ret = Await UpdateHandler.CheckForUpdate(True)
-        If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdateHandler.NewVersion.ToString)
+        If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdateHandler.NewVersion.Friendly)
     End Sub
 
 
@@ -282,8 +281,7 @@ Public Class MainViewModel : Inherits ObservableObject
             Return principal.IsInRole(Security.Principal.WindowsBuiltInRole.Administrator)
         End Get
     End Property
-
-
+    Public ReadOnly Property Version As String = UpdateHandler.CurrentVersion.Friendly
 
 #End Region
 

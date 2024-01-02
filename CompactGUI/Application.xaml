@@ -18,11 +18,11 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="button" CornerRadius="24" BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
+                                <Border x:Name="button" CornerRadius="20" BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
                                     
-                                    <TextBlock  Text="{TemplateBinding Button.Content}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock  Text="{TemplateBinding Button.Content}" FontSize="15" FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
                                     <Border.Effect>
-                                        <DropShadowEffect Opacity="0.16" Direction="-90" BlurRadius="6" ShadowDepth="3"/>
+                                        <DropShadowEffect Opacity="0.26" Direction="-90" BlurRadius="16" ShadowDepth="6"/>
                                     </Border.Effect>
 
                                     <VisualStateManager.VisualStateGroups>
@@ -107,6 +107,7 @@
                 <Setter Property="Control.Template" Value="{x:Null}" />
             </Style>
 
+            <local:WindowScalingConverter x:Key="WindowScalingConverter"/>
 
 
             <!-- Other app resources here -->

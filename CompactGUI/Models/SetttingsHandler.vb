@@ -32,7 +32,7 @@ Public Class SettingsHandler : Inherits ObservableObject
     End Sub
 
     Shared Sub WriteToFile()
-        Dim output = JsonSerializer.Serialize(AppSettings)
+        Dim output = JsonSerializer.Serialize(AppSettings, New JsonSerializerOptions With {.IncludeFields = True})
         IO.File.WriteAllText(SettingsJSONFile.FullName, output)
     End Sub
 
@@ -51,6 +51,22 @@ Public Class Settings : Inherits ObservableObject
     Public Property IsStartMenuEnabled As Boolean = False
     Public Property SkipUserFileTypesLevel As Integer = 0
     Public Property ShowNotifications As Boolean = False
+    Private _WindowScalingFactor = 1
+    Public Property WindowScalingFactor As Decimal
+        Get
+            Return _WindowScalingFactor
+        End Get
+        Set(value As Decimal)
+            _WindowScalingFactor = value
+            WindowWidth = 500 * value
+            WindowHeight = 800 * value
+            OnPropertyChanged()
+        End Set
+    End Property
+
+    Public Property WindowWidth As Decimal = 500
+    Public Property WindowHeight As Decimal = 800
+
 
     'TODO: Add local saving of per-folder skip list
     Public Sub Save()
