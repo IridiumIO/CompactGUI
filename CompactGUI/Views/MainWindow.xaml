@@ -10,8 +10,8 @@
         WindowState="{Binding WindowState}" ShowInTaskbar="{Binding ShowInTaskbar}" AllowDrop="True" Drop="Window_Drop"
         ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Title="CompactGUI" 
-        Height="{Binding BindableSettings.WindowHeight, Mode=TwoWay}"  
-        Width="{Binding BindableSettings.WindowWidth, Mode=TwoWay}" ResizeMode="NoResize" 
+        Height="{Binding BindableSettings.WindowHeight, Mode=TwoWay,FallbackValue=800}"  
+        Width="{Binding BindableSettings.WindowWidth, Mode=TwoWay, FallbackValue=500}" ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" Background="White" >
 
     <Window.Resources>
