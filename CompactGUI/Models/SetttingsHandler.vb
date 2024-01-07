@@ -52,11 +52,11 @@ Public Class Settings : Inherits ObservableObject
     Public Property SkipUserFileTypesLevel As Integer = 0
     Public Property ShowNotifications As Boolean = False
     Private _WindowScalingFactor = 1
-    Public Property WindowScalingFactor As Decimal
+    Public Property WindowScalingFactor As Double
         Get
             Return _WindowScalingFactor
         End Get
-        Set(value As Decimal)
+        Set(value As Double)
             _WindowScalingFactor = value
             WindowWidth = 500 * value
             WindowHeight = 800 * value

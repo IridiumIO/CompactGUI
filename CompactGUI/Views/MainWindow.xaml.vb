@@ -29,7 +29,7 @@ Class MainWindow
 
     Private Sub uiBtnOptions_Click(sender As Object, e As RoutedEventArgs) Handles uiBtnOptions.Click
 
-        Dim settingsDialog As New ContentDialog With {.Content = New SettingsControl}
+        Dim settingsDialog As New CustomContentDialog With {.Content = New SettingsControl}
 
         settingsDialog.PrimaryButtonText = "save and close"
 
