@@ -34,7 +34,13 @@ Partial Public Class MainViewModel
     Private Sub InitialiseNotificationTray()
         ClosingCommand = New RelayCommand(Of CancelEventArgs)(AddressOf Closing)
         NotifyCommand = New RelayCommand(Sub() Notify("Hello", "World"))
-        NotifyIconOpenCommand = New RelayCommand(Sub() WindowState = WindowState.Normal)
+        NotifyIconOpenCommand = New RelayCommand(Sub()
+                                                     Application.Current.MainWindow.Show()
+                                                     WindowState = WindowState.Normal
+                                                     Application.Current.MainWindow.Topmost = True
+                                                     Application.Current.MainWindow.Activate()
+                                                     Application.Current.MainWindow.Topmost = False
+                                                 End Sub)
         NotifyIconExitCommand = New RelayCommand(AddressOf NotifyExit)
     End Sub
 
@@ -71,6 +77,7 @@ Partial Public Class MainViewModel
         If Watcher.WatchedFolders.Count <> 0 Then
             e.Cancel = True
             WindowState = WindowState.Minimized
+            Application.Current.MainWindow.Hide()
         End If
 
     End Sub
