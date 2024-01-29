@@ -17,10 +17,19 @@ Partial Public Class MainViewModel
             ShowInTaskbar = True
             SetProperty(_windowState, value)
             ShowInTaskbar = value <> WindowState.Minimized
+
+            If Not ShowInTaskbar Then
+                Notify("Watcher is running in the background.", $"{Environment.NewLine}{Watcher.WatchedFolders.Count} folders will be monitored when your system is not in use")
+
+                NotifyIconWrapper._notifyIcon.Text = $"CompactGUI{Environment.NewLine}Monitoring {Watcher.WatchedFolders.Count} folders"
+            End If
+
         End Set
     End Property
     Public Property ShowInTaskbar
     Public Property NotifyRequest As NotifyIconWrapper.NotifyRequestRecord
+
+    Public Property NotifyIcon As NotifyIconWrapper
 
     Private Sub InitialiseNotificationTray()
         ClosingCommand = New RelayCommand(Of CancelEventArgs)(AddressOf Closing)

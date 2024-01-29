@@ -21,16 +21,17 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
 
     Private Shared ReadOnly ExitSelectedEvent As RoutedEvent = EventManager.RegisterRoutedEvent("ExitSelected", RoutingStrategy.Direct, GetType(RoutedEventHandler), GetType(NotifyIconWrapper))
 
-    Private ReadOnly _notifyIcon As NotifyIcon
+    Public Shared _notifyIcon As NotifyIcon
 
 
     Public Sub New()
-        Debug.WriteLine(Assembly.GetExecutingAssembly().Location)
+
         If DesignerProperties.GetIsInDesignMode(Me) Then Return
-        _notifyIcon = New NotifyIcon With {
+        NotifyIconWrapper._notifyIcon = New NotifyIcon With {
             .Icon = Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName),
             .Visible = True,
-            .ContextMenuStrip = CreateContextMenu()}
+            .ContextMenuStrip = CreateContextMenu(),
+            .Text = "CompactGUI"}
 
         AddHandler _notifyIcon.DoubleClick, AddressOf OpenItemOnClick
         AddHandler Application.Current.Exit, Sub(obj, args)
