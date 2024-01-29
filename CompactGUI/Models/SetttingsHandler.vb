@@ -27,12 +27,29 @@ Public Class SettingsHandler : Inherits ObservableObject
 
         End If
 
+        InitialiseWindowSize()
+
         WriteToFile()
 
     End Sub
 
+
+    Private Shared Sub InitialiseWindowSize()
+
+        AppSettings.WindowWidth = AppSettings.WindowHeight * 0.625
+        AppSettings.WindowScalingFactor = AppSettings.WindowHeight / 800
+
+        If AppSettings.WindowHeight < 400 OrElse AppSettings.WindowHeight > 1600 Then
+            AppSettings.WindowScalingFactor = 1
+            AppSettings.WindowHeight = 800
+            AppSettings.WindowWidth = 500
+        End If
+
+    End Sub
+
+
     Shared Sub WriteToFile()
-        Dim output = JsonSerializer.Serialize(AppSettings, New JsonSerializerOptions With {.IncludeFields = True})
+        Dim output = JsonSerializer.Serialize(AppSettings, New JsonSerializerOptions With {.IncludeFields = True, .WriteIndented = True})
         IO.File.WriteAllText(SettingsJSONFile.FullName, output)
     End Sub
 
@@ -60,6 +77,7 @@ Public Class Settings : Inherits ObservableObject
             _WindowScalingFactor = value
             WindowWidth = 500 * value
             WindowHeight = 800 * value
+
             OnPropertyChanged()
         End Set
     End Property
