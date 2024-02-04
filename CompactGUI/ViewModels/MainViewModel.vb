@@ -130,8 +130,14 @@ Public Class MainViewModel : Inherits ObservableObject
             .LastCompressedDate = DateTime.Now,
             .LastCheckedDate = DateTime.Now,
             .LastCheckedSize = ActiveFolder.CompressedBytes,
-            .LastSystemModifiedDate = DateTime.Now,
-            .CompressionLevel = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).Max}
+            .LastSystemModifiedDate = DateTime.Now
+            }
+
+        If ActiveFolder.AnalysisResults IsNot Nothing AndAlso ActiveFolder.AnalysisResults.Any() Then
+            newWatched.CompressionLevel = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressedSize).Max()
+        Else
+            newWatched.CompressionLevel = -2
+        End If
 
         Watcher.AddOrUpdateWatched(newWatched)
 
