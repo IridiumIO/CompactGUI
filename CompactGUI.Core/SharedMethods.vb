@@ -21,6 +21,14 @@ Public Module SharedMethods
     Function GetFileSizeOnDisk(file As String) As Long
         Dim hosize As UInteger
         Dim losize As UInteger = GetCompressedFileSizeW(file, hosize)
+        'INVALID_FILE_SIZE (0xFFFFFFFF)
+        If losize = 4294967295 Then
+            Dim errCode As Integer
+            errCode = Marshal.GetLastPInvokeError()
+            If errCode <> 0 Then
+                Return -1
+            End If
+        End If
         Return CLng(hosize) << 32 Or losize
     End Function
 
@@ -73,7 +81,7 @@ Public Module SharedMethods
 
 #Region "DLL Imports"
 
-    <DllImport("kernel32.dll")>
+    <DllImport("kernel32.dll", SetLastError:=True)>
     Private Function GetCompressedFileSizeW(
     <[In](), MarshalAs(UnmanagedType.LPWStr)> lpFileName As String,
     <Out(), MarshalAs(UnmanagedType.U4)> ByRef lpFileSizeHigh As UInteger) _
