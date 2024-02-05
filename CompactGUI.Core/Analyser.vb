@@ -39,6 +39,10 @@ Public Class Analyser
         Dim fInfo As New FileInfo(file)
         Dim unCompSize = fInfo.Length
         Dim compSize = GetFileSizeOnDisk(file)
+        If compSize < 0 Then
+            'GetFileSizeOnDisk failed, fall back to unCompSize
+            compSize = unCompSize
+        End If
         Dim cLevel As CompressionAlgorithm = If(compSize = unCompSize, CompressionAlgorithm.NO_COMPRESSION, DetectCompression(fInfo))
 
         'Sets the backing private fields directly because Interlocked doesn't play nice with properties!
