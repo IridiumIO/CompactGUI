@@ -6,7 +6,7 @@ Public Class Compactor
 
     Public Sub New(folder As String, cLevel As CompressionAlgorithm, excludedFilesTypes As String())
 
-        If Not verifyFolder(folder) Then Return
+        If Not verifyFolder(folder).isValid Then Return
 
         _workingDir = folder
         _excludedFileTypes = excludedFilesTypes

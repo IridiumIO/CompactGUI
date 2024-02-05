@@ -5,15 +5,16 @@ Imports System.Text
 Public Module SharedMethods
 
 
-    Function verifyFolder(folder As String) As Boolean
+    Function verifyFolder(folder As String) As (isValid As Boolean, msg As String)
 
-        If Not IO.Directory.Exists(folder) Then : Return False
-        ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return False
-        ElseIf folder.EndsWith(":\") Then : Return False
-        ElseIf DriveInfo.GetDrives().First(Function(f) folder.startswith(f.Name)).DriveFormat <> "NTFS" Then : Return False
+        If Not IO.Directory.Exists(folder) Then : Return (False, "Directory does not exist")
+        ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return (False, "Cannot compress system directory")
+        ElseIf folder.EndsWith(":\") Then : Return (False, "Cannot compress root directory")
+        ElseIf Not IO.Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories).Any() Then : Return (False, "Directory is empty")
+        ElseIf DriveInfo.GetDrives().First(Function(f) folder.StartsWith(f.Name)).DriveFormat <> "NTFS" Then : Return (False, "Cannot compress a directory on a non-NTFS drive")
         End If
 
-        Return True
+        Return (True, "")
 
     End Function
 
