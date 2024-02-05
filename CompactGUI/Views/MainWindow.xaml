@@ -1110,25 +1110,40 @@
                     </ui:FontIcon>
                 </ui:AppBarButton.Icon>
             </ui:AppBarButton>
-            <ui:AppBarButton Width="100" Command="{Binding MenuWatcherAreaCommand}" Margin="105,0,0,0"  KeyboardNavigation.TabNavigation="None">
-                <ui:AppBarButton.Icon>
-                    <ui:FontIcon Glyph="&#xE823;" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+      <ui:AppBarButton Width="100"
+                       Command="{Binding MenuWatcherAreaCommand}"
+                       Margin="105,0,0,0"
+                       KeyboardNavigation.TabNavigation="None">
+        <ui:AppBarButton.Icon>
+          <ui:FontIcon Glyph="&#xE823;"
+                       Foreground="White"
+                       RenderTransformOrigin="0.5,0.5">
 
-                    </ui:FontIcon>
-                </ui:AppBarButton.Icon>
-            </ui:AppBarButton>
-            <bh:Interaction.Triggers>
-                <bh:EventTrigger EventName="MouseEnter">
-                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}}" PropertyName="Opacity" Value="1"
-                                             Duration="00:00:00.1"/>
-                </bh:EventTrigger>
-                <bh:EventTrigger EventName="MouseLeave">
-                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}}" PropertyName="Opacity" Value="0" 
-                                             Duration="00:00:00.5"/>
-                </bh:EventTrigger>
-            </bh:Interaction.Triggers>
+          </ui:FontIcon>
+        </ui:AppBarButton.Icon>
+      </ui:AppBarButton>
+      <StackPanel.Triggers>
+        <EventTrigger RoutedEvent="MouseEnter">
+          <BeginStoryboard>
+            <Storyboard>
+              <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                               To="1"
+                               Duration="0:0:0.1" />
+            </Storyboard>
+          </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="MouseLeave">
+          <BeginStoryboard>
+            <Storyboard>
+              <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                               To="0"
+                               Duration="0:0:0.5" />
+            </Storyboard>
+          </BeginStoryboard>
+        </EventTrigger>
+      </StackPanel.Triggers>
 
-        </StackPanel>
+    </StackPanel>
         
         <!--Version String in Bottom Right-->
         <TextBlock Text="{Binding Version, StringFormat=v {0}}" Foreground="#40FFFFFF" FontFamily="Segoe UI SemiBold" VerticalAlignment="Bottom" FontSize="14" Panel.ZIndex="1" IsHitTestVisible="False" HorizontalAlignment="Right" Margin="0,0,15,10"/>
