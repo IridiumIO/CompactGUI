@@ -60,6 +60,7 @@ Public Class Settings : Inherits ObservableObject
 
     Public Property SettingsVersion As Decimal
     Public Property ResultsDBLastUpdated As DateTime = DateTime.UnixEpoch
+    Public Property SelectedCompressionMode As Integer = 0
     Public Property SkipNonCompressable As Boolean = False
     Public Property SkipUserNonCompressable As Boolean = False
     Public Property WatchFolderForChanges As Boolean = False
@@ -84,7 +85,6 @@ Public Class Settings : Inherits ObservableObject
 
     Public Property WindowWidth As Decimal = 500
     Public Property WindowHeight As Decimal = 800
-
 
     'TODO: Add local saving of per-folder skip list
     Public Sub Save()

@@ -139,11 +139,8 @@ Public Class MainViewModel : Inherits ObservableObject
 
     Private Sub ChooseCompression()
 
+        ActiveFolder.SelectedCompressionMode = BindableSettings.SelectedCompressionMode
         State = "ChooseCompressionOptions"
-
-        SettingsHandler.AppSettings.SkipNonCompressable = False
-        SettingsHandler.AppSettings.SkipUserNonCompressable = False
-        SettingsHandler.AppSettings.Save()
 
 
     End Sub
@@ -168,6 +165,10 @@ Public Class MainViewModel : Inherits ObservableObject
         Dim res = Await cm.RunCompactAsync(CProgress)
 
         ActiveFolder.IsFreshlyCompressed = True
+
+        BindableSettings.SelectedCompressionMode = ActiveFolder.SelectedCompressionMode
+        BindableSettings.Save()
+
         AnalyseBegin()
 
     End Sub
