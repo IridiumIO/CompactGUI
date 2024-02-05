@@ -23,7 +23,9 @@ Class MainWindow
         ViewModel.SelectFolder()
     End Sub
 
-    Private Sub uiUpdateBanner_MouseUp(sender As Object, e As MouseButtonEventArgs)
+    Private Sub uiUpdateBanner_MouseUp(sender As Object, e As RoutedEventArgs)
+
+
         Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI/releases/") With {.UseShellExecute = True})
     End Sub
 

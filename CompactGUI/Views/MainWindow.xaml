@@ -530,28 +530,53 @@
 
         </VisualStateManager.VisualStateGroups>
 
-        <Grid x:Name="titleBar" Height="{Binding ElementName=MainWindow, Path=(ui:TitleBar.Height)}" Panel.ZIndex="2" VerticalAlignment="Top" >
+    <Grid x:Name="titleBar"
+          Height="{Binding ElementName=MainWindow, Path=(ui:TitleBar.Height)}" Panel.ZIndex="2" VerticalAlignment="Top" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ui:TitleBarButton x:Name="uiBtnOptions" Margin="10,5,0,0"
-                Grid.Column="0"  HoverForeground="White" InactiveForeground="#80FFFFFF" HoverBackground="#00000000" PressedBackground="#00000000" PressedForeground="#40FFFFFF"
+      <ui:TitleBarButton x:Name="uiBtnOptions"
+                         Margin="10,2,0,0"
+                         Panel.ZIndex="2" HorizontalAlignment="Left"
+                         Grid.Column="0"  HoverForeground="White" InactiveForeground="#80FFFFFF" HoverBackground="#00000000" PressedBackground="#00000000" PressedForeground="#40FFFFFF"
                 Content="&#xE713;" FontSize="16" Width="20"
                 ContentTemplate="{x:Null}" />
-        </Grid>
 
-        <!--Update Banner-->
-        <Grid x:Name="uiUpdateBanner" VerticalAlignment="Bottom" Height="30" Panel.ZIndex="2" Background="#FF468E56" Visibility="{Binding UpdateAvailable.Item1, Converter={StaticResource BoolToVisConverter}}"  Cursor="Hand" MouseUp="uiUpdateBanner_MouseUp">
-            <Grid.Effect>
-                <DropShadowEffect Direction="90" Opacity="0.15" BlurRadius="6"/>
-            </Grid.Effect>
+      <ui:TitleBarButton x:Name="uiUpdateText" Panel.ZIndex="5"
+                 d:Content="update available  -  v3.0a2"
+                 Content="{Binding UpdateAvailable.Item2}"
+                         FontSize="14"
+                         FontFamily="Segoe UI"
+                         Width="200"
+                         Visibility="{Binding UpdateAvailable.Item1, Converter={StaticResource BoolToVisConverter}}"
+                         Click="uiUpdateBanner_MouseUp"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                         Foreground="White"
+                         InactiveForeground="#80FFFFFF"
+                         HoverBackground="#00000000" HoverForeground="#40FFFFFF"
+                         PressedBackground="#00000000"
+                         PressedForeground="#20FFFFFF" />
+      <!--Update Banner-->
+      <Grid x:Name="uiUpdateBanner"
+            VerticalAlignment="Top" HorizontalAlignment="Stretch"
+            Height="{Binding ElementName=MainWindow, Path=(ui:TitleBar.Height)}" IsHitTestVisible="False"
+            Background="#AA468E56"
+            Visibility="{Binding UpdateAvailable.Item1, Converter={StaticResource BoolToVisConverter}}"
+            Cursor="Hand">
+        <Grid.Effect>
+          <DropShadowEffect Direction="90"
+                            Opacity="0.15"
+                            BlurRadius="6" />
+        </Grid.Effect>
 
-            <TextBlock x:Name="uiUpdateText" d:Text="update available  -  v3.0a2" Text="{Binding UpdateAvailable.Item2}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
-        </Grid>
+      </Grid>
+    </Grid>
 
-        <!--Main information section / results of analysis-->
+   
+
+    <!--Main information section / results of analysis-->
         <Grid x:Name="mainSection" VerticalAlignment="Top" Panel.ZIndex="1">
             <Grid.Background>
                 <LinearGradientBrush MappingMode="RelativeToBoundingBox" >
