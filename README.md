@@ -2,43 +2,13 @@
 
 &nbsp;
 
-<p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It used to use the Windows 10 <code>compact.exe</code> function but now works directly with the Win32 API to be much more efficient.</b></p> 
+<p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It works directly with the Win32 API to achieve the same thing as the native <code>compact.exe</code> command-line tool available from Windows 10 onwards.</b></p> 
 
 &nbsp;
 &nbsp;
 
 <p align="center"><img src="https://user-images.githubusercontent.com/1491536/172040389-62932137-11ae-49c8-8749-95c0b67f3aab.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040455-6cd06756-6323-44da-b350-daa47f31c5e3.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040456-09c069e3-093a-4c5e-8d69-f52d4dc2f982.png" width="250"/></>
 
-
-
-------
-
-**Note - v3.0 Complete rewrite is underway as of June 2022 with the following features:**
- - Rebuilt from scratch in .NET 6 using WPF
- - Smoother, simplified UI
- - Removed dependency on `compact.exe` and directly accesses the Win32 API
- - Background monitoring of compressed folders to keep track of size changes with e.g. Steam updates. 
- - Parallelised and asynchronous programming resulting in over an order of magnitude speed improvement in some cases.
- 
-    ```yml
-    ARK Survival Evolved | 170 GB | 108000 Files
-    
-    compact.exe:         9m18s   
-    CompactGUI v3 a3:    4m42s    49%  faster  # compact.exe yields system resources and checks files which is why this is so much faster
-    CompactGUI v3 a2:    8m17s    11%  faster
-    CompactGUI v2.6.2:   23m6s    248% slower
-        
-    Stardew Valley       | 700 MB | 6800 Files
-
-    compact.exe:         17.34s   
-    CompactGUI v3 a3:    12.95s   25%  faster
-    CompactGUI v3 a2:    17.82s   2.7% slower
-    CompactGUI v2.6.2:   81.79s   471% slower
-    ```
- - Automatic skipping of files that are smaller than the disk's cluster size, 4kb by default
- - Saving of poorly compressed filetypes per directory to skip on next run
-
-&nbsp;
 
 ------
 &nbsp;
@@ -59,8 +29,6 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 ####
  
 <p>Download from <a href="https://github.com/IridiumIO/CompactGUI/releases"><b>GitHub Releases</b></a></p>
-
-Coming soon: Download from Windows 10/11 Store
   
 ## Uses
 Use this tool to compress folders while still being able to use/run them normally: 
@@ -77,7 +45,7 @@ Use this tool to compress folders while still being able to use/run them normall
  - Background monitor to keep track of compressed folders and easily see / recompress them if they've been recently updated (such as Steam games) or decompressed. 
  
 
-<h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/Games-5085-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-34923-lightgrey.svg"></a> submissions</b></h3>
+<h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/8530-Games-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-57947-lightgrey.svg"></a> submissions</b></h3>
 <p>&nbsp;</p>
 
 
@@ -85,7 +53,7 @@ Use this tool to compress folders while still being able to use/run them normall
 
 ## Background
 
-Windows 10 includes a little-known but very useful tool called Compact.exe that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU (I have tested as old as an i3-370M from 2010 with negligible impact), this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
+Windows 10 introduced a little-known but very useful tool called `compact.exe` that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU (I have tested as old as an i3-370M from 2010 with negligible impact), this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs. 
 
 As program folders and games can be shrunk by up to 60%, this has the added bonus of potentially reducing load times - especially on slower HDDs. 
 
