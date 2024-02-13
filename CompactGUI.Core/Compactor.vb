@@ -25,24 +25,61 @@ Public Class Compactor
     Private _EFInfo As _WOF_FILE_COMPRESSION_INFO_V1
     Private _EFInfoPtr As IntPtr
 
+    Private _pauseSemaphore As New SemaphoreSlim(1, 2)
 
+
+    Private _processedFileCount As New Concurrent.ConcurrentDictionary(Of String, Integer)
+
+    Private _cancellationTokenSource As New CancellationTokenSource
 
     Public Async Function RunCompactAsync(Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing) As Task(Of Boolean)
 
         Dim FilesList = Await BuildWorkingFilesList()
         Dim totalFiles As Integer = FilesList.Count
-        Dim processedFileCount As Integer = 0
+
+        _processedFileCount.Clear()
 
         Await Parallel.ForEachAsync(FilesList,
-                                    Function(file, _ctx)
-                                        Dim res = WOFCompressFile(file)
-                                        Dim incremented = Interlocked.Increment(processedFileCount)
-                                        progressMonitor.Report((CInt(((incremented / totalFiles) * 100)), file))
-                                    End Function).ConfigureAwait(False)
+                                Function(file, _ctx) As ValueTask
+                                    Return New ValueTask(PauseAndProcessFile(file, _cancellationTokenSource.Token, totalFiles, progressMonitor))
+                                End Function).ConfigureAwait(False)
+
+        If _cancellationTokenSource.IsCancellationRequested Then Return False
 
         Return True
     End Function
 
+    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, totalFiles As Integer, progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task
+
+        If _ctx.IsCancellationRequested Then Return
+        Try
+            Await _pauseSemaphore.WaitAsync(_ctx).ConfigureAwait(False)
+            _pauseSemaphore.Release()
+
+        Catch ex As OperationCanceledException
+            Return
+        End Try
+
+        If _ctx.IsCancellationRequested Then Return
+
+        Dim res = WOFCompressFile(file)
+        _processedFileCount.TryAdd(file, 1)
+        Dim incremented = _processedFileCount.Count
+        progressMonitor.Report((CInt(((incremented / totalFiles) * 100)), file))
+    End Function
+
+    Public Sub PauseCompression()
+        _pauseSemaphore.Wait()
+    End Sub
+
+    Public Sub ResumeCompression()
+        If _pauseSemaphore.CurrentCount = 0 Then _pauseSemaphore.Release()
+    End Sub
+
+    Public Sub Cancel()
+        ResumeCompression()
+        _cancellationTokenSource.Cancel()
+    End Sub
 
     Private Function WOFCompressFile(path As String)
 

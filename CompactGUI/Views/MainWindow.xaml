@@ -1004,8 +1004,29 @@
 
                 <TextBlock x:Name="uiCurrentFileCompress" d:Text="/test/folder/gamefile.bin" Text="{Binding WorkingProgress.Item2, Mode=OneWay}" Margin="0,187,0,0" Foreground="#73808C" Opacity="0.4" FontSize="20" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
 
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,240,0,0"
+                    VerticalAlignment="Top" HorizontalAlignment="Center">
+          <Button x:Name="btnPause"
+                  Content="{Binding PauseResumeStatus}"
+                  Background="#FF6B8399"
+                  Width="138"
+                  Height="48" Margin="20,0"
+                  Foreground="White"
+                  Style="{StaticResource RoundedButton}"
+                  Command="{Binding PauseCompressionCommand}" />
+          <Button x:Name="btnCancel"
+                  Content="{Binding CancelStatus, Mode=OneWay}"
+                  Background="#FF6B8399"
+                  Width="138"
+                  Margin="20,0"
+                  Height="48"
+                  Foreground="White"
+                  Style="{StaticResource RoundedButton}"
+                  Command="{Binding CancelCompressionCommand}" />
+        </StackPanel>
 
-            </Grid>
+      </Grid>
 
 
         </Grid>

@@ -146,9 +146,14 @@ Public Class MainViewModel : Inherits ObservableObject
     End Sub
 
 
+    Private Property CoreCompactor As Core.Compactor
+    Private Property CoreUncompactor As Core.Uncompactor
+
     Private Async Sub CompressBegin()
 
         State = "CurrentlyCompressing"
+        PauseResumeStatus = "Pause"
+        CancelStatus = "Cancel"
         Watcher.IsActive = True
         CProgress.Report((0, ""))
 
@@ -161,10 +166,11 @@ Public Class MainViewModel : Inherits ObservableObject
         End If
 
 
-        Dim cm As New Core.Compactor(ActiveFolder.FolderName, Core.WOFConvertCompressionLevel(ActiveFolder.SelectedCompressionMode), exclist)
-        Dim res = Await cm.RunCompactAsync(CProgress)
+        CoreCompactor = New Core.Compactor(ActiveFolder.FolderName, Core.WOFConvertCompressionLevel(ActiveFolder.SelectedCompressionMode), exclist)
+        Dim res = Await CoreCompactor.RunCompactAsync(CProgress)
 
-        ActiveFolder.IsFreshlyCompressed = True
+        ActiveFolder.IsFreshlyCompressed = False
+        If res Then ActiveFolder.IsFreshlyCompressed = True
 
         BindableSettings.SelectedCompressionMode = ActiveFolder.SelectedCompressionMode
         BindableSettings.Save()
@@ -176,11 +182,14 @@ Public Class MainViewModel : Inherits ObservableObject
 
     Private Async Sub UncompressBegin()
         State = "CurrentlyCompressing"
+        PauseResumeStatus = "Pause"
+        CancelStatus = "Cancel"
+
         CProgress.Report((0, ""))
 
         Dim compressedFilesList = ActiveFolder.AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
-        Dim ucm As New Core.Uncompactor
-        Dim res = Await ucm.UncompactFiles(compressedFilesList, CProgress)
+        CoreUncompactor = New Core.Uncompactor
+        Dim res = Await CoreUncompactor.UncompactFiles(compressedFilesList, CProgress)
 
         ActiveFolder.IsFreshlyCompressed = False
         AnalyseBegin()
@@ -283,6 +292,8 @@ Public Class MainViewModel : Inherits ObservableObject
         End Get
     End Property
     Public ReadOnly Property Version As String = UpdateHandler.CurrentVersion.Friendly
+    Public Property PauseResumeStatus As String = "Pause"
+    Public Property CancelStatus As String = "Cancel"
 
 #End Region
 
@@ -297,7 +308,26 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
     Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolder(f.Folder))
     Property RefreshWatchedCommand As ICommand = New RelayCommand(Sub() Task.Run(Function() Watcher.ParseWatchers(True)))
+    Public Property PauseCompressionCommand As RelayCommand = New RelayCommand(Sub()
 
+                                                                                   If PauseResumeStatus = "Pause" Then
+                                                                                       PauseResumeStatus = "Pausing..."
+                                                                                       If CoreCompactor IsNot Nothing Then CoreCompactor.PauseCompression()
+                                                                                       If CoreUncompactor IsNot Nothing Then CoreUncompactor.PauseCompression()
+                                                                                       PauseResumeStatus = "Resume"
+                                                                                   Else
+                                                                                       If CoreCompactor IsNot Nothing Then CoreCompactor.ResumeCompression()
+                                                                                       If CoreUncompactor IsNot Nothing Then CoreUncompactor.ResumeCompression()
+                                                                                       PauseResumeStatus = "Pause"
+                                                                                   End If
+
+                                                                               End Sub)
+
+    Public Property CancelCompressionCommand As RelayCommand = New RelayCommand(Sub()
+                                                                                    CancelStatus = "Cancelling..."
+                                                                                    If CoreCompactor IsNot Nothing Then CoreCompactor.Cancel()
+                                                                                    If CoreUncompactor IsNot Nothing Then CoreUncompactor.Cancel()
+                                                                                End Sub)
 
 #End Region
 
