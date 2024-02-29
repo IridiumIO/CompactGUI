@@ -9,7 +9,7 @@
         mc:Ignorable="d" xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" d:DataContext="{d:DesignInstance Type=local:MainViewModel}" RenderOptions.ClearTypeHint="Enabled"
         WindowState="{Binding WindowState}" ShowInTaskbar="{Binding ShowInTaskbar}" AllowDrop="True" Drop="Window_Drop"
         ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True"
-        Title="CompactGUI" 
+        Title="CompactGUI" Loaded="MainWindow_Loaded"
         Height="{Binding BindableSettings.WindowHeight, Mode=TwoWay,FallbackValue=800}"  
         Width="{Binding BindableSettings.WindowWidth, Mode=TwoWay, FallbackValue=500}" ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" Background="White" >

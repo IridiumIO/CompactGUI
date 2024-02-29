@@ -64,6 +64,14 @@ Public Class SettingsHandler : Inherits ObservableObject
             AppSettings.WindowWidth = 500
         End If
 
+        Dim scHeight = SystemParameters.MaximizedPrimaryScreenHeight * 0.9
+
+        If scHeight < AppSettings.WindowHeight Then
+            AppSettings.WindowHeight = scHeight
+            AppSettings.WindowWidth = scHeight * 0.625
+            AppSettings.WindowScalingFactor = scHeight / 800
+        End If
+
     End Sub
 
 

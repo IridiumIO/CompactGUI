@@ -13,6 +13,8 @@ Class MainWindow
         Me.DataContext = ViewModel
 
         ViewModel.State = "FreshLaunch"
+
+
     End Sub
 
     Public Property ViewModel As New MainViewModel
@@ -56,6 +58,15 @@ Class MainWindow
             ViewModel.SelectFolder(xs(0))
         End If
 
+
+    End Sub
+
+    Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs)
+
+        Me.Top = (SystemParameters.PrimaryScreenHeight - SettingsHandler.AppSettings.WindowHeight) / 2
+        Me.Left = (SystemParameters.PrimaryScreenWidth - SettingsHandler.AppSettings.WindowWidth) / 2
+
+        If Me.Top < 0 Then Me.Top = 0
 
     End Sub
 End Class
