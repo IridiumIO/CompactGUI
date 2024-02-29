@@ -1,4 +1,6 @@
 ﻿
+Imports System.Collections.ObjectModel
+
 Imports Microsoft.Toolkit.Mvvm.ComponentModel
 ''' <summary>
 ''' Shared objects between multiple code regions
@@ -15,6 +17,7 @@ Public Class ActiveFolder : Inherits ObservableObject
     Public Property CompressedBytes As Long
     Public Property SelectedCompressionMode = 0
     Public Property CompressionConfidence = -1
+    Public Property WikiCompressionResults As New ObservableCollection(Of CompressionResult)
 
     Public Property IsFreshlyCompressed As Boolean = False
 
@@ -68,12 +71,12 @@ End Class
 
 
 ' Used to hold compression results from parsed existing wiki file (above)
-Public Class CompressionResult
+Public Class CompressionResult : Inherits ObservableObject
 
-    Public CompType As Integer
-    Public BeforeBytes As Long
-    Public AfterBytes As Long
-    Public TotalResults As Integer
+    Public Property CompType As Integer
+    Public Property BeforeBytes As Long
+    Public Property AfterBytes As Long
+    Public Property TotalResults As Integer
 
 End Class
 

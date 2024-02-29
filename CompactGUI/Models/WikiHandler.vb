@@ -28,7 +28,7 @@ Public Class WikiHandler
 
     End Function
 
-    Shared Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer)))
+    Shared Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult)))
 
         Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
         If Not JSONFile.Exists Then Return Nothing
@@ -46,11 +46,13 @@ Public Class WikiHandler
             estimatedRatio += ratio * compressionResult.TotalResults
         Next
 
+        workingGame.CompressionResults.Sort(Function(x, y) x.CompType.CompareTo(y.CompType))
+
         'TODO: Adjust this return to account for selected level of aggressiveness in settings
         'Dim poorlyCompressedExt = workingGame.PoorlyCompressedExtensions.Where(Function(k) k.Value > 100).Select(Function(k) k.Key)
 
         estimatedRatio /= totaldataPoints
-        Return (estimatedRatio, workingGame.Confidence, workingGame.PoorlyCompressedExtensions)
+        Return (estimatedRatio, workingGame.Confidence, workingGame.PoorlyCompressedExtensions, workingGame.CompressionResults)
 
     End Function
 

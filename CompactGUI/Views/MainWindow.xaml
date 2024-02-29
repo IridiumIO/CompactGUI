@@ -24,8 +24,11 @@
             <local:CompressionLevelAbbreviatedConverter x:Key="CompressionLevelAbbreviatedConverter"/>
             <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter"/>
             <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter"/>
+            <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" />
+            <local:RatioConverter x:Key="RatioConverter" />
+      <local:NonZeroToVisConverter x:Key="NonZeroToVisConverter" />
 
-        </ResourceDictionary>
+    </ResourceDictionary>
 
     </Window.Resources>
     
@@ -790,11 +793,115 @@
                         <TextBlock x:Name="LeftLabel" Text="current size" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
                     </StackPanel>
 
-                    <StackPanel Orientation="Vertical" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding ActiveFolder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"  d:Text="29.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="RightLabel" Text="estimated size" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Help">
+        <TextBlock Text="{Binding ActiveFolder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"  d:Text="29.7 GB" FontFamily="Segoe UI Semibold" FontSize="31" Foreground="White" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="RightLabel" Text="estimated size" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
+        <StackPanel.ToolTip>
+              <ToolTip Visibility="{Binding ActiveFolder.WikiCompressionResults.Count, Converter={StaticResource NonZeroToVisConverter}}" >
+                <ToolTip.Resources>
+                  <Style TargetType="ToolTip">
+                    <Setter Property="ContentTemplate">
+                      <Setter.Value>
+                        <DataTemplate>
+                          <Border BorderBrush="Gray" Padding="10"
+                                  BorderThickness="1" Background="White" CornerRadius="5">
+                            
+                            <ContentPresenter Content="{Binding}" />
+                          </Border>
+                          </DataTemplate>
+                      </Setter.Value>
+                    </Setter>
+                    <Setter Property="MaxWidth"
+                            Value="400" />
+                    <Setter Property="Width"
+                            Value="400" />
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                    <Setter Property="BorderThickness"
+                            Value="0" />
+                  </Style>
+
+                </ToolTip.Resources>
+                              <Grid  >
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="30" />
+                  <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal"
+                            Grid.Row="0">
+                  
+                  <TextBlock Text="Algorithm" FontFamily="Segoe UI " FontSize="13" Foreground="#4A4A4A" Width="110" Margin="10,0" />
+                  <TextBlock Text="Before" TextAlignment="Right" FontFamily="Segoe UI " FontSize="13" Foreground="#4A4A4A" Width="60"/>
+                  <TextBlock Text="After" TextAlignment="Right" FontFamily="Segoe UI " FontSize="13" Foreground="#4A4A4A" Width="80"/>
+                  <TextBlock Text="%Saved" TextAlignment="Right" FontFamily="Segoe UI " FontSize="13" Foreground="#4A4A4A" Width="80"/>
+                </StackPanel>
+                
+                <ListView Grid.Row="1" ItemsSource="{Binding ActiveFolder.WikiCompressionResults}"
+          HorizontalAlignment="Left" HorizontalContentAlignment="Left"
+          Background="Transparent"
+          BorderThickness="0"
+          Foreground="White"
+          FontFamily="Segoe UI"
+          FontSize="13"
+          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+          ScrollViewer.VerticalScrollBarVisibility="Disabled">
+  <ListView.ItemTemplate>
+    <DataTemplate>
+                
+                    <StackPanel >
+                      <StackPanel Orientation="Horizontal">
+                        <Grid  Margin="0,0,40,0" Height="30" >
+
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="auto" />
+                          </Grid.ColumnDefinitions>
+
+                          <Border Grid.Column="0"
+                                  Grid.ColumnSpan="2"
+                                  CornerRadius="4"
+                                  Background="#C03f4758" Margin="0" Padding="0" />
+
+                          <TextBlock VerticalAlignment="Center" Grid.Column="0" Text="{Binding CompType, Converter={StaticResource WikiCompressionLevelAbbreviatedConverter}}" Margin="7,0,5,0" FontFamily="Segoe UI Semibold" FontSize="14" Foreground="White"/>
+
+                          <Border Grid.Column="1" CornerRadius="4" Width="30"
+                                  HorizontalAlignment="Center" Margin="0,0,-1,0"
+                                  Background="#3f4758" Padding="2,0">
+                            <TextBlock VerticalAlignment="Center" Text="{Binding TotalResults}"
+                                       TextAlignment="Center" Foreground="White"
+                                       FontFamily="Segoe UI Semibold"
+                                       Padding="0,2,0,0" FontSize="12"/>
+                          </Border>
+                            
+     
+                        </Grid>
                         
+                     
+                        <TextBlock VerticalAlignment="Center" Text="{Binding BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" TextAlignment="Right" Width="60" Margin="0,0,10,0"/>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding AfterBytes, Converter={StaticResource BytesToReadableConverter}}" TextAlignment="Right" Width="70" Margin="0,0,10,0"/>
+                        <TextBlock VerticalAlignment="Center" TextAlignment="Right" Width="70" Margin="0,0,10,0">
+                            <TextBlock.Text>
+                              <MultiBinding Converter="{StaticResource RatioConverter}">
+                                <Binding Path="AfterBytes" />
+                                <Binding Path="BeforeBytes" />
+                              </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                      </StackPanel>
                     </StackPanel>
+    </DataTemplate>
+  </ListView.ItemTemplate>
+</ListView>
+                
+              </Grid>
+              </ToolTip>
+
+         
+
+              
+        </StackPanel.ToolTip> 
+    </StackPanel>
                     <Grid Margin="0,3,0,0" x:Name="Confidence"  Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="1" HorizontalAlignment="Center" Width="110">
                         <TextBlock HorizontalAlignment="Left" Text="confidence" FontFamily="Segoe UI " FontSize="13" Foreground="#50BAC2CA" />
                         <TextBlock HorizontalAlignment="Right" Text="{Binding ActiveFolder.CompressionConfidence, Converter={StaticResource ConfidenceIntToStringConverter}}" FontFamily="Segoe UI SemiBold" FontSize="13" Foreground="{Binding ActiveFolder.CompressionConfidence, Converter={StaticResource ConfidenceIntToColorConverter}}" />
