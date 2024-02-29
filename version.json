@@ -2,22 +2,22 @@
     "Latest": {
         "Major": 3,
         "Minor": 1,
-        "Patch": 0,
+        "Patch": 1,
         "PreRelease": "r",
         "PreReleaseMinor": 0,
-        "VersionString": "3.1.0",
-        "FriendlyString": "3.1.0",
+        "VersionString": "3.1.1",
+        "FriendlyString": "3.1.1",
         "Changes": [],
         "Fixes": []
     },
     "LatestNonPreRelease": {
         "Major": 3,
         "Minor": 1,
-        "Patch": 0,
+        "Patch": 1,
         "PreRelease": "r",
         "PreReleaseMinor": 0,
-        "VersionString": "3.1.0",
-        "FriendlyString": "3.1.0",
+        "VersionString": "3.1.1",
+        "FriendlyString": "3.1.1",
         "Changes": [],
         "Fixes": []
     }
