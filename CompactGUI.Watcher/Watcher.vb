@@ -4,6 +4,7 @@ Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports CompactGUI.Core
 Imports System.Threading
 Imports System.Collections.Specialized
+Imports System.Runtime
 
 Public Class Watcher : Inherits ObservableObject
 
@@ -121,21 +122,33 @@ Public Class Watcher : Inherits ObservableObject
         If Not _DataFolder.Exists Then _DataFolder.Create()
         If Not WatcherJSONFile.Exists Then Await WatcherJSONFile.Create().DisposeAsync()
 
-        Dim WatcherJSON = IO.File.ReadAllText(WatcherJSONFile.FullName)
-        If WatcherJSON = "" Then WatcherJSON = "{}"
-
-        Dim ret = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, New JsonSerializerOptions With {.IncludeFields = True})
+        Dim ret = DeserializeAndValidateJSON(WatcherJSONFile)
         LastAnalysed = ret.Item1
         Dim _WatchedFolders = ret.Item2
 
 
         Return _WatchedFolders
-
     End Function
 
+    Private Shared Function DeserializeAndValidateJSON(inputjsonFile As IO.FileInfo) As (DateTime, ObservableCollection(Of WatchedFolder))
+        Dim WatcherJSON = IO.File.ReadAllText(inputjsonFile.FullName)
+        If WatcherJSON = "" Then WatcherJSON = "{}"
+
+        Dim validatedResult As (DateTime, ObservableCollection(Of WatchedFolder))
+        Try
+            validatedResult = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, New JsonSerializerOptions With {.IncludeFields = True})
+
+        Catch ex As Exception
+            validatedResult = (DateTime.Now, Nothing)
+
+        End Try
+
+        Return validatedResult
+
+    End Function
     Private Sub WriteToFile()
 
-        Dim output = JsonSerializer.Serialize((LastAnalysed, WatchedFolders), New JsonSerializerOptions With {.IncludeFields = True})
+        Dim output = JsonSerializer.Serialize((LastAnalysed, WatchedFolders), New JsonSerializerOptions With {.IncludeFields = True, .WriteIndented = True})
         IO.File.WriteAllText(WatcherJSONFile.FullName, output)
 
     End Sub

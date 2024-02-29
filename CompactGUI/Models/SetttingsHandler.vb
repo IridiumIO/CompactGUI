@@ -13,10 +13,7 @@ Public Class SettingsHandler : Inherits ObservableObject
         If Not DataFolder.Exists Then DataFolder.Create()
         If Not SettingsJSONFile.Exists Then Await SettingsJSONFile.Create().DisposeAsync()
 
-        Dim SettingsJSON = IO.File.ReadAllText(SettingsJSONFile.FullName)
-        If SettingsJSON = "" Then SettingsJSON = "{}"
-
-        AppSettings = JsonSerializer.Deserialize(Of Settings)(SettingsJSON, New JsonSerializerOptions With {.IncludeFields = True})
+        AppSettings = DeserializeAndValidateJSON(SettingsJSONFile)
 
         If AppSettings.SettingsVersion = 0 OrElse SettingsVersion > AppSettings.SettingsVersion Then
             AppSettings = New Settings
@@ -32,6 +29,28 @@ Public Class SettingsHandler : Inherits ObservableObject
         WriteToFile()
 
     End Sub
+
+    Private Shared Function DeserializeAndValidateJSON(inputjsonFile As IO.FileInfo) As Settings
+        Dim SettingsJSON = IO.File.ReadAllText(inputjsonFile.FullName)
+        If SettingsJSON = "" Then SettingsJSON = "{}"
+
+        Dim validatedSettings As Settings
+
+        Try
+            validatedSettings = JsonSerializer.Deserialize(Of Settings)(SettingsJSON, New JsonSerializerOptions With {.IncludeFields = True})
+        Catch ex As Exception
+            validatedSettings = New Settings
+            validatedSettings.SettingsVersion = SettingsVersion
+
+            Dim msgError As New ModernWpf.Controls.ContentDialog With {.Title = $"Corrupted Settings File Detected", .Content = "Your settings have been reset to their default.", .CloseButtonText = "OK"}
+            msgError.ShowAsync()
+
+
+        End Try
+
+        Return validatedSettings
+
+    End Function
 
 
     Private Shared Sub InitialiseWindowSize()
