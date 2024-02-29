@@ -10,11 +10,44 @@ Public Module SharedMethods
         If Not IO.Directory.Exists(folder) Then : Return (False, "Directory does not exist")
         ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return (False, "Cannot compress system directory")
         ElseIf folder.EndsWith(":\") Then : Return (False, "Cannot compress root directory")
-        ElseIf Not IO.Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories).Any() Then : Return (False, "Directory is empty")
+        ElseIf IsDirectoryEmptySafe(folder) Then : Return (False, "This directory is either empty or you are not authorized to access its files.")
         ElseIf DriveInfo.GetDrives().First(Function(f) folder.StartsWith(f.Name)).DriveFormat <> "NTFS" Then : Return (False, "Cannot compress a directory on a non-NTFS drive")
         End If
 
         Return (True, "")
+
+    End Function
+
+    Function IsDirectoryEmptySafe(folder As String)
+
+        Try
+            Return Not IO.Directory.EnumerateFileSystemEntries(folder).Any()
+
+            For Each subdir In IO.Directory.EnumerateDirectories(folder)
+                Try
+                    If Not IsDirectoryEmptySafe(subdir) Then Return False
+                Catch ex As System.UnauthorizedAccessException
+
+                End Try
+            Next
+
+            For Each file In IO.Directory.EnumerateFiles(folder)
+                Try
+                    Return False
+                Catch ex As System.UnauthorizedAccessException
+
+                End Try
+            Next
+
+            Return True
+
+        Catch ex As System.UnauthorizedAccessException
+            MsgBox("You are not authorized to access some items in this folder." & vbCrLf & "Please try running CompactGUI as an administrator, otherwise these items will be skipped.", MsgBoxStyle.Exclamation, "Unauthorized Access")
+            Return False
+
+        Catch ex As Exception
+            Return False
+        End Try
 
     End Function
 
