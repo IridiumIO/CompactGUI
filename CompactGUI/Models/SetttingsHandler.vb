@@ -105,6 +105,8 @@ Public Class Settings : Inherits ObservableObject
     Public Property WindowWidth As Decimal = 500
     Public Property WindowHeight As Decimal = 800
 
+    Public Property AllowMultiInstance As Boolean = False
+
     'TODO: Add local saving of per-folder skip list
     Public Sub Save()
         SettingsHandler.WriteToFile()

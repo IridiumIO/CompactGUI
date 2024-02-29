@@ -11,7 +11,10 @@ Class Application
 
     Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs)
 
-        If Not mutex.WaitOne(0, False) Then
+        SettingsHandler.InitialiseSettings()
+
+
+        If Not SettingsHandler.AppSettings.AllowMultiInstance AndAlso Not mutex.WaitOne(0, False) Then
 
             If e.Args.Length <> 0 AndAlso e.Args(0) = "-tray" Then
                 MessageBox.Show("An instance of CompactGUI is already running")
@@ -27,7 +30,7 @@ Class Application
             End Using
 
             Application.Current.Shutdown()
-        Else
+        ElseIf Not SettingsHandler.AppSettings.AllowMultiInstance Then
 
             ProcessNextInstanceMessage()
         End If
