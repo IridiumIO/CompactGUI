@@ -6,7 +6,7 @@ Public Class SettingsHandler : Inherits ObservableObject
     Public Shared Property DataFolder As IO.DirectoryInfo = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
     Public Shared Property SettingsJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(DataFolder.FullName, "settings.json"))
     Public Shared Property AppSettings As Settings
-    Private Shared Property SettingsVersion As Decimal = 1.2
+    Public Shared Property SettingsVersion As Decimal = 1.2
 
     Shared Async Sub InitialiseSettings()
 
@@ -85,7 +85,7 @@ End Class
 
 Public Class Settings : Inherits ObservableObject
 
-    Public Property SettingsVersion As Decimal
+    Public Property SettingsVersion As Decimal = SettingsHandler.SettingsVersion
     Public Property ResultsDBLastUpdated As DateTime = DateTime.UnixEpoch
     Public Property SelectedCompressionMode As Integer = 0
     Public Property SkipNonCompressable As Boolean = False

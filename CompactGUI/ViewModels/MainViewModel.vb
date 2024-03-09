@@ -9,7 +9,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Sub New()
-        SettingsHandler.InitialiseSettings()
+
         WikiHandler.GetUpdatedJSON()
         FireAndForgetCheckForUpdates()
         InitialiseNotificationTray()
