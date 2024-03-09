@@ -2,7 +2,7 @@
 Imports System.Text.Json
 Public Class UpdateHandler
 
-    Public Shared CurrentVersion As New SemVersion(3, 2, 0)
+    Public Shared CurrentVersion As New SemVersion(3, 2, 1)
     Public Shared NewVersion As SemVersion
     Shared UpdateURL As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/version.json"
 
