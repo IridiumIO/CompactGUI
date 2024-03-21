@@ -39,7 +39,9 @@ Class Application
             Using client = New NamedPipeClientStream(".", "CompactGUI", PipeDirection.Out)
                 client.Connect()
                 Using writer = New StreamWriter(client)
-                    writer.WriteLine(e.Args(0))
+                    If e.Args.Length > 0 Then
+                        writer.WriteLine(e.Args(0))
+                    End If
                 End Using
             End Using
 
