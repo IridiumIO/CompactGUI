@@ -13,8 +13,19 @@ Class Application
 
         SettingsHandler.InitialiseSettings()
 
+        Dim acquiredMutex As Boolean
 
-        If Not SettingsHandler.AppSettings.AllowMultiInstance AndAlso Not mutex.WaitOne(0, False) Then
+        Try
+            acquiredMutex = mutex.WaitOne(0, False)
+        Catch ex As AbandonedMutexException
+            ' This means the mutex was acquired successfully,
+            ' but its last owner exited abruptly, without releasing it.
+            ' acquiredMutex should still be True here, but further error checking
+            ' on shared program state could be added here as well.
+            acquiredMutex = True
+        End Try
+
+        If Not SettingsHandler.AppSettings.AllowMultiInstance AndAlso Not acquiredMutex Then
 
             If e.Args.Length <> 0 AndAlso e.Args(0) = "-tray" Then
                 MessageBox.Show("An instance of CompactGUI is already running")
