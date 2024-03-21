@@ -258,10 +258,19 @@ Public Class MainViewModel : Inherits ObservableObject
                 .Arguments = $"""{ActiveFolder.FolderName}""",
                 .Verb = "runas"}
         }
-        Application.mutex.Dispose()
-        myproc.Start()
-        Application.Current.Shutdown()
-
+        Dim app As Application = Application.Current
+        app.ShutdownPipeServer().ContinueWith(
+            Sub()
+                app.Dispatcher.Invoke(
+                    Sub()
+                        Application.mutex.ReleaseMutex()
+                        Application.mutex.Dispose()
+                    End Sub
+                )
+                myproc.Start()
+                app.Dispatcher.Invoke(Sub() app.Shutdown())
+            End Sub
+        )
     End Sub
 
 

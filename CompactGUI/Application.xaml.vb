@@ -7,6 +7,9 @@ Class Application
 
     Public Shared ReadOnly mutex As New Mutex(False, "Global\CompactGUI")
 
+    Private pipeServerCancellation As New CancellationTokenSource()
+    Private pipeServerTask As Task
+
     Private mainWindow As MainWindow
 
     Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs)
@@ -33,7 +36,7 @@ Class Application
 
             End If
 
-            Using client = New NamedPipeClientStream("CompactGUI")
+            Using client = New NamedPipeClientStream(".", "CompactGUI", PipeDirection.Out)
                 client.Connect()
                 Using writer = New StreamWriter(client)
                     writer.WriteLine(e.Args(0))
@@ -42,8 +45,7 @@ Class Application
 
             Application.Current.Shutdown()
         ElseIf Not SettingsHandler.AppSettings.AllowMultiInstance Then
-
-            ProcessNextInstanceMessage()
+            pipeServerTask = ProcessNextInstanceMessage()
         End If
 
 
@@ -67,31 +69,40 @@ Class Application
     ' can be handled in this file.
 
 
-    Private Async Sub ProcessNextInstanceMessage()
+    Private Async Function ProcessNextInstanceMessage() As Task
+        Using server = New NamedPipeServerStream("CompactGUI",
+                                                 PipeDirection.In,
+                                                 1,
+                                                 PipeTransmissionMode.Byte,
+                                                 PipeOptions.Asynchronous)
+            While Not pipeServerCancellation.IsCancellationRequested
+                Try
+                    Await server.WaitForConnectionAsync(pipeServerCancellation.Token)
+                Catch ex As OperationCanceledException
+                    Return
+                End Try
+                Using reader = New StreamReader(server)
+                    Dim message = Await reader.ReadLineAsync()
+                    mainWindow.Dispatcher.Invoke(Sub()
+                                                     mainWindow.Show()
+                                                     mainWindow.WindowState = WindowState.Normal
+                                                     mainWindow.Topmost = True
+                                                     mainWindow.Activate()
+                                                     mainWindow.Topmost = False
+                                                     If message IsNot Nothing Then
+                                                         mainWindow.ViewModel.SelectFolder(message)
+                                                     End If
+                                                 End Sub)
+                End Using
+            End While
+        End Using
+    End Function
 
-        Await Task.Run(Sub()
-                           While True
-
-                               Using server = New NamedPipeServerStream("CompactGUI")
-                                   server.WaitForConnection()
-                                   Using reader = New StreamReader(server)
-                                       Dim message = reader.ReadLine()
-                                       mainWindow.Dispatcher.Invoke(Sub()
-                                                                        mainWindow.Show()
-                                                                        mainWindow.WindowState = WindowState.Normal
-                                                                        mainWindow.Topmost = True
-                                                                        mainWindow.Activate()
-                                                                        mainWindow.Topmost = False
-                                                                        If message IsNot Nothing Then
-                                                                            mainWindow.ViewModel.SelectFolder(message)
-
-                                                                        End If
-                                                                    End Sub)
-
-                                   End Using
-                               End Using
-                           End While
-                       End Sub)
-    End Sub
+    Public Async Function ShutdownPipeServer() As Task
+        If pipeServerTask IsNot Nothing Then
+            pipeServerCancellation.Cancel()
+            Await pipeServerTask
+        End If
+    End Function
 
 End Class
