@@ -40,6 +40,7 @@ Use this tool to compress folders while still being able to use/run them normall
  - Visual feedback on compression progress and statistics
  - Configurable list of poorly-compressed filetypes that can be skipped.
  - Online integration with community-sourced [database](https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results) to get compression estimates
+      - Steam game results can be submitted to the online database from within CompactGUI 
  - Integration into Windows Explorer context menus for easier use.
  - Analyze the status of existing folders
  - Background monitor to keep track of compressed folders and easily see / recompress them if they've been recently updated (such as Steam games) or decompressed. 
