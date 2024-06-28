@@ -34,17 +34,20 @@ Module Helper
 
 
     Function getUID() As String
-
         Dim MacID As String = String.Empty
         Dim mc As ManagementClass = New ManagementClass("Win32_NetworkAdapterConfiguration")
         Dim moc As ManagementObjectCollection = mc.GetInstances()
         For Each mo As ManagementObject In moc
-            If (MacID = String.Empty And CBool(mo.Properties("IPEnabled").Value) = True) Then
-                MacID = mo.Properties("MacAddress").Value.ToString()
+
+            If mo.Properties("IPEnabled") IsNot Nothing AndAlso mo.Properties("IPEnabled").Value IsNot Nothing Then
+
+                If CBool(mo.Properties("IPEnabled").Value) = True AndAlso mo.Properties("MacAddress") IsNot Nothing AndAlso mo.Properties("MacAddress").Value IsNot Nothing Then
+                    MacID = mo.Properties("MacAddress").Value.ToString()
+                    Exit For
+                End If
             End If
         Next
         Return Convert.ToBase64String(Encoding.UTF8.GetBytes(MacID))
-
     End Function
 
 
