@@ -11,6 +11,7 @@ Public Module SharedMethods
         ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return (False, "Cannot compress system directory")
         ElseIf folder.EndsWith(":\") Then : Return (False, "Cannot compress root directory")
         ElseIf IsDirectoryEmptySafe(folder) Then : Return (False, "This directory is either empty or you are not authorized to access its files.")
+        ElseIf IsOneDriveFolder(folder) Then : Return (False, "Files synced with OneDrive cannot be compressed as they use a different storage structure")
         ElseIf DriveInfo.GetDrives().First(Function(f) folder.StartsWith(f.Name)).DriveFormat <> "NTFS" Then : Return (False, "Cannot compress a directory on a non-NTFS drive")
         End If
 
@@ -110,7 +111,21 @@ Public Module SharedMethods
 
     End Function
 
+    Function IsOneDriveFolder(folderPath As String) As Boolean
+        Dim userProfile As String = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+        Dim oneDrivePaths As New List(Of String) From {
+            Path.Combine(userProfile, "OneDrive"), ' Personal OneDrive
+            Path.Combine(userProfile, "OneDrive - Personal"), ' Alternative Personal OneDrive
+            Path.Combine(userProfile, "OneDrive for Business"), ' OneDrive for Business
+            Path.Combine(userProfile, "OneDrive - Business") ' Alternative OneDrive for Business
+        }
 
+        ' Normalize the folder path to compare
+        Dim normalizedFolderPath As String = Path.GetFullPath(folderPath).TrimEnd(Path.DirectorySeparatorChar).ToLowerInvariant()
+
+        ' Check if the folder path starts with any of the known OneDrive paths
+        Return oneDrivePaths.Any(Function(odPath) normalizedFolderPath.StartsWith(Path.GetFullPath(odPath).TrimEnd(Path.DirectorySeparatorChar).ToLowerInvariant()))
+    End Function
 
 #Region "DLL Imports"
 
