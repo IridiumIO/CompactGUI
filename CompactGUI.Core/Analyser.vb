@@ -1,5 +1,6 @@
 Imports System.IO
 Imports System.Security.AccessControl
+Imports System.Security.Principal
 Imports System.Threading
 
 Public Class Analyser
@@ -92,34 +93,84 @@ Public Class Analyser
     End Function
 
 
+
+    'Public Function HasDirectoryWritePermission() As Boolean
+
+    '    Try
+    '        Dim ACRules = New DirectoryInfo(FolderName).GetAccessControl().GetAccessRules(True, True, GetType(Security.Principal.SecurityIdentifier))
+
+    '        Dim identity = Security.Principal.WindowsIdentity.GetCurrent
+    '        Dim principal = New Security.Principal.WindowsPrincipal(identity)
+    '        Dim writeDenied = False
+
+    '        For Each FSRule As FileSystemAccessRule In ACRules
+    '            If (FSRule.FileSystemRights And FileSystemRights.Write) = 0 Then Continue For
+
+
+    '            ' Use Translate to safely convert to NTAccount
+    '            Dim ntAccount As Security.Principal.NTAccount = Nothing
+    '            Try
+    '                ntAccount = DirectCast(FSRule.IdentityReference.Translate(GetType(Security.Principal.NTAccount)), System.Security.Principal.NTAccount)
+    '            Catch ex As Exception
+    '                Continue For
+    '            End Try
+
+    '            If ntAccount Is Nothing OrElse Not principal.IsInRole(ntAccount.Value) Then Continue For
+
+    '            If FSRule.AccessControlType = AccessControlType.Deny Then
+    '                writeDenied = True
+    '                Exit For
+    '            End If
+
+    '        Next
+
+    '        Return Not writeDenied
+    '    Catch ex As UnauthorizedAccessException
+    '        
+    '        Return False
+    '    End Try
+
+    'End Function
+
     Public Function HasDirectoryWritePermission() As Boolean
-
         Try
-            Dim ACRules = New DirectoryInfo(FolderName).GetAccessControl().GetAccessRules(True, True, GetType(Security.Principal.NTAccount))
+            Dim directoryInfo = New DirectoryInfo(FolderName)
+            Dim directorySecurity = directoryInfo.GetAccessControl()
 
-            Dim identity = Security.Principal.WindowsIdentity.GetCurrent
-            Dim principal = New Security.Principal.WindowsPrincipal(identity)
+            Dim user = WindowsIdentity.GetCurrent()
+            Dim userSID = user.User
+            Dim userGroupSIDs = user.Groups
+
+            Dim accessRules = directorySecurity.GetAccessRules(True, True, GetType(SecurityIdentifier))
+
+            Dim writeAllowed = False
             Dim writeDenied = False
 
-            For Each FSRule As FileSystemAccessRule In ACRules
-                If (FSRule.FileSystemRights And FileSystemRights.Write) = 0 Then Continue For
-                Dim ntAccount As Security.Principal.NTAccount = TryCast(FSRule.IdentityReference, Security.Principal.NTAccount)
+            For Each rule As FileSystemAccessRule In accessRules
+                Dim fileSystemRights = rule.FileSystemRights
+                If (fileSystemRights And FileSystemRights.Write) > 0 Then
+                    Dim ruleSID = DirectCast(rule.IdentityReference, SecurityIdentifier)
 
-                If ntAccount Is Nothing OrElse Not principal.IsInRole(ntAccount.Value) Then Continue For
-
-                If FSRule.AccessControlType = AccessControlType.Deny Then
-                    writeDenied = True
-                    Exit For
+                    ' Check if the rule applies to the user or any of the user's groups
+                    If ruleSID.Equals(userSID) OrElse userGroupSIDs.Contains(ruleSID) Then
+                        If rule.AccessControlType = AccessControlType.Allow Then
+                            writeAllowed = True
+                        ElseIf rule.AccessControlType = AccessControlType.Deny Then
+                            writeDenied = True
+                            Exit For
+                        End If
+                    End If
                 End If
-
             Next
 
-            Return Not writeDenied
-        Catch ex As System.UnauthorizedAccessException
-            ' Consider logging the exception or notifying the caller
+            ' Write permission is considered available if it's explicitly allowed and not explicitly denied
+            Return writeAllowed And Not writeDenied
+        Catch ex As UnauthorizedAccessException
+
             Return False
         End Try
-
     End Function
+
+
 
 End Class
