@@ -13,7 +13,7 @@
 ------
 &nbsp;
 
-**What is the Windows 10 compact.exe function?**
+**What is `compact.exe`?**
 It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss.
 
 **Transparently? What does that mean?**
@@ -45,6 +45,9 @@ Use this tool to compress folders while still being able to use/run them normall
  - Analyze the status of existing folders
  - Background monitor to keep track of compressed folders and easily see / recompress them if they've been recently updated (such as Steam games) or decompressed. 
  
+
+## Caveat
+  - **This tool should not be used on games that utilise DirectStorage on Windows 11. DirectStorage is a new API that allows games to load assets directly from the SSD, bypassing the CPU. Compressed files will need to be decompressed before being sent to the GPU, which will negate any performance gains.**
 
 <h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/8530-Games-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-57947-lightgrey.svg"></a> submissions</b></h3>
 <p>&nbsp;</p>
