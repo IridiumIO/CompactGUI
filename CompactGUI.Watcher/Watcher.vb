@@ -5,6 +5,7 @@ Imports CompactGUI.Core
 Imports System.Threading
 Imports System.Collections.Specialized
 Imports System.Runtime
+Imports System.ComponentModel
 
 Public Class Watcher : Inherits ObservableObject
 
@@ -89,8 +90,10 @@ Public Class Watcher : Inherits ObservableObject
         End If
 
         If immediateFlushToDisk Then WriteToFile()
+        OnPropertyChanged(NameOf(TotalSaved))
 
     End Sub
+
 
     Public Sub RemoveWatched(item As WatchedFolder)
 
@@ -102,7 +105,7 @@ Public Class Watcher : Inherits ObservableObject
 
         WatchedFolders.Remove(item)
         WriteToFile()
-
+        OnPropertyChanged(NameOf(TotalSaved))
 
     End Sub
 
@@ -114,7 +117,7 @@ Public Class Watcher : Inherits ObservableObject
         For Each f In WatchedFolders
             f.RefreshProperties()
         Next
-
+        OnPropertyChanged(NameOf(TotalSaved))
     End Sub
 
     Private Async Function GetWatchedFoldersFromJson() As Task(Of ObservableCollection(Of WatchedFolder))
@@ -171,7 +174,7 @@ Public Class Watcher : Inherits ObservableObject
 
         WriteToFile()
         Debug.WriteLine("")
-
+        OnPropertyChanged(NameOf(TotalSaved))
 
         IsActive = False
     End Function
@@ -204,6 +207,14 @@ Public Class Watcher : Inherits ObservableObject
         Return True
 
     End Function
+
+
+    Public ReadOnly Property TotalSaved As Long
+        Get
+            Return WatchedFolders.Sum(Function(f) f.LastUncompressedSize - f.LastCheckedSize)
+        End Get
+    End Property
+
 
 
 End Class

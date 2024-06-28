@@ -1155,8 +1155,13 @@
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE">
                 <ui:FontIcon Glyph="&#xE9F3;" FontSize="14" />
             </Button>
-            
-            <ui:ListView x:Name="uiWatcherListView" Margin="-10,60,0,0" Padding="0" Width="480" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{d:SampleData}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="False">
+
+      <TextBlock FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Right" Margin="0,2,0,220">
+        <Run Text="Disk space saved: " />
+        <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
+      </TextBlock>
+          
+      <ui:ListView x:Name="uiWatcherListView" Margin="-10,60,0,0" Padding="0" Width="480" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{d:SampleData}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="False">
                 <ui:ListView.ItemContainerStyle>
                     <Style TargetType="ui:ListViewItem">
                         <Setter Property="Margin" Value="0,0,0,10"/>
