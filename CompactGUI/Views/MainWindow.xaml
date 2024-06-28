@@ -1156,7 +1156,7 @@
                 <ui:FontIcon Glyph="&#xE9F3;" FontSize="14" />
             </Button>
             
-            <ui:ListView x:Name="uiWatcherListView" Margin="-10,60,0,0" Padding="0" Width="480" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{d:SampleData}"   KeyboardNavigation.TabNavigation="None">
+            <ui:ListView x:Name="uiWatcherListView" Margin="-10,60,0,0" Padding="0" Width="480" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{d:SampleData}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="False">
                 <ui:ListView.ItemContainerStyle>
                     <Style TargetType="ui:ListViewItem">
                         <Setter Property="Margin" Value="0,0,0,10"/>
@@ -1164,7 +1164,7 @@
                 </ui:ListView.ItemContainerStyle>
                 <ui:ListView.ItemTemplate >
                     <DataTemplate >
-                        <Border Padding="6" Background="WhiteSmoke" d:Height="100" Height="50" Width="470"  KeyboardNavigation.TabNavigation="None">
+                        <Border Padding="6" Background="WhiteSmoke" d:Height="100" Height="50" Width="470"  KeyboardNavigation.TabNavigation="None" MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
 
                             <Grid >
                                 <Label>
@@ -1226,16 +1226,7 @@
 
 
                             </Grid>
-                            <bh:Interaction.Triggers>
-                                <bh:EventTrigger  EventName="MouseEnter">
-                                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}}" PropertyName="Height" Value="100" Duration="00:00:00.2"/>
-                                </bh:EventTrigger>
-                                <bh:EventTrigger  EventName="MouseLeave">
-                                    <bh:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}}" PropertyName="Height" Value="50" Duration="00:00:00.2"/>
-                                </bh:EventTrigger>
-
-                            </bh:Interaction.Triggers>
-
+                           
                         </Border>
                     </DataTemplate>
                 </ui:ListView.ItemTemplate>

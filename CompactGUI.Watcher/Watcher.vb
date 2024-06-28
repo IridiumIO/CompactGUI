@@ -224,7 +224,7 @@ Public Class WatchedFolder : Inherits ObservableObject
     Public ReadOnly Property DecayPercentage As Decimal
         Get
             If LastCompressedSize = 0 Then Return 1
-            Return Math.Clamp((LastCheckedSize - LastCompressedSize) / (LastUncompressedSize - LastCompressedSize), 0, 1)
+            Return If(LastUncompressedSize = LastCompressedSize OrElse LastCompressedSize > LastUncompressedSize, 0D, Math.Clamp((LastCheckedSize - LastCompressedSize) / (LastUncompressedSize - LastCompressedSize), 0, 1))
         End Get
     End Property
 
