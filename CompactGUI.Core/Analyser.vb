@@ -95,30 +95,29 @@ Public Class Analyser
     Public Function HasDirectoryWritePermission() As Boolean
 
         Try
-            Dim writeAllow = False
-
             Dim ACRules = New DirectoryInfo(FolderName).GetAccessControl().GetAccessRules(True, True, GetType(Security.Principal.NTAccount))
-            If ACRules Is Nothing Then Return False
 
             Dim identity = Security.Principal.WindowsIdentity.GetCurrent
             Dim principal = New Security.Principal.WindowsPrincipal(identity)
-            For Each FSRule As FileSystemAccessRule In ACRules
+            Dim writeDenied = False
 
-                If (FSRule.FileSystemRights And FileSystemRights.Write) <= 0 Then Continue For
-                Dim ntAccount As Security.Principal.NTAccount = FSRule.IdentityReference
-                If ntAccount Is Nothing Then Continue For
-                If Not principal.IsInRole(ntAccount.Value) Then Continue For
-                If FSRule.AccessControlType = AccessControlType.Deny Then Return False
-                writeAllow = True
+            For Each FSRule As FileSystemAccessRule In ACRules
+                If (FSRule.FileSystemRights And FileSystemRights.Write) = 0 Then Continue For
+                Dim ntAccount As Security.Principal.NTAccount = TryCast(FSRule.IdentityReference, Security.Principal.NTAccount)
+
+                If ntAccount Is Nothing OrElse Not principal.IsInRole(ntAccount.Value) Then Continue For
+
+                If FSRule.AccessControlType = AccessControlType.Deny Then
+                    writeDenied = True
+                    Exit For
+                End If
 
             Next
 
-            Return writeAllow
-
+            Return Not writeDenied
         Catch ex As System.UnauthorizedAccessException
-
+            ' Consider logging the exception or notifying the caller
             Return False
-
         End Try
 
     End Function
