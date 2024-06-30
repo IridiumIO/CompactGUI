@@ -3,44 +3,52 @@ Imports System.Threading
 
 Public Class IdleDetector
 
-    Public Event IsIdle As EventHandler
+    Public Shared Event IsIdle As EventHandler
+    Public Shared Event IsNotIdle As EventHandler
 
-    Private _timerTask As Task
-    Private _idletimer As PeriodicTimer
-    Private ReadOnly _cts As New CancellationTokenSource
+    Private Shared _timerTask As Task
+    Private Shared _idletimer As PeriodicTimer
+    Private Shared ReadOnly _cts As New CancellationTokenSource
 
 
-    Sub New()
-        _idletimer = New PeriodicTimer(TimeSpan.FromMilliseconds(30000))
+    Shared Sub New()
+        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(1))
     End Sub
 
-    Public Sub Start()
-        _timerTask = IdleTimerDoWorkAsync()
+    Public Shared Sub Start()
+        If _timerTask Is Nothing OrElse _timerTask.IsCompleted Then _timerTask = IdleTimerDoWorkAsync()
     End Sub
 
-    Public Async Sub StopAsync()
+    Public Shared Async Sub StopAsync()
         _cts.Cancel()
-        Await _timerTask
+        If _timerTask IsNot Nothing Then Await _timerTask
+        _idletimer.Dispose()
         _cts.Dispose()
     End Sub
 
-    Private Async Function IdleTimerDoWorkAsync() As Task
+    Private Shared Async Function IdleTimerDoWorkAsync() As Task
 
-        While Await _idletimer.WaitForNextTickAsync
-            If GetIdleTime() > 300 Then RaiseEvent IsIdle(Me, Nothing)
-        End While
+        Try
+            While Await IdleDetector._idletimer.WaitForNextTickAsync(_cts.Token) AndAlso Not _cts.Token.IsCancellationRequested
+                If GetIdleTime() > 5 Then
+                    RaiseEvent IsIdle(Nothing, EventArgs.Empty)
+
+                Else
+                    RaiseEvent IsNotIdle(Nothing, EventArgs.Empty)
+                End If
+
+            End While
+        Catch ex As OperationCanceledException
+
+        End Try
 
     End Function
 
-    Public Shared Function GetIdleTime()
+    Public Shared Function GetIdleTime() As Double
+        Dim lastInputInfo As LASTINPUTINFO = New LASTINPUTINFO() With {.cbSize = CType(Marshal.SizeOf(GetType(LASTINPUTINFO)), UInteger)}
+        If Not GetLastInputInfo(lastInputInfo) Then Return 0
 
-        Dim idleTicks = 0
-
-        Dim lastInputInfo As LASTINPUTINFO = New LASTINPUTINFO()
-        lastInputInfo.cbSize = CType(Marshal.SizeOf(lastInputInfo), UInteger)
-        lastInputInfo.dwTime = 0
-
-        If GetLastInputInfo(lastInputInfo) Then idleTicks = Environment.TickCount64 - CLng(lastInputInfo.dwTime)
+        Dim idleTicks = Environment.TickCount64 - CLng(lastInputInfo.dwTime)
         Return TimeSpan.FromMilliseconds(idleTicks).TotalSeconds
 
     End Function

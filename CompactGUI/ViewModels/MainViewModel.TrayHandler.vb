@@ -49,7 +49,9 @@ Partial Public Class MainViewModel
         Dim res = MessageBox.Show(
             $"You currently have {Watcher.WatchedFolders.Count} folders being watched. Closing CompactGUI will stop them from being monitored.{Environment.NewLine}{Environment.NewLine}Are you sure you want to exit?",
 "CompactGUI", MessageBoxButton.YesNo)
-        If res = MessageBoxResult.Yes Then Application.Current.Shutdown()
+        If res = MessageBoxResult.No Then Return
+        Watcher.WriteToFile()
+        Application.Current.Shutdown()
 
     End Sub
 
@@ -77,6 +79,7 @@ Partial Public Class MainViewModel
         If Watcher.WatchedFolders.Count <> 0 Then
             e.Cancel = True
             WindowState = WindowState.Minimized
+            Watcher.WriteToFile()
             Application.Current.MainWindow.Hide()
         End If
 

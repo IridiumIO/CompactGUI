@@ -13,7 +13,7 @@ Public Class MainViewModel : Inherits ObservableObject
         WikiHandler.GetUpdatedJSON()
         FireAndForgetCheckForUpdates()
         InitialiseNotificationTray()
-        Watcher = New Watcher.Watcher   'This naming isn't going to get confusing at all...
+        Watcher = New Watcher.Watcher(GetSkipList)   'This naming isn't going to get confusing at all...
 
     End Sub
 
@@ -116,6 +116,7 @@ Public Class MainViewModel : Inherits ObservableObject
         ChooseCompressionCommand.NotifyCanExecuteChanged()
         Watcher.IsActive = False
 
+
     End Sub
 
 
@@ -157,13 +158,7 @@ Public Class MainViewModel : Inherits ObservableObject
         Watcher.IsActive = True
         CProgress.Report((0, ""))
 
-        Dim exclist() As String = {}
-        If SettingsHandler.AppSettings.SkipNonCompressable AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
-            exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
-        End If
-        If SettingsHandler.AppSettings.SkipUserNonCompressable AndAlso ActiveFolder.WikiPoorlyCompressedFiles.Count <> 0 Then
-            exclist = exclist.Union(ActiveFolder.WikiPoorlyCompressedFiles).ToArray
-        End If
+        Dim exclist() As String = GetSkipList()
 
 
         CoreCompactor = New Core.Compactor(ActiveFolder.FolderName, Core.WOFConvertCompressionLevel(ActiveFolder.SelectedCompressionMode), exclist)
@@ -179,12 +174,25 @@ Public Class MainViewModel : Inherits ObservableObject
 
     End Sub
 
+    Private Function GetSkipList() As String()
+        Dim exclist() As String = {}
+        If SettingsHandler.AppSettings.SkipNonCompressable AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
+            exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
+        End If
+        If SettingsHandler.AppSettings.SkipUserNonCompressable AndAlso ActiveFolder.WikiPoorlyCompressedFiles.Count <> 0 Then
+            exclist = exclist.Union(ActiveFolder.WikiPoorlyCompressedFiles).ToArray
+        End If
+
+        Return exclist
+
+    End Function
+
 
     Private Async Sub UncompressBegin()
         State = "CurrentlyCompressing"
         PauseResumeStatus = "Pause"
         CancelStatus = "Cancel"
-
+        Watcher.IsActive = True
         CProgress.Report((0, ""))
 
         Dim compressedFilesList = ActiveFolder.AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
@@ -192,7 +200,17 @@ Public Class MainViewModel : Inherits ObservableObject
         Dim res = Await CoreUncompactor.UncompactFiles(compressedFilesList, CProgress)
 
         ActiveFolder.IsFreshlyCompressed = False
+
+        Dim existing = Watcher.WatchedFolders.FirstOrDefault(Function(f) f.Folder = ActiveFolder.FolderName, Nothing)
+
         AnalyseBegin()
+
+
+        If existing IsNot Nothing Then
+            Debug.WriteLine("Updating watched folder")
+            Await Watcher.Analyse(ActiveFolder.FolderName, False)
+        End If
+
 
     End Sub
 

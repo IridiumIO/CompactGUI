@@ -7,63 +7,60 @@ Imports System.Collections.Specialized
 Imports System.Runtime
 Imports System.ComponentModel
 
+<PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class Watcher : Inherits ObservableObject
-
-    Public Property Watchers As New List(Of FolderWatcher)
+    <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
+    Public Property FolderMonitors As New List(Of FolderMonitor)
+    <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
     Public Property WatchedFolders As New ObservableCollection(Of WatchedFolder)
+    <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
     Public Property LastAnalysed As DateTime
     Public Property IsActive As Boolean = False
-
-    Private _idledetector As New IdleDetector
-    Private _refreshTimer As PeriodicTimer
-    Private _refreshTimerTask As Task
 
     Private ReadOnly _DataFolder As New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
     Private ReadOnly Property WatcherJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
 
-    Sub New()
+    Public Property BGCompactor As BackgroundCompactor
 
-        _idledetector.Start()
-        AddHandler _idledetector.IsIdle, AddressOf SWTick
+    Sub New(excludedFiletypes As String())
 
-        WatchedFolders = If(Task.Run(Function() GetWatchedFoldersFromJson()).GetAwaiter().GetResult(), New ObservableCollection(Of WatchedFolder))
-        WriteToFile()
+        IdleDetector.Start()
+        AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
 
-        If WatchedFolders Is Nothing Then Return
+        BGCompactor = New BackgroundCompactor(excludedFiletypes)
 
-        Dim nonExist = WatchedFolders.Where(Function(f) IO.Directory.Exists(f.Folder) <> True).ToList
-        For Each nE In nonExist
-            WatchedFolders.Remove(WatchedFolders.First(Function(f) f.Folder = nE.Folder))
-            WriteToFile()
-        Next
+        InitializeWatchedFoldersAsync()
 
-        For Each watched In WatchedFolders
-            Watchers.Add(New FolderWatcher(watched.Folder) With {.LastChangedDate = watched.LastSystemModifiedDate})
-        Next
-
-        _refreshTimer = New PeriodicTimer(TimeSpan.FromSeconds(30))
-        _refreshTimerTask = RefreshTimerDoWorkAsync()
-
-        If WatchedFolders.Count > 0 Then
-            Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "CompactGUI", Process.GetCurrentProcess().MainModule.FileName & " -tray")
-        Else
-            Try
-                Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True).DeleteValue("CompactGUI")
-            Catch ex As Exception
-            End Try
-        End If
 
     End Sub
 
+    Private Async Function InitializeWatchedFoldersAsync() As Task
+        Dim initialWatchedFolders = Await GetWatchedFoldersFromJson()
+        'WriteToFile()
 
-    Private Async Function RefreshTimerDoWorkAsync() As Task
+        If initialWatchedFolders Is Nothing Then Return
 
-        While Await _refreshTimer.WaitForNextTickAsync
-            Debug.WriteLine("Refreshing")
-            RefreshProperties()
-        End While
+        WatchedFolders.Clear()
 
+        For Each folder In initialWatchedFolders.Where(Function(f) IO.Directory.Exists(f.Folder))
+            WatchedFolders.Add(folder)
+        Next
+
+        FolderMonitors.AddRange(WatchedFolders.Select(Function(w) New FolderMonitor(w.Folder) With {.LastChangedDate = w.LastSystemModifiedDate}))
+
+        UpdateRegistryBasedOnWatchedFolders()
     End Function
+
+    Private Sub UpdateRegistryBasedOnWatchedFolders()
+        Dim registryKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
+
+        If WatchedFolders.Count > 0 Then
+            registryKey.SetValue("CompactGUI", Process.GetCurrentProcess().MainModule.FileName & " -tray")
+        Else
+            registryKey.DeleteValue("CompactGUI", False)
+        End If
+    End Sub
+
 
     Public Sub AddOrUpdateWatched(item As WatchedFolder, Optional immediateFlushToDisk As Boolean = True)
 
@@ -71,7 +68,7 @@ Public Class Watcher : Inherits ObservableObject
 
         If existing Is Nothing Then
             WatchedFolders.Add(item)
-            Watchers.Add(New FolderWatcher(item.Folder) With {.LastChangedDate = item.LastSystemModifiedDate})
+            FolderMonitors.Add(New FolderMonitor(item.Folder) With {.LastChangedDate = item.LastSystemModifiedDate})
 
         Else
             With WatchedFolders(WatchedFolders.IndexOf(existing))
@@ -90,35 +87,24 @@ Public Class Watcher : Inherits ObservableObject
         End If
 
         If immediateFlushToDisk Then WriteToFile()
-        OnPropertyChanged(NameOf(TotalSaved))
 
     End Sub
 
 
     Public Sub RemoveWatched(item As WatchedFolder)
 
-        Dim x = Watchers.Find(Function(f) f.Folder = item.Folder)
+        Dim x = FolderMonitors.Find(Function(f) f.Folder = item.Folder)
         If x IsNot Nothing Then
             x.Dispose()
-            Watchers.Remove(x)
+            FolderMonitors.Remove(x)
         End If
 
         WatchedFolders.Remove(item)
         WriteToFile()
-        OnPropertyChanged(NameOf(TotalSaved))
+
 
     End Sub
 
-    Public Sub RefreshProperties()
-        For Each prop In Me.GetType.GetProperties
-            Me.OnPropertyChanged(prop.Name)
-        Next
-
-        For Each f In WatchedFolders
-            f.RefreshProperties()
-        Next
-        OnPropertyChanged(NameOf(TotalSaved))
-    End Sub
 
     Private Async Function GetWatchedFoldersFromJson() As Task(Of ObservableCollection(Of WatchedFolder))
 
@@ -132,6 +118,7 @@ Public Class Watcher : Inherits ObservableObject
 
         Return _WatchedFolders
     End Function
+
 
     Private Shared Function DeserializeAndValidateJSON(inputjsonFile As IO.FileInfo) As (DateTime, ObservableCollection(Of WatchedFolder))
         Dim WatcherJSON = IO.File.ReadAllText(inputjsonFile.FullName)
@@ -149,22 +136,23 @@ Public Class Watcher : Inherits ObservableObject
         Return validatedResult
 
     End Function
-    Private Sub WriteToFile()
+    Public Sub WriteToFile()
 
         Dim output = JsonSerializer.Serialize((LastAnalysed, WatchedFolders), New JsonSerializerOptions With {.IncludeFields = True, .WriteIndented = True})
         IO.File.WriteAllText(WatcherJSONFile.FullName, output)
 
     End Sub
 
-    Private Async Sub SWTick()
+    Private Async Sub OnSystemIdle()
         Await ParseWatchers()
+        Await BackgroundCompact()
     End Sub
 
     Public Async Function ParseWatchers(Optional ParseAll As Boolean = False) As Task
         If IsActive Then Return
         IsActive = True
 
-        Dim WatchersToCheck = If(ParseAll, Watchers, Watchers.Where(Function(w) w.HasTargetChanged = True))
+        Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged = True))
 
         For Each fsWatcher In WatchersToCheck
             Dim ret = Await Analyse(fsWatcher.Folder, ParseAll)
@@ -172,15 +160,30 @@ Public Class Watcher : Inherits ObservableObject
 
         LastAnalysed = DateTime.Now
 
-        WriteToFile()
-        Debug.WriteLine("")
-        OnPropertyChanged(NameOf(TotalSaved))
+        If WatchersToCheck.Count > 0 Then WriteToFile()
 
         IsActive = False
     End Function
 
-    Private Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
-        Debug.WriteLine("analysing" & folder)
+
+    Public Async Function BackgroundCompact() As Task
+
+        If IsActive Then Return
+        IsActive = True
+
+        If BGCompactor.isCompactorActive Then Return
+
+        Dim ret = Await BGCompactor.StartCompactingAsync(WatchedFolders)
+        If ret Then
+            IsActive = False
+        End If
+
+
+    End Function
+
+
+    Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
+        Debug.WriteLine("Background Analysing: " & folder)
         Dim analyser As New Core.Analyser(folder)
 
         Dim ret = Await analyser.AnalyseFolder(Nothing)
@@ -189,7 +192,7 @@ Public Class Watcher : Inherits ObservableObject
 
         watched.LastCheckedDate = DateTime.Now
         watched.LastCheckedSize = analyser.CompressedBytes
-        watched.LastSystemModifiedDate = Watchers.First(Function(f) f.Folder = folder).LastChangedDate
+        watched.LastSystemModifiedDate = FolderMonitors.First(Function(f) f.Folder = folder).LastChangedDate
         Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
         watched.CompressionLevel = mainCompressionLVL
         If checkDiskModified Then
@@ -202,7 +205,7 @@ Public Class Watcher : Inherits ObservableObject
 
         End If
 
-        Watchers.First(Function(f) f.Folder = folder).HasTargetChanged = False
+        FolderMonitors.First(Function(f) f.Folder = folder).HasTargetChanged = False
 
         Return True
 
@@ -216,34 +219,6 @@ Public Class Watcher : Inherits ObservableObject
     End Property
 
 
-
-End Class
-
-Public Class WatchedFolder : Inherits ObservableObject
-
-    Public Property Folder As String
-    Public Property DisplayName As String
-    Public Property IsSteamGame As Boolean
-    Public Property LastCompressedDate As DateTime
-    Public Property LastCompressedSize As Long
-    Public Property LastUncompressedSize As Long
-    Public Property LastSystemModifiedDate As DateTime
-    Public Property LastCheckedDate As DateTime
-    Public Property LastCheckedSize As Long
-    Public Property CompressionLevel As Core.CompressionAlgorithm
-
-    Public ReadOnly Property DecayPercentage As Decimal
-        Get
-            If LastCompressedSize = 0 Then Return 1
-            Return If(LastUncompressedSize = LastCompressedSize OrElse LastCompressedSize > LastUncompressedSize, 0D, Math.Clamp((LastCheckedSize - LastCompressedSize) / (LastUncompressedSize - LastCompressedSize), 0, 1))
-        End Get
-    End Property
-
-    Public Sub RefreshProperties()
-        For Each prop In Me.GetType.GetProperties
-            Me.OnPropertyChanged(prop.Name)
-        Next
-    End Sub
 
 End Class
 

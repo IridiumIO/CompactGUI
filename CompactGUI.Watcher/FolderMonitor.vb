@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 
-Public Class FolderWatcher : Implements IDisposable
+Public Class FolderMonitor : Implements IDisposable
 
     Private WithEvents FSWatcher As FileSystemWatcher
     Private disposedValue As Boolean
@@ -25,7 +25,6 @@ Public Class FolderWatcher : Implements IDisposable
 
 
     Private Sub WatcherModifiedEvent(sender As Object, e As FileSystemEventArgs) Handles FSWatcher.Created, FSWatcher.Changed, FSWatcher.Renamed, FSWatcher.Deleted
-        If Not HasTargetChanged Then Debug.WriteLine($"{Folder} has been modified")
         HasTargetChanged = True
         LastChangedDate = DateTime.Now
     End Sub

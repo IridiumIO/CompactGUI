@@ -49,7 +49,7 @@ Public Class Compactor
         Return True
     End Function
 
-    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, totalFiles As Integer, progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task
+    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, totalFiles As Integer, Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing) As Task
 
         If _ctx.IsCancellationRequested Then Return
         Try
@@ -65,6 +65,8 @@ Public Class Compactor
         Dim res = WOFCompressFile(file)
         _processedFileCount.TryAdd(file, 1)
         Dim incremented = _processedFileCount.Count
+
+        If progressMonitor Is Nothing Then Return
         progressMonitor.Report((CInt(((incremented / totalFiles) * 100)), file))
     End Function
 
