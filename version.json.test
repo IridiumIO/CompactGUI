@@ -3,10 +3,10 @@
         "Major": 3,
         "Minor": 4,
         "Patch": 0,
-        "PreRelease": "alpha",
+        "PreRelease": "a",
         "PreReleaseMinor": 1,
         "VersionString": "3.4.0",
-        "FriendlyString": "3.4.0-a1",
+        "FriendlyString": "3.4.0 alpha 1",
         "Changes": [],
         "Fixes": []
     },
