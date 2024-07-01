@@ -4,7 +4,7 @@
     Public UncompressedSize As Long
     Public CompressedSize As Long
     Public CompressionMode As CompressionAlgorithm
-
+    Public FileInfo As IO.FileInfo
 End Class
 
 

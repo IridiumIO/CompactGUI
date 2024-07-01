@@ -113,7 +113,7 @@ Public Class Compactor : Implements IDisposable
         Dim ret = Await ax.AnalyseFolder(Nothing)
 
         Parallel.ForEach(ax.FileCompressionDetailsList, Sub(fl)
-                                                            Dim ft = New FileInfo(fl.FileName)
+                                                            Dim ft = fl.FileInfo
                                                             If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize AndAlso fl.CompressionMode <> _WOFCompressionLevel Then _filesList.Add(fl.FileName)
                                                         End Sub)
 

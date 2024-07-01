@@ -106,11 +106,6 @@ Public Class MainViewModel : Inherits ObservableObject
     End Sub
 
     Private Async Function UpdateWatcherAndState(containsCompressedFiles As Boolean, Analyser As Core.Analyser) As Task
-        ActiveFolder.PoorlyCompressedFiles = Await Analyser.GetPoorlyCompressedExtensions()
-
-        For Each ix In ActiveFolder.PoorlyCompressedFiles
-            Debug.WriteLine("   " & ix.extension & ": " & ix.totalFiles)
-        Next
 
         If containsCompressedFiles OrElse ActiveFolder.IsFreshlyCompressed Then
             State = "FolderCompressedResults"

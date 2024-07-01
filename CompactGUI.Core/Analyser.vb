@@ -67,7 +67,7 @@ Public Class Analyser
             End If
             Dim cLevel As CompressionAlgorithm = If(compSize = unCompSize, CompressionAlgorithm.NO_COMPRESSION, DetectCompression(fInfo))
 
-            Return New AnalysedFileDetails With {.FileName = file, .CompressedSize = compSize, .UncompressedSize = unCompSize, .CompressionMode = cLevel}
+            Return New AnalysedFileDetails With {.FileName = file, .CompressedSize = compSize, .UncompressedSize = unCompSize, .CompressionMode = cLevel, .FileInfo = fInfo}
         Catch ex As IOException
             Debug.WriteLine($"Error analysing file {file}: {ex.Message}")
             Return Nothing
