@@ -226,6 +226,8 @@ Public Class MainViewModel : Inherits ObservableObject
         'TODO: Modify the 100 cutoff based on level of aggressiveness selected by user in settings
         ActiveFolder.WikiPoorlyCompressedFiles = res.poorlyCompressedList.Where(Function(k) k.Value > 100 AndAlso k.Key <> "").Select(Function(k) k.Key).ToList
         ActiveFolder.CompressionConfidence = res.confidence
+        ActiveFolder.WikiCompressionResults.Clear()
+
         For Each item In res.compressionResults
             ActiveFolder.WikiCompressionResults.Add(item)
         Next
