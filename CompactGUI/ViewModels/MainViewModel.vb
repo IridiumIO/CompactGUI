@@ -70,15 +70,19 @@ Public Class MainViewModel : Inherits ObservableObject
 
     Private Async Sub AnalyseBegin()
 
+        Await Watcher.DisableBackgrounding
+
         State = "AnalysingFolderSelected"
-        Watcher.IsActive = True
+
         _cancellationTokenSource = New CancellationTokenSource
         Dim token = _cancellationTokenSource.Token
 
         Dim Analyser As New Core.Analyser(ActiveFolder.FolderName)
 
         If Not Analyser.HasDirectoryWritePermission Then
-            InsufficientPermissionHandler()
+            Await InsufficientPermissionHandler()
+            State = "ValidFolderSelected"
+            Return
         End If
 
         Dim containsCompressedFiles = Await Analyser.AnalyseFolder(token)
@@ -86,9 +90,22 @@ Public Class MainViewModel : Inherits ObservableObject
             State = "ValidFolderSelected"
             Return
         End If
+
         ActiveFolder.AnalysisResults = Analyser.FileCompressionDetailsList
         ActiveFolder.CompressedBytes = Analyser.CompressedBytes
         ActiveFolder.UncompressedBytes = Analyser.UncompressedBytes
+
+        Await UpdateWatcherAndState(containsCompressedFiles, Analyser)
+
+
+        SubmitToWikiCommand.NotifyCanExecuteChanged()
+        ChooseCompressionCommand.NotifyCanExecuteChanged()
+
+        Await Watcher.EnableBackgrounding()
+
+    End Sub
+
+    Private Async Function UpdateWatcherAndState(containsCompressedFiles As Boolean, Analyser As Core.Analyser) As Task
 
         If containsCompressedFiles OrElse ActiveFolder.IsFreshlyCompressed Then
             State = "FolderCompressedResults"
@@ -99,44 +116,40 @@ Public Class MainViewModel : Inherits ObservableObject
                 Notify_Compressed(ActiveFolder.DisplayName, ActiveFolder.UncompressedBytes - ActiveFolder.CompressedBytes, ActiveFolder.CompressionRatio)
             Else
                 Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList()
-
-                Dim allCompressionsInFolder = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).GroupBy(Function(f) f).OrderByDescending(Function(f) f.Count).ToList
                 Dim mainCompressionLVL = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).Max
-
+                Watcher.UpdateWatched(ActiveFolder.FolderName, Analyser)
                 ActiveFolder.SelectedCompressionMode = Core.WOFConvertBackCompressionLevel(mainCompressionLVL)
-
             End If
         Else
-
+            Watcher.UpdateWatched(ActiveFolder.FolderName, Analyser)
             Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList()
             ActiveFolder.CompressedBytes = compRatioEstimate
             State = "FolderAnalysedResults"
         End If
-        SubmitToWikiCommand.NotifyCanExecuteChanged()
-        ChooseCompressionCommand.NotifyCanExecuteChanged()
-        Watcher.IsActive = False
+
+    End Function
 
 
-    End Sub
 
 
     Private Sub AddFolderToWatcher()
 
         Dim newWatched = New Watcher.WatchedFolder With {
-            .Folder = ActiveFolder.FolderName,
-            .DisplayName = ActiveFolder.DisplayName,
-            .IsSteamGame = ActiveFolder.SteamAppID <> 0,
-            .LastCompressedSize = ActiveFolder.CompressedBytes,
-            .LastUncompressedSize = ActiveFolder.UncompressedBytes,
-            .LastCompressedDate = DateTime.Now,
-            .LastCheckedDate = DateTime.Now,
-            .LastCheckedSize = ActiveFolder.CompressedBytes,
-            .LastSystemModifiedDate = DateTime.Now,
-            .CompressionLevel = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).Max}
+           .Folder = ActiveFolder.FolderName,
+           .DisplayName = ActiveFolder.DisplayName,
+           .IsSteamGame = ActiveFolder.SteamAppID <> 0,
+           .LastCompressedSize = ActiveFolder.CompressedBytes,
+           .LastUncompressedSize = ActiveFolder.UncompressedBytes,
+           .LastCompressedDate = DateTime.Now,
+           .LastCheckedDate = DateTime.Now,
+           .LastCheckedSize = ActiveFolder.CompressedBytes,
+           .LastSystemModifiedDate = DateTime.Now,
+           .CompressionLevel = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).Max}
 
         Watcher.AddOrUpdateWatched(newWatched)
 
     End Sub
+
 
     Private Sub ChooseCompression()
 
@@ -152,10 +165,12 @@ Public Class MainViewModel : Inherits ObservableObject
 
     Private Async Sub CompressBegin()
 
+        Await Watcher.DisableBackgrounding
+
         State = "CurrentlyCompressing"
         PauseResumeStatus = "Pause"
         CancelStatus = "Cancel"
-        Watcher.IsActive = True
+
         CProgress.Report((0, ""))
 
         Dim exclist() As String = GetSkipList()
@@ -171,6 +186,8 @@ Public Class MainViewModel : Inherits ObservableObject
         BindableSettings.Save()
 
         AnalyseBegin()
+
+        Await Watcher.EnableBackgrounding()
 
     End Sub
 
@@ -189,10 +206,13 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Async Sub UncompressBegin()
+
+        Await Watcher.DisableBackgrounding()
+
         State = "CurrentlyCompressing"
         PauseResumeStatus = "Pause"
         CancelStatus = "Cancel"
-        Watcher.IsActive = True
+
         CProgress.Report((0, ""))
 
         Dim compressedFilesList = ActiveFolder.AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
@@ -201,17 +221,9 @@ Public Class MainViewModel : Inherits ObservableObject
 
         ActiveFolder.IsFreshlyCompressed = False
 
-        Dim existing = Watcher.WatchedFolders.FirstOrDefault(Function(f) f.Folder = ActiveFolder.FolderName, Nothing)
-
         AnalyseBegin()
 
-
-        If existing IsNot Nothing Then
-            Debug.WriteLine("Updating watched folder")
-            Await Watcher.Analyse(ActiveFolder.FolderName, False)
-        End If
-
-
+        Await Watcher.EnableBackgrounding()
     End Sub
 
     Dim CProgress As IProgress(Of (Integer, String)) = New Progress(Of (Integer, String))(Sub(val) WorkingProgress = New Tuple(Of Integer, String)(val.Item1, val.Item2.Replace(ActiveFolder.FolderName, "")))
@@ -253,7 +265,7 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
-    Private Sub InsufficientPermissionHandler()
+    Private Async Function InsufficientPermissionHandler() As Task
 
         Dim msg As New ContentDialog
         msg.Title = "Permissions Error"
@@ -267,8 +279,8 @@ Public Class MainViewModel : Inherits ObservableObject
             msg.SecondaryButtonText = "Restart App"
             msg.SecondaryButtonCommand = New RelayCommand(AddressOf RunAsAdmin)
         End If
-        msg.ShowAsync()
-    End Sub
+        Await msg.ShowAsync()
+    End Function
 
     Private Sub RunAsAdmin()
         Dim myproc As New Process With {

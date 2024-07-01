@@ -15,12 +15,52 @@ Public Class Watcher : Inherits ObservableObject
     Public Property WatchedFolders As New ObservableCollection(Of WatchedFolder)
     <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
     Public Property LastAnalysed As DateTime
-    Public Property IsActive As Boolean = False
+
 
     Private ReadOnly _DataFolder As New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
     Private ReadOnly Property WatcherJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
 
     Public Property BGCompactor As BackgroundCompactor
+
+
+    Private ReadOnly _parseWatchersSemaphore As New SemaphoreSlim(1, 1)
+
+    Private Const LAST_SYSTEM_MODIFIED_TIME_THRESHOLD As Integer = 180 ' 3 minutes
+
+
+    Private _disableCounter As Integer = 0
+    Private _counterLock As New SemaphoreSlim(1, 1)
+
+    Public Async Function DisableBackgrounding() As Task
+        Await _counterLock.WaitAsync()
+        Try
+            _disableCounter += 1
+            If _disableCounter = 1 Then
+                Debug.WriteLine("Backgrounding disabled!")
+                IdleDetector.Paused = True
+                Await _parseWatchersSemaphore.WaitAsync()
+            End If
+        Finally
+            _counterLock.Release()
+        End Try
+    End Function
+
+    Public Async Function EnableBackgrounding() As Task
+        Await _counterLock.WaitAsync()
+        Try
+            If _disableCounter > 0 Then
+                _disableCounter -= 1
+                If _disableCounter = 0 Then
+                    _parseWatchersSemaphore.Release()
+                    IdleDetector.Paused = False
+                    Debug.WriteLine("Backgrounding enabled!")
+                End If
+            End If
+        Finally
+            _counterLock.Release()
+        End Try
+    End Function
+
 
     Sub New(excludedFiletypes As String())
 
@@ -36,7 +76,6 @@ Public Class Watcher : Inherits ObservableObject
 
     Private Async Function InitializeWatchedFoldersAsync() As Task
         Dim initialWatchedFolders = Await GetWatchedFoldersFromJson()
-        'WriteToFile()
 
         If initialWatchedFolders Is Nothing Then Return
 
@@ -64,32 +103,50 @@ Public Class Watcher : Inherits ObservableObject
 
     Public Sub AddOrUpdateWatched(item As WatchedFolder, Optional immediateFlushToDisk As Boolean = True)
 
-        Dim existing = WatchedFolders.FirstOrDefault(Function(f) f.Folder = item.Folder, Nothing)
-
-        If existing Is Nothing Then
+        Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = item.Folder)
+        If existingItem Is Nothing Then
             WatchedFolders.Add(item)
             FolderMonitors.Add(New FolderMonitor(item.Folder) With {.LastChangedDate = item.LastSystemModifiedDate})
-
         Else
-            With WatchedFolders(WatchedFolders.IndexOf(existing))
-                .Folder = item.Folder
-                .DisplayName = item.DisplayName
-                .IsSteamGame = item.IsSteamGame
-                .LastCompressedSize = item.LastCompressedSize
-                .LastUncompressedSize = item.LastUncompressedSize
-                .LastCompressedDate = DateTime.Now
-                .LastCheckedDate = DateTime.Now
-                .LastCheckedSize = item.LastCheckedSize
-                .LastSystemModifiedDate = DateTime.Now
-                .CompressionLevel = item.CompressionLevel
-            End With
-
+            UpdateFolderProperties(existingItem, item)
         End If
-
+        OnPropertyChanged(NameOf(TotalSaved))
         If immediateFlushToDisk Then WriteToFile()
 
     End Sub
 
+    Public Sub UpdateWatched(folder As String, ByRef analyser As Analyser, Optional immediateFlushToDisk As Boolean = True)
+
+        Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = folder)
+        If existingItem IsNot Nothing Then
+
+            existingItem.LastCheckedDate = DateTime.Now
+            existingItem.LastCheckedSize = analyser.CompressedBytes
+            existingItem.LastSystemModifiedDate = FolderMonitors.First(Function(f) f.Folder = folder).LastChangedDate
+
+            existingItem.CompressionLevel = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
+
+            FolderMonitors.First(Function(f) f.Folder = folder).HasTargetChanged = False
+            OnPropertyChanged(NameOf(TotalSaved))
+            If Not immediateFlushToDisk Then WriteToFile()
+        End If
+    End Sub
+
+    Private Sub UpdateFolderProperties(existingItem As WatchedFolder, newItem As WatchedFolder)
+        With existingItem
+            .Folder = newItem.Folder
+            .DisplayName = newItem.DisplayName
+            .IsSteamGame = newItem.IsSteamGame
+            .LastCompressedSize = newItem.LastCompressedSize
+            .LastUncompressedSize = newItem.LastUncompressedSize
+            .LastCompressedDate = DateTime.Now
+            .LastCheckedDate = DateTime.Now
+            .LastCheckedSize = newItem.LastCheckedSize
+            .LastSystemModifiedDate = DateTime.Now
+            .CompressionLevel = newItem.CompressionLevel
+        End With
+        FolderMonitors.First(Function(f) f.Folder = newItem.Folder).HasTargetChanged = False
+    End Sub
 
     Public Sub RemoveWatched(item As WatchedFolder)
 
@@ -143,41 +200,66 @@ Public Class Watcher : Inherits ObservableObject
 
     End Sub
 
+
+
+
     Private Async Sub OnSystemIdle()
-        Await ParseWatchers()
-        Await BackgroundCompact()
+        Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
+        If FolderMonitors.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
+
+        If Not _parseWatchersSemaphore.CurrentCount = 0 Then
+            Await ParseWatchers()
+        End If
+        If Not _parseWatchersSemaphore.CurrentCount = 0 Then
+            Await BackgroundCompact()
+        End If
     End Sub
 
     Public Async Function ParseWatchers(Optional ParseAll As Boolean = False) As Task
-        If IsActive Then Return
-        IsActive = True
+        Dim acquired = Await _parseWatchersSemaphore.WaitAsync(0)
+        If Not acquired Then Return
 
-        Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged = True))
+        Try
 
-        For Each fsWatcher In WatchersToCheck
-            Dim ret = Await Analyse(fsWatcher.Folder, ParseAll)
-        Next
+            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged = True))
 
-        LastAnalysed = DateTime.Now
+            If WatchersToCheck.Count = 0 Then Return
 
-        If WatchersToCheck.Count > 0 Then WriteToFile()
+            For Each fsWatcher In WatchersToCheck
+                Dim ret = Await Analyse(fsWatcher.Folder, ParseAll)
+            Next
 
-        IsActive = False
+            LastAnalysed = DateTime.Now
+
+            If WatchersToCheck.Count > 0 Then WriteToFile()
+        Finally
+            _parseWatchersSemaphore.Release()
+        End Try
+
+
+
     End Function
 
 
     Public Async Function BackgroundCompact() As Task
 
-        If IsActive Then Return
-        IsActive = True
+        Dim acquired = Await _parseWatchersSemaphore.WaitAsync(0)
+        If Not acquired Then Return
 
-        If BGCompactor.isCompactorActive Then Return
+        Try
 
-        Dim ret = Await BGCompactor.StartCompactingAsync(WatchedFolders)
-        If ret Then
-            IsActive = False
-        End If
+            If BGCompactor.isCompactorActive Then Return
 
+            If Not WatchedFolders.Any(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.CompressionAlgorithm.NO_COMPRESSION) Then
+                Return
+            End If
+
+            Await BGCompactor.StartCompactingAsync(WatchedFolders, FolderMonitors)
+            OnPropertyChanged(NameOf(TotalSaved))
+        Finally
+            _parseWatchersSemaphore.Release()
+
+        End Try
 
     End Function
 

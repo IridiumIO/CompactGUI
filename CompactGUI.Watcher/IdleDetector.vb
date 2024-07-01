@@ -10,9 +10,10 @@ Public Class IdleDetector
     Private Shared _idletimer As PeriodicTimer
     Private Shared ReadOnly _cts As New CancellationTokenSource
 
+    Public Shared Paused As Boolean = False
 
     Shared Sub New()
-        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(1))
+        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(2))
     End Sub
 
     Public Shared Sub Start()
@@ -30,10 +31,11 @@ Public Class IdleDetector
 
         Try
             While Await IdleDetector._idletimer.WaitForNextTickAsync(_cts.Token) AndAlso Not _cts.Token.IsCancellationRequested
-                If GetIdleTime() > 5 Then
+
+                If GetIdleTime() > 300 AndAlso Not Paused Then
                     RaiseEvent IsIdle(Nothing, EventArgs.Empty)
 
-                Else
+                ElseIf Not Paused Then
                     RaiseEvent IsNotIdle(Nothing, EventArgs.Empty)
                 End If
 

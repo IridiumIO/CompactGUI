@@ -16,6 +16,10 @@ Public Class BackgroundCompactor
 
     Private _excludedFileTypes As String()
 
+
+    Private Const LAST_SYSTEM_MODIFIED_TIME_THRESHOLD As Integer = 300 ' 5 minutes
+
+
     Public Sub New(excludedFileTypes As String())
 
         _excludedFileTypes = excludedFileTypes
@@ -45,7 +49,7 @@ Public Class BackgroundCompactor
 
     Public Function BeginCompacting(folder As String, compressionLevel As Core.CompressionAlgorithm) As Task(Of Boolean)
 
-        If compressionLevel = Core.CompressionAlgorithm.NO_COMPRESSION Then Return Task(Of Boolean).FromResult(False)
+        If compressionLevel = Core.CompressionAlgorithm.NO_COMPRESSION Then Return Task.FromResult(False)
 
         _compactor = New Core.Compactor(folder, compressionLevel, _excludedFileTypes)
 
@@ -53,7 +57,7 @@ Public Class BackgroundCompactor
 
     End Function
 
-    Public Async Function StartCompactingAsync(folders As ObservableCollection(Of WatchedFolder)) As Task(Of Boolean)
+    Public Async Function StartCompactingAsync(folders As ObservableCollection(Of WatchedFolder), monitors As List(Of FolderMonitor)) As Task(Of Boolean)
         Debug.WriteLine("Background Compacting Started")
         Dim cancellationToken As CancellationToken = cancellationTokenSource.Token
 
@@ -62,12 +66,18 @@ Public Class BackgroundCompactor
         Dim currentProcess As Process = Process.GetCurrentProcess()
         currentProcess.PriorityClass = ProcessPriorityClass.Idle
 
-        Dim foldersCopy As List(Of WatchedFolder) = folders.ToList()
+        Dim foldersCopy As List(Of WatchedFolder) = folders.Where(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.CompressionAlgorithm.NO_COMPRESSION).ToList()
+
+        Dim monitorsCopy As List(Of FolderMonitor) = monitors.ToList()
 
         For Each folder In foldersCopy
-            If folder.DecayPercentage = 0 Then
+
+            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
+            If folder.LastSystemModifiedDate > recentThresholdDate Then
+                Debug.WriteLine("    Skipping " & folder.DisplayName)
                 Continue For
             End If
+
             Debug.WriteLine("    Compacting " & folder.DisplayName)
             Dim compactingTask = BeginCompacting(folder.Folder, folder.CompressionLevel)
             isCompacting = True
@@ -90,10 +100,29 @@ Public Class BackgroundCompactor
             If result Then
                 ' Ensure the folder is still in the original collection before updating
                 If folders.Contains(folder) Then
+
+                    Dim analyser As New Core.Analyser(folder.Folder)
+
+                    Dim ret = Await analyser.AnalyseFolder(Nothing)
+
+                    folder.LastCheckedDate = DateTime.Now
+                    folder.LastCheckedSize = analyser.CompressedBytes
+                    folder.LastCompressedSize = analyser.CompressedBytes
+                    folder.LastSystemModifiedDate = DateTime.Now
+                    Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
+                    folder.CompressionLevel = mainCompressionLVL
+
                     folder.LastCompressedDate = DateTime.Now
+
+                    Dim monitor = monitorsCopy.FirstOrDefault(Function(m) m.Folder = folder.Folder)
+                    If monitor IsNot Nothing AndAlso monitors.Contains(monitor) Then
+                        monitor.HasTargetChanged = False
+                    End If
+
                 End If
+
             End If
-            Debug.WriteLine("    Finished Compacting " & folder.DisplayName)
+                Debug.WriteLine("    Finished Compacting " & folder.DisplayName)
         Next
 
         isCompactorActive = False
