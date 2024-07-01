@@ -6,12 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.6.2">
+    <PackageReference Include="Fody" Version="6.8.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" PrivateAssets="All"/>
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

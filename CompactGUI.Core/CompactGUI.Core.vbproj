@@ -5,4 +5,13 @@
     <TargetFramework>net6.0-windows</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.8.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MeasurePerformance.Fody" Version="1.3.1" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
+  </ItemGroup>
+
 </Project>
