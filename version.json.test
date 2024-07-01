@@ -6,7 +6,7 @@
         "PreRelease": "alpha",
         "PreReleaseMinor": 1,
         "VersionString": "3.4.0",
-        "FriendlyString": "3.4.0-alpha 1",
+        "FriendlyString": "3.4.0-a1",
         "Changes": [],
         "Fixes": []
     },
