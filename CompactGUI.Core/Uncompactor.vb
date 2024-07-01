@@ -16,6 +16,7 @@ Public Class Uncompactor
         _processedFileCount.Clear()
         Await Parallel.ForEachAsync(filesList,
                                    Function(file, _ctx) As ValueTask
+                                       If _ctx.IsCancellationRequested Then Return ValueTask.FromCanceled(_ctx)
                                        Return New ValueTask(PauseAndProcessFile(file, _cancellationTokenSource.Token, totalFiles, progressMonitor))
                                    End Function).ConfigureAwait(False)
         Return True
@@ -36,7 +37,7 @@ Public Class Uncompactor
         Dim res = WOFDecompressFile(file)
         _processedFileCount.TryAdd(file, 1)
         Dim incremented = _processedFileCount.Count
-        progressMonitor.Report((CInt(((incremented / totalFiles) * 100)), file))
+        progressMonitor?.Report((CInt(((incremented / totalFiles) * 100)), file))
     End Function
 
     Private Function WOFDecompressFile(path As String)

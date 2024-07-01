@@ -37,21 +37,27 @@ Public Class Analyser
 
 
     Private Sub AnalyseFile(file As String, ByRef compressedFilesCount As Integer, ByRef fileDetails As Concurrent.ConcurrentBag(Of AnalysedFileDetails))
-        Dim fInfo As New FileInfo(file)
-        Dim unCompSize = fInfo.Length
-        Dim compSize = GetFileSizeOnDisk(file)
-        If compSize < 0 Then
-            'GetFileSizeOnDisk failed, fall back to unCompSize
-            compSize = unCompSize
-        End If
-        Dim cLevel As CompressionAlgorithm = If(compSize = unCompSize, CompressionAlgorithm.NO_COMPRESSION, DetectCompression(fInfo))
 
-        'Sets the backing private fields directly because Interlocked doesn't play nice with properties!
-        Interlocked.Add(_CompressedBytes, compSize)
-        Interlocked.Add(_UncompressedBytes, unCompSize)
-        Interlocked.Add(_testField, 1)
-        fileDetails.Add(New AnalysedFileDetails With {.FileName = file, .CompressedSize = compSize, .UncompressedSize = unCompSize, .CompressionMode = cLevel})
-        If cLevel <> CompressionAlgorithm.NO_COMPRESSION Then Interlocked.Increment(compressedFilesCount)
+        Try
+            Dim fInfo As New FileInfo(file)
+            Dim unCompSize = fInfo.Length
+            Dim compSize = GetFileSizeOnDisk(file)
+            If compSize < 0 Then
+                'GetFileSizeOnDisk failed, fall back to unCompSize
+                compSize = unCompSize
+            End If
+            Dim cLevel As CompressionAlgorithm = If(compSize = unCompSize, CompressionAlgorithm.NO_COMPRESSION, DetectCompression(fInfo))
+
+            'Sets the backing private fields directly because Interlocked doesn't play nice with properties!
+            Interlocked.Add(_CompressedBytes, compSize)
+            Interlocked.Add(_UncompressedBytes, unCompSize)
+            Interlocked.Add(_testField, 1)
+            fileDetails.Add(New AnalysedFileDetails With {.FileName = file, .CompressedSize = compSize, .UncompressedSize = unCompSize, .CompressionMode = cLevel})
+            If cLevel <> CompressionAlgorithm.NO_COMPRESSION Then Interlocked.Increment(compressedFilesCount)
+        Catch ex As IOException
+            Debug.WriteLine($"Error analysing file {file}: {ex.Message}")
+        End Try
+
     End Sub
 
 
