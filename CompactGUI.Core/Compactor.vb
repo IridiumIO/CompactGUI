@@ -27,23 +27,24 @@ Public Class Compactor : Implements IDisposable
 
     Private _pauseSemaphore As New SemaphoreSlim(1, 2)
 
-    Private _processedFileCount As New Concurrent.ConcurrentDictionary(Of String, Integer)
+    Private _processedFilesBytes As Long = 0
 
     Private _cancellationTokenSource As New CancellationTokenSource
+
+
 
     Public Async Function RunCompactAsync(Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing) As Task(Of Boolean)
         If _cancellationTokenSource.IsCancellationRequested Then Return False
 
         Dim FilesList = Await BuildWorkingFilesList()
-        Dim totalFiles As Integer = FilesList.Count
-
-        _processedFileCount.Clear()
+        Dim totalFilesSize As Long = FilesList.Sum(Function(f) f.Item2)
+        _processedFilesBytes = 0
 
 
         Await Parallel.ForEachAsync(FilesList,
                                 Function(file, _ctx) As ValueTask
                                     If _ctx.IsCancellationRequested Then Return ValueTask.FromCanceled(_ctx)
-                                    Return New ValueTask(PauseAndProcessFile(file, _cancellationTokenSource.Token, totalFiles, progressMonitor))
+                                    Return New ValueTask(PauseAndProcessFile(file.Item1, _cancellationTokenSource.Token, file.Item2, totalFilesSize, progressMonitor))
                                 End Function).ConfigureAwait(False)
 
 
@@ -52,7 +53,7 @@ Public Class Compactor : Implements IDisposable
         Return True
     End Function
 
-    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, totalFiles As Integer, Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing) As Task
+    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, fileSize As Long, totalFilesSize As Long, Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing) As Task
 
         If _ctx.IsCancellationRequested Then Return
         Try
@@ -66,10 +67,11 @@ Public Class Compactor : Implements IDisposable
         If _ctx.IsCancellationRequested Then Return
 
         Dim res = WOFCompressFile(file)
-        _processedFileCount.TryAdd(file, 1)
-        Dim incremented = _processedFileCount.Count
 
-        progressMonitor?.Report((CInt(((incremented / totalFiles) * 100)), file))
+        Interlocked.Add(_processedFilesBytes, fileSize)
+        Dim incremented = _processedFilesBytes
+
+        progressMonitor?.Report((CInt(((incremented / totalFilesSize) * 100)), file))
 
     End Function
 
@@ -103,18 +105,18 @@ Public Class Compactor : Implements IDisposable
 
     End Function
 
-    Private Async Function BuildWorkingFilesList() As Task(Of IEnumerable(Of String))
+    Private Async Function BuildWorkingFilesList() As Task(Of IEnumerable(Of (String, Long)))
 
         Dim clusterSize As Integer = GetClusterSize(_workingDir)
 
-        Dim _filesList As New Concurrent.ConcurrentBag(Of String)
+        Dim _filesList As New Concurrent.ConcurrentBag(Of (String, Long))
         'TODO: if the user has already analysed within the last minute, then skip creating a new one and use the old one
         Dim ax As New Analyser(_workingDir)
         Dim ret = Await ax.AnalyseFolder(Nothing)
 
         Parallel.ForEach(ax.FileCompressionDetailsList, Sub(fl)
                                                             Dim ft = fl.FileInfo
-                                                            If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize AndAlso fl.CompressionMode <> _WOFCompressionLevel Then _filesList.Add(fl.FileName)
+                                                            If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize AndAlso fl.CompressionMode <> _WOFCompressionLevel Then _filesList.Add((fl.FileName, fl.UncompressedSize))
                                                         End Sub)
 
 
