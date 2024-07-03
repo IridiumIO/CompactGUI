@@ -96,6 +96,7 @@ Public Class Settings : Inherits ObservableObject
     Public Property IsStartMenuEnabled As Boolean = False
     Public Property SkipUserFileTypesLevel As Integer = 0
     Public Property ShowNotifications As Boolean = False
+    Public Property StartInSystemTray As Boolean = False
 
     Private _EnableBackgroundWatcher As Boolean = True
     Public Property EnableBackgroundWatcher As Boolean

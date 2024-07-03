@@ -15,6 +15,7 @@ Class Settings_main
         uiShowNotifications.IsChecked = SettingsHandler.AppSettings.ShowNotifications
         uiEnableBackgroundWatcher.IsChecked = SettingsHandler.AppSettings.EnableBackgroundWatcher
         uiEnableBackgroundAutoCompression.IsChecked = SettingsHandler.AppSettings.EnableBackgroundAutoCompression
+        uiAlwaysStartInTray.IsChecked = SettingsHandler.AppSettings.StartInSystemTray
         comboBoxSkipUserResultsAggression.SelectedIndex = SettingsHandler.AppSettings.SkipUserFileTypesLevel
         uiScalingFactor.Value = SettingsHandler.AppSettings.WindowScalingFactor
         SetEnv()
@@ -114,6 +115,16 @@ Class Settings_main
 
     Private Sub uiEnableBackgroundAutoCompression_Unchecked(sender As Object, e As RoutedEventArgs)
         SettingsHandler.AppSettings.EnableBackgroundAutoCompression = False
+        SettingsHandler.AppSettings.Save()
+    End Sub
+
+    Private Sub uiAlwaysStartInTray_Checked(sender As Object, e As RoutedEventArgs)
+        SettingsHandler.AppSettings.StartInSystemTray = True
+        SettingsHandler.AppSettings.Save()
+    End Sub
+
+    Private Sub uiAlwaysStartInTray_Unchecked(sender As Object, e As RoutedEventArgs)
+        SettingsHandler.AppSettings.StartInSystemTray = False
         SettingsHandler.AppSettings.Save()
     End Sub
 End Class

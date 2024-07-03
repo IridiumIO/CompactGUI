@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CompactGUI" xmlns:ui="http://schemas.modernwpf.com/2019" 
-             mc:Ignorable="d"  Width="400" Background="White" Height="600" Padding="0,0,0,0"
+             mc:Ignorable="d"  Width="400" Background="White"  Padding="0,0,0,0"
              d:DesignHeight="600" d:DesignWidth="400">
     <Grid Margin="0">
         <TextBlock Text="options" FontSize="26" FontWeight="SemiBold"/>
@@ -17,10 +17,10 @@
                 <ui:NavigationViewItem Tag="help" Content="help"/>
             </ui:NavigationView.MenuItems>
             <ui:ScrollViewerEx VerticalScrollBarVisibility="Hidden">
-                <Frame x:Name="ContentFrame" Padding="0, 20, 0, 0" NavigationUIVisibility="Hidden"/>
+                <Frame x:Name="ContentFrame" Padding="0, 20, 0, 20" NavigationUIVisibility="Hidden"/>
             </ui:ScrollViewerEx>
 
         </ui:NavigationView>
-        <Border BorderThickness="2" VerticalAlignment="Bottom" Width="400" BorderBrush="Gray" CornerRadius="1"/>
+        <Border BorderThickness="1" VerticalAlignment="Bottom" Width="400" BorderBrush="Gray" CornerRadius="1"/>
     </Grid>
 </UserControl>

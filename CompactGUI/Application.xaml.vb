@@ -63,6 +63,13 @@ Class Application
 
             mainWindow.ViewModel.SelectFolder(e.Args(0))
         End If
+
+        If SettingsHandler.AppSettings.StartInSystemTray Then
+            mainWindow.Show()
+            mainWindow.ViewModel.ClosingCommand.Execute(New ComponentModel.CancelEventArgs(True))
+            Return
+        End If
+
         mainWindow.Show()
 
     End Sub
