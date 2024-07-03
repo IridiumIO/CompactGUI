@@ -16,6 +16,8 @@ Public Class Watcher : Inherits ObservableObject
     <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
     Public Property LastAnalysed As DateTime
 
+    Public Shared Property IsWatchingEnabled As Boolean = True
+    Public Shared Property IsBackgroundCompactingEnabled As Boolean = True
 
     Private ReadOnly _DataFolder As New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
     Private ReadOnly Property WatcherJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
@@ -204,13 +206,16 @@ Public Class Watcher : Inherits ObservableObject
 
 
     Private Async Sub OnSystemIdle()
+
+        If Not IsWatchingEnabled Then Return
+
         Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
         If FolderMonitors.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
 
-        If Not _parseWatchersSemaphore.CurrentCount = 0 Then
+        If Not _parseWatchersSemaphore.CurrentCount = 0 AndAlso IsWatchingEnabled Then
             Await ParseWatchers()
         End If
-        If Not _parseWatchersSemaphore.CurrentCount = 0 Then
+        If Not _parseWatchersSemaphore.CurrentCount = 0 AndAlso IsBackgroundCompactingEnabled Then
             Await BackgroundCompact()
         End If
     End Sub

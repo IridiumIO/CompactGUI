@@ -12,6 +12,8 @@ Public Class IdleDetector
 
     Public Shared Paused As Boolean = False
 
+    Public Shared Property IsEnabled As Boolean = True
+
     Shared Sub New()
         _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(2))
     End Sub
@@ -32,10 +34,10 @@ Public Class IdleDetector
         Try
             While Await IdleDetector._idletimer.WaitForNextTickAsync(_cts.Token) AndAlso Not _cts.Token.IsCancellationRequested
 
-                If GetIdleTime() > 300 AndAlso Not Paused Then
+                If GetIdleTime() > 300 AndAlso Not Paused AndAlso IsEnabled Then
                     RaiseEvent IsIdle(Nothing, EventArgs.Empty)
 
-                ElseIf Not Paused Then
+                ElseIf Not Paused AndAlso IsEnabled Then
                     RaiseEvent IsNotIdle(Nothing, EventArgs.Empty)
                 End If
 

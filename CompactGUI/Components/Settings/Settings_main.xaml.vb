@@ -13,6 +13,8 @@ Class Settings_main
         uiIsContextEnabled.IsChecked = SettingsHandler.AppSettings.IsContextIntegrated
         uiIsStartMenuEnabled.IsChecked = SettingsHandler.AppSettings.IsStartMenuEnabled
         uiShowNotifications.IsChecked = SettingsHandler.AppSettings.ShowNotifications
+        uiEnableBackgroundWatcher.IsChecked = SettingsHandler.AppSettings.EnableBackgroundWatcher
+        uiEnableBackgroundAutoCompression.IsChecked = SettingsHandler.AppSettings.EnableBackgroundAutoCompression
         comboBoxSkipUserResultsAggression.SelectedIndex = SettingsHandler.AppSettings.SkipUserFileTypesLevel
         uiScalingFactor.Value = SettingsHandler.AppSettings.WindowScalingFactor
         SetEnv()
@@ -91,5 +93,27 @@ Class Settings_main
     Private Sub Canvas_MouseUp_1(sender As Object, e As MouseButtonEventArgs)
         Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI") With {.UseShellExecute = True})
 
+    End Sub
+
+    Private Sub uiEnableBackgroundWatcher_Checked(sender As Object, e As RoutedEventArgs)
+        SettingsHandler.AppSettings.EnableBackgroundWatcher = True
+        SettingsHandler.AppSettings.Save()
+    End Sub
+
+    Private Sub uiEnableBackgroundWatcher_Unchecked(sender As Object, e As RoutedEventArgs)
+        uiEnableBackgroundAutoCompression.IsChecked = False
+        SettingsHandler.AppSettings.EnableBackgroundWatcher = False
+        SettingsHandler.AppSettings.Save()
+    End Sub
+
+    Private Sub uiEnableBackgroundAutoCompression_Checked(sender As Object, e As RoutedEventArgs)
+        uiEnableBackgroundWatcher.IsChecked = True
+        SettingsHandler.AppSettings.EnableBackgroundAutoCompression = True
+        SettingsHandler.AppSettings.Save()
+    End Sub
+
+    Private Sub uiEnableBackgroundAutoCompression_Unchecked(sender As Object, e As RoutedEventArgs)
+        SettingsHandler.AppSettings.EnableBackgroundAutoCompression = False
+        SettingsHandler.AppSettings.Save()
     End Sub
 End Class

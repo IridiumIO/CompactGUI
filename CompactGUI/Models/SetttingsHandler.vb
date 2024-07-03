@@ -96,6 +96,29 @@ Public Class Settings : Inherits ObservableObject
     Public Property IsStartMenuEnabled As Boolean = False
     Public Property SkipUserFileTypesLevel As Integer = 0
     Public Property ShowNotifications As Boolean = False
+
+    Private _EnableBackgroundWatcher As Boolean = True
+    Public Property EnableBackgroundWatcher As Boolean
+        Get
+            Return _EnableBackgroundWatcher
+        End Get
+        Set(value As Boolean)
+            _EnableBackgroundWatcher = value
+            Watcher.Watcher.IsWatchingEnabled = value
+        End Set
+    End Property
+
+    Private _EnableBackgroundAutoCompression As Boolean = True
+    Public Property EnableBackgroundAutoCompression As Boolean
+        Get
+            Return _EnableBackgroundAutoCompression
+        End Get
+        Set(value As Boolean)
+            _EnableBackgroundAutoCompression = value
+            Watcher.Watcher.IsBackgroundCompactingEnabled = value
+        End Set
+    End Property
+
     Private _WindowScalingFactor = 1
     Public Property WindowScalingFactor As Double
         Get
