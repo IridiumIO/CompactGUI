@@ -226,7 +226,7 @@ Public Class MainViewModel : Inherits ObservableObject
         Await Watcher.EnableBackgrounding()
     End Sub
 
-    Dim CProgress As IProgress(Of (Integer, String)) = New Progress(Of (Integer, String))(Sub(val) WorkingProgress = New Tuple(Of Integer, String)(val.Item1, val.Item2.Replace(ActiveFolder.FolderName, "")))
+    Dim CProgress As IProgress(Of (Integer, String)) = New Progress(Of (Integer, String))(Sub(val) WorkingProgress = New Tuple(Of Integer, String, Double, String)(val.Item1, val.Item2.Replace(ActiveFolder.FolderName, ""), val.Item1 / 100.0, WorkingProgress.Item4))
 
 
     Private Async Function GetWikiResultsAndSetPoorlyCompressedList() As Task(Of Long)
@@ -319,10 +319,19 @@ Public Class MainViewModel : Inherits ObservableObject
         Set(value As String)
             If State <> "FolderWatcherView" Then LastState = State
             _State = value
+
+            If State = "AnalysingFolderSelected" Then
+                WorkingProgress = New Tuple(Of Integer, String, Double, String)(WorkingProgress.Item1, WorkingProgress.Item2, WorkingProgress.Item3, "Indeterminate")
+            ElseIf State = "CurrentlyCompressing" Then
+                WorkingProgress = New Tuple(Of Integer, String, Double, String)(WorkingProgress.Item1, WorkingProgress.Item2, WorkingProgress.Item3, "Normal")
+            Else
+                WorkingProgress = New Tuple(Of Integer, String, Double, String)(WorkingProgress.Item1, WorkingProgress.Item2, WorkingProgress.Item3, "None")
+            End If
+
         End Set
     End Property
     Public Property SteamBGImage As BitmapImage = Nothing
-    Public Property WorkingProgress As New Tuple(Of Integer, String)(0, "")
+    Public Property WorkingProgress As New Tuple(Of Integer, String, Double, String)(0, "", 0, "None")
     Public Property Watcher As CompactGUI.Watcher.Watcher
     Public ReadOnly Property IsAdmin As Boolean = (New Security.Principal.WindowsPrincipal(Security.Principal.WindowsIdentity.GetCurrent()).IsInRole(Security.Principal.WindowsBuiltInRole.Administrator))
     Public ReadOnly Property BindableSettings As Settings

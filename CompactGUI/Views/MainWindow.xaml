@@ -31,7 +31,11 @@
     </ResourceDictionary>
 
     </Window.Resources>
-    
+
+    <Window.TaskbarItemInfo>
+      <TaskbarItemInfo x:Name="taskbarItemInfo" ProgressValue="{Binding WorkingProgress.Item3}" ProgressState="{Binding WorkingProgress.Item4}" />
+    </Window.TaskbarItemInfo>
+  
     <Grid x:Name="BaseView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
         <Grid.LayoutTransform>
             <ScaleTransform x:Name="ApplicationScaleTransform"
