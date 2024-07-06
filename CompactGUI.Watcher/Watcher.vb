@@ -269,7 +269,7 @@ Public Class Watcher : Inherits ObservableObject
     End Function
 
 
-    Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
+    Public Async Function Analyse(folder As String, checkDiskModified As Boolean, Optional isManualAddition As Boolean = False) As Task(Of Boolean)
         Debug.WriteLine("Background Analysing: " & folder)
         Dim analyser As New Core.Analyser(folder)
 
@@ -279,6 +279,8 @@ Public Class Watcher : Inherits ObservableObject
 
         watched.LastCheckedDate = DateTime.Now
         watched.LastCheckedSize = analyser.CompressedBytes
+        watched.LastUncompressedSize = analyser.UncompressedBytes
+
         watched.LastSystemModifiedDate = FolderMonitors.First(Function(f) f.Folder = folder).LastChangedDate
         Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
         watched.CompressionLevel = mainCompressionLVL
