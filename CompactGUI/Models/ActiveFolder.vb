@@ -2,9 +2,7 @@
 Imports System.Collections.ObjectModel
 
 Imports Microsoft.Toolkit.Mvvm.ComponentModel
-''' <summary>
-''' Shared objects between multiple code regions
-''' </summary>
+
 Public Class ActiveFolder : Inherits ObservableObject
 
     Public Property FolderName As String
@@ -39,44 +37,6 @@ Public Class ActiveFolder : Inherits ObservableObject
             Return AnalysisResults.Where(Function(fl) WikiPoorlyCompressedFiles.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
         End Get
     End Property
-
-End Class
-
-
-' Object used to build submission data to send online after compression
-Public Class SteamSubmissionData
-    Public Property UID As String
-    Public Property SteamID As Integer
-    Public Property GameName As String
-    Public Property FolderName As String
-    Public Property CompressionMode As Integer
-    Public Property BeforeBytes As Long
-    Public Property AfterBytes As Long
-    Public Property PoorlyCompressedExt As List(Of Core.ExtensionResult)
-
-End Class
-
-
-' Object to get results from existing wiki file
-Public Class SteamResultsData
-
-    Public SteamID As Integer
-    Public GameName As String
-    Public FolderName As String
-    Public Confidence As Integer '0=Low, 1=Moderate, 2=High
-    Public CompressionResults As New List(Of CompressionResult)
-    Public PoorlyCompressedExtensions As Dictionary(Of String, Integer)
-
-End Class
-
-
-' Used to hold compression results from parsed existing wiki file (above)
-Public Class CompressionResult : Inherits ObservableObject
-
-    Public Property CompType As Integer
-    Public Property BeforeBytes As Long
-    Public Property AfterBytes As Long
-    Public Property TotalResults As Integer
 
 End Class
 

@@ -1,14 +1,10 @@
 ﻿Imports System.Globalization
 
 Public Class DecimalToPercentageConverter : Implements IValueConverter
-
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-
         'IF = invert and format, to show the "percentage smaller" text
         If parameter = "IF" Then Return CInt(100 - (CType(value, Decimal) * 100)) & "%"
-
         If parameter = "I" Then Return CInt(100 - (CType(value, Decimal) * 100))
-
         Return CInt(CType(value, Decimal) * 100)
     End Function
 
@@ -19,7 +15,6 @@ End Class
 
 
 Public Class BytesToReadableConverter : Implements IValueConverter
-
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim suf As String() = {" B", " KB", " MB", " GB", " TB", " PB", " EB"}
 
@@ -40,7 +35,6 @@ End Class
 
 
 Public Class StrippedFolderPathConverter : Implements IValueConverter
-
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         If value Is Nothing Then Return Nothing
         Dim Str = CType(value, String)
@@ -54,7 +48,6 @@ End Class
 
 
 Public Class RelativeDateConverter : Implements IValueConverter
-
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim dt = CType(value, DateTime)
         Dim ts As TimeSpan = DateTime.Now - dt
@@ -70,10 +63,7 @@ Public Class RelativeDateConverter : Implements IValueConverter
             Return String.Format("{0:0} minutes ago", ts.TotalMinutes)
         Else
             Return "just now"
-
         End If
-
-
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
@@ -81,8 +71,8 @@ Public Class RelativeDateConverter : Implements IValueConverter
     End Function
 End Class
 
-Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
 
+Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim clvl = CType(value, Core.CompressionAlgorithm)
         Select Case clvl
@@ -100,8 +90,8 @@ Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
     End Function
 End Class
 
-Public Class ConfidenceIntToStringConverter : Implements IValueConverter
 
+Public Class ConfidenceIntToStringConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Select Case value
             Case 0
@@ -120,8 +110,8 @@ Public Class ConfidenceIntToStringConverter : Implements IValueConverter
     End Function
 End Class
 
-Public Class ConfidenceIntToColorConverter : Implements IValueConverter
 
+Public Class ConfidenceIntToColorConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Select Case value
             Case 0
@@ -140,15 +130,11 @@ Public Class ConfidenceIntToColorConverter : Implements IValueConverter
     End Function
 End Class
 
+
 Public Class WindowScalingConverter : Implements IValueConverter
-
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-
         Dim dimension = CInt(parameter)
-
-
         Return CInt(value * dimension)
-
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
@@ -158,7 +144,6 @@ End Class
 
 
 Public Class WikiCompressionLevelAbbreviatedConverter : Implements IValueConverter
-
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim clvl = CType(value, Integer)
         Select Case clvl
@@ -176,18 +161,13 @@ End Class
 
 
 Public Class RatioConverter : Implements IMultiValueConverter
-
     Public Function Convert(values As Object(), targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IMultiValueConverter.Convert
-        If values.Length <> 2 Then
-            Throw New ArgumentException("Two values should be provided.")
-        End If
+        If values.Length <> 2 Then Throw New ArgumentException("Two values should be provided.")
 
         Dim afterBytes As Long
         Dim beforeBytes As Long
 
-        If Not Long.TryParse(values(0).ToString(), afterBytes) OrElse Not Long.TryParse(values(1).ToString(), beforeBytes) Then
-            Throw New ArgumentException("Both values should be of type double.")
-        End If
+        If Not Long.TryParse(values(0).ToString(), afterBytes) OrElse Not Long.TryParse(values(1).ToString(), beforeBytes) Then Throw New ArgumentException("Both values should be of type double.")
 
         Dim ratio = Math.Round((1 - afterBytes / beforeBytes) * 100, 0)
 
@@ -202,11 +182,9 @@ End Class
 
 
 Public Class NonZeroToVisConverter : Implements IValueConverter
-
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim clvl = CType(value, Integer)
         If clvl = 0 Then Return Visibility.Collapsed
-
         Return Visibility.Visible
     End Function
 
@@ -214,9 +192,9 @@ Public Class NonZeroToVisConverter : Implements IValueConverter
         Throw New NotImplementedException()
     End Function
 End Class
-Public Class ProgressBarColorConverter
-    Implements IValueConverter
 
+
+Public Class ProgressBarColorConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim progress As Decimal = DirectCast(value, Decimal)
 
@@ -227,7 +205,6 @@ Public Class ProgressBarColorConverter
         Else
             Return New SolidColorBrush(Media.Color.FromRgb(146, 241, 171))
         End If
-
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
