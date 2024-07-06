@@ -23,7 +23,7 @@ Class MainWindow
     Property activeFolder As ActiveFolder
 
     Private Sub SearchClicked(sender As Object, e As MouseButtonEventArgs)
-        ViewModel.SelectFolder()
+        ViewModel.SelectFolderAsync()
     End Sub
 
     Private Sub uiUpdateBanner_MouseUp(sender As Object, e As RoutedEventArgs)
@@ -56,7 +56,7 @@ Class MainWindow
         End If
 
         If IO.Directory.Exists(xs(0)) Then
-            ViewModel.SelectFolder(xs(0))
+            ViewModel.SelectFolderAsync(xs(0))
         End If
 
 

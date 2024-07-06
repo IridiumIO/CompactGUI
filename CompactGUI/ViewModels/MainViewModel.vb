@@ -26,7 +26,7 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
-    Public Async Sub SelectFolder(Optional path As String = Nothing)
+    Public Async Function SelectFolderAsync(Optional path As String = Nothing) As Task
 
         If path Is Nothing Then
             Dim folderSelector As New VistaFolderBrowserDialog
@@ -52,14 +52,15 @@ Public Class MainViewModel : Inherits ObservableObject
 
         State = "ValidFolderSelected"
 
-        Dim GetSteamHeader As Task = FireAndForgetGetSteamHeaderAsync()
+        Dim GetSteamHeader As Task = GetSteamHeaderAsync()
 
         AnalyseFolderCommand.Execute(Nothing)
 
 
-    End Sub
+    End Function
 
-    Private Async Function FireAndForgetGetSteamHeaderAsync() As Task
+
+    Private Async Function GetSteamHeaderAsync() As Task
 
         Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{ActiveFolder.SteamAppID}/page_bg_generated_v6b.jpg"
 
@@ -81,25 +82,20 @@ Public Class MainViewModel : Inherits ObservableObject
                 SteamBGImage = bImg
             End Using
         Catch ex As Exception
-            ' Handle exceptions (e.g., network errors)
             Debug.WriteLine($"Failed to load Steam header image: {ex.Message}")
         End Try
     End Function
 
 
-    Dim _cancellationTokenSource As CancellationTokenSource
 
-    Public Property CancelCommand As RelayCommand = New RelayCommand(Sub() _cancellationTokenSource.Cancel())
-
-
-    Private Async Sub AnalyseBegin()
+    Private Async Function AnalyseAsync() As Task
 
         Await Watcher.DisableBackgrounding
 
         State = "AnalysingFolderSelected"
 
-        _cancellationTokenSource = New CancellationTokenSource
-        Dim token = _cancellationTokenSource.Token
+        CancellationTokenSource = New CancellationTokenSource
+        Dim token = CancellationTokenSource.Token
 
         Dim Analyser As New Core.Analyser(ActiveFolder.FolderName)
 
@@ -110,7 +106,7 @@ Public Class MainViewModel : Inherits ObservableObject
         End If
 
         Dim containsCompressedFiles = Await Analyser.AnalyseFolder(token)
-        If _cancellationTokenSource.IsCancellationRequested Then
+        If CancellationTokenSource.IsCancellationRequested Then
             State = "ValidFolderSelected"
             Return
         End If
@@ -119,7 +115,7 @@ Public Class MainViewModel : Inherits ObservableObject
         ActiveFolder.CompressedBytes = Analyser.CompressedBytes
         ActiveFolder.UncompressedBytes = Analyser.UncompressedBytes
 
-        Await UpdateWatcherAndState(containsCompressedFiles, Analyser)
+        Await UpdateWatcherAndStateAsync(containsCompressedFiles, Analyser)
 
 
         SubmitToWikiCommand.NotifyCanExecuteChanged()
@@ -127,9 +123,10 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Await Watcher.EnableBackgrounding()
 
-    End Sub
+    End Function
 
-    Private Async Function UpdateWatcherAndState(containsCompressedFiles As Boolean, Analyser As Core.Analyser) As Task
+
+    Private Async Function UpdateWatcherAndStateAsync(containsCompressedFiles As Boolean, Analyser As Core.Analyser) As Task
 
         If containsCompressedFiles OrElse ActiveFolder.IsFreshlyCompressed Then
             State = "FolderCompressedResults"
@@ -139,21 +136,19 @@ Public Class MainViewModel : Inherits ObservableObject
                 If SettingsHandler.AppSettings.WatchFolderForChanges Then AddFolderToWatcher()
                 Notify_Compressed(ActiveFolder.DisplayName, ActiveFolder.UncompressedBytes - ActiveFolder.CompressedBytes, ActiveFolder.CompressionRatio)
             Else
-                Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList()
+                Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedListAsync()
                 Dim mainCompressionLVL = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).Max
                 Watcher.UpdateWatched(ActiveFolder.FolderName, Analyser)
                 ActiveFolder.SelectedCompressionMode = Core.WOFConvertBackCompressionLevel(mainCompressionLVL)
             End If
         Else
             Watcher.UpdateWatched(ActiveFolder.FolderName, Analyser)
-            Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedList()
+            Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedListAsync()
             ActiveFolder.CompressedBytes = compRatioEstimate
             State = "FolderAnalysedResults"
         End If
 
     End Function
-
-
 
 
     Private Sub AddFolderToWatcher()
@@ -176,18 +171,12 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Sub ChooseCompression()
-
         ActiveFolder.SelectedCompressionMode = BindableSettings.SelectedCompressionMode
         State = "ChooseCompressionOptions"
-
-
     End Sub
 
 
-    Private Property CoreCompactor As Core.Compactor
-    Private Property CoreUncompactor As Core.Uncompactor
-
-    Private Async Sub CompressBegin()
+    Private Async Function CompressBeginAsync() As Task
 
         Await Watcher.DisableBackgrounding
 
@@ -199,7 +188,6 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Dim exclist() As String = GetSkipList()
 
-
         CoreCompactor = New Core.Compactor(ActiveFolder.FolderName, Core.WOFConvertCompressionLevel(ActiveFolder.SelectedCompressionMode), exclist)
         Dim res = Await CoreCompactor.RunCompactAsync(CProgress)
 
@@ -209,11 +197,12 @@ Public Class MainViewModel : Inherits ObservableObject
         BindableSettings.SelectedCompressionMode = ActiveFolder.SelectedCompressionMode
         BindableSettings.Save()
 
-        AnalyseBegin()
+        Await AnalyseAsync()
 
         Await Watcher.EnableBackgrounding()
 
-    End Sub
+    End Function
+
 
     Private Function GetSkipList() As String()
         Dim exclist() As String = {}
@@ -229,7 +218,7 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
-    Private Async Sub UncompressBegin()
+    Private Async Function UncompressBeginAsync() As Task
 
         Await Watcher.DisableBackgrounding()
 
@@ -245,15 +234,15 @@ Public Class MainViewModel : Inherits ObservableObject
 
         ActiveFolder.IsFreshlyCompressed = False
 
-        AnalyseBegin()
+        Await AnalyseAsync()
 
         Await Watcher.EnableBackgrounding()
-    End Sub
+    End Function
 
     Dim CProgress As IProgress(Of (Integer, String)) = New Progress(Of (Integer, String))(Sub(val) WorkingProgress = New Tuple(Of Integer, String, Double, String)(val.Item1, val.Item2.Replace(ActiveFolder.FolderName, ""), val.Item1 / 100.0, WorkingProgress.Item4))
 
 
-    Private Async Function GetWikiResultsAndSetPoorlyCompressedList() As Task(Of Long)
+    Private Async Function GetWikiResultsAndSetPoorlyCompressedListAsync() As Task(Of Long)
 
         If ActiveFolder.SteamAppID = 0 Then Return 1010101010101010
         Dim res = Await WikiHandler.ParseData(ActiveFolder.SteamAppID)
@@ -273,14 +262,14 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
-    Private Async Sub SubmitToWiki()
+    Private Async Function SubmitToWikiAsync() As Task
         ActiveFolder.IsFreshlyCompressed = False
         SubmitToWikiCommand.NotifyCanExecuteChanged()
         Dim successfullySent = Await WikiHandler.SubmitToWiki(ActiveFolder.FolderName, ActiveFolder.AnalysisResults, ActiveFolder.PoorlyCompressedFiles, ActiveFolder.SelectedCompressionMode)
         If Not successfullySent Then ActiveFolder.IsFreshlyCompressed = True
         SubmitToWikiCommand.NotifyCanExecuteChanged()
         ChooseCompressionCommand.NotifyCanExecuteChanged()
-    End Sub
+    End Function
 
 
     Private Function CanSubmitToWiki() As Boolean
@@ -306,6 +295,7 @@ Public Class MainViewModel : Inherits ObservableObject
         Await msg.ShowAsync()
     End Function
 
+
     Private Sub RunAsAdmin()
         Dim myproc As New Process With {
             .StartInfo = New ProcessStartInfo With {
@@ -328,6 +318,7 @@ Public Class MainViewModel : Inherits ObservableObject
             End Sub
         )
     End Sub
+
 
     Private Async Function ManuallyAddFolderToWatcher() As Task
 
@@ -375,6 +366,9 @@ Public Class MainViewModel : Inherits ObservableObject
 
 #Region "Properties"
 
+    Private Property CoreCompactor As Core.Compactor
+    Private Property CoreUncompactor As Core.Uncompactor
+    Private Property CancellationTokenSource As CancellationTokenSource
     Public Property UpdateAvailable As New Tuple(Of Boolean, String)(False, Nothing)
     Public Property ActiveFolder As New ActiveFolder
     Public Property LastState As String
@@ -419,19 +413,18 @@ Public Class MainViewModel : Inherits ObservableObject
 #End Region
 
 #Region "Commands"
-    Public Property AnalyseFolderCommand As ICommand = New RelayCommand(AddressOf AnalyseBegin)
-    Public Property SubmitToWikiCommand As RelayCommand = New RelayCommand(AddressOf SubmitToWiki, AddressOf CanSubmitToWiki)
+    Public Property AnalyseFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf AnalyseAsync)
+    Public Property SubmitToWikiCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf SubmitToWikiAsync, AddressOf CanSubmitToWiki)
     Public Property ChooseCompressionCommand As RelayCommand = New RelayCommand(AddressOf ChooseCompression, Function() Not SubmitToWikiCommand.CanExecute(Nothing))
-    Public Property CompressFolderCommand As RelayCommand = New RelayCommand(AddressOf CompressBegin)
-    Public Property UncompressFolderCommand As RelayCommand = New RelayCommand(AddressOf UncompressBegin)
+    Public Property CompressFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf CompressBeginAsync)
+    Public Property UncompressFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf UncompressBeginAsync)
     Public Property MenuCompressionAreaCommand As RelayCommand = New RelayCommand(Sub() State = If(State = "FolderWatcherView", LastState, State))
     Public Property MenuWatcherAreaCommand As RelayCommand = New RelayCommand(Sub() State = "FolderWatcherView")
     Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
-    Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolder(f.Folder))
-    Property RefreshWatchedCommand As ICommand = New RelayCommand(Sub() Task.Run(Function() Watcher.ParseWatchers(True)))
-
-    Public Property ManuallyAddFolderToWatcherCommand As ICommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
-
+    Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolderAsync(f.Folder))
+    Public Property RefreshWatchedCommand As RelayCommand = New RelayCommand(Sub() Task.Run(Function() Watcher.ParseWatchers(True)))
+    Public Property ManuallyAddFolderToWatcherCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
+    Public Property CancelCommand As RelayCommand = New RelayCommand(Sub() CancellationTokenSource.Cancel())
     Public Property PauseCompressionCommand As RelayCommand = New RelayCommand(Sub()
 
                                                                                    If PauseResumeStatus = "Pause" Then

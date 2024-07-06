@@ -61,7 +61,7 @@ Class Application
                 Return
             End If
 
-            mainWindow.ViewModel.SelectFolder(e.Args(0))
+            mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
         End If
 
         If SettingsHandler.AppSettings.StartInSystemTray Then
@@ -99,7 +99,7 @@ Class Application
                                                      mainWindow.Activate()
                                                      mainWindow.Topmost = False
                                                      If message IsNot Nothing Then
-                                                         mainWindow.ViewModel.SelectFolder(message)
+                                                         mainWindow.ViewModel.SelectFolderAsync(message)
                                                      End If
                                                  End Sub)
                 End Using
