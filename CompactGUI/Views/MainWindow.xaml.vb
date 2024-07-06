@@ -4,6 +4,7 @@ Imports System.Windows.Media.Animation
 Imports ModernWpf.Controls
 Imports CompactGUI.Core
 Imports System.Windows.Threading
+Imports CompactGUI.MainViewModel
 
 Class MainWindow
 
@@ -13,8 +14,7 @@ Class MainWindow
 
         Me.DataContext = ViewModel
 
-        ViewModel.State = "FreshLaunch"
-
+        ViewModel.State = UIState.FreshLaunch
 
     End Sub
 

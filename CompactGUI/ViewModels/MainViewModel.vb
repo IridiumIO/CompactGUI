@@ -50,7 +50,7 @@ Public Class MainViewModel : Inherits ObservableObject
         }
 
 
-        State = "ValidFolderSelected"
+        State = UIState.ValidFolderSelected
 
         Dim GetSteamHeader As Task = GetSteamHeaderAsync()
 
@@ -92,7 +92,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Await Watcher.DisableBackgrounding
 
-        State = "AnalysingFolderSelected"
+        State = UIState.AnalysingFolderSelected
 
         CancellationTokenSource = New CancellationTokenSource
         Dim token = CancellationTokenSource.Token
@@ -101,13 +101,13 @@ Public Class MainViewModel : Inherits ObservableObject
 
         If Not Analyser.HasDirectoryWritePermission Then
             Await InsufficientPermissionHandler()
-            State = "ValidFolderSelected"
+            State = UIState.ValidFolderSelected
             Return
         End If
 
         Dim containsCompressedFiles = Await Analyser.AnalyseFolder(token)
         If CancellationTokenSource.IsCancellationRequested Then
-            State = "ValidFolderSelected"
+            State = UIState.ValidFolderSelected
             Return
         End If
 
@@ -129,7 +129,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Private Async Function UpdateWatcherAndStateAsync(containsCompressedFiles As Boolean, Analyser As Core.Analyser) As Task
 
         If containsCompressedFiles OrElse ActiveFolder.IsFreshlyCompressed Then
-            State = "FolderCompressedResults"
+            State = UIState.FolderCompressedResults
 
             If ActiveFolder.IsFreshlyCompressed Then
                 ActiveFolder.PoorlyCompressedFiles = Await Analyser.GetPoorlyCompressedExtensions()
@@ -145,7 +145,7 @@ Public Class MainViewModel : Inherits ObservableObject
             Watcher.UpdateWatched(ActiveFolder.FolderName, Analyser)
             Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedListAsync()
             ActiveFolder.CompressedBytes = compRatioEstimate
-            State = "FolderAnalysedResults"
+            State = UIState.FolderAnalysedResults
         End If
 
     End Function
@@ -172,7 +172,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
     Private Sub ChooseCompression()
         ActiveFolder.SelectedCompressionMode = BindableSettings.SelectedCompressionMode
-        State = "ChooseCompressionOptions"
+        State = UIState.ChooseCompressionOptions
     End Sub
 
 
@@ -180,7 +180,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Await Watcher.DisableBackgrounding
 
-        State = "CurrentlyCompressing"
+        State = UIState.CurrentlyCompressing
         PauseResumeStatus = "Pause"
         CancelStatus = "Cancel"
 
@@ -222,7 +222,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Await Watcher.DisableBackgrounding()
 
-        State = "CurrentlyCompressing"
+        State = UIState.CurrentlyCompressing
         PauseResumeStatus = "Pause"
         CancelStatus = "Cancel"
 
@@ -363,6 +363,18 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
+    Public Enum UIState
+        FreshLaunch
+        ValidFolderSelected
+        AnalysingFolderSelected
+        FolderAnalysedResults
+        FolderCompressedResults
+        ChooseCompressionOptions
+        CurrentlyCompressing
+        FolderWatcherView
+        UINothing
+    End Enum
+
 
 #Region "Properties"
 
@@ -371,19 +383,19 @@ Public Class MainViewModel : Inherits ObservableObject
     Private Property CancellationTokenSource As CancellationTokenSource
     Public Property UpdateAvailable As New Tuple(Of Boolean, String)(False, Nothing)
     Public Property ActiveFolder As New ActiveFolder
-    Public Property LastState As String
-    Private _State As String
-    Public Property State As String
+    Public Property LastState As UIState
+    Private _State As UIState
+    Public Property State As UIState
         Get
             Return _State
         End Get
-        Set(value As String)
-            If State <> "FolderWatcherView" Then LastState = State
+        Set(value As UIState)
+            If State <> UIState.FolderWatcherView Then LastState = State
             _State = value
 
-            If State = "AnalysingFolderSelected" Then
+            If State = UIState.AnalysingFolderSelected Then
                 WorkingProgress = New Tuple(Of Integer, String, Double, String)(WorkingProgress.Item1, WorkingProgress.Item2, WorkingProgress.Item3, "Indeterminate")
-            ElseIf State = "CurrentlyCompressing" Then
+            ElseIf State = UIState.CurrentlyCompressing Then
                 WorkingProgress = New Tuple(Of Integer, String, Double, String)(WorkingProgress.Item1, WorkingProgress.Item2, WorkingProgress.Item3, "Normal")
             Else
                 WorkingProgress = New Tuple(Of Integer, String, Double, String)(WorkingProgress.Item1, WorkingProgress.Item2, WorkingProgress.Item3, "None")
@@ -418,8 +430,8 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Property ChooseCompressionCommand As RelayCommand = New RelayCommand(AddressOf ChooseCompression, Function() Not SubmitToWikiCommand.CanExecute(Nothing))
     Public Property CompressFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf CompressBeginAsync)
     Public Property UncompressFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf UncompressBeginAsync)
-    Public Property MenuCompressionAreaCommand As RelayCommand = New RelayCommand(Sub() State = If(State = "FolderWatcherView", LastState, State))
-    Public Property MenuWatcherAreaCommand As RelayCommand = New RelayCommand(Sub() State = "FolderWatcherView")
+    Public Property MenuCompressionAreaCommand As RelayCommand = New RelayCommand(Sub() State = If(State = UIState.FolderWatcherView, LastState, State))
+    Public Property MenuWatcherAreaCommand As RelayCommand = New RelayCommand(Sub() State = UIState.FolderWatcherView)
     Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
     Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolderAsync(f.Folder))
     Public Property RefreshWatchedCommand As RelayCommand = New RelayCommand(Sub() Task.Run(Function() Watcher.ParseWatchers(True)))
@@ -461,16 +473,26 @@ End Class
 
 Public Class VisualStateApplier
     Public Shared Function GetVisualState(ByVal target As DependencyObject) As String
-        Return TryCast(target.GetValue(VisualStateProperty), String)
+        Dim stateEnum = target.GetValue(VisualStateProperty)
+        If TypeOf stateEnum Is MainViewModel.UIState Then Return CType(stateEnum, MainViewModel.UIState).ToString()
+        Return Nothing
     End Function
 
     Public Shared Sub SetVisualState(ByVal target As DependencyObject, ByVal value As String)
-        target.SetValue(VisualStateProperty, value)
+        Dim stateEnum As MainViewModel.UIState
+        If [Enum].TryParse(value, True, stateEnum) Then target.SetValue(VisualStateProperty, stateEnum)
     End Sub
 
-    Public Shared ReadOnly VisualStateProperty As DependencyProperty = DependencyProperty.RegisterAttached("VisualState", GetType(String), GetType(VisualStateApplier), New PropertyMetadata(Nothing, AddressOf VisualStatePropertyChangedCallback))
+    Public Shared ReadOnly VisualStateProperty As DependencyProperty = DependencyProperty.RegisterAttached(
+        "VisualState",
+        GetType(MainViewModel.UIState),
+        GetType(VisualStateApplier),
+        New PropertyMetadata(MainViewModel.UIState.UINothing, AddressOf VisualStatePropertyChangedCallback)
+    )
 
     Private Shared Sub VisualStatePropertyChangedCallback(ByVal target As DependencyObject, ByVal args As DependencyPropertyChangedEventArgs)
-        VisualStateManager.GoToElementState(CType(target, FrameworkElement), TryCast(args.NewValue, String), True)
+        If TypeOf args.NewValue IsNot MainViewModel.UIState Then Return
+        Dim newState = CType(args.NewValue, MainViewModel.UIState).ToString()
+        VisualStateManager.GoToElementState(CType(target, FrameworkElement), newState, True)
     End Sub
 End Class
