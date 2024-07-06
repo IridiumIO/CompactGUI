@@ -214,3 +214,23 @@ Public Class NonZeroToVisConverter : Implements IValueConverter
         Throw New NotImplementedException()
     End Function
 End Class
+Public Class ProgressBarColorConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim progress As Decimal = DirectCast(value, Decimal)
+
+        If progress > 0.6 Then
+            Return New SolidColorBrush(Media.Color.FromRgb(239, 146, 146))
+        ElseIf progress > 0.2 Then
+            Return New SolidColorBrush(Media.Color.FromRgb(239, 239, 146))
+        Else
+            Return New SolidColorBrush(Media.Color.FromRgb(146, 241, 171))
+        End If
+
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class

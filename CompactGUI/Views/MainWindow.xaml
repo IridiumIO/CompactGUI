@@ -26,6 +26,7 @@
             <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter"/>
             <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" />
             <local:RatioConverter x:Key="RatioConverter" />
+            <local:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
       <local:NonZeroToVisConverter x:Key="NonZeroToVisConverter" />
 
     </ResourceDictionary>
@@ -1230,7 +1231,7 @@
                                 <TextBlock Width="220" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0"/>
                                 <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFF"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
 
-                                <ui:ProgressBar Height="6" Width="108" CornerRadius="3" Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" >
+                                <ui:ProgressBar Height="6" Width="108" CornerRadius="3" Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="{Binding DecayPercentage, Converter={StaticResource ProgressBarColorConverter}}" Background="#808B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" >
                                     <ui:ProgressBar.Effect>
                                         <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="4"/>
                                     </ui:ProgressBar.Effect>
