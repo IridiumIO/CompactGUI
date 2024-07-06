@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>CompactGUI.Watcher</RootNamespace>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

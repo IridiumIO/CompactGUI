@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>CompactGUI</RootNamespace>
     <UseWPF>true</UseWPF>
     <OptionStrict>Off</OptionStrict>
