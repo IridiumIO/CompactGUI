@@ -5,7 +5,8 @@ Public Class WikiHandler
 
     Shared ReadOnly filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
 
-    Shared Async Function GetUpdatedJSON() As Task
+
+    Shared Async Function GetUpdatedJSONAsync() As Task
 
         Dim dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
 

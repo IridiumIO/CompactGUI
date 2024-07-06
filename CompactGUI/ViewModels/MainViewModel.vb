@@ -4,27 +4,29 @@ Imports Microsoft.Toolkit.Mvvm.Input
 Imports ModernWpf.Controls
 Imports Ookii.Dialogs.Wpf
 Imports CompactGUI.Watcher
+Imports System.IO
+Imports System.Net.Http
 
 Public Class MainViewModel : Inherits ObservableObject
 
 
     Sub New()
 
-        WikiHandler.GetUpdatedJSON()
-        FireAndForgetCheckForUpdates()
+        Dim WikiUpdate = WikiHandler.GetUpdatedJSONAsync()
+        Dim UpdateTask = CheckForUpdatesAsync()
         InitialiseNotificationTray()
         Watcher = New Watcher.Watcher(GetSkipList)   'This naming isn't going to get confusing at all...
 
     End Sub
 
 
-    Private Async Sub FireAndForgetCheckForUpdates()
+    Private Async Function CheckForUpdatesAsync() As Task
         Dim ret = Await UpdateHandler.CheckForUpdate(True)
         If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdateHandler.NewVersion.Friendly)
-    End Sub
+    End Function
 
 
-    Public Sub SelectFolder(Optional path As String = Nothing)
+    Public Async Sub SelectFolder(Optional path As String = Nothing)
 
         If path Is Nothing Then
             Dim folderSelector As New VistaFolderBrowserDialog
@@ -35,33 +37,55 @@ Public Class MainViewModel : Inherits ObservableObject
         Dim validFolder = Core.verifyFolder(path)
         If Not validFolder.isValid Then
             Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
-            msgError.ShowAsync()
+            Await msgError.ShowAsync()
             Return
         End If
 
-        ActiveFolder = New ActiveFolder
-        ActiveFolder.FolderName = path
-
         Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
 
-        ActiveFolder.SteamAppID = SteamFolderData.appID
-        ActiveFolder.DisplayName = If(SteamFolderData.gameName, path)
+        ActiveFolder = New ActiveFolder With {
+            .FolderName = path,
+            .SteamAppID = SteamFolderData.appID,
+            .DisplayName = If(SteamFolderData.gameName, path)
+        }
 
 
         State = "ValidFolderSelected"
 
-        FireAndForgetGetSteamHeader()
+        Dim GetSteamHeader As Task = FireAndForgetGetSteamHeaderAsync()
 
         AnalyseFolderCommand.Execute(Nothing)
 
+
     End Sub
 
-    Private Sub FireAndForgetGetSteamHeader()
+    Private Async Function FireAndForgetGetSteamHeaderAsync() As Task
+
         Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{ActiveFolder.SteamAppID}/page_bg_generated_v6b.jpg"
-        Dim bImg As New BitmapImage(New Uri(url))
-        If SteamBGImage?.UriSource IsNot Nothing AndAlso SteamBGImage.UriSource = bImg.UriSource Then Return
-        SteamBGImage = bImg
-    End Sub
+
+        If SteamBGImage?.UriSource IsNot Nothing AndAlso SteamBGImage.UriSource.ToString() = url Then Return
+
+        Try
+            Using client As New HttpClient()
+
+                Dim imageData As Byte() = Await client.GetByteArrayAsync(url)
+
+                Dim bImg As New BitmapImage()
+                Using ms As New MemoryStream(imageData)
+                    bImg.BeginInit()
+                    bImg.CacheOption = BitmapCacheOption.OnLoad
+                    bImg.StreamSource = ms
+                    bImg.EndInit()
+                End Using
+
+                SteamBGImage = bImg
+            End Using
+        Catch ex As Exception
+            ' Handle exceptions (e.g., network errors)
+            Debug.WriteLine($"Failed to load Steam header image: {ex.Message}")
+        End Try
+    End Function
+
 
     Dim _cancellationTokenSource As CancellationTokenSource
 
