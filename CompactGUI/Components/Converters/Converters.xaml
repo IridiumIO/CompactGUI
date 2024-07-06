@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:ValueConverters;assembly=ValueConverters"
+                    xmlns:local="clr-namespace:CompactGUI">
+  
+      <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
+      <local:DecimalToPercentageConverter x:Key="DecimalToPercentageConverter" />
+      <local:BytesToReadableConverter x:Key="BytesToReadableConverter" />
+      <local:StrippedFolderPathConverter x:Key="StrippedFolderPathConverter" />
+      <local:RelativeDateConverter x:Key="RelativeDateConverter" />
+      <local:CompressionLevelAbbreviatedConverter x:Key="CompressionLevelAbbreviatedConverter" />
+      <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter" />
+      <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter" />
+      <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" />
+      <local:RatioConverter x:Key="RatioConverter" />
+      <local:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
+      <local:NonZeroToVisConverter x:Key="NonZeroToVisConverter" />
+      <local:WindowScalingConverter x:Key="WindowScalingConverter"/>
+  
+</ResourceDictionary>

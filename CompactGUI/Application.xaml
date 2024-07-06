@@ -9,6 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
+                <ResourceDictionary Source="Components/Converters/Converters.xaml"/>
                 <!-- Other merged dictionaries here -->
                 
             </ResourceDictionary.MergedDictionaries>
@@ -107,7 +108,6 @@
                 <Setter Property="Control.Template" Value="{x:Null}" />
             </Style>
 
-            <local:WindowScalingConverter x:Key="WindowScalingConverter"/>
 
 
             <!-- Other app resources here -->
