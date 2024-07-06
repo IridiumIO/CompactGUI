@@ -3,21 +3,21 @@
         "Major": 3,
         "Minor": 4,
         "Patch": 0,
-        "PreRelease": "a",
-        "PreReleaseMinor": 2,
+        "PreRelease": "r",
+        "PreReleaseMinor": 0,
         "VersionString": "3.4.0",
-        "FriendlyString": "3.4.0 alpha 2",
+        "FriendlyString": "3.4.0",
         "Changes": [],
         "Fixes": []
     },
     "LatestNonPreRelease": {
         "Major": 3,
-        "Minor": 3,
+        "Minor": 4,
         "Patch": 0,
         "PreRelease": "r",
         "PreReleaseMinor": 0,
-        "VersionString": "3.3.0",
-        "FriendlyString": "3.3.0",
+        "VersionString": "3.4.0",
+        "FriendlyString": "3.4.0",
         "Changes": [],
         "Fixes": []
     }
