@@ -2,7 +2,6 @@
 Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports Microsoft.Toolkit.Mvvm.Input
 Imports ModernWpf.Controls
-Imports Ookii.Dialogs.Wpf
 Imports CompactGUI.Watcher
 Imports System.IO
 Imports System.Net.Http
@@ -29,10 +28,10 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Async Function SelectFolderAsync(Optional path As String = Nothing) As Task
 
         If path Is Nothing Then
-            Dim folderSelector As New VistaFolderBrowserDialog
+            Dim folderSelector As New Microsoft.Win32.OpenFolderDialog
             folderSelector.ShowDialog()
-            If folderSelector.SelectedPath = "" Then Return
-            path = folderSelector.SelectedPath
+            If folderSelector.FolderName = "" Then Return
+            path = folderSelector.FolderName
         End If
         Dim validFolder = Core.verifyFolder(path)
         If Not validFolder.isValid Then
@@ -324,10 +323,10 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Dim path As String = ""
 
-        Dim folderSelector As New VistaFolderBrowserDialog
+        Dim folderSelector As New Microsoft.Win32.OpenFolderDialog
         folderSelector.ShowDialog()
-        If folderSelector.SelectedPath = "" Then Return
-        path = folderSelector.SelectedPath
+        If folderSelector.FolderName = "" Then Return
+        path = folderSelector.FolderName
 
         Dim validFolder = Core.verifyFolder(path)
         If Not validFolder.isValid Then

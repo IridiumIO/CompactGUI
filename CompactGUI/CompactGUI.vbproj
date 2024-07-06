@@ -5,6 +5,7 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>CompactGUI</RootNamespace>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <OptionStrict>Off</OptionStrict>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
     <Version>3.0.0</Version>
@@ -48,7 +49,6 @@
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="ModernWpfUis" Version="1.4.0" />
-    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" PrivateAssets="All" />
     <PackageReference Include="System.Management" Version="6.0.0" />
     <PackageReference Include="ValueConverters" Version="2.2.10" />

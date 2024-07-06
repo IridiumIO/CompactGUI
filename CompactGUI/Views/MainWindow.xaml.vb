@@ -1,5 +1,4 @@
-﻿Imports Ookii.Dialogs.Wpf
-Imports MethodTimer
+﻿Imports MethodTimer
 Imports System.Windows.Media.Animation
 Imports ModernWpf.Controls
 Imports CompactGUI.Core
