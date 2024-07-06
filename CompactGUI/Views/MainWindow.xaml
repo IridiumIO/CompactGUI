@@ -503,7 +503,7 @@
                             </EasingThicknessKeyFrame>
                         </ThicknessAnimationUsingKeyFrames>
                         <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainSection" Storyboard.TargetProperty="(FrameworkElement.Height)">
-                            <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="150">
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="800">
                                 <EasingDoubleKeyFrame.EasingFunction>
                                     <CubicEase EasingMode="EaseOut"/>
                                 </EasingDoubleKeyFrame.EasingFunction>
@@ -1144,76 +1144,109 @@
 
 
         <!--Folder Watcher Region-->
-        <Grid x:Name="grid"  VerticalAlignment="Bottom"  Height="540" Margin="20,0,20,80" Visibility="Collapsed">
-            <Grid.Resources>
-                <CollectionViewSource x:Key='src' Source="{Binding Watcher.WatchedFolders}">
-                    <CollectionViewSource.SortDescriptions>
-                        <scm:SortDescription PropertyName="DisplayName" />
-                    </CollectionViewSource.SortDescriptions>
-
-                </CollectionViewSource>
-
-            </Grid.Resources>
-            <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
-            <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,2,35,220"/>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE">
-                <ui:FontIcon Glyph="&#xE9F3;" FontSize="14" />
-            </Button>
-
-      <TextBlock FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Right" Margin="0,2,0,220">
-        <Run Text="Disk space saved: " />
-        <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
-      </TextBlock>
+        <Grid x:Name="grid"  VerticalAlignment="Bottom"  Height="560" Margin="20,0,20,60" Visibility="Collapsed" Panel.ZIndex="1010">
           
-      <ui:ListView x:Name="uiWatcherListView" Margin="-10,60,0,0" Padding="0" Width="480" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{d:SampleData}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="False">
-                <ui:ListView.ItemContainerStyle>
+          <Grid.Resources>
+            <CollectionViewSource x:Key='src' Source="{Binding Watcher.WatchedFolders}">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="DisplayName" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+          </Grid.Resources>
+          
+          <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
+          <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,-6,35,220"/>
+          <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-8,0,0"  Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE">
+              <ui:FontIcon Glyph="&#xE9F3;" FontSize="14" />
+          </Button>
+
+          <TextBlock FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,-30,0,220">    
+            <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
+            <Run Text="saved" />
+          </TextBlock>
+          
+          <Button VerticalAlignment="Top" Content="Add To Watchlist" Background="#A26B8399" Foreground="White" HorizontalAlignment="Right" Margin="0,-26,10,0" Command="{Binding ManuallyAddFolderToWatcherCommand}" />
+          
+          <ui:ListView x:Name="uiWatcherListView" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="-20,60,-20,0" Padding="10,0,10,0" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{d:SampleData}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="False">
+            <ui:ListView.Background>
+              <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                <GradientStop Color="#00000000" Offset="0"/>
+                <GradientStop Color="#30000000" Offset="0.8"/>
+                <GradientStop Color="#10000000" Offset="0.95"/>
+                <GradientStop Color="#00000000" Offset="0.99"/>
+                
+              </LinearGradientBrush>
+            </ui:ListView.Background>
+            <ui:ListView.ItemContainerStyle>
                     <Style TargetType="ui:ListViewItem">
                         <Setter Property="Margin" Value="0,0,0,10"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ui:ListViewItem}">
+                                    <Border Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                            <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" />
+                                        </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+        
+                      <Style.Triggers>
+                          <Trigger Property="IsMouseOver" Value="True">
+                              <Setter Property="Background" Value="#20000000"/>
+                              <Setter Property="BorderBrush" Value="Transparent"/>
+                          </Trigger>
+                      </Style.Triggers>
+                      
                     </Style>
+              
                 </ui:ListView.ItemContainerStyle>
                 <ui:ListView.ItemTemplate >
                     <DataTemplate >
-                        <Border Padding="6" Background="WhiteSmoke" d:Height="100" Height="50" Width="470"  KeyboardNavigation.TabNavigation="None" MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
+                        <Border Padding="6"  d:Height="100" Height="50" Width="480"  KeyboardNavigation.TabNavigation="None" MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
+                         
 
                             <Grid >
                                 <Label>
                                     <StackPanel Orientation="Horizontal" >
                                         <Viewbox Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}" 
-                         Width="12"
-                         Height="12"
-                         Margin="0,0,5,0"
-                         HorizontalAlignment="Left">
-                                            <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#73808C" />
+                                                 Width="12"
+                                                 Height="12"
+                                                 Margin="0,0,5,0"
+                                                 HorizontalAlignment="Left">
+                                            <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#FFFFFF" />
                                         </Viewbox>
-                                        <TextBlock MaxWidth="280" TextTrimming="CharacterEllipsis" Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}" FontSize="16" Foreground="#73808C" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,-2,0,0"/>
+                                        <TextBlock MaxWidth="280"  TextTrimming="CharacterEllipsis" Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}" FontSize="15" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,-2,0,0"/>
 
                                     </StackPanel>
 
                                 </Label>
-                                <Border CornerRadius="5" Height="15" Width="40" Background="#3373808C" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,22,0,0">
-                                    <TextBlock Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#73808C" FontWeight="SemiBold" />
+                                <Border CornerRadius="5" Height="15" Width="40" Background="#8373808C" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,22,0,0">
+                                    <TextBlock Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" d:Text="fds" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFF" FontWeight="SemiBold" />
                                 </Border>
 
-                                <TextBlock Width="250" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#73808C"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0"/>
-                                <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#73808C"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
+                                <TextBlock Width="220" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0"/>
+                                <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFF"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
 
                                 <ui:ProgressBar Height="6" Width="108" CornerRadius="3" Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" >
                                     <ui:ProgressBar.Effect>
-                                        <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="6"/>
+                                        <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="4"/>
                                     </ui:ProgressBar.Effect>
 
                                 </ui:ProgressBar>
 
-                                <Separator Background="#DDDDDD" VerticalAlignment="Top" Margin="0,40,30,0"/>
+                                <Separator Background="#60FFFFFF" VerticalAlignment="Top" Margin="0,42,30,0"/>
 
                                 <Grid Margin="0,45,30,0">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last compressed:" Margin="0,0,10,0"/>
-                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"/>
+                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                                         <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last modified:" Margin="0,0,27,0"/>
-                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"/>
+                                        <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
                                     </StackPanel>
                                     <Button HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
                                         <ui:FontIcon Glyph="&#xE74D;" FontSize="14"/>
@@ -1244,7 +1277,7 @@
 
         </Grid>
 
-        <StackPanel Orientation="Horizontal" Panel.ZIndex="1" Background="#FF6B8399" VerticalAlignment="Bottom" Height="40" Opacity="0">
+        <StackPanel Orientation="Horizontal" Panel.ZIndex="2" Background="#304257" VerticalAlignment="Bottom" Height="40" Opacity="0">
             <StackPanel.Effect>
                 <DropShadowEffect Direction="90" BlurRadius="9" Opacity="0.2"/>
             </StackPanel.Effect>

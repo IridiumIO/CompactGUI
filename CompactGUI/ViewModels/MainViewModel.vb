@@ -305,6 +305,49 @@ Public Class MainViewModel : Inherits ObservableObject
         )
     End Sub
 
+    Private Async Function ManuallyAddFolderToWatcher() As Task
+
+        Dim path As String = ""
+
+        Dim folderSelector As New VistaFolderBrowserDialog
+        folderSelector.ShowDialog()
+        If folderSelector.SelectedPath = "" Then Return
+        path = folderSelector.SelectedPath
+
+        Dim validFolder = Core.verifyFolder(path)
+        If Not validFolder.isValid Then
+            Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
+            Await msgError.ShowAsync()
+            Return
+        End If
+
+        Dim newFolder = New ActiveFolder
+        newFolder.FolderName = path
+
+        Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
+
+        newFolder.SteamAppID = SteamFolderData.appID
+        newFolder.DisplayName = If(SteamFolderData.gameName, path)
+
+
+        Dim newWatched = New Watcher.WatchedFolder With {
+           .Folder = newFolder.FolderName,
+           .DisplayName = newFolder.DisplayName,
+           .IsSteamGame = newFolder.SteamAppID <> 0,
+           .LastCompressedSize = 0,
+           .LastUncompressedSize = 0,
+           .LastCompressedDate = DateTime.UnixEpoch,
+           .LastCheckedDate = DateTime.UnixEpoch,
+           .LastCheckedSize = 0,
+           .LastSystemModifiedDate = DateTime.UnixEpoch,
+           .CompressionLevel = Core.CompressionAlgorithm.NO_COMPRESSION}
+
+        Watcher.AddOrUpdateWatched(newWatched)
+        Await Watcher.Analyse(path, True, True)
+
+    End Function
+
+
 
 #Region "Properties"
 
@@ -362,6 +405,9 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
     Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolder(f.Folder))
     Property RefreshWatchedCommand As ICommand = New RelayCommand(Sub() Task.Run(Function() Watcher.ParseWatchers(True)))
+
+    Public Property ManuallyAddFolderToWatcherCommand As ICommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
+
     Public Property PauseCompressionCommand As RelayCommand = New RelayCommand(Sub()
 
                                                                                    If PauseResumeStatus = "Pause" Then

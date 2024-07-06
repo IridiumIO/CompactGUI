@@ -59,6 +59,9 @@ Public Class RelativeDateConverter : Implements IValueConverter
         Dim dt = CType(value, DateTime)
         Dim ts As TimeSpan = DateTime.Now - dt
 
+        If ts > TimeSpan.FromDays(19000) Then
+            Return String.Format("Unknown")
+        End If
         If ts > TimeSpan.FromDays(2) Then
             Return String.Format("{0:0} days ago", ts.TotalDays)
         ElseIf ts > TimeSpan.FromHours(2) Then
