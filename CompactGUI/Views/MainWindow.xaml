@@ -717,7 +717,7 @@
 
             <!--Analyse Button and Progress Ring-->
             <Grid x:Name="uiAnalysisButtonRegion" Margin="0,560,0,0" Width="138" Height="48" VerticalAlignment="Top" >
-                <Button x:Name="btnAnalyse" Width="138" Height="48" Content="analyse" Foreground="White"  Background="#FF6B8399" Command="{Binding AnalyseFolderCommand}" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnAnalyse" Width="138" Height="48" Content="analyse" Foreground="White"  Background="#A26B8399" Command="{Binding AnalyseFolderCommand}" Style="{StaticResource RoundedButton}"/>
                 <ui:ProgressRing x:Name="progRingAnalyse" IsActive="False" Width="40" Height="40" Foreground="White"/>
             </Grid>
 
@@ -745,7 +745,7 @@
 
 
             <!--Choose compression options button-->
-            <Button x:Name="btnChooseCompressionOptions" Margin="0,560,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding ChooseCompressionCommand}"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
+            <Button x:Name="btnChooseCompressionOptions" Margin="0,560,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding ChooseCompressionCommand}"  Background="#A26B8399" Style="{StaticResource RoundedButton}"/>
 
 
             <!--Folder Size, estimated size and post-compression view-->
@@ -927,7 +927,7 @@
                 </ui:ProgressBar>
 
                 <!--bar after compression-->
-                <ui:ProgressBar x:Name="uiResultsBarAfterSize" Height="32" CornerRadius="16" Width="108" Value="{Binding ActiveFolder.CompressionRatio, Converter={StaticResource DecimalToPercentageConverter}, Mode=OneWay}" RenderTransformOrigin="0.5,0.5" Foreground="#92F1AB" Background="#FF8B9FB3" VerticalAlignment="Top" Margin="210,38,0,0">
+                <ui:ProgressBar x:Name="uiResultsBarAfterSize" Height="32" CornerRadius="16" Width="108" Value="{Binding ActiveFolder.CompressionRatio, Converter={StaticResource DecimalToPercentageConverter}, Mode=OneWay}" RenderTransformOrigin="0.5,0.5" Foreground="#92F1AB" Background="#408B9FB3" VerticalAlignment="Top" Margin="210,38,0,0">
                     <ui:ProgressBar.Effect>
                         <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="6"/>
                     </ui:ProgressBar.Effect>
@@ -947,8 +947,8 @@
                     <TextBlock x:Name="uiResultsPercentSmaller" d:Text="44 %" Text="{Binding ActiveFolder.CompressionRatio, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF', Mode=OneWay}" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
                     <TextBlock Text="smaller" FontFamily="Segoe UI Semibold" FontSize="17" Foreground="#BAC2CA" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Command="{Binding UncompressFolderCommand}"  Background="#84A2BD" Style="{StaticResource RoundedButton}"/>
-                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Command="{Binding SubmitToWikiCommand}"  Background="#84A2BD" >
+                <Button x:Name="btnUncompress" Margin="-210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="uncompress" Foreground="White" Command="{Binding UncompressFolderCommand}"  Background="#4084A2BD" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnSubmitToWiki" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="submit results" Foreground="White" Command="{Binding SubmitToWikiCommand}"  Background="#4084A2BD" >
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource RoundedButton}">
                             <Style.Triggers>
@@ -963,7 +963,7 @@
 
                     </Button.Style>
                 </Button>
-                <Button x:Name="btnCompressAgain" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress again" Foreground="White" Command="{Binding ChooseCompressionCommand}" Background="#84A2BD" >
+                <Button x:Name="btnCompressAgain" Margin="210,210,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress again" Foreground="White" Command="{Binding ChooseCompressionCommand}" Background="#4084A2BD" >
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource RoundedButton}">
                             <Style.Triggers>
@@ -1085,7 +1085,7 @@
 
                 </StackPanel>
 
-                <Button x:Name="btnCompress" Margin="0,366,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding CompressFolderCommand}"  Background="#FF6B8399" Style="{StaticResource RoundedButton}"/>
+                <Button x:Name="btnCompress" Margin="0,366,0,0"  Width="138" Height="48" VerticalAlignment="Top" Content="compress" Foreground="White" Command="{Binding CompressFolderCommand}"  Background="#A26B8399" Style="{StaticResource RoundedButton}"/>
             </Grid>
 
             <!--progress area while actively compressing-->
