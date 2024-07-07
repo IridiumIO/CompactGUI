@@ -83,10 +83,7 @@ Public Class BackgroundCompactor
             isCompacting = True
 
             While Not cancellationToken.IsCancellationRequested AndAlso Not compactingTask.IsCompleted
-                Dim completedTask = Await Task.WhenAny(compactingTask, Task.Delay(1000, cancellationToken))
-                If completedTask Is compactingTask Then
-                    Exit While
-                End If
+                Await Task.WhenAny(compactingTask, Task.Delay(1000, cancellationToken))
 
                 ' Check the idle state and adjust compacting status accordingly
                 If Not isSystemIdle AndAlso Not isCompactingPaused Then
