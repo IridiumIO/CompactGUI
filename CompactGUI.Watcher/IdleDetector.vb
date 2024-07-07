@@ -10,7 +10,7 @@ Public Class IdleDetector
     Private Shared _idletimer As PeriodicTimer
     Private Shared ReadOnly _cts As New CancellationTokenSource
 
-    Public Shared Paused As Boolean = False
+    Public Shared Property Paused As Boolean = False
 
     Public Shared Property IsEnabled As Boolean = True
 
@@ -43,13 +43,13 @@ Public Class IdleDetector
 
             End While
         Catch ex As OperationCanceledException
-
+            Return
         End Try
 
     End Function
 
     Public Shared Function GetIdleTime() As Double
-        Dim lastInputInfo As LASTINPUTINFO = New LASTINPUTINFO() With {.cbSize = CType(Marshal.SizeOf(GetType(LASTINPUTINFO)), UInteger)}
+        Dim lastInputInfo As New LASTINPUTINFO() With {.cbSize = CType(Marshal.SizeOf(GetType(LASTINPUTINFO)), UInteger)}
         If Not GetLastInputInfo(lastInputInfo) Then Return 0
 
         Dim idleTicks = Environment.TickCount64 - CLng(lastInputInfo.dwTime)
@@ -59,7 +59,7 @@ Public Class IdleDetector
 
 
     <DllImport("user32.dll")>
-    Public Shared Function GetLastInputInfo(ByRef plii As LASTINPUTINFO) As Boolean
+    Private Shared Function GetLastInputInfo(ByRef plii As LASTINPUTINFO) As Boolean
     End Function
 
 

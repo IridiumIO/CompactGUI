@@ -38,7 +38,7 @@ Public Class StrippedFolderPathConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         If value Is Nothing Then Return Nothing
         Dim Str = CType(value, String)
-        Return Str.Substring(Str.LastIndexOf("\") + 1)
+        Return Str.Substring(Str.LastIndexOf("\"c) + 1)
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
@@ -82,6 +82,7 @@ Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
             Case Core.CompressionAlgorithm.XPRESS8K : Return "X8"
             Case Core.CompressionAlgorithm.XPRESS16K : Return "X16"
             Case Core.CompressionAlgorithm.LZX : Return "LZX"
+            Case Else : Return "NIL"
         End Select
     End Function
 
@@ -151,7 +152,9 @@ Public Class WikiCompressionLevelAbbreviatedConverter : Implements IValueConvert
             Case 1 : Return "X8"
             Case 2 : Return "X16"
             Case 3 : Return "LZX"
+            Case Else : Return "NIL"
         End Select
+
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack

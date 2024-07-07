@@ -32,7 +32,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
     End Sub
 
     Public Sub InsertText(text As String)
-        text = text & " "
+        text &= " "
         MyBase.AppendText(text)
         If TokenMatcher Is Nothing Then Return
         Dim token = TokenMatcher(text)

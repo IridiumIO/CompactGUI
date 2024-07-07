@@ -7,7 +7,7 @@
         Me.MainGrid.Margin = New Thickness(20 * SettingsHandler.AppSettings.WindowScalingFactor)
         Me.Width = 500 * SettingsHandler.AppSettings.WindowScalingFactor
         Me.Height = 400 * SettingsHandler.AppSettings.WindowScalingFactor
-        uiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" ") OrElse text.EndsWith(";") OrElse text.EndsWith(","), text.Substring(0, text.Length - 1).Trim(), Nothing)
+        uiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" "c) OrElse text.EndsWith(";"c) OrElse text.EndsWith(","c), text.Substring(0, text.Length - 1).Trim(), Nothing)
         PopulateTokens()
 
     End Sub
@@ -19,13 +19,13 @@
         Next
     End Sub
 
-    Private Sub uiReset_Click(sender As Object, e As RoutedEventArgs)
+    Private Sub UIReset_Click(sender As Object, e As RoutedEventArgs)
         SettingsHandler.AppSettings.NonCompressableList = New Settings().NonCompressableList
-        SettingsHandler.AppSettings.Save()
+        Settings.Save()
         PopulateTokens()
     End Sub
 
-    Private Sub uiSave_Click(sender As Object, e As RoutedEventArgs)
+    Private Sub UISave_Click(sender As Object, e As RoutedEventArgs)
         Dim items = uiTokenizedText.Document.Blocks
 
         Dim inlineI As Paragraph = items(0)
@@ -36,8 +36,8 @@
                         Return cl.Content.ToString
                     End Function).ToList
 
-        SettingsHandler.AppSettings.NonCompressableList = allObj.Where(Function(c) c.StartsWith(".") AndAlso c.Length > 1).Distinct().ToList
-        SettingsHandler.AppSettings.Save()
+        SettingsHandler.AppSettings.NonCompressableList = allObj.Where(Function(c) c.StartsWith("."c) AndAlso c.Length > 1).Distinct().ToList
+        Settings.Save()
 
         PopulateTokens()
 

@@ -7,35 +7,35 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
 
 
     Public Shared ReadOnly TextProperty As DependencyProperty = DependencyProperty.Register("Text", GetType(String), GetType(NotifyIconWrapper), New PropertyMetadata(Nothing, Sub(d, e)
-                                                                                                                                                                                   Dim notifyIcon = CType(d, NotifyIconWrapper)._notifyIcon
+                                                                                                                                                                                   Dim notifyIcon = NotifyIconWrapper.Notify_Icon
                                                                                                                                                                                    If notifyIcon Is Nothing Then Return
                                                                                                                                                                                    notifyIcon.Text = CType(e.NewValue, String)
                                                                                                                                                                                End Sub))
 
     Private Shared ReadOnly NotifyRequestProperty As DependencyProperty = DependencyProperty.Register("NotifyRequest", GetType(NotifyRequestRecord), GetType(NotifyIconWrapper), New PropertyMetadata(Nothing, Sub(d, e)
                                                                                                                                                                                                                    Dim r = CType(e.NewValue, NotifyRequestRecord)
-                                                                                                                                                                                                                   CType(d, NotifyIconWrapper)._notifyIcon?.ShowBalloonTip(r.Duration, r.Title, r.Text, r.Icon)
+                                                                                                                                                                                                                   NotifyIconWrapper.Notify_Icon?.ShowBalloonTip(r.Duration, r.Title, r.Text, r.Icon)
                                                                                                                                                                                                                End Sub))
 
     Private Shared ReadOnly OpenSelectedEvent As RoutedEvent = EventManager.RegisterRoutedEvent("OpenSelected", RoutingStrategy.Direct, GetType(RoutedEventHandler), GetType(NotifyIconWrapper))
 
     Private Shared ReadOnly ExitSelectedEvent As RoutedEvent = EventManager.RegisterRoutedEvent("ExitSelected", RoutingStrategy.Direct, GetType(RoutedEventHandler), GetType(NotifyIconWrapper))
 
-    Public Shared _notifyIcon As NotifyIcon
+    Public Shared Property Notify_Icon As NotifyIcon
 
 
     Public Sub New()
 
         If DesignerProperties.GetIsInDesignMode(Me) Then Return
-        NotifyIconWrapper._notifyIcon = New NotifyIcon With {
-            .Icon = Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName),
+        NotifyIconWrapper.Notify_Icon = New NotifyIcon With {
+            .Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath),
             .Visible = True,
             .ContextMenuStrip = CreateContextMenu(),
             .Text = "CompactGUI"}
 
-        AddHandler _notifyIcon.DoubleClick, AddressOf OpenItemOnClick
+        AddHandler Notify_Icon.DoubleClick, AddressOf OpenItemOnClick
         AddHandler Application.Current.Exit, Sub(obj, args)
-                                                 _notifyIcon.Dispose()
+                                                 Notify_Icon.Dispose()
                                              End Sub
 
     End Sub
@@ -60,8 +60,17 @@ Public Class NotifyIconWrapper : Inherits FrameworkElement : Implements IDisposa
 
 
     Public Sub Dispose() Implements IDisposable.Dispose
-        _notifyIcon.Dispose()
+        Dispose(True)
+        GC.SuppressFinalize(Me)
     End Sub
+
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If disposing AndAlso Notify_Icon IsNot Nothing Then
+            Notify_Icon.Dispose()
+            Notify_Icon = Nothing
+        End If
+    End Sub
+
 
 
     Public Custom Event OpenSelected As RoutedEventHandler

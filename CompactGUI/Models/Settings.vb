@@ -58,7 +58,7 @@ Public Class Settings : Inherits ObservableObject
     Public Property EnablePreReleaseUpdates As Boolean = True
 
     'TODO: Add local saving of per-folder skip list
-    Public Sub Save()
+    Public Shared Sub Save()
         SettingsHandler.WriteToFile()
     End Sub
 

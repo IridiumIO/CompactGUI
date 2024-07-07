@@ -21,7 +21,7 @@ Partial Public Class MainViewModel
             If Not ShowInTaskbar Then
                 Notify("Watcher is running in the background.", $"{Environment.NewLine}{Watcher.WatchedFolders.Count} folders will be monitored when your system is not in use")
 
-                NotifyIconWrapper._notifyIcon.Text = $"CompactGUI{Environment.NewLine}Monitoring {Watcher.WatchedFolders.Count} folders"
+                NotifyIconWrapper.Notify_Icon.Text = $"CompactGUI{Environment.NewLine}Monitoring {Watcher.WatchedFolders.Count} folders"
             End If
 
         End Set

@@ -96,7 +96,7 @@ Public Class Watcher : Inherits ObservableObject
         Dim registryKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
 
         If WatchedFolders.Count > 0 Then
-            registryKey.SetValue("CompactGUI", Process.GetCurrentProcess().MainModule.FileName & " -tray")
+            registryKey.SetValue("CompactGUI", Environment.ProcessPath & " -tray")
         Else
             registryKey.DeleteValue("CompactGUI", False)
         End If
@@ -179,13 +179,16 @@ Public Class Watcher : Inherits ObservableObject
     End Function
 
 
+    Private Shared ReadOnly DeserializeOptions As New JsonSerializerOptions With {.IncludeFields = True}
+    Private Shared ReadOnly SerializeOptions As New JsonSerializerOptions With {.IncludeFields = True, .WriteIndented = True}
+
     Private Shared Function DeserializeAndValidateJSON(inputjsonFile As IO.FileInfo) As (DateTime, ObservableCollection(Of WatchedFolder))
         Dim WatcherJSON = IO.File.ReadAllText(inputjsonFile.FullName)
         If WatcherJSON = "" Then WatcherJSON = "{}"
 
         Dim validatedResult As (DateTime, ObservableCollection(Of WatchedFolder))
         Try
-            validatedResult = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, New JsonSerializerOptions With {.IncludeFields = True})
+            validatedResult = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, DeserializeOptions)
 
         Catch ex As Exception
             validatedResult = (DateTime.Now, Nothing)
@@ -197,7 +200,7 @@ Public Class Watcher : Inherits ObservableObject
     End Function
     Public Sub WriteToFile()
 
-        Dim output = JsonSerializer.Serialize((LastAnalysed, WatchedFolders), New JsonSerializerOptions With {.IncludeFields = True, .WriteIndented = True})
+        Dim output = JsonSerializer.Serialize((LastAnalysed, WatchedFolders), SerializeOptions)
         IO.File.WriteAllText(WatcherJSONFile.FullName, output)
 
     End Sub
@@ -210,12 +213,12 @@ Public Class Watcher : Inherits ObservableObject
         If Not IsWatchingEnabled Then Return
 
         Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
-        If FolderMonitors.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
+        If FolderMonitors.Exists(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
 
-        If Not _parseWatchersSemaphore.CurrentCount = 0 AndAlso IsWatchingEnabled Then
+        If _parseWatchersSemaphore.CurrentCount <> 0 Then
             Await ParseWatchers()
         End If
-        If Not _parseWatchersSemaphore.CurrentCount = 0 AndAlso IsBackgroundCompactingEnabled Then
+        If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso IsBackgroundCompactingEnabled Then
             Await BackgroundCompact()
         End If
     End Sub
@@ -226,17 +229,17 @@ Public Class Watcher : Inherits ObservableObject
 
         Try
 
-            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged = True))
+            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged))
 
-            If WatchersToCheck.Count = 0 Then Return
+            If Not WatchersToCheck.Any() Then Return
 
             For Each fsWatcher In WatchersToCheck.OrderBy(Function(f) f.DisplayName)
-                Dim ret = Await Analyse(fsWatcher.Folder, ParseAll)
+                Await Analyse(fsWatcher.Folder, ParseAll)
             Next
 
             LastAnalysed = DateTime.Now
 
-            If WatchersToCheck.Count > 0 Then WriteToFile()
+            If WatchersToCheck.Any() Then WriteToFile()
         Finally
             _parseWatchersSemaphore.Release()
         End Try
@@ -269,11 +272,11 @@ Public Class Watcher : Inherits ObservableObject
     End Function
 
 
-    Public Async Function Analyse(folder As String, checkDiskModified As Boolean, Optional isManualAddition As Boolean = False) As Task(Of Boolean)
+    Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
         Debug.WriteLine("Background Analysing: " & folder)
         Dim analyser As New Core.Analyser(folder)
 
-        Dim ret = Await analyser.AnalyseFolder(Nothing)
+        Await analyser.AnalyseFolder(Nothing)
 
         Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
         watched.IsWorking = True
@@ -289,7 +292,7 @@ Public Class Watcher : Inherits ObservableObject
                                                                                    Dim finfo As New IO.FileInfo(fl.FileName)
                                                                                    Return finfo.LastWriteTime
                                                                                End Function).OrderByDescending(Function(f) f).First
-            Dim istrue = watched.LastSystemModifiedDate < lastDiskWriteTime
+
             watched.LastSystemModifiedDate = If(watched.LastSystemModifiedDate < lastDiskWriteTime, lastDiskWriteTime, watched.LastSystemModifiedDate)
 
         End If

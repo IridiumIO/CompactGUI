@@ -10,7 +10,7 @@ Class Application
     Private pipeServerCancellation As New CancellationTokenSource()
     Private pipeServerTask As Task
 
-    Private mainWindow As MainWindow
+    Private Shadows mainWindow As MainWindow
 
     Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs)
 
@@ -61,7 +61,7 @@ Class Application
                 Return
             End If
 
-            mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
+            Await mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
         End If
 
         If SettingsHandler.AppSettings.StartInSystemTray Then

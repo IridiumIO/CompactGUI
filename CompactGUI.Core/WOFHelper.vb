@@ -12,6 +12,7 @@ Public Module WOFHelper
             Case 1 : Return CompressionAlgorithm.XPRESS8K
             Case 2 : Return CompressionAlgorithm.XPRESS16K
             Case 3 : Return CompressionAlgorithm.LZX
+            Case Else : Return CompressionAlgorithm.XPRESS4K
         End Select
 
     End Function
@@ -29,23 +30,23 @@ Public Module WOFHelper
 
     End Function
 
-    Public Structure _WOF_FILE_COMPRESSION_INFO_V1
+    Public Structure WOF_FILE_COMPRESSION_INFO_V1
         Public Algorithm As CompressionAlgorithm
         Public Flags As ULong
     End Structure
 
 
     <DllImport("WofUtil.dll")>
-    Public Function WofIsExternalFile(
+    Friend Function WofIsExternalFile(
     <MarshalAs(UnmanagedType.LPWStr)> ByVal Filepath As String,
     <Out> ByRef IsExternalFile As Integer,
     <Out> ByRef Provider As UInteger,
-    <Out> ByRef Info As _WOF_FILE_COMPRESSION_INFO_V1,
+    <Out> ByRef Info As WOF_FILE_COMPRESSION_INFO_V1,
     ByRef BufferLength As UInteger) As Integer
     End Function
 
     <DllImport("WofUtil.dll")>
-    Public Function WofSetFileDataLocation(
+    Friend Function WofSetFileDataLocation(
         FileHandle As IntPtr,
         Provider As ULong,
         ExternalFileInfo As IntPtr,
@@ -54,7 +55,7 @@ Public Module WOFHelper
 
     'Most of these should be optional if MS Docs are to be believed -.-
     <DllImport("kernel32.dll")>
-    Public Function DeviceIoControl(
+    Friend Function DeviceIoControl(
         hDevice As IntPtr,
         dwIoControlCode As UInteger,
         lpInBuffer As IntPtr,

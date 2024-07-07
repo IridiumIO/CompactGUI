@@ -40,7 +40,7 @@
         </local:TokenizedTextBox>
 
         <Button x:Name="uiSave" Content="Save" Width="100" Margin="240,290,0,0" Click="uiSave_Click"></Button>
-        <Button x:Name="uiReset" Content="Reset" Width="100" Margin="350,290,0,0" Click="uiReset_Click" ></Button>
+        <Button x:Name="uiReset" Content="Reset" Width="100" Margin="350,290,0,0" Click="UIReset_Click" ></Button>
         
     </Grid>
 </Window>

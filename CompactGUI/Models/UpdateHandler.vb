@@ -85,12 +85,9 @@ Public Class SemVersion : Implements IComparable(Of SemVersion)
     End Function
 
     Public Function Friendly() As String
-        If PreRelease = "" OrElse PreRelease = Nothing OrElse PreRelease = "r" Then
-            Return $"{Major}.{Minor}.{Patch}"
-        Else
-            Return $"{Major}.{Minor}.{Patch} - {PreRelease} {PreReleaseMinor}"
-
-        End If
+        Return If(PreRelease = "" OrElse PreRelease = Nothing OrElse PreRelease = "r",
+            $"{Major}.{Minor}.{Patch}",
+            $"{Major}.{Minor}.{Patch} - {PreRelease} {PreReleaseMinor}")
 
     End Function
 

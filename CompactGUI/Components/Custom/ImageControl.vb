@@ -23,8 +23,6 @@
 
     Private Shared Sub SourcePropertyChanged(ByVal obj As DependencyObject, ByVal e As DependencyPropertyChangedEventArgs)
         Dim image As Image = TryCast(obj, Image)
-        If image IsNot Nothing Then
-            image.[RaiseEvent](New RoutedEventArgs(SourceChangedEvent))
-        End If
+        image?.[RaiseEvent](New RoutedEventArgs(SourceChangedEvent))
     End Sub
 End Class

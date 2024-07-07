@@ -12,7 +12,7 @@ Public Class Compactor : Implements IDisposable
         _excludedFileTypes = excludedFilesTypes
         _WOFCompressionLevel = cLevel
 
-        _EFInfo = New _WOF_FILE_COMPRESSION_INFO_V1 With {.Algorithm = _WOFCompressionLevel, .Flags = 0}
+        _EFInfo = New WOF_FILE_COMPRESSION_INFO_V1 With {.Algorithm = _WOFCompressionLevel, .Flags = 0}
         _EFInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(_EFInfo))
         Marshal.StructureToPtr(_EFInfo, _EFInfoPtr, True)
 
@@ -22,7 +22,7 @@ Public Class Compactor : Implements IDisposable
     Private _excludedFileTypes() As String
     Private _WOFCompressionLevel As CompressionAlgorithm
 
-    Private _EFInfo As _WOF_FILE_COMPRESSION_INFO_V1
+    Private _EFInfo As WOF_FILE_COMPRESSION_INFO_V1
     Private _EFInfoPtr As IntPtr
 
     Private _pauseSemaphore As New SemaphoreSlim(1, 2)

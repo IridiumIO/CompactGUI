@@ -543,7 +543,7 @@
                          FontFamily="Segoe UI"
                          Width="200"
                          Visibility="{Binding UpdateAvailable.Item1, Converter={StaticResource BoolToVisConverter}}"
-                         Click="uiUpdateBanner_MouseUp"
+                         Click="UIUpdateBanner_MouseUp"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
                          Foreground="White"

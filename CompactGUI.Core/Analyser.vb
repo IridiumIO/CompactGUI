@@ -116,7 +116,7 @@ Public Class Analyser
 
         Dim isextFile As Integer
         Dim prov As ULong
-        Dim info As _WOF_FILE_COMPRESSION_INFO_V1
+        Dim info As WOF_FILE_COMPRESSION_INFO_V1
         Dim buf As UInt16 = 8
 
         Dim ret = WofIsExternalFile(fInfo.FullName, isextFile, prov, info, buf)

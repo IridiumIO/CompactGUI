@@ -4,7 +4,7 @@ Imports System.Threading
 
 Public Class BackgroundCompactor
 
-    Public Property isCompactorActive As Boolean = False
+    Public Property IsCompactorActive As Boolean = False
 
     Private cancellationTokenSource As New CancellationTokenSource()
     Private isCompacting As Boolean = False
@@ -61,7 +61,7 @@ Public Class BackgroundCompactor
         Debug.WriteLine("Background Compacting Started")
         Dim cancellationToken As CancellationToken = cancellationTokenSource.Token
 
-        isCompactorActive = True
+        IsCompactorActive = True
 
         Dim currentProcess As Process = Process.GetCurrentProcess()
         currentProcess.PriorityClass = ProcessPriorityClass.Idle
@@ -82,7 +82,7 @@ Public Class BackgroundCompactor
             Dim compactingTask = BeginCompacting(folder.Folder, folder.CompressionLevel)
             isCompacting = True
 
-            While Not cancellationToken.IsCancellationRequested
+            While Not cancellationToken.IsCancellationRequested AndAlso Not compactingTask.IsCompleted
                 Dim completedTask = Await Task.WhenAny(compactingTask, Task.Delay(1000, cancellationToken))
                 If completedTask Is compactingTask Then
                     Exit While
@@ -97,36 +97,34 @@ Public Class BackgroundCompactor
             End While
 
             Dim result = Await compactingTask
-            If result Then
+            If result AndAlso folders.Contains(folder) Then
                 ' Ensure the folder is still in the original collection before updating
-                If folders.Contains(folder) Then
 
-                    Dim analyser As New Core.Analyser(folder.Folder)
+                Dim analyser As New Core.Analyser(folder.Folder)
 
-                    Dim ret = Await analyser.AnalyseFolder(Nothing)
+                Await analyser.AnalyseFolder(Nothing)
 
-                    folder.LastCheckedDate = DateTime.Now
-                    folder.LastCheckedSize = analyser.CompressedBytes
-                    folder.LastCompressedSize = analyser.CompressedBytes
-                    folder.LastSystemModifiedDate = DateTime.Now
-                    Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
-                    folder.CompressionLevel = mainCompressionLVL
+                folder.LastCheckedDate = DateTime.Now
+                folder.LastCheckedSize = analyser.CompressedBytes
+                folder.LastCompressedSize = analyser.CompressedBytes
+                folder.LastSystemModifiedDate = DateTime.Now
+                Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
+                folder.CompressionLevel = mainCompressionLVL
 
-                    folder.LastCompressedDate = DateTime.Now
+                folder.LastCompressedDate = DateTime.Now
 
-                    Dim monitor = monitorsCopy.FirstOrDefault(Function(m) m.Folder = folder.Folder)
-                    If monitor IsNot Nothing AndAlso monitors.Contains(monitor) Then
-                        monitor.HasTargetChanged = False
-                    End If
-
+                Dim monitor = monitorsCopy.Find(Function(m) m.Folder = folder.Folder)
+                If monitor IsNot Nothing AndAlso monitors.Contains(monitor) Then
+                    monitor.HasTargetChanged = False
                 End If
+
 
             End If
             folder.IsWorking = False
             Debug.WriteLine("    Finished Compacting " & folder.DisplayName)
         Next
 
-        isCompactorActive = False
+        IsCompactorActive = False
         isCompacting = False ' Ensure compacting status is reset after operation
         Debug.WriteLine("Background Compacting Finished")
         currentProcess.PriorityClass = ProcessPriorityClass.Normal

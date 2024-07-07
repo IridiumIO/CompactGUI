@@ -14,16 +14,17 @@ Public Class SettingsViewModel : Inherits ObservableObject
     End Sub
 
 
-    Private Async Sub SetEnv()
+    Private Shared Async Sub SetEnv()
         Await Task.Run(Sub() Environment.SetEnvironmentVariable("IridiumIO", IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO"), EnvironmentVariableTarget.User))
     End Sub
 
     Private Sub SettingsPropertyChanged()
-        SettingsHandler.AppSettings.Save()
+        Debug.WriteLine("Saving settings")
+        Settings.Save()
     End Sub
 
 
-    Sub AddExecutableToRegistry()
+    Private Shared Sub AddExecutableToRegistry()
         Registry.SetValue("HKEY_CURRENT_USER\software\IridiumIO\CompactGUI\", "Executable Path", IO.Directory.GetCurrentDirectory)
     End Sub
 
@@ -31,10 +32,10 @@ Public Class SettingsViewModel : Inherits ObservableObject
 
         Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "", "Compress Folder")
         Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "Icon", Environment.ProcessPath)
-        Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI\command", "", Environment.ProcessPath + " " + """%1""")
+        Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI\command", "", Environment.ProcessPath & " " & """%1""")
 
         SettingsHandler.AppSettings.IsContextIntegrated = True
-        SettingsHandler.AppSettings.Save()
+        Settings.Save()
 
     End Sub
 
@@ -45,7 +46,7 @@ Public Class SettingsViewModel : Inherits ObservableObject
         Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI")
 
         SettingsHandler.AppSettings.IsContextIntegrated = False
-        SettingsHandler.AppSettings.Save()
+        Settings.Save()
     End Sub
 
 

@@ -16,6 +16,7 @@ Public Class MainViewModel : Inherits ObservableObject
         InitialiseNotificationTray()
         Watcher = New Watcher.Watcher(GetSkipList)   'This naming isn't going to get confusing at all...
 
+
     End Sub
 
 
@@ -56,6 +57,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
         AnalyseFolderCommand.Execute(Nothing)
 
+        Await GetSteamHeader
 
     End Function
 
@@ -136,7 +138,7 @@ Public Class MainViewModel : Inherits ObservableObject
                 If SettingsHandler.AppSettings.WatchFolderForChanges Then AddFolderToWatcher()
                 Notify_Compressed(ActiveFolder.DisplayName, ActiveFolder.UncompressedBytes - ActiveFolder.CompressedBytes, ActiveFolder.CompressionRatio)
             Else
-                Dim compRatioEstimate = Await GetWikiResultsAndSetPoorlyCompressedListAsync()
+                Await GetWikiResultsAndSetPoorlyCompressedListAsync()
                 Dim mainCompressionLVL = ActiveFolder.AnalysisResults.Select(Function(f) f.CompressionMode).Max
                 Watcher.UpdateWatched(ActiveFolder.FolderName, Analyser)
                 ActiveFolder.SelectedCompressionMode = Core.WOFConvertBackCompressionLevel(mainCompressionLVL)
@@ -186,7 +188,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
         CProgress.Report((0, ""))
 
-        Dim exclist() As String = GetSkipList()
+        Dim exclist As String() = GetSkipList()
 
         CoreCompactor = New Core.Compactor(ActiveFolder.FolderName, Core.WOFConvertCompressionLevel(ActiveFolder.SelectedCompressionMode), exclist)
         Dim res = Await CoreCompactor.RunCompactAsync(CProgress)
@@ -195,7 +197,7 @@ Public Class MainViewModel : Inherits ObservableObject
         If res Then ActiveFolder.IsFreshlyCompressed = True
 
         BindableSettings.SelectedCompressionMode = ActiveFolder.SelectedCompressionMode
-        BindableSettings.Save()
+        Settings.Save()
 
         Await AnalyseAsync()
 
@@ -205,7 +207,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Function GetSkipList() As String()
-        Dim exclist() As String = {}
+        Dim exclist As String() = Array.Empty(Of String)()
         If SettingsHandler.AppSettings.SkipNonCompressable AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
             exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
         End If
@@ -230,7 +232,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
         Dim compressedFilesList = ActiveFolder.AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
         CoreUncompactor = New Core.Uncompactor
-        Dim res = Await CoreUncompactor.UncompactFiles(compressedFilesList, CProgress)
+        Await CoreUncompactor.UncompactFiles(compressedFilesList, CProgress)
 
         ActiveFolder.IsFreshlyCompressed = False
 
@@ -273,15 +275,14 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Function CanSubmitToWiki() As Boolean
-        Return ActiveFolder.SteamAppID <> 0 AndAlso ActiveFolder.IsFreshlyCompressed AndAlso SettingsHandler.AppSettings.SkipUserNonCompressable = False AndAlso SettingsHandler.AppSettings.SkipNonCompressable = False
+        Return ActiveFolder.SteamAppID <> 0 AndAlso ActiveFolder.IsFreshlyCompressed AndAlso Not SettingsHandler.AppSettings.SkipUserNonCompressable AndAlso Not SettingsHandler.AppSettings.SkipNonCompressable
         'NEED TO RE-ADD CHECK TO NOT LET YOU SUBMIT IF YOU'RE SKIPPING FILES!!!!
     End Function
 
 
     Private Async Function InsufficientPermissionHandler() As Task
 
-        Dim msg As New ContentDialog
-        msg.Title = "Permissions Error"
+        Dim msg As New ContentDialog With {.Title = "Permissions Error"}
         If IsAdministrator() Then
             msg.Content = "You are running as Administrator, however, you do not have permission to make changes to this folder - it is likely protected by the system. " & Environment.NewLine & "Analysis results are probably inaccurate and compression will likely fail or cause issues."
             msg.CloseButtonText = "OK"
@@ -336,8 +337,7 @@ Public Class MainViewModel : Inherits ObservableObject
             Return
         End If
 
-        Dim newFolder = New ActiveFolder
-        newFolder.FolderName = path
+        Dim newFolder As New ActiveFolder With {.FolderName = path}
 
         Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
 
@@ -358,7 +358,7 @@ Public Class MainViewModel : Inherits ObservableObject
            .CompressionLevel = Core.CompressionAlgorithm.NO_COMPRESSION}
 
         Watcher.AddOrUpdateWatched(newWatched)
-        Await Watcher.Analyse(path, True, True)
+        Await Watcher.Analyse(path, True)
 
     End Function
 
@@ -437,7 +437,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Property MenuCompressionAreaCommand As RelayCommand = New RelayCommand(Sub() State = If(State = UIState.FolderWatcherView, LastState, State))
     Public Property MenuWatcherAreaCommand As RelayCommand = New RelayCommand(Sub() State = UIState.FolderWatcherView)
     Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
-    Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolderAsync(f.Folder))
+    Public Property ReCompressWatchedCommand As ICommand = New AsyncRelayCommand(Of Watcher.WatchedFolder)(Function(f) SelectFolderAsync(f.Folder))
     Public Property RefreshWatchedCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf RefreshWatchedAsync)
     Public Property ManuallyAddFolderToWatcherCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
     Public Property CancelCommand As RelayCommand = New RelayCommand(Sub() CancellationTokenSource.Cancel())

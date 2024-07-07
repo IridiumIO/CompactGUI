@@ -24,18 +24,19 @@ Public Class WikiHandler
         httpClient.Dispose()
 
         SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
-        SettingsHandler.AppSettings.Save()
+        Settings.Save()
 
 
     End Function
 
+    Private Shared ReadOnly JsonDefaultSettings As New JsonSerializerOptions With {.IncludeFields = True}
     Shared Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult)))
 
-        Dim JSONFile As IO.FileInfo = New IO.FileInfo(filePath)
+        Dim JSONFile As New IO.FileInfo(filePath)
         If Not JSONFile.Exists Then Return Nothing
 
         Dim jStream As IO.FileStream = JSONFile.OpenRead
-        Dim parsedSteamWikiResults = Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(jStream, New JsonSerializerOptions With {.IncludeFields = True}).ConfigureAwait(False)
+        Dim parsedSteamWikiResults = Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(jStream, JsonDefaultSettings).ConfigureAwait(False)
         Dim workingGame = parsedSteamWikiResults.Find(Function(game) game.SteamID = appid)
 
         If workingGame Is Nothing Then Return Nothing
@@ -62,7 +63,6 @@ Public Class WikiHandler
 
         Dim wikiSubmitURI = "https://docs.google.com/forms/d/e/1FAIpQLSdQyMwHIfldsuKKdDYBE9DNEyro8bidBDInq8EafGogFu382A/formResponse?entry.1019946248=%3CCompactGUI3%3E"
 
-        Dim activeFolder = folderpath
         Dim ret = Await Task.Run(Function() GetSteamNameAndIDFromFolder(folderpath))
 
         Dim before = analysisResults.Sum(Function(res) res.UncompressedSize)
