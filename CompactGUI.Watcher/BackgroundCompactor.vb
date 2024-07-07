@@ -71,7 +71,7 @@ Public Class BackgroundCompactor
         Dim monitorsCopy As List(Of FolderMonitor) = monitors.ToList()
 
         For Each folder In foldersCopy
-
+            folder.IsWorking = True
             Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
             If folder.LastSystemModifiedDate > recentThresholdDate Then
                 Debug.WriteLine("    Skipping " & folder.DisplayName)
@@ -122,7 +122,8 @@ Public Class BackgroundCompactor
                 End If
 
             End If
-                Debug.WriteLine("    Finished Compacting " & folder.DisplayName)
+            folder.IsWorking = False
+            Debug.WriteLine("    Finished Compacting " & folder.DisplayName)
         Next
 
         isCompactorActive = False

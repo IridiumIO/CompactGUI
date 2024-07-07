@@ -533,7 +533,7 @@
                          Margin="10,2,0,0"
                          Panel.ZIndex="2" HorizontalAlignment="Left"
                          Grid.Column="0"  HoverForeground="White" InactiveForeground="#80FFFFFF" HoverBackground="#00000000" PressedBackground="#00000000" PressedForeground="#40FFFFFF"
-                Content="&#xE713;" FontSize="16" Width="20"
+                Content="&#xE713;" FontSize="16" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Width="20"
                 ContentTemplate="{x:Null}" />
 
       <ui:TitleBarButton x:Name="uiUpdateText" Panel.ZIndex="5"
@@ -707,7 +707,7 @@
                             <DropShadowEffect Opacity="0.16" Direction="-90" ShadowDepth="3" BlurRadius="6"/>
                         </Rectangle.Effect>
                     </Rectangle>
-                    <Label Content="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="21" VerticalAlignment="Center" Padding="20,0,0,0" Foreground="#FF757575"/>
+                    <Label Content="&#xE721;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="21" VerticalAlignment="Center" Padding="20,0,0,0" Foreground="#FF757575"/>
                     <TextBlock Text="{Binding ActiveFolder.DisplayName, Mode=TwoWay, TargetNullValue='select target folder', Converter={StaticResource StrippedFolderPathConverter}}" d:Text="select target folder" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="45,-2,45,0" Foreground="#FF757575" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
 
                 </Grid>
@@ -1130,7 +1130,7 @@
 
 
         <!--Folder Watcher Region-->
-        <Grid x:Name="grid"  VerticalAlignment="Bottom"  Height="560" Margin="20,0,20,60" Visibility="Collapsed" Panel.ZIndex="1010">
+        <Grid x:Name="grid"  VerticalAlignment="Bottom"  Height="575" Margin="20,0,20,45" Visibility="Collapsed" Panel.ZIndex="1010">
           
           <Grid.Resources>
             <CollectionViewSource x:Key='src' Source="{Binding Watcher.WatchedFolders}">
@@ -1143,7 +1143,7 @@
           <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
           <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,-6,35,220"/>
           <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-8,0,0"  Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE" Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-              <ui:FontIcon Glyph="&#xE9F3;" FontSize="14" />
+              <ui:FontIcon Glyph="&#xE9F3;" FontSize="14"  FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" />
           </Button>
           <ui:ProgressRing IsActive="{Binding RefreshWatchedCommand.IsRunning}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,-6,0,0" Foreground="#FFBFC7CE" />
 
@@ -1198,7 +1198,7 @@
                             <Grid >
                                 <Label>
                                     <StackPanel Orientation="Horizontal" >
-                                        <ui:ProgressRing IsActive="{Binding IsWorking}" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" Foreground="#FFBFC7CE" />
+                                        <ui:ProgressRing IsActive="True" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" Foreground="#FFBFC7CE" Margin="0,0,6,0" Padding="7" />
                                         <Viewbox Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}" 
                                                  Width="12"
                                                  Height="12"
@@ -1206,6 +1206,7 @@
                                                  HorizontalAlignment="Left">
                                             <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#FFFFFF" />
                                         </Viewbox>
+                                        <TextBlock Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}" Text="&#xED42;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Foreground="White" Width="12" Height="12" Margin="0,0,5,0"/>
                                         <TextBlock MaxWidth="280"  TextTrimming="CharacterEllipsis" Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}" FontSize="15" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,-2,0,0"/>
 
                                     </StackPanel>
@@ -1236,12 +1237,12 @@
                                         <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last modified:" Margin="0,0,27,0"/>
                                         <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
                                     </StackPanel>
-                                    <Button HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
+                                    <Button  HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
                                         <ui:FontIcon Glyph="&#xE74D;" FontSize="14"/>
                                     </Button>
 
                                     <Button HorizontalAlignment="Right" Margin="0,0,35,0" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.ReCompressWatchedCommand}" CommandParameter="{Binding}" Background="#6B8399" Foreground="White">
-                                        <ui:FontIcon Glyph="&#xE92C;" FontSize="14" RenderTransformOrigin="0.5,0.5">
+                                        <ui:FontIcon Glyph="&#xE92C;" FontSize="14" RenderTransformOrigin="0.5,0.5" >
                                             <ui:FontIcon.RenderTransform>
                                                 <TransformGroup>
                                                     <ScaleTransform/>
@@ -1267,7 +1268,7 @@
 
         <StackPanel Orientation="Horizontal" Panel.ZIndex="2" Background="#304257" VerticalAlignment="Bottom" Height="40" Opacity="0">
             <StackPanel.Effect>
-                <DropShadowEffect Direction="90" BlurRadius="9" Opacity="0.2"/>
+                <DropShadowEffect Direction="90" BlurRadius="9" Opacity="0.4"/>
             </StackPanel.Effect>
 
             <ui:AppBarButton Width="100" Command="{Binding MenuCompressionAreaCommand}" Margin="100,0,0,0" KeyboardNavigation.TabNavigation="None">
@@ -1290,7 +1291,7 @@
                        KeyboardNavigation.TabNavigation="None">
         <ui:AppBarButton.Icon>
           <ui:FontIcon Glyph="&#xE823;"
-                       Foreground="White"
+                       Foreground="White" 
                        RenderTransformOrigin="0.5,0.5">
 
           </ui:FontIcon>
@@ -1311,7 +1312,7 @@
             <Storyboard>
               <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                To="0"
-                               Duration="0:0:0.5" />
+                               Duration="0:0:0.8" />
             </Storyboard>
           </BeginStoryboard>
         </EventTrigger>
