@@ -6,13 +6,15 @@ Public Class FolderMonitor : Implements IDisposable
     Private WithEvents FSWatcher As FileSystemWatcher
     Private disposedValue As Boolean
     Public Property Folder As String
+    Public Property DisplayName As String
     Public Property HasTargetChanged As Boolean = False
     Public Property LastChangedDate As DateTime
 
     Private debounceTimer As Timer
 
-    Sub New(_folder As String)
+    Sub New(_folder As String, _displayName As String)
         Folder = _folder
+        DisplayName = _displayName
         FSWatcher = New FileSystemWatcher(Folder) With {
             .NotifyFilter = NotifyFilters.Size Or NotifyFilters.CreationTime Or NotifyFilters.LastWrite Or NotifyFilters.FileName,
             .IncludeSubdirectories = True,

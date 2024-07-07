@@ -20,7 +20,8 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Async Function CheckForUpdatesAsync() As Task
-        Dim ret = Await UpdateHandler.CheckForUpdate(True)
+
+        Dim ret = Await UpdateHandler.CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
         If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdateHandler.NewVersion.Friendly)
     End Function
 
@@ -361,6 +362,10 @@ Public Class MainViewModel : Inherits ObservableObject
 
     End Function
 
+    Public Async Function RefreshWatchedAsync() As Task
+
+        Await Task.Run(Function() Watcher.ParseWatchers(True))
+    End Function
 
     Public Enum UIState
         FreshLaunch
@@ -433,7 +438,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Property MenuWatcherAreaCommand As RelayCommand = New RelayCommand(Sub() State = UIState.FolderWatcherView)
     Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
     Public Property ReCompressWatchedCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) SelectFolderAsync(f.Folder))
-    Public Property RefreshWatchedCommand As RelayCommand = New RelayCommand(Sub() Task.Run(Function() Watcher.ParseWatchers(True)))
+    Public Property RefreshWatchedCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf RefreshWatchedAsync)
     Public Property ManuallyAddFolderToWatcherCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
     Public Property CancelCommand As RelayCommand = New RelayCommand(Sub() CancellationTokenSource.Cancel())
     Public Property PauseCompressionCommand As RelayCommand = New RelayCommand(Sub()

@@ -1142,9 +1142,10 @@
           
           <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
           <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,-6,35,220"/>
-          <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-8,0,0"  Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE">
+          <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-8,0,0"  Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE" Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
               <ui:FontIcon Glyph="&#xE9F3;" FontSize="14" />
           </Button>
+          <ui:ProgressRing IsActive="{Binding RefreshWatchedCommand.IsRunning}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,-6,0,0" Foreground="#FFBFC7CE" />
 
           <TextBlock FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,-30,0,220">    
             <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
@@ -1197,6 +1198,7 @@
                             <Grid >
                                 <Label>
                                     <StackPanel Orientation="Horizontal" >
+                                        <ui:ProgressRing IsActive="{Binding IsWorking}" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" Foreground="#FFBFC7CE" />
                                         <Viewbox Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}" 
                                                  Width="12"
                                                  Height="12"

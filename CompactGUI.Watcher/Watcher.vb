@@ -87,7 +87,7 @@ Public Class Watcher : Inherits ObservableObject
             WatchedFolders.Add(folder)
         Next
 
-        FolderMonitors.AddRange(WatchedFolders.Select(Function(w) New FolderMonitor(w.Folder) With {.LastChangedDate = w.LastSystemModifiedDate}))
+        FolderMonitors.AddRange(WatchedFolders.Select(Function(w) New FolderMonitor(w.Folder, w.DisplayName) With {.LastChangedDate = w.LastSystemModifiedDate}))
 
         UpdateRegistryBasedOnWatchedFolders()
     End Function
@@ -108,7 +108,7 @@ Public Class Watcher : Inherits ObservableObject
         Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = item.Folder)
         If existingItem Is Nothing Then
             WatchedFolders.Add(item)
-            FolderMonitors.Add(New FolderMonitor(item.Folder) With {.LastChangedDate = item.LastSystemModifiedDate})
+            FolderMonitors.Add(New FolderMonitor(item.Folder, item.DisplayName) With {.LastChangedDate = item.LastSystemModifiedDate})
         Else
             UpdateFolderProperties(existingItem, item)
         End If
@@ -230,7 +230,7 @@ Public Class Watcher : Inherits ObservableObject
 
             If WatchersToCheck.Count = 0 Then Return
 
-            For Each fsWatcher In WatchersToCheck
+            For Each fsWatcher In WatchersToCheck.OrderBy(Function(f) f.DisplayName)
                 Dim ret = Await Analyse(fsWatcher.Folder, ParseAll)
             Next
 
@@ -276,7 +276,7 @@ Public Class Watcher : Inherits ObservableObject
         Dim ret = Await analyser.AnalyseFolder(Nothing)
 
         Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
-
+        watched.IsWorking = True
         watched.LastCheckedDate = DateTime.Now
         watched.LastCheckedSize = analyser.CompressedBytes
         watched.LastUncompressedSize = analyser.UncompressedBytes
@@ -295,7 +295,7 @@ Public Class Watcher : Inherits ObservableObject
         End If
 
         FolderMonitors.First(Function(f) f.Folder = folder).HasTargetChanged = False
-
+        watched.IsWorking = False
         Return True
 
     End Function
