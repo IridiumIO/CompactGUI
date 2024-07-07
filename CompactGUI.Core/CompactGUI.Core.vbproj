@@ -3,10 +3,11 @@
   <PropertyGroup>
     <RootNamespace>CompactGUI.Core</RootNamespace>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.8.0">
+    <PackageReference Include="Fody" Version="6.8.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
