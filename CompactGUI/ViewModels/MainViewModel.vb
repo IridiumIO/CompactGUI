@@ -20,7 +20,8 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Private Async Function CheckForUpdatesAsync() As Task
-        Dim ret = Await UpdateHandler.CheckForUpdate(True)
+
+        Dim ret = Await UpdateHandler.CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
         If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdateHandler.NewVersion.Friendly)
     End Function
 
