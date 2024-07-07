@@ -77,6 +77,11 @@ Class MainWindow
         Dim border As Border = DirectCast(sender, Border)
         Dim newHeight As Double = If(border.Height = 100, 50, 100)
 
+        If currentlyExpandedBorder Is border AndAlso border.Height = 100 AndAlso TypeOf (e) IsNot MouseButtonEventArgs Then
+            ' Do nothing, keep it expanded
+            Return
+        End If
+
         If currentlyExpandedBorder IsNot Nothing AndAlso currentlyExpandedBorder IsNot border Then
             AnimateBorderHeight(currentlyExpandedBorder, 50)
         End If

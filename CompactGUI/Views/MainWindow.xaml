@@ -1192,7 +1192,7 @@
                 </ui:ListView.ItemContainerStyle>
                 <ui:ListView.ItemTemplate >
                     <DataTemplate >
-                        <Border Padding="6"  d:Height="100" Height="50" Width="480"  KeyboardNavigation.TabNavigation="None" MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
+                        <Border Padding="16,6" Margin="-10,0"  d:Height="100" Height="50" Width="500" Background="#00FFFFFF"  KeyboardNavigation.TabNavigation="None" MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
                          
 
                             <Grid >
@@ -1217,7 +1217,7 @@
                                 </Border>
 
                                 <TextBlock Width="220" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0"/>
-                                <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFF"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFBFC7CE"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
 
                                 <ui:ProgressBar Height="6" Width="108" CornerRadius="3" Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="{Binding DecayPercentage, Converter={StaticResource ProgressBarColorConverter}}" Background="#808B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" >
                                     <ui:ProgressBar.Effect>
