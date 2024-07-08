@@ -1,8 +1,5 @@
-﻿Imports MethodTimer
-Imports System.Windows.Media.Animation
-Imports ModernWpf.Controls
-Imports CompactGUI.Core
-Imports System.Windows.Threading
+﻿Imports System.Windows.Media.Animation
+
 Imports CompactGUI.MainViewModel
 
 Class MainWindow
