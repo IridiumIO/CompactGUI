@@ -5,6 +5,7 @@ Imports ModernWpf.Controls
 Imports CompactGUI.Watcher
 Imports System.IO
 Imports System.Net.Http
+Imports System.Runtime
 
 Public Class MainViewModel : Inherits ObservableObject
 
@@ -28,7 +29,7 @@ Public Class MainViewModel : Inherits ObservableObject
 
 
     Public Async Function SelectFolderAsync(Optional path As String = Nothing) As Task
-
+        path = path?.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar).Replace("/"c, "\"c)
         If path Is Nothing Then
             Dim folderSelector As New Microsoft.Win32.OpenFolderDialog
             folderSelector.ShowDialog()
@@ -41,7 +42,6 @@ Public Class MainViewModel : Inherits ObservableObject
             Await msgError.ShowAsync()
             Return
         End If
-
         Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
 
         ActiveFolder = New ActiveFolder With {

@@ -50,7 +50,7 @@ Class Application
             pipeServerTask = ProcessNextInstanceMessage()
         End If
 
-
+        Dim registryTask = UpdateRegistry()
 
         GC.Collect()
         mainWindow = New MainWindow()
@@ -60,7 +60,7 @@ Class Application
                 mainWindow.ViewModel.ClosingCommand.Execute(New ComponentModel.CancelEventArgs(True))
                 Return
             End If
-
+            mainWindow.Show()
             Await mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
         End If
 
@@ -71,40 +71,60 @@ Class Application
         End If
 
         mainWindow.Show()
-
+        Await registryTask
     End Sub
 
     ' Application-level events, such as Startup, Exit, and DispatcherUnhandledException
     ' can be handled in this file.
 
+    Private Async Function UpdateRegistry() As Task
+        If SettingsHandler.AppSettings.IsContextIntegrated Then
+            Await Task.Run(Sub()
+                               Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "", "Compress Folder")
+                               Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "Icon", Environment.ProcessPath)
+                               Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI\command", "", Environment.ProcessPath & " " & """%1""")
+                           End Sub)
+        Else
+            Await Task.Run(Sub()
+                               Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI\command")
+                               Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI")
+                           End Sub)
+        End If
+    End Function
 
     Private Async Function ProcessNextInstanceMessage() As Task
-        Using server = New NamedPipeServerStream("CompactGUI",
+        While Not pipeServerCancellation.IsCancellationRequested
+            Using server = New NamedPipeServerStream("CompactGUI",
                                                  PipeDirection.In,
-                                                 1,
+                                                 -1, ' Allow multiple client connections
                                                  PipeTransmissionMode.Byte,
                                                  PipeOptions.Asynchronous)
-            While Not pipeServerCancellation.IsCancellationRequested
                 Try
                     Await server.WaitForConnectionAsync(pipeServerCancellation.Token)
+
+                    Using reader = New StreamReader(server)
+                        Dim message = Await reader.ReadLineAsync()
+                        Await mainWindow.Dispatcher.InvokeAsync(Async Function()
+                                                                    mainWindow.Show()
+                                                                    mainWindow.WindowState = WindowState.Normal
+                                                                    mainWindow.Topmost = True
+                                                                    mainWindow.Activate()
+                                                                    mainWindow.Topmost = False
+                                                                    If message IsNot Nothing Then
+                                                                        Await mainWindow.ViewModel.SelectFolderAsync(message)
+                                                                    End If
+                                                                End Function).Task
+                    End Using
                 Catch ex As OperationCanceledException
+                    ' Handle the cancellation exception if the operation was cancelled
                     Return
+                Finally
+                    If server.IsConnected Then
+                        server.Disconnect() ' Ensure the server is ready for the next connection
+                    End If
                 End Try
-                Using reader = New StreamReader(server)
-                    Dim message = Await reader.ReadLineAsync()
-                    mainWindow.Dispatcher.Invoke(Sub()
-                                                     mainWindow.Show()
-                                                     mainWindow.WindowState = WindowState.Normal
-                                                     mainWindow.Topmost = True
-                                                     mainWindow.Activate()
-                                                     mainWindow.Topmost = False
-                                                     If message IsNot Nothing Then
-                                                         mainWindow.ViewModel.SelectFolderAsync(message)
-                                                     End If
-                                                 End Sub)
-                End Using
-            End While
-        End Using
+            End Using
+        End While
     End Function
 
     Public Async Function ShutdownPipeServer() As Task
