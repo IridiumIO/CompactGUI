@@ -30,6 +30,12 @@ Public Class SettingsViewModel : Inherits ObservableObject
             Await Settings.RemoveContextMenus
         End If
 
+        If SettingsHandler.AppSettings.IsStartMenuEnabled Then
+            Settings.CreateStartMenuShortcut()
+        Else
+            Settings.DeleteStartMenuShortcut()
+        End If
+
     End Function
 
     Private Shared Async Function SetEnv() As Task

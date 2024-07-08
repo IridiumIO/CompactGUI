@@ -9,7 +9,7 @@
              Width="400" Height="800"
              Padding="0,0,0,0"
              d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}"
-             d:DesignHeight="600" d:DesignWidth="400" Background="White"
+             d:DesignHeight="800" d:DesignWidth="400" Background="White"
              mc:Ignorable="d">
     <Grid Margin="0">
         <TextBlock Text="options"
@@ -83,7 +83,7 @@
                 <CheckBox x:Name="uiIsStartMenuEnabled"
                           Content="add to start menu"
                           IsChecked="{Binding AppSettings.IsStartMenuEnabled, Mode=TwoWay}"
-                          IsEnabled="False" Visibility="Collapsed" />
+                           />
                 <CheckBox x:Name="uiShowNotifications"
                           Content="show notification on completion"
                           IsChecked="{Binding AppSettings.ShowNotifications, Mode=TwoWay}" />

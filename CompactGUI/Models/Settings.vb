@@ -1,7 +1,8 @@
 ﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
+Imports IWshRuntimeLibrary
 
 Public Class Settings : Inherits ObservableObject
-
+    'TODO: Add local saving of per-folder skip list
     Public Property SettingsVersion As Decimal = SettingsHandler.SettingsVersion
     Public Property ResultsDBLastUpdated As DateTime = DateTime.UnixEpoch
     Public Property SelectedCompressionMode As Integer = 0
@@ -56,7 +57,7 @@ Public Class Settings : Inherits ObservableObject
     Public Property AllowMultiInstance As Boolean = False
     Public Property EnablePreReleaseUpdates As Boolean = True
 
-    Private _IsContextIntegrated As Boolean = False
+    Private _IsContextIntegrated As Boolean = True
     Public Property IsContextIntegrated As Boolean
         Get
             Return _IsContextIntegrated
@@ -70,7 +71,21 @@ Public Class Settings : Inherits ObservableObject
             End If
         End Set
     End Property
-    Public Property IsStartMenuEnabled As Boolean = False
+
+    Private _IsStartMenuEnabled As Boolean = True
+    Public Property IsStartMenuEnabled As Boolean
+        Get
+            Return _IsStartMenuEnabled
+        End Get
+        Set(value As Boolean)
+            _IsStartMenuEnabled = value
+            If _IsStartMenuEnabled Then
+                CreateStartMenuShortcut()
+            Else
+                DeleteStartMenuShortcut()
+            End If
+        End Set
+    End Property
 
 
     Public Shared Async Function AddContextMenus() As Task
@@ -102,7 +117,31 @@ Public Class Settings : Inherits ObservableObject
                        End Sub)
     End Function
 
-    'TODO: Add local saving of per-folder skip list
+
+    Public Shared Sub CreateStartMenuShortcut()
+        Dim wshShell As New WshShell()
+        Dim startMenuPath As String = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)
+        Dim shortcutPath As String = IO.Path.Combine(startMenuPath, "CompactGUI.lnk")
+
+        Dim shortcut As IWshShortcut = DirectCast(wshShell.CreateShortcut(shortcutPath), IWshShortcut)
+        With shortcut
+            .TargetPath = Environment.ProcessPath ' Path to the executable
+            .WorkingDirectory = IO.Path.GetDirectoryName(Environment.ProcessPath)
+            .IconLocation = Environment.ProcessPath ' Path to the executable or icon file
+            .Description = "CompactGUI"
+            .Save()
+        End With
+    End Sub
+
+    Public Shared Sub DeleteStartMenuShortcut()
+        Dim startMenuPath As String = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)
+        Dim shortcutPath As String = IO.Path.Combine(startMenuPath, "CompactGUI.lnk")
+
+        If IO.File.Exists(shortcutPath) Then
+            IO.File.Delete(shortcutPath)
+        End If
+    End Sub
+
     Public Shared Sub Save()
         SettingsHandler.WriteToFile()
     End Sub
