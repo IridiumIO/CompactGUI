@@ -35,7 +35,11 @@ Class MainWindow
 
     Private Sub Window_PreviewKeyDown(sender As Object, e As KeyEventArgs)
 
-        If e.Key = Key.System Then e.Handled = True
+        If e.Key = Key.System AndAlso e.SystemKey = Key.F4 Then
+            Return
+        ElseIf e.Key = Key.System Then
+            e.Handled = True
+        End If
 
     End Sub
 
