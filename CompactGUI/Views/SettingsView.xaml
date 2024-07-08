@@ -77,16 +77,9 @@
             <Separator Margin="0,5,0,5" />
             <Label Content="System Integration" FontWeight="SemiBold" />
             <StackPanel Margin="10,5,0,7">
-                <CheckBox x:Name="uiIsContextEnabled" Content="add to right-click context menu" IsChecked="{Binding AppSettings.IsContextIntegrated}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Checked">
-                            <i:InvokeCommandAction Command="{Binding AddToContextMenuCommand}" />
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="Unchecked">
-                            <i:InvokeCommandAction Command="{Binding RemoveFromContextMenuCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
+                <CheckBox x:Name="uiIsContextEnabled"
+                          Content="add to right-click context menu"
+                          IsChecked="{Binding AppSettings.IsContextIntegrated, Mode=TwoWay}" />
                 <CheckBox x:Name="uiIsStartMenuEnabled"
                           Content="add to start menu"
                           IsChecked="{Binding AppSettings.IsStartMenuEnabled, Mode=TwoWay}"

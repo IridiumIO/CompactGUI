@@ -1,10 +1,8 @@
 ﻿Public Class SettingsView
 
-    Public Property SettingsVM As New SettingsViewModel
-
     Sub New()
 
-        Me.DataContext = SettingsVM
+        Me.DataContext = SettingsViewModel.Instance
 
         InitializeComponent()
 

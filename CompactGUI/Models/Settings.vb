@@ -9,8 +9,7 @@ Public Class Settings : Inherits ObservableObject
     Public Property SkipUserNonCompressable As Boolean = False
     Public Property WatchFolderForChanges As Boolean = False
     Public Property NonCompressableList As New List(Of String) From {".dl_", ".gif", ".jpg", ".jpeg", ".png", ".wmf", ".mkv", ".mp4", ".wmv", ".avi", ".bik", ".bk2", ".flv", ".ogg", ".mpg", ".m2v", ".m4v", ".vob", ".mp3", ".aac", ".wma", ".flac", ".zip", ".xap", ".rar", ".7z", ".cab", ".lzx", ".docx", ".xlsx", ".pptx", ".vssx", ".vstx", ".onepkg", ".tar", ".gz", ".dmg", ".bz2", ".tgz", ".lz", ".xz", ".txz"}
-    Public Property IsContextIntegrated As Boolean = False
-    Public Property IsStartMenuEnabled As Boolean = False
+
     Public Property SkipUserFileTypesLevel As Integer = 0
     Public Property ShowNotifications As Boolean = False
     Public Property StartInSystemTray As Boolean = False
@@ -56,6 +55,38 @@ Public Class Settings : Inherits ObservableObject
 
     Public Property AllowMultiInstance As Boolean = False
     Public Property EnablePreReleaseUpdates As Boolean = True
+
+    Private _IsContextIntegrated As Boolean = False
+    Public Property IsContextIntegrated As Boolean
+        Get
+            Return _IsContextIntegrated
+        End Get
+        Set(value As Boolean)
+            _IsContextIntegrated = value
+            If _IsContextIntegrated Then
+                AddContextMenus()
+            Else
+                RemoveContextMenus()
+            End If
+        End Set
+    End Property
+    Public Property IsStartMenuEnabled As Boolean = False
+
+
+    Public Shared Async Function AddContextMenus() As Task
+        Await Task.Run(Sub()
+                           Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "", "Compress Folder")
+                           Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "Icon", Environment.ProcessPath)
+                           Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI\command", "", Environment.ProcessPath & " " & """%1""")
+                       End Sub)
+    End Function
+
+    Public Shared Async Function RemoveContextMenus() As Task
+        Await Task.Run(Sub()
+                           Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI\command")
+                           Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI")
+                       End Sub)
+    End Function
 
     'TODO: Add local saving of per-folder skip list
     Public Shared Sub Save()

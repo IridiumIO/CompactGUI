@@ -50,7 +50,8 @@ Class Application
             pipeServerTask = ProcessNextInstanceMessage()
         End If
 
-        Dim registryTask = UpdateRegistry()
+
+        Dim registryTask = SettingsViewModel.InitializeEnvironment
 
         GC.Collect()
         mainWindow = New MainWindow()
@@ -74,23 +75,6 @@ Class Application
         Await registryTask
     End Sub
 
-    ' Application-level events, such as Startup, Exit, and DispatcherUnhandledException
-    ' can be handled in this file.
-
-    Private Async Function UpdateRegistry() As Task
-        If SettingsHandler.AppSettings.IsContextIntegrated Then
-            Await Task.Run(Sub()
-                               Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "", "Compress Folder")
-                               Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "Icon", Environment.ProcessPath)
-                               Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI\command", "", Environment.ProcessPath & " " & """%1""")
-                           End Sub)
-        Else
-            Await Task.Run(Sub()
-                               Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI\command")
-                               Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI")
-                           End Sub)
-        End If
-    End Function
 
     Private Async Function ProcessNextInstanceMessage() As Task
         While Not pipeServerCancellation.IsCancellationRequested

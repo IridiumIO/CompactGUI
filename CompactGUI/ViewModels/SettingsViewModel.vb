@@ -4,19 +4,37 @@ Imports Microsoft.Win32
 
 Public Class SettingsViewModel : Inherits ObservableObject
 
+    Private Shared _instance As SettingsViewModel
+    Public Shared ReadOnly Property Instance As SettingsViewModel
+        Get
+            If _instance Is Nothing Then _instance = New SettingsViewModel()
+            Return _instance
+        End Get
+    End Property
 
     Public Property AppSettings As Settings = SettingsHandler.AppSettings
 
-    Public Sub New()
-        AddExecutableToRegistry()
+    Protected Sub New()
+
         AddHandler AppSettings.PropertyChanged, AddressOf SettingsPropertyChanged
-        SetEnv()
+
     End Sub
 
+    Public Shared Async Function InitializeEnvironment() As Task
 
-    Private Shared Async Sub SetEnv()
+        Await AddExecutableToRegistry()
+        Await SetEnv()
+        If SettingsHandler.AppSettings.IsContextIntegrated Then
+            Await Settings.AddContextMenus
+        Else
+            Await Settings.RemoveContextMenus
+        End If
+
+    End Function
+
+    Private Shared Async Function SetEnv() As Task
         Await Task.Run(Sub() Environment.SetEnvironmentVariable("IridiumIO", IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO"), EnvironmentVariableTarget.User))
-    End Sub
+    End Function
 
     Private Sub SettingsPropertyChanged()
         Debug.WriteLine("Saving settings")
@@ -24,30 +42,9 @@ Public Class SettingsViewModel : Inherits ObservableObject
     End Sub
 
 
-    Private Shared Sub AddExecutableToRegistry()
-        Registry.SetValue("HKEY_CURRENT_USER\software\IridiumIO\CompactGUI\", "Executable Path", IO.Directory.GetCurrentDirectory)
-    End Sub
-
-    Private Sub AddToContextMenu()
-
-        Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "", "Compress Folder")
-        Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "Icon", Environment.ProcessPath)
-        Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI\command", "", Environment.ProcessPath & " " & """%1""")
-
-        SettingsHandler.AppSettings.IsContextIntegrated = True
-        Settings.Save()
-
-    End Sub
-
-
-    Private Sub RemoveFromContextMenu()
-        Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI\command")
-
-        Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI")
-
-        SettingsHandler.AppSettings.IsContextIntegrated = False
-        Settings.Save()
-    End Sub
+    Private Shared Async Function AddExecutableToRegistry() As Task
+        Await Task.Run(Sub() Registry.SetValue("HKEY_CURRENT_USER\software\IridiumIO\CompactGUI\", "Executable Path", IO.Directory.GetCurrentDirectory))
+    End Function
 
 
     Public Property EditSkipListCommand As ICommand = New RelayCommand(Sub()
@@ -55,8 +52,7 @@ Public Class SettingsViewModel : Inherits ObservableObject
                                                                            fl.ShowDialog()
                                                                        End Sub)
 
-    Public Property AddToContextMenuCommand As ICommand = New RelayCommand(AddressOf AddToContextMenu)
-    Public Property RemoveFromContextMenuCommand As ICommand = New RelayCommand(AddressOf RemoveFromContextMenu)
+
     Public Property UIScalingSliderCommand As ICommand = New RelayCommand(Of Double)(Sub(val) SettingsHandler.AppSettings.WindowScalingFactor = val)
     Public Property DisableAutoCompressionCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundAutoCompression = False)
     Public Property EnableBackgroundWatcherCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundWatcher = True)
