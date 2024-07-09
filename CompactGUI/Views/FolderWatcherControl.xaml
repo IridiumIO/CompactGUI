@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="FolderWatcherControl" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
+             xmlns:local="clr-namespace:CompactGUI" xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" xmlns:ui="http://schemas.modernwpf.com/2019" d:DataContext="{d:DesignInstance Type=local:MainViewModel}" 
+             mc:Ignorable="d" Panel.ZIndex="1010" Padding="0" Margin="0"
+             d:DesignHeight="800" d:DesignWidth="500" >
+    <Grid VerticalAlignment="Bottom" Height="575"  Margin="20,0,20,45" >
+
+        <Grid.Resources>
+            <CollectionViewSource x:Key='src' Source="{Binding Watcher.WatchedFolders}">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="DisplayName" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+            <CollectionViewSource x:Key="dtd" d:Source="{d:SampleData ItemCount=3}" />
+        </Grid.Resources>
+
+        <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
+        <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,-6,35,0" d:Text="last analysed just now"/>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-8,0,0"  Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE" Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+            <ui:FontIcon Glyph="&#xE9F3;" FontSize="14"  FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" />
+        </Button>
+        <ui:ProgressRing IsActive="{Binding RefreshWatchedCommand.IsRunning}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,-6,0,0" Foreground="#FFBFC7CE" />
+
+        <TextBlock FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,-30,0,220">    
+            <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" d:Text="51.8GB" />
+            <Run Text="saved" />
+        </TextBlock>
+
+        <Button VerticalAlignment="Top" Content="Add To Watchlist" Background="#A26B8399" Foreground="White" HorizontalAlignment="Right" Margin="0,-26,10,0" Command="{Binding ManuallyAddFolderToWatcherCommand}" />
+
+        <ui:ListView x:Name="uiWatcherListView" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="-20,60,-20,0" Padding="10,0,10,0" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{Binding Source = {StaticResource dtd}}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="False">
+            <ui:ListView.Background>
+                <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#30000000" Offset="0.8"/>
+                    <GradientStop Color="#10000000" Offset="0.95"/>
+                    <GradientStop Color="#00000000" Offset="0.99"/>
+
+                </LinearGradientBrush>
+            </ui:ListView.Background>
+            <ui:ListView.ItemContainerStyle>
+                <Style TargetType="ui:ListViewItem">
+                    <Setter Property="Margin" Value="0,0,0,10"/>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ui:ListViewItem}">
+                                <Border Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter Content="{TemplateBinding Content}" d:Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#20000000"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+
+                </Style>
+
+            </ui:ListView.ItemContainerStyle>
+            <ui:ListView.ItemTemplate >
+                <DataTemplate >
+                    <Border Padding="16,6" Margin="-10,0"  d:Height="100" Height="50" Width="500" Background="#00FFFFFF"  KeyboardNavigation.TabNavigation="None" MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
+
+
+                        <Grid >
+                            <Label>
+                                <StackPanel Orientation="Horizontal" >
+                                    <ui:ProgressRing IsActive="True" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" Foreground="#FFBFC7CE" Margin="0,0,6,0" Padding="7" />
+                                    <Viewbox Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}" 
+                                                 Width="12"
+                                                 Height="12"
+                                                 Margin="0,0,5,0"
+                                                 HorizontalAlignment="Left">
+                                        <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#FFFFFF" />
+                                    </Viewbox>
+                                    <TextBlock Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}" Text="&#xED42;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Foreground="White" Width="12" Height="12" Margin="0,0,5,0"/>
+                                    <TextBlock MaxWidth="280"  TextTrimming="CharacterEllipsis" Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}" FontSize="15" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,-2,0,0"/>
+
+                                </StackPanel>
+
+                            </Label>
+                            <Border CornerRadius="5" Height="15" Width="40" Background="#8373808C" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,22,0,0">
+                                <TextBlock Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" d:Text="fds" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFF" FontWeight="SemiBold" />
+                            </Border>
+
+                            <TextBlock Width="220" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0"/>
+                            <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFBFC7CE"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
+
+                            <ui:ProgressBar Height="6" Width="108" CornerRadius="3" Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="{Binding DecayPercentage, Converter={StaticResource ProgressBarColorConverter}}" Background="#808B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" >
+                                <ui:ProgressBar.Effect>
+                                    <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="4"/>
+                                </ui:ProgressBar.Effect>
+
+                            </ui:ProgressBar>
+
+                            <Separator Background="#60FFFFFF" VerticalAlignment="Top" Margin="0,42,30,0"/>
+
+                            <Grid Margin="0,45,30,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last compressed:" Margin="0,0,10,0"/>
+                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last modified:" Margin="0,0,27,0"/>
+                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
+                                </StackPanel>
+                                <Button  HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
+                                    <ui:FontIcon Glyph="&#xE74D;" FontSize="14"/>
+                                </Button>
+
+                                <Button HorizontalAlignment="Right" Margin="0,0,35,0" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.ReCompressWatchedCommand}" CommandParameter="{Binding}" Background="#6B8399" Foreground="White">
+                                    <ui:FontIcon Glyph="&#xE92C;" FontSize="14" RenderTransformOrigin="0.5,0.5" >
+                                        <ui:FontIcon.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="90"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </ui:FontIcon.RenderTransform>
+                                    </ui:FontIcon>
+                                </Button>
+                            </Grid>
+
+
+                        </Grid>
+
+                    </Border>
+                </DataTemplate>
+            </ui:ListView.ItemTemplate>
+
+        </ui:ListView>
+
+    </Grid>
+</UserControl>
