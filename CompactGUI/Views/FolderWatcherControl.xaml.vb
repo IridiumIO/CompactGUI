@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Media.Animation
 
-Public Class FolderWatcherControl
+Public Class FolderWatcherControl : Inherits UserControl
     Private currentlyExpandedBorder As Border = Nothing
 
 

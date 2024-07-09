@@ -571,6 +571,9 @@
 
     <!--Main information section / results of analysis-->
         <Grid x:Name="mainSection" VerticalAlignment="Top" Panel.ZIndex="1">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="15"  Opacity="1" ShadowDepth="0" Direction="-90"/>
+            </Grid.Effect>
             <Grid.Background>
                 <LinearGradientBrush MappingMode="RelativeToBoundingBox" >
                     <GradientStop Color="#304257" Offset="0"/>
@@ -578,7 +581,8 @@
                 </LinearGradientBrush>
             </Grid.Background>
 
-            <local:ImageControl x:Name="steamBG" Height="{Binding Height, ElementName=mainSection}" Stretch="UniformToFill" Opacity="1" Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True" Source="{Binding SteamBGImage}">
+            <Grid ClipToBounds="True">
+                <local:ImageControl x:Name="steamBG" Height="{Binding ActualHeight, ElementName=mainSection}" Stretch="UniformToFill" Opacity="1" Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True" Source="{Binding SteamBGImage}">
 
                 <local:ImageControl.RenderTransform>
                     <TransformGroup>
@@ -630,6 +634,8 @@
 
                 
             </local:ImageControl>
+            </Grid>
+            
 
             <!--Title-->
             <Label x:Name="label" FontFamily="Segoe UI" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0,100,0,0" RenderOptions.ClearTypeHint="Enabled">
