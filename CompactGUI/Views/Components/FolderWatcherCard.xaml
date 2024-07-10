@@ -31,7 +31,7 @@
 
         <Button VerticalAlignment="Top" Content="Add To Watchlist" Background="#A26B8399" Foreground="White" HorizontalAlignment="Right" Margin="0,-26,10,0" Command="{Binding ManuallyAddFolderToWatcherCommand}" />
 
-        <ui:ListView x:Name="uiWatcherListView" ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="-20,60,-20,0" Padding="10,0,10,0" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{Binding Source = {StaticResource dtd}}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="False">
+        <ui:ListView x:Name="uiWatcherListView"  Margin="-20,60,-20,0" Padding="10,0,10,0" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{Binding Source = {StaticResource dtd}}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="True" >
             <ui:ListView.Background>
                 <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
                     <GradientStop Color="#00000000" Offset="0"/>
@@ -93,9 +93,15 @@
                                 <TextBlock Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" d:Text="fds" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFF" FontWeight="SemiBold" />
                             </Border>
 
-                            <TextBlock Width="220" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0"/>
-                            <TextBlock Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFBFC7CE"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right"/>
-
+                            <TextBlock Width="220" Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0">
+                                <TextBlock.ToolTip >
+                                    <ToolTip Background="#304257" Placement="RelativePoint" >
+                                        <TextBlock Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <TextBlock x:Name="DecayedText" Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFBFC7CE"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right" d:Text="7% decayed"/>
+                            <TextBlock x:Name="SavedText" Visibility="Collapsed" Text="{Binding SavedSpace, StringFormat={}{0} saved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}, ConverterParameter=0}" FontSize="12" Foreground="#FFBFC7CE"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right" d:Text="39GB saved"/>
                             <ui:ProgressBar Height="6" Width="108" CornerRadius="3" Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="{Binding DecayPercentage, Converter={StaticResource ProgressBarColorConverter}}" Background="#808B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" >
                                 <ui:ProgressBar.Effect>
                                     <DropShadowEffect Direction="-135" Opacity="0.2" ShadowDepth="3" BlurRadius="4"/>
@@ -114,6 +120,9 @@
                                     <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last modified:" Margin="0,0,27,0"/>
                                     <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
                                 </StackPanel>
+
+                               
+
                                 <Button  HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
                                     <ui:FontIcon Glyph="&#xE74D;" FontSize="14"/>
                                 </Button>

@@ -24,6 +24,12 @@ Public Class WatchedFolder : Inherits ObservableObject
         End Get
     End Property
 
+    Public ReadOnly Property SavedSpace As Long
+        Get
+            Return LastUncompressedSize - LastCompressedSize
+        End Get
+    End Property
+
     Public Sub RefreshProperties()
         For Each prop In Me.GetType.GetProperties
             Me.OnPropertyChanged(prop.Name)

@@ -23,7 +23,17 @@ Public Class BytesToReadableConverter : Implements IValueConverter
         If value = 0 Then Return "0" & suf(0)
         Dim bytes As Long = Math.Abs(value)
         Dim place As Integer = CInt(Math.Floor(Math.Log(bytes, 1024)))
-        Dim num As Double = Math.Round(bytes / Math.Pow(1024, place), 1)
+
+        Dim roundingPrecision As Integer = 1
+        If parameter IsNot Nothing AndAlso Integer.TryParse(parameter.ToString(), roundingPrecision) Then
+            roundingPrecision = Math.Max(0, roundingPrecision)
+            'We want to round to 1 decimal place if the value is in the GB range or higher
+            If Array.IndexOf(suf, suf(place)) > 2 AndAlso roundingPrecision = 0 Then
+                roundingPrecision = 1
+            End If
+        End If
+
+        Dim num As Double = Math.Round(bytes / Math.Pow(1024, place), roundingPrecision)
 
         Return (Math.Sign(value) * num).ToString() & suf(place)
     End Function
@@ -39,6 +49,20 @@ Public Class StrippedFolderPathConverter : Implements IValueConverter
         If value Is Nothing Then Return Nothing
         Dim Str = CType(value, String)
         Return Str.Substring(Str.LastIndexOf("\"c) + 1)
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+
+Public Class TokenisedFolderPathConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Then Return Nothing
+        Dim Str = CType(value, String)
+        Dim formattedString = Str.Replace("\"c, " 🢒 ")
+        Return formattedString
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
