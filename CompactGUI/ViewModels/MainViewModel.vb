@@ -62,26 +62,30 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
+
     Private Async Function GetSteamHeaderAsync() As Task
 
-        Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{ActiveFolder.SteamAppID}/page_bg_generated_v6b.jpg"
+        If ActiveFolder.SteamAppID = 0 Then Return
 
+        Dim EnvironmentPath = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
+        Dim imagePath = Path.Combine(EnvironmentPath, "CompactGUI", "SteamCache", $"{ActiveFolder.SteamAppID}.jpg")
+
+        If Not Path.Exists(Path.GetDirectoryName(imagePath)) Then Directory.CreateDirectory(Path.GetDirectoryName(imagePath))
+
+        If File.Exists(imagePath) Then
+            SteamBGImage = Helper.LoadImageFromDisk(imagePath)
+            Debug.WriteLine("Loaded Steam header image from disk")
+            Return
+        End If
+
+        Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{ActiveFolder.SteamAppID}/page_bg_generated_v6b.jpg"
         If SteamBGImage?.UriSource IsNot Nothing AndAlso SteamBGImage.UriSource.ToString() = url Then Return
 
         Try
             Using client As New HttpClient()
-
                 Dim imageData As Byte() = Await client.GetByteArrayAsync(url)
-
-                Dim bImg As New BitmapImage()
-                Using ms As New MemoryStream(imageData)
-                    bImg.BeginInit()
-                    bImg.CacheOption = BitmapCacheOption.OnLoad
-                    bImg.StreamSource = ms
-                    bImg.EndInit()
-                End Using
-
-                SteamBGImage = bImg
+                SteamBGImage = LoadImageFromMemoryStream(imageData)
+                Await File.WriteAllBytesAsync(imagePath, imageData)
             End Using
         Catch ex As Exception
             Debug.WriteLine($"Failed to load Steam header image: {ex.Message}")

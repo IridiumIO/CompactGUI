@@ -51,4 +51,20 @@ Module Helper
     End Function
 
 
+    Function LoadImageFromDisk(imagePath As String) As BitmapImage
+        Dim bImg As New BitmapImage(New Uri(imagePath))
+        Return bImg
+    End Function
+
+    Function LoadImageFromMemoryStream(imageData As Byte()) As BitmapImage
+        Dim bImg As New BitmapImage()
+        Using ms As New MemoryStream(imageData)
+            bImg.BeginInit()
+            bImg.CacheOption = BitmapCacheOption.OnLoad
+            bImg.StreamSource = ms
+            bImg.EndInit()
+        End Using
+        Return bImg
+    End Function
+
 End Module
