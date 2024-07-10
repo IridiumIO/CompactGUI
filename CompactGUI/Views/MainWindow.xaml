@@ -1136,63 +1136,12 @@
 
 
         <!--Folder Watcher Region-->
-        <local:FolderWatcherControl x:Name="grid"  Visibility="Collapsed" />
+        <local:FolderWatcherCard x:Name="grid"  Visibility="Collapsed" />
 
 
-        <StackPanel Orientation="Horizontal" Panel.ZIndex="2" Background="#304257" VerticalAlignment="Bottom" Height="40" Opacity="0">
-            <StackPanel.Effect>
-                <DropShadowEffect Direction="90" BlurRadius="9" Opacity="0.4"/>
-            </StackPanel.Effect>
+        <!-- Navigation Bar -->
+        <local:NavigationBar Panel.ZIndex="20"/>
 
-            <ui:AppBarButton Width="100" Command="{Binding MenuCompressionAreaCommand}" Margin="100,0,0,0" KeyboardNavigation.TabNavigation="None">
-                <ui:AppBarButton.Icon>
-                    <ui:FontIcon Glyph="&#xE92C;" Foreground="White" RenderTransformOrigin="0.5,0.5" >
-                        <ui:FontIcon.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </ui:FontIcon.RenderTransform>
-                    </ui:FontIcon>
-                </ui:AppBarButton.Icon>
-            </ui:AppBarButton>
-      <ui:AppBarButton Width="100"
-                       Command="{Binding MenuWatcherAreaCommand}"
-                       Margin="105,0,0,0"
-                       KeyboardNavigation.TabNavigation="None">
-        <ui:AppBarButton.Icon>
-          <ui:FontIcon Glyph="&#xE823;"
-                       Foreground="White" 
-                       RenderTransformOrigin="0.5,0.5">
-
-          </ui:FontIcon>
-        </ui:AppBarButton.Icon>
-      </ui:AppBarButton>
-      <StackPanel.Triggers>
-        <EventTrigger RoutedEvent="MouseEnter">
-          <BeginStoryboard>
-            <Storyboard>
-              <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                               To="1"
-                               Duration="0:0:0.1" />
-            </Storyboard>
-          </BeginStoryboard>
-        </EventTrigger>
-        <EventTrigger RoutedEvent="MouseLeave">
-          <BeginStoryboard>
-            <Storyboard>
-              <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                               To="0"
-                               Duration="0:0:0.8" />
-            </Storyboard>
-          </BeginStoryboard>
-        </EventTrigger>
-      </StackPanel.Triggers>
-
-    </StackPanel>
-        
         <!--Version String in Bottom Right-->
         <TextBlock Text="{Binding Version, StringFormat=v {0}}" Foreground="#40FFFFFF" FontFamily="Segoe UI SemiBold" VerticalAlignment="Bottom" FontSize="14" Panel.ZIndex="1" IsHitTestVisible="False" HorizontalAlignment="Right" Margin="0,0,15,10"/>
 
