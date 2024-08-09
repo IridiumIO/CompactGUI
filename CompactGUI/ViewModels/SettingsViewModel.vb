@@ -43,7 +43,6 @@ Public Class SettingsViewModel : Inherits ObservableObject
     End Function
 
     Private Sub SettingsPropertyChanged()
-        Debug.WriteLine("Saving settings")
         Settings.Save()
     End Sub
 

@@ -30,7 +30,7 @@ Public Class BackgroundCompactor
     End Sub
 
     Private Sub OnSystemIdle(sender As Object, e As EventArgs)
-        Debug.WriteLine("  SYSTEM IDLE!")
+        If Not isSystemIdle Then Debug.WriteLine("SYSTEM IDLE!")
         isSystemIdle = True
         ' Attempt to resume only if compacting was paused due to system activity
         If isCompactingPaused AndAlso Not isCompacting Then
@@ -39,7 +39,7 @@ Public Class BackgroundCompactor
     End Sub
 
     Private Sub OnSystemNotIdle(sender As Object, e As EventArgs)
-        Debug.WriteLine("  SYSTEM NOT IDLE!")
+        If isSystemIdle Then Debug.WriteLine("SYSTEM NOT IDLE!")
         isSystemIdle = False
         ' Attempt to pause only if compacting is currently active and not already paused
         If isCompacting AndAlso Not isCompactingPaused Then

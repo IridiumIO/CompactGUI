@@ -47,10 +47,6 @@ Public Class Analyser
             Return Nothing
         End Try
 
-        Debug.WriteLine(CompressedBytes)
-        Debug.WriteLine(UncompressedBytes)
-
-
         ContainsCompressedFiles = compressedFilesCount > 0
         FileCompressionDetailsList = fileDetails.ToList
         Return ContainsCompressedFiles
