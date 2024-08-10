@@ -34,14 +34,16 @@ Partial Public Class MainViewModel
     Private Sub InitialiseNotificationTray()
         ClosingCommand = New RelayCommand(Of CancelEventArgs)(AddressOf Closing)
         NotifyCommand = New RelayCommand(Sub() Notify("Hello", "World"))
-        NotifyIconOpenCommand = New RelayCommand(Sub()
-                                                     Application.Current.MainWindow.Show()
-                                                     WindowState = WindowState.Normal
-                                                     Application.Current.MainWindow.Topmost = True
-                                                     Application.Current.MainWindow.Activate()
-                                                     Application.Current.MainWindow.Topmost = False
-                                                 End Sub)
+        NotifyIconOpenCommand = New RelayCommand(AddressOf NotifyOpen)
         NotifyIconExitCommand = New RelayCommand(AddressOf NotifyExit)
+    End Sub
+
+    Private Sub NotifyOpen()
+        Application.Current.MainWindow.Show()
+        WindowState = WindowState.Normal
+        Application.Current.MainWindow.Topmost = True
+        Application.Current.MainWindow.Activate()
+        Application.Current.MainWindow.Topmost = False
     End Sub
 
     Private Sub NotifyExit()

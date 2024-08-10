@@ -26,15 +26,16 @@ Class Application
         End If
 
         mainWindow = New MainWindow()
-        If e.Args.Length = 1 AndAlso e.Args(0).ToString = "-tray" Then
-            mainWindow.ViewModel.ClosingCommand.Execute(New ComponentModel.CancelEventArgs(True))
-        ElseIf e.Args.Length = 1 Then
-            Await mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
-        End If
+        Dim shouldMinimizeToTray As Boolean = (e.Args.Length = 1 AndAlso e.Args(0).ToString = "-tray") OrElse
+                                          (SettingsHandler.AppSettings.StartInSystemTray AndAlso e.Args.Length = 0)
 
-        If SettingsHandler.AppSettings.StartInSystemTray AndAlso e.Args.Length = 0 Then
+        If shouldMinimizeToTray Then
+            mainWindow.Show()
             mainWindow.ViewModel.ClosingCommand.Execute(New ComponentModel.CancelEventArgs(True))
         Else
+            If e.Args.Length = 1 Then
+                Await mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
+            End If
             mainWindow.Show()
         End If
 
