@@ -18,7 +18,7 @@ Public Class Analyser
 
     Public Async Function AnalyseFolder(cancellationToken As CancellationToken) As Task(Of Boolean)
         Dim allFiles = Await Task.Run(Function() Directory.EnumerateFiles(FolderName, "*", New EnumerationOptions() With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}).AsShortPathNames, cancellationToken).ConfigureAwait(False)
-        Dim fileDetails As New Concurrent.ConcurrentBag(Of AnalysedFileDetails)
+        Dim fileDetails As New List(Of AnalysedFileDetails)
         Dim compressedFilesCount As Integer = 0
 
         ' Use local variables to reduce contention
@@ -27,17 +27,19 @@ Public Class Analyser
 
         Try
             Parallel.ForEach(allFiles, New ParallelOptions With {.CancellationToken = cancellationToken},
-                         Sub(file)
-                             Dim details = AnalyseFile(file)
-                             If details IsNot Nothing Then
-                                 fileDetails.Add(details)
-                                 If details.CompressionMode <> CompressionAlgorithm.NO_COMPRESSION Then
-                                     Interlocked.Increment(compressedFilesCount)
-                                 End If
-                                 Interlocked.Add(localCompressedBytes, details.CompressedSize)
-                                 Interlocked.Add(localUncompressedBytes, details.UncompressedSize)
-                             End If
-                         End Sub)
+                            Sub(file)
+                                Dim details = AnalyseFile(file)
+                                If details IsNot Nothing Then
+                                    SyncLock fileDetails
+                                        fileDetails.Add(details)
+                                    End SyncLock
+                                    If details.CompressionMode <> CompressionAlgorithm.NO_COMPRESSION Then
+                                        Interlocked.Increment(compressedFilesCount)
+                                    End If
+                                    Interlocked.Add(localCompressedBytes, details.CompressedSize)
+                                    Interlocked.Add(localUncompressedBytes, details.UncompressedSize)
+                                End If
+                            End Sub)
 
             ' Update the shared state after the parallel loop to minimize contention
             CompressedBytes = localCompressedBytes
@@ -48,7 +50,7 @@ Public Class Analyser
         End Try
 
         ContainsCompressedFiles = compressedFilesCount > 0
-        FileCompressionDetailsList = fileDetails.ToList
+        FileCompressionDetailsList = fileDetails
         Return ContainsCompressedFiles
     End Function
 
