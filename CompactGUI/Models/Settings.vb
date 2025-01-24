@@ -15,6 +15,9 @@ Public Class Settings : Inherits ObservableObject
     Public Property ShowNotifications As Boolean = False
     Public Property StartInSystemTray As Boolean = False
 
+    Public Property MaxCompressionThreads As Integer = 0
+    Public Property LockHDDsToOneThread As Boolean = True
+
     Private _EnableBackgroundWatcher As Boolean = True
     Public Property EnableBackgroundWatcher As Boolean
         Get

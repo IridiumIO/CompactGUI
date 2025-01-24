@@ -2,6 +2,7 @@
 Imports System.Collections.ObjectModel
 
 Imports Microsoft.Toolkit.Mvvm.ComponentModel
+Imports DiskDetector
 
 Public Class ActiveFolder : Inherits ObservableObject
 
@@ -18,6 +19,14 @@ Public Class ActiveFolder : Inherits ObservableObject
     Public Property WikiCompressionResults As New ObservableCollection(Of CompressionResult)
 
     Public Property IsFreshlyCompressed As Boolean = False
+
+    Public ReadOnly Property DiskType As DiskDetector.Models.HardwareType
+        Get
+            If FolderName Is Nothing Then Return Models.HardwareType.Unknown
+            Return DiskDetector.Detector.DetectDrive(FolderName.First, DiskDetector.Models.QueryType.RotationRate).HardwareType
+
+        End Get
+    End Property
 
     Public ReadOnly Property CompressionRatio As Decimal
         Get

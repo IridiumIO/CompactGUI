@@ -53,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="diskdetector-net" Version="0.3.2" />
     <PackageReference Include="Fody" Version="6.8.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

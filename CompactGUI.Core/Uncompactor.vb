@@ -9,16 +9,30 @@ Public Class Uncompactor
     Private _cancellationTokenSource As New CancellationTokenSource
 
 
-    Public Async Function UncompactFiles(filesList As List(Of String), Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing) As Task(Of Boolean)
+    Public Async Function UncompactFiles(filesList As List(Of String), Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean)
 
         Dim totalFiles As Integer = filesList.Count
 
+        If MaxParallelism <= 0 Then MaxParallelism = Environment.ProcessorCount
+
+        Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
+
+
+        Dim sw As New Stopwatch
+        sw.Start()
+
+
         _processedFileCount.Clear()
-        Await Parallel.ForEachAsync(filesList,
+        Await Parallel.ForEachAsync(filesList, paraOptions,
                                    Function(file, _ctx) As ValueTask
                                        If _ctx.IsCancellationRequested Then Return ValueTask.FromCanceled(_ctx)
                                        Return New ValueTask(PauseAndProcessFile(file, _cancellationTokenSource.Token, totalFiles, progressMonitor))
                                    End Function).ConfigureAwait(False)
+
+
+        sw.Stop()
+        Debug.WriteLine($"Completed in {sw.Elapsed.TotalSeconds} s")
+
         Return True
     End Function
 

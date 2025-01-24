@@ -18,8 +18,8 @@
         <StackPanel Margin="0,40,0,0">
             <Label Content="Filetype Management" FontWeight="SemiBold" />
 
-            <StackPanel Margin="10,10,0,5">
-                <Grid Margin="0,0,0,5">
+            <StackPanel Margin="10,5,0,5">
+                <Grid Margin="0,0,0,2">
                     <TextBlock Text="manage local skipped filetypes"
                                VerticalAlignment="Center"
                                FontSize="14" />
@@ -77,26 +77,49 @@
             <Separator Margin="0,5,0,5" />
             <Label Content="System Integration" FontWeight="SemiBold" />
             <StackPanel Margin="10,5,0,7">
-                <CheckBox x:Name="uiIsContextEnabled"
+                <CheckBox x:Name="uiIsContextEnabled" Margin="0,-3"
                           Content="add to right-click context menu"
                           IsChecked="{Binding AppSettings.IsContextIntegrated, Mode=TwoWay}" />
-                <CheckBox x:Name="uiIsStartMenuEnabled"
+                <CheckBox x:Name="uiIsStartMenuEnabled" Margin="0,-3"
                           Content="add to start menu"
                           IsChecked="{Binding AppSettings.IsStartMenuEnabled, Mode=TwoWay}"
                            />
-                <CheckBox x:Name="uiShowNotifications"
+                <CheckBox x:Name="uiShowNotifications" Margin="0,-3"
                           Content="show notification on completion"
                           IsChecked="{Binding AppSettings.ShowNotifications, Mode=TwoWay}" />
-                <CheckBox x:Name="uiAlwaysStartInTray"
+                <CheckBox x:Name="uiAlwaysStartInTray" Margin="0,-3"
                           Content="start CompactGUI in system tray"
                           IsChecked="{Binding AppSettings.StartInSystemTray}" />
 
             </StackPanel>
             <Separator Margin="0,5,0,5" />
 
+            <Label Content="Maximum Compression Threads" FontWeight="SemiBold" />
+
+            <StackPanel Orientation="Horizontal" Margin="15,0,15,0">
+
+                <Slider x:Name="compressionParallelism" Width="130"
+
+IsSnapToTickEnabled="True" LargeChange="1" Maximum="16" Minimum="0"
+Orientation="Horizontal" SmallChange="1" TickFrequency="1"
+TickPlacement="BottomRight"
+Value="{Binding AppSettings.MaxCompressionThreads, Mode=TwoWay}">
+
+                </Slider>
+
+                <Label Margin="15,5" FontWeight="SemiBold" Content="{Binding AppSettings.MaxCompressionThreads, FallbackValue=0}"/>
+                <CheckBox x:Name="uiLockHDDToOneThread" Margin="15,0"
+          Content="HDDs only use 1 thread"
+          IsChecked="{Binding AppSettings.LockHDDsToOneThread}" />
+            </StackPanel>
+            
+
+
+            <Separator Margin="0,5,0,5" />
+
             <Label Content="Background Watcher Settings" FontWeight="SemiBold" />
             <StackPanel Margin="10,5,0,7">
-                <CheckBox x:Name="uiEnableBackgroundWatcher"
+                <CheckBox x:Name="uiEnableBackgroundWatcher" Margin="0,-3"
                           Content="monitor compressed folders for changes"
                           IsChecked="{Binding AppSettings.EnableBackgroundWatcher, Mode=TwoWay}">
 
@@ -106,9 +129,9 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </CheckBox>
-                <CheckBox x:Name="uiEnableBackgroundAutoCompression"
+                <CheckBox x:Name="uiEnableBackgroundAutoCompression" 
                           Content="periodically check and keep folders compressed"
-                          Margin="30,0,0,0"
+                          Margin="30,-3,0,-3"
                           IsChecked="{Binding AppSettings.EnableBackgroundAutoCompression, Mode=TwoWay}">
 
                     <i:Interaction.Triggers>
@@ -119,11 +142,13 @@
                 </CheckBox>
 
             </StackPanel>
+            
+            
             <Separator Margin="0,5,0,5" />
 
             <Label Content="Updates" FontWeight="SemiBold" />
             <StackPanel Margin="10,5,0,7">
-                <CheckBox x:Name="uiEnablePreReleaseUpdates"
+                <CheckBox x:Name="uiEnablePreReleaseUpdates" Margin="0,-3"
                           Content="Check for pre-release updates"
                           IsChecked="{Binding AppSettings.EnablePreReleaseUpdates}" />
 
@@ -134,7 +159,7 @@
             <Label Content="UI Scaling" FontWeight="SemiBold" />
 
             <Slider x:Name="uiScalingFactor"
-                    Margin="15,5,15,20"
+                    Margin="15,0,15,0"
                     IsSnapToTickEnabled="True" LargeChange="0.125" Maximum="1.5" Minimum="0.5"
                     Orientation="Horizontal" SmallChange="0.125" TickFrequency="0.125"
                     TickPlacement="BottomRight"
@@ -149,7 +174,9 @@
                 </i:Interaction.Triggers>
             </Slider>
 
+        
             <Separator Margin="0,0,0,30" />
+
             <Grid HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
