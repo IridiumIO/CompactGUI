@@ -18,14 +18,18 @@ Module Helper
         If Not parentfolder?.Name = "steamapps" Then Return Nothing
 
         For Each fl In parentfolder.EnumerateFiles("*.acf").Where(Function(f) f.Length > 0)
-            Dim vConv = VdfConvert.Deserialize(File.ReadAllText(fl.FullName))
-            If vConv.Value.Item("installdir").ToString = workingDir.Name Then
-                Dim appID = CInt(vConv.Value.Item("appid").ToString)
-                Dim sName = vConv.Value.Item("name").ToString
-                Dim sInstallDir = vConv.Value.Item("installdir").ToString
-                Return (appID, sName, sInstallDir)
-                'TODO: Maybe add check to see when game was last updated?
-            End If
+            Try
+                Dim vConv = VdfConvert.Deserialize(File.ReadAllText(fl.FullName))
+                If vConv.Value.Item("installdir").ToString = workingDir.Name Then
+                    Dim appID = CInt(vConv.Value.Item("appid").ToString)
+                    Dim sName = vConv.Value.Item("name").ToString
+                    Dim sInstallDir = vConv.Value.Item("installdir").ToString
+                    Return (appID, sName, sInstallDir)
+                    'TODO: Maybe add check to see when game was last updated?
+                End If
+            Catch
+                Debug.WriteLine($"VDF file unsupported: {fl.FullName}")
+            End Try
         Next
 
         Return Nothing
