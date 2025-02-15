@@ -21,6 +21,11 @@
         <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,-6,35,0" d:Text="last analysed just now"/>
         <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-8,0,0"  Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE" Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
             <ui:FontIcon Glyph="&#xE9F3;" FontSize="14"  FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" />
+            <Button.ToolTip >
+                <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                    <TextBlock Text="Re-analyse all watched folders" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
         <ui:ProgressRing IsActive="{Binding RefreshWatchedCommand.IsRunning}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,-6,0,0" Foreground="#FFBFC7CE" />
 
@@ -29,7 +34,13 @@
             <Run Text="saved" />
         </TextBlock>
 
-        <Button VerticalAlignment="Top" Content="Add To Watchlist" Background="#A26B8399" Foreground="White" HorizontalAlignment="Right" Margin="0,-26,10,0" Command="{Binding ManuallyAddFolderToWatcherCommand}" />
+        <Button VerticalAlignment="Top" Content="Add To Watchlist" Background="#A26B8399" Foreground="White" HorizontalAlignment="Right" Margin="0,-26,10,0" Command="{Binding ManuallyAddFolderToWatcherCommand}">
+            <Button.ToolTip >
+                <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                    <TextBlock Text="Add a custom folder to the watchlist" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
 
         <ui:ListView x:Name="uiWatcherListView"  Margin="-20,60,-20,0" Padding="10,0,10,0" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{Binding Source = {StaticResource dtd}}"   KeyboardNavigation.TabNavigation="None" ui:ScrollViewerHelper.AutoHideScrollBars="True" >
             <ui:ListView.Background>
@@ -125,6 +136,11 @@
 
                                 <Button  HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
                                     <ui:FontIcon Glyph="&#xE74D;" FontSize="14"/>
+                                    <Button.ToolTip >
+                                        <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                                            <TextBlock Text="Remove from Watchlist" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                                        </ToolTip>
+                                    </Button.ToolTip>
                                 </Button>
 
                                 <Button HorizontalAlignment="Right" Margin="0,0,35,0" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.ReCompressWatchedCommand}" CommandParameter="{Binding}" Background="#6B8399" Foreground="White">
@@ -138,6 +154,11 @@
                                             </TransformGroup>
                                         </ui:FontIcon.RenderTransform>
                                     </ui:FontIcon>
+                                    <Button.ToolTip >
+                                        <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                                            <TextBlock Text="Modify Compression" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                                        </ToolTip>
+                                    </Button.ToolTip>
                                 </Button>
                             </Grid>
 
