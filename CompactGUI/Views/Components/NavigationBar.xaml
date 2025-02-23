@@ -8,10 +8,10 @@
              Height="40"
              VerticalAlignment="Bottom" HorizontalContentAlignment="Center"
              d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
-             d:DesignHeight="40" d:DesignWidth="500" d:Opacity="0.5" Opacity="1"
+             d:DesignHeight="40" d:DesignWidth="500" Opacity="1"
              mc:Ignorable="d">
     <UserControl.Background>
-        <SolidColorBrush x:Name="BGBrushNavBar" Color="#304257"/>
+        <SolidColorBrush x:Name="BGBrushNavBar" Color="#304257" Opacity="0.8"/>
     </UserControl.Background>
 
     <StackPanel ClipToBounds="True" Orientation="Horizontal">
