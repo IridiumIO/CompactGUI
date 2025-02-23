@@ -23,7 +23,12 @@ Public Class ActiveFolder : Inherits ObservableObject
     Public ReadOnly Property DiskType As DiskDetector.Models.HardwareType
         Get
             If FolderName Is Nothing Then Return Models.HardwareType.Unknown
-            Return DiskDetector.Detector.DetectDrive(FolderName.First, DiskDetector.Models.QueryType.RotationRate).HardwareType
+
+            Try
+                Return DiskDetector.Detector.DetectDrive(FolderName.First, DiskDetector.Models.QueryType.RotationRate).HardwareType
+            Catch ex As Exception
+                Return Models.HardwareType.Unknown
+            End Try
 
         End Get
     End Property

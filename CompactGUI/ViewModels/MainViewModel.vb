@@ -196,7 +196,9 @@ Public Class MainViewModel : Inherits ObservableObject
         Dim exclist As String() = GetSkipList()
 
         CoreCompactor = New Core.Compactor(ActiveFolder.FolderName, Core.WOFConvertCompressionLevel(ActiveFolder.SelectedCompressionMode), exclist)
-        Dim res = Await CoreCompactor.RunCompactAsync(CProgress, If(ActiveFolder.DiskType = DiskDetector.Models.HardwareType.Hdd AndAlso SettingsHandler.AppSettings.LockHDDsToOneThread, 1, SettingsHandler.AppSettings.MaxCompressionThreads))
+        Dim HDDType As DiskDetector.Models.HardwareType = ActiveFolder.DiskType
+        Dim IsLockedToOneThread As Boolean = SettingsHandler.AppSettings.LockHDDsToOneThread
+        Dim res = Await CoreCompactor.RunCompactAsync(CProgress, If(HDDType = DiskDetector.Models.HardwareType.Hdd AndAlso IsLockedToOneThread, 1, SettingsHandler.AppSettings.MaxCompressionThreads))
 
         ActiveFolder.IsFreshlyCompressed = False
         If res Then ActiveFolder.IsFreshlyCompressed = True
