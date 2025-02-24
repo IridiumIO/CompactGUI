@@ -78,6 +78,13 @@ Partial Public Class MainViewModel
 
     Private Sub Closing(e As CancelEventArgs)
         If e Is Nothing Then Return
+
+        If Keyboard.Modifiers = ModifierKeys.Shift Then
+            e.Cancel = False
+            Application.Current.Shutdown()
+            Return
+        End If
+
         If Watcher.WatchedFolders.Count <> 0 Then
             e.Cancel = True
             WindowState = WindowState.Minimized
