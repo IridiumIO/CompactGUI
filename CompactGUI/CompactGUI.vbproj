@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
     <RootNamespace>CompactGUI</RootNamespace>
@@ -72,4 +73,25 @@
     <ProjectReference Include="..\CompactGUI.Watcher\CompactGUI.Watcher.vbproj" />
   </ItemGroup>
 
+  <Target Name="RenamePublishedExe" AfterTargets="Publish" Condition="'$(IsMonolithic)' == 'true'">
+    <Move SourceFiles="$(PublishDir)CompactGUI.exe"
+          DestinationFiles="$(PublishDir)CompactGUI.mono.exe"/>
+
+  </Target>
+  
+  <PropertyGroup>
+    <FinalPublishDir>$(ProjectDir)bin\publish\FinalOutput\</FinalPublishDir>
+  </PropertyGroup>
+
+  <Target Name="MovePublishedFiles" AfterTargets="Publish">
+    <Message Text="Moving published files to FinalOutput..." Importance="high" />
+    
+    <ItemGroup>
+        <PublishedFiles Include="$(PublishDir)**\*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(PublishedFiles)" DestinationFolder="$(FinalPublishDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  
 </Project>
