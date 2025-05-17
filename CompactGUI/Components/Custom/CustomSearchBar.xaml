@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CompactGUI"
+             xmlns:local="clr-namespace:CompactGUI" xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border >
@@ -68,8 +68,10 @@
             </Rectangle>
             <Label Content="&#xE721;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="21" VerticalAlignment="Center" Padding="20,0,0,0" Foreground="#FF757575"/>
             <TextBlock Text="{Binding ActiveFolder.DisplayName, Mode=TwoWay, TargetNullValue='select target folder', Converter={StaticResource StrippedFolderPathConverter}}" d:Text="select target folder" FontFamily="Segoe UI" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="45,-2,45,0" Foreground="#FF757575" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
-            
-            
+
+            <ui:DropDownButton HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Stretch" Margin="0,0,10,0" Padding="5,0,9,0">
+               
+            </ui:DropDownButton>
 
         </Grid>
 

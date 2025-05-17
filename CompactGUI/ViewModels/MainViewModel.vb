@@ -254,7 +254,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Private Async Function GetWikiResultsAndSetPoorlyCompressedListAsync() As Task(Of Long)
 
         If ActiveFolder.SteamAppID = 0 Then Return 1010101010101010
-        Dim res = Await WikiHandler.ParseData(ActiveFolder.SteamAppID)
+        Dim res = Nothing 'Await WikiHandler.ParseData(ActiveFolder.SteamAppID)
         If res.Equals(Nothing) Then Return 1010101010101010
 
         'TODO: Modify the 100 cutoff based on level of aggressiveness selected by user in settings
@@ -287,6 +287,9 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
+
+    'TODO: Re-implement restart as admin and run as admin
+
     Private Async Function InsufficientPermissionHandler() As Task
 
         Dim msg As New ContentDialog With {.Title = "Permissions Error"}
@@ -313,18 +316,19 @@ Public Class MainViewModel : Inherits ObservableObject
                 .Verb = "runas"}
         }
         Dim app As Application = Application.Current
-        app.ShutdownPipeServer().ContinueWith(
-            Sub()
-                app.Dispatcher.Invoke(
-                    Sub()
-                        Application.mutex.ReleaseMutex()
-                        Application.mutex.Dispose()
-                    End Sub
-                )
-                myproc.Start()
-                app.Dispatcher.Invoke(Sub() app.Shutdown())
-            End Sub
-        )
+        'TODO - REIMPLEMENT
+        'app.ShutdownPipeServer().ContinueWith(
+        '    Sub()
+        '        app.Dispatcher.Invoke(
+        '            Sub()
+        '                Application.mutex.ReleaseMutex()
+        '                Application.mutex.Dispose()
+        '            End Sub
+        '        )
+        '        myproc.Start()
+        '        app.Dispatcher.Invoke(Sub() app.Shutdown())
+        '    End Sub
+        ')
     End Sub
 
 
@@ -362,7 +366,7 @@ Public Class MainViewModel : Inherits ObservableObject
            .LastCheckedDate = DateTime.UnixEpoch,
            .LastCheckedSize = 0,
            .LastSystemModifiedDate = DateTime.UnixEpoch,
-           .CompressionLevel = Core.CompressionAlgorithm.NO_COMPRESSION}
+           .CompressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION}
 
         Watcher.AddOrUpdateWatched(newWatched)
         Await Watcher.Analyse(path, True)

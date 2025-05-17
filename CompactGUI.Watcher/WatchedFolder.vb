@@ -14,7 +14,7 @@ Public Class WatchedFolder : Inherits ObservableObject
     Public Property LastSystemModifiedDate As DateTime
     Public Property LastCheckedDate As DateTime
     Public Property LastCheckedSize As Long
-    Public Property CompressionLevel As Core.CompressionAlgorithm
+    Public Property CompressionLevel As Core.WOFCompressionAlgorithm
     <JsonIgnore>
     Public Property IsWorking As Boolean
     Public ReadOnly Property DecayPercentage As Decimal

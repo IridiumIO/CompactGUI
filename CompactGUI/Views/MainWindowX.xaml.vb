@@ -2,7 +2,7 @@
 
 Imports CompactGUI.MainViewModel
 
-Class MainWindow
+Class MainWindowX
 
     Sub New()
 

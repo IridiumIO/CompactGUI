@@ -47,9 +47,9 @@ Public Class BackgroundCompactor
         End If
     End Sub
 
-    Public Function BeginCompacting(folder As String, compressionLevel As Core.CompressionAlgorithm) As Task(Of Boolean)
+    Public Function BeginCompacting(folder As String, compressionLevel As Core.WOFCompressionAlgorithm) As Task(Of Boolean)
 
-        If compressionLevel = Core.CompressionAlgorithm.NO_COMPRESSION Then Return Task.FromResult(False)
+        If compressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION Then Return Task.FromResult(False)
 
         _compactor = New Core.Compactor(folder, compressionLevel, _excludedFileTypes)
 
@@ -66,7 +66,7 @@ Public Class BackgroundCompactor
         Dim currentProcess As Process = Process.GetCurrentProcess()
         currentProcess.PriorityClass = ProcessPriorityClass.Idle
 
-        Dim foldersCopy As List(Of WatchedFolder) = folders.Where(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.CompressionAlgorithm.NO_COMPRESSION).ToList()
+        Dim foldersCopy As List(Of WatchedFolder) = folders.Where(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION).ToList()
 
         Dim monitorsCopy As List(Of FolderMonitor) = monitors.ToList()
 

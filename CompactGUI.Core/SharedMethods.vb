@@ -8,7 +8,7 @@ Public Module SharedMethods
     Function verifyFolder(folder As String) As (isValid As Boolean, msg As String)
 
         If Not IO.Directory.Exists(folder) Then : Return (False, "Directory does not exist")
-        ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return (False, "Cannot compress system directory")
+        ElseIf folder.ToLowerInvariant.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows)).ToLowerInvariant) Then : Return (False, "Cannot compress system directory")
         ElseIf folder.EndsWith(":\") Then : Return (False, "Cannot compress root directory")
         ElseIf IsDirectoryEmptySafe(folder) Then : Return (False, "This directory is either empty or you are not authorized to access its files.")
         ElseIf IsOneDriveFolder(folder) Then : Return (False, "Files synced with OneDrive cannot be compressed as they use a different storage structure")

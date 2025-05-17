@@ -98,14 +98,14 @@ End Class
 
 Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-        Dim clvl = CType(value, Core.CompressionAlgorithm)
+        Dim clvl = CType(value, Core.WOFCompressionAlgorithm)
         Select Case clvl
-            Case Core.CompressionAlgorithm.NO_COMPRESSION : Return "NIL"
-            Case Core.CompressionAlgorithm.LZNT1 : Return "NT"
-            Case Core.CompressionAlgorithm.XPRESS4K : Return "X4"
-            Case Core.CompressionAlgorithm.XPRESS8K : Return "X8"
-            Case Core.CompressionAlgorithm.XPRESS16K : Return "X16"
-            Case Core.CompressionAlgorithm.LZX : Return "LZX"
+            Case Core.WOFCompressionAlgorithm.NO_COMPRESSION : Return "NIL"
+            Case Core.WOFCompressionAlgorithm.LZNT1 : Return "NT"
+            Case Core.WOFCompressionAlgorithm.XPRESS4K : Return "X4"
+            Case Core.WOFCompressionAlgorithm.XPRESS8K : Return "X8"
+            Case Core.WOFCompressionAlgorithm.XPRESS16K : Return "X16"
+            Case Core.WOFCompressionAlgorithm.LZX : Return "LZX"
             Case Else : Return "NIL"
         End Select
     End Function
@@ -251,4 +251,116 @@ Public Class BooleanToInverseVisibilityConverter : Implements IValueConverter
         Throw New NotImplementedException()
     End Function
 
+End Class
+
+Public Class EnumToRadioButtonConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim enumValue = CType(value, [Enum])
+        Dim parameterValue = CType(parameter, [Enum])
+        Return enumValue.Equals(parameterValue)
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If value Then
+            Return parameter
+        End If
+        Return Binding.DoNothing
+    End Function
+End Class
+
+Public Class FolderStatusToColorConverter : Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim status = CType(value, ActionState)
+        Select Case status
+            Case ActionState.Idle
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#6E9DEF"))
+            Case ActionState.Analysing, ActionState.Working, ActionState.Paused
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#F1CE92"))
+            Case ActionState.Results
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#92F1AB"))
+            Case Else
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#FFBAC2CA"))
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class FolderStatusToStringConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim status = CType(value, ActionState)
+        Select Case status
+            Case ActionState.Idle
+                Return "Awaiting Compression"
+            Case ActionState.Analysing
+                Return "Analysing"
+            Case ActionState.Working, ActionState.Paused
+                Return "Working"
+            Case ActionState.Results
+                Return "Compressed"
+            Case Else
+                Return "Unknown"
+        End Select
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+
+
+Public Class FolderWorkingStateToPauseSymbolConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim status = CType(value, ActionState)
+        Select Case status
+            Case ActionState.Paused
+                Return "Play12"
+            Case Else
+                Return "Pause12"
+        End Select
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+
+Public Class IsSteamFolderConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim folder = CType(value, CompressableFolder)
+        If folder Is Nothing Then Return False
+        Return TypeOf (folder) Is SteamFolder
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+
+Public Class IsSteamFolderAndFreshlyCompressedMultiConverter : Implements IMultiValueConverter
+
+    Public Function Convert(values As Object(), targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IMultiValueConverter.Convert
+        ' Ensure both properties are provided
+        If values.Length < 2 OrElse
+            values(0) Is Nothing OrElse values(1) Is Nothing OrElse
+            values(0) Is DependencyProperty.UnsetValue OrElse values(1) Is DependencyProperty.UnsetValue Then
+            Return Visibility.Collapsed
+        End If
+
+        ' Example logic: Both properties must be True for the element to be visible
+        Dim isFreshlyCompressed As Boolean = CType(values(0), Boolean)
+        Dim isSteamFolder As Boolean = CType(values(1), Boolean)
+
+        If isFreshlyCompressed AndAlso isSteamFolder Then
+            Return Visibility.Visible
+        End If
+
+        Return Visibility.Collapsed
+    End Function
+
+    Public Function ConvertBack(value As Object, targetTypes As Type(), parameter As Object, culture As CultureInfo) As Object() Implements IMultiValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
 End Class

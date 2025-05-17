@@ -9,7 +9,7 @@ Public Class Uncompactor
     Private _cancellationTokenSource As New CancellationTokenSource
 
 
-    Public Async Function UncompactFiles(filesList As List(Of String), Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean)
+    Public Async Function UncompactFiles(filesList As List(Of String), Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean)
 
         Dim totalFiles As Integer = filesList.Count
 
@@ -36,7 +36,7 @@ Public Class Uncompactor
         Return True
     End Function
 
-    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, totalFiles As Integer, progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String))) As Task
+    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, totalFiles As Integer, progressMonitor As IProgress(Of CompressionProgress)) As Task
         If _ctx.IsCancellationRequested Then Return
 
         Try
@@ -51,7 +51,7 @@ Public Class Uncompactor
         Dim res = WOFDecompressFile(file)
         _processedFileCount.TryAdd(file, 1)
         Dim incremented = _processedFileCount.Count
-        progressMonitor?.Report((CInt(((incremented / totalFiles) * 100)), file))
+        progressMonitor?.Report(New CompressionProgress((CInt(((incremented / totalFiles) * 100))), file))
     End Function
 
     Private Function WOFDecompressFile(path As String)

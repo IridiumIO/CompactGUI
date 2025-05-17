@@ -71,4 +71,44 @@ Module Helper
         Return bImg
     End Function
 
+
+
+
+    Public Function GetInvalidFolders(folderPaths() As String) As (InvalidFolders As List(Of String), InvalidMessages As List(Of String))
+
+        Dim invalidFolders As New List(Of String)
+        Dim invalidMessages As New List(Of String)
+
+        For Each folder In folderPaths
+            Dim validation = Core.verifyFolder(folder)
+
+            If Not validation.isValid Then
+                invalidFolders.Add(folder)
+                invalidMessages.Add($"{New IO.DirectoryInfo(folder).Name}: {validation.msg}")
+            End If
+        Next
+        If invalidFolders.Any Then
+            GenerateInvalidFolderSnackbar(invalidFolders, invalidMessages)
+        End If
+
+        Return (invalidFolders, invalidMessages)
+
+    End Function
+
+    Private Sub GenerateInvalidFolderSnackbar(invalidFolders As List(Of String), invalidMessages As List(Of String))
+        Dim snackbar = Application.GetService(Of CustomSnackBarService)()
+        Dim message = String.Join(vbCrLf, invalidMessages)
+        snackbar.Show("Invalid Folders", message, Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(10))
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
 End Module
