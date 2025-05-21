@@ -105,7 +105,8 @@
             </StackPanel.Style>
 
         </StackPanel>
-        <Label Content="Version 4.0" Grid.Row="1" VerticalAlignment="Bottom" Margin="0 0 0 20" Foreground="{StaticResource CardForegroundDisabled}" HorizontalAlignment="Center" Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+        <Label Grid.Row="1" VerticalAlignment="Bottom" Margin="0 0 0 20" Foreground="{StaticResource CardForegroundDisabled}" HorizontalAlignment="Center" Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+            <TextBlock Text="{Binding DisplayVersion, StringFormat={}Version {0}}"/>
             <Label.RenderTransform>
                 <TranslateTransform x:Name="TransformL" Y="20" />
             </Label.RenderTransform>
