@@ -5,13 +5,10 @@
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             xmlns:wui="http://schemas.modernwpf.com/2019"
              Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <wui:ThemeResources />
-                <wui:XamlControlsResources />
                 <ResourceDictionary Source="Components/Converters/Converters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Resources/Theme/Dark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Resources/Wpf.Ui.xaml" />

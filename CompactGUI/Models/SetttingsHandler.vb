@@ -19,7 +19,7 @@ Public Class SettingsHandler : Inherits ObservableObject
         If AppSettings.SettingsVersion = 0 OrElse SettingsVersion > AppSettings.SettingsVersion Then
             AppSettings = New Settings With {.SettingsVersion = SettingsVersion}
 
-            Dim msgError As New ModernWpf.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
+            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
             Await msgError.ShowAsync()
 
         End If
@@ -44,7 +44,7 @@ Public Class SettingsHandler : Inherits ObservableObject
         Catch ex As Exception
             validatedSettings = New Settings With {.SettingsVersion = SettingsVersion}
 
-            Dim msgError As New ModernWpf.Controls.ContentDialog With {.Title = $"Corrupted Settings File Detected", .Content = "Your settings have been reset to their default.", .CloseButtonText = "OK"}
+            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"Corrupted Settings File Detected", .Content = "Your settings have been reset to their default.", .CloseButtonText = "OK"}
             msgError.ShowAsync()
 
 

@@ -4,7 +4,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
              Height="40"
              VerticalAlignment="Bottom" HorizontalContentAlignment="Center"
              d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
@@ -13,8 +12,8 @@
     <UserControl.Background>
         <SolidColorBrush x:Name="BGBrushNavBar" Color="#304257" Opacity="0.8"/>
     </UserControl.Background>
-
-    <StackPanel ClipToBounds="True" Orientation="Horizontal">
+    <Grid/>
+    <!--<StackPanel ClipToBounds="True" Orientation="Horizontal">
        
         
         <ui:AppBarButton Width="100"
@@ -61,7 +60,7 @@
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
-    </UserControl.Triggers>
+    </UserControl.Triggers>-->
 
 
 </UserControl>

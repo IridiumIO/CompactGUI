@@ -38,8 +38,8 @@ Public Class MainViewModel : Inherits ObservableObject
         End If
         Dim validFolder = Core.verifyFolder(path)
         If Not validFolder.isValid Then
-            Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
-            Await msgError.ShowAsync()
+            'Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
+            'Await msgError.ShowAsync()
             Return
         End If
         Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
@@ -106,8 +106,8 @@ Public Class MainViewModel : Inherits ObservableObject
         Dim Analyser As New Core.Analyser(ActiveFolder.FolderName)
 
         If Not Analyser.HasDirectoryWritePermission Then
-            Await InsufficientPermissionHandler()
-            State = UIState.ValidFolderSelected
+            'Await InsufficientPermissionHandler()
+            'State = UIState.ValidFolderSelected
             Return
         End If
 
@@ -290,88 +290,88 @@ Public Class MainViewModel : Inherits ObservableObject
 
     'TODO: Re-implement restart as admin and run as admin
 
-    Private Async Function InsufficientPermissionHandler() As Task
+    'Private Async Function InsufficientPermissionHandler() As Task
 
-        Dim msg As New ContentDialog With {.Title = "Permissions Error"}
-        If IsAdministrator() Then
-            msg.Content = "You are running as Administrator, however, you do not have permission to make changes to this folder - it is likely protected by the system. " & Environment.NewLine & "Analysis results are probably inaccurate and compression will likely fail or cause issues."
-            msg.CloseButtonText = "OK"
-        Else
-            msg.Content = "You do not have permission to make changes to this folder. Would you like to try restarting as administrator?"
-            msg.CloseButtonText = "No"
-            msg.IsSecondaryButtonEnabled = True
-            msg.SecondaryButtonText = "Restart App"
-            msg.SecondaryButtonCommand = New RelayCommand(AddressOf RunAsAdmin)
-        End If
-        Await msg.ShowAsync()
-    End Function
-
-
-    Private Sub RunAsAdmin()
-        Dim myproc As New Process With {
-            .StartInfo = New ProcessStartInfo With {
-                .FileName = Environment.ProcessPath,
-                .UseShellExecute = True,
-                .Arguments = $"""{ActiveFolder.FolderName}""",
-                .Verb = "runas"}
-        }
-        Dim app As Application = Application.Current
-        'TODO - REIMPLEMENT
-        'app.ShutdownPipeServer().ContinueWith(
-        '    Sub()
-        '        app.Dispatcher.Invoke(
-        '            Sub()
-        '                Application.mutex.ReleaseMutex()
-        '                Application.mutex.Dispose()
-        '            End Sub
-        '        )
-        '        myproc.Start()
-        '        app.Dispatcher.Invoke(Sub() app.Shutdown())
-        '    End Sub
-        ')
-    End Sub
+    '    Dim msg As New ContentDialog With {.Title = "Permissions Error"}
+    '    If IsAdministrator() Then
+    '        msg.Content = "You are running as Administrator, however, you do not have permission to make changes to this folder - it is likely protected by the system. " & Environment.NewLine & "Analysis results are probably inaccurate and compression will likely fail or cause issues."
+    '        msg.CloseButtonText = "OK"
+    '    Else
+    '        msg.Content = "You do not have permission to make changes to this folder. Would you like to try restarting as administrator?"
+    '        msg.CloseButtonText = "No"
+    '        msg.IsSecondaryButtonEnabled = True
+    '        msg.SecondaryButtonText = "Restart App"
+    '        msg.SecondaryButtonCommand = New RelayCommand(AddressOf RunAsAdmin)
+    '    End If
+    '    Await msg.ShowAsync()
+    'End Function
 
 
-    Private Async Function ManuallyAddFolderToWatcher() As Task
+    'Private Sub RunAsAdmin()
+    '    Dim myproc As New Process With {
+    '        .StartInfo = New ProcessStartInfo With {
+    '            .FileName = Environment.ProcessPath,
+    '            .UseShellExecute = True,
+    '            .Arguments = $"""{ActiveFolder.FolderName}""",
+    '            .Verb = "runas"}
+    '    }
+    '    Dim app As Application = Application.Current
+    '    'TODO - REIMPLEMENT
+    '    'app.ShutdownPipeServer().ContinueWith(
+    '    '    Sub()
+    '    '        app.Dispatcher.Invoke(
+    '    '            Sub()
+    '    '                Application.mutex.ReleaseMutex()
+    '    '                Application.mutex.Dispose()
+    '    '            End Sub
+    '    '        )
+    '    '        myproc.Start()
+    '    '        app.Dispatcher.Invoke(Sub() app.Shutdown())
+    '    '    End Sub
+    '    ')
+    'End Sub
 
-        Dim path As String = ""
 
-        Dim folderSelector As New Microsoft.Win32.OpenFolderDialog
-        folderSelector.ShowDialog()
-        If folderSelector.FolderName = "" Then Return
-        path = folderSelector.FolderName
+    'Private Async Function ManuallyAddFolderToWatcher() As Task
 
-        Dim validFolder = Core.verifyFolder(path)
-        If Not validFolder.isValid Then
-            Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
-            Await msgError.ShowAsync()
-            Return
-        End If
+    '    Dim path As String = ""
 
-        Dim newFolder As New ActiveFolder With {.FolderName = path}
+    '    Dim folderSelector As New Microsoft.Win32.OpenFolderDialog
+    '    folderSelector.ShowDialog()
+    '    If folderSelector.FolderName = "" Then Return
+    '    path = folderSelector.FolderName
 
-        Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
+    '    Dim validFolder = Core.verifyFolder(path)
+    '    If Not validFolder.isValid Then
+    '        Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
+    '        Await msgError.ShowAsync()
+    '        Return
+    '    End If
 
-        newFolder.SteamAppID = SteamFolderData.appID
-        newFolder.DisplayName = If(SteamFolderData.gameName, path)
+    '    Dim newFolder As New ActiveFolder With {.FolderName = path}
+
+    '    Dim SteamFolderData = GetSteamNameAndIDFromFolder(path)
+
+    '    newFolder.SteamAppID = SteamFolderData.appID
+    '    newFolder.DisplayName = If(SteamFolderData.gameName, path)
 
 
-        Dim newWatched = New Watcher.WatchedFolder With {
-           .Folder = newFolder.FolderName,
-           .DisplayName = newFolder.DisplayName,
-           .IsSteamGame = newFolder.SteamAppID <> 0,
-           .LastCompressedSize = 0,
-           .LastUncompressedSize = 0,
-           .LastCompressedDate = DateTime.UnixEpoch,
-           .LastCheckedDate = DateTime.UnixEpoch,
-           .LastCheckedSize = 0,
-           .LastSystemModifiedDate = DateTime.UnixEpoch,
-           .CompressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION}
+    '    Dim newWatched = New Watcher.WatchedFolder With {
+    '       .Folder = newFolder.FolderName,
+    '       .DisplayName = newFolder.DisplayName,
+    '       .IsSteamGame = newFolder.SteamAppID <> 0,
+    '       .LastCompressedSize = 0,
+    '       .LastUncompressedSize = 0,
+    '       .LastCompressedDate = DateTime.UnixEpoch,
+    '       .LastCheckedDate = DateTime.UnixEpoch,
+    '       .LastCheckedSize = 0,
+    '       .LastSystemModifiedDate = DateTime.UnixEpoch,
+    '       .CompressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION}
 
-        Watcher.AddOrUpdateWatched(newWatched)
-        Await Watcher.Analyse(path, True)
+    '    Watcher.AddOrUpdateWatched(newWatched)
+    '    Await Watcher.Analyse(path, True)
 
-    End Function
+    'End Function
 
     Public Async Function RefreshWatchedAsync() As Task
 
@@ -450,7 +450,7 @@ Public Class MainViewModel : Inherits ObservableObject
     Public Property RemoveWatcherCommand As ICommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
     Public Property ReCompressWatchedCommand As ICommand = New AsyncRelayCommand(Of Watcher.WatchedFolder)(Function(f) SelectFolderAsync(f.Folder))
     Public Property RefreshWatchedCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf RefreshWatchedAsync)
-    Public Property ManuallyAddFolderToWatcherCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
+    'Public Property ManuallyAddFolderToWatcherCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
     Public Property CancelCommand As RelayCommand = New RelayCommand(Sub() CancellationTokenSource.Cancel())
     Public Property PauseCompressionCommand As RelayCommand = New RelayCommand(Sub()
 
