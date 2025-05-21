@@ -30,14 +30,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\MainWindowX.xaml.vb" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Remove="Views\MainWindowX.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -59,11 +51,6 @@
     <Import Include="System.Windows.Media.Imaging" />
     <Import Include="System.Windows.Navigation" />
     <Import Include="System.Windows.Shapes" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\MainWindowX.xaml" />
-    <None Include="Views\MainWindowX.xaml.vb" />
   </ItemGroup>
 
   <ItemGroup>

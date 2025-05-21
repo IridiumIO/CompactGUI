@@ -25,7 +25,7 @@ Public Class ImageControl : Inherits Image
 
     Private Shared Async Sub OnNewSourceChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim control = TryCast(d, ImageControl)
-        If control Is Nothing Then Exit Sub
+        If control Is Nothing Then Return
 
         control.RaiseEvent(New RoutedEventArgs(SourceChangingEvent))
 

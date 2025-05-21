@@ -2,8 +2,6 @@
 Imports System.ComponentModel
 Imports System.Drawing
 Imports System.Threading
-Imports System.Windows.Forms
-Imports System.Windows.Forms.AxHost
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input

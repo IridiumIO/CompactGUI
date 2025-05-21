@@ -119,6 +119,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     Private CancellationTokenSource As CancellationTokenSource
 
     Public Async Function AnalyseFolderAsync() As Task(Of Integer)
+
         Me.FolderActionState = ActionState.Analysing
 
         CancellationTokenSource = New CancellationTokenSource()
