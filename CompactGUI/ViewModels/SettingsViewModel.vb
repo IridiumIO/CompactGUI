@@ -51,7 +51,6 @@ Public Class SettingsViewModel : Inherits ObservableObject
                                                                        End Sub)
 
 
-    Public Property UIScalingSliderCommand As ICommand = New RelayCommand(Of Double)(Sub(val) SettingsHandler.AppSettings.WindowScalingFactor = val)
     Public Property DisableAutoCompressionCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundAutoCompression = False)
     Public Property EnableBackgroundWatcherCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundWatcher = True)
     Public Property OpenGitHubCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI") With {.UseShellExecute = True}))
