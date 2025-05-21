@@ -5,7 +5,7 @@
         InitializeComponent()
 
 
-        Me.DataContext = settingsviewmodel
+        DataContext = settingsviewmodel
 
 
         ScrollViewer.SetCanContentScroll(Me, False)

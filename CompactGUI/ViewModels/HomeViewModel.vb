@@ -6,8 +6,6 @@ Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 
-Imports CompactGUI.MainViewModel
-
 Imports PropertyChanged
 
 Partial Public Class HomeViewModel

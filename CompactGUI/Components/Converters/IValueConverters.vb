@@ -226,11 +226,11 @@ Public Class ProgressBarColorConverter : Implements IValueConverter
         Dim progress As Decimal = DirectCast(value, Decimal)
 
         If progress > 0.6 Then
-            Return New SolidColorBrush(Media.Color.FromRgb(239, 146, 146))
+            Return New SolidColorBrush(Color.FromRgb(239, 146, 146))
         ElseIf progress > 0.2 Then
-            Return New SolidColorBrush(Media.Color.FromRgb(239, 239, 146))
+            Return New SolidColorBrush(Color.FromRgb(239, 239, 146))
         Else
-            Return New SolidColorBrush(Media.Color.FromRgb(146, 241, 171))
+            Return New SolidColorBrush(Color.FromRgb(146, 241, 171))
         End If
     End Function
 

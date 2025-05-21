@@ -39,7 +39,7 @@ Public Class FolderWatcherCard : Inherits UserControl
     }
         Dim storyboard As New Storyboard()
         Storyboard.SetTarget(animation, border)
-        Storyboard.SetTargetProperty(animation, New PropertyPath(Border.HeightProperty))
+        Storyboard.SetTargetProperty(animation, New PropertyPath(HeightProperty))
 
         storyboard.Children.Add(animation)
         storyboard.Begin()

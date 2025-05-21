@@ -157,11 +157,11 @@
             <TextBlock x:Name="ProgTitle" Text="CompactGUI" Margin="20,14" FontSize="20" Visibility="Collapsed" d:Visibility="Visible" />
         </Grid>
         <ui:SnackbarPresenter x:Name="RootSnackbar" MaxWidth="600"
-                              Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
-        <tray:NotifyIcon x:Name="NotifyIconTray"
-            FocusOnLeftClick="True"
-            MenuOnRightClick="True"
-            TooltipText="CompactGUI">
+                              Grid.Row="1" Grid.Column="0" />
+        <tray:NotifyIcon Grid.Row="0" x:Name="NotifyIconTray"
+                         FocusOnLeftClick="True"
+                         MenuOnRightClick="True"
+                         TooltipText="CompactGUI">
             <tray:NotifyIcon.Menu>
                 <ContextMenu x:Name="NotifyIconTrayMenu">
                     <MenuItem Header="Open" Command="{Binding NotifyIconOpenCommand}"/>

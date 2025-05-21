@@ -32,7 +32,7 @@ Public Class WatchedFolder : Inherits ObservableObject
 
     Public Sub RefreshProperties()
         For Each prop In Me.GetType.GetProperties
-            Me.OnPropertyChanged(prop.Name)
+            OnPropertyChanged(prop.Name)
         Next
     End Sub
 

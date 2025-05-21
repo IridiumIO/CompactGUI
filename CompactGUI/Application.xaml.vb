@@ -1,11 +1,9 @@
 ﻿Imports System.IO
 Imports System.IO.Pipes
-Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports System.Windows.Threading
 Imports Wpf.Ui
 Imports Wpf.Ui.DependencyInjection
-Imports Wpf.Ui.Abstractions
 Imports Microsoft.Extensions.Hosting
 Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Configuration
@@ -62,7 +60,7 @@ Partial Public Class Application
 
 
                                'Other services
-                               services.AddSingleton(Of CompactGUI.Watcher.Watcher)(Function()
+                               services.AddSingleton(Of Watcher.Watcher)(Function()
                                                                                         Return New Watcher.Watcher({})
                                                                                     End Function)
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
@@ -103,8 +101,8 @@ Partial Public Class Application
 
         Await _host.StartAsync()
         Await SettingsViewModel.InitializeEnvironment()
-        Await Application.GetService(Of IUpdaterService).CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
-        Await Application.GetService(Of IWikiService).GetUpdatedJSONAsync()
+        Await GetService(Of IUpdaterService).CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
+        Await GetService(Of IWikiService).GetUpdatedJSONAsync()
 
     End Sub
 
@@ -120,7 +118,7 @@ Partial Public Class Application
         Else
             MessageBox.Show("An instance of CompactGUI is already running")
         End If
-        Application.Current.Shutdown()
+        Current.Shutdown()
     End Sub
 
     Private Async Function ProcessNextInstanceMessage() As Task
@@ -135,7 +133,7 @@ Partial Public Class Application
                                                                         MainWindow.Show()
                                                                         MainWindow.WindowState = WindowState.Normal
                                                                         MainWindow.Activate()
-                                                                        Await Application.GetService(Of HomeViewModel).AddFoldersAsync({message})
+                                                                        Await GetService(Of HomeViewModel).AddFoldersAsync({message})
                                                                         'Await MainWindow.ViewModel.SelectFolderAsync(message)
                                                                     End If
                                                                 End Function).Task

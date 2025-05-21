@@ -1,10 +1,6 @@
-﻿Imports System.Collections.ObjectModel
+﻿
 Imports System.IO
 Imports System.Net.Http
-
-Imports CompactGUI.Core
-
-Imports PropertyChanged
 
 Public Class SteamFolder : Inherits CompressableFolder
 
@@ -35,7 +31,7 @@ Public Class SteamFolder : Inherits CompressableFolder
     Public ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
         Get
             If AnalysisResults Is Nothing OrElse WikiPoorlyCompressedFiles Is Nothing Then Return 0
-            Return AnalysisResults.Where(Function(fl) WikiPoorlyCompressedFiles.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
+            Return AnalysisResults.Where(Function(fl) WikiPoorlyCompressedFiles.Contains(New FileInfo(fl.FileName).Extension)).Count
         End Get
     End Property
 
@@ -64,7 +60,7 @@ Public Class SteamFolder : Inherits CompressableFolder
         If Not Path.Exists(Path.GetDirectoryName(imagePath)) Then Directory.CreateDirectory(Path.GetDirectoryName(imagePath))
 
         If File.Exists(imagePath) Then
-            tempImg = Helper.LoadImageFromDisk(imagePath)
+            tempImg = LoadImageFromDisk(imagePath)
             Debug.WriteLine("Loaded Steam header image from disk")
         Else
 

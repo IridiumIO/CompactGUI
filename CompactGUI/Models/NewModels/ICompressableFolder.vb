@@ -5,8 +5,6 @@ Imports CommunityToolkit.Mvvm.ComponentModel
 
 Imports CompactGUI.Core
 
-Imports IWshRuntimeLibrary
-
 Imports PropertyChanged
 
 
@@ -71,15 +69,15 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
 
 
-    Public Compactor As Core.Compactor
+    Public Compactor As Compactor
 
     Public Async Function CompressFolder() As Task(Of Boolean)
 
         FolderActionState = ActionState.Working
 
-        CompressionProgress.Report(New Core.CompressionProgress(0, ""))
+        CompressionProgress.Report(New CompressionProgress(0, ""))
 
-        Compactor = New Core.Compactor(FolderName, Core.WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
+        Compactor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
         Dim res = Await Compactor.RunCompactAsync(CompressionProgress, GetThreadCount)
 
         If res Then
@@ -95,13 +93,13 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     End Function
 
 
-    Public Uncompactor As Core.Uncompactor
+    Public Uncompactor As Uncompactor
 
     Public Async Function UncompressFolder() As Task(Of Boolean)
         FolderActionState = ActionState.Working
-        CompressionProgress.Report(New Core.CompressionProgress(0, ""))
+        CompressionProgress.Report(New CompressionProgress(0, ""))
 
-        Uncompactor = New Core.Uncompactor
+        Uncompactor = New Uncompactor
 
         Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
 
@@ -120,30 +118,30 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
     Public Async Function AnalyseFolderAsync() As Task(Of Integer)
 
-        Me.FolderActionState = ActionState.Analysing
+        FolderActionState = ActionState.Analysing
 
         CancellationTokenSource = New CancellationTokenSource()
         Dim token = CancellationTokenSource.Token
 
-        Dim Analyser As New Core.Analyser(Me.FolderName)
+        Dim Analyser As New Analyser(FolderName)
 
         If Not Analyser.HasDirectoryWritePermission Then
-            Me.FolderActionState = ActionState.Idle
+            FolderActionState = ActionState.Idle
             Return -1
         End If
 
         Dim containsCompressedFiles = Await Analyser.AnalyseFolder(token)
         If CancellationTokenSource.IsCancellationRequested Then
-            Me.FolderActionState = ActionState.Idle
+            FolderActionState = ActionState.Idle
             Return 1
         End If
 
-        Me.AnalysisResults = New ObservableCollection(Of Core.AnalysedFileDetails)(Analyser.FileCompressionDetailsList)
-        Me.UncompressedBytes = Analyser.UncompressedBytes
-        Me.CompressedBytes = Analyser.CompressedBytes
+        AnalysisResults = New ObservableCollection(Of AnalysedFileDetails)(Analyser.FileCompressionDetailsList)
+        UncompressedBytes = Analyser.UncompressedBytes
+        CompressedBytes = Analyser.CompressedBytes
 
-        If containsCompressedFiles OrElse Me.IsFreshlyCompressed Then : Me.FolderActionState = ActionState.Results
-        Else : Me.FolderActionState = ActionState.Idle
+        If containsCompressedFiles OrElse IsFreshlyCompressed Then : FolderActionState = ActionState.Results
+        Else : FolderActionState = ActionState.Idle
         End If
         PoorlyCompressedFiles = Await Analyser.GetPoorlyCompressedExtensions()
 

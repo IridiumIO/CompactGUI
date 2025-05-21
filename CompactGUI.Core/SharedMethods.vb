@@ -7,7 +7,7 @@ Public Module SharedMethods
 
     Function verifyFolder(folder As String) As (isValid As Boolean, msg As String)
 
-        If Not IO.Directory.Exists(folder) Then : Return (False, "Directory does not exist")
+        If Not Directory.Exists(folder) Then : Return (False, "Directory does not exist")
         ElseIf folder.ToLowerInvariant.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows)).ToLowerInvariant) Then : Return (False, "Cannot compress system directory")
         ElseIf folder.EndsWith(":\") Then : Return (False, "Cannot compress root directory")
         ElseIf IsDirectoryEmptySafe(folder) Then : Return (False, "This directory is either empty or you are not authorized to access its files.")
@@ -22,27 +22,27 @@ Public Module SharedMethods
     Function IsDirectoryEmptySafe(folder As String)
 
         Try
-            Return Not IO.Directory.EnumerateFileSystemEntries(folder).Any()
+            Return Not Directory.EnumerateFileSystemEntries(folder).Any()
 
-            For Each subdir In IO.Directory.EnumerateDirectories(folder)
+            For Each subdir In Directory.EnumerateDirectories(folder)
                 Try
                     If Not IsDirectoryEmptySafe(subdir) Then Return False
-                Catch ex As System.UnauthorizedAccessException
+                Catch ex As UnauthorizedAccessException
 
                 End Try
             Next
 
-            For Each file In IO.Directory.EnumerateFiles(folder)
+            For Each file In Directory.EnumerateFiles(folder)
                 Try
                     Return False
-                Catch ex As System.UnauthorizedAccessException
+                Catch ex As UnauthorizedAccessException
 
                 End Try
             Next
 
             Return True
 
-        Catch ex As System.UnauthorizedAccessException
+        Catch ex As UnauthorizedAccessException
             MsgBox("You are not authorized to access some items in this folder." & vbCrLf & "Please try running CompactGUI as an administrator, otherwise these items will be skipped.", MsgBoxStyle.Exclamation, "Unauthorized Access")
             Return False
 

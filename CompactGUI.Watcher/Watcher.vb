@@ -3,9 +3,6 @@ Imports System.Text.Json
 Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports CompactGUI.Core
 Imports System.Threading
-Imports System.Collections.Specialized
-Imports System.Runtime
-Imports System.ComponentModel
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class Watcher : Inherits ObservableObject
@@ -258,7 +255,7 @@ Public Class Watcher : Inherits ObservableObject
 
             If BGCompactor.isCompactorActive Then Return
 
-            If Not WatchedFolders.Any(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION) Then
+            If Not WatchedFolders.Any(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION) Then
                 Return
             End If
 
@@ -274,7 +271,7 @@ Public Class Watcher : Inherits ObservableObject
 
     Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
         Debug.WriteLine("Background Analysing: " & folder)
-        Dim analyser As New Core.Analyser(folder)
+        Dim analyser As New Analyser(folder)
 
         Await analyser.AnalyseFolder(Nothing)
 

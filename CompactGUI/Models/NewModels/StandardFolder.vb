@@ -1,4 +1,4 @@
-﻿Imports CompactGUI.Core
+﻿
 
 Public Class StandardFolder : Inherits CompressableFolder
 

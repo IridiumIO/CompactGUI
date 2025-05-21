@@ -16,7 +16,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
 
     Public Sub New()
 
-        AddHandler MyBase.TextChanged, AddressOf OnTokenTextChanged
+        AddHandler TextChanged, AddressOf OnTokenTextChanged
 
     End Sub
 
@@ -33,7 +33,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
 
     Public Sub InsertText(text As String)
         text &= " "
-        MyBase.AppendText(text)
+        AppendText(text)
         If TokenMatcher Is Nothing Then Return
         Dim token = TokenMatcher(text)
         If token IsNot Nothing Then
@@ -43,7 +43,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
 
     Private Sub ReplaceTextWithToken(inputText As String, token As Object)
 
-        RemoveHandler MyBase.TextChanged, AddressOf OnTokenTextChanged
+        RemoveHandler TextChanged, AddressOf OnTokenTextChanged
 
         Dim para = CaretPosition.Paragraph
 
@@ -68,7 +68,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
 
         End If
 
-        AddHandler MyBase.TextChanged, AddressOf OnTokenTextChanged
+        AddHandler TextChanged, AddressOf OnTokenTextChanged
 
     End Sub
 

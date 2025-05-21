@@ -23,10 +23,10 @@ Public Class CompressionOptions : Inherits ObservableObject
     Public Function Clone() As CompressionOptions
         Dim copy As New CompressionOptions()
 
-        copy.SelectedCompressionMode = Me.SelectedCompressionMode
-        copy.SkipPoorlyCompressedFileTypes = Me.SkipPoorlyCompressedFileTypes
-        copy.SkipUserSubmittedFiletypes = Me.SkipUserSubmittedFiletypes
-        copy.WatchFolderForChanges = Me.WatchFolderForChanges
+        copy.SelectedCompressionMode = SelectedCompressionMode
+        copy.SkipPoorlyCompressedFileTypes = SkipPoorlyCompressedFileTypes
+        copy.SkipUserSubmittedFiletypes = SkipUserSubmittedFiletypes
+        copy.WatchFolderForChanges = WatchFolderForChanges
 
         Return copy
     End Function

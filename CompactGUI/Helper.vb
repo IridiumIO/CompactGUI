@@ -12,7 +12,7 @@ Module Helper
 
     Function GetSteamNameAndIDFromFolder(path As String) As (appID As Integer, gameName As String, installDir As String)
 
-        Dim workingDir = New IO.DirectoryInfo(path)
+        Dim workingDir = New DirectoryInfo(path)
         Dim parentfolder = workingDir.Parent.Parent
 
         If Not parentfolder?.Name = "steamapps" Then Return Nothing
@@ -84,18 +84,18 @@ Module Helper
 
             If Not validation.isValid Then
                 invalidFolders.Add(folder)
-                invalidMessages.Add($"{New IO.DirectoryInfo(folder).Name}: {validation.msg}")
+                invalidMessages.Add($"{New DirectoryInfo(folder).Name}: {validation.msg}")
             End If
         Next
         If invalidFolders.Any Then
-            GenerateInvalidFolderSnackbar(invalidFolders, invalidMessages)
+            GenerateInvalidFolderSnackbar(invalidMessages)
         End If
 
         Return (invalidFolders, invalidMessages)
 
     End Function
 
-    Private Sub GenerateInvalidFolderSnackbar(invalidFolders As List(Of String), invalidMessages As List(Of String))
+    Private Sub GenerateInvalidFolderSnackbar(invalidMessages As List(Of String))
         Dim snackbar = Application.GetService(Of CustomSnackBarService)()
         Dim message = String.Join(vbCrLf, invalidMessages)
         snackbar.Show("Invalid Folders", message, Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(10))

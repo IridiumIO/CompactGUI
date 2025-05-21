@@ -1,7 +1,5 @@
 ﻿Imports System.ComponentModel
 
-Imports CommunityToolkit.Mvvm.ComponentModel
-
 Imports Wpf.Ui
 Imports Wpf.Ui.Abstractions
 Imports Wpf.Ui.Controls
@@ -17,7 +15,7 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
         NavigationView.SetServiceProvider(serviceProvider)
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.DataContext = viewmodel
+        DataContext = viewmodel
 
         NotifyIconTrayMenu.DataContext = viewmodel
 

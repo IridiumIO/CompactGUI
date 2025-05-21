@@ -1,5 +1,4 @@
 ﻿Imports System.Collections.ObjectModel
-Imports System.Runtime
 Imports System.Threading
 
 Public Class BackgroundCompactor

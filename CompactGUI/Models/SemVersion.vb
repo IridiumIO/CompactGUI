@@ -23,15 +23,15 @@
     End Sub
 
     Public Function CompareTo(other As SemVersion) As Integer Implements IComparable(Of SemVersion).CompareTo
-        If other.Major - Me.Major <> 0 Then Return other.Major - Me.Major
-        If other.Minor - Me.Minor <> 0 Then Return other.Minor - Me.Minor
-        If other.Patch - Me.Patch <> 0 Then Return other.Patch - Me.Patch
-        If Not String.Equals(Me.PreRelease, other.PreRelease) Then
-            If Me.PreRelease = "" Then Return -1
+        If other.Major - Major <> 0 Then Return other.Major - Major
+        If other.Minor - Minor <> 0 Then Return other.Minor - Minor
+        If other.Patch - Patch <> 0 Then Return other.Patch - Patch
+        If Not String.Equals(PreRelease, other.PreRelease) Then
+            If PreRelease = "" Then Return -1
             If other.PreRelease = "" Then Return 1
-            Return String.Compare(other.PreRelease, Me.PreRelease)
+            Return String.Compare(other.PreRelease, PreRelease)
         End If
-        If other.PreReleaseMinor - Me.PreReleaseMinor <> 0 Then Return other.PreReleaseMinor - Me.PreReleaseMinor
+        If other.PreReleaseMinor - PreReleaseMinor <> 0 Then Return other.PreReleaseMinor - PreReleaseMinor
         Return 0
 
     End Function

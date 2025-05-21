@@ -9,7 +9,7 @@
 
     Public Sub New(name As String, desc As String)
         Me.Name = name
-        Me.Description = desc
+        Description = desc
     End Sub
 
 End Class

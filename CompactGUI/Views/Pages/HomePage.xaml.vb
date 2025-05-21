@@ -8,7 +8,7 @@
         ' This call is required by the designer.
         InitializeComponent()
         _viewModel = viewmodel
-        Me.DataContext = viewmodel
+        DataContext = viewmodel
 
         ScrollViewer.SetCanContentScroll(Me, False)
 

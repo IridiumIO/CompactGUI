@@ -2,8 +2,6 @@
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 
-Imports IWshRuntimeLibrary
-
 Imports Wpf.Ui.Controls
 
 Public Class WatcherViewModel : Inherits ObservableObject

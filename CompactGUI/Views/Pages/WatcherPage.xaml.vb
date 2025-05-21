@@ -4,7 +4,7 @@
     Sub New(VM As WatcherViewModel)
 
         InitializeComponent()
-        Me.DataContext = VM
+        DataContext = VM
         viewModel = VM
 
     End Sub

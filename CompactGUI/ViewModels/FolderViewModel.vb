@@ -1,16 +1,9 @@
-﻿Imports System.Collections.ObjectModel
+﻿
 Imports System.ComponentModel
-Imports System.Drawing
-Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 
-Imports MeasurePerformance.IL.Weaver
-
-Imports PropertyChanged
-
-Imports Wpf.Ui
 Imports Wpf.Ui.Controls
 
 Public Class FolderViewModel : Inherits ObservableObject
@@ -117,7 +110,7 @@ Public Class FolderViewModel : Inherits ObservableObject
         Next
 
         Dim snackbar = Application.GetService(Of CustomSnackBarService)()
-        snackbar.Show("Applied to all folders", "Success", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
+        snackbar.Show("Applied to all folders", "Success", ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
 
     End Sub
 
@@ -195,7 +188,7 @@ Public Class FolderViewModel : Inherits ObservableObject
 
         Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
 
-        Dim button = New Wpf.Ui.Controls.Button
+        Dim button = New Button
         button.Content = "Restart as Admin"
         button.Command = New RelayCommand(AddressOf RunAsAdmin)
         button.Margin = New Thickness(-3, 10, 0, 0)

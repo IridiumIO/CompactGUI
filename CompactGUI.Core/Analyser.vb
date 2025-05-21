@@ -80,7 +80,7 @@ Public Class Analyser
             Dim extRes As New Concurrent.ConcurrentDictionary(Of String, ExtensionResult)
             Parallel.ForEach(FileCompressionDetailsList,
                                Sub(fl)
-                                   Dim xt = New IO.FileInfo(fl.FileName).Extension
+                                   Dim xt = New FileInfo(fl.FileName).Extension
                                    If fl.UncompressedSize = 0 Then Return
 
                                    extRes.AddOrUpdate(xt,

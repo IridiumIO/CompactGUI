@@ -1,8 +1,6 @@
 ﻿Imports System.Net.Http
 Imports System.Text.Json
 
-Imports CommunityToolkit.Mvvm.Input
-
 Imports Wpf.Ui.Controls
 
 Public Interface IUpdaterService
@@ -35,7 +33,7 @@ Public Class UpdaterService : Implements IUpdaterService
 
         Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
 
-        Dim textBlock = New Wpf.Ui.Controls.TextBlock
+        Dim textBlock = New TextBlock
         textBlock.Text = "Click to download"
 
         ' Show the custom snackbar

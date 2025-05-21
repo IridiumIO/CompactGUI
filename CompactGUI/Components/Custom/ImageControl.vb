@@ -31,7 +31,7 @@ Public Class ImageControl : Inherits Image
 
         ' Animate fade out
         Dim fadeOut As New DoubleAnimation(0, TimeSpan.FromMilliseconds(300))
-        Await control.BeginAnimationAsync(Image.OpacityProperty, fadeOut)
+        Await control.BeginAnimationAsync(OpacityProperty, fadeOut)
 
         ' Now update the actual image source
         control.Source = CType(e.NewValue, ImageSource)
@@ -40,7 +40,7 @@ Public Class ImageControl : Inherits Image
     End Sub
 
     Shared Sub New()
-        Image.SourceProperty.OverrideMetadata(GetType(ImageControl), New FrameworkPropertyMetadata(Nothing, AddressOf OnSourcePropertyChanged, AddressOf OnSourceCoerceValue))
+        SourceProperty.OverrideMetadata(GetType(ImageControl), New FrameworkPropertyMetadata(Nothing, AddressOf OnSourcePropertyChanged, AddressOf OnSourceCoerceValue))
     End Sub
 
     Public Custom Event SourceChanging As RoutedEventHandler
@@ -84,7 +84,7 @@ Public Class ImageControl : Inherits Image
 End Class
 
 Public Module AnimationHelper
-    <System.Runtime.CompilerServices.Extension()>
+    <Runtime.CompilerServices.Extension()>
     Public Async Function BeginAnimationAsync(target As UIElement, dp As DependencyProperty, animation As AnimationTimeline) As Task
         Dim tcs As New TaskCompletionSource(Of Boolean)()
 

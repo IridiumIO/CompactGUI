@@ -91,7 +91,7 @@ Public Class WikiService : Implements IWikiService
             Return False
         End If
 
-        snackbar.Show("Submitted to wiki", $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
+        snackbar.Show("Submitted to wiki", $"UID: {steamsubmitdata.UID}{vbCrLf}Game: {steamsubmitdata.GameName}{vbCrLf}SteamID: {steamsubmitdata.SteamID}{vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
         Return True
 
     End Function
@@ -103,8 +103,6 @@ Public Class WikiService : Implements IWikiService
             Dim httpC As New HttpClient
             Dim resp = Await httpC.GetAsync(New Uri(url & submissionstring))
             Return resp.StatusCode
-            If resp.StatusCode <> 200 Then Return False
-            Return True
         Catch ex As Exception
             Return 0
         End Try

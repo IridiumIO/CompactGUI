@@ -1,6 +1,4 @@
-﻿Imports System.Collections.Concurrent
-
-Imports Gameloop
+﻿
 
 Imports Gameloop.Vdf
 Imports Gameloop.Vdf.Linq

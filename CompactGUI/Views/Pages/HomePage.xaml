@@ -279,7 +279,7 @@
 
                                 </Grid>
                                 <DataTemplate.Triggers>
-                                    <EventTrigger RoutedEvent="MouseEnter">
+                                    <EventTrigger RoutedEvent="UIElement.MouseEnter">
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <DoubleAnimation Storyboard.TargetName="ContainingGrid"
@@ -288,7 +288,7 @@
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </EventTrigger>
-                                    <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger RoutedEvent="UIElement.MouseLeave">
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <DoubleAnimation Storyboard.TargetName="ContainingGrid"

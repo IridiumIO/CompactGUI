@@ -11,7 +11,7 @@ Public Class CustomSnackBarService
         If _snackbar Is Nothing Then _snackbar = New Snackbar(GetSnackbarPresenter())
 
         _snackbar.SetCurrentValue(Snackbar.TitleProperty, title)
-        _snackbar.SetCurrentValue(System.Windows.Controls.ContentControl.ContentProperty, message)
+        _snackbar.SetCurrentValue(ContentControl.ContentProperty, message)
         _snackbar.SetCurrentValue(Snackbar.AppearanceProperty, appearance)
         _snackbar.SetCurrentValue(Snackbar.IconProperty, icon)
         _snackbar.SetCurrentValue(Snackbar.TimeoutProperty, If(timeout = Nothing, DefaultTimeOut, timeout))
