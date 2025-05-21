@@ -28,8 +28,8 @@ Class MainWindowX
 
     Private Sub UIBtnOptions_Click(sender As Object, e As RoutedEventArgs) Handles uiBtnOptions.Click
 
-        Dim settingsDialog As New CustomContentDialog With {.Content = New SettingsView, .PrimaryButtonText = "save and close"}
-        settingsDialog.ShowAsync()
+        'Dim settingsDialog As New CustomContentDialog With {.Content = New SettingsPage, .PrimaryButtonText = "save and close"}
+        'settingsDialog.ShowAsync()
 
     End Sub
 

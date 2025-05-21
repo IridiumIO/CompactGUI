@@ -37,11 +37,28 @@ Public Class ApplicationHostService
         Await Task.CompletedTask
 
 
+
+        Dim args As String() = Environment.GetCommandLineArgs()
+
+        Dim shouldMinimizeToTray As Boolean = (args.Length = 2 AndAlso args(1).ToString = "-tray") OrElse
+                                          (SettingsHandler.AppSettings.StartInSystemTray AndAlso args.Length = 1)
+
         If Not Application.Current.Windows.OfType(Of MainWindow)().Any() Then
+
             Dim navigationWindow = _serviceProvider.GetRequiredService(Of MainWindow)()
             AddHandler navigationWindow.Loaded, AddressOf OnNavigationWindowLoaded
             navigationWindow.Show()
+
+            If shouldMinimizeToTray Then
+                Application.GetService(Of MainWindowViewModel).ClosingCommand.Execute(New ComponentModel.CancelEventArgs(True))
+            ElseIf args.Length = 2 Then
+                Await Application.GetService(Of HomeViewModel).AddFoldersAsync({args(1)})
+            End If
+
+
         End If
+
+
     End Function
 
     Private Sub OnNavigationWindowLoaded(sender As Object, e As RoutedEventArgs)

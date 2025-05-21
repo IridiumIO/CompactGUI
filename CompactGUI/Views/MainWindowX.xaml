@@ -1050,7 +1050,7 @@
         <!--Version String in Bottom Right-->
         <TextBlock Text="{Binding Version, StringFormat=v {0}}" Foreground="#40FFFFFF" FontFamily="Segoe UI SemiBold" VerticalAlignment="Bottom" FontSize="14" Panel.ZIndex="1" IsHitTestVisible="False" HorizontalAlignment="Right" Margin="0,0,15,10"/>
 
-        <local:NotifyIconWrapper NotifyRequest="{Binding NotifyRequest}">
+        <!--<local:NotifyIconWrapper NotifyRequest="{Binding NotifyRequest}">
             <bh:Interaction.Triggers>
                 <bh:EventTrigger EventName="OpenSelected">
                     <bh:InvokeCommandAction Command="{Binding NotifyIconOpenCommand}"/>
@@ -1059,7 +1059,7 @@
                     <bh:InvokeCommandAction Command="{Binding NotifyIconExitCommand}"/>
                 </bh:EventTrigger>
             </bh:Interaction.Triggers>
-        </local:NotifyIconWrapper>
+        </local:NotifyIconWrapper>-->
 
     </Grid>
     <bh:Interaction.Triggers>

@@ -9,64 +9,163 @@ Imports Wpf.Ui.Abstractions
 Imports Microsoft.Extensions.Hosting
 Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Configuration
+Imports System.Drawing
+
+
 Partial Public Class Application
-        Private Shared _host As IHost = Host.CreateDefaultBuilder() _
-            .ConfigureAppConfiguration(Sub(context, configBuilder)
-                                           ' Set base path using IConfigurationBuilder
-                                           configBuilder.SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory))
-                                       End Sub) _
-            .ConfigureServices(Sub(context, services)
 
-                                   services.AddHostedService(Of ApplicationHostService)()
-
-                                   ' Theme manipulation
-                                   services.AddSingleton(Of IThemeService, ThemeService)()
-
-                                   ' TaskBar manipulation
-                                   services.AddSingleton(Of ITaskBarService, TaskBarService)()
-                                   ' Service containing navigation, same as INavigationWindow... but without window
-                                   services.AddNavigationViewPageProvider()
-                                   services.AddSingleton(Of INavigationService, NavigationService)()
-                                   services.AddSingleton(Of CustomSnackBarService)()
-
-                                   services.AddSingleton(Of INavigationWindow, MainWindow)()
-                                   services.AddSingleton(Of MainWindow)()
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 1)
 
 
-                                   ' Views and ViewModels
-                                   services.AddSingleton(Of HomePage)()
-                                   services.AddSingleton(Of HomeViewModel)()
 
-                                   services.AddSingleton(Of WatcherPage)()
-                                   services.AddSingleton(Of WatcherViewModel)()
 
-                                   'Other services
-                                   services.AddSingleton(Of CompactGUI.Watcher.Watcher)(Function()
-                                                                                            Return New Watcher.Watcher({})
-                                                                                        End Function)
 
-                               End Sub) _
+
+
+
+    Private Shared _host As IHost = Host.CreateDefaultBuilder() _
+        .ConfigureAppConfiguration(Sub(context, configBuilder)
+                                       ' Set base path using IConfigurationBuilder
+                                       configBuilder.SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory))
+                                   End Sub) _
+        .ConfigureServices(Sub(context, services)
+
+                               services.AddHostedService(Of ApplicationHostService)()
+
+                               ' Theme manipulation
+                               services.AddSingleton(Of IThemeService, ThemeService)()
+
+                               ' TaskBar manipulation
+                               services.AddSingleton(Of ITaskBarService, TaskBarService)()
+                               ' Service containing navigation, same as INavigationWindow... but without window
+                               services.AddNavigationViewPageProvider()
+                               services.AddSingleton(Of INavigationService, NavigationService)()
+                               services.AddSingleton(Of CustomSnackBarService)()
+                               services.AddSingleton(Of IWindowService, WindowService)()
+                               services.AddSingleton(Of IUpdaterService, UpdaterService)()
+                               services.AddSingleton(Of IWikiService, WikiService)()
+
+                               services.AddSingleton(Of INavigationWindow, MainWindow)()
+                               services.AddSingleton(Of MainWindow)()
+                               services.AddSingleton(Of MainWindowViewModel)()
+
+
+                               ' Views and ViewModels
+                               services.AddSingleton(Of HomePage)()
+                               services.AddSingleton(Of HomeViewModel)()
+
+                               services.AddSingleton(Of WatcherPage)()
+                               services.AddSingleton(Of WatcherViewModel)()
+
+                               services.AddSingleton(Of SettingsPage)()
+                               services.AddSingleton(Of SettingsViewModel)()
+
+
+                               'Other services
+                               services.AddSingleton(Of CompactGUI.Watcher.Watcher)(Function()
+                                                                                        Return New Watcher.Watcher({})
+                                                                                    End Function)
+                               services.AddSingleton(Of TrayNotifierService)(Function(sp)
+                                                                                 Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
+                                                                             End Function)
+                           End Sub) _
             .Build()
 
 
-        Public Shared Function GetService(Of T As Class)() As T
-            Return TryCast(_host.Services.GetService(GetType(T)), T)
-        End Function
+    Public Shared Function GetService(Of T As Class)() As T
+        Return TryCast(_host.Services.GetService(GetType(T)), T)
+    End Function
 
-        Private Shadows Async Sub OnStartup(sender As Object, e As StartupEventArgs)
+
+    Public Shared ReadOnly mutex As New Mutex(False, "Global\CompactGUI")
+    Private pipeServerCancellation As New CancellationTokenSource()
+    Private pipeServerTask As Task
+
+
+
+    Private Shadows Async Sub OnStartup(sender As Object, e As StartupEventArgs)
         SettingsHandler.InitialiseSettings()
+
+        Dim acquiredMutex As Boolean = mutex.WaitOne(0, False)
+
+        If Not acquiredMutex Then
+            If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+                HandleSecondInstance(e.Args)
+                Return
+            End If
+        Else
+            If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+                pipeServerTask = ProcessNextInstanceMessage()
+            End If
+        End If
+
+        GetService(Of Watcher.Watcher)()
+
         Await _host.StartAsync()
+        Await SettingsViewModel.InitializeEnvironment()
+        Await Application.GetService(Of IUpdaterService).CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
+        Await Application.GetService(Of IWikiService).GetUpdatedJSONAsync()
+
     End Sub
 
-        Private Shadows Async Sub OnExit(sender As Object, e As ExitEventArgs)
 
-            Await _host.StopAsync()
-            _host.Dispose()
-        End Sub
+    Private Sub HandleSecondInstance(args As String())
+        If args.Length > 0 AndAlso args(0) <> "-tray" Then
+            Using client = New NamedPipeClientStream(".", "CompactGUI", PipeDirection.Out)
+                client.Connect()
+                Using writer = New StreamWriter(client)
+                    writer.WriteLine(args(0))
+                End Using
+            End Using
+        Else
+            MessageBox.Show("An instance of CompactGUI is already running")
+        End If
+        Application.Current.Shutdown()
+    End Sub
 
-        Private Sub OnDispatcherUnhandledException(sender As Object, e As DispatcherUnhandledExceptionEventArgs)
-            ' For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
-        End Sub
+    Private Async Function ProcessNextInstanceMessage() As Task
+        While Not pipeServerCancellation.IsCancellationRequested
+            Using server = New NamedPipeServerStream("CompactGUI", PipeDirection.In, -1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous)
+                Try
+                    Await server.WaitForConnectionAsync(pipeServerCancellation.Token)
+                    Using reader = New StreamReader(server)
+                        Dim message = Await reader.ReadLineAsync()
+                        Await MainWindow.Dispatcher.InvokeAsync(Async Function()
+                                                                    If message IsNot Nothing Then
+                                                                        MainWindow.Show()
+                                                                        MainWindow.WindowState = WindowState.Normal
+                                                                        MainWindow.Activate()
+                                                                        Await Application.GetService(Of HomeViewModel).AddFoldersAsync({message})
+                                                                        'Await MainWindow.ViewModel.SelectFolderAsync(message)
+                                                                    End If
+                                                                End Function).Task
+                    End Using
+                Catch ex As OperationCanceledException
+                    Return
+                Finally
+                    If server.IsConnected Then server.Disconnect()
+                End Try
+            End Using
+        End While
+    End Function
+
+    Public Async Function ShutdownPipeServer() As Task
+        If pipeServerTask IsNot Nothing Then
+            pipeServerCancellation.Cancel()
+            Await pipeServerTask
+        End If
+    End Function
+
+
+    Private Shadows Async Sub OnExit(sender As Object, e As ExitEventArgs)
+
+        Await _host.StopAsync()
+        _host.Dispose()
+    End Sub
+
+    Private Sub OnDispatcherUnhandledException(sender As Object, e As DispatcherUnhandledExceptionEventArgs)
+        ' For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+    End Sub
 
 
 
@@ -97,87 +196,87 @@ Partial Public Class Application
 
 
 
-        'Public Shared ReadOnly mutex As New Mutex(False, "Global\CompactGUI")
-        'Private pipeServerCancellation As New CancellationTokenSource()
-        'Private pipeServerTask As Task
-        'Private Shadows mainWindow As MainWindow
+    'Public Shared ReadOnly mutex As New Mutex(False, "Global\CompactGUI")
+    'Private pipeServerCancellation As New CancellationTokenSource()
+    'Private pipeServerTask As Task
+    'Private Shadows mainWindow As MainWindow
 
-        'Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs)
-        '    SettingsHandler.InitialiseSettings()
-        '    Dim acquiredMutex As Boolean = mutex.WaitOne(0, False)
+    'Private Async Sub Application_Startup(sender As Object, e As StartupEventArgs)
+    '    SettingsHandler.InitialiseSettings()
+    '    Dim acquiredMutex As Boolean = mutex.WaitOne(0, False)
 
-        '    If Not acquiredMutex Then
-        '        If Not SettingsHandler.AppSettings.AllowMultiInstance Then
-        '            HandleSecondInstance(e.Args)
-        '            Return
-        '        End If
-        '    Else
-        '        If Not SettingsHandler.AppSettings.AllowMultiInstance Then
-        '            pipeServerTask = ProcessNextInstanceMessage()
-        '        End If
-        '    End If
+    '    If Not acquiredMutex Then
+    '        If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+    '            HandleSecondInstance(e.Args)
+    '            Return
+    '        End If
+    '    Else
+    '        If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+    '            pipeServerTask = ProcessNextInstanceMessage()
+    '        End If
+    '    End If
 
-        '    mainWindow = New MainWindow()
-        '    Dim shouldMinimizeToTray As Boolean = (e.Args.Length = 1 AndAlso e.Args(0).ToString = "-tray") OrElse
-        '                                      (SettingsHandler.AppSettings.StartInSystemTray AndAlso e.Args.Length = 0)
+    '    mainWindow = New MainWindow()
+    '    Dim shouldMinimizeToTray As Boolean = (e.Args.Length = 1 AndAlso e.Args(0).ToString = "-tray") OrElse
+    '                                      (SettingsHandler.AppSettings.StartInSystemTray AndAlso e.Args.Length = 0)
 
-        '    If shouldMinimizeToTray Then
-        '        mainWindow.Show()
-        '        mainWindow.ViewModel.ClosingCommand.Execute(New ComponentModel.CancelEventArgs(True))
-        '    Else
-        '        If e.Args.Length = 1 Then
-        '            Await mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
-        '        End If
-        '        mainWindow.Show()
-        '    End If
+    '    If shouldMinimizeToTray Then
+    '        mainWindow.Show()
+    '        mainWindow.ViewModel.ClosingCommand.Execute(New ComponentModel.CancelEventArgs(True))
+    '    Else
+    '        If e.Args.Length = 1 Then
+    '            Await mainWindow.ViewModel.SelectFolderAsync(e.Args(0))
+    '        End If
+    '        mainWindow.Show()
+    '    End If
 
-        '    Await SettingsViewModel.InitializeEnvironment()
-        'End Sub
+    '    Await SettingsViewModel.InitializeEnvironment()
+    'End Sub
 
-        'Private Sub HandleSecondInstance(args As String())
-        '    If args.Length > 0 AndAlso args(0) <> "-tray" Then
-        '        Using client = New NamedPipeClientStream(".", "CompactGUI", PipeDirection.Out)
-        '            client.Connect()
-        '            Using writer = New StreamWriter(client)
-        '                writer.WriteLine(args(0))
-        '            End Using
-        '        End Using
-        '    Else
-        '        MessageBox.Show("An instance of CompactGUI is already running")
-        '    End If
-        '    Application.Current.Shutdown()
-        'End Sub
+    'Private Sub HandleSecondInstance(args As String())
+    '    If args.Length > 0 AndAlso args(0) <> "-tray" Then
+    '        Using client = New NamedPipeClientStream(".", "CompactGUI", PipeDirection.Out)
+    '            client.Connect()
+    '            Using writer = New StreamWriter(client)
+    '                writer.WriteLine(args(0))
+    '            End Using
+    '        End Using
+    '    Else
+    '        MessageBox.Show("An instance of CompactGUI is already running")
+    '    End If
+    '    Application.Current.Shutdown()
+    'End Sub
 
-        'Private Async Function ProcessNextInstanceMessage() As Task
-        '    While Not pipeServerCancellation.IsCancellationRequested
-        '        Using server = New NamedPipeServerStream("CompactGUI", PipeDirection.In, -1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous)
-        '            Try
-        '                Await server.WaitForConnectionAsync(pipeServerCancellation.Token)
-        '                Using reader = New StreamReader(server)
-        '                    Dim message = Await reader.ReadLineAsync()
-        '                    Await mainWindow.Dispatcher.InvokeAsync(Async Function()
-        '                                                                If message IsNot Nothing Then
-        '                                                                    mainWindow.Show()
-        '                                                                    mainWindow.WindowState = WindowState.Normal
-        '                                                                    mainWindow.Activate()
-        '                                                                    Await mainWindow.ViewModel.SelectFolderAsync(message)
-        '                                                                End If
-        '                                                            End Function).Task
-        '                End Using
-        '            Catch ex As OperationCanceledException
-        '                Return
-        '            Finally
-        '                If server.IsConnected Then server.Disconnect()
-        '            End Try
-        '        End Using
-        '    End While
-        'End Function
+    'Private Async Function ProcessNextInstanceMessage() As Task
+    '    While Not pipeServerCancellation.IsCancellationRequested
+    '        Using server = New NamedPipeServerStream("CompactGUI", PipeDirection.In, -1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous)
+    '            Try
+    '                Await server.WaitForConnectionAsync(pipeServerCancellation.Token)
+    '                Using reader = New StreamReader(server)
+    '                    Dim message = Await reader.ReadLineAsync()
+    '                    Await mainWindow.Dispatcher.InvokeAsync(Async Function()
+    '                                                                If message IsNot Nothing Then
+    '                                                                    mainWindow.Show()
+    '                                                                    mainWindow.WindowState = WindowState.Normal
+    '                                                                    mainWindow.Activate()
+    '                                                                    Await mainWindow.ViewModel.SelectFolderAsync(message)
+    '                                                                End If
+    '                                                            End Function).Task
+    '                End Using
+    '            Catch ex As OperationCanceledException
+    '                Return
+    '            Finally
+    '                If server.IsConnected Then server.Disconnect()
+    '            End Try
+    '        End Using
+    '    End While
+    'End Function
 
-        'Public Async Function ShutdownPipeServer() As Task
-        '    If pipeServerTask IsNot Nothing Then
-        '        pipeServerCancellation.Cancel()
-        '        Await pipeServerTask
-        '    End If
-        'End Function
+    'Public Async Function ShutdownPipeServer() As Task
+    '    If pipeServerTask IsNot Nothing Then
+    '        pipeServerCancellation.Cancel()
+    '        Await pipeServerTask
+    '    End If
+    'End Function
 
-    End Class
+End Class

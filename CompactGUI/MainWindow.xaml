@@ -1,19 +1,27 @@
-﻿<ui:FluentWindow x:Class="MainWindow"
+﻿<ui:FluentWindow x:Class="MainWindow" x:Name="MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:local="clr-namespace:CompactGUI"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 Title="MainWindow" 
+                 xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
+                 Title="MainWindow"  xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
                  Width="1300" Height="700" MinHeight="600" MinWidth="768"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
                  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 ExtendsContentIntoTitleBar="True"
+                 ExtendsContentIntoTitleBar="True" 
                  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 RenderOptions.BitmapScalingMode="HighQuality" WindowBackdropType="Tabbed" 
+                 RenderOptions.BitmapScalingMode="HighQuality" WindowBackdropType="Mica" 
                  WindowCornerPreference="Round" WindowStartupLocation="CenterScreen"
+                 d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
                  mc:Ignorable="d">
+    <bh:Interaction.Triggers>
+
+        <bh:EventTrigger EventName="Closing">
+            <bh:InvokeCommandAction Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+        </bh:EventTrigger>
+    </bh:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -55,7 +63,7 @@
             <ui:NavigationView.FooterMenuItems>
                 
                 <ui:NavigationViewItem Margin="-5,0,15,1"
-                                       NavigationCacheMode="Required"
+                                       NavigationCacheMode="Required" TargetPageType="{x:Type local:SettingsPage}"
                                        Tag="{Binding}">
                                        <!--TargetPageType="{x:Type local:SettingsPage}"-->
 
@@ -82,22 +90,85 @@
 
             <Border>
                 <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="0.2,1" Opacity="0.9">
-                        <GradientStop Color="#1b2737" Offset="0"/>
-                        <GradientStop Color="#2d425d" Offset="3"/>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="0.2,1" Opacity="0.4">
+                        <GradientStop Color="#283e51" Offset="0"/>
+                        <GradientStop Color="#2d425d" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
             </Border>
-            <ui:Image Source="F:\812140.jpg" Stretch="UniformToFill" Opacity="0.6" Margin="-20" >
-                <ui:Image.Effect>
-                    <BlurEffect Radius="12" KernelType="Box" RenderingBias="Quality"/>
-                </ui:Image.Effect>
-            </ui:Image>
+            <local:ImageControl x:Name="steamBG" Height="{Binding ActualHeight, ElementName=MainWindow}" Stretch="UniformToFill" Opacity="1" Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True" NewSource="{Binding BackgroundImage}">
+
+                <local:ImageControl.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="2" ScaleY="1.2" />
+                    </TransformGroup>
+
+                </local:ImageControl.RenderTransform>
+                <local:ImageControl.RenderTransformOrigin>
+                    <Point X="0.5" Y="0.5"/>
+                </local:ImageControl.RenderTransformOrigin>
+                <local:ImageControl.Triggers>
+                    <EventTrigger RoutedEvent="local:ImageControl.SourceChanged">
+                        <BeginStoryboard>
+                            <Storyboard>
+                               
+                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.6" Duration="0:0:2" >
+                                    <DoubleAnimation.EasingFunction>
+                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" From="100" To="12" Duration="0:0:5" />
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" From="2" To="1.0"  Duration="0:0:6">
+                                    <DoubleAnimation.EasingFunction>
+                                        <QuinticEase EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" From="1.2" To="1.00" Duration="0:0:8">
+                                    <DoubleAnimation.EasingFunction>
+                                        <QuinticEase EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <!--<EventTrigger RoutedEvent="local:ImageControl.SourceChanging">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" To="100" Duration="0:0:0" BeginTime="0:0:0"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" To="0" Duration="0:0:0"/>
+
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" To="2.0"  Duration="0:0:0"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" To="1.2" Duration="0:0:0"/>
+
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>-->
+                </local:ImageControl.Triggers>
+
+
+                <local:ImageControl.Effect>
+                    <BlurEffect Radius="0" RenderingBias="Quality" KernelType="Box" />
+                </local:ImageControl.Effect>
+
+
+            </local:ImageControl>
 
             <TextBlock x:Name="ProgTitle" Text="CompactGUI" Margin="20,14" FontSize="20" Visibility="Collapsed" d:Visibility="Visible" />
         </Grid>
         <ui:SnackbarPresenter x:Name="RootSnackbar" MaxWidth="600"
                               Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
+        <tray:NotifyIcon x:Name="NotifyIconTray"
+            FocusOnLeftClick="True"
+            MenuOnRightClick="True"
+            TooltipText="CompactGUI">
+            <tray:NotifyIcon.Menu>
+                <ContextMenu x:Name="NotifyIconTrayMenu">
+                    <MenuItem Header="Open" Command="{Binding NotifyIconOpenCommand}"/>
+                    <MenuItem Header="Exit" Command="{Binding NotifyIconExitCommand}"/>
+                </ContextMenu>
+            </tray:NotifyIcon.Menu>
+        </tray:NotifyIcon>
 
     </Grid>
 </ui:FluentWindow>

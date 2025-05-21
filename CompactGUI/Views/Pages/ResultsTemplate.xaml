@@ -128,7 +128,7 @@
                        Width="140" Height="40"
                        Margin="40,0,0,10"
                        Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
-                       Command="{Binding CompressAgainCommand}"
+                       Command="{Binding SubmitToWikiCommand}"
                        FontSize="16">
                 <ui:Button.Visibility>
                     <MultiBinding Converter="{StaticResource IsSteamFolderAndFreshlyCompressedMultiConverter}">

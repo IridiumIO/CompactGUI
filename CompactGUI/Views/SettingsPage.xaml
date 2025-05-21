@@ -1,183 +1,23 @@
-﻿<UserControl x:Class="SettingsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:CompactGUI"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
-             Width="400" Height="800"
-             Padding="0,0,0,0"
-             d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}"
-             d:DesignHeight="800" d:DesignWidth="400" Background="White"
-             mc:Ignorable="d">
-    <Grid Margin="0">
-        <TextBlock Text="options"
-                   FontSize="26" FontWeight="SemiBold" />
+﻿<Page x:Class="SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:local="clr-namespace:CompactGUI"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}"
+      d:Height="400" d:Width="800"
+      mc:Ignorable="d">
+    <Grid Margin="40,20" ScrollViewer.CanContentScroll="False">
+        <Grid>
+             <TextBlock Text="Settings"
+                   FontSize="26"
+                   Foreground="{StaticResource CardForeground}" />
 
-        <StackPanel Margin="0,40,0,0">
-            <Label Content="Filetype Management" FontWeight="SemiBold" />
-
-            <StackPanel Margin="10,5,0,5">
-                <Grid Margin="0,0,0,2">
-                    <TextBlock Text="manage local skipped filetypes"
-                               VerticalAlignment="Center"
-                               FontSize="14" />
-                    <Button x:Name="uiEditSkipListBTN"
-                            Content="edit"
-                            Width="100" Height="30"
-                            Margin="0,0,25,0" HorizontalAlignment="Right"
-                            BorderThickness="0"
-                            Command="{Binding EditSkipListCommand}"
-                            IsEnabled="True" />
-                </Grid>
-
-                <Grid>
-                    <TextBlock Text="aggression of online skiplist"
-                               VerticalAlignment="Center"
-                               FontSize="14" />
-                    <TextBlock x:Name="skipHelpIcon"
-                               Text="(?)"
-                               Margin="175,0,0,0" VerticalAlignment="Center"
-                               Cursor="Hand" FontSize="14" Foreground="#FF98A9B9" TextDecorations="Underline">
-
-                        <ToolTipService.ToolTip>
-                            <ToolTip Placement="Top">
-                                <TextBlock Text="For Steam games only.&#x0a;When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well."
-                                           Width="200"
-                                           TextWrapping="Wrap" />
-                            </ToolTip>
-                        </ToolTipService.ToolTip>
-                    </TextBlock>
-
-                    <ComboBox x:Name="comboBoxSkipUserResultsAggression"
-                              Width="100" Height="30"
-                              Margin="0,0,25,0" HorizontalAlignment="Right" VerticalAlignment="Center"
-                              HorizontalContentAlignment="Left"
-                              Background="Transparent" BorderBrush="#98A9B9" BorderThickness="1" Foreground="#98A9B9"
-                              IsEnabled="False" SelectedIndex="0">
-                        <ComboBoxItem>
-                            <TextBlock Text="low"
-                                       FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <TextBlock Text="medium"
-                                       FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <TextBlock Text="high"
-                                       FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
-                        </ComboBoxItem>
-                    </ComboBox>
-
-                </Grid>
-
-            </StackPanel>
-
-            <Separator Margin="0,5,0,5" />
-            <Label Content="System Integration" FontWeight="SemiBold" />
-            <StackPanel Margin="10,5,0,7">
-                <CheckBox x:Name="uiIsContextEnabled" Margin="0,-3"
-                          Content="add to right-click context menu"
-                          IsChecked="{Binding AppSettings.IsContextIntegrated, Mode=TwoWay}" />
-                <CheckBox x:Name="uiIsStartMenuEnabled" Margin="0,-3"
-                          Content="add to start menu"
-                          IsChecked="{Binding AppSettings.IsStartMenuEnabled, Mode=TwoWay}"
-                           />
-                <CheckBox x:Name="uiShowNotifications" Margin="0,-3"
-                          Content="show notification on completion"
-                          IsChecked="{Binding AppSettings.ShowNotifications, Mode=TwoWay}" />
-                <CheckBox x:Name="uiAlwaysStartInTray" Margin="0,-3"
-                          Content="start CompactGUI in system tray"
-                          IsChecked="{Binding AppSettings.StartInSystemTray}" />
-
-            </StackPanel>
-            <Separator Margin="0,5,0,5" />
-
-            <Label Content="Maximum Compression Threads" FontWeight="SemiBold" />
-
-            <StackPanel Orientation="Horizontal" Margin="15,0,15,0">
-
-                <Slider x:Name="compressionParallelism" Width="130"
-
-IsSnapToTickEnabled="True" LargeChange="1" Maximum="16" Minimum="0"
-Orientation="Horizontal" SmallChange="1" TickFrequency="1"
-TickPlacement="BottomRight"
-Value="{Binding AppSettings.MaxCompressionThreads, Mode=TwoWay}">
-
-                </Slider>
-
-                <Label Margin="15,5" FontWeight="SemiBold" Content="{Binding AppSettings.MaxCompressionThreads, FallbackValue=0}"/>
-                <CheckBox x:Name="uiLockHDDToOneThread" Margin="15,0"
-          Content="HDDs only use 1 thread"
-          IsChecked="{Binding AppSettings.LockHDDsToOneThread}" />
-            </StackPanel>
+         
             
-
-
-            <Separator Margin="0,5,0,5" />
-
-            <Label Content="Background Watcher Settings" FontWeight="SemiBold" />
-            <StackPanel Margin="10,5,0,7">
-                <CheckBox x:Name="uiEnableBackgroundWatcher" Margin="0,-3"
-                          Content="monitor compressed folders for changes"
-                          IsChecked="{Binding AppSettings.EnableBackgroundWatcher, Mode=TwoWay}">
-
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Unchecked">
-                            <i:InvokeCommandAction Command="{Binding DisableAutoCompressionCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
-                <CheckBox x:Name="uiEnableBackgroundAutoCompression" 
-                          Content="periodically check and keep folders compressed"
-                          Margin="30,-3,0,-3"
-                          IsChecked="{Binding AppSettings.EnableBackgroundAutoCompression, Mode=TwoWay}">
-
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Checked">
-                            <i:InvokeCommandAction Command="{Binding EnableBackgroundWatcherCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
-
-            </StackPanel>
-            
-            
-            <Separator Margin="0,5,0,5" />
-
-            <Label Content="Updates" FontWeight="SemiBold" />
-            <StackPanel Margin="10,5,0,7">
-                <CheckBox x:Name="uiEnablePreReleaseUpdates" Margin="0,-3"
-                          Content="Check for pre-release updates"
-                          IsChecked="{Binding AppSettings.EnablePreReleaseUpdates}" />
-
-            </StackPanel>
-
-            <Separator Margin="0,5,0,5" />
-
-            <Label Content="UI Scaling" FontWeight="SemiBold" />
-
-            <Slider x:Name="uiScalingFactor"
-                    Margin="15,0,15,0"
-                    IsSnapToTickEnabled="True" LargeChange="0.125" Maximum="1.5" Minimum="0.5"
-                    Orientation="Horizontal" SmallChange="0.125" TickFrequency="0.125"
-                    TickPlacement="BottomRight"
-                    Value="{Binding AppSettings.WindowScalingFactor, Mode=OneWay}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewKeyUp">
-                        <i:InvokeCommandAction Command="{Binding UIScalingSliderCommand}" CommandParameter="{Binding Value, ElementName=uiScalingFactor}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="PreviewMouseUp">
-                        <i:InvokeCommandAction Command="{Binding UIScalingSliderCommand}" CommandParameter="{Binding Value, ElementName=uiScalingFactor}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Slider>
-
-        
-            <Separator Margin="0,0,0,30" />
-
-            <Grid HorizontalAlignment="Center">
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -185,32 +25,16 @@ Value="{Binding AppSettings.MaxCompressionThreads, Mode=TwoWay}">
 
                 <!--  There are less stupid ways of adding customised SVG to XAML than this...  -->
 
-                <Canvas Grid.Column="1"
-                        Width="137" Height="26"
-                        Margin="10"
-                        Opacity="0.8">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseUp">
-                            <i:InvokeCommandAction Command="{Binding OpenKoFiCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Canvas.Style>
-                        <Style TargetType="Canvas">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Cursor" Value="Hand" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="False">
-                                    <Setter Property="Cursor" Value="Arrow" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Canvas.Style>
+                <Button Grid.Column="1"
+                        Width="137" Height="37" Command="{Binding OpenKoFiCommand}" 
+                        Margin="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0 6">
+                    <Canvas  
+                        Opacity="1">
+                   
                     <Canvas.RenderTransform>
                         <ScaleTransform CenterX="0" CenterY="0" ScaleX="0.09" ScaleY="0.09" />
                     </Canvas.RenderTransform>
-                    <Border Width="1524.69389" Height="293.0675"
-                            Background="#2f4156" CornerRadius="80" Opacity="1" />
+                   
                     <Path Data="M448.18652,174.15791V102.29854a6.67935,6.67935,0,0,1,6.69922-6.69922h17.29492a23.14135,23.14135,0,0,1,18.5127,37.02636,26.08472,26.08472,0,0,1-13.7627,48.23047h-21.5581a.11874.11874,0,0,1-.12158-.12109c-.24366,0-.24366.12109-.36524.12109A6.75826,6.75826,0,0,1,448.18652,174.15791Zm13.51953-45.55176h10.47461a9.774,9.774,0,0,0,9.62159-9.86523,9.56462,9.56462,0,0,0-9.62159-9.62207H461.70605Zm0,38.73047h15.22461a12.60562,12.60562,0,0,0,0-25.21094H461.70605Z" Fill="#fff" />
                     <Path Data="M543.30518,180.85615a25.47074,25.47074,0,0,1-25.3335-25.333V126.41377a6.57929,6.57929,0,0,1,6.45508-6.45508,6.49719,6.49719,0,0,1,6.45556,6.45508v29.10938A12.32007,12.32007,0,0,0,543.30518,167.946a12.63347,12.63347,0,0,0,12.78857-12.42285V126.41377a6.39243,6.39243,0,0,1,6.3335-6.45508,6.77437,6.77437,0,0,1,6.57714,6.45508v29.10938C569.00439,169.40791,557.312,180.85615,543.30518,180.85615Z" Fill="#fff" />
                     <Path Data="M639.7627,126.41377v46.03906a28.77024,28.77024,0,0,1-41.65381,26.06348,6.372,6.372,0,0,1-3.16651-8.64746,6.69181,6.69181,0,0,1,8.64746-2.67871,16.29746,16.29746,0,0,0,7.06446,1.70508,16.09832,16.09832,0,0,0,15.22363-11.084,23.66274,23.66274,0,0,1-11.57031,2.92383,25.62727,25.62727,0,0,1-25.45508-25.57715V126.41377a6.47315,6.47315,0,0,1,6.333-6.45508,6.27215,6.27215,0,0,1,6.45507,6.45508v28.74414a12.60731,12.60731,0,0,0,25.21192,0V126.41377a6.2442,6.2442,0,0,1,6.333-6.45508A6.52308,6.52308,0,0,1,639.7627,126.41377Z" Fill="#fff" />
@@ -228,32 +52,16 @@ Value="{Binding AppSettings.MaxCompressionThreads, Mode=TwoWay}">
 
                 </Canvas>
 
-                <Canvas Grid.Column="0"
-                        Width="137" Height="26"
-                        Margin="10"
+                </Button>
+
+                <Button Grid.Column="0"  Width="137" Height="37" Command="{Binding OpenGitHubCommand}" Margin="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0 6">
+                       <Canvas 
                         Opacity="1">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseUp">
-                            <i:InvokeCommandAction Command="{Binding OpenGitHubCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Canvas.Style>
-                        <Style TargetType="Canvas">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Cursor" Value="Hand" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="False">
-                                    <Setter Property="Cursor" Value="Arrow" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Canvas.Style>
+                   
                     <Canvas.RenderTransform>
                         <ScaleTransform CenterX="0" CenterY="0" ScaleX="0.09" ScaleY="0.09" />
                     </Canvas.RenderTransform>
-                    <Border Width="1524.69389" Height="293.0675"
-                            Background="#2f4156" CornerRadius="80" Opacity="0.8" />
+                    
                     <Path Data="M475.95605,179.63838a5.22327,5.22327,0,0,0-.85253-.60937c0-.1211-.12159-.1211-.12159-.36524a3.22007,3.22007,0,0,1-.60888-.73047.11955.11955,0,0,1-.12207-.12207,4.25937,4.25937,0,0,0-.60889-.97363l-29.83984-71.12891a6.48633,6.48633,0,0,1,3.6538-8.64746,6.56583,6.56583,0,0,1,8.64747,3.53223l23.75,56.39062L503.604,100.59346a6.71834,6.71834,0,0,1,12.42286,5.11523l-30.0835,71.12891a3.63493,3.63493,0,0,1-.48731.97363c0,.12207,0,.12207-.12158.12207-.12158.24317-.4873.48731-.60888.73047a.931.931,0,0,1-.24366.36524c-.24365.24414-.4873.36621-.73095.60937l-.24366.12207a6.80758,6.80758,0,0,1-.97412.6084c-.12207,0-.12207,0-.24365.12207a2.85993,2.85993,0,0,0-.97412.24414h-.24365a4.596,4.596,0,0,1-1.21826.12109,4.1654,4.1654,0,0,1-1.21778-.12109h-.24365a2.86272,2.86272,0,0,0-.97412-.24414.11955.11955,0,0,0-.12207-.12207h-.12158c-.24366-.12109-.731-.48731-1.0962-.73047Z" Fill="#fff" />
                     <Path Data="M549.02832,104.73408a6.57638,6.57638,0,0,1-6.57666,6.69922,6.65438,6.65438,0,0,1-6.57715-6.69922v-2.55761a6.5497,6.5497,0,0,1,6.57715-6.57715,6.4739,6.4739,0,0,1,6.57666,6.57715Zm0,22.04493v47.5a6.4739,6.4739,0,0,1-6.57666,6.57714,6.5497,6.5497,0,0,1-6.57715-6.57714v-47.5a6.50291,6.50291,0,0,1,6.57715-6.69825A6.43152,6.43152,0,0,1,549.02832,126.779Z" Fill="#fff" />
                     <Path Data="M565.7124,150.40791c.12207-16.56445,13.03223-30.44922,29.71826-30.44922,15.833,0,28.37891,11.81446,29.35254,28.25684v.6084a3.3938,3.3938,0,0,1-.12109,1.09668c-.36621,2.92285-2.92383,4.87109-6.334,4.87109h-38.731a15.968,15.968,0,0,0,4.14111,8.03906c2.55762,2.92285,7.42969,5.11524,11.69238,5.48047,4.38477.36524,9.62207-.73047,12.667-3.04492,2.55761-2.67969,7.55078-2.31348,9.13476-.36523,1.583,1.70507,2.80078,5.35937,0,7.917-5.96875,5.48047-13.1543,8.03808-21.80176,8.03808C578.74463,180.73506,565.83447,166.97139,565.7124,150.40791Zm13.27588-5.96875h34.46777c-1.21777-4.87109-7.42871-12.05762-18.02539-12.91015C585.07812,132.01631,579.96289,139.446,578.98828,144.43916Z" Fill="#fff" />
@@ -269,12 +77,268 @@ Value="{Binding AppSettings.MaxCompressionThreads, Mode=TwoWay}">
                     <Path Data="M205.26968,50.16688c-54.23433,0-98.07751,44.1664-98.07751,98.80625a98.72522,98.72522,0,0,0,67.06266,93.73314c4.87236.9837,6.65708-2.126,6.65708-4.74186,0-2.29063-.16061-10.14222-.16061-18.323-27.28279,5.89018-32.96419-11.77837-32.96419-11.77837-4.38452-11.45115-10.881-14.39423-10.881-14.39423-8.92964-6.0528.65046-6.0528.65046-6.0528,9.90531.65446,15.10289,10.14221,15.10289,10.14221,8.767,15.0487,22.89426,10.79668,28.57767,8.17881.81106-6.38,3.41086-10.79667,6.17126-13.24991-21.76-2.29063-44.65424-10.79668-44.65424-48.74967a38.68168,38.68168,0,0,1,10.06592-26.49984c-.97367-2.45324-4.38452-12.59746.97568-26.17461,0,0,8.2812-2.61787,26.95354,10.14221a93.49732,93.49732,0,0,1,49.03876,0C248.46241,88.44511,256.74361,91.063,256.74361,91.063c5.36019,13.57715,1.94734,23.72137.97367,26.17461a37.93985,37.93985,0,0,1,10.06793,26.49984c0,37.953-22.89425,46.29442-44.81684,48.74967,3.57346,3.1077,6.65708,8.99589,6.65708,18.321,0,13.24992-.16061,23.884-.16061,27.15431,0,2.61786,1.78673,5.72757,6.65709,4.74587a98.7316,98.7316,0,0,0,67.06265-93.73515C303.34518,94.33328,259.3414,50.16688,205.26968,50.16688Z" Fill="#fff" />
 
                 </Canvas>
+                </Button>
+             
             </Grid>
+            
+        </Grid>
+       
+        <ScrollViewer Margin="0, 50 0 0 ">
+            <StackPanel ScrollViewer.CanContentScroll="True">
 
-        </StackPanel>
+                <ui:CardExpander Margin="-15,0"
+                                 Background="Transparent" BorderBrush="Transparent" ContentPadding="0"
+                                 FlowDirection="RightToLeft" IsExpanded="True"
+                                 Style="{StaticResource CustomCardExpanderStyle}">
+                    <ui:CardExpander.Header>
+                        <Label Content="Filetype Management"
+                               Margin="10,0"
+                               FlowDirection="LeftToRight" />
 
-        <Border Width="400"
-                VerticalAlignment="Bottom"
-                BorderBrush="Gray" BorderThickness="1" CornerRadius="1" />
+                    </ui:CardExpander.Header>
+
+                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="5" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Label Content="Manage local skipped filetypes" VerticalAlignment="Center" />
+                            <Button x:Name="uiEditSkipListBTN"
+                                    Content="edit"
+                                    Grid.Column="1"
+                                    Width="100" Height="37"
+                                    BorderThickness="0"
+                                    Command="{Binding EditSkipListCommand}"
+                                    IsEnabled="True" />
+
+                            <Label Content="Agression of online skiplist"
+                                   Grid.Row="2"
+                                   VerticalAlignment="Center" />
+                            <TextBlock x:Name="skipHelpIcon"
+                                       Text="(?)"
+                                       Grid.Row="2"
+                                       Margin="175,0,0,0" VerticalAlignment="Center"
+                                       Cursor="Hand" FontSize="14" Foreground="#FF98A9B9" TextDecorations="Underline">
+
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Placement="Top">
+                                        <TextBlock Text="For Steam games only.&#x0a;When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well."
+                                                   Width="200"
+                                                   TextAlignment="Left" TextWrapping="Wrap" />
+                                    </ToolTip>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <ComboBox x:Name="comboBoxSkipUserResultsAggression"
+                                      Grid.Row="2" Grid.Column="1"
+                                      Foreground="#98A9B9" IsEnabled="False" SelectedIndex="0">
+                                <ComboBoxItem>
+                                    <TextBlock Text="low"
+                                               FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="medium"
+                                               FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="high"
+                                               FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
+                                </ComboBoxItem>
+                            </ComboBox>
+
+                        </Grid>
+
+                    </StackPanel>
+
+                </ui:CardExpander>
+
+                <Separator Height="1" />
+
+                <ui:CardExpander Margin="-15,0"
+                                 Background="Transparent" BorderBrush="Transparent" ContentPadding="0"
+                                 FlowDirection="RightToLeft" IsExpanded="True"
+                                 Style="{StaticResource CustomCardExpanderStyle}">
+                    <ui:CardExpander.Header>
+                        <Label Content="System Integration"
+                               Margin="10,0"
+                               FlowDirection="LeftToRight" />
+
+                    </ui:CardExpander.Header>
+
+                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+                        <StackPanel Margin="-10,10,0,0">
+                            <CheckBox x:Name="uiIsContextEnabled"
+                                      Content="Add to right-click context menu"
+                                      Margin="0,-3"
+                                      IsChecked="{Binding AppSettings.IsContextIntegrated, Mode=TwoWay}" />
+                            <CheckBox x:Name="uiIsStartMenuEnabled"
+                                      Content="Add to start menu"
+                                      Margin="0,-3"
+                                      IsChecked="{Binding AppSettings.IsStartMenuEnabled, Mode=TwoWay}" />
+                            <CheckBox x:Name="uiShowNotifications"
+                                      Content="Show notification on completion"
+                                      Margin="0,-3"
+                                      IsChecked="{Binding AppSettings.ShowNotifications, Mode=TwoWay}" />
+                            <CheckBox x:Name="uiAlwaysStartInTray"
+                                      Content="Start CompactGUI in system tray"
+                                      Margin="0,-3"
+                                      IsChecked="{Binding AppSettings.StartInSystemTray}" />
+
+                        </StackPanel>
+                    </StackPanel>
+
+
+                </ui:CardExpander>
+
+                <Separator Height="1" />
+
+
+                <ui:CardExpander Margin="-15,0"
+                                 Background="Transparent" BorderBrush="Transparent" ContentPadding="0"
+                                 FlowDirection="RightToLeft" IsExpanded="True"
+                                 Style="{StaticResource CustomCardExpanderStyle}">
+                    <ui:CardExpander.Header>
+                        <Label Content="Compression Settings"
+                               Margin="10,0"
+                               FlowDirection="LeftToRight" />
+
+                    </ui:CardExpander.Header>
+
+
+                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+                        <Grid Margin="0,10,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="200" />
+
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="5" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Label Content="Maximum Compression Threads" />
+                            <StackPanel Grid.Column="1"
+                                        Margin="15,0,15,0"
+                                        Orientation="Horizontal">
+
+                                <Slider x:Name="compressionParallelism"
+                                        Width="130"
+                                        IsSnapToTickEnabled="True" LargeChange="1" Maximum="16" Minimum="0"
+                                        Orientation="Horizontal" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"
+                                        Value="{Binding AppSettings.MaxCompressionThreads, Mode=TwoWay}" />
+
+                                <Label Content="{Binding AppSettings.MaxCompressionThreads, FallbackValue=0}"
+                                       Margin="15,0"
+                                       FontWeight="SemiBold" />
+                            </StackPanel>
+
+                            <CheckBox x:Name="uiLockHDDToOneThread"
+                                      Content="HDDs only use 1 thread"
+                                      Grid.Row="2"
+                                      Margin="-10,0"
+                                      IsChecked="{Binding AppSettings.LockHDDsToOneThread}" />
+                        </Grid>
+                    </StackPanel>
+
+                </ui:CardExpander>
+
+                <Separator Height="1" />
+
+
+                <ui:CardExpander Margin="-15,0"
+                                 Background="Transparent" BorderBrush="Transparent" ContentPadding="0"
+                                 FlowDirection="RightToLeft" IsExpanded="True"
+                                 Style="{StaticResource CustomCardExpanderStyle}">
+                    <ui:CardExpander.Header>
+                        <Label Content="Background Watcher Settings"
+                               Margin="10,0"
+                               FlowDirection="LeftToRight" />
+
+                    </ui:CardExpander.Header>
+
+
+                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+                        <StackPanel Margin="-10,10,0,0">
+                            <CheckBox x:Name="uiEnableBackgroundWatcher"
+                                      Content="Monitor compressed folders for changes"
+                                      Margin="0,-3"
+                                      IsChecked="{Binding AppSettings.EnableBackgroundWatcher, Mode=TwoWay}">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <i:InvokeCommandAction Command="{Binding DisableAutoCompressionCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+                            <CheckBox x:Name="uiEnableBackgroundAutoCompression"
+                                      Content="Periodically check and keep folders compressed"
+                                      Margin="30,-3,0,-3"
+                                      IsChecked="{Binding AppSettings.EnableBackgroundAutoCompression, Mode=TwoWay}">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding EnableBackgroundWatcherCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+
+                        </StackPanel>
+                    </StackPanel>
+
+                </ui:CardExpander>
+
+
+                <Separator Height="1" />
+
+                <ui:CardExpander Margin="-15,0"
+                  Background="Transparent" BorderBrush="Transparent" ContentPadding="0"
+                  FlowDirection="RightToLeft" IsExpanded="True"
+                  Style="{StaticResource CustomCardExpanderStyle}">
+                    <ui:CardExpander.Header>
+                        <Label Content="Update Settings"
+                Margin="10,0"
+                FlowDirection="LeftToRight" />
+
+                    </ui:CardExpander.Header>
+
+
+                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+                        <StackPanel Margin="-10,10,0,0">
+                            <CheckBox x:Name="uiEnablePreReleaseUpdates"
+          Content="Check for pre-release updates"
+          Margin="0,-3"
+          IsChecked="{Binding AppSettings.EnablePreReleaseUpdates}" />
+
+                        </StackPanel>
+                    </StackPanel>
+
+                </ui:CardExpander>
+
+
+
+
+
+            </StackPanel>
+
+
+
+
+        </ScrollViewer>
+
+
+
     </Grid>
-</UserControl>
+
+</Page>

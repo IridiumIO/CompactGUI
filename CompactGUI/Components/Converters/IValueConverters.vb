@@ -364,3 +364,49 @@ Public Class IsSteamFolderAndFreshlyCompressedMultiConverter : Implements IMulti
         Throw New NotImplementedException()
     End Function
 End Class
+
+Public Class AnimationFactorToValueConverter
+    Implements IMultiValueConverter
+
+    Public Function Convert(values() As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IMultiValueConverter.Convert
+        If TypeOf values(0) IsNot Double Then
+            Return 0.0
+        End If
+
+        Dim completeValue As Double = DirectCast(values(0), Double)
+
+        If TypeOf values(1) IsNot Double Then
+            Return 0.0
+        End If
+
+        Dim factor As Double = DirectCast(values(1), Double)
+
+        If parameter IsNot Nothing AndAlso parameter.ToString() = "negative" Then
+            factor = -factor
+        End If
+
+        Return factor * completeValue
+    End Function
+
+    Public Function ConvertBack(value As Object, targetTypes() As Type, parameter As Object, culture As CultureInfo) As Object() Implements IMultiValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+
+Public Class FolderActionStateWorkingToVisibilityConverter
+    Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim status = CType(value, ActionState)
+        Select Case status
+            Case ActionState.Working
+                Return Visibility.Visible
+            Case Else
+                Return Visibility.Collapsed
+        End Select
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+
+End Class

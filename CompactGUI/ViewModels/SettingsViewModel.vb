@@ -4,17 +4,10 @@ Imports Microsoft.Win32
 
 Public Class SettingsViewModel : Inherits ObservableObject
 
-    Private Shared _instance As SettingsViewModel
-    Public Shared ReadOnly Property Instance As SettingsViewModel
-        Get
-            If _instance Is Nothing Then _instance = New SettingsViewModel()
-            Return _instance
-        End Get
-    End Property
 
     Public Property AppSettings As Settings = SettingsHandler.AppSettings
 
-    Protected Sub New()
+    Public Sub New()
 
         AddHandler AppSettings.PropertyChanged, AddressOf SettingsPropertyChanged
 

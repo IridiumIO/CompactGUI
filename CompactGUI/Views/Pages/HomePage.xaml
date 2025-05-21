@@ -14,8 +14,8 @@
 
         <DataTemplate x:Key="IdleTemplate">
 
-            <Button Content="Compress"
-                    Width="140" Height="40"
+            <Button Content="Compress Selected"
+                    Width="160" Height="40"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
                     Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                     Command="{Binding CompressAllCommand}"
@@ -29,10 +29,12 @@
         </DataTemplate>
 
         <DataTemplate x:Key="CompressingTemplate">
-            <StackPanel Margin="0,20">
+            <ui:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center"
+                  IsIndeterminate="True" />
+            <!--<StackPanel Margin="0,20">
                 <TextBlock Text="Working" FontSize="18" />
                 <ProgressBar Margin="0,10" IsIndeterminate="True" />
-            </StackPanel>
+            </StackPanel>-->
         </DataTemplate>
 
         <DataTemplate x:Key="ResultsTemplate">
@@ -218,8 +220,9 @@
                                             CornerRadius="2"
                                             Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
 
-
-                                    <StackPanel Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0" >
+                                        <ui:ProgressRing Width="20" Height="20" Margin="10 0 0 0" Background="Red" IsIndeterminate="True" Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}"/>
+                                        <StackPanel Margin="10 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"
                                                 Orientation="Vertical">
                                         
                                         <TextBlock Text="{Binding DisplayName}" FontSize="15" />
@@ -231,6 +234,9 @@
                                                    Foreground="{StaticResource AccentFillColorDisabledBrush}"
                                                    TextTrimming="CharacterEllipsis" />
                                     </StackPanel>
+                                    </StackPanel>
+
+                                  
 
 
 

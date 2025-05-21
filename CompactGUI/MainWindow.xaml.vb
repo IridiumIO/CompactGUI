@@ -7,7 +7,7 @@ Imports Wpf.Ui.Abstractions
 Imports Wpf.Ui.Controls
 
 Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
-    Public Sub New(navigationService As INavigationService, serviceProvider As IServiceProvider, snackbarService As CustomSnackBarService)
+    Public Sub New(navigationService As INavigationService, serviceProvider As IServiceProvider, snackbarService As CustomSnackBarService, viewmodel As MainWindowViewModel)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -17,14 +17,19 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
         NavigationView.SetServiceProvider(serviceProvider)
         ' Add any initialization after the InitializeComponent() call.
 
+        Me.DataContext = viewmodel
+
+        NotifyIconTrayMenu.DataContext = viewmodel
+
         AddHandler Application.GetService(Of HomeViewModel)().PropertyChanged, AddressOf HVPropertyChanged
 
     End Sub
 
     Private Sub HVPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+
         Dim homeVM As HomeViewModel = CType(sender, HomeViewModel)
         If e.PropertyName = NameOf(homeVM.HomeViewIsFresh) Then
-            If homeVM.HomeViewIsFresh Then '
+            If homeVM.HomeViewIsFresh Then
                 ProgTitle.Visibility = Visibility.Collapsed
             Else
                 ProgTitle.Visibility = Visibility.Visible

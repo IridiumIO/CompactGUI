@@ -73,6 +73,7 @@
     <PackageReference Include="ValueConverters" Version="3.0.26" />
     <PackageReference Include="WPF-UI" Version="4.0.2" />
     <PackageReference Include="WPF-UI.DependencyInjection" Version="4.0.2" />
+    <PackageReference Include="WPF-UI.Tray" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>

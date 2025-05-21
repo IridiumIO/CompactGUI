@@ -8,14 +8,11 @@ Imports System.Windows.Forms.AxHost
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 
-Imports CompactGUI.MainViewModel
-
 Imports MeasurePerformance.IL.Weaver
 
 Imports PropertyChanged
 
 Imports Wpf.Ui
-
 Imports Wpf.Ui.Controls
 
 Public Class FolderViewModel : Inherits ObservableObject
@@ -29,26 +26,22 @@ Public Class FolderViewModel : Inherits ObservableObject
         Get
             Return Folder?.FolderActionState = ActionState.Analysing
         End Get
-
     End Property
+
 
     Public ReadOnly Property IsNotResultsOrAnalysing As Boolean
         Get
             Return Folder?.FolderActionState <> ActionState.Results AndAlso Not IsAnalysing
         End Get
-
     End Property
 
     Public ReadOnly Property CompressionDisplayLevel As String
         Get
-
             If Folder.AnalysisResults Is Nothing OrElse
                 Not Folder.AnalysisResults.Any(Function(x) x.CompressionMode <> Core.WOFCompressionAlgorithm.NO_COMPRESSION) Then
                 Return "Not Compressed"
             End If
-
             Return "Compressed"
-
         End Get
     End Property
 
@@ -145,13 +138,32 @@ Public Class FolderViewModel : Inherits ObservableObject
                                                                                   End If
                                                                               End Sub)
 
-    Public ReadOnly Property CancelCommand As RelayCommand = New RelayCommand(Sub()
+    Public ReadOnly Property CancelCommand As IRelayCommand = New RelayCommand(Sub()
 
-                                                                                  Folder.Compactor?.Cancel()
-                                                                                  Folder.Uncompactor?.Cancel()
+                                                                                   Folder.Compactor?.Cancel()
+                                                                                   Folder.Uncompactor?.Cancel()
 
-                                                                              End Sub)
+                                                                               End Sub)
 
+    Public ReadOnly Property SubmitToWikiCommand As IRelayCommand = New AsyncRelayCommand(AddressOf SubmitToWiki, AddressOf CanSubmitToWiki)
+
+    Private Async Function SubmitToWiki() As Task
+
+        SubmitToWikiCommand.NotifyCanExecuteChanged()
+
+        Dim result = Await Application.GetService(Of IWikiService).SubmitToWiki(Folder.FolderName, Folder.AnalysisResults.ToList, Folder.PoorlyCompressedFiles, Folder.CompressionOptions.SelectedCompressionMode)
+
+        Folder.IsFreshlyCompressed = False
+        SubmitToWikiCommand.NotifyCanExecuteChanged()
+    End Function
+
+    Private Function CanSubmitToWiki() As Boolean
+        Return TypeOf (Folder) _
+            Is SteamFolder AndAlso
+            Folder.IsFreshlyCompressed AndAlso
+            Not Folder.CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso
+            Not Folder.CompressionOptions.SkipUserSubmittedFiletypes
+    End Function
 
 
     Public ReadOnly Property DisplayedFolderAfterSize As Long
@@ -179,30 +191,45 @@ Public Class FolderViewModel : Inherits ObservableObject
 
 
 
-    Public Shared Async Function InsufficientPermissionHandler() As Task
+
+
+    Public Async Function InsufficientPermissionHandler() As Task
 
         Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
 
-        Dim button = New Wpf.Ui.Controls.HyperlinkButton
-        button.Background = System.Windows.Media.Brushes.Transparent
-
+        Dim button = New Wpf.Ui.Controls.Button
         button.Content = "Restart as Admin"
-        button.Command = New RelayCommand(Async Sub()
-                                              Dim msg As New Wpf.Ui.Controls.MessageBox With {
-                                                    .Title = "Restart as Admin",
-                                                    .Content = "TODO."
-                                                }
-
-                                              Await msg.ShowDialogAsync()
-                                          End Sub)
-        button.Padding = New Thickness(3)
+        button.Command = New RelayCommand(AddressOf RunAsAdmin)
+        button.Margin = New Thickness(-3, 10, 0, 0)
 
         ' Show the custom snackbar
-        snackbarSV.ShowCustom(button, "Insufficient permission to access this folder.", ControlAppearance.Dark, timeout:=TimeSpan.FromSeconds(60))
+        snackbarSV.ShowCustom(button, "Insufficient permission to access this folder.", ControlAppearance.Danger, timeout:=TimeSpan.FromSeconds(60))
 
     End Function
 
+    Private Sub RunAsAdmin()
+        Dim myproc As New Process With {
+            .StartInfo = New ProcessStartInfo With {
+                .FileName = Environment.ProcessPath,
+                .UseShellExecute = True,
+                .Arguments = $"""{Folder.FolderName}""",
+                .Verb = "runas"}
+        }
+        Dim app As Application = Application.Current
 
+        app.ShutdownPipeServer().ContinueWith(
+            Sub()
+                app.Dispatcher.Invoke(
+                    Sub()
+                        Application.mutex.ReleaseMutex()
+                        Application.mutex.Dispose()
+                    End Sub
+                )
+                myproc.Start()
+                app.Dispatcher.Invoke(Sub() app.Shutdown())
+            End Sub
+        )
+    End Sub
 
 End Class
 

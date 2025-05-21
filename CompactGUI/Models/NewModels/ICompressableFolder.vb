@@ -28,6 +28,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     Public Property CompressionOptions As CompressionOptions
     Public Property IsFreshlyCompressed As Boolean
 
+    Public Property FolderBGImage As BitmapImage = Nothing
 
     Public ReadOnly Property BytesSaved As Long
         Get
@@ -41,6 +42,16 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
             Return CompressedBytes / UncompressedBytes
         End Get
     End Property
+
+
+    Public ReadOnly Property GlobalPoorlyCompressedFileCount
+        Get
+            If AnalysisResults Is Nothing OrElse SettingsHandler.AppSettings.NonCompressableList.Count = 0 Then Return 0
+            Return AnalysisResults.Where(Function(fl) SettingsHandler.AppSettings.NonCompressableList.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
+        End Get
+    End Property
+
+
 
 
     Sub New()
@@ -63,17 +74,13 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     Public Compactor As Core.Compactor
 
     Public Async Function CompressFolder() As Task(Of Boolean)
+
         FolderActionState = ActionState.Working
 
         CompressionProgress.Report(New Core.CompressionProgress(0, ""))
 
-
-        Compactor = New Core.Compactor(FolderName, Core.WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), CompressionOptions.GetExclusionList)
-
-        'Dim HDDType As DiskDetector.Models.HardwareType = ActiveFolder.DiskType
-        Dim IsLockedToOneThread As Boolean = SettingsHandler.AppSettings.LockHDDsToOneThread
-        Debug.WriteLine(SettingsHandler.AppSettings.MaxCompressionThreads)
-        Dim res = Await Compactor.RunCompactAsync(CompressionProgress, SettingsHandler.AppSettings.MaxCompressionThreads)
+        Compactor = New Core.Compactor(FolderName, Core.WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
+        Dim res = Await Compactor.RunCompactAsync(CompressionProgress, GetThreadCount)
 
         If res Then
             FolderActionState = ActionState.Results
@@ -98,7 +105,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
         Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
 
-        Dim res = Await Uncompactor.UncompactFiles(compressedFilesList, CompressionProgress, SettingsHandler.AppSettings.MaxCompressionThreads)
+        Dim res = Await Uncompactor.UncompactFiles(compressedFilesList, CompressionProgress, GetThreadCount)
 
         FolderActionState = ActionState.Idle
         IsFreshlyCompressed = False
@@ -145,9 +152,37 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
 
 
+    Protected Function GetThreadCount() As Integer
+        Dim threadCount As Integer = SettingsHandler.AppSettings.MaxCompressionThreads
+        If SettingsHandler.AppSettings.LockHDDsToOneThread Then
+            Dim HDDType As DiskDetector.Models.HardwareType = GetDiskType()
+            If HDDType = DiskDetector.Models.HardwareType.Hdd Then
+                threadCount = 1
+            End If
+        End If
+        Debug.WriteLine($"Thread count: {threadCount}")
+        Return threadCount
+    End Function
+
+    Protected Function GetDiskType() As DiskDetector.Models.HardwareType
+        If FolderName Is Nothing Then Return DiskDetector.Models.HardwareType.Unknown
+        Try
+            Return DiskDetector.Detector.DetectDrive(FolderName.First, DiskDetector.Models.QueryType.RotationRate).HardwareType
+        Catch ex As Exception
+            Return DiskDetector.Models.HardwareType.Unknown
+        End Try
+    End Function
 
 
+    Protected Overridable Function GetSkipList() As String()
+        Dim exclist As String() = Array.Empty(Of String)()
+        If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
+            exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
+        End If
 
+
+        Return exclist
+    End Function
 
 
 
@@ -191,10 +226,8 @@ Public Class CompressableFolderFactory
 
         If SteamFolderData Is Nothing Then Return Nothing
 
-        Dim steamFolder As New SteamFolder()
-        steamFolder.FolderName = folderInfo.FullName
-        steamFolder.DisplayName = If(SteamFolderData?.GameName, folderInfo.FullName)
-        steamFolder.SteamAppID = SteamFolderData?.AppID
+        Dim steamFolder As New SteamFolder(folderInfo.FullName, If(SteamFolderData?.GameName, folderInfo.FullName), SteamFolderData?.AppID)
+
         Return steamFolder
     End Function
 

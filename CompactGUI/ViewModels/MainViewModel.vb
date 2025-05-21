@@ -12,20 +12,20 @@ Public Class MainViewModel : Inherits ObservableObject
 
     Sub New()
 
-        Dim WikiUpdate = WikiHandler.GetUpdatedJSONAsync()
-        Dim UpdateTask = CheckForUpdatesAsync()
-        InitialiseNotificationTray()
-        Watcher = New Watcher.Watcher(GetSkipList)   'This naming isn't going to get confusing at all...
+        'Dim WikiUpdate = WikiService.GetUpdatedJSONAsync()
+        'Dim UpdateTask = CheckForUpdatesAsync()
+        'InitialiseNotificationTray()
+        'Watcher = New Watcher.Watcher(GetSkipList)   'This naming isn't going to get confusing at all...
 
 
     End Sub
 
 
-    Private Async Function CheckForUpdatesAsync() As Task
+    'Private Async Function CheckForUpdatesAsync() As Task
 
-        Dim ret = Await UpdateHandler.CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
-        If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdateHandler.NewVersion.Friendly)
-    End Function
+    '    Dim ret = Await UpdaterService.CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
+    '    If ret Then UpdateAvailable = New Tuple(Of Boolean, String)(True, "update available  -  v" & UpdaterService.NewVersion.Friendly)
+    'End Function
 
 
     Public Async Function SelectFolderAsync(Optional path As String = Nothing) As Task
@@ -124,8 +124,8 @@ Public Class MainViewModel : Inherits ObservableObject
         Await UpdateWatcherAndStateAsync(containsCompressedFiles, Analyser)
 
 
-        SubmitToWikiCommand.NotifyCanExecuteChanged()
-        ChooseCompressionCommand.NotifyCanExecuteChanged()
+        'SubmitToWikiCommand.NotifyCanExecuteChanged()
+        'ChooseCompressionCommand.NotifyCanExecuteChanged()
 
         Await Watcher.EnableBackgrounding()
 
@@ -271,14 +271,14 @@ Public Class MainViewModel : Inherits ObservableObject
     End Function
 
 
-    Private Async Function SubmitToWikiAsync() As Task
-        ActiveFolder.IsFreshlyCompressed = False
-        SubmitToWikiCommand.NotifyCanExecuteChanged()
-        Dim successfullySent = Await WikiHandler.SubmitToWiki(ActiveFolder.FolderName, ActiveFolder.AnalysisResults, ActiveFolder.PoorlyCompressedFiles, ActiveFolder.SelectedCompressionMode)
-        If Not successfullySent Then ActiveFolder.IsFreshlyCompressed = True
-        SubmitToWikiCommand.NotifyCanExecuteChanged()
-        ChooseCompressionCommand.NotifyCanExecuteChanged()
-    End Function
+    'Private Async Function SubmitToWikiAsync() As Task
+    '    ActiveFolder.IsFreshlyCompressed = False
+    '    SubmitToWikiCommand.NotifyCanExecuteChanged()
+    '    Dim successfullySent = Await WikiService.SubmitToWiki(ActiveFolder.FolderName, ActiveFolder.AnalysisResults, ActiveFolder.PoorlyCompressedFiles, ActiveFolder.SelectedCompressionMode)
+    '    If Not successfullySent Then ActiveFolder.IsFreshlyCompressed = True
+    '    SubmitToWikiCommand.NotifyCanExecuteChanged()
+    '    ChooseCompressionCommand.NotifyCanExecuteChanged()
+    'End Function
 
 
     Private Function CanSubmitToWiki() As Boolean
@@ -433,7 +433,7 @@ Public Class MainViewModel : Inherits ObservableObject
             Return principal.IsInRole(Security.Principal.WindowsBuiltInRole.Administrator)
         End Get
     End Property
-    Public ReadOnly Property Version As String = UpdateHandler.CurrentVersion.Friendly
+    'Public ReadOnly Property Version As String = UpdateHandler.CurrentVersion.Friendly
     Public Property PauseResumeStatus As String = "Pause"
     Public Property CancelStatus As String = "Cancel"
 
@@ -441,8 +441,8 @@ Public Class MainViewModel : Inherits ObservableObject
 
 #Region "Commands"
     Public Property AnalyseFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf AnalyseAsync)
-    Public Property SubmitToWikiCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf SubmitToWikiAsync, AddressOf CanSubmitToWiki)
-    Public Property ChooseCompressionCommand As RelayCommand = New RelayCommand(AddressOf ChooseCompression, Function() Not SubmitToWikiCommand.CanExecute(Nothing))
+    'Public Property SubmitToWikiCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf SubmitToWikiAsync, AddressOf CanSubmitToWiki)
+    'Public Property ChooseCompressionCommand As RelayCommand = New RelayCommand(AddressOf ChooseCompression, Function() Not SubmitToWikiCommand.CanExecute(Nothing))
     Public Property CompressFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf CompressBeginAsync)
     Public Property UncompressFolderCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf UncompressBeginAsync)
     Public Property MenuCompressionAreaCommand As RelayCommand = New RelayCommand(Sub() State = If(State = UIState.FolderWatcherView, LastState, State))

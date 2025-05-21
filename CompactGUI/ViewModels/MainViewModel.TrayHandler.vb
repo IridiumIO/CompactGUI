@@ -21,15 +21,15 @@ Partial Public Class MainViewModel
             If Not ShowInTaskbar Then
                 Notify("Watcher is running in the background.", $"{Environment.NewLine}{Watcher.WatchedFolders.Count} folders will be monitored when your system is not in use")
 
-                NotifyIconWrapper.Notify_Icon.Text = $"CompactGUI{Environment.NewLine}Monitoring {Watcher.WatchedFolders.Count} folders"
+                '  NotifyIconWrapper.Notify_Icon.Text = $"CompactGUI{Environment.NewLine}Monitoring {Watcher.WatchedFolders.Count} folders"
             End If
 
         End Set
     End Property
     Public Property ShowInTaskbar
-    Public Property NotifyRequest As NotifyIconWrapper.NotifyRequestRecord
+    ' Public Property NotifyRequest As NotifyIconWrapper.NotifyRequestRecord
 
-    Public Property NotifyIcon As NotifyIconWrapper
+    'Public Property NotifyIcon As NotifyIconWrapper
 
     Private Sub InitialiseNotificationTray()
         ClosingCommand = New RelayCommand(Of CancelEventArgs)(AddressOf Closing)
@@ -61,10 +61,10 @@ Partial Public Class MainViewModel
 
         If Not SettingsHandler.AppSettings.ShowNotifications Then Return
 
-        NotifyRequest = New NotifyIconWrapper.NotifyRequestRecord With {
-            .Title = title,
-            .Text = message,
-            .Duration = 1000}
+        'NotifyRequest = New NotifyIconWrapper.NotifyRequestRecord With {
+        '.T'itle = title,
+        '.T'ext = message,
+        '.D'uration = 1000}
     End Sub
 
     Private Sub Notify_Compressed(DisplayName As String, BytesSaved As Long, CompressionRatio As Decimal)

@@ -25,6 +25,8 @@
     <local:FolderWorkingStateToPauseSymbolConverter x:Key="FolderWorkingStateToPauseSymbolConverter"/>
     <local:IsSteamFolderAndFreshlyCompressedMultiConverter x:Key="IsSteamFolderAndFreshlyCompressedMultiConverter" />
     <local:IsSteamFolderConverter x:Key="IsSteamFolderConverter"/>
+    <local:AnimationFactorToValueConverter x:Key="AnimationFactorToValueConverter" />
+    <local:FolderActionStateWorkingToVisibilityConverter x:Key="FolderActionStateWorkingToVisibilityConverter" />
 
     <converters:ValueConverterGroup x:Key="IsSteamFolderToVisibilityConverter">
         <local:IsSteamFolderConverter/>

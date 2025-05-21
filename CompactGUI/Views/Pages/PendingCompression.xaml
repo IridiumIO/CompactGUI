@@ -32,25 +32,29 @@
                                          BorderBrush="Transparent" CompressionMode="XPRESS 4K"
                                          EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionPercent}" Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 8K"
                                          EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionPercent}" Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 16K"
                                          EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionPercent}" Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10"
                                          BorderBrush="Transparent" CompressionMode="LZX"
                                          EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.LZX.CompressionPercent}" Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.LZX.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" />
 
         </WrapPanel>
 
@@ -59,15 +63,47 @@
             <ui:TextBlock Text="Configuration"
                           Margin="0,0,0,20" VerticalAlignment="Center"
                           FontSize="18" />
-            <CheckBox Content="Skip poorly compressed filetypes"
-                      Margin="0,0,0,15"
-                      FontSize="16"
-                      IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" />
+            <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
+                <CheckBox x:Name="uiChkSkipPoorlyCompressed"
+                          Content="Skip poorly compressed filetypes"
+                          Width="260"
+                          FontSize="16"
+                          IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" />
+                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
+                           FontSize="14" Foreground="#FF98A9B9">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipPoorlyCompressed}" Value="True">
+                                    <Setter Property="Text" Value="{Binding Folder.GlobalPoorlyCompressedFileCount, StringFormat={}{0} files will be skipped}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </WrapPanel>
+            <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
+                <CheckBox x:Name="uiChkSkipUserPoorlyCompressed"
+                          Content="Skip user-submitted filetypes"
+                          Width="260"
+                          FontSize="16"
+                          IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}" />
+                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
+                           FontSize="14" Foreground="#FF98A9B9">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipUserPoorlyCompressed}" Value="True">
+                                    <Setter Property="Text" Value="{Binding Folder.WikiPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </WrapPanel>
 
-            <CheckBox Content="Skip user-submitted filetypes"
-                      Margin="0,0,0,15"
-                      FontSize="16"
-                      IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}" />
 
             <CheckBox Content="Watch folder for changes"
                       Margin="0,0,0,15"

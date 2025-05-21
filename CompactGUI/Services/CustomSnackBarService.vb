@@ -3,7 +3,7 @@
 Public Class CustomSnackBarService
     Inherits Wpf.Ui.SnackbarService
 
-    Private _snackbar As Snackbar
+    Public _snackbar As Snackbar
 
     Public Sub ShowCustom(message As UIElement, title As String, appearance As ControlAppearance, Optional icon As IconElement = Nothing, Optional timeout As TimeSpan = Nothing)
 

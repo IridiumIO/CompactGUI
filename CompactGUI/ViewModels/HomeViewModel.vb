@@ -16,6 +16,7 @@ Partial Public Class HomeViewModel
 
     Public Property Folders As ObservableCollection(Of CompressableFolder)
 
+    <OnChangedMethod(NameOf(OnSelectedFolderChanged))>
     <AlsoNotifyFor(NameOf(SelectedFolderViewModel))>
     Public Property SelectedFolder As CompressableFolder
 
@@ -31,6 +32,15 @@ Partial Public Class HomeViewModel
             Return Not Folders.Any()
         End Get
     End Property
+
+
+    Public Sub OnSelectedFolderChanged()
+
+        WeakReferenceMessenger.Default.Send(New BackgroundImageChangedMessage(SelectedFolder?.FolderBGImage))
+
+    End Sub
+
+
 
     Sub New()
         Folders = New ObservableCollection(Of CompressableFolder)()
@@ -80,7 +90,7 @@ Partial Public Class HomeViewModel
             End If
 
             Dim res = Await newFolder.AnalyseFolderAsync
-            If res = -1 Then Await FolderViewModel.InsufficientPermissionHandler()
+            If res = -1 Then Await SelectedFolderViewModel.InsufficientPermissionHandler()
             If TypeOf (newFolder) Is SteamFolder Then
                 Await CType(newFolder, SteamFolder).GetWikiResults()
             End If
@@ -140,6 +150,9 @@ Partial Public Class HomeViewModel
 
     Private Property Compressing As Boolean = False
     Private Async Function CompressAllAsync() As Task
+
+        Await Application.GetService(Of Watcher.Watcher).DisableBackgrounding()
+
         Compressing = True
         Dim tasks As New List(Of Task)()
         For Each folder In Folders
@@ -148,6 +161,12 @@ Partial Public Class HomeViewModel
                                    Debug.WriteLine("Compressing " & folder.FolderName)
                                    Dim ret = Await folder.CompressFolder()
                                    Dim analysis = Await folder.AnalyseFolderAsync
+
+                                   If SettingsHandler.AppSettings.ShowNotifications Then
+
+                                       Application.GetService(Of TrayNotifierService).Notify_Compressed(folder.DisplayName, folder.UncompressedBytes - folder.CompressedBytes, folder.CompressionRatio)
+
+                                   End If
 
                                    'For Each poorext In folder.PoorlyCompressedFiles
                                    '    Debug.WriteLine($"{poorext.extension} : {poorext.totalFiles} with ratio of {poorext.cRatio}")
@@ -158,7 +177,36 @@ Partial Public Class HomeViewModel
             End If
         Next
         Compressing = False
+
+        For Each folder In Folders.Where(Function(f) f.CompressionOptions.WatchFolderForChanges)
+            AddFolderToWatcher(folder)
+        Next
+
+
+        Await Application.GetService(Of Watcher.Watcher).EnableBackgrounding()
     End Function
+
+
+    Public Sub AddFolderToWatcher(folder As CompressableFolder)
+        Debug.WriteLine("Adding folder to watcher: " & folder.FolderName)
+        Dim newWatched = New Watcher.WatchedFolder With {
+            .Folder = folder.FolderName,
+            .DisplayName = folder.DisplayName,
+            .IsSteamGame = TypeOf (folder) Is SteamFolder,
+            .LastCompressedSize = folder.CompressedBytes,
+            .LastUncompressedSize = folder.UncompressedBytes,
+            .LastCompressedDate = DateTime.Now,
+            .LastCheckedDate = DateTime.Now,
+            .LastCheckedSize = folder.CompressedBytes,
+            .LastSystemModifiedDate = DateTime.Now,
+            .CompressionLevel = folder.AnalysisResults.Select(Function(f) f.CompressionMode).Max
+        }
+
+        Application.GetService(Of Watcher.Watcher).AddOrUpdateWatched(newWatched)
+
+    End Sub
+
+
 
     Public Async Sub Receive(message As WatcherAddedFolderToQueueMessage) Implements IRecipient(Of WatcherAddedFolderToQueueMessage).Receive
         Await AddFoldersAsync({message.Value})
