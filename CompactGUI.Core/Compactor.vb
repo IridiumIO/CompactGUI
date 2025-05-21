@@ -146,7 +146,7 @@ Public Class Compactor : Implements IDisposable
     Public Sub Dispose() Implements IDisposable.Dispose
         _cancellationTokenSource.Dispose()
         _pauseSemaphore.Dispose()
-        If _EFInfoPtr <> IntPtr.Zero Then
+        If not _EFInfoPtr.Equals(IntPtr.Zero)  Then
             Marshal.FreeHGlobal(_EFInfoPtr)
             _EFInfoPtr = IntPtr.Zero
         End If

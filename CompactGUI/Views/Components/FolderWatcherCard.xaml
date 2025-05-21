@@ -9,12 +9,12 @@
     <Grid VerticalAlignment="Stretch">
 
         <Grid.Resources>
-            <CollectionViewSource x:Key='src' Source="{Binding Watcher.WatchedFolders}">
+            <CollectionViewSource x:Key='Src' Source="{Binding Watcher.WatchedFolders}">
                 <CollectionViewSource.SortDescriptions>
                     <scm:SortDescription PropertyName="DisplayName" />
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
-            <CollectionViewSource x:Key="dtd" d:Source="{d:SampleData ItemCount=3}" />
+            <CollectionViewSource x:Key="Dtd" d:Source="{d:SampleData ItemCount=3}" />
         </Grid.Resources>
 
         <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
@@ -43,7 +43,7 @@
             </Button.ToolTip>
         </Button>
 
-            <ListView x:Name="uiWatcherListView"  Margin="-20,90,-20,0" Padding="10,0,10,0" ItemsSource="{Binding Source = {StaticResource src}}" d:ItemsSource="{Binding Source = {StaticResource dtd}}"   KeyboardNavigation.TabNavigation="None" ScrollViewer.VerticalScrollBarVisibility="Visible" >
+            <ListView x:Name="UiWatcherListView"  Margin="-20,90,-20,0" Padding="10,0,10,0" ItemsSource="{Binding Source = {StaticResource Src}}" d:ItemsSource="{Binding Source = {StaticResource Dtd}}"   KeyboardNavigation.TabNavigation="None" ScrollViewer.VerticalScrollBarVisibility="Visible" >
            
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -123,7 +123,7 @@
 
                                
 
-                                <Button  HorizontalAlignment="Right" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
+                                <Button  HorizontalAlignment="Right" Command="{Binding ElementName=UiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
                                     <ui:SymbolIcon Symbol="Delete16" FontSize="14" />
                                     <Button.ToolTip >
                                         <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
@@ -132,7 +132,7 @@
                                     </Button.ToolTip>
                                 </Button>
 
-                                <Button HorizontalAlignment="Right" Margin="0,0,35,0" Command="{Binding ElementName=uiWatcherListView, Path=DataContext.ReCompressWatchedCommand}" CommandParameter="{Binding}" Background="#6B8399" Foreground="White">
+                                <Button HorizontalAlignment="Right" Margin="0,0,35,0" Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReCompressWatchedCommand}" CommandParameter="{Binding}" Background="#6B8399" Foreground="White">
                                     <ui:SymbolIcon Symbol="ArrowMinimize20" FontSize="14" RenderTransformOrigin="0.5,0.5" >
                                         <ui:SymbolIcon.RenderTransform>
                                             <TransformGroup>

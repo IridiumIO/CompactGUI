@@ -44,7 +44,7 @@
         <TextBlock Text="edit skipped filetypes"
                    Margin="10"
                    FontSize="22" FontWeight="SemiBold" />
-        <local:TokenizedTextBox x:Name="uiTokenizedText"
+        <local:TokenizedTextBox x:Name="UiTokenizedText"
                                 Margin="10,50,10,80"
                                 AcceptsTab="False"
                                 Background="{StaticResource CardBackground}"
@@ -59,12 +59,12 @@
             </FlowDocument>
         </local:TokenizedTextBox>
 
-        <Button x:Name="uiSave"
+        <Button x:Name="UiSave"
                 Content="Save"
                 Width="100" HorizontalAlignment="Right"
                 Margin="0,0,130,20" VerticalAlignment="Bottom"
-                Click="uiSave_Click" />
-        <Button x:Name="uiReset"
+                Click="UISave_Click" />
+        <Button x:Name="UiReset"
                 Content="Reset"
                 Width="100" HorizontalAlignment="Right"
                 Margin="0,0,10,20" VerticalAlignment="Bottom"

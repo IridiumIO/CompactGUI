@@ -36,13 +36,13 @@
 
     End Function
 
-    Public Shared Operator <(ByVal lhs As SemVersion, ByVal rhs As SemVersion) As Boolean
+    Public Shared Operator <(lhs As SemVersion, rhs As SemVersion) As Boolean
         Dim comparer = lhs.CompareTo(rhs)
         If comparer <= 0 Then Return False
         Return True
     End Operator
 
-    Public Shared Operator >(ByVal lhs As SemVersion, ByVal rhs As SemVersion) As Boolean
+    Public Shared Operator >(lhs As SemVersion, rhs As SemVersion) As Boolean
         Dim comparer = lhs.CompareTo(rhs)
         If comparer >= 0 Then Return False
         Return True

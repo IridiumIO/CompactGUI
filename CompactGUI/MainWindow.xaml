@@ -96,7 +96,7 @@
                     </LinearGradientBrush>
                 </Border.Background>
             </Border>
-            <local:ImageControl x:Name="steamBG" Height="{Binding ActualHeight, ElementName=MainWindow}" Stretch="UniformToFill" Opacity="1" Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True" NewSource="{Binding BackgroundImage}">
+            <local:ImageControl x:Name="SteamBg" Height="{Binding ActualHeight, ElementName=MainWindow}" Stretch="UniformToFill" Opacity="1" Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True" NewSource="{Binding BackgroundImage}">
 
                 <local:ImageControl.RenderTransform>
                     <TransformGroup>

@@ -64,7 +64,7 @@
                           Margin="0,0,0,20" VerticalAlignment="Center"
                           FontSize="18" />
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
-                <CheckBox x:Name="uiChkSkipPoorlyCompressed"
+                <CheckBox x:Name="UiChkSkipPoorlyCompressed"
                           Content="Skip poorly compressed filetypes"
                           Width="260"
                           FontSize="16"
@@ -75,7 +75,7 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="Text" Value="" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipPoorlyCompressed}" Value="True">
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=UiChkSkipPoorlyCompressed}" Value="True">
                                     <Setter Property="Text" Value="{Binding Folder.GlobalPoorlyCompressedFileCount, StringFormat={}{0} files will be skipped}" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -84,7 +84,7 @@
                 </TextBlock>
             </WrapPanel>
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
-                <CheckBox x:Name="uiChkSkipUserPoorlyCompressed"
+                <CheckBox x:Name="UiChkSkipUserPoorlyCompressed"
                           Content="Skip user-submitted filetypes"
                           Width="260"
                           FontSize="16"
@@ -95,7 +95,7 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="Text" Value="" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsChecked, ElementName=uiChkSkipUserPoorlyCompressed}" Value="True">
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=UiChkSkipUserPoorlyCompressed}" Value="True">
                                     <Setter Property="Text" Value="{Binding Folder.WikiPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped}" />
                                 </DataTrigger>
                             </Style.Triggers>

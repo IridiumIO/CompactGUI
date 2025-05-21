@@ -4,12 +4,6 @@ Imports System.Text
 Imports Gameloop.Vdf
 
 Module Helper
-
-
-    Function GetSteamIDFromFolder(path As String) As Integer
-        Return GetSteamNameAndIDFromFolder(path).appID
-    End Function
-
     Function GetSteamNameAndIDFromFolder(path As String) As (appID As Integer, gameName As String, installDir As String)
 
         Dim workingDir = New DirectoryInfo(path)
@@ -33,7 +27,6 @@ Module Helper
         Next
 
         Return Nothing
-
     End Function
 
 
@@ -72,8 +65,6 @@ Module Helper
     End Function
 
 
-
-
     Public Function GetInvalidFolders(folderPaths() As String) As (InvalidFolders As List(Of String), InvalidMessages As List(Of String))
 
         Dim invalidFolders As New List(Of String)
@@ -92,23 +83,11 @@ Module Helper
         End If
 
         Return (invalidFolders, invalidMessages)
-
     End Function
 
     Private Sub GenerateInvalidFolderSnackbar(invalidMessages As List(Of String))
-        Dim snackbar = Application.GetService(Of CustomSnackBarService)()
+        Dim snackbar = Application.GetService (Of CustomSnackBarService)()
         Dim message = String.Join(vbCrLf, invalidMessages)
         snackbar.Show("Invalid Folders", message, Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(10))
     End Sub
-
-
-
-
-
-
-
-
-
-
-
 End Module

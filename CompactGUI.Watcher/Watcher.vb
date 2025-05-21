@@ -169,10 +169,10 @@ Public Class Watcher : Inherits ObservableObject
 
         Dim ret = DeserializeAndValidateJSON(WatcherJSONFile)
         LastAnalysed = ret.Item1
-        Dim _WatchedFolders = ret.Item2
+        Dim retWatchedFolders = ret.Item2
 
 
-        Return _WatchedFolders
+        Return retWatchedFolders
     End Function
 
 
@@ -226,7 +226,7 @@ Public Class Watcher : Inherits ObservableObject
 
         Try
 
-            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged))
+            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged)).ToList()
 
             If Not WatchersToCheck.Any() Then Return
 

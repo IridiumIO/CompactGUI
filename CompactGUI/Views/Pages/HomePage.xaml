@@ -63,7 +63,7 @@
             <Label HorizontalAlignment="Center">
                 <TextBlock Text="CompactGUI" FontSize="32" />
             </Label>
-            <Button x:Name="BTN_AddFolder_1"
+            <Button x:Name="BtnAddFolder1"
                     Width="300" Height="40"
                     Margin="0,20,0,0" HorizontalContentAlignment="Stretch">
                 <Grid>
@@ -165,7 +165,7 @@
                     <StackPanel Grid.Row="0"
                                 Margin="0,0,0,30"
                                 Orientation="Horizontal">
-                        <ui:Button x:Name="BTN_AddFolder_2"
+                        <ui:Button x:Name="BtnAddFolder2"
                                    Width="38" Height="38"
                                    Background="{StaticResource CardBackgroundFillColorSecondaryBrush}">
                             <ui:SymbolIcon Symbol="Add16" />

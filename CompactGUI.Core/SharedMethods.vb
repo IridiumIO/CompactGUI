@@ -24,23 +24,6 @@ Public Module SharedMethods
         Try
             Return Not Directory.EnumerateFileSystemEntries(folder).Any()
 
-            For Each subdir In Directory.EnumerateDirectories(folder)
-                Try
-                    If Not IsDirectoryEmptySafe(subdir) Then Return False
-                Catch ex As UnauthorizedAccessException
-
-                End Try
-            Next
-
-            For Each file In Directory.EnumerateFiles(folder)
-                Try
-                    Return False
-                Catch ex As UnauthorizedAccessException
-
-                End Try
-            Next
-
-            Return True
 
         Catch ex As UnauthorizedAccessException
             MsgBox("You are not authorized to access some items in this folder." & vbCrLf & "Please try running CompactGUI as an administrator, otherwise these items will be skipped.", MsgBoxStyle.Exclamation, "Unauthorized Access")
@@ -138,8 +121,8 @@ Public Module SharedMethods
 
     <DllImport("kernel32.dll", CharSet:=CharSet.Auto)>
     Private Function GetShortPathName(
-        <MarshalAs(UnmanagedType.LPTStr)> ByVal path As String,
-        <MarshalAs(UnmanagedType.LPTStr)> ByVal shortPath As StringBuilder, ByVal shortPathLength As Integer) As Integer
+        <MarshalAs(UnmanagedType.LPTStr)> path As String,
+        <MarshalAs(UnmanagedType.LPTStr)> shortPath As StringBuilder, shortPathLength As Integer) As Integer
 
     End Function
 
@@ -147,7 +130,7 @@ Public Module SharedMethods
 
     <DllImport("kernel32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Private Function GetDiskFreeSpace(
-        ByVal lpRootPathName As String,
+        lpRootPathName As String,
         <Out> ByRef lpSectorsPerCluster As UInteger,
         <Out> ByRef lpBytesPerSector As UInteger,
         <Out> ByRef lpNumberOfFreeClusters As UInteger,

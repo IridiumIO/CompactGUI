@@ -111,7 +111,7 @@
                             </Grid.RowDefinitions>
 
                             <Label Content="Manage local skipped filetypes" VerticalAlignment="Center" />
-                            <Button x:Name="uiEditSkipListBTN"
+                            <Button x:Name="UiEditSkipListBtn"
                                     Content="edit"
                                     Grid.Column="1"
                                     Width="100" Height="37"
@@ -122,7 +122,7 @@
                             <Label Content="Agression of online skiplist"
                                    Grid.Row="2"
                                    VerticalAlignment="Center" />
-                            <TextBlock x:Name="skipHelpIcon"
+                            <TextBlock x:Name="SkipHelpIcon"
                                        Text="(?)"
                                        Grid.Row="2"
                                        Margin="175,0,0,0" VerticalAlignment="Center"
@@ -137,7 +137,7 @@
                                 </ToolTipService.ToolTip>
                             </TextBlock>
 
-                            <ComboBox x:Name="comboBoxSkipUserResultsAggression"
+                            <ComboBox x:Name="ComboBoxSkipUserResultsAggression"
                                       Grid.Row="2" Grid.Column="1"
                                       Foreground="#98A9B9" IsEnabled="False" SelectedIndex="0">
                                 <ComboBoxItem>
@@ -175,19 +175,19 @@
 
                     <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
                         <StackPanel Margin="-10,10,0,0">
-                            <CheckBox x:Name="uiIsContextEnabled"
+                            <CheckBox x:Name="UiIsContextEnabled"
                                       Content="Add to right-click context menu"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.IsContextIntegrated, Mode=TwoWay}" />
-                            <CheckBox x:Name="uiIsStartMenuEnabled"
+                            <CheckBox x:Name="UiIsStartMenuEnabled"
                                       Content="Add to start menu"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.IsStartMenuEnabled, Mode=TwoWay}" />
-                            <CheckBox x:Name="uiShowNotifications"
+                            <CheckBox x:Name="UiShowNotifications"
                                       Content="Show notification on completion"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.ShowNotifications, Mode=TwoWay}" />
-                            <CheckBox x:Name="uiAlwaysStartInTray"
+                            <CheckBox x:Name="UiAlwaysStartInTray"
                                       Content="Start CompactGUI in system tray"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.StartInSystemTray}" />
@@ -233,7 +233,7 @@
                                         Margin="15,0,15,0"
                                         Orientation="Horizontal">
 
-                                <Slider x:Name="compressionParallelism"
+                                <Slider x:Name="CompressionParallelism"
                                         Width="130"
                                         IsSnapToTickEnabled="True" LargeChange="1" Maximum="16" Minimum="0"
                                         Orientation="Horizontal" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"
@@ -244,7 +244,7 @@
                                        FontWeight="SemiBold" />
                             </StackPanel>
 
-                            <CheckBox x:Name="uiLockHDDToOneThread"
+                            <CheckBox x:Name="UiLockHddToOneThread"
                                       Content="HDDs only use 1 thread"
                                       Grid.Row="2"
                                       Margin="-10,0"
@@ -271,7 +271,7 @@
 
                     <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
                         <StackPanel Margin="-10,10,0,0">
-                            <CheckBox x:Name="uiEnableBackgroundWatcher"
+                            <CheckBox x:Name="UiEnableBackgroundWatcher"
                                       Content="Monitor compressed folders for changes"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.EnableBackgroundWatcher, Mode=TwoWay}">
@@ -282,7 +282,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
-                            <CheckBox x:Name="uiEnableBackgroundAutoCompression"
+                            <CheckBox x:Name="UiEnableBackgroundAutoCompression"
                                       Content="Periodically check and keep folders compressed"
                                       Margin="30,-3,0,-3"
                                       IsChecked="{Binding AppSettings.EnableBackgroundAutoCompression, Mode=TwoWay}">
@@ -316,7 +316,7 @@
 
                     <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
                         <StackPanel Margin="-10,10,0,0">
-                            <CheckBox x:Name="uiEnablePreReleaseUpdates"
+                            <CheckBox x:Name="UiEnablePreReleaseUpdates"
           Content="Check for pre-release updates"
           Margin="0,-3"
           IsChecked="{Binding AppSettings.EnablePreReleaseUpdates}" />

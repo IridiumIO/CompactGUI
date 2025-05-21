@@ -48,7 +48,7 @@ Public Module WOFHelper
 
     <DllImport("WofUtil.dll")>
     Friend Function WofIsExternalFile(
-    <MarshalAs(UnmanagedType.LPWStr)> ByVal Filepath As String,
+    <MarshalAs(UnmanagedType.LPWStr)> Filepath As String,
     <Out> ByRef IsExternalFile As Integer,
     <Out> ByRef Provider As UInteger,
     <Out> ByRef Info As WOF_FILE_COMPRESSION_INFO_V1,

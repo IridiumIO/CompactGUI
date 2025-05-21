@@ -44,10 +44,10 @@ Public Class ImageControl : Inherits Image
     End Sub
 
     Public Custom Event SourceChanging As RoutedEventHandler
-        AddHandler(ByVal value As RoutedEventHandler)
+        AddHandler(value As RoutedEventHandler)
             [AddHandler](SourceChangingEvent, value)
         End AddHandler
-        RemoveHandler(ByVal value As RoutedEventHandler)
+        RemoveHandler(value As RoutedEventHandler)
             [RemoveHandler](SourceChangingEvent, value)
         End RemoveHandler
         RaiseEvent(sender As Object, e As RoutedEventArgs)
@@ -56,10 +56,10 @@ Public Class ImageControl : Inherits Image
     End Event
 
     Public Custom Event SourceChanged As RoutedEventHandler
-        AddHandler(ByVal value As RoutedEventHandler)
+        AddHandler(value As RoutedEventHandler)
             [AddHandler](SourceChangedEvent, value)
         End AddHandler
-        RemoveHandler(ByVal value As RoutedEventHandler)
+        RemoveHandler(value As RoutedEventHandler)
             [RemoveHandler](SourceChangedEvent, value)
         End RemoveHandler
         RaiseEvent(sender As Object, e As RoutedEventArgs)
