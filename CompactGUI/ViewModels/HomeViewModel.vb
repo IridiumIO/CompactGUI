@@ -33,6 +33,12 @@ Partial Public Class HomeViewModel
         End Get
     End Property
 
+    Public ReadOnly Property DisplayVersion As String
+        Get
+            Return Application.AppVersion.Friendly
+        End Get
+    End Property
+
 
     Public Sub OnSelectedFolderChanged()
 
