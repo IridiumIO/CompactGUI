@@ -19,17 +19,14 @@ Public Class UpdaterService : Implements IUpdaterService
             Dim jVer = JsonSerializer.Deserialize(Of Dictionary(Of String, SemVersion))(ret)
             Dim newVersion As SemVersion = If(includePrerelease, jVer("Latest"), jVer("LatestNonPreRelease"))
             If newVersion > Application.AppVersion Then
-
-                ShowUpdateSnackbar(newVersion)
-
+                ShowUpdateSnackbar(newVersion, newVersion.IsPreRelease)
             End If
         Catch ex As Exception
             Debug.WriteLine(ex.Message)
         End Try
-
     End Function
 
-    Public Sub ShowUpdateSnackbar(newVersion As SemVersion)
+    Public Sub ShowUpdateSnackbar(newVersion As SemVersion, Optional isPreRelease As Boolean = False)
 
         Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
 
@@ -37,7 +34,7 @@ Public Class UpdaterService : Implements IUpdaterService
         textBlock.Text = "Click to download"
 
         ' Show the custom snackbar
-        snackbarSV.ShowCustom(textBlock, $"Update Version {newVersion.Friendly} Available", ControlAppearance.Success, timeout:=TimeSpan.FromSeconds(10))
+        snackbarSV.ShowCustom(textBlock, $"Update Available ▸ Version {newVersion.Friendly}", If(isPreRelease, ControlAppearance.Info, ControlAppearance.Success), timeout:=TimeSpan.FromSeconds(10))
 
         Dim handler As MouseButtonEventHandler = Nothing
         Dim closedHandler As TypedEventHandler(Of Snackbar, RoutedEventArgs) = Nothing

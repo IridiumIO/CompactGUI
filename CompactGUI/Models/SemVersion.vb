@@ -53,8 +53,8 @@
     End Function
 
     Public Function IsPreRelease() As Boolean
-        If PreRelease = "" Then Return True
-        Return False
+        If PreRelease = "" OrElse PreRelease = Nothing OrElse PreRelease = "r" Then Return False
+        Return True
     End Function
 
     Public Function Friendly() As String
