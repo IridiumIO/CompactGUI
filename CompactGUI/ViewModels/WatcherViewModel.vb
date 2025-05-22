@@ -45,7 +45,10 @@ Public Class WatcherViewModel : Inherits ObservableObject
         Dim validFolder = Core.verifyFolder(path)
         If Not validFolder.isValid Then
             Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
-            Await msgError.ShowAsync()
+            Application.Current.Dispatcher.Invoke(Sub()
+                                                      msgError.ShowAsync()
+                                                  End Sub)
+
             Return
         End If
 

@@ -7,6 +7,8 @@
         DataContext = VM
         viewModel = VM
 
+        ScrollViewer.SetCanContentScroll(Me, False)
+
     End Sub
 
 End Class

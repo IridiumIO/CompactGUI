@@ -1,15 +1,20 @@
-﻿<UserControl x:Class="FolderWatcherCard" 
+﻿<UserControl x:Class="FolderWatcherCard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  d:Background="Black"
-             xmlns:local="clr-namespace:CompactGUI" xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" d:DataContext="{d:DesignInstance Type=local:WatcherViewModel}" 
-             mc:Ignorable="d" Panel.ZIndex="1010" Padding="0" Margin="0"
-             d:DesignHeight="500" d:DesignWidth="800" >
-    <Grid VerticalAlignment="Stretch" >
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CompactGUI"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             Margin="0" Padding="0" Panel.ZIndex="1010"
+             d:Background="Black"
+             d:DataContext="{d:DesignInstance Type=local:WatcherViewModel}"
+             d:DesignHeight="500" d:DesignWidth="800"
+             mc:Ignorable="d">
+    <Grid VerticalAlignment="Stretch" Margin="10 0 10 0">
 
         <Grid.Resources>
-            <CollectionViewSource x:Key='Src' Source="{Binding Watcher.WatchedFolders}">
+            <CollectionViewSource x:Key="Src" Source="{Binding Watcher.WatchedFolders}">
                 <CollectionViewSource.SortDescriptions>
                     <scm:SortDescription PropertyName="DisplayName" />
                 </CollectionViewSource.SortDescriptions>
@@ -17,45 +22,96 @@
             <CollectionViewSource x:Key="Dtd" d:Source="{d:SampleData ItemCount=3}" />
         </Grid.Resources>
 
-        <TextBlock Text="watched folders" FontSize="20" Foreground="#73808C" VerticalAlignment="Top" Margin="0,-3,0,0" Visibility="Collapsed"/>
-        <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=last analysed {0}, Converter={StaticResource RelativeDateConverter}}" FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,32,35,0" d:Text="last analysed just now"/>
-        <ui:Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,32,0,0"  Command="{Binding RefreshWatchedCommand}" Background="Transparent" Foreground="#FFBFC7CE" Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}" BorderThickness="0">
-            
-            <ui:FontIcon Glyph="&#xE9F3;" FontSize="14"  FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" />
-            <ui:Button.ToolTip >
-                <ToolTip  ToolTipService.InitialShowDelay="100">
-                    <TextBlock Text="Re-analyse all watched folders" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
-                </ToolTip>
-            </ui:Button.ToolTip>
-        </ui:Button>
-        <ui:ProgressRing Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BoolToVisConverter}}" IsIndeterminate="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,-6,0,0" Foreground="#FFBFC7CE" Width="18" Height="18" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="20" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-        <TextBlock FontSize="14" Foreground="#FFBFC7CE" HorizontalAlignment="Left" Margin="35,0,0,220">    
-            <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" d:Text="51.8GB" />
-            <Run Text="saved" />
-        </TextBlock>
 
-        <Button VerticalAlignment="Top" Content="Add To Watchlist"  HorizontalAlignment="Right" Margin="0,32,10,0" Command="{Binding ManuallyAddFolderToWatcherCommand}">
-            <Button.ToolTip >
+
+        <TextBlock Text="Watched folders"
+                   Grid.Row="0"
+                   FontSize="22" VerticalAlignment="Center"
+                   Foreground="{StaticResource CardForeground}"
+                   Visibility="Visible" />
+
+        <Button Content="Add Folder To Watchlist"
+                Grid.Row="0"
+                Height="30"
+                HorizontalAlignment="Right" 
+                Command="{Binding ManuallyAddFolderToWatcherCommand}">
+            <Button.ToolTip>
                 <ToolTip ToolTipService.InitialShowDelay="100">
-                    <TextBlock Text="Add a custom folder to the watchlist" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                    <TextBlock Text="Add a custom folder to the watchlist"
+                               FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                 </ToolTip>
             </Button.ToolTip>
         </Button>
 
-            <ListView x:Name="UiWatcherListView"  Margin="-20,90,-20,0" Padding="10,0,10,0" Background="Transparent" BorderThickness="0" ItemsSource="{Binding Source = {StaticResource Src}}" d:ItemsSource="{Binding Source = {StaticResource Dtd}}"   KeyboardNavigation.TabNavigation="None" ScrollViewer.VerticalScrollBarVisibility="Visible" >
+
+
+        <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                   FontSize="20" Foreground="{StaticResource CardForegroundDisabled}">
+            <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" d:Text="51.8GB" />
+            <Run Text="saved" />
+        </TextBlock>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 3 0"  >
+            <Grid Width="45" Height="25" VerticalAlignment="Center" >
+                <ui:Button Background="Transparent" BorderThickness="0"
+            Command="{Binding RefreshWatchedCommand}"
+            Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+
+                    <ui:FontIcon FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
+                  Glyph="&#xE9F3;" />
+                    <ui:Button.ToolTip>
+                        <ToolTip ToolTipService.InitialShowDelay="100">
+                            <TextBlock Text="Re-analyse all watched folders"
+                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
+                        </ToolTip>
+                    </ui:Button.ToolTip>
+                </ui:Button>
+                <ui:ProgressRing Width="18" Height="18" Margin="-15 0 0 0 "
+       Foreground="#FFBFC7CE" IsIndeterminate="True"
+       Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BoolToVisConverter}}" />
+            </Grid>
            
+
+            <TextBlock VerticalAlignment="Center" Margin="0 -2 0 0" Text="{Binding Watcher.LastAnalysed, StringFormat=Last analysed {0}, Converter={StaticResource RelativeDateConverter}}"
+                   
+                   d:Text="Last analysed: just now" FontSize="14" Foreground="#FFBFC7CE" />
+        </StackPanel>
+
+
+        <Separator Height="1" Grid.Row="2" VerticalAlignment="Bottom"/>
+
+
+            <ListView x:Name="UiWatcherListView" Grid.Row="3" Margin="-10 0 -20 0" Padding="0 0 10 0"
+                   HorizontalAlignment="Stretch" 
+                  d:ItemsSource="{Binding Source={StaticResource Dtd}}"
+                  Background="Transparent" BorderThickness="0" 
+                  ItemsSource="{Binding Source={StaticResource Src}}" ScrollViewer.CanContentScroll="True"
+                  KeyboardNavigation.TabNavigation="None" ScrollViewer.VerticalScrollBarVisibility="Visible">
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="Margin" Value="0,0,0,10"/>
+                    <Setter Property="Margin" Value="0,0,0,0" />
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <Border Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                                    <ContentPresenter Content="{TemplateBinding Content}" d:Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" />
+                                <Border Name="Border" CornerRadius="5"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter Content="{TemplateBinding Content}"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      d:Content="{TemplateBinding Content}"
+                                                      ContentTemplate="{TemplateBinding ContentTemplate}" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -63,89 +119,140 @@
 
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#20000000"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Background" Value="#20000000" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                     </Style.Triggers>
 
                 </Style>
 
             </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate >
-                <DataTemplate >
-                    <Border Padding="116,6" Margin="-10,0"  d:Height="100" Height="50"  Background="#00FFFFFF"  KeyboardNavigation.TabNavigation="None" MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Height="70"
+                            Margin="0,0" Padding="6,16"
+                            d:Height="100" Background="#00FFFFFF" KeyboardNavigation.TabNavigation="None"
+                            MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
 
 
-                        <Grid>
-                            <Label>
-                                <StackPanel Orientation="Horizontal" >
-                                    
-                                    <ui:ProgressRing IsIndeterminate="True" Height="15" Width="15" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" Foreground="#FFBFC7CE" Margin="0,0,6,0" Padding="7" />
-                                    <Viewbox Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}" 
-                                                 Width="12"
-                                                 Height="12"
-                                                 Margin="0,0,5,0"
-                                                 HorizontalAlignment="Left">
+                        <Grid> 
+                            
+                            
+                            
+                            <Label >
+                                <StackPanel Orientation="Horizontal">
+
+                                    <ui:ProgressRing Width="15" Height="15"
+                                                     Margin="0,0,6,0" Padding="7"
+                                                     Foreground="#FFBFC7CE" IsIndeterminate="True"
+                                                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" />
+                                    <Viewbox Grid.Column="1"
+                                             Width="12" Height="12"
+                                             Margin="0,0,5,0" HorizontalAlignment="Left"
+                                             Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}">
                                         <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#FFFFFF" />
                                     </Viewbox>
-                                    <TextBlock Grid.Column="1" Visibility="{Binding IsSteamGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}" Text="&#xED42;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Foreground="White" Width="12" Height="12" Margin="0,0,5,0"/>
-                                    <TextBlock MaxWidth="280"  TextTrimming="CharacterEllipsis" Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}" FontSize="15" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,-2,0,0"/>
+                                    <TextBlock Text="&#xED42;"
+                                               Grid.Column="1"
+                                               Width="12" Height="12"
+                                               Margin="0,0,5,0"
+                                               FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Foreground="White"
+                                               Visibility="{Binding IsSteamGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}"
+                                               MaxWidth="280"
+                                               Margin="0,-2,0,0" VerticalAlignment="Top"
+                                               FontSize="15" FontWeight="SemiBold" Foreground="White" TextTrimming="CharacterEllipsis" />
 
                                 </StackPanel>
 
                             </Label>
-                            <Border CornerRadius="5" Height="15" Width="40" Background="#8373808C" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,22,0,0">
-                                <TextBlock Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" d:Text="fds" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFF" FontWeight="SemiBold" />
+                            <Border Width="40" Height="15"
+                                    Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                    Background="#8373808C" CornerRadius="5">
+                                <TextBlock Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           d:Text="X4K" FontSize="11" FontWeight="SemiBold" Foreground="#FFF" />
                             </Border>
 
-                            <TextBlock Width="220" Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0">
-                                <TextBlock.ToolTip >
-                                    <ToolTip Placement="RelativePoint" MaxWidth="500" >
-                                        <TextBlock Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                            <TextBlock Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}"
+                                       Width="450"
+                                       Margin="50,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                       FontSize="12" Foreground="#80FFFFFF" TextTrimming="CharacterEllipsis">
+                                <TextBlock.ToolTip>
+                                    <ToolTip MaxWidth="500" Placement="RelativePoint">
+                                        <TextBlock Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}"
+                                                   FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
-                            <TextBlock x:Name="DecayedText" Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}" FontSize="12" Foreground="#FFBFC7CE"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right" d:Text="7% decayed"/>
-                            <TextBlock x:Name="SavedText" Visibility="Collapsed" Text="{Binding SavedSpace, StringFormat={}{0} saved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}, ConverterParameter=0}" FontSize="12" Foreground="#FFBFC7CE"  VerticalAlignment="Top" Margin="0,-2,30,0" HorizontalAlignment="Right" d:Text="39GB saved"/>
-                            <ProgressBar Height="6" Width="108"  Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" Foreground="{Binding DecayPercentage, Converter={StaticResource ProgressBarColorConverter}}" Background="#808B9FB3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,25,30,0" />
+                            <TextBlock x:Name="DecayedText"
+                                       Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}"
+                                       Margin="0,-2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                       d:Text="7% decayed" FontSize="12" Foreground="#FFBFC7CE" />
+                            <TextBlock x:Name="SavedText"
+                                       Text="{Binding SavedSpace, StringFormat={}{0} saved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}, ConverterParameter=0}"
+                                       Margin="0,-2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                       d:Text="39GB saved" FontSize="12" Foreground="#FFBFC7CE" Visibility="Collapsed" />
+                            <ProgressBar Width="160" Height="6"
+                                         Margin="0,25,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                         Background="#808B9FB3"
+                                         Foreground="{Binding DecayPercentage, Converter={StaticResource ProgressBarColorConverter}}"
+                                         Value="{Binding DecayPercentage, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='I'}" />
 
-                            <Separator Visibility="Collapsed" Background="#60FFFFFF" VerticalAlignment="Top" Margin="0,42,30,0"/>
+                            <Separator Margin="0,42,30,0" VerticalAlignment="Top"
+                                       Background="#60FFFFFF" Visibility="Collapsed" />
 
-                            <Grid Margin="0,45,30,0">
+                            <Grid Margin="0,45,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last compressed:" Margin="0,0,10,0"/>
-                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
+                                    <TextBlock Text="last compressed:"
+                                               Margin="0,0,10,0"
+                                               FontSize="12" Foreground="#FF8B9FB3" />
+                                    <TextBlock Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"
+                                               d:Text="fds" FontSize="12" Foreground="#FF8B9FB3" />
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="last modified:" Margin="0,0,27,0"/>
-                                    <TextBlock FontSize="12" Foreground="#FF8B9FB3" Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"  d:Text="fds"/>
+                                <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                    <TextBlock Text="last modified:"
+                                               Margin="0,0,27,0"
+                                               FontSize="12" Foreground="#FF8B9FB3" />
+                                    <TextBlock Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"
+                                               d:Text="fds" FontSize="12" Foreground="#FF8B9FB3" />
                                 </StackPanel>
 
-                               
 
-                                <Button  HorizontalAlignment="Right" Command="{Binding ElementName=UiWatcherListView, Path=DataContext.RemoveWatcherCommand}" CommandParameter="{Binding}" Background="#DD6B6B" Foreground="White">
-                                    <ui:SymbolIcon Symbol="Delete16" FontSize="14" />
-                                    <Button.ToolTip >
+
+                                <Button HorizontalAlignment="Right"
+                                        Background="#DD6B6B"
+                                        Command="{Binding ElementName=UiWatcherListView, Path=DataContext.RemoveWatcherCommand}"
+                                        CommandParameter="{Binding}"
+                                        Foreground="White">
+                                    <ui:SymbolIcon FontSize="14" Symbol="Delete16" />
+                                    <Button.ToolTip>
                                         <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
-                                            <TextBlock Text="Remove from Watchlist" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                                            <TextBlock Text="Remove from Watchlist"
+                                                       FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
 
-                                <Button HorizontalAlignment="Right" Margin="0,0,35,0" Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReCompressWatchedCommand}" CommandParameter="{Binding}" Background="#6B8399" Foreground="White">
-                                    <ui:SymbolIcon Symbol="ArrowMinimize20" FontSize="14" RenderTransformOrigin="0.5,0.5" >
+                                <Button Margin="0,0,35,0" HorizontalAlignment="Right"
+                                        Background="#6B8399"
+                                        Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReCompressWatchedCommand}"
+                                        CommandParameter="{Binding}"
+                                        Foreground="White">
+                                    <ui:SymbolIcon FontSize="14" RenderTransformOrigin="0.5,0.5" Symbol="ArrowMinimize20">
                                         <ui:SymbolIcon.RenderTransform>
                                             <TransformGroup>
-                                                <ScaleTransform/>
-                                                <SkewTransform/>
-                                                <RotateTransform Angle="90"/>
-                                                <TranslateTransform/>
+                                                <ScaleTransform />
+                                                <SkewTransform />
+                                                <RotateTransform Angle="90" />
+                                                <TranslateTransform />
                                             </TransformGroup>
                                         </ui:SymbolIcon.RenderTransform>
                                     </ui:SymbolIcon>
-                                    <Button.ToolTip >
+                                    <Button.ToolTip>
                                         <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
-                                            <TextBlock Text="Add to compression queue" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
+                                            <TextBlock Text="Add to compression queue"
+                                                       FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
@@ -159,7 +266,8 @@
             </ListView.ItemTemplate>
 
         </ListView>
- 
-       
+
+    
+
     </Grid>
 </UserControl>
