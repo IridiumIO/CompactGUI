@@ -2,21 +2,35 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:ValueConverters;assembly=ValueConverters"
                     xmlns:local="clr-namespace:CompactGUI">
-  
-      <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
-      <local:DecimalToPercentageConverter x:Key="DecimalToPercentageConverter" />
-      <local:BytesToReadableConverter x:Key="BytesToReadableConverter" />
-      <local:StrippedFolderPathConverter x:Key="StrippedFolderPathConverter" />
-      <local:RelativeDateConverter x:Key="RelativeDateConverter" />
-      <local:CompressionLevelAbbreviatedConverter x:Key="CompressionLevelAbbreviatedConverter" />
-      <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter" />
-      <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter" />
-      <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" />
-      <local:RatioConverter x:Key="RatioConverter" />
-      <local:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
-      <local:NonZeroToVisConverter x:Key="NonZeroToVisConverter" />
-      <local:WindowScalingConverter x:Key="WindowScalingConverter"/>
-      <local:BooleanToInverseVisibilityConverter x:Key="BooleanToInverseVisibilityConverter"  />
-    <local:TokenisedFolderPathConverter x:Key="TokenisedFolderPathConverter" />
 
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
+    <!-- <converters:EnumToBoolConverter x:Key="XEnumToBoolConverter" /> -->
+    <local:EnumToRadioButtonConverter x:Key="EnumToRadioButtonConverter" />
+    <local:DecimalToPercentageConverter x:Key="DecimalToPercentageConverter" />
+    <local:BytesToReadableConverter x:Key="BytesToReadableConverter" />
+    <local:StrippedFolderPathConverter x:Key="StrippedFolderPathConverter" />
+    <local:RelativeDateConverter x:Key="RelativeDateConverter" />
+    <local:CompressionLevelAbbreviatedConverter x:Key="CompressionLevelAbbreviatedConverter" />
+    <!-- <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter" /> -->
+    <!-- <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter" /> -->
+    <!-- <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" /> -->
+    <!-- <local:RatioConverter x:Key="RatioConverter" /> -->
+    <local:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
+    <!-- <local:NonZeroToVisConverter x:Key="NonZeroToVisConverter" /> -->
+    <!-- <local:WindowScalingConverter x:Key="WindowScalingConverter" /> -->
+    <local:BooleanToInverseVisibilityConverter x:Key="BooleanToInverseVisibilityConverter" />
+    <local:TokenisedFolderPathConverter x:Key="TokenisedFolderPathConverter" />
+    <local:FolderStatusToColorConverter x:Key="FolderStatusToColorConverter" />
+    <local:FolderStatusToStringConverter x:Key="FolderStatusToStringConverter" />
+    <local:FolderWorkingStateToPauseSymbolConverter x:Key="FolderWorkingStateToPauseSymbolConverter"/>
+    <local:IsSteamFolderAndFreshlyCompressedMultiConverter x:Key="IsSteamFolderAndFreshlyCompressedMultiConverter" />
+    <local:IsSteamFolderConverter x:Key="IsSteamFolderConverter"/>
+    <local:AnimationFactorToValueConverter x:Key="AnimationFactorToValueConverter" />
+    <local:FolderActionStateWorkingToVisibilityConverter x:Key="FolderActionStateWorkingToVisibilityConverter" />
+
+    <converters:ValueConverterGroup x:Key="IsSteamFolderToVisibilityConverter">
+        <local:IsSteamFolderConverter/>
+        <converters:BoolToVisibilityConverter/>
+    </converters:ValueConverterGroup>
+    
 </ResourceDictionary>

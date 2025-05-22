@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /CompactGUI/My Project/launchSettings.json
+
+# IntelliJ
+.idea/

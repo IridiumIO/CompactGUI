@@ -7,8 +7,8 @@ Public Module SharedMethods
 
     Function verifyFolder(folder As String) As (isValid As Boolean, msg As String)
 
-        If Not IO.Directory.Exists(folder) Then : Return (False, "Directory does not exist")
-        ElseIf folder.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows))) Then : Return (False, "Cannot compress system directory")
+        If Not Directory.Exists(folder) Then : Return (False, "Directory does not exist")
+        ElseIf folder.ToLowerInvariant.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows)).ToLowerInvariant) Then : Return (False, "Cannot compress system directory")
         ElseIf folder.EndsWith(":\") Then : Return (False, "Cannot compress root directory")
         ElseIf IsDirectoryEmptySafe(folder) Then : Return (False, "This directory is either empty or you are not authorized to access its files.")
         ElseIf IsOneDriveFolder(folder) Then : Return (False, "Files synced with OneDrive cannot be compressed as they use a different storage structure")
@@ -22,27 +22,10 @@ Public Module SharedMethods
     Function IsDirectoryEmptySafe(folder As String)
 
         Try
-            Return Not IO.Directory.EnumerateFileSystemEntries(folder).Any()
+            Return Not Directory.EnumerateFileSystemEntries(folder).Any()
 
-            For Each subdir In IO.Directory.EnumerateDirectories(folder)
-                Try
-                    If Not IsDirectoryEmptySafe(subdir) Then Return False
-                Catch ex As System.UnauthorizedAccessException
 
-                End Try
-            Next
-
-            For Each file In IO.Directory.EnumerateFiles(folder)
-                Try
-                    Return False
-                Catch ex As System.UnauthorizedAccessException
-
-                End Try
-            Next
-
-            Return True
-
-        Catch ex As System.UnauthorizedAccessException
+        Catch ex As UnauthorizedAccessException
             MsgBox("You are not authorized to access some items in this folder." & vbCrLf & "Please try running CompactGUI as an administrator, otherwise these items will be skipped.", MsgBoxStyle.Exclamation, "Unauthorized Access")
             Return False
 
@@ -138,8 +121,8 @@ Public Module SharedMethods
 
     <DllImport("kernel32.dll", CharSet:=CharSet.Auto)>
     Private Function GetShortPathName(
-        <MarshalAs(UnmanagedType.LPTStr)> ByVal path As String,
-        <MarshalAs(UnmanagedType.LPTStr)> ByVal shortPath As StringBuilder, ByVal shortPathLength As Integer) As Integer
+        <MarshalAs(UnmanagedType.LPTStr)> path As String,
+        <MarshalAs(UnmanagedType.LPTStr)> shortPath As StringBuilder, shortPathLength As Integer) As Integer
 
     End Function
 
@@ -147,7 +130,7 @@ Public Module SharedMethods
 
     <DllImport("kernel32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Private Function GetDiskFreeSpace(
-        ByVal lpRootPathName As String,
+        lpRootPathName As String,
         <Out> ByRef lpSectorsPerCluster As UInteger,
         <Out> ByRef lpBytesPerSector As UInteger,
         <Out> ByRef lpNumberOfFreeClusters As UInteger,

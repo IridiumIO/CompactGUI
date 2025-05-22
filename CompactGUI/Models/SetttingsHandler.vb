@@ -19,12 +19,10 @@ Public Class SettingsHandler : Inherits ObservableObject
         If AppSettings.SettingsVersion = 0 OrElse SettingsVersion > AppSettings.SettingsVersion Then
             AppSettings = New Settings With {.SettingsVersion = SettingsVersion}
 
-            Dim msgError As New ModernWpf.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
+            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
             Await msgError.ShowAsync()
 
         End If
-
-        InitialiseWindowSize()
 
         WriteToFile()
 
@@ -44,7 +42,7 @@ Public Class SettingsHandler : Inherits ObservableObject
         Catch ex As Exception
             validatedSettings = New Settings With {.SettingsVersion = SettingsVersion}
 
-            Dim msgError As New ModernWpf.Controls.ContentDialog With {.Title = $"Corrupted Settings File Detected", .Content = "Your settings have been reset to their default.", .CloseButtonText = "OK"}
+            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"Corrupted Settings File Detected", .Content = "Your settings have been reset to their default.", .CloseButtonText = "OK"}
             msgError.ShowAsync()
 
 
@@ -54,27 +52,6 @@ Public Class SettingsHandler : Inherits ObservableObject
 
     End Function
 
-
-    Private Shared Sub InitialiseWindowSize()
-
-        AppSettings.WindowWidth = AppSettings.WindowHeight * 0.625
-        AppSettings.WindowScalingFactor = AppSettings.WindowHeight / 800
-
-        If AppSettings.WindowHeight < 400 OrElse AppSettings.WindowHeight > 1600 Then
-            AppSettings.WindowScalingFactor = 1
-            AppSettings.WindowHeight = 800
-            AppSettings.WindowWidth = 500
-        End If
-
-        Dim scHeight = SystemParameters.MaximizedPrimaryScreenHeight * 0.9
-
-        If scHeight < AppSettings.WindowHeight Then
-            AppSettings.WindowHeight = scHeight
-            AppSettings.WindowWidth = scHeight * 0.625
-            AppSettings.WindowScalingFactor = scHeight / 800
-        End If
-
-    End Sub
 
 
     Shared Sub WriteToFile()

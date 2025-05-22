@@ -1,0 +1,333 @@
+﻿<Page x:Class="HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:CompactGUI"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      x:Name="Root" Title="HomePage"
+      d:DataContext="{d:DesignInstance Type=local:HomeViewModel}"
+      d:DesignHeight="450" d:DesignWidth="800"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+
+        <DataTemplate x:Key="IdleTemplate">
+
+            <Button Content="Compress Selected"
+                    Width="160" Height="40"
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                    Command="{Binding CompressAllCommand}"
+                    DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Page}}" />
+
+        </DataTemplate>
+
+        <DataTemplate x:Key="AnalysingTemplate">
+            <ui:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center"
+                             IsIndeterminate="True" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="CompressingTemplate">
+            <ui:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center"
+                  IsIndeterminate="True" />
+            <!--<StackPanel Margin="0,20">
+                <TextBlock Text="Working" FontSize="18" />
+                <ProgressBar Margin="0,10" IsIndeterminate="True" />
+            </StackPanel>-->
+        </DataTemplate>
+
+        <DataTemplate x:Key="ResultsTemplate">
+            <!--<TextBlock Text="Results State" />-->
+
+        </DataTemplate>
+
+        <local:HomeViewStateTemplateSelector x:Key="HomeViewStateTemplateSelector"
+                                             AnalysingTemplate="{StaticResource AnalysingTemplate}"
+                                             CompressingTemplate="{StaticResource CompressingTemplate}"
+                                             IdleTemplate="{StaticResource IdleTemplate}"
+                                             ResultsTemplate="{StaticResource ResultsTemplate}" />
+    </Page.Resources>
+
+    <Grid Margin="10,0,10,10" VerticalAlignment="Stretch">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="FreshLaunchSelector"
+                    Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3"
+                    Margin="0,-90,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+            <Label HorizontalAlignment="Center">
+                <TextBlock Text="CompactGUI" FontSize="32" />
+            </Label>
+            <Button x:Name="BtnAddFolder1"
+                    Width="300" Height="40"
+                    Margin="0,20,0,0" HorizontalContentAlignment="Stretch">
+                <Grid>
+                    <ui:SymbolIcon HorizontalAlignment="Left" Symbol="Search12" />
+                    <TextBlock Text="select a folder" HorizontalAlignment="Center" />
+                </Grid>
+            </Button>
+
+            <StackPanel.RenderTransform>
+                <TranslateTransform x:Name="Transform" Y="20" />
+            </StackPanel.RenderTransform>
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Opacity" Value="0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Visibility, RelativeSource={RelativeSource Self}}" Value="Visible">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!-- Fade-in animation -->
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                             From="0" To="1"
+                                             Duration="0:0:0.5" />
+
+                                        <!-- Move upwards animation -->
+                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)"
+                                             From="30" To="0" 
+                                             Duration="0:0:0.5">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CircleEase/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+
+        </StackPanel>
+        <Label Grid.Row="1" VerticalAlignment="Bottom" Margin="0 0 0 20" Foreground="{StaticResource CardForegroundDisabled}" HorizontalAlignment="Center" Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+            <TextBlock Text="{Binding DisplayVersion, StringFormat={}Version {0}}"/>
+            <Label.RenderTransform>
+                <TranslateTransform x:Name="TransformL" Y="20" />
+            </Label.RenderTransform>
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Setter Property="Opacity" Value="0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Visibility, RelativeSource={RelativeSource Self}}" Value="Visible">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="0"/>
+                                        <!-- Fade-in animation -->
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                 From="0" To="1" BeginTime="0:0:0.5"
+                                 Duration="0:0:1.5" />
+
+                                        <!-- Move upwards animation -->
+                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)"
+                                 From="10" To="0" BeginTime="0:0:0.5"
+                                 Duration="0:0:0.5">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CircleEase/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+
+        <Grid x:Name="BaseHomeView"
+              Grid.Row="1"
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToInverseVisibilityConverter}, Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="370" MinWidth="370" MaxWidth="700"/>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" MinWidth="200" />
+            </Grid.ColumnDefinitions>
+
+            <ui:Card VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+                     Background="Transparent" BorderThickness="0">
+
+                <Grid Margin="10" VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="90" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0"
+                                Margin="0,0,0,30"
+                                Orientation="Horizontal">
+                        <ui:Button x:Name="BtnAddFolder2"
+                                   Width="38" Height="38"
+                                   Background="{StaticResource CardBackgroundFillColorSecondaryBrush}">
+                            <ui:SymbolIcon Symbol="Add16" />
+                        </ui:Button>
+                        <TextBlock Text="Add Folder to Queue"
+                                   Margin="15,-1,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <ui:ListView Grid.Row="1"
+                                 Margin="0,0,-20,0"
+                                 ItemsSource="{Binding Folders}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 SelectedItem="{Binding SelectedFolder, Mode=TwoWay}">
+                        <ui:ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ui:ListView.ItemContainerStyle>
+                        <ui:ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="50" Margin="5,0,30,0">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="30" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border x:Name="ContainingGrid"
+                                            Grid.Column="0" Grid.ColumnSpan="2"
+                                            Margin="10,0,-10,0"
+                                            CornerRadius="5">
+                                        <Border.Background>
+                                            <LinearGradientBrush Opacity="0" StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Offset="0.4" Color="#FFFFFFFF" />
+                                                <GradientStop Offset="1" Color="#FFFFFFFF" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+
+                                    </Border>
+
+                                    <Border Grid.Column="0"
+                                            Width="4" Height="30"
+                                            Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                            Background="{StaticResource PaletteBlueBrush}"
+                                            CornerRadius="2"
+                                            Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
+
+                                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0" >
+                                        <ui:ProgressRing Width="20" Height="20" Margin="10 0 0 0" Background="Red" IsIndeterminate="True" Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}"/>
+                                        <StackPanel Margin="10 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Orientation="Vertical">
+                                        
+                                        <TextBlock Text="{Binding DisplayName}" FontSize="15" />
+
+                                        <TextBlock Text="{Binding FolderName, Converter={StaticResource TokenisedFolderPathConverter}}"
+                                                   Grid.Column="0"
+                                                   HorizontalAlignment="Left"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource AccentFillColorDisabledBrush}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    </StackPanel>
+
+                                  
+
+
+
+
+
+                                    <ui:Button Grid.Column="1"
+                                               Width="26" Height="26"
+                                               Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                               BorderBrush="{StaticResource PaletteRedBrush}"
+                                               Command="{Binding DataContext.RemoveFolderCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                               CommandParameter="{Binding}">
+                                        <ui:SymbolIcon FontSize="12"
+                                                       Foreground="{StaticResource PaletteRedBrush}"
+                                                       Symbol="Dismiss12" />
+                                        <ui:Button.Style>
+                                            <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
+                                                <Setter Property="Opacity" Value="0" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}}" Value="True">
+                                                        <DataTrigger.EnterActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.1" />
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.EnterActions>
+                                                        <DataTrigger.ExitActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.1" />
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.ExitActions>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:Button.Style>
+                                    </ui:Button>
+
+                                </Grid>
+                                <DataTemplate.Triggers>
+                                    <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="ContainingGrid"
+                                                                 Storyboard.TargetProperty="(Grid.Background).(LinearGradientBrush.Opacity)" To="0.11"
+                                                                 Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="ContainingGrid"
+                                                                 Storyboard.TargetProperty="(Grid.Background).(LinearGradientBrush.Opacity)" To="0"
+                                                                 Duration="0:0:0.05" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ui:ListView.ItemTemplate>
+
+                    </ui:ListView>
+
+                    <ContentControl Content="{Binding HomeViewModelState}"
+                                    Grid.Row="2"
+                                    VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                    ContentTemplateSelector="{StaticResource HomeViewStateTemplateSelector}" />
+
+
+
+                </Grid>
+
+            </ui:Card>
+
+            <GridSplitter Width="2"
+                          Background="{StaticResource SeparatorBorderBrush}"
+                          ResizeBehavior="BasedOnAlignment"  />
+
+
+
+            <ui:Card Grid.Column="2"
+                     VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+                     Background="Transparent" BorderThickness="0">
+
+                <local:FolderView VerticalContentAlignment="Stretch" DataContext="{Binding SelectedFolderViewModel}" />
+
+            </ui:Card>
+        </Grid>
+
+    </Grid>
+</Page>

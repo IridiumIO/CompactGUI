@@ -3,9 +3,6 @@ Imports System.Text.Json
 Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports CompactGUI.Core
 Imports System.Threading
-Imports System.Collections.Specialized
-Imports System.Runtime
-Imports System.ComponentModel
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class Watcher : Inherits ObservableObject
@@ -67,6 +64,7 @@ Public Class Watcher : Inherits ObservableObject
     Sub New(excludedFiletypes As String())
 
         IdleDetector.Start()
+        Debug.WriteLine("Idle Detector Started")
         AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
 
         BGCompactor = New BackgroundCompactor(excludedFiletypes)
@@ -117,20 +115,25 @@ Public Class Watcher : Inherits ObservableObject
 
     End Sub
 
-    Public Sub UpdateWatched(folder As String, ByRef analyser As Analyser, Optional immediateFlushToDisk As Boolean = True)
+    Public Sub UpdateWatched(folder As String, ByRef analyser As Analyser, isFreshlyCompressed As Boolean, Optional immediateFlushToDisk As Boolean = True)
 
         Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = folder)
         If existingItem IsNot Nothing Then
 
             existingItem.LastCheckedDate = DateTime.Now
             existingItem.LastCheckedSize = analyser.CompressedBytes
+            existingItem.LastUncompressedSize = analyser.UncompressedBytes
             existingItem.LastSystemModifiedDate = FolderMonitors.First(Function(f) f.Folder = folder).LastChangedDate
 
             existingItem.CompressionLevel = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
 
+            If isFreshlyCompressed OrElse existingItem.CompressionLevel = WOFCompressionAlgorithm.NO_COMPRESSION Then
+                existingItem.LastCompressedSize = analyser.CompressedBytes
+            End If
+
             FolderMonitors.First(Function(f) f.Folder = folder).HasTargetChanged = False
             OnPropertyChanged(NameOf(TotalSaved))
-            If Not immediateFlushToDisk Then WriteToFile()
+            If immediateFlushToDisk Then WriteToFile()
         End If
     End Sub
 
@@ -172,10 +175,10 @@ Public Class Watcher : Inherits ObservableObject
 
         Dim ret = DeserializeAndValidateJSON(WatcherJSONFile)
         LastAnalysed = ret.Item1
-        Dim _WatchedFolders = ret.Item2
+        Dim retWatchedFolders = ret.Item2
 
 
-        Return _WatchedFolders
+        Return retWatchedFolders
     End Function
 
 
@@ -207,29 +210,40 @@ Public Class Watcher : Inherits ObservableObject
 
 
 
+    Private _isHandlingIdle As Boolean = False
 
-    Private Async Sub OnSystemIdle()
+    Private Async Function OnSystemIdle() As Task
+        If _isHandlingIdle Then Return
+        _isHandlingIdle = True
+        Try
 
-        If Not IsWatchingEnabled Then Return
+            Debug.WriteLine("System Idle Detected")
+            If Not IsWatchingEnabled Then Return
 
-        Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
-        If FolderMonitors.Exists(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
+            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
+            If FolderMonitors.Exists(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
 
-        If _parseWatchersSemaphore.CurrentCount <> 0 Then
-            Await ParseWatchers()
-        End If
-        If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso IsBackgroundCompactingEnabled Then
-            Await BackgroundCompact()
-        End If
-    End Sub
+            If _parseWatchersSemaphore.CurrentCount <> 0 Then
+                Await ParseWatchers()
+            End If
+            If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso IsBackgroundCompactingEnabled Then
+                Await BackgroundCompact()
+            End If
+        Finally
+
+            _isHandlingIdle = False
+        End Try
+    End Function
+
 
     Public Async Function ParseWatchers(Optional ParseAll As Boolean = False) As Task
         Dim acquired = Await _parseWatchersSemaphore.WaitAsync(0)
         If Not acquired Then Return
 
         Try
+            Debug.WriteLine("Background Parsing Watchers")
 
-            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged))
+            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged)).ToList()
 
             If Not WatchersToCheck.Any() Then Return
 
@@ -258,7 +272,7 @@ Public Class Watcher : Inherits ObservableObject
 
             If BGCompactor.isCompactorActive Then Return
 
-            If Not WatchedFolders.Any(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.CompressionAlgorithm.NO_COMPRESSION) Then
+            If Not WatchedFolders.Any(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION) Then
                 Return
             End If
 
@@ -274,7 +288,7 @@ Public Class Watcher : Inherits ObservableObject
 
     Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
         Debug.WriteLine("Background Analysing: " & folder)
-        Dim analyser As New Core.Analyser(folder)
+        Dim analyser As New Analyser(folder)
 
         Await analyser.AnalyseFolder(Nothing)
 

@@ -6,7 +6,7 @@ Public Class FolderWatcherCard : Inherits UserControl
 
     Private Sub ToggleBorderHeight(sender As Object, e As RoutedEventArgs)
         Dim border As Border = DirectCast(sender, Border)
-        Dim newHeight As Double = If(border.Height = 100, 50, 100)
+        Dim newHeight As Double = If(border.Height = 110, 70, 110)
 
         Dim childSavedText = FindChild(Of TextBlock)(border, "SavedText")
         Dim childDecayedText = FindChild(Of TextBlock)(border, "DecayedText")
@@ -14,21 +14,21 @@ Public Class FolderWatcherCard : Inherits UserControl
         Dim previousBorderChildSavedText = FindChild(Of TextBlock)(currentlyExpandedBorder, "SavedText")
         Dim previousBorderChildDecayedText = FindChild(Of TextBlock)(currentlyExpandedBorder, "DecayedText")
 
-        If currentlyExpandedBorder Is border AndAlso border.Height = 100 AndAlso TypeOf (e) IsNot MouseButtonEventArgs Then
+        If currentlyExpandedBorder Is border AndAlso border.Height = 110 AndAlso TypeOf (e) IsNot MouseButtonEventArgs Then
             ' Do nothing, keep it expanded
             Return
         End If
 
         If currentlyExpandedBorder IsNot Nothing AndAlso currentlyExpandedBorder IsNot border Then
-            AnimateBorderHeight(currentlyExpandedBorder, 50)
+            AnimateBorderHeight(currentlyExpandedBorder, 70)
             previousBorderChildSavedText.Visibility = Visibility.Collapsed
             previousBorderChildDecayedText.Visibility = Visibility.Visible
 
         End If
         AnimateBorderHeight(border, newHeight)
-        childSavedText.Visibility = If(newHeight = 100, Visibility.Visible, Visibility.Collapsed)
-        childDecayedText.Visibility = If(newHeight = 100, Visibility.Collapsed, Visibility.Visible)
-        currentlyExpandedBorder = If(newHeight = 100, border, Nothing)
+        childSavedText.Visibility = If(newHeight = 110, Visibility.Visible, Visibility.Collapsed)
+        childDecayedText.Visibility = If(newHeight = 110, Visibility.Collapsed, Visibility.Visible)
+        currentlyExpandedBorder = If(newHeight = 110, border, Nothing)
     End Sub
 
     Private Sub AnimateBorderHeight(border As Border, targetHeight As Double)
@@ -39,7 +39,7 @@ Public Class FolderWatcherCard : Inherits UserControl
     }
         Dim storyboard As New Storyboard()
         Storyboard.SetTarget(animation, border)
-        Storyboard.SetTargetProperty(animation, New PropertyPath(Border.HeightProperty))
+        Storyboard.SetTargetProperty(animation, New PropertyPath(HeightProperty))
 
         storyboard.Children.Add(animation)
         storyboard.Begin()

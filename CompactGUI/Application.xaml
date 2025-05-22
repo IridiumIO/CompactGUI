@@ -1,17 +1,22 @@
 ﻿<Application x:Class="Application"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CompactGUI" Startup="Application_Startup"
-             xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-             >
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemeResources />
-                <ui:XamlControlsResources />
-                <ResourceDictionary Source="Components/Converters/Converters.xaml"/>
-                <!-- Other merged dictionaries here -->
-                
+                <ResourceDictionary Source="Components/Converters/Converters.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Resources/Theme/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Resources/Wpf.Ui.xaml" />
+                <ui:ControlsDictionary />
+                <!--  Other merged dictionaries here  -->
+
+                <ResourceDictionary>
+                    <Geometry x:Key="SteamLogo">M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z</Geometry>
+                </ResourceDictionary>
+
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
@@ -19,23 +24,30 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="button" CornerRadius="20" BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}">
-                                    
-                                    <TextBlock  Text="{TemplateBinding Button.Content}" FontSize="15" FontFamily="Segoe UI" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                                <Border x:Name="button"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="Transparent" BorderThickness="0" CornerRadius="20">
                                     <Border.Effect>
-                                        <DropShadowEffect Opacity="0.26" Direction="-90" BlurRadius="16" ShadowDepth="6"/>
+                                        <DropShadowEffect BlurRadius="16" Direction="-90" Opacity="0.26" ShadowDepth="6" />
                                     </Border.Effect>
+
+                                    <TextBlock Text="{TemplateBinding Button.Content}"
+                                               Margin="0,-2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               FontFamily="Segoe UI" FontSize="15" />
 
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup x:Name="Common">
                                             <VisualState x:Name="MouseOver">
                                                 <Storyboard>
-                                                    <ColorAnimation  Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#FF597186" Duration="0:00:0.3" />
+                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#FF597186"
+                                                                    Duration="0:00:0.3" />
                                                 </Storyboard>
                                             </VisualState>
                                             <VisualState x:Name="Normal">
                                                 <Storyboard>
-                                                    <ColorAnimation  Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{TemplateBinding Background}" Duration="0:00:0.3" />
+                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                    To="{TemplateBinding Background}"
+                                                                    Duration="0:00:0.3" />
                                                 </Storyboard>
                                             </VisualState>
 
@@ -46,7 +58,7 @@
 
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="button"  Property="Background" Value="#FF4B6175"/>
+                                        <Setter TargetName="button" Property="Background" Value="#FF4B6175" />
                                     </Trigger>
 
                                     <Trigger Property="IsEnabled" Value="False">
@@ -60,21 +72,27 @@
                 </Style.Setters>
             </Style>
 
-            <Style TargetType="CheckBox" x:Key="RoundedCheckBox">
-                <Setter Property="Cursor" Value="Hand"></Setter>
-                <Setter Property="Content" Value=""></Setter>
+            <Style x:Key="RoundedCheckBox" TargetType="CheckBox">
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Content" Value="" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type CheckBox}">
                             <Grid>
-                              
-                                <Border x:Name="cBox" Background="Transparent" BorderBrush="#98A9B9" BorderThickness="2" CornerRadius="18" Width="36" Height="36" VerticalAlignment="Center"  >
+
+                                <Border x:Name="cBox"
+                                        Width="36" Height="36"
+                                        VerticalAlignment="Center"
+                                        Background="Transparent" BorderBrush="#98A9B9" BorderThickness="2" CornerRadius="18">
                                     <Grid>
-                                        <Ellipse x:Name="outerEllipse" Grid.Column="0" Fill="#FFFFFF" Margin="3">
-                                        </Ellipse>
+                                        <Ellipse x:Name="outerEllipse"
+                                                 Grid.Column="0"
+                                                 Margin="3"
+                                                 Fill="#FFFFFF" />
                                     </Grid>
                                 </Border>
-                                <ContentPresenter Grid.Column="1" x:Name="content" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <ContentPresenter x:Name="content"
+                                                  Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
@@ -82,8 +100,8 @@
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <ColorAnimation Storyboard.TargetName="outerEllipse"
-                                                        Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
-                                                        From="#FFFFFF" To="#98A9B9" Duration="0:0:0.2"/>
+                                                                Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)" From="#FFFFFF"
+                                                                To="#98A9B9" Duration="0:0:0.2" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </Trigger.EnterActions>
@@ -91,13 +109,13 @@
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <ColorAnimation Storyboard.TargetName="outerEllipse"
-                                                        Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
-                                                        From="#98A9B9" To="#FFFFFF" Duration="0:0:0.2"/>
+                                                                Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)" From="#98A9B9"
+                                                                To="#FFFFFF" Duration="0:0:0.2" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </Trigger.ExitActions>
                                 </Trigger>
-                                
+
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
@@ -108,11 +126,144 @@
                 <Setter Property="Control.Template" Value="{x:Null}" />
             </Style>
 
+            <Style x:Key="CustomCardExpanderStyle"
+                   BasedOn="{StaticResource DefaultUiCardExpanderStyle}"
+                   TargetType="{x:Type ui:CardExpander}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ui:CardExpander}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!--  Top level controls always visible  -->
+                                <Border x:Name="ToggleButtonBorder"
+                                        Grid.Row="0"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="{TemplateBinding CornerRadius}">
+                                    <ToggleButton x:Name="ExpanderToggleButton"
+                                                  Margin="0"
+                                                  Padding="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center"
+                                                  FontSize="{TemplateBinding FontSize}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  IsEnabled="{TemplateBinding IsEnabled}"
+                                                  OverridesDefaultStyle="True"
+                                                  Template="{StaticResource DefaultUiCardExpanderToggleButtonStyle}">
+                                        <ToggleButton.Content>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <ContentControl x:Name="ControlIcon"
+                                                                Content="{TemplateBinding Icon}"
+                                                                Grid.Column="0"
+                                                                Margin="{StaticResource CardExpanderIconMargin}"
+                                                                VerticalAlignment="Center"
+                                                                Focusable="False"
+                                                                FontSize="{StaticResource CardExpanderIconSize}"
+                                                                Foreground="{TemplateBinding Foreground}"
+                                                                KeyboardNavigation.IsTabStop="False" />
+
+                                                <ContentPresenter x:Name="HeaderContentPresenter"
+                                                                  Content="{TemplateBinding Header}"
+                                                                  Grid.Column="1"
+                                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
+                                            </Grid>
+                                        </ToggleButton.Content>
+                                    </ToggleButton>
+                                </Border>
+
+                                <!--  Collapsed content to expand  -->
+                                <Grid Grid.Row="1" ClipToBounds="True">
+                                    <Border x:Name="ContentPresenterBorder"
+                                            Background="Transparent"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1,0,1,1" CornerRadius="0,0,4,4" Visibility="Collapsed">
+                                        <ContentPresenter x:Name="ContentPresenter"
+                                                          Content="{TemplateBinding Content}"
+                                                          Margin="{TemplateBinding ContentPadding}"
+                                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                        <Border.Tag>
+                                            <system:Double>0.0</system:Double>
+                                        </Border.Tag>
+                                        <Border.RenderTransform>
+                                            <TranslateTransform>
+                                                <TranslateTransform.Y>
+                                                    <MultiBinding Converter="{StaticResource AnimationFactorToValueConverter}" ConverterParameter="negative">
+                                                        <Binding ElementName="ContentPresenterBorder" Path="ActualHeight" />
+                                                        <Binding ElementName="ContentPresenterBorder" Path="Tag" />
+                                                    </MultiBinding>
+                                                </TranslateTransform.Y>
+                                            </TranslateTransform>
+                                        </Border.RenderTransform>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="True">
+                                    <!--  TODO: Update  -->
+                                    <Setter TargetName="ToggleButtonBorder" Property="CornerRadius" Value="4,4,0,0" />
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenterBorder" Storyboard.TargetProperty="(Border.Visibility)">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenterBorder" Storyboard.TargetProperty="Tag">
+                                                    <DiscreteDoubleKeyFrame KeyTime="0" Value="1.0" />
+                                                    <SplineDoubleKeyFrame KeySpline="0.0, 0.0, 0.0, 1.0" KeyTime="0:0:0.333"
+                                                                          Value="0.0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenterBorder" Storyboard.TargetProperty="(Border.Visibility)">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenterBorder" Storyboard.TargetProperty="Tag">
+                                                    <DiscreteDoubleKeyFrame KeyTime="0" Value="0.0" />
+                                                    <SplineDoubleKeyFrame KeySpline="1.0, 1.0, 0.0, 1.0" KeyTime="0:0:0.167"
+                                                                          Value="1.0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="{DynamicResource CardBackgroundDisabled}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrushDisabled}" />
+                                    <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource CardForegroundDisabled}" />
+                                    <Setter TargetName="ExpanderToggleButton" Property="Foreground" Value="{DynamicResource CardForegroundDisabled}" />
+                                </Trigger>
+                                <Trigger Property="Icon" Value="{x:Null}">
+                                    <Setter TargetName="ControlIcon" Property="Margin" Value="0" />
+                                    <Setter TargetName="ControlIcon" Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
 
-            <!-- Other app resources here -->
+            <!--  Other app resources here  -->
 
         </ResourceDictionary>
-       
+
     </Application.Resources>
 </Application>

@@ -14,25 +14,25 @@ Public Class WatchedFolder : Inherits ObservableObject
     Public Property LastSystemModifiedDate As DateTime
     Public Property LastCheckedDate As DateTime
     Public Property LastCheckedSize As Long
-    Public Property CompressionLevel As Core.CompressionAlgorithm
+    Public Property CompressionLevel As Core.WOFCompressionAlgorithm
     <JsonIgnore>
     Public Property IsWorking As Boolean
     Public ReadOnly Property DecayPercentage As Decimal
         Get
             If LastCompressedSize = 0 Then Return 1
-            Return If(LastUncompressedSize = LastCompressedSize OrElse LastCompressedSize > LastUncompressedSize, 0D, Math.Clamp((LastCheckedSize - LastCompressedSize) / (LastUncompressedSize - LastCompressedSize), 0, 1))
+            Return If(LastUncompressedSize = LastCompressedSize OrElse LastCompressedSize > LastUncompressedSize, 1D, Math.Clamp((LastCheckedSize - LastCompressedSize) / (LastUncompressedSize - LastCompressedSize), 0, 1))
         End Get
     End Property
     <JsonIgnore>
     Public ReadOnly Property SavedSpace As Long
         Get
-            Return LastUncompressedSize - LastCompressedSize
+            Return LastUncompressedSize - LastCheckedSize
         End Get
     End Property
 
     Public Sub RefreshProperties()
         For Each prop In Me.GetType.GetProperties
-            Me.OnPropertyChanged(prop.Name)
+            OnPropertyChanged(prop.Name)
         Next
     End Sub
 

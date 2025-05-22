@@ -1,0 +1,148 @@
+﻿<UserControl x:Class="ResultsTemplate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CompactGUI"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             d:DesignHeight="450" d:DesignWidth="800"
+             mc:Ignorable="d">
+    <Grid Margin="0,10,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+          d:DataContext="{d:DesignInstance Type=local:FolderViewModel}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="10" />
+            <ColumnDefinition MaxWidth="100" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Compression Summary"
+                   HorizontalAlignment="Left"
+                   FontSize="18" />
+
+
+        <ProgressBar Grid.Row="1" Grid.Column="0"
+                     Height="24"
+                     Foreground="#F1CE92"
+                     Value="100" />
+        <ProgressBar Grid.Row="2" Grid.Column="0"
+                     Height="24"
+                     Background="{StaticResource CardBackground}"
+                     Foreground="#92F1AB"
+                     Maximum="{Binding Folder.UncompressedBytes}"
+                     Value="{Binding Folder.CompressedBytes}" />
+
+        <StackPanel Grid.Row="1" Grid.Column="1"
+                    VerticalAlignment="Center">
+            <TextBlock Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
+                       HorizontalAlignment="Right"
+                       FontSize="22" />
+            <TextBlock Text="Before"
+                       Margin="0,-2" HorizontalAlignment="Right"
+                       FontSize="14"
+                       Foreground="{StaticResource AccentFillColorDisabledBrush}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="1"
+                    VerticalAlignment="Center">
+            <TextBlock Text="{Binding Folder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
+                       HorizontalAlignment="Right"
+                       FontSize="22" />
+            <TextBlock Text="After"
+                       Margin="0,-2" HorizontalAlignment="Right"
+                       FontSize="14"
+                       Foreground="{StaticResource AccentFillColorDisabledBrush}" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="3"
+                   Margin="0,5,0,30" HorizontalAlignment="Left" VerticalAlignment="Top"
+                   FontSize="18" Foreground="#8092F1AB" TextWrapping="Wrap">
+
+            <Run Text="Space Saved:" BaselineAlignment="Center" />
+            <Run Text="{Binding Folder.CompressionRatio, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF'}" />
+
+        </TextBlock>
+
+        <ui:Card Grid.Row="4" Grid.ColumnSpan="2"
+                 Padding="10,10,10,0"
+                 Background="{StaticResource CardBackgroundDisabled}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Files Compressed"
+                           Grid.Row="0"
+                           VerticalAlignment="Center"
+                           FontSize="16" />
+                <TextBlock Text="Compression Method"
+                           Grid.Row="1"
+                           Margin="0,10" VerticalAlignment="Center"
+                           FontSize="16" />
+
+                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap">
+                    <Run Text="{Binding TotalCompressedFiles, Mode=OneWay}" />
+                    <Run Text="/" BaselineAlignment="Center" />
+                    <Run Text="{Binding Folder.AnalysisResults.Count, Mode=OneWay}" BaselineAlignment="Center" />
+
+                </TextBlock>
+
+
+                <TextBlock Text="{Binding DominantCompressionMode}"
+                           Grid.Row="2"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           FontSize="16" FontWeight="SemiBold" />
+            </Grid>
+
+
+        </ui:Card>
+
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Orientation="Horizontal">
+
+            <ui:Button Content="Uncompress"
+                       Width="140" Height="40"
+                       Margin="0,0,0,10"
+                       Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                       Command="{Binding UncompressCommand}"
+                       FontSize="16"/>
+            <ui:Button Content="Compress Again"
+                       Width="140" Height="40"
+                       Margin="40,0,0,10"
+                       Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                       Command="{Binding CompressAgainCommand}"
+                       FontSize="16"
+                       Visibility="{Binding Folder.IsFreshlyCompressed, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+            <ui:Button Content="Submit Results"
+                       Width="140" Height="40"
+                       Margin="40,0,0,10"
+                       Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                       Command="{Binding SubmitToWikiCommand}"
+                       FontSize="16">
+                <ui:Button.Visibility>
+                    <MultiBinding Converter="{StaticResource IsSteamFolderAndFreshlyCompressedMultiConverter}">
+                        <Binding Path="Folder.IsFreshlyCompressed" />
+                        <Binding Path="Folder" Converter="{StaticResource IsSteamFolderConverter}" />
+                    </MultiBinding>
+                </ui:Button.Visibility>
+            </ui:Button>
+
+        </StackPanel>
+
+
+
+
+    </Grid>
+
+</UserControl>

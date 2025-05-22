@@ -3,19 +3,19 @@
     Sub New()
 
         InitializeComponent()
-        Me.MainGrid.LayoutTransform = New ScaleTransform(SettingsHandler.AppSettings.WindowScalingFactor, SettingsHandler.AppSettings.WindowScalingFactor)
-        Me.MainGrid.Margin = New Thickness(20 * SettingsHandler.AppSettings.WindowScalingFactor)
-        Me.Width = 500 * SettingsHandler.AppSettings.WindowScalingFactor
-        Me.Height = 400 * SettingsHandler.AppSettings.WindowScalingFactor
-        uiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" "c) OrElse text.EndsWith(";"c) OrElse text.EndsWith(","c), text.Substring(0, text.Length - 1).Trim(), Nothing)
+        'Me.MainGrid.LayoutTransform = New ScaleTransform(SettingsHandler.AppSettings.WindowScalingFactor, SettingsHandler.AppSettings.WindowScalingFactor)
+        'Me.MainGrid.Margin = New Thickness(20 * SettingsHandler.AppSettings.WindowScalingFactor)
+        'Me.Width = 500 * SettingsHandler.AppSettings.WindowScalingFactor
+        'Me.Height = 400 * SettingsHandler.AppSettings.WindowScalingFactor
+        UiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" "c) OrElse text.EndsWith(";"c) OrElse text.EndsWith(","c), text.Substring(0, text.Length - 1).Trim(), Nothing)
         PopulateTokens()
 
     End Sub
 
     Private Sub PopulateTokens()
-        uiTokenizedText.Document.Blocks.Clear()
+        UiTokenizedText.Document.Blocks.Clear()
         For Each i In SettingsHandler.AppSettings.NonCompressableList
-            uiTokenizedText.InsertText(i)
+            UiTokenizedText.InsertText(i)
         Next
     End Sub
 
@@ -26,7 +26,7 @@
     End Sub
 
     Private Sub UISave_Click(sender As Object, e As RoutedEventArgs)
-        Dim items = uiTokenizedText.Document.Blocks
+        Dim items = UiTokenizedText.Document.Blocks
 
         Dim inlineI As Paragraph = items(0)
         Dim allObj = inlineI.Inlines _

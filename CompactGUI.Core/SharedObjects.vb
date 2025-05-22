@@ -1,10 +1,10 @@
 ﻿Public Class AnalysedFileDetails
 
-    Public FileName As String
-    Public UncompressedSize As Long
-    Public CompressedSize As Long
-    Public CompressionMode As CompressionAlgorithm
-    Public FileInfo As IO.FileInfo
+    Public Property FileName As String
+    Public Property UncompressedSize As Long
+    Public Property CompressedSize As Long
+    Public Property CompressionMode As WOFCompressionAlgorithm
+    Public Property FileInfo As IO.FileInfo
 End Class
 
 
@@ -23,7 +23,28 @@ Public Class ExtensionResult
 
 End Class
 
-Public Enum CompressionAlgorithm
+Public Structure CompressionProgress
+    Public ProgressPercent As Integer
+    Public FileName As String
+
+    Public Sub New(_progressPercent As Integer, _fileName As String)
+        ProgressPercent = _progressPercent
+        FileName = _fileName
+    End Sub
+
+End Structure
+
+
+
+Public Enum CompressionMode
+    XPRESS4K
+    XPRESS8K
+    XPRESS16K
+    LZX
+    None
+End Enum
+
+Public Enum WOFCompressionAlgorithm
     NO_COMPRESSION = -2
     LZNT1 = -1
     XPRESS4K = 0

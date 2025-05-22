@@ -1,15 +1,21 @@
 ﻿Imports System.Net.Http
 Imports System.Text.Json
 
-Public Class WikiHandler
+Public Interface IWikiService
+    Function GetUpdatedJSONAsync() As Task
+    Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult)))
+    Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean)
+    Function SubmitURLForm(url As String, submissionstring As String) As Task(Of Boolean)
+End Interface
 
-    Shared ReadOnly filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
+Public Class WikiService : Implements IWikiService
+
+    Private ReadOnly filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
+    Private ReadOnly dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
 
 
-    Shared Async Function GetUpdatedJSONAsync() As Task
-
-        Dim dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
-
+    Async Function GetUpdatedJSONAsync() As Task Implements IWikiService.GetUpdatedJSONAsync
+        Debug.WriteLine("Updating JSON file")
         Dim JSONFile As New IO.FileInfo(filePath)
 
         If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
@@ -17,21 +23,27 @@ Public Class WikiHandler
         Dim httpClient As New HttpClient
         Dim res = Await httpClient.GetStreamAsync(dlPath)
 
-        Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
-            Await res.CopyToAsync(fs)
-        End Using
+        Try
+            Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
+                Await res.CopyToAsync(fs)
+            End Using
 
-        httpClient.Dispose()
+        Catch ex As IO.IOException
+            Debug.WriteLine("Could not update JSON file: file is in use.")
+            Return
+        Finally
+            httpClient.Dispose()
+        End Try
+
 
         SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
         Settings.Save()
-
+        Debug.WriteLine("Updated JSON file")
 
     End Function
 
-    Private Shared ReadOnly JsonDefaultSettings As New JsonSerializerOptions With {.IncludeFields = True}
-    Shared Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult)))
-
+    Private ReadOnly JsonDefaultSettings As New JsonSerializerOptions With {.IncludeFields = True}
+    Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult))) Implements IWikiService.ParseData
         Dim JSONFile As New IO.FileInfo(filePath)
         If Not JSONFile.Exists Then Return Nothing
 
@@ -59,8 +71,7 @@ Public Class WikiHandler
     End Function
 
 
-    Shared Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean)
-
+    Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean) Implements IWikiService.SubmitToWiki
         Dim wikiSubmitURI = "https://docs.google.com/forms/d/e/1FAIpQLSdQyMwHIfldsuKKdDYBE9DNEyro8bidBDInq8EafGogFu382A/formResponse?entry.1019946248=%3CCompactGUI3%3E"
 
         Dim ret = Await Task.Run(Function() GetSteamNameAndIDFromFolder(folderpath))
@@ -81,39 +92,24 @@ Public Class WikiHandler
         Dim jstring = JsonSerializer.Serialize(steamsubmitdata)
         Dim response = Await SubmitURLForm(wikiSubmitURI, jstring)
 
+        Dim snackbar = Application.GetService(Of CustomSnackBarService)()
         If Not response Then
-
-            Dim msgFailed As New ModernWpf.Controls.ContentDialog With {
-                .Title = "Failed to submit result",
-                .Content = $"Please check your internet connection and try again",
-                .CloseButtonText = "Close"
-                }
-            Await msgFailed.ShowAsync()
+            snackbar.Show("Failed to submit to wiki", "Please check your internet connection and try again", Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(5))
             Return False
-
         End If
 
-        Dim msgSuccess As New ModernWpf.Controls.ContentDialog With {
-            .Title = "Thank you for submitting your result",
-            .Content = $"UID: {steamsubmitdata.UID & vbCrLf}Game: {steamsubmitdata.GameName & vbCrLf}SteamID: {steamsubmitdata.SteamID & vbCrLf}Compression: {[Enum].GetName(GetType(Core.CompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}",
-            .CloseButtonText = "OK"
-            }
-
-        Await msgSuccess.ShowAsync()
-
+        snackbar.Show("Submitted to wiki", $"UID: {steamsubmitdata.UID}{vbCrLf}Game: {steamsubmitdata.GameName}{vbCrLf}SteamID: {steamsubmitdata.SteamID}{vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
         Return True
 
     End Function
 
 
-    Shared Async Function SubmitURLForm(url As String, submissionstring As String) As Task(Of Boolean)
+    Async Function SubmitURLForm(url As String, submissionstring As String) As Task(Of Boolean) Implements IWikiService.SubmitURLForm
         Try
 
             Dim httpC As New HttpClient
             Dim resp = Await httpC.GetAsync(New Uri(url & submissionstring))
             Return resp.StatusCode
-            If resp.StatusCode <> 200 Then Return False
-            Return True
         Catch ex As Exception
             Return 0
         End Try

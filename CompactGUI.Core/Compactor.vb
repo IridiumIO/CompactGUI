@@ -5,7 +5,7 @@ Imports System.Threading
 
 Public Class Compactor : Implements IDisposable
 
-    Public Sub New(folder As String, cLevel As CompressionAlgorithm, excludedFilesTypes As String())
+    Public Sub New(folder As String, cLevel As WOFCompressionAlgorithm, excludedFilesTypes As String())
 
         If Not verifyFolder(folder).isValid Then Return
 
@@ -21,7 +21,7 @@ Public Class Compactor : Implements IDisposable
 
     Private _workingDir As String
     Private _excludedFileTypes() As String
-    Private _WOFCompressionLevel As CompressionAlgorithm
+    Private _WOFCompressionLevel As WOFCompressionAlgorithm
 
     Private _EFInfo As WOF_FILE_COMPRESSION_INFO_V1
     Private _EFInfoPtr As IntPtr
@@ -34,7 +34,7 @@ Public Class Compactor : Implements IDisposable
 
 
 
-    Public Async Function RunCompactAsync(Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean)
+    Public Async Function RunCompactAsync(Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean)
         If _cancellationTokenSource.IsCancellationRequested Then Return False
 
         Dim FilesList = Await BuildWorkingFilesList()
@@ -48,6 +48,12 @@ Public Class Compactor : Implements IDisposable
         sw.Start()
 
         Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
+
+        'For Each file In FilesList
+        '    Threading.Thread.Sleep(2000)
+        '    Await PauseAndProcessFile(file.Item1, _cancellationTokenSource.Token, file.Item2, totalFilesSize, progressMonitor)
+        'Next
+
 
         Await Parallel.ForEachAsync(FilesList, paraOptions,
                                 Function(file, _ctx) As ValueTask
@@ -66,7 +72,7 @@ Public Class Compactor : Implements IDisposable
         Return True
     End Function
 
-    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, fileSize As Long, totalFilesSize As Long, Optional progressMonitor As IProgress(Of (percentageProgress As Integer, currentFile As String)) = Nothing) As Task
+    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, fileSize As Long, totalFilesSize As Long, Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing) As Task
 
         If _ctx.IsCancellationRequested Then Return
         Try
@@ -84,7 +90,7 @@ Public Class Compactor : Implements IDisposable
         Interlocked.Add(_processedFilesBytes, fileSize)
         Dim incremented = _processedFilesBytes
 
-        progressMonitor?.Report((CInt(((incremented / totalFilesSize) * 100)), file))
+        progressMonitor?.Report(New CompressionProgress(CInt(((incremented / totalFilesSize) * 100)), file))
 
     End Function
 
@@ -140,7 +146,7 @@ Public Class Compactor : Implements IDisposable
     Public Sub Dispose() Implements IDisposable.Dispose
         _cancellationTokenSource.Dispose()
         _pauseSemaphore.Dispose()
-        If _EFInfoPtr <> IntPtr.Zero Then
+        If Not _EFInfoPtr.Equals(IntPtr.Zero) Then
             Marshal.FreeHGlobal(_EFInfoPtr)
             _EFInfoPtr = IntPtr.Zero
         End If

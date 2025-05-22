@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="PendingCompression"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:core="clr-namespace:CompactGUI.Core;assembly=CompactGUI.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CompactGUI"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             d:DataContext="{d:DesignInstance Type=local:FolderViewModel}"
+             d:DesignHeight="450" d:DesignWidth="900" d:Foreground="White"
+             RenderOptions.ClearTypeHint="Enabled"
+             mc:Ignorable="d">
+
+    <Grid VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TextBlock Text="Compression Mode"
+                      Margin="0,30,0,20" VerticalAlignment="Center"
+                      FontSize="18" />
+
+        <WrapPanel Grid.Row="1"
+                   Margin="0,0,0,0"
+                   Orientation="Horizontal">
+
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0,0,20,10"
+                                         BorderBrush="Transparent" CompressionMode="XPRESS 4K"
+                                         EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
+                                         IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}" />
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0,0,20,10"
+                                         BorderBrush="Transparent" CompressionMode="XPRESS 8K"
+                                         EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
+                                         IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}" />
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0,0,20,10"
+                                         BorderBrush="Transparent" CompressionMode="XPRESS 16K"
+                                         EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
+                                         IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0,0,20,10"
+                                         BorderBrush="Transparent" CompressionMode="LZX"
+                                         EstimatedVisibility="{Binding Folder, Converter={StaticResource IsSteamFolderToVisibilityConverter}}"
+                                         IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.LZX.CompressionPercent}"
+                                         Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" />
+
+        </WrapPanel>
+
+
+        <StackPanel Grid.Row="2" Margin="0,20,0,0">
+            <ui:TextBlock Text="Configuration"
+                          Margin="0,0,0,20" VerticalAlignment="Center"
+                          FontSize="18" />
+            <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
+                <CheckBox x:Name="UiChkSkipPoorlyCompressed"
+                          Content="Skip poorly compressed filetypes"
+                          Width="260"
+                          FontSize="16"
+                          IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" />
+                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
+                           FontSize="14" Foreground="#FF98A9B9">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=UiChkSkipPoorlyCompressed}" Value="True">
+                                    <Setter Property="Text" Value="{Binding Folder.GlobalPoorlyCompressedFileCount, StringFormat={}{0} files will be skipped}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </WrapPanel>
+            <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
+                <CheckBox x:Name="UiChkSkipUserPoorlyCompressed"
+                          Content="Skip user-submitted filetypes"
+                          Width="260"
+                          FontSize="16"
+                          IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}" />
+                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
+                           FontSize="14" Foreground="#FF98A9B9">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=UiChkSkipUserPoorlyCompressed}" Value="True">
+                                    <Setter Property="Text" Value="{Binding Folder.WikiPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </WrapPanel>
+
+
+            <CheckBox Content="Watch folder for changes"
+                      Margin="0,0,0,15"
+                      FontSize="16"
+                      IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}" />
+
+        </StackPanel>
+
+
+        <ui:Button Content="Apply to all"
+                   Grid.Row="3"
+                   Width="140" Height="40"
+                   Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                   Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                   Command="{Binding ApplyToAllCommand}"
+                   FontSize="16" />
+
+    </Grid>
+</UserControl>
