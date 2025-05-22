@@ -4,20 +4,20 @@
                     xmlns:local="clr-namespace:CompactGUI">
 
     <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
-    <converters:EnumToBoolConverter x:Key="XEnumToBoolConverter" />
+    <!-- <converters:EnumToBoolConverter x:Key="XEnumToBoolConverter" /> -->
     <local:EnumToRadioButtonConverter x:Key="EnumToRadioButtonConverter" />
     <local:DecimalToPercentageConverter x:Key="DecimalToPercentageConverter" />
     <local:BytesToReadableConverter x:Key="BytesToReadableConverter" />
     <local:StrippedFolderPathConverter x:Key="StrippedFolderPathConverter" />
     <local:RelativeDateConverter x:Key="RelativeDateConverter" />
     <local:CompressionLevelAbbreviatedConverter x:Key="CompressionLevelAbbreviatedConverter" />
-    <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter" />
-    <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter" />
-    <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" />
-    <local:RatioConverter x:Key="RatioConverter" />
+    <!-- <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter" /> -->
+    <!-- <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter" /> -->
+    <!-- <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" /> -->
+    <!-- <local:RatioConverter x:Key="RatioConverter" /> -->
     <local:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
-    <local:NonZeroToVisConverter x:Key="NonZeroToVisConverter" />
-    <local:WindowScalingConverter x:Key="WindowScalingConverter" />
+    <!-- <local:NonZeroToVisConverter x:Key="NonZeroToVisConverter" /> -->
+    <!-- <local:WindowScalingConverter x:Key="WindowScalingConverter" /> -->
     <local:BooleanToInverseVisibilityConverter x:Key="BooleanToInverseVisibilityConverter" />
     <local:TokenisedFolderPathConverter x:Key="TokenisedFolderPathConverter" />
     <local:FolderStatusToColorConverter x:Key="FolderStatusToColorConverter" />

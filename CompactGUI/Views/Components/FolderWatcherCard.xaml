@@ -23,7 +23,7 @@
             
             <ui:FontIcon Glyph="&#xE9F3;" FontSize="14"  FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" />
             <ui:Button.ToolTip >
-                <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                <ToolTip  ToolTipService.InitialShowDelay="100">
                     <TextBlock Text="Re-analyse all watched folders" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
                 </ToolTip>
             </ui:Button.ToolTip>
@@ -37,7 +37,7 @@
 
         <Button VerticalAlignment="Top" Content="Add To Watchlist"  HorizontalAlignment="Right" Margin="0,32,10,0" Command="{Binding ManuallyAddFolderToWatcherCommand}">
             <Button.ToolTip >
-                <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                <ToolTip ToolTipService.InitialShowDelay="100">
                     <TextBlock Text="Add a custom folder to the watchlist" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
                 </ToolTip>
             </Button.ToolTip>
@@ -100,7 +100,7 @@
 
                             <TextBlock Width="220" Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="#80FFFFFF"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0">
                                 <TextBlock.ToolTip >
-                                    <ToolTip Background="#304257" Placement="RelativePoint" MaxWidth="500" >
+                                    <ToolTip Placement="RelativePoint" MaxWidth="500" >
                                         <TextBlock Text="{Binding Folder, Converter={StaticResource TokenisedFolderPathConverter}}" TextWrapping="NoWrap" Foreground="#FFBFC7CE"  FontSize="12"/>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
