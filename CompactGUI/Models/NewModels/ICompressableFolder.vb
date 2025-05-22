@@ -116,6 +116,8 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
     Private CancellationTokenSource As CancellationTokenSource
 
+    Public Analyser As Analyser
+
     Public Async Function AnalyseFolderAsync() As Task(Of Integer)
 
         FolderActionState = ActionState.Analysing
@@ -123,7 +125,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         CancellationTokenSource = New CancellationTokenSource()
         Dim token = CancellationTokenSource.Token
 
-        Dim Analyser As New Analyser(FolderName)
+        Analyser = New Analyser(FolderName)
 
         If Not Analyser.HasDirectoryWritePermission Then
             FolderActionState = ActionState.Idle

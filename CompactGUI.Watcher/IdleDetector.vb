@@ -15,7 +15,7 @@ Public Class IdleDetector
     Public Shared Property IsEnabled As Boolean = True
 
     Shared Sub New()
-        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(2))
+        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(5))
     End Sub
 
     Public Shared Sub Start()

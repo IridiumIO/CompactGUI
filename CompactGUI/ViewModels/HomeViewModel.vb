@@ -172,6 +172,8 @@ Partial Public Class HomeViewModel
 
                                    End If
 
+                                   Application.GetService(Of Watcher.Watcher).UpdateWatched(folder.FolderName, folder.Analyser, True)
+
                                    'For Each poorext In folder.PoorlyCompressedFiles
                                    '    Debug.WriteLine($"{poorext.extension} : {poorext.totalFiles} with ratio of {poorext.cRatio}")
                                    'Next
@@ -183,7 +185,7 @@ Partial Public Class HomeViewModel
         Compressing = False
 
         For Each folder In Folders.Where(Function(f) f.CompressionOptions.WatchFolderForChanges)
-            AddFolderToWatcher(folder)
+            AddOrUpdateFolderWatcher(folder)
         Next
 
 
@@ -191,7 +193,7 @@ Partial Public Class HomeViewModel
     End Function
 
 
-    Public Sub AddFolderToWatcher(folder As CompressableFolder)
+    Public Sub AddOrUpdateFolderWatcher(folder As CompressableFolder)
         Debug.WriteLine("Adding folder to watcher: " & folder.FolderName)
         Dim newWatched = New Watcher.WatchedFolder With {
             .Folder = folder.FolderName,

@@ -20,13 +20,13 @@ Public Class WatchedFolder : Inherits ObservableObject
     Public ReadOnly Property DecayPercentage As Decimal
         Get
             If LastCompressedSize = 0 Then Return 1
-            Return If(LastUncompressedSize = LastCompressedSize OrElse LastCompressedSize > LastUncompressedSize, 0D, Math.Clamp((LastCheckedSize - LastCompressedSize) / (LastUncompressedSize - LastCompressedSize), 0, 1))
+            Return If(LastUncompressedSize = LastCompressedSize OrElse LastCompressedSize > LastUncompressedSize, 1D, Math.Clamp((LastCheckedSize - LastCompressedSize) / (LastUncompressedSize - LastCompressedSize), 0, 1))
         End Get
     End Property
     <JsonIgnore>
     Public ReadOnly Property SavedSpace As Long
         Get
-            Return LastUncompressedSize - LastCompressedSize
+            Return LastUncompressedSize - LastCheckedSize
         End Get
     End Property
 
