@@ -101,8 +101,10 @@ Partial Public Class Application
 
         Await _host.StartAsync()
         Await SettingsViewModel.InitializeEnvironment()
-        Await GetService(Of IUpdaterService).CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
-        Await GetService(Of IWikiService).GetUpdatedJSONAsync()
+
+        Dim UpdateTask = GetService(Of IUpdaterService).CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
+        Dim WikiTask = GetService(Of IWikiService).GetUpdatedJSONAsync()
+        Await Task.WhenAll(UpdateTask, WikiTask)
 
     End Sub
 
