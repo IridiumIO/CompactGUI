@@ -23,11 +23,18 @@ Public Class WikiService : Implements IWikiService
         Dim httpClient As New HttpClient
         Dim res = Await httpClient.GetStreamAsync(dlPath)
 
-        Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
-            Await res.CopyToAsync(fs)
-        End Using
+        Try
+            Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
+                Await res.CopyToAsync(fs)
+            End Using
 
-        httpClient.Dispose()
+        Catch ex As IO.IOException
+            Debug.WriteLine("Could not update JSON file: file is in use.")
+            Return
+        Finally
+            httpClient.Dispose()
+        End Try
+
 
         SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
         Settings.Save()
