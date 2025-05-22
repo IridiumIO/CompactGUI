@@ -17,11 +17,7 @@ Public Class SettingsViewModel : Inherits ObservableObject
 
         Await AddExecutableToRegistry()
         Await SetEnv()
-        If SettingsHandler.AppSettings.IsContextIntegrated Then
-            Await Settings.AddContextMenus
-        Else
-            Await Settings.RemoveContextMenus
-        End If
+        Await If(SettingsHandler.AppSettings.IsContextIntegrated, Settings.AddContextMenus, Settings.RemoveContextMenus)
 
         If SettingsHandler.AppSettings.IsStartMenuEnabled Then
             Settings.CreateStartMenuShortcut()
@@ -32,7 +28,10 @@ Public Class SettingsViewModel : Inherits ObservableObject
     End Function
 
     Private Shared Async Function SetEnv() As Task
-        Await Task.Run(Sub() Environment.SetEnvironmentVariable("IridiumIO", IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO"), EnvironmentVariableTarget.User))
+        Dim desiredValue = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO")
+        Dim currentValue = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
+        If currentValue <> desiredValue Then Await Task.Run(Sub() Environment.SetEnvironmentVariable("IridiumIO", desiredValue, EnvironmentVariableTarget.User))
+
     End Function
 
     Private Sub SettingsPropertyChanged()
