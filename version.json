@@ -1,12 +1,10 @@
 {
     "Latest": {
-        "Major": 3,
-        "Minor": 8,
+        "Major": 4,
+        "Minor": 0,
         "Patch": 0,
-        "PreRelease": "r",
-        "PreReleaseMinor": 0,
-        "VersionString": "3.8.0",
-        "FriendlyString": "3.8.0",
+        "PreRelease": "beta",
+        "PreReleaseMinor": 1,
         "Changes": [],
         "Fixes": []
     },
@@ -16,8 +14,6 @@
         "Patch": 0,
         "PreRelease": "r",
         "PreReleaseMinor": 0,
-        "VersionString": "3.8.0",
-        "FriendlyString": "3.8.0",
         "Changes": [],
         "Fixes": []
     }
