@@ -60,7 +60,7 @@
     Public Function Friendly() As String
         Return If(PreRelease = "" OrElse PreRelease = Nothing OrElse PreRelease = "r",
             $"{Major}.{Minor}.{Patch}",
-            $"{Major}.{Minor}.{Patch} - {PreRelease} {PreReleaseMinor}")
+            $"{Major}.{Minor}.{Patch} {PreRelease} {PreReleaseMinor}")
 
     End Function
 

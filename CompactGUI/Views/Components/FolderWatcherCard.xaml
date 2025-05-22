@@ -11,7 +11,7 @@
              d:DataContext="{d:DesignInstance Type=local:WatcherViewModel}"
              d:DesignHeight="500" d:DesignWidth="800"
              mc:Ignorable="d">
-    <Grid VerticalAlignment="Stretch" Margin="10 0 10 0">
+    <Grid VerticalAlignment="Stretch" Margin="30 10 30 0">
 
         <Grid.Resources>
             <CollectionViewSource x:Key="Src" Source="{Binding Watcher.WatchedFolders}">
@@ -23,7 +23,7 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="40" />
             <RowDefinition Height="20" />
             <RowDefinition />
@@ -33,14 +33,14 @@
 
         <TextBlock Text="Watched folders"
                    Grid.Row="0"
-                   FontSize="22" VerticalAlignment="Center"
+                   FontSize="26" VerticalAlignment="Top"
                    Foreground="{StaticResource CardForeground}"
                    Visibility="Visible" />
 
         <Button Content="Add Folder To Watchlist"
                 Grid.Row="0"
                 Height="30"
-                HorizontalAlignment="Right" 
+                HorizontalAlignment="Right" VerticalAlignment="Top"
                 Command="{Binding ManuallyAddFolderToWatcherCommand}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.InitialShowDelay="100">
@@ -92,8 +92,8 @@
                    HorizontalAlignment="Stretch" 
                   d:ItemsSource="{Binding Source={StaticResource Dtd}}"
                   Background="Transparent" BorderThickness="0" 
-                  ItemsSource="{Binding Source={StaticResource Src}}" ScrollViewer.CanContentScroll="True"
-                  KeyboardNavigation.TabNavigation="None" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                  ItemsSource="{Binding Source={StaticResource Src}}" 
+                   ScrollViewer.VerticalScrollBarVisibility="Visible">
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -101,6 +101,7 @@
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">

@@ -9,6 +9,6 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="WatcherPage">
     <Grid Margin="10,10,10,10">
-        <local:FolderWatcherCard Margin="20 20 20 0"/>
+        <local:FolderWatcherCard />
     </Grid>
 </Page>
