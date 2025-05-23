@@ -15,7 +15,7 @@
     <Copyright>Copyright © 2025</Copyright>
     <PackageProjectUrl>https://github.com/IridiumIO/CompactGUI/</PackageProjectUrl>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <DebugType>embedded</DebugType>
+    <DebugType>none</DebugType>
  
   </PropertyGroup>
 

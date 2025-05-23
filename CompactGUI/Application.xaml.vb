@@ -24,7 +24,7 @@ Partial Public Class Application
     Private Shared _host As IHost = Host.CreateDefaultBuilder() _
         .ConfigureAppConfiguration(Sub(context, configBuilder)
                                        ' Set base path using IConfigurationBuilder
-                                       configBuilder.SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory))
+                                       configBuilder.SetBasePath(AppContext.BaseDirectory)
                                    End Sub) _
         .ConfigureServices(Sub(context, services)
 
