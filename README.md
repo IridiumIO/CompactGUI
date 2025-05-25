@@ -5,7 +5,7 @@
 
 <p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It works directly with the Win32 API to achieve the same thing as the native <code>compact.exe</code> command-line tool available from Windows 10 onwards.</b></p> 
 
-<p align="center"><img src="https://private-user-images.githubusercontent.com/1491536/446785513-0d316572-8dc2-4ac8-8f24-51f44f04282c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDgxODI2ODAsIm5iZiI6MTc0ODE4MjM4MCwicGF0aCI6Ii8xNDkxNTM2LzQ0Njc4NTUxMy0wZDMxNjU3Mi04ZGMyLTRhYzgtOGYyNC01MWY0NGYwNDI4MmMucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDUyNSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA1MjVUMTQxMzAwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZDQ0MWUzNDM5YTZkNzBiNGNkZTMwYTc4ZmZmNDM3MDU3MmIzOTdkYzMyODk2Y2VmMGUyZjZhNjIwODUxOTcxMSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.WRXlSeRbRiUKUD23ozc1_q-kpYUWweq5kH3WmQFwWEw"/></>
+<p align="center"><img src="https://github.com/user-attachments/assets/18905802-3c9a-4afa-a16d-16f43b041930"/></>
 
 ------
 &nbsp;
@@ -47,7 +47,7 @@ Use this tool to compress folders while still being able to use/run them normall
 <h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-lightgrey.svg"></a> submissions</b></h3>
 
 
-<p align="center"><img src="https://private-user-images.githubusercontent.com/1491536/446785516-d8f5a5df-450d-49c7-b016-b4fc104d1cc9.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDgxODMwMTQsIm5iZiI6MTc0ODE4MjcxNCwicGF0aCI6Ii8xNDkxNTM2LzQ0Njc4NTUxNi1kOGY1YTVkZi00NTBkLTQ5YzctYjAxNi1iNGZjMTA0ZDFjYzkucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDUyNSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA1MjVUMTQxODM0WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9NDEyZDNjYzljZTA3NTE1YWUyYjI0NzI1MWIyZWViMTI1OTMzOGU2NjE5ZjNmNWEzN2UzMzM3YmRiNGQzODkzMCZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.RdJ5YIG3arfmOn9C7ENhzyBodG71Pkd4Af0buB4NgQs"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/eaaeb970-99a8-429c-8c00-15d916ea7e33"/></p>
 
 ## Caveat
 **This tool should not be used on games that utilise DirectStorage on Windows 11.** 
