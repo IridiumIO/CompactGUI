@@ -6,9 +6,13 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  Width="620" Height="400"
-                 d:DesignHeight="400" d:DesignWidth="500" ExtendsContentIntoTitleBar="True"
-                 RenderOptions.ClearTypeHint="Enabled" WindowBackdropType="Acrylic"
-                 WindowStartupLocation="CenterScreen"
+                 d:DesignHeight="400" d:DesignWidth="500"
+                 Background="{DynamicResource ApplicationBackgroundBrush}"
+                 ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                 ExtendsContentIntoTitleBar="True"
+                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                 RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.ClearTypeHint="Enabled"
+                 WindowBackdropType="Mica" WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d">
     <ui:FluentWindow.Resources>
         <DataTemplate x:Key="NameTokenTemplate">
@@ -61,13 +65,13 @@
 
         <Button x:Name="UiSave"
                 Content="Save"
-                Width="100" HorizontalAlignment="Right"
-                Margin="0,0,130,20" VerticalAlignment="Bottom"
+                Width="100"
+                Margin="0,0,130,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Click="UISave_Click" />
         <Button x:Name="UiReset"
                 Content="Reset"
-                Width="100" HorizontalAlignment="Right"
-                Margin="0,0,10,20" VerticalAlignment="Bottom"
+                Width="100"
+                Margin="0,0,10,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Click="UIReset_Click" />
 
     </Grid>
