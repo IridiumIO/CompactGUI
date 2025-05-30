@@ -7,7 +7,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 x:Name="MainWindow" Title="MainWindow"
+                 x:Name="MainWindow" Title="CompactGUI"
                  Width="1300" Height="700" MinWidth="768" MinHeight="600"
                  d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
