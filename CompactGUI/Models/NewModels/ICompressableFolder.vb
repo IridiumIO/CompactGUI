@@ -127,7 +127,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
         Analyser = New Analyser(FolderName)
 
-        If Not Analyser.HasDirectoryWritePermission Then
+        If Not Analyser.HasDirectoryWritePermission(FolderName) Then
             FolderActionState = ActionState.Idle
             Return -1
         End If

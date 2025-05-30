@@ -43,11 +43,9 @@ Public Class WatcherViewModel : Inherits ObservableObject
         path = folderSelector.FolderName
 
         Dim validFolder = Core.verifyFolder(path)
-        If Not validFolder.isValid Then
-            Dim msgError As New ContentDialog With {.Title = "Invalid Folder", .Content = $"{validFolder.msg}", .CloseButtonText = "OK"}
-            Application.Current.Dispatcher.Invoke(Sub()
-                                                      msgError.ShowAsync()
-                                                  End Sub)
+        If validFolder <> Core.SharedMethods.FolderVerificationResult.Valid Then
+
+            Helper.GenerateInvalidFolderSnackbar(New List(Of String) From {path}, New List(Of Core.SharedMethods.FolderVerificationResult) From {validFolder})
 
             Return
         End If

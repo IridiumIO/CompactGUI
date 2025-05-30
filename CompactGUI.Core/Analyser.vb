@@ -125,7 +125,7 @@ Public Class Analyser
     End Function
 
 
-    Public Function HasDirectoryWritePermission() As Boolean
+    Public Shared Function HasDirectoryWritePermission(FolderName As String) As Boolean
         Try
             Dim directoryInfo = New DirectoryInfo(FolderName)
             Dim directorySecurity = directoryInfo.GetAccessControl()

@@ -118,12 +118,15 @@ Public Class Watcher : Inherits ObservableObject
     Public Sub UpdateWatched(folder As String, ByRef analyser As Analyser, isFreshlyCompressed As Boolean, Optional immediateFlushToDisk As Boolean = True)
 
         Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = folder)
-        If existingItem IsNot Nothing Then
+
+        Dim existingFolderMonitor = FolderMonitors.FirstOrDefault(Function(f) f.Folder = folder)
+
+        If existingItem IsNot Nothing AndAlso existingFolderMonitor IsNot Nothing Then
 
             existingItem.LastCheckedDate = DateTime.Now
             existingItem.LastCheckedSize = analyser.CompressedBytes
             existingItem.LastUncompressedSize = analyser.UncompressedBytes
-            existingItem.LastSystemModifiedDate = FolderMonitors.First(Function(f) f.Folder = folder).LastChangedDate
+            existingItem.LastSystemModifiedDate = existingFolderMonitor.LastChangedDate
 
             existingItem.CompressionLevel = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
 

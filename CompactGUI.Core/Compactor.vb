@@ -7,7 +7,7 @@ Public Class Compactor : Implements IDisposable
 
     Public Sub New(folder As String, cLevel As WOFCompressionAlgorithm, excludedFilesTypes As String())
 
-        If Not verifyFolder(folder).isValid Then Return
+        If verifyFolder(folder) <> FolderVerificationResult.Valid Then Return
 
         _workingDir = folder
         _excludedFileTypes = excludedFilesTypes

@@ -1,7 +1,16 @@
 ﻿Imports System.IO
 Imports System.Management
 Imports System.Text
+
+Imports CommunityToolkit.Mvvm.Input
+
+Imports CompactGUI.Core.SharedMethods
+
 Imports Gameloop.Vdf
+
+Imports IWshRuntimeLibrary
+
+Imports Wpf.Ui.Controls
 
 Module Helper
     Function GetSteamNameAndIDFromFolder(path As String) As (appID As Integer, gameName As String, installDir As String)
@@ -13,7 +22,7 @@ Module Helper
 
         For Each fl In parentfolder.EnumerateFiles("*.acf").Where(Function(f) f.Length > 0)
             Try
-                Dim vConv = VdfConvert.Deserialize(File.ReadAllText(fl.FullName))
+                Dim vConv = VdfConvert.Deserialize(IO.File.ReadAllText(fl.FullName))
                 If vConv.Value.Item("installdir").ToString = workingDir.Name Then
                     Dim appID = CInt(vConv.Value.Item("appid").ToString)
                     Dim sName = vConv.Value.Item("name").ToString
@@ -65,29 +74,81 @@ Module Helper
     End Function
 
 
-    Public Function GetInvalidFolders(folderPaths() As String) As (InvalidFolders As List(Of String), InvalidMessages As List(Of String))
+    Public Function GetInvalidFolders(folderPaths() As String) As (InvalidFolders As List(Of String), InvalidMessages As List(Of FolderVerificationResult))
 
         Dim invalidFolders As New List(Of String)
-        Dim invalidMessages As New List(Of String)
+        Dim invalidMessages As New List(Of FolderVerificationResult)
 
         For Each folder In folderPaths
             Dim validation = Core.verifyFolder(folder)
 
-            If Not validation.isValid Then
+            If validation <> FolderVerificationResult.Valid Then
                 invalidFolders.Add(folder)
-                invalidMessages.Add($"{New DirectoryInfo(folder).Name}: {validation.msg}")
+                invalidMessages.Add(validation)
             End If
         Next
-        If invalidFolders.Any Then
-            GenerateInvalidFolderSnackbar(invalidMessages)
-        End If
+
 
         Return (invalidFolders, invalidMessages)
     End Function
 
-    Private Sub GenerateInvalidFolderSnackbar(invalidMessages As List(Of String))
-        Dim snackbar = Application.GetService (Of CustomSnackBarService)()
-        Dim message = String.Join(vbCrLf, invalidMessages)
-        snackbar.Show("Invalid Folders", message, Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(10))
+    Public Sub GenerateInvalidFolderSnackbar(InvalidFolders As List(Of String), InvalidMessages As List(Of FolderVerificationResult))
+
+        Dim messageString = ""
+        For i = 0 To InvalidFolders.Count - 1
+            If InvalidMessages(i) = FolderVerificationResult.InsufficientPermission Then
+                InsufficientPermissionHandler(InvalidFolders(i))
+                Return
+            End If
+
+
+            messageString &= $"{InvalidFolders(i)}: {GetFolderVerificationMessage(InvalidMessages(i))}" & vbCrLf
+        Next
+
+
+        Dim snackbar = Application.GetService(Of CustomSnackBarService)()
+        snackbar.Show("Invalid Folders", messageString, Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(10))
     End Sub
+
+
+
+    Public Async Function InsufficientPermissionHandler(folderName As String) As Task
+
+        Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
+
+        Dim button = New Button
+        button.Content = "Restart as Admin"
+        button.Command = New RelayCommand(Sub() RunAsAdmin(folderName))
+        button.Margin = New Thickness(-3, 10, 0, 0)
+
+        ' Show the custom snackbar
+        snackbarSV.ShowCustom(button, "Insufficient permission to access this folder.", ControlAppearance.Danger, timeout:=TimeSpan.FromSeconds(60))
+
+    End Function
+
+    Private Sub RunAsAdmin(FolderName As String)
+        Dim myproc As New Process With {
+            .StartInfo = New ProcessStartInfo With {
+                .FileName = Environment.ProcessPath,
+                .UseShellExecute = True,
+                .Arguments = $"""{FolderName}""",
+                .Verb = "runas"}
+        }
+        Dim app As Application = Application.Current
+
+        app.ShutdownPipeServer().ContinueWith(
+            Sub()
+                app.Dispatcher.Invoke(
+                    Sub()
+                        Application.mutex.ReleaseMutex()
+                        Application.mutex.Dispose()
+                    End Sub
+                )
+                myproc.Start()
+                app.Dispatcher.Invoke(Sub() app.Shutdown())
+            End Sub
+        )
+    End Sub
+
+
 End Module

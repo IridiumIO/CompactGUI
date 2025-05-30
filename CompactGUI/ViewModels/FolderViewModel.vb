@@ -186,43 +186,5 @@ Public Class FolderViewModel : Inherits ObservableObject
 
 
 
-    Public Async Function InsufficientPermissionHandler() As Task
-
-        Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
-
-        Dim button = New Button
-        button.Content = "Restart as Admin"
-        button.Command = New RelayCommand(AddressOf RunAsAdmin)
-        button.Margin = New Thickness(-3, 10, 0, 0)
-
-        ' Show the custom snackbar
-        snackbarSV.ShowCustom(button, "Insufficient permission to access this folder.", ControlAppearance.Danger, timeout:=TimeSpan.FromSeconds(60))
-
-    End Function
-
-    Private Sub RunAsAdmin()
-        Dim myproc As New Process With {
-            .StartInfo = New ProcessStartInfo With {
-                .FileName = Environment.ProcessPath,
-                .UseShellExecute = True,
-                .Arguments = $"""{Folder.FolderName}""",
-                .Verb = "runas"}
-        }
-        Dim app As Application = Application.Current
-
-        app.ShutdownPipeServer().ContinueWith(
-            Sub()
-                app.Dispatcher.Invoke(
-                    Sub()
-                        Application.mutex.ReleaseMutex()
-                        Application.mutex.Dispose()
-                    End Sub
-                )
-                myproc.Start()
-                app.Dispatcher.Invoke(Sub() app.Shutdown())
-            End Sub
-        )
-    End Sub
-
 End Class
 

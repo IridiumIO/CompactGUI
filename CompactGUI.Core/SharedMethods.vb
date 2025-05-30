@@ -3,21 +3,57 @@ Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Text
 Public Module SharedMethods
+    Public Enum FolderVerificationResult
+        Valid = 0
+        DirectoryDoesNotExist
+        SystemDirectory
+        RootDirectory
+        DirectoryEmptyOrUnauthorized
+        OneDriveFolder
+        NonNTFSDrive
+        InsufficientPermission
+    End Enum
 
+    Function verifyFolder(folder As String) As FolderVerificationResult
 
-    Function verifyFolder(folder As String) As (isValid As Boolean, msg As String)
-
-        If Not Directory.Exists(folder) Then : Return (False, "Directory does not exist")
-        ElseIf folder.ToLowerInvariant.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows)).ToLowerInvariant) Then : Return (False, "Cannot compress system directory")
-        ElseIf folder.EndsWith(":\") Then : Return (False, "Cannot compress root directory")
-        ElseIf IsDirectoryEmptySafe(folder) Then : Return (False, "This directory is either empty or you are not authorized to access its files.")
-        ElseIf IsOneDriveFolder(folder) Then : Return (False, "Files synced with OneDrive cannot be compressed as they use a different storage structure")
-        ElseIf DriveInfo.GetDrives().First(Function(f) folder.StartsWith(f.Name)).DriveFormat <> "NTFS" Then : Return (False, "Cannot compress a directory on a non-NTFS drive")
+        If Not Directory.Exists(folder) Then : Return FolderVerificationResult.DirectoryDoesNotExist
+        ElseIf folder.ToLowerInvariant.Contains((Environment.GetFolderPath(Environment.SpecialFolder.Windows)).ToLowerInvariant) Then : Return FolderVerificationResult.SystemDirectory
+        ElseIf folder.EndsWith(":\") Then : Return FolderVerificationResult.RootDirectory
+        ElseIf IsDirectoryEmptySafe(folder) Then : Return FolderVerificationResult.DirectoryEmptyOrUnauthorized
+        ElseIf IsOneDriveFolder(folder) Then : Return FolderVerificationResult.OneDriveFolder
+        ElseIf DriveInfo.GetDrives().First(Function(f) folder.StartsWith(f.Name)).DriveFormat <> "NTFS" Then : Return FolderVerificationResult.NonNTFSDrive
+        ElseIf Not Analyser.HasDirectoryWritePermission(folder) Then : Return FolderVerificationResult.InsufficientPermission
         End If
 
-        Return (True, "")
+        Return FolderVerificationResult.Valid
 
     End Function
+
+
+    Function GetFolderVerificationMessage(result As FolderVerificationResult) As String
+        Select Case result
+            Case FolderVerificationResult.Valid
+                Return ""
+            Case FolderVerificationResult.DirectoryDoesNotExist
+                Return "Directory does not exist"
+            Case FolderVerificationResult.SystemDirectory
+                Return "Cannot compress system directory"
+            Case FolderVerificationResult.RootDirectory
+                Return "Cannot compress root directory"
+            Case FolderVerificationResult.DirectoryEmptyOrUnauthorized
+                Return "This directory is either empty or you are not authorized to access its files."
+            Case FolderVerificationResult.OneDriveFolder
+                Return "Files synced with OneDrive cannot be compressed as they use a different storage structure"
+            Case FolderVerificationResult.NonNTFSDrive
+                Return "Cannot compress a directory on a non-NTFS drive"
+            Case FolderVerificationResult.InsufficientPermission
+                Return "Insufficient permission to access this folder."
+            Case Else
+                Return "Unknown error"
+        End Select
+    End Function
+
+
 
     Function IsDirectoryEmptySafe(folder As String)
 
@@ -26,7 +62,6 @@ Public Module SharedMethods
 
 
         Catch ex As UnauthorizedAccessException
-            MsgBox("You are not authorized to access some items in this folder." & vbCrLf & "Please try running CompactGUI as an administrator, otherwise these items will be skipped.", MsgBoxStyle.Exclamation, "Unauthorized Access")
             Return False
 
         Catch ex As Exception

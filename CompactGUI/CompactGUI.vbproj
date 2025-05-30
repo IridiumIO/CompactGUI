@@ -15,7 +15,6 @@
     <Copyright>Copyright © 2025</Copyright>
     <PackageProjectUrl>https://github.com/IridiumIO/CompactGUI/</PackageProjectUrl>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <DebugType>none</DebugType>
  
   </PropertyGroup>
 
@@ -26,7 +25,8 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
-    <WarningsAsErrors></WarningsAsErrors>
+    <WarningsAsErrors></WarningsAsErrors>    
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

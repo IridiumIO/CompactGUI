@@ -6,6 +6,8 @@ Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 
+Imports CompactGUI.Core.SharedMethods
+
 Imports PropertyChanged
 
 Partial Public Class HomeViewModel
@@ -85,6 +87,11 @@ Partial Public Class HomeViewModel
         Dim invalidFolders = GetInvalidFolders(folderPaths.ToArray)
         Dim validFolders = folderPaths.Except(invalidFolders.InvalidFolders)
 
+        If invalidFolders.InvalidFolders.Count > 0 Then
+
+            Helper.GenerateInvalidFolderSnackbar(invalidFolders.InvalidFolders, invalidFolders.InvalidMessages)
+        End If
+
         For Each folderName In validFolders
 
             Dim newFolder As CompressableFolder = CompressableFolderFactory.CreateCompressableFolder(folderName)
@@ -94,11 +101,11 @@ Partial Public Class HomeViewModel
             End If
 
             Dim res = Await newFolder.AnalyseFolderAsync
-            If res = -1 Then Await SelectedFolderViewModel.InsufficientPermissionHandler()
             If TypeOf (newFolder) Is SteamFolder Then
                 Await CType(newFolder, SteamFolder).GetWikiResults()
             End If
         Next
+
 
     End Function
 
@@ -159,7 +166,8 @@ Partial Public Class HomeViewModel
 
         Compressing = True
         Dim tasks As New List(Of Task)()
-        For Each folder In Folders
+        Dim foldersToCompress = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).ToList
+        For Each folder In foldersToCompress
             If folder.FolderActionState = ActionState.Idle Then
                 Await Task.Run(Async Function()
                                    Debug.WriteLine("Compressing " & folder.FolderName)

@@ -3,9 +3,12 @@
   <PropertyGroup>
     <RootNamespace>CompactGUI.Watcher</RootNamespace>
     <TargetFramework>net9.0-windows</TargetFramework>
-    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Fody" Version="6.8.1">
       <PrivateAssets>all</PrivateAssets>
