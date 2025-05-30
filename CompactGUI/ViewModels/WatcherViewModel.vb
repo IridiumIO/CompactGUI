@@ -22,10 +22,28 @@ Public Class WatcherViewModel : Inherits ObservableObject
 
 
     Public Async Function RefreshWatchedAsync() As Task
+        DeleteWatchersWithNonExistentFolders()
 
         Await Task.Run(Function() Watcher.ParseWatchers(True))
     End Function
 
+
+    Private Sub DeleteWatchersWithNonExistentFolders()
+
+        Dim watchersToRemove As New List(Of Watcher.WatchedFolder)
+
+        For Each wx In Watcher.WatchedFolders
+            If Not IO.Directory.Exists(wx.Folder) Then
+                watchersToRemove.Add(wx)
+            End If
+        Next
+
+
+
+        For Each wx In watchersToRemove
+            Watcher.RemoveWatched(wx)
+        Next
+    End Sub
 
     Private Sub AddWatchedFolderToQueue(folder As Watcher.WatchedFolder)
 

@@ -250,7 +250,16 @@ Public Class Watcher : Inherits ObservableObject
 
             If Not WatchersToCheck.Any() Then Return
 
+            Dim watchersToRemove = WatchersToCheck.Where(Function(f) Not IO.Directory.Exists(f.Folder)).ToList()
+            If watchersToRemove.Any() Then
+                Debug.WriteLine($"Removing {watchersToRemove.Count} folders that do not exist from watcher list.")
+                For Each fsWatcher In watchersToRemove
+                    RemoveWatched(WatchedFolders.FirstOrDefault(Function(f) f.Folder = fsWatcher.Folder))
+                Next
+            End If
+
             For Each fsWatcher In WatchersToCheck.OrderBy(Function(f) f.DisplayName)
+
                 Await Analyse(fsWatcher.Folder, ParseAll)
             Next
 
