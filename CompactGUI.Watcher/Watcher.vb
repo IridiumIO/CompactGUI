@@ -127,8 +127,10 @@ Public Class Watcher : Inherits ObservableObject
             existingItem.LastCheckedSize = analyser.CompressedBytes
             existingItem.LastUncompressedSize = analyser.UncompressedBytes
             existingItem.LastSystemModifiedDate = existingFolderMonitor.LastChangedDate
+            If analyser.FileCompressionDetailsList.Count <> 0 Then
+                existingItem.CompressionLevel = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
+            End If
 
-            existingItem.CompressionLevel = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
 
             If isFreshlyCompressed OrElse existingItem.CompressionLevel = WOFCompressionAlgorithm.NO_COMPRESSION Then
                 existingItem.LastCompressedSize = analyser.CompressedBytes
@@ -302,7 +304,19 @@ Public Class Watcher : Inherits ObservableObject
         Debug.WriteLine("Background Analysing: " & folder)
         Dim analyser As New Analyser(folder)
 
-        Await analyser.AnalyseFolder(Nothing)
+        Dim ret = Await analyser.AnalyseFolder(Nothing)
+
+        'Dim retMSG As String = ""
+
+        'retMSG &= $"Compressed Bytes: {analyser.CompressedBytes}" & Environment.NewLine
+        'retMSG &= $"Uncompressed Bytes: {analyser.UncompressedBytes}" & Environment.NewLine
+        'retMSG &= $"FileCompressionDetails: {analyser.FileCompressionDetailsList.Count}" & Environment.NewLine
+        'retMSG &= $"FolderSubs: {analyser.FolderName.Count}" & Environment.NewLine
+
+
+        'MsgBox(retMSG)
+
+        analyser.FileCompressionDetailsList.Clear()
 
         Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
         watched.IsWorking = True
@@ -311,17 +325,23 @@ Public Class Watcher : Inherits ObservableObject
         watched.LastUncompressedSize = analyser.UncompressedBytes
 
         watched.LastSystemModifiedDate = FolderMonitors.First(Function(f) f.Folder = folder).LastChangedDate
-        Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
-        watched.CompressionLevel = mainCompressionLVL
-        If checkDiskModified Then
-            Dim lastDiskWriteTime = analyser.FileCompressionDetailsList.Select(Function(fl)
-                                                                                   Dim finfo As New IO.FileInfo(fl.FileName)
-                                                                                   Return finfo.LastWriteTime
-                                                                               End Function).OrderByDescending(Function(f) f).First
 
-            watched.LastSystemModifiedDate = If(watched.LastSystemModifiedDate < lastDiskWriteTime, lastDiskWriteTime, watched.LastSystemModifiedDate)
+        If analyser.FileCompressionDetailsList.Count <> 0 Then
+            Dim mainCompressionLVL = analyser.FileCompressionDetailsList?.Select(Function(f) f.CompressionMode).Max
+            watched.CompressionLevel = If(mainCompressionLVL, WOFCompressionAlgorithm.NO_COMPRESSION)
 
+            If checkDiskModified Then
+                Dim lastDiskWriteTime = analyser.FileCompressionDetailsList.Select(Function(fl)
+                                                                                       Dim finfo As New IO.FileInfo(fl.FileName)
+                                                                                       Return finfo.LastWriteTime
+                                                                                   End Function).OrderByDescending(Function(f) f).First
+
+                watched.LastSystemModifiedDate = If(watched.LastSystemModifiedDate < lastDiskWriteTime, lastDiskWriteTime, watched.LastSystemModifiedDate)
+
+            End If
         End If
+
+
 
         FolderMonitors.First(Function(f) f.Folder = folder).HasTargetChanged = False
         watched.IsWorking = False
