@@ -104,7 +104,7 @@ Public Class FolderViewModel : Inherits ObservableObject
     Private Sub ApplyToAll()
         Dim allFolders = Application.GetService(Of HomeViewModel)().Folders
 
-        For Each fl In allFolders
+        For Each fl In allFolders.Where(Function(f) f.FolderActionState <> ActionState.Analysing AndAlso f.FolderActionState <> ActionState.Working AndAlso f.FolderActionState <> ActionState.Paused)
             If fl IsNot Folder Then
                 fl.CompressionOptions = Folder.CompressionOptions.Clone
                 fl.FolderActionState = ActionState.Idle
