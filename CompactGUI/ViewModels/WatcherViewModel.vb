@@ -15,6 +15,8 @@ Public Class WatcherViewModel : Inherits ObservableObject
     Public Property RefreshWatchedCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf RefreshWatchedAsync)
     Public Property ManuallyAddFolderToWatcherCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
 
+
+
     Public Sub New(watcher As Watcher.Watcher)
         Me.Watcher = watcher
     End Sub
