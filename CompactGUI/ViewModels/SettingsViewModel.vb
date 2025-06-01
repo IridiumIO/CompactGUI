@@ -15,7 +15,7 @@ Public Class SettingsViewModel : Inherits ObservableObject
 
     Public Shared Async Function InitializeEnvironment() As Task
 
-        Await AddExecutableToRegistry()
+        ' Await AddExecutableToRegistry()
         Await SetEnv()
         Await If(SettingsHandler.AppSettings.IsContextIntegrated, Settings.AddContextMenus, Settings.RemoveContextMenus)
 
@@ -39,9 +39,9 @@ Public Class SettingsViewModel : Inherits ObservableObject
     End Sub
 
 
-    Private Shared Async Function AddExecutableToRegistry() As Task
-        Await Task.Run(Sub() Registry.SetValue("HKEY_CURRENT_USER\software\IridiumIO\CompactGUI\", "Executable Path", IO.Directory.GetCurrentDirectory))
-    End Function
+    'Private Shared Async Function AddExecutableToRegistry() As Task
+    '    Await Task.Run(Sub() Registry.SetValue("HKEY_CURRENT_USER\software\IridiumIO\CompactGUI\", "Executable Path", IO.Directory.GetCurrentDirectory))
+    'End Function
 
 
     Public Property EditSkipListCommand As ICommand = New RelayCommand(Sub()
