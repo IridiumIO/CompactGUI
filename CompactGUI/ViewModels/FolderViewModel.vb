@@ -95,7 +95,7 @@ Public Class FolderViewModel : Inherits ObservableObject
 
     Public Async Function UncompressFolderAsync() As Task
         Await Folder.UncompressFolder()
-        Application.GetService(Of Watcher.Watcher).UpdateWatched(Folder.FolderName, Folder.Analyser, True)
+        Application.GetService(Of Watcher.Watcher).UpdateWatched(Folder.FolderName, Folder.Analyser, False)
 
     End Function
 

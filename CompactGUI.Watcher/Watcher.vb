@@ -126,11 +126,14 @@ Public Class Watcher : Inherits ObservableObject
             existingItem.LastCheckedDate = DateTime.Now
             existingItem.LastCheckedSize = analyser.CompressedBytes
             existingItem.LastUncompressedSize = analyser.UncompressedBytes
-            existingItem.LastSystemModifiedDate = existingFolderMonitor.LastChangedDate
+            existingItem.LastSystemModifiedDate = DateTime.Now
             If analyser.FileCompressionDetailsList.Count <> 0 Then
                 existingItem.CompressionLevel = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
             End If
 
+            If isFreshlyCompressed Then
+                existingItem.LastCompressedDate = DateTime.Now
+            End If
 
             If isFreshlyCompressed OrElse existingItem.CompressionLevel = WOFCompressionAlgorithm.NO_COMPRESSION Then
                 existingItem.LastCompressedSize = analyser.CompressedBytes
@@ -168,7 +171,6 @@ Public Class Watcher : Inherits ObservableObject
 
         WatchedFolders.Remove(item)
         WriteToFile()
-
 
     End Sub
 
