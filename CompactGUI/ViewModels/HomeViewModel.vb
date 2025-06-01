@@ -178,6 +178,7 @@ Partial Public Class HomeViewModel
         Await Application.GetService(Of Watcher.Watcher).DisableBackgrounding()
 
         Compressing = True
+        Core.PreventSleep()
         Dim tasks As New List(Of Task)()
         Dim foldersToCompress = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).ToList
         For Each folder In foldersToCompress
@@ -209,6 +210,7 @@ Partial Public Class HomeViewModel
             AddOrUpdateFolderWatcher(folder)
         Next
 
+        Core.RestoreSleep()
 
         Await Application.GetService(Of Watcher.Watcher).EnableBackgrounding()
     End Function

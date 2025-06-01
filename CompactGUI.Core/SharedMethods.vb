@@ -145,6 +145,14 @@ Public Module SharedMethods
         Return oneDrivePaths.Any(Function(odPath) normalizedFolderPath.StartsWith(Path.GetFullPath(odPath).TrimEnd(Path.DirectorySeparatorChar).ToLowerInvariant()))
     End Function
 
+    Public Sub PreventSleep()
+        SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS Or EXECUTION_STATE.ES_SYSTEM_REQUIRED Or EXECUTION_STATE.ES_DISPLAY_REQUIRED)
+    End Sub
+    Public Sub RestoreSleep()
+        SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS)
+    End Sub
+
+
 #Region "DLL Imports"
 
     <DllImport("kernel32.dll", SetLastError:=True)>
@@ -172,6 +180,18 @@ Public Module SharedMethods
         <Out> ByRef lpTotalNumberOfClusters As UInteger) As Boolean
     End Function
 
+
+    <DllImport("kernel32.dll", SetLastError:=True)>
+    Private Function SetThreadExecutionState(esFlags As EXECUTION_STATE) As EXECUTION_STATE
+    End Function
+
+    <Flags()>
+    Private Enum EXECUTION_STATE As UInteger
+        ES_AWAYMODE_REQUIRED = &H40
+        ES_CONTINUOUS = &H80000000UI
+        ES_DISPLAY_REQUIRED = &H2
+        ES_SYSTEM_REQUIRED = &H1
+    End Enum
 
 #End Region
 
