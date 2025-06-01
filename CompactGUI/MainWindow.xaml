@@ -167,15 +167,15 @@
 
             </local:ImageControl>
 
-            <TextBlock x:Name="ProgTitle"
-                       Text="CompactGUI" Foreground="#10FFFFFF"
+            <Label x:Name="ProgTitle"
+                      
                        Margin="20,16" HorizontalAlignment="Left"
                        d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
-                <TextBlock.RenderTransform>
+                <Label.RenderTransform>
                     <TranslateTransform x:Name="TransformL" Y="20" />
-                </TextBlock.RenderTransform>
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
+                </Label.RenderTransform>
+                <Label.Style>
+                    <Style TargetType="Label">
                         <Setter Property="Opacity" Value="0" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Visibility, RelativeSource={RelativeSource Self}}" Value="Visible">
@@ -201,8 +201,17 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </Label.Style>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock  Margin="0 0 20 0"  Text="CompactGUI" VerticalAlignment="Center" Foreground="#10FFFFFF" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+                    <Border Background="#20f44336" CornerRadius="10" Width="80" Height="22" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock  Text="Admin" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center"/>
+
+                    </Border>
+                </StackPanel>
+            </Label>
+
+
         </Grid>
         <ui:SnackbarPresenter x:Name="RootSnackbar"
                               Grid.Row="1" Grid.Column="0"

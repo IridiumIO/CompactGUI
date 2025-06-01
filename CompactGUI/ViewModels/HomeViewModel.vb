@@ -39,6 +39,12 @@ Partial Public Class HomeViewModel
         End Get
     End Property
 
+    Public ReadOnly Property IsAdmin As Boolean
+        Get
+            Dim principal = New Security.Principal.WindowsPrincipal(Security.Principal.WindowsIdentity.GetCurrent())
+            Return principal.IsInRole(Security.Principal.WindowsBuiltInRole.Administrator)
+        End Get
+    End Property
 
     Public Sub OnSelectedFolderChanged()
 
