@@ -110,6 +110,13 @@ Partial Public Class HomeViewModel
             If TypeOf (newFolder) Is SteamFolder Then
                 Await CType(newFolder, SteamFolder).GetWikiResults()
             End If
+
+            If Application.GetService(Of Watcher.Watcher).WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
+                newFolder.CompressionOptions.WatchFolderForChanges = True
+            End If
+
+
+
         Next
 
 
