@@ -33,19 +33,16 @@ Public Class Compactor : Implements IDisposable
     Private _cancellationTokenSource As New CancellationTokenSource
 
 
-
+    <MeasurePerformance.IL.Weaver.MeasurePerformance>
     Public Async Function RunCompactAsync(Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean)
         If _cancellationTokenSource.IsCancellationRequested Then Return False
 
-        Dim FilesList = Await BuildWorkingFilesList()
+        Dim FilesList = Await BuildWorkingFilesList().ConfigureAwait(False)
         Dim totalFilesSize As Long = FilesList.Sum(Function(f) f.Item2)
         _processedFilesBytes = 0
 
         If MaxParallelism <= 0 Then MaxParallelism = Environment.ProcessorCount
 
-
-        Dim sw As New Stopwatch
-        sw.Start()
 
         Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
 
@@ -61,10 +58,6 @@ Public Class Compactor : Implements IDisposable
                                     Return New ValueTask(PauseAndProcessFile(file.Item1, _cancellationTokenSource.Token, file.Item2, totalFilesSize, progressMonitor))
                                 End Function).ConfigureAwait(False)
 
-
-        sw.Stop()
-
-        Debug.WriteLine($"Completed in {sw.Elapsed.TotalSeconds} s")
 
 
         If _cancellationTokenSource.IsCancellationRequested Then Return False

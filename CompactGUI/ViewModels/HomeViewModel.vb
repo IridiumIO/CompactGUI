@@ -209,18 +209,18 @@ Partial Public Class HomeViewModel
 
     Public Sub AddOrUpdateFolderWatcher(folder As CompressableFolder)
         Debug.WriteLine("Adding folder to watcher: " & folder.FolderName)
-        Dim newWatched = New Watcher.WatchedFolder With {
-            .Folder = folder.FolderName,
-            .DisplayName = folder.DisplayName,
-            .IsSteamGame = TypeOf (folder) Is SteamFolder,
-            .LastCompressedSize = folder.CompressedBytes,
-            .LastUncompressedSize = folder.UncompressedBytes,
-            .LastCompressedDate = DateTime.Now,
-            .LastCheckedDate = DateTime.Now,
-            .LastCheckedSize = folder.CompressedBytes,
-            .LastSystemModifiedDate = DateTime.Now,
-            .CompressionLevel = folder.AnalysisResults.Select(Function(f) f.CompressionMode).Max
-        }
+
+        Dim newWatched = New Watcher.WatchedFolder
+        newWatched.Folder = folder.FolderName
+        newWatched.DisplayName = folder.DisplayName
+        newWatched.IsSteamGame = TypeOf (folder) Is SteamFolder
+        newWatched.LastCompressedSize = folder.CompressedBytes
+        newWatched.LastUncompressedSize = folder.UncompressedBytes
+        newWatched.LastCompressedDate = DateTime.Now
+        newWatched.LastCheckedDate = DateTime.Now
+        newWatched.LastCheckedSize = folder.CompressedBytes
+        newWatched.LastSystemModifiedDate = DateTime.Now
+        newWatched.CompressionLevel = If(folder.AnalysisResults.Any(), folder.AnalysisResults.Max(Function(f) f.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
 
         Application.GetService(Of Watcher.Watcher).AddOrUpdateWatched(newWatched)
 
