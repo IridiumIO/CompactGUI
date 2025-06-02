@@ -278,6 +278,27 @@ Public Class Watcher : Inherits ObservableObject
 
     End Function
 
+    Public Async Function ParseSingleWatcher(watchedFolder As WatchedFolder) As Task
+
+        Dim acquired = Await _parseWatchersSemaphore.WaitAsync(0)
+        If Not acquired Then Return
+
+        Try
+            If watchedFolder Is Nothing Then Return
+            If Not IO.Directory.Exists(watchedFolder.Folder) Then
+                RemoveWatched(watchedFolder)
+                Return
+            End If
+
+            Await Analyse(watchedFolder.Folder, False)
+            LastAnalysed = DateTime.Now
+            WriteToFile()
+        Finally
+            _parseWatchersSemaphore.Release()
+        End Try
+
+
+    End Function
 
     Public Async Function BackgroundCompact() As Task
 
@@ -306,22 +327,14 @@ Public Class Watcher : Inherits ObservableObject
         Debug.WriteLine("Background Analysing: " & folder)
         Dim analyser As New Analyser(folder)
 
+        Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
+        watched.IsWorking = True
+
         Dim ret = Await analyser.AnalyseFolder(Nothing)
-
-        'Dim retMSG As String = ""
-
-        'retMSG &= $"Compressed Bytes: {analyser.CompressedBytes}" & Environment.NewLine
-        'retMSG &= $"Uncompressed Bytes: {analyser.UncompressedBytes}" & Environment.NewLine
-        'retMSG &= $"FileCompressionDetails: {analyser.FileCompressionDetailsList.Count}" & Environment.NewLine
-        'retMSG &= $"FolderSubs: {analyser.FolderName.Count}" & Environment.NewLine
-
-
-        'MsgBox(retMSG)
 
         analyser.FileCompressionDetailsList.Clear()
 
-        Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
-        watched.IsWorking = True
+
         watched.LastCheckedDate = DateTime.Now
         watched.LastCheckedSize = analyser.CompressedBytes
         watched.LastUncompressedSize = analyser.UncompressedBytes

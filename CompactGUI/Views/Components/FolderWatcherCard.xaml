@@ -157,7 +157,7 @@
                                     <ui:ProgressRing Width="15" Height="15"
                                                      Margin="0,0,6,0" Padding="7"
                                                      Foreground="#FFBFC7CE" IsIndeterminate="True"
-                                                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" />
+                                                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}, Mode=OneWay}" />
                                     <Viewbox Grid.Column="1"
                                              Width="12" Height="12"
                                              Margin="0,0,5,0" HorizontalAlignment="Left"
@@ -172,7 +172,7 @@
                                                Visibility="{Binding IsSteamGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
                                     <Grid>
                                         <TextBlock Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}"
-                                                   MaxWidth="280" MinWidth="100"
+                                                   MinWidth="100" MaxWidth="280"
                                                    Margin="0,-2,0,0" VerticalAlignment="Top"
                                                    FontSize="15" FontWeight="SemiBold" Foreground="White"
                                                    MouseLeftButtonDown="DisplayNameTextBlock_MouseLeftButtonDown"
@@ -180,9 +180,10 @@
                                                    Visibility="{Binding IsEditing, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
 
                                         <TextBox Text="{Binding DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                 MaxWidth="280" MinWidth="100"
-                                                 Margin="-3,-3,0,0" VerticalAlignment="Top" Padding="0" 
-                                                 FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextControlForeground}"
+                                                 MinWidth="100" MaxWidth="280"
+                                                 Margin="-3,-3,0,0" Padding="0" VerticalAlignment="Top"
+                                                 FontSize="15" FontWeight="SemiBold"
+                                                 Foreground="{StaticResource TextControlForeground}"
                                                  KeyDown="DisplayNameTextBox_KeyDown" LostFocus="DisplayNameTextBox_LostFocus"
                                                  Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisConverter}}" />
                                     </Grid>
@@ -251,14 +252,14 @@
                                         Foreground="White">
                                     <ui:SymbolIcon FontSize="14" Symbol="Delete16" />
                                     <Button.ToolTip>
-                                        <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                                        <ToolTip ToolTipService.InitialShowDelay="100">
                                             <TextBlock Text="Remove from Watchlist"
                                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
 
-                                <Button Margin="0,0,35,0" HorizontalAlignment="Right"
+                                <Button Margin="0,0,40,0" HorizontalAlignment="Right"
                                         Background="#6B8399"
                                         Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReCompressWatchedCommand}"
                                         CommandParameter="{Binding}"
@@ -274,12 +275,27 @@
                                         </ui:SymbolIcon.RenderTransform>
                                     </ui:SymbolIcon>
                                     <Button.ToolTip>
-                                        <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                                        <ToolTip  ToolTipService.InitialShowDelay="100">
                                             <TextBlock Text="Add to compression queue"
                                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
+
+                                <Button Margin="0,0,80,0" HorizontalAlignment="Right" Visibility="{Binding IsWorking, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+                                        Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReAnalyseWatchedCommand}"
+                                        CommandParameter="{Binding}"
+                                        Foreground="White">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
+                                                 Glyph="&#xE9F3;" />
+                                    <Button.ToolTip>
+                                        <ToolTip ToolTipService.InitialShowDelay="100">
+                                            <TextBlock Text="Re-analyse this folder"
+                                                       FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
+                                        </ToolTip>
+                                    </Button.ToolTip>
+                                </Button>
+
                             </Grid>
 
 

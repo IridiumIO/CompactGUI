@@ -13,6 +13,9 @@ Public Class WatcherViewModel : Inherits ObservableObject
     Public ReadOnly Property ReCompressWatchedCommand As IRelayCommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) AddWatchedFolderToQueue(f))
 
     Public Property RefreshWatchedCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf RefreshWatchedAsync)
+
+    Public ReadOnly Property ReAnalyseWatchedCommand As IRelayCommand = New AsyncRelayCommand(Of Watcher.WatchedFolder)(Function(f) ReAnalyseWatchedAsync(f))
+
     Public Property ManuallyAddFolderToWatcherCommand As AsyncRelayCommand = New AsyncRelayCommand(AddressOf ManuallyAddFolderToWatcher)
 
 
@@ -27,6 +30,11 @@ Public Class WatcherViewModel : Inherits ObservableObject
         DeleteWatchersWithNonExistentFolders()
 
         Await Task.Run(Function() Watcher.ParseWatchers(True))
+    End Function
+
+
+    Private Async Function ReAnalyseWatchedAsync(watchedfolder As Watcher.WatchedFolder) As Task
+        Await Task.Run(Function() Watcher.ParseSingleWatcher(watchedfolder))
     End Function
 
 
