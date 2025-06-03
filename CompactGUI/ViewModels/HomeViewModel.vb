@@ -21,7 +21,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
     Public ReadOnly Property SelectedFolderViewModel As FolderViewModel
         Get
             If SelectedFolder Is Nothing Then Return Nothing
-            Return New FolderViewModel(SelectedFolder, _watcher)
+            Return New FolderViewModel(SelectedFolder, _watcher, _snackbarService)
         End Get
     End Property
 
@@ -46,12 +46,14 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
 
 
-    Private _watcher As Watcher.Watcher
+    Private ReadOnly _watcher As Watcher.Watcher
+    Private ReadOnly _snackbarService As CustomSnackBarService
 
-    Sub New(watcher As Watcher.Watcher)
+    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
         WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
         AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
         _watcher = watcher
+        _snackbarService = snackbarService
     End Sub
 
 
@@ -97,7 +99,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
         If invalidFolders.InvalidFolders.Count > 0 Then
 
-            Helper.GenerateInvalidFolderSnackbar(invalidFolders.InvalidFolders, invalidFolders.InvalidMessages)
+            _snackbarService.ShowInvalidFoldersMessage(invalidFolders.InvalidFolders, invalidFolders.InvalidMessages)
         End If
 
         For Each folderName In validFolders
@@ -130,7 +132,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
     Public Property RemoveFolderCommand As IRelayCommand = New RelayCommand(Of CompressableFolder)(Sub(folder) RemoveFolder(folder))
     Public Sub RemoveFolder(folder As CompressableFolder)
         If Not CanRemoveFolder() Then
-            Application.GetService(Of CustomSnackBarService)().Show("Cannot remove folder", "Please wait until the current operation is finished", Wpf.Ui.Controls.ControlAppearance.Caution, Nothing, TimeSpan.FromSeconds(5))
+            Application.GetService(Of CustomSnackBarService)().ShowCannotRemoveFolder()
             Return
         End If
 
@@ -240,7 +242,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
 
     Public Async Sub Receive(message As WatcherAddedFolderToQueueMessage) Implements IRecipient(Of WatcherAddedFolderToQueueMessage).Receive
-        Application.GetService(Of CustomSnackBarService).Show("Success", "Added to Queue", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
+        Application.GetService(Of CustomSnackBarService).ShowAddedToQueue()
         Await AddFoldersAsync({message.Value})
     End Sub
 End Class

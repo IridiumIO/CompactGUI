@@ -94,11 +94,11 @@ Public Class WikiService : Implements IWikiService
 
         Dim snackbar = Application.GetService(Of CustomSnackBarService)()
         If Not response Then
-            snackbar.Show("Failed to submit to wiki", "Please check your internet connection and try again", Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(5))
+            snackbar.ShowFailedToSubmitToWiki()
             Return False
         End If
 
-        snackbar.Show("Submitted to wiki", $"UID: {steamsubmitdata.UID}{vbCrLf}Game: {steamsubmitdata.GameName}{vbCrLf}SteamID: {steamsubmitdata.SteamID}{vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
+        snackbar.ShowSubmittedToWiki(steamsubmitdata, compressionMode)
         Return True
 
     End Function

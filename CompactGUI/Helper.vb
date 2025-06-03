@@ -92,41 +92,9 @@ Module Helper
         Return (invalidFolders, invalidMessages)
     End Function
 
-    Public Sub GenerateInvalidFolderSnackbar(InvalidFolders As List(Of String), InvalidMessages As List(Of FolderVerificationResult))
-
-        Dim messageString = ""
-        For i = 0 To InvalidFolders.Count - 1
-            If InvalidMessages(i) = FolderVerificationResult.InsufficientPermission Then
-                InsufficientPermissionHandler(InvalidFolders(i))
-                Return
-            End If
 
 
-            messageString &= $"{InvalidFolders(i)}: {GetFolderVerificationMessage(InvalidMessages(i))}" & vbCrLf
-        Next
-
-
-        Dim snackbar = Application.GetService(Of CustomSnackBarService)()
-        snackbar.Show("Invalid Folders", messageString, Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(10))
-    End Sub
-
-
-
-    Public Async Function InsufficientPermissionHandler(folderName As String) As Task
-
-        Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
-
-        Dim button = New Button
-        button.Content = "Restart as Admin"
-        button.Command = New RelayCommand(Sub() RunAsAdmin(folderName))
-        button.Margin = New Thickness(-3, 10, 0, 0)
-
-        ' Show the custom snackbar
-        snackbarSV.ShowCustom(button, "Insufficient permission to access this folder.", ControlAppearance.Danger, timeout:=TimeSpan.FromSeconds(60))
-
-    End Function
-
-    Private Sub RunAsAdmin(FolderName As String)
+    Public Sub RunAsAdmin(FolderName As String)
         Dim myproc As New Process With {
             .StartInfo = New ProcessStartInfo With {
                 .FileName = Environment.ProcessPath,

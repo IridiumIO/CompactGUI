@@ -6,6 +6,7 @@ Imports Wpf.Ui.Controls
 
 Public Class WatcherViewModel : Inherits ObservableObject
 
+    Private ReadOnly _snackbarService As CustomSnackBarService
     Public ReadOnly Property Watcher As Watcher.Watcher
 
     Public ReadOnly Property RemoveWatcherCommand As IRelayCommand = New RelayCommand(Of Watcher.WatchedFolder)(Sub(f) Watcher.RemoveWatched(f))
@@ -20,8 +21,9 @@ Public Class WatcherViewModel : Inherits ObservableObject
 
 
 
-    Public Sub New(watcher As Watcher.Watcher)
+    Public Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
         Me.Watcher = watcher
+        _snackbarService = snackbarService
     End Sub
 
 
@@ -73,7 +75,7 @@ Public Class WatcherViewModel : Inherits ObservableObject
         Dim validFolder = Core.verifyFolder(path)
         If validFolder <> Core.SharedMethods.FolderVerificationResult.Valid Then
 
-            Helper.GenerateInvalidFolderSnackbar(New List(Of String) From {path}, New List(Of Core.SharedMethods.FolderVerificationResult) From {validFolder})
+            _snackbarService.ShowInvalidFoldersMessage(New List(Of String) From {path}, New List(Of Core.SharedMethods.FolderVerificationResult) From {validFolder})
 
             Return
         End If

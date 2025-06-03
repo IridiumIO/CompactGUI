@@ -55,10 +55,12 @@ Public Class FolderViewModel : Inherits ObservableObject
     End Property
 
     Private _watcher As Watcher.Watcher
+    Private ReadOnly _snackbarService As CustomSnackBarService
 
-    Public Sub New(folder As CompressableFolder, watcher As Watcher.Watcher)
+    Public Sub New(folder As CompressableFolder, watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
         Me.Folder = folder
         _watcher = watcher
+        _snackbarService = snackbarService
         AddHandler folder.PropertyChanged, AddressOf OnFolderPropertyChanged
         AddHandler folder.CompressionProgressChanged, AddressOf OnCompressionProgressChanged
         AddHandler folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
@@ -113,9 +115,8 @@ Public Class FolderViewModel : Inherits ObservableObject
             End If
         Next
 
-        Dim snackbar = Application.GetService(Of CustomSnackBarService)()
-        snackbar.Show("Applied to all folders", "Success", ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
 
+        _snackbarService.ShowAppliedToAllFolders()
     End Sub
 
 
