@@ -15,7 +15,7 @@ Public Class Analyser
         FolderName = folder
     End Sub
 
-    <MeasurePerformance.IL.Weaver.MeasurePerformance>
+
     Public Async Function AnalyseFolder(cancellationToken As CancellationToken) As Task(Of Boolean)
         Dim allFiles = Await Task.Run(Function() Directory.EnumerateFiles(FolderName, "*", New EnumerationOptions() With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}).AsShortPathNames, cancellationToken).ConfigureAwait(False)
         Dim fileDetails As New List(Of AnalysedFileDetails)

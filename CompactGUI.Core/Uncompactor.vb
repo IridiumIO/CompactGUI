@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports System.Threading
 
-Public Class Uncompactor : Implements ICompressor
+Public Class Uncompactor : Implements ICompressor, IDisposable
 
 
     Private _pauseSemaphore As New SemaphoreSlim(1, 2)
@@ -71,6 +71,8 @@ Public Class Uncompactor : Implements ICompressor
         _cancellationTokenSource.Cancel()
     End Sub
 
-
-
+    Public Sub Dispose() Implements IDisposable.Dispose
+        _pauseSemaphore?.Dispose()
+        _cancellationTokenSource?.Dispose()
+    End Sub
 End Class

@@ -122,23 +122,16 @@ Public Class FolderViewModel : Inherits ObservableObject
     Public ReadOnly Property PauseCommand As IRelayCommand = New RelayCommand(Sub()
 
                                                                                   If Folder.FolderActionState = ActionState.Working Then
-                                                                                      Folder.Compactor?.Pause()
-                                                                                      Folder.Uncompactor?.Pause()
+                                                                                      Folder.Compressor?.Pause()
                                                                                       Folder.FolderActionState = ActionState.Paused
                                                                                   Else
-                                                                                      Folder.Compactor?.Resume()
-                                                                                      Folder.Uncompactor?.Resume()
+                                                                                      Folder.Compressor?.Resume()
                                                                                       Folder.FolderActionState = ActionState.Working
 
                                                                                   End If
                                                                               End Sub)
 
-    Public ReadOnly Property CancelCommand As IRelayCommand = New RelayCommand(Sub()
-
-                                                                                   Folder.Compactor?.Cancel()
-                                                                                   Folder.Uncompactor?.Cancel()
-
-                                                                               End Sub)
+    Public ReadOnly Property CancelCommand As IRelayCommand = New RelayCommand(Sub() Folder.Compressor?.Cancel())
 
     Public ReadOnly Property SubmitToWikiCommand As IRelayCommand = New AsyncRelayCommand(AddressOf SubmitToWiki, AddressOf CanSubmitToWiki)
 

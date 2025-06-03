@@ -131,8 +131,8 @@ Public Class Compactor : Implements IDisposable, ICompressor
 
 
     Public Sub Dispose() Implements IDisposable.Dispose
-        cancellationTokenSource.Dispose()
-        pauseSemaphore.Dispose()
+        cancellationTokenSource?.Dispose()
+        pauseSemaphore?.Dispose()
         If Not compressionInfoPtr.Equals(IntPtr.Zero) Then
             Marshal.FreeHGlobal(compressionInfoPtr)
             compressionInfoPtr = IntPtr.Zero

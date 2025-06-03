@@ -69,50 +69,41 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
 
 
-    Public Compactor As Compactor
+    Public Compressor As ICompressor
 
     Public Async Function CompressFolder() As Task(Of Boolean)
 
-        FolderActionState = ActionState.Working
-
-        CompressionProgress.Report(New CompressionProgress(0, ""))
-
-        Compactor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
-        Dim res = Await Compactor.RunAsync(Nothing, CompressionProgress, GetThreadCount)
-
-        If res Then
-            FolderActionState = ActionState.Results
-            IsFreshlyCompressed = True
-        Else
-            FolderActionState = ActionState.Results
-            IsFreshlyCompressed = False
-        End If
-
-        Return res
+        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
+        Return Await RunCompressionAsync(Compressor, Nothing, True)
 
     End Function
 
-
-    Public Uncompactor As Uncompactor
 
     Public Async Function UncompressFolder() As Task(Of Boolean)
+
+        Compressor = New Uncompactor
+        Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
+        Return Await RunCompressionAsync(Compressor, compressedFilesList, isCompressing:=False)
+
+    End Function
+
+    Private Async Function RunCompressionAsync(compressor As ICompressor, filesList As List(Of String), isCompressing As Boolean) As Task(Of Boolean)
         FolderActionState = ActionState.Working
         CompressionProgress.Report(New CompressionProgress(0, ""))
 
-        Uncompactor = New Uncompactor
+        Dim res = Await compressor.RunAsync(filesList, CompressionProgress, GetThreadCount)
 
-        Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
-
-        Dim res = Await Uncompactor.RunAsync(compressedFilesList, CompressionProgress, GetThreadCount)
-
-        FolderActionState = ActionState.Idle
-        IsFreshlyCompressed = False
-
-        Await AnalyseFolderAsync()
+        If isCompressing Then
+            FolderActionState = ActionState.Results
+            IsFreshlyCompressed = res
+        Else
+            FolderActionState = ActionState.Idle
+            IsFreshlyCompressed = False
+            Await AnalyseFolderAsync()
+        End If
+        compressor.Dispose()
         Return res
     End Function
-
-
 
     Private CancellationTokenSource As CancellationTokenSource
 
