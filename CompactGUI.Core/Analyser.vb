@@ -118,9 +118,12 @@ Public Class Analyser
         Dim buf As UInt16 = 8
 
         Dim ret = WofIsExternalFile(fInfo.FullName, isextFile, prov, info, buf)
-        If isextFile = 0 Then info.Algorithm = WOFCompressionAlgorithm.NO_COMPRESSION
-        If (fInfo.Attributes And 2048) <> 0 Then info.Algorithm = WOFCompressionAlgorithm.LZNT1
-        Return info.Algorithm
+
+        Dim algorithm As WOFCompressionAlgorithm = info.Algorithm
+
+        If isextFile = 0 Then algorithm = WOFCompressionAlgorithm.NO_COMPRESSION
+        If (fInfo.Attributes And 2048) <> 0 Then algorithm = WOFCompressionAlgorithm.LZNT1
+        Return algorithm
 
     End Function
 

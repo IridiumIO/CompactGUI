@@ -3,112 +3,102 @@ Imports System.Runtime.InteropServices
 Imports System.Threading
 
 
-Public Class Compactor : Implements IDisposable
+Public Class Compactor : Implements IDisposable, ICompressor
 
-    Public Sub New(folder As String, cLevel As WOFCompressionAlgorithm, excludedFilesTypes As String())
+    Private ReadOnly workingDirectory As String
+    Private ReadOnly excludedFileExtensions() As String
+    Private ReadOnly wofCompressionAlgorithm As WOFCompressionAlgorithm
 
-        If verifyFolder(folder) <> FolderVerificationResult.Valid Then Return
+    Private compressionInfoPtr As IntPtr
+    Private compressionInfoSize As UInteger
 
-        _workingDir = folder
-        _excludedFileTypes = excludedFilesTypes
-        _WOFCompressionLevel = cLevel
+    Private totalProcessedBytes As Long = 0
+    Private ReadOnly pauseSemaphore As New SemaphoreSlim(1, 2)
+    Private ReadOnly cancellationTokenSource As New CancellationTokenSource
 
-        _EFInfo = New WOF_FILE_COMPRESSION_INFO_V1 With {.Algorithm = _WOFCompressionLevel, .Flags = 0}
-        _EFInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(_EFInfo))
-        Marshal.StructureToPtr(_EFInfo, _EFInfoPtr, True)
+
+    Public Sub New(folder As String, compressionLevel As WOFCompressionAlgorithm, excludedFilesTypes As String())
+
+        workingDirectory = folder
+        wofCompressionAlgorithm = compressionLevel
+        excludedFileExtensions = excludedFilesTypes
+
+        InitializeCompressionInfoPointer()
 
     End Sub
 
-    Private _workingDir As String
-    Private _excludedFileTypes() As String
-    Private _WOFCompressionLevel As WOFCompressionAlgorithm
 
-    Private _EFInfo As WOF_FILE_COMPRESSION_INFO_V1
-    Private _EFInfoPtr As IntPtr
-
-    Private _pauseSemaphore As New SemaphoreSlim(1, 2)
-
-    Private _processedFilesBytes As Long = 0
-
-    Private _cancellationTokenSource As New CancellationTokenSource
-
+    Private Sub InitializeCompressionInfoPointer()
+        Dim _EFInfo As New WOF_FILE_COMPRESSION_INFO_V1 With {.Algorithm = wofCompressionAlgorithm, .Flags = 0}
+        compressionInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(_EFInfo))
+        compressionInfoSize = CUInt(Marshal.SizeOf(_EFInfo))
+        Marshal.StructureToPtr(_EFInfo, compressionInfoPtr, True)
+    End Sub
 
     <MeasurePerformance.IL.Weaver.MeasurePerformance>
-    Public Async Function RunCompactAsync(Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean)
-        If _cancellationTokenSource.IsCancellationRequested Then Return False
+    Public Async Function RunAsync(filesList As List(Of String), Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing, Optional MaxParallelism As Integer = 1) As Task(Of Boolean) Implements ICompressor.RunAsync
 
-        Dim FilesList = Await BuildWorkingFilesList().ConfigureAwait(False)
-        Dim totalFilesSize As Long = FilesList.Sum(Function(f) f.Item2)
-        _processedFilesBytes = 0
+        If cancellationTokenSource.IsCancellationRequested Then Return False
+
+        Dim workingFiles = Await BuildWorkingFilesList().ConfigureAwait(False)
+        Dim totalFilesSize As Long = workingFiles.Sum(Function(f) f.UncompressedSize)
+        totalProcessedBytes = 0
 
         If MaxParallelism <= 0 Then MaxParallelism = Environment.ProcessorCount
 
-
         Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
 
-        'For Each file In FilesList
-        '    Threading.Thread.Sleep(2000)
-        '    Await PauseAndProcessFile(file.Item1, _cancellationTokenSource.Token, file.Item2, totalFilesSize, progressMonitor)
-        'Next
-
-
-        Await Parallel.ForEachAsync(FilesList, paraOptions,
+        Await Parallel.ForEachAsync(workingFiles, paraOptions,
                                 Function(file, _ctx) As ValueTask
                                     If _ctx.IsCancellationRequested Then Return ValueTask.FromCanceled(_ctx)
-                                    Return New ValueTask(PauseAndProcessFile(file.Item1, _cancellationTokenSource.Token, file.Item2, totalFilesSize, progressMonitor))
+                                    Return New ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor))
                                 End Function).ConfigureAwait(False)
 
+        Return Not cancellationTokenSource.IsCancellationRequested
 
-
-        If _cancellationTokenSource.IsCancellationRequested Then Return False
-
-        Return True
     End Function
 
-    Private Async Function PauseAndProcessFile(file As String, _ctx As CancellationToken, fileSize As Long, totalFilesSize As Long, Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing) As Task
+    Private Async Function PauseAndProcessFile(details As FileDetails, totalFilesSize As Long, _ctx As CancellationToken, Optional progressMonitor As IProgress(Of CompressionProgress) = Nothing) As Task
 
-        If _ctx.IsCancellationRequested Then Return
         Try
-            Await _pauseSemaphore.WaitAsync(_ctx).ConfigureAwait(False)
-            _pauseSemaphore.Release()
-
+            Await pauseSemaphore.WaitAsync(_ctx).ConfigureAwait(False)
+            pauseSemaphore.Release()
         Catch ex As OperationCanceledException
             Return
         End Try
 
         If _ctx.IsCancellationRequested Then Return
 
-        Dim res = WOFCompressFile(file)
+        Dim res = WOFCompressFile(details.FileName)
+        Interlocked.Add(totalProcessedBytes, details.UncompressedSize)
 
-        Interlocked.Add(_processedFilesBytes, fileSize)
-        Dim incremented = _processedFilesBytes
-
-        progressMonitor?.Report(New CompressionProgress(CInt(((incremented / totalFilesSize) * 100)), file))
+        progressMonitor?.Report(New CompressionProgress(totalProcessedBytes / totalFilesSize * 100, details.FileName))
 
     End Function
 
-    Public Sub PauseCompression()
-        _pauseSemaphore.Wait()
+
+
+    Public Sub Pause() Implements ICompressor.Pause
+        pauseSemaphore.Wait()
     End Sub
 
 
-    Public Sub ResumeCompression()
-        If _pauseSemaphore.CurrentCount = 0 Then _pauseSemaphore.Release()
+    Public Sub [Resume]() Implements ICompressor.Resume
+        If pauseSemaphore.CurrentCount = 0 Then pauseSemaphore.Release()
     End Sub
 
-    Public Sub Cancel()
-        ResumeCompression()
-        _cancellationTokenSource.Cancel()
+    Public Sub Cancel() Implements ICompressor.Cancel
+        [Resume]()
+        cancellationTokenSource.Cancel()
     End Sub
 
-    Private Function WOFCompressFile(path As String)
 
-        Dim length As ULong = Marshal.SizeOf(_EFInfoPtr)
+
+    Private Function WOFCompressFile(path As String) As Integer
+
         Try
-            Using fs As FileStream = New FileStream(path, FileMode.Open)
-                Dim hFile = fs.SafeFileHandle.DangerousGetHandle()
-                Dim res = WofSetFileDataLocation(hFile, WOF_PROVIDER_FILE, _EFInfoPtr, length)
-                Return res
+            Using fs As New FileStream(path, FileMode.Open)
+                Return WofSetFileDataLocation(fs.SafeFileHandle.DangerousGetHandle(), WOF_PROVIDER_FILE, compressionInfoPtr, compressionInfoSize)
             End Using
         Catch ex As Exception
             Debug.WriteLine(ex.Message)
@@ -117,18 +107,22 @@ Public Class Compactor : Implements IDisposable
 
     End Function
 
-    Private Async Function BuildWorkingFilesList() As Task(Of IEnumerable(Of (String, Long)))
+    Private Async Function BuildWorkingFilesList() As Task(Of IEnumerable(Of FileDetails))
 
-        Dim clusterSize As Integer = GetClusterSize(_workingDir)
+        Dim clusterSize As Integer = GetClusterSize(workingDirectory)
 
-        Dim _filesList As New Concurrent.ConcurrentBag(Of (String, Long))
+        Dim _filesList As New Concurrent.ConcurrentBag(Of FileDetails)
         'TODO: if the user has already analysed within the last minute, then skip creating a new one and use the old one
-        Dim ax As New Analyser(_workingDir)
+        Dim ax As New Analyser(workingDirectory)
         Dim ret = Await ax.AnalyseFolder(Nothing)
 
         Parallel.ForEach(ax.FileCompressionDetailsList, Sub(fl)
                                                             Dim ft = fl.FileInfo
-                                                            If Not _excludedFileTypes.Contains(ft.Extension) AndAlso ft.Length > clusterSize AndAlso fl.CompressionMode <> _WOFCompressionLevel Then _filesList.Add((fl.FileName, fl.UncompressedSize))
+                                                            If Not excludedFileExtensions.Contains(ft.Extension) AndAlso
+                                                                    ft.Length > clusterSize AndAlso
+                                                                    fl.CompressionMode <> wofCompressionAlgorithm Then
+                                                                _filesList.Add((New FileDetails With {.FileName = fl.FileName, .UncompressedSize = fl.UncompressedSize}))
+                                                            End If
                                                         End Sub)
 
 
@@ -137,11 +131,21 @@ Public Class Compactor : Implements IDisposable
 
 
     Public Sub Dispose() Implements IDisposable.Dispose
-        _cancellationTokenSource.Dispose()
-        _pauseSemaphore.Dispose()
-        If Not _EFInfoPtr.Equals(IntPtr.Zero) Then
-            Marshal.FreeHGlobal(_EFInfoPtr)
-            _EFInfoPtr = IntPtr.Zero
+        cancellationTokenSource.Dispose()
+        pauseSemaphore.Dispose()
+        If Not compressionInfoPtr.Equals(IntPtr.Zero) Then
+            Marshal.FreeHGlobal(compressionInfoPtr)
+            compressionInfoPtr = IntPtr.Zero
         End If
     End Sub
+
+
+
+    Private Structure FileDetails
+        Public Property FileName As String
+        Public Property UncompressedSize As Long
+
+    End Structure
+
+
 End Class

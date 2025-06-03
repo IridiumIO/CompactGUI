@@ -21,7 +21,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
     Public ReadOnly Property SelectedFolderViewModel As FolderViewModel
         Get
             If SelectedFolder Is Nothing Then Return Nothing
-            Return New FolderViewModel(SelectedFolder)
+            Return New FolderViewModel(SelectedFolder, _watcher)
         End Get
     End Property
 

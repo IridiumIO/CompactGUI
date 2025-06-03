@@ -78,7 +78,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         CompressionProgress.Report(New CompressionProgress(0, ""))
 
         Compactor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
-        Dim res = Await Compactor.RunCompactAsync(CompressionProgress, GetThreadCount)
+        Dim res = Await Compactor.RunAsync(Nothing, CompressionProgress, GetThreadCount)
 
         If res Then
             FolderActionState = ActionState.Results
@@ -103,7 +103,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
         Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
 
-        Dim res = Await Uncompactor.UncompactFiles(compressedFilesList, CompressionProgress, GetThreadCount)
+        Dim res = Await Uncompactor.RunAsync(compressedFilesList, CompressionProgress, GetThreadCount)
 
         FolderActionState = ActionState.Idle
         IsFreshlyCompressed = False

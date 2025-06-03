@@ -52,7 +52,7 @@ Public Class BackgroundCompactor
 
         _compactor = New Core.Compactor(folder, compressionLevel, _excludedFileTypes)
 
-        Return _compactor.RunCompactAsync()
+        Return _compactor.RunAsync(Nothing)
 
     End Function
 
@@ -130,13 +130,13 @@ Public Class BackgroundCompactor
     Public Sub PauseCompacting()
         Debug.WriteLine(" - Pausing Background!")
         isCompactingPaused = True ' Indicate compacting is paused
-        _compactor.PauseCompression()
+        _compactor.Pause()
     End Sub
 
     Public Sub ResumeCompacting()
         Debug.WriteLine(" - Resuming Background!")
         isCompactingPaused = False ' Indicate compacting is no longer paused
-        _compactor.ResumeCompression()
+        _compactor.Resume()
     End Sub
 
 End Class

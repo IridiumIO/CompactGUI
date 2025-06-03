@@ -41,8 +41,8 @@ Public Module WOFHelper
     End Function
 
     Public Structure WOF_FILE_COMPRESSION_INFO_V1
-        Public Algorithm As WOFCompressionAlgorithm
-        Public Flags As ULong
+        Public Algorithm As UInteger
+        Public Flags As UInteger
     End Structure
 
 

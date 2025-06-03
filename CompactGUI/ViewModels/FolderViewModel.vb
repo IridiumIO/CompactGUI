@@ -122,12 +122,12 @@ Public Class FolderViewModel : Inherits ObservableObject
     Public ReadOnly Property PauseCommand As IRelayCommand = New RelayCommand(Sub()
 
                                                                                   If Folder.FolderActionState = ActionState.Working Then
-                                                                                      Folder.Compactor?.PauseCompression()
-                                                                                      Folder.Uncompactor?.PauseCompression()
+                                                                                      Folder.Compactor?.Pause()
+                                                                                      Folder.Uncompactor?.Pause()
                                                                                       Folder.FolderActionState = ActionState.Paused
                                                                                   Else
-                                                                                      Folder.Compactor?.ResumeCompression()
-                                                                                      Folder.Uncompactor?.ResumeCompression()
+                                                                                      Folder.Compactor?.Resume()
+                                                                                      Folder.Uncompactor?.Resume()
                                                                                       Folder.FolderActionState = ActionState.Working
 
                                                                                   End If
