@@ -53,7 +53,7 @@ Partial Public Class Application
                                services.AddSingleton(Of HomeViewModel)()
 
                                services.AddSingleton(Of WatcherPage)()
-                               services.AddSingleton(Of WatcherViewModel)()
+                               services.AddTransient(Of WatcherViewModel)()
 
                                services.AddSingleton(Of SettingsPage)()
                                services.AddSingleton(Of SettingsViewModel)()

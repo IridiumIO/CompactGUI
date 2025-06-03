@@ -10,11 +10,9 @@ Imports CompactGUI.Core.SharedMethods
 
 Imports PropertyChanged
 
-Partial Public Class HomeViewModel
-    Inherits ObservableObject
-    Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
+Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
 
-    Public Property Folders As ObservableCollection(Of CompressableFolder)
+    Public Property Folders As New ObservableCollection(Of CompressableFolder)
 
     <OnChangedMethod(NameOf(OnSelectedFolderChanged))>
     <AlsoNotifyFor(NameOf(SelectedFolderViewModel))>
@@ -46,6 +44,18 @@ Partial Public Class HomeViewModel
         End Get
     End Property
 
+
+
+    Private _watcher As Watcher.Watcher
+
+    Sub New(watcher As Watcher.Watcher)
+        WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
+        AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
+        _watcher = watcher
+    End Sub
+
+
+
     Public Sub OnSelectedFolderChanged()
 
         WeakReferenceMessenger.Default.Send(New BackgroundImageChangedMessage(SelectedFolder?.FolderBGImage))
@@ -54,15 +64,7 @@ Partial Public Class HomeViewModel
 
 
 
-    Sub New()
-        Folders = New ObservableCollection(Of CompressableFolder)()
 
-        WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
-
-
-        AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
-
-    End Sub
 
     Private Sub OnAnyFolderPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
         If e.PropertyName = NameOf(SelectedFolder.FolderActionState) Then
@@ -111,7 +113,7 @@ Partial Public Class HomeViewModel
                 Await CType(newFolder, SteamFolder).GetWikiResults()
             End If
 
-            If Application.GetService(Of Watcher.Watcher).WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
+            If _watcher.WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
                 newFolder.CompressionOptions.WatchFolderForChanges = True
             End If
 
@@ -175,7 +177,7 @@ Partial Public Class HomeViewModel
     Private Property Compressing As Boolean = False
     Private Async Function CompressAllAsync() As Task
 
-        Await Application.GetService(Of Watcher.Watcher).DisableBackgrounding()
+        Await _watcher.DisableBackgrounding()
 
         Compressing = True
         Core.PreventSleep()
@@ -194,7 +196,7 @@ Partial Public Class HomeViewModel
 
                                    End If
 
-                                   Application.GetService(Of Watcher.Watcher).UpdateWatched(folder.FolderName, folder.Analyser, True)
+                                   _watcher.UpdateWatched(folder.FolderName, folder.Analyser, True)
 
                                    'For Each poorext In folder.PoorlyCompressedFiles
                                    '    Debug.WriteLine($"{poorext.extension} : {poorext.totalFiles} with ratio of {poorext.cRatio}")
@@ -212,7 +214,7 @@ Partial Public Class HomeViewModel
 
         Core.RestoreSleep()
 
-        Await Application.GetService(Of Watcher.Watcher).EnableBackgrounding()
+        Await _watcher.EnableBackgrounding()
     End Function
 
 
@@ -231,14 +233,14 @@ Partial Public Class HomeViewModel
         newWatched.LastSystemModifiedDate = DateTime.Now
         newWatched.CompressionLevel = If(folder.AnalysisResults.Any(), folder.AnalysisResults.Max(Function(f) f.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
 
-        Application.GetService(Of Watcher.Watcher).AddOrUpdateWatched(newWatched)
+        _watcher.AddOrUpdateWatched(newWatched)
 
     End Sub
 
 
 
     Public Async Sub Receive(message As WatcherAddedFolderToQueueMessage) Implements IRecipient(Of WatcherAddedFolderToQueueMessage).Receive
-        Await AddFoldersAsync({message.Value})
         Application.GetService(Of CustomSnackBarService).Show("Success", "Added to Queue", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
+        Await AddFoldersAsync({message.Value})
     End Sub
 End Class

@@ -90,7 +90,7 @@ Public Class FolderWatcherCard : Inherits UserControl
             Dim vm = TryCast(fe.DataContext, Watcher.WatchedFolder)
             If vm IsNot Nothing Then
                 vm.IsEditing = False
-                Application.GetService(Of Watcher.Watcher)().WriteToFile()
+                Application.GetService(Of Watcher.Watcher).WriteToFile()
             End If
         End If
     End Sub
@@ -102,7 +102,7 @@ Public Class FolderWatcherCard : Inherits UserControl
                 Dim vm = TryCast(fe.DataContext, Watcher.WatchedFolder)
                 If vm IsNot Nothing Then
                     vm.IsEditing = False
-                    Application.GetService(Of Watcher.Watcher)().WriteToFile()
+                    Application.GetService(Of Watcher.Watcher).WriteToFile()
                 End If
             End If
         End If

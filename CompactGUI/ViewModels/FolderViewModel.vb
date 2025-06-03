@@ -54,9 +54,11 @@ Public Class FolderViewModel : Inherits ObservableObject
         End Get
     End Property
 
+    Private _watcher As Watcher.Watcher
 
-    Public Sub New(folder As CompressableFolder)
+    Public Sub New(folder As CompressableFolder, watcher As Watcher.Watcher)
         Me.Folder = folder
+        _watcher = watcher
         AddHandler folder.PropertyChanged, AddressOf OnFolderPropertyChanged
         AddHandler folder.CompressionProgressChanged, AddressOf OnCompressionProgressChanged
         AddHandler folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
@@ -95,7 +97,7 @@ Public Class FolderViewModel : Inherits ObservableObject
 
     Public Async Function UncompressFolderAsync() As Task
         Await Folder.UncompressFolder()
-        Application.GetService(Of Watcher.Watcher).UpdateWatched(Folder.FolderName, Folder.Analyser, False)
+        _watcher.UpdateWatched(Folder.FolderName, Folder.Analyser, False)
 
     End Function
 
