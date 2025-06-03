@@ -117,6 +117,7 @@ Public Class BackgroundCompactor
 
             End If
             folder.IsWorking = False
+            _compactor.Dispose()
             Debug.WriteLine("    Finished Compacting " & folder.DisplayName)
         Next
 
