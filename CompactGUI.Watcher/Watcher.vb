@@ -1,8 +1,8 @@
 Imports System.Collections.ObjectModel
 Imports System.Text.Json
-Imports Microsoft.Toolkit.Mvvm.ComponentModel
 Imports CompactGUI.Core
 Imports System.Threading
+Imports CommunityToolkit.Mvvm.ComponentModel
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class Watcher : Inherits ObservableObject
@@ -307,7 +307,7 @@ Public Class Watcher : Inherits ObservableObject
 
         Try
 
-            If BGCompactor.isCompactorActive Then Return
+            If BGCompactor.IsCompactorActive Then Return
 
             If Not WatchedFolders.Any(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION) Then
                 Return

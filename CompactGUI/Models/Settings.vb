@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
+﻿Imports CommunityToolkit.Mvvm.ComponentModel
+
 Imports IWshRuntimeLibrary
 
 Public Class Settings : Inherits ObservableObject

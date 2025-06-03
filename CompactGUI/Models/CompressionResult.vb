@@ -1,7 +1,7 @@
-﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
-
-
+﻿
 ' Used to hold compression results from parsed existing wiki file (above)
+Imports CommunityToolkit.Mvvm.ComponentModel
+
 Public Class CompressionResult : Inherits ObservableObject
 
     Public Property CompType As Core.CompressionMode

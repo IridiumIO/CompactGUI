@@ -10,12 +10,12 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.8.1">
+    <PackageReference Include="Fody" Version="6.9.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MeasurePerformance.Fody" Version="1.3.1" />
-    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="9.0.5" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
-Imports Microsoft.Toolkit.Mvvm.Input
-Imports Microsoft.Win32
+﻿
+Imports CommunityToolkit.Mvvm.ComponentModel
+Imports CommunityToolkit.Mvvm.Input
 
 Public Class SettingsViewModel : Inherits ObservableObject
 

@@ -1,6 +1,7 @@
 ﻿Imports System.Text.Json.Serialization
 
-Imports Microsoft.Toolkit.Mvvm.ComponentModel
+Imports CommunityToolkit.Mvvm.ComponentModel
+
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class WatchedFolder : Inherits ObservableObject
