@@ -16,11 +16,16 @@ Public Class Uncompactor : Implements ICompressor, IDisposable
         Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
 
         _processedFileCount.Clear()
-        Await Parallel.ForEachAsync(filesList, paraOptions,
-                                   Function(file, _ctx) As ValueTask
-                                       If _ctx.IsCancellationRequested Then Return ValueTask.FromCanceled(_ctx)
-                                       Return New ValueTask(PauseAndProcessFile(file, totalFiles, _cancellationTokenSource.Token, progressMonitor))
-                                   End Function).ConfigureAwait(False)
+        Try
+            Await Parallel.ForEachAsync(filesList, paraOptions,
+                                  Function(file, _ctx) As ValueTask
+                                      _ctx.ThrowIfCancellationRequested()
+                                      Return New ValueTask(PauseAndProcessFile(file, totalFiles, _cancellationTokenSource.Token, progressMonitor))
+                                  End Function).ConfigureAwait(False)
+        Catch ex As OperationCanceledException
+            Return False
+        End Try
+
         Return True
 
     End Function
@@ -31,10 +36,11 @@ Public Class Uncompactor : Implements ICompressor, IDisposable
             Await _pauseSemaphore.WaitAsync(_ctx).ConfigureAwait(False)
             _pauseSemaphore.Release()
         Catch ex As OperationCanceledException
+            Throw
             Return
         End Try
 
-        If _ctx.IsCancellationRequested Then Return
+        _ctx.ThrowIfCancellationRequested()
 
         Dim res = WOFDecompressFile(file)
         _processedFileCount.TryAdd(file, 1)

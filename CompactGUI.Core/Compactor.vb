@@ -48,11 +48,16 @@ Public Class Compactor : Implements IDisposable, ICompressor
 
         Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
 
-        Await Parallel.ForEachAsync(workingFiles, paraOptions,
-                                Function(file, _ctx) As ValueTask
-                                    If _ctx.IsCancellationRequested Then Return ValueTask.FromCanceled(_ctx)
-                                    Return New ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor))
-                                End Function).ConfigureAwait(False)
+        Try
+            Await Parallel.ForEachAsync(workingFiles, paraOptions,
+            Function(file, _ctx) As ValueTask
+                _ctx.ThrowIfCancellationRequested()
+                Return New ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor))
+            End Function).ConfigureAwait(False)
+        Catch ex As OperationCanceledException
+            ' Swallow cancellation, return false
+            Return False
+        End Try
 
         Return Not cancellationTokenSource.IsCancellationRequested
 
@@ -64,15 +69,16 @@ Public Class Compactor : Implements IDisposable, ICompressor
             Await pauseSemaphore.WaitAsync(_ctx).ConfigureAwait(False)
             pauseSemaphore.Release()
         Catch ex As OperationCanceledException
+            Throw
             Return
         End Try
 
-        If _ctx.IsCancellationRequested Then Return
+        _ctx.ThrowIfCancellationRequested()
 
         Dim res = WOFCompressFile(details.FileName)
         Interlocked.Add(totalProcessedBytes, details.UncompressedSize)
-
         progressMonitor?.Report(New CompressionProgress(totalProcessedBytes / totalFilesSize * 100, details.FileName))
+
 
     End Function
 
