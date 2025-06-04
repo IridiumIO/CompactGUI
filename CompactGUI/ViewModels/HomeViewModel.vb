@@ -113,6 +113,11 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
             Dim res = Await newFolder.AnalyseFolderAsync
             If TypeOf (newFolder) Is SteamFolder Then
                 Await CType(newFolder, SteamFolder).GetWikiResults()
+            Else
+                If SettingsHandler.AppSettings.EstimateCompressionForNonSteamFolders Then
+                    Await newFolder.GetEstimatedCompression()
+                End If
+
             End If
 
             If _watcher.WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
@@ -138,6 +143,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
         If folder Is Nothing Then Return
         Dim index = Folders.IndexOf(folder)
+        folder.CancelEstimation()
         Folders.Remove(folder)
 
         If SelectedFolder IsNot Nothing OrElse Folders.Count = 0 Then Return

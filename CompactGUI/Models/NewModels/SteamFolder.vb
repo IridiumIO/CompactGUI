@@ -25,10 +25,10 @@ Public Class SteamFolder : Inherits CompressableFolder
 
 
 
-    Public Property WikiCompressionResults As WikiCompressionResults
-    Public Property WikiPoorlyCompressedFiles As New List(Of String)
+    Public Overloads Property WikiCompressionResults As WikiCompressionResults
+    Public Overloads Property WikiPoorlyCompressedFiles As New List(Of String)
 
-    Public ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
+    Public Overloads ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
         Get
             If AnalysisResults Is Nothing OrElse WikiPoorlyCompressedFiles Is Nothing Then Return 0
             Return AnalysisResults.Where(Function(fl) WikiPoorlyCompressedFiles.Contains(New FileInfo(fl.FileName).Extension)).Count

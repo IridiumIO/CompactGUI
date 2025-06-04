@@ -118,7 +118,7 @@ Public Class Compactor : Implements IDisposable, ICompressor
 
         Parallel.ForEach(ax.FileCompressionDetailsList, Sub(fl)
                                                             Dim ft = fl.FileInfo
-                                                            If Not excludedFileExtensions.Contains(ft.Extension) AndAlso
+                                                            If Not (excludedFileExtensions.Contains(ft.Extension) OrElse excludedFileExtensions.Contains(fl.FileName)) AndAlso
                                                                     ft.Length > clusterSize AndAlso
                                                                     fl.CompressionMode <> wofCompressionAlgorithm Then
                                                                 _filesList.Add((New FileDetails With {.FileName = fl.FileName, .UncompressedSize = fl.UncompressedSize}))

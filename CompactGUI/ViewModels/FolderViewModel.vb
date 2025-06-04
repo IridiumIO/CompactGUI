@@ -6,10 +6,11 @@ Imports CommunityToolkit.Mvvm.Input
 
 Imports Wpf.Ui.Controls
 
+<PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class FolderViewModel : Inherits ObservableObject
 
 
-
+    Public Event PropertyChanged As PropertyChangedEventHandler
 
     Public Property Folder As CompressableFolder
 
@@ -53,6 +54,7 @@ Public Class FolderViewModel : Inherits ObservableObject
             .FirstOrDefault()
         End Get
     End Property
+
 
     Private _watcher As Watcher.Watcher
     Private ReadOnly _snackbarService As CustomSnackBarService

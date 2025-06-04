@@ -10,6 +10,8 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="EasyCompressor.LZ4" Version="2.1.0" />
+    <PackageReference Include="EasyCompressor.Snappier" Version="2.1.0" />
     <PackageReference Include="Fody" Version="6.9.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
