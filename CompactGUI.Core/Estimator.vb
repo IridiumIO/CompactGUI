@@ -14,6 +14,9 @@ Public Class Estimator
     Private Const ErrorMargin As Single = 0.1
     Private Const SampleSize As Single = 100 '0.25 * (ZScore / ErrorMargin) ^ 2
 
+    Private DiskClusterSize As Integer = 4096
+    Private IsHDD As Boolean = False
+
     Public Sub New()
     End Sub
 
@@ -27,14 +30,15 @@ Public Class Estimator
     End Class
 
 
-    Public Function EstimateCompressability(analysisResult As List(Of AnalysedFileDetails), Optional MaxParallelism As Integer = 1, Optional clusterSize As Integer = 4096, Optional cancellationToken As Threading.CancellationToken = Nothing) As List(Of (AnalysedFile As AnalysedFileDetails, CompressionRatio As Single))
+    Public Function EstimateCompressability(analysisResult As List(Of AnalysedFileDetails), ishdd As Boolean, Optional MaxParallelism As Integer = 1, Optional clusterSize As Integer = 4096, Optional cancellationToken As Threading.CancellationToken = Nothing) As List(Of (AnalysedFile As AnalysedFileDetails, CompressionRatio As Single))
 
+        DiskClusterSize = clusterSize
         Dim _filesList As New Concurrent.ConcurrentBag(Of FileDetails)
         If MaxParallelism <= 0 Then MaxParallelism = Environment.ProcessorCount
 
+        Me.IsHDD = ishdd
+
         Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
-
-
 
         Parallel.ForEach(analysisResult, parallelOptions:=paraOptions, Sub(fl)
 
@@ -79,6 +83,9 @@ Public Class Estimator
     Public Function EstimateCompressabilityLZ4(path As String, filesize As Long, Optional cancellationToken As Threading.CancellationToken = Nothing) As Double
         Try
             Using fs As FileStream = File.OpenRead(path)
+                If IsHDD Then
+                    Return EstimateCompressabilityHDD(fs, filesize, Function(output) LZ4Stream.Encode(output, LZ4Level.L00_FAST, 0, True), cancellationToken)
+                End If
                 Return EstimateCompressability(fs, filesize, Function(output) LZ4Stream.Encode(output, LZ4Level.L00_FAST, 0, True), cancellationToken)
             End Using
         Catch cancelledEx As OperationCanceledException
@@ -128,6 +135,63 @@ Public Class Estimator
                     compressionStream.Write(buffer, 0, bytesRead)
                     totalWritten += bytesRead
                 Next
+            End If
+        End Using
+
+        Return Math.Min(compressed.Length / Math.Max(totalWritten, 1), 1.0)
+    End Function
+
+    'Private Function EstimateCompressabilityHDD(input As FileStream, fileSize As Long, compressionFactory As CompressionStreamFactory, Optional cancellationToken As Threading.CancellationToken = Nothing) As Double
+    '    Dim MiddleChunkSize As Integer = SampleSize * BlockSize ' 10KB
+
+    '    Dim totalWritten As Long = 0
+    '    Dim compressed = New MemoryStream()
+
+    '    Using compressionStream As Stream = compressionFactory(compressed)
+    '        ' If file is smaller than 10KB, just use the whole file
+    '        Dim chunkSize As Integer = CInt(Math.Min(MiddleChunkSize, fileSize))
+    '        Dim middleStart As Long = Math.Max(0, (fileSize \ 2) - (chunkSize \ 2))
+
+    '        Dim buffer(chunkSize - 1) As Byte
+    '        input.Position = middleStart
+    '        Dim bytesRead As Integer = input.Read(buffer, 0, chunkSize)
+
+    '        If cancellationToken <> Nothing AndAlso cancellationToken.IsCancellationRequested Then
+    '            Throw New OperationCanceledException(cancellationToken)
+    '        End If
+
+    '        If bytesRead > 0 Then
+    '            compressionStream.Write(buffer, 0, bytesRead)
+    '            totalWritten += bytesRead
+    '        End If
+    '    End Using
+
+    '    Return Math.Min(compressed.Length / Math.Max(totalWritten, 1), 1.0)
+    'End Function
+
+    Private Function EstimateCompressabilityHDD(input As FileStream, fileSize As Long, compressionFactory As CompressionStreamFactory, Optional cancellationToken As Threading.CancellationToken = Nothing) As Double
+        Dim NumClusters As Integer = SampleSize ' or any small number you want to sample
+        Dim clusterSize As Integer = DiskClusterSize
+
+        Dim middleCluster As Long = (fileSize \ 2) \ clusterSize
+        Dim alignedStart As Long = middleCluster * clusterSize
+        Dim chunkSize As Integer = CInt(Math.Min(clusterSize * NumClusters, fileSize - alignedStart))
+
+        Dim totalWritten As Long = 0
+        Dim compressed = New MemoryStream()
+
+        Using compressionStream As Stream = compressionFactory(compressed)
+            Dim buffer(chunkSize - 1) As Byte
+            input.Position = alignedStart
+            Dim bytesRead As Integer = input.Read(buffer, 0, chunkSize)
+
+            If cancellationToken <> Nothing AndAlso cancellationToken.IsCancellationRequested Then
+                Throw New OperationCanceledException(cancellationToken)
+            End If
+
+            If bytesRead > 0 Then
+                compressionStream.Write(buffer, 0, bytesRead)
+                totalWritten += bytesRead
             End If
         End Using
 

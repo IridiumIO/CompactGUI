@@ -177,7 +177,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         Try
             Dim sw As New Stopwatch
             sw.Start()
-            estimatedData = Await Task.Run(Function() estimator.EstimateCompressability(AnalysisResults.ToList, GetThreadCount, GetClusterSize(FolderName), CancellationTokenSource.Token))
+            estimatedData = Await Task.Run(Function() estimator.EstimateCompressability(AnalysisResults.ToList, IsHDD, GetThreadCount, GetClusterSize(FolderName), CancellationTokenSource.Token))
             sw.Stop()
             Debug.WriteLine($"Estimated compression took {sw.ElapsedMilliseconds}ms")
         Catch ex As AggregateException
@@ -256,6 +256,10 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         End Try
     End Function
 
+    Private Function IsHDD() As Boolean
+        Dim HDDType As DiskDetector.Models.HardwareType = GetDiskType()
+        Return HDDType = DiskDetector.Models.HardwareType.Hdd
+    End Function
 
     Protected Overridable Function GetSkipList() As String()
         Dim exclist As String() = Array.Empty(Of String)()
