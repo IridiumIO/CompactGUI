@@ -29,32 +29,43 @@
 
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10"
-                                         BorderBrush="Transparent" CompressionMode="XPRESS 4K"
-                                         EstimatedVisibility="Visible" IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         BorderBrush="Transparent" CompressionMode="XPRESS 4K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
+                                         IsEstimating="{Binding Folder.IsGettingEstimate}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionPercent}"
                                          Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10"
-                                         BorderBrush="Transparent" CompressionMode="XPRESS 8K"
-                                         EstimatedVisibility="Visible" IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         BorderBrush="Transparent" CompressionMode="XPRESS 8K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
+                                         IsEstimating="{Binding Folder.IsGettingEstimate}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionPercent}"
                                          Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10"
-                                         BorderBrush="Transparent" CompressionMode="XPRESS 16K"
-                                         EstimatedVisibility="Visible" IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         BorderBrush="Transparent" CompressionMode="XPRESS 16K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
+                                         IsEstimating="{Binding Folder.IsGettingEstimate}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionPercent}"
                                          Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10"
-                                         BorderBrush="Transparent" CompressionMode="LZX"
-                                         EstimatedVisibility="Visible" IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         BorderBrush="Transparent" CompressionMode="LZX" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
+                                         IsEstimating="{Binding Folder.IsGettingEstimate}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.LZX.CompressionPercent}"
                                          Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" />
+
+            <WrapPanel.ToolTip>
+                <ToolTip MaxWidth="500">
+                    <TextBlock TextAlignment="Left">
+                        <Bold>For Steam Games:</Bold> estimate is based on database results
+                        <LineBreak />
+                        <LineBreak />
+                        <Bold>For Non-Steam Folders:</Bold> estimate is calculated by block analysis.<LineBreak />
+                        If estimation is disabled, this will always show 0%</TextBlock>
+                </ToolTip>
+            </WrapPanel.ToolTip>
 
         </WrapPanel>
 
@@ -65,8 +76,8 @@
                           FontSize="18" />
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
                 <CheckBox x:Name="UiChkSkipPoorlyCompressed"
-                          Content="Skip poorly compressed filetypes"
-                          Width="260"
+                          Content="Skip file types specified in settings"
+                          Width="330"
                           FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" />
                 <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
@@ -85,10 +96,28 @@
             </WrapPanel>
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
                 <CheckBox x:Name="UiChkSkipUserPoorlyCompressed"
-                          Content="Skip user-submitted filetypes"
-                          Width="260"
+                          Width="330"
                           FontSize="16"
-                          IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}" />
+                          IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}">
+                    <TextBlock>
+                        Skip file types likely to compress poorly<Run Text=" " />
+                        <InlineUIContainer>
+                            <TextBlock Text="(?)"
+                                       Cursor="Hand" Foreground="#FF98A9B9" TextDecorations="Underline">
+                                <TextBlock.ToolTip>
+                                    <ToolTip MaxWidth="450">
+                                        <TextBlock TextAlignment="Left">
+                                            <Bold>For Steam Games:</Bold>
+                                            skips files based on database results<LineBreak />
+                                            <LineBreak />
+                                            <Bold>For Non-Steam Folders:</Bold>
+                                            skips files based on compression estimate</TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </InlineUIContainer>
+                    </TextBlock>
+                </CheckBox>
                 <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
                            FontSize="14" Foreground="#FF98A9B9">
                     <TextBlock.Style>
