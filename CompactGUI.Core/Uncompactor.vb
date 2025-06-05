@@ -54,7 +54,7 @@ Public Class Uncompactor : Implements ICompressor, IDisposable
         Try
             Using fs As FileStream = New FileStream(path, FileMode.Open)
                 Dim hDevice = fs.SafeFileHandle.DangerousGetHandle
-                Dim res = DeviceIoControl(hDevice, FSCTL_DELETE_EXTERNAL_BACKING, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero)
+                Dim res = WOFHelper.DeviceIoControl(hDevice, FSCTL_DELETE_EXTERNAL_BACKING, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero)
                 Return res
             End Using
         Catch ex As Exception

@@ -1,9 +1,12 @@
 ﻿Imports System.IO
 Imports System.IO.Compression
+Imports System.Runtime.InteropServices
 
 Imports K4os.Compression.LZ4
 
 Imports K4os.Compression.LZ4.Streams
+
+Imports Microsoft.Win32.SafeHandles
 
 
 'https://unix.stackexchange.com/questions/155901/estimate-compressibility-of-file
@@ -29,6 +32,7 @@ Public Class Estimator
         Public CompressionRatio As Single
     End Class
 
+    Public Shared IsAlternate As Boolean = False
 
     Public Function EstimateCompressability(analysisResult As List(Of AnalysedFileDetails), ishdd As Boolean, Optional MaxParallelism As Integer = 1, Optional clusterSize As Integer = 4096, Optional cancellationToken As Threading.CancellationToken = Nothing) As List(Of (AnalysedFile As AnalysedFileDetails, CompressionRatio As Single))
 
@@ -38,25 +42,36 @@ Public Class Estimator
 
         Me.IsHDD = ishdd
 
+
+        'Filter the files based on the cluster size and sort them by cluster location if it's an HDD to minimize seek time
+        Dim filteredList = analysisResult.Where(Function(f) f.UncompressedSize > clusterSize)
+
+        Dim sw = Stopwatch.StartNew()
+
+        If ishdd Then filteredList = filteredList.OrderBy(Function(f) GetFirstLcn(f.FileName))
+        Dim finalList = filteredList.ToList
+        sw.Stop()
+        Debug.WriteLine($"Filtered and sorted {finalList.Count} files in {sw.ElapsedMilliseconds} ms")
+        If IsAlternate Then Debug.WriteLine("Alternate mode enabled, using different handle method.")
+
+
         Dim paraOptions As New ParallelOptions With {.MaxDegreeOfParallelism = MaxParallelism}
 
-        Parallel.ForEach(analysisResult, parallelOptions:=paraOptions, Sub(fl)
+        Parallel.ForEach(finalList, parallelOptions:=paraOptions, Sub(fl)
+                                                                      cancellationToken.ThrowIfCancellationRequested()
 
-                                                                           If fl.UncompressedSize > clusterSize Then
-                                                                               If cancellationToken <> Nothing AndAlso cancellationToken.IsCancellationRequested Then
-                                                                                   Throw New OperationCanceledException(cancellationToken)
-                                                                               End If
-                                                                               Dim estimatedRatio = EstimateCompressabilityLZ4(fl.FileName, fl.UncompressedSize, cancellationToken)
+                                                                      Dim estimatedRatio = EstimateCompressabilityLZ4(fl.FileName, fl.UncompressedSize, cancellationToken)
 
-                                                                               _filesList.Add((New FileDetails With {.AnalysedFile = fl, .CompressionRatio = estimatedRatio}))
-                                                                           End If
-                                                                       End Sub)
+                                                                      _filesList.Add((New FileDetails With {.AnalysedFile = fl, .CompressionRatio = estimatedRatio}))
+                                                                  End Sub)
 
         Dim retList As New List(Of (AnalysedFile As AnalysedFileDetails, CompressionRatio As Single))
 
         For Each item In _filesList
             retList.Add((item.AnalysedFile, item.CompressionRatio))
         Next
+
+        IsAlternate = Not IsAlternate ' Toggle the alternate mode for next run
 
         Return retList
 
@@ -114,9 +129,7 @@ Public Class Estimator
                 Dim bytesRead As Integer = input.Read(buffer, 0, BlockSize)
 
                 While bytesRead > 0
-                    If cancellationToken <> Nothing AndAlso cancellationToken.IsCancellationRequested Then
-                        Throw New OperationCanceledException(cancellationToken)
-                    End If
+                    cancellationToken.ThrowIfCancellationRequested()
                     compressionStream.Write(buffer, 0, bytesRead)
                     totalWritten += bytesRead
                     bytesRead = input.Read(buffer, 0, BlockSize)
@@ -127,9 +140,7 @@ Public Class Estimator
                 Dim stepSize As Long = BlockSize * (totalBlocks \ samplesNeeded)
                 Dim buffer(BlockSize - 1) As Byte
                 For i As Integer = 0 To samplesNeeded - 1
-                    If cancellationToken <> Nothing AndAlso cancellationToken.IsCancellationRequested Then
-                        Throw New OperationCanceledException(cancellationToken)
-                    End If
+                    cancellationToken.ThrowIfCancellationRequested()
                     input.Position = stepSize * i
                     Dim bytesRead As Integer = input.Read(buffer, 0, BlockSize)
                     compressionStream.Write(buffer, 0, bytesRead)
@@ -141,33 +152,6 @@ Public Class Estimator
         Return Math.Min(compressed.Length / Math.Max(totalWritten, 1), 1.0)
     End Function
 
-    'Private Function EstimateCompressabilityHDD(input As FileStream, fileSize As Long, compressionFactory As CompressionStreamFactory, Optional cancellationToken As Threading.CancellationToken = Nothing) As Double
-    '    Dim MiddleChunkSize As Integer = SampleSize * BlockSize ' 10KB
-
-    '    Dim totalWritten As Long = 0
-    '    Dim compressed = New MemoryStream()
-
-    '    Using compressionStream As Stream = compressionFactory(compressed)
-    '        ' If file is smaller than 10KB, just use the whole file
-    '        Dim chunkSize As Integer = CInt(Math.Min(MiddleChunkSize, fileSize))
-    '        Dim middleStart As Long = Math.Max(0, (fileSize \ 2) - (chunkSize \ 2))
-
-    '        Dim buffer(chunkSize - 1) As Byte
-    '        input.Position = middleStart
-    '        Dim bytesRead As Integer = input.Read(buffer, 0, chunkSize)
-
-    '        If cancellationToken <> Nothing AndAlso cancellationToken.IsCancellationRequested Then
-    '            Throw New OperationCanceledException(cancellationToken)
-    '        End If
-
-    '        If bytesRead > 0 Then
-    '            compressionStream.Write(buffer, 0, bytesRead)
-    '            totalWritten += bytesRead
-    '        End If
-    '    End Using
-
-    '    Return Math.Min(compressed.Length / Math.Max(totalWritten, 1), 1.0)
-    'End Function
 
     Private Function EstimateCompressabilityHDD(input As FileStream, fileSize As Long, compressionFactory As CompressionStreamFactory, Optional cancellationToken As Threading.CancellationToken = Nothing) As Double
         Dim NumClusters As Integer = SampleSize ' or any small number you want to sample
@@ -198,6 +182,102 @@ Public Class Estimator
         Return Math.Min(compressed.Length / Math.Max(totalWritten, 1), 1.0)
     End Function
 
+    Public Function GetFirstLcn(filePath As String) As Long
 
+        Dim handle As SafeFileHandle = File.OpenHandle(filePath)
+
+        If handle.IsInvalid Then Throw New IOException("Failed to open file handle.")
+
+
+        Dim inBuffer As NtfsInterop.STARTING_VCN_INPUT_BUFFER
+        inBuffer.StartingVcn = 0
+        Dim inBufferSize = Marshal.SizeOf(inBuffer)
+        Dim inBufferPtr = Marshal.AllocHGlobal(inBufferSize)
+        Marshal.StructureToPtr(inBuffer, inBufferPtr, False)
+
+        Dim outBufferSize = 4096
+        Dim outBufferPtr = Marshal.AllocHGlobal(outBufferSize)
+        Dim bytesReturned As Integer = 0
+
+        Try
+            Dim result = NtfsInterop.DeviceIoControl(
+                handle,
+                NtfsInterop.FSCTL_GET_RETRIEVAL_POINTERS,
+                inBufferPtr,
+                inBufferSize,
+                outBufferPtr,
+                outBufferSize,
+                bytesReturned,
+                IntPtr.Zero
+            )
+
+            'Probably errors because the file is empty
+            If Not result Then Return Long.MaxValue
+
+
+            ' Marshal the output buffer to get the first LCN
+            Dim extentOffset As Integer = Marshal.OffsetOf(Of RETRIEVAL_POINTERS_BUFFER)("Extents").ToInt32()
+            Dim lcn As Long = Marshal.ReadInt64(outBufferPtr, extentOffset + 8)
+            Return lcn
+
+        Finally
+            Marshal.FreeHGlobal(inBufferPtr)
+            Marshal.FreeHGlobal(outBufferPtr)
+            handle.Close()
+        End Try
+    End Function
 
 End Class
+
+Friend Module NtfsInterop
+    Public Const FSCTL_GET_RETRIEVAL_POINTERS As UInteger = &H90073
+    Public Const OPEN_EXISTING As Integer = 3
+    Public Const FILE_FLAG_BACKUP_SEMANTICS As Integer = &H2000000
+    Public Const FILE_SHARE_READ As Integer = 1
+    Public Const FILE_SHARE_WRITE As Integer = 2
+    Public Const GENERIC_READ As Integer = &H80000000
+
+    <DllImport("kernel32.dll", SetLastError:=True, CharSet:=CharSet.Unicode)>
+    Public Function CreateFile(
+        lpFileName As String,
+        dwDesiredAccess As Integer,
+        dwShareMode As Integer,
+        lpSecurityAttributes As IntPtr,
+        dwCreationDisposition As Integer,
+        dwFlagsAndAttributes As Integer,
+        hTemplateFile As IntPtr
+    ) As SafeFileHandle
+    End Function
+
+    <DllImport("kernel32.dll", SetLastError:=True)>
+    Public Function DeviceIoControl(
+        hDevice As SafeFileHandle,
+        dwIoControlCode As UInteger,
+        lpInBuffer As IntPtr,
+        nInBufferSize As Integer,
+        lpOutBuffer As IntPtr,
+        nOutBufferSize As Integer,
+        ByRef lpBytesReturned As Integer,
+        lpOverlapped As IntPtr
+    ) As Boolean
+    End Function
+
+
+    <StructLayout(LayoutKind.Sequential)>
+    Public Structure STARTING_VCN_INPUT_BUFFER
+        Public StartingVcn As Long
+    End Structure
+
+    <StructLayout(LayoutKind.Sequential)>
+    Public Structure RETRIEVAL_POINTERS_BUFFER
+        Public ExtentCount As Integer
+        Public StartingVcn As Long
+        Public Extents As LCN_EXTENT ' This is actually an array, but we only need the first
+    End Structure
+
+    <StructLayout(LayoutKind.Sequential)>
+    Public Structure LCN_EXTENT
+        Public NextVcn As Long
+        Public Lcn As Long
+    End Structure
+End Module
