@@ -1,6 +1,8 @@
 ﻿Imports System.IO
 Imports System.Threading
 
+Imports Microsoft.Win32.SafeHandles
+
 Public Class Uncompactor : Implements ICompressor, IDisposable
 
 
@@ -52,9 +54,8 @@ Public Class Uncompactor : Implements ICompressor, IDisposable
     Private Function WOFDecompressFile(path As String)
 
         Try
-            Using fs As FileStream = New FileStream(path, FileMode.Open)
-                Dim hDevice = fs.SafeFileHandle.DangerousGetHandle
-                Dim res = WOFHelper.DeviceIoControl(hDevice, FSCTL_DELETE_EXTERNAL_BACKING, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero)
+            Using fs As SafeFileHandle = File.OpenHandle(path)
+                Dim res = WOFHelper.DeviceIoControl(fs, FSCTL_DELETE_EXTERNAL_BACKING, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero)
                 Return res
             End Using
         Catch ex As Exception

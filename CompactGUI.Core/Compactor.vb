@@ -2,6 +2,8 @@
 Imports System.Runtime.InteropServices
 Imports System.Threading
 
+Imports Microsoft.Win32.SafeHandles
+
 
 Public Class Compactor : Implements IDisposable, ICompressor
 
@@ -103,8 +105,8 @@ Public Class Compactor : Implements IDisposable, ICompressor
     Private Function WOFCompressFile(path As String) As Integer
 
         Try
-            Using fs As New FileStream(path, FileMode.Open)
-                Return WofSetFileDataLocation(fs.SafeFileHandle.DangerousGetHandle(), WOF_PROVIDER_FILE, compressionInfoPtr, compressionInfoSize)
+            Using fs As SafeFileHandle = File.OpenHandle(path)
+                Return WofSetFileDataLocation(fs, WOF_PROVIDER_FILE, compressionInfoPtr, compressionInfoSize)
             End Using
         Catch ex As Exception
             Debug.WriteLine(ex.Message)
