@@ -21,9 +21,11 @@ Public Class WikiService : Implements IWikiService
         If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
 
         Dim httpClient As New HttpClient
-        Dim res = Await httpClient.GetStreamAsync(dlPath)
 
         Try
+
+            Dim res = Await httpClient.GetStreamAsync(dlPath)
+
             Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
                 Await res.CopyToAsync(fs)
             End Using
@@ -31,8 +33,11 @@ Public Class WikiService : Implements IWikiService
         Catch ex As IO.IOException
             Debug.WriteLine("Could not update JSON file: file is in use.")
             Return
+        Catch ex As HttpRequestException
+            Debug.WriteLine($"Unable to reach endpoint. Likely no internet connection")
+            Return
         Finally
-            httpClient.Dispose()
+            HttpClient.Dispose()
         End Try
 
 
