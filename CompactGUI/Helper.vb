@@ -80,7 +80,7 @@ Module Helper
         Dim invalidMessages As New List(Of FolderVerificationResult)
 
         For Each folder In folderPaths
-            Dim validation = Core.verifyFolder(folder)
+            Dim validation = Core.SharedMethods.VerifyFolder(folder)
 
             If validation <> FolderVerificationResult.Valid Then
                 invalidFolders.Add(folder)

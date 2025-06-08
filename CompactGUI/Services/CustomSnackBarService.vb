@@ -80,7 +80,7 @@ Public Class CustomSnackBarService
     End Sub
 
     Public Sub ShowSubmittedToWiki(steamsubmitdata As SteamSubmissionData, compressionMode As Integer)
-        Show("Submitted to wiki", $"UID: {steamsubmitdata.UID}{vbCrLf}Game: {steamsubmitdata.GameName}{vbCrLf}SteamID: {steamsubmitdata.SteamID}{vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
+        Show("Submitted to wiki", $"UID: {steamsubmitdata.UID}{vbCrLf}Game: {steamsubmitdata.GameName}{vbCrLf}SteamID: {steamsubmitdata.SteamID}{vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFHelper.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
     End Sub
 
 

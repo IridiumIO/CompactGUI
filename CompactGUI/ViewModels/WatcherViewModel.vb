@@ -72,7 +72,7 @@ Public Class WatcherViewModel : Inherits ObservableObject
         If folderSelector.FolderName = "" Then Return
         path = folderSelector.FolderName
 
-        Dim validFolder = Core.verifyFolder(path)
+        Dim validFolder = Core.SharedMethods.VerifyFolder(path)
         If validFolder <> Core.SharedMethods.FolderVerificationResult.Valid Then
 
             _snackbarService.ShowInvalidFoldersMessage(New List(Of String) From {path}, New List(Of Core.SharedMethods.FolderVerificationResult) From {validFolder})

@@ -5,6 +5,7 @@ Imports System.Threading
 Imports CommunityToolkit.Mvvm.ComponentModel
 
 Imports CompactGUI.Core
+Imports CompactGUI.Core.WOFHelper
 
 Imports PropertyChanged
 
@@ -126,7 +127,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
         Analyser = New Analyser(FolderName)
 
-        If Not Analyser.HasDirectoryWritePermission(FolderName) Then
+        If Not Core.SharedMethods.HasDirectoryWritePermission(FolderName) Then
             FolderActionState = ActionState.Idle
             Return -1
         End If
@@ -177,7 +178,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         Try
             Dim sw As New Stopwatch
             sw.Start()
-            estimatedData = Await Task.Run(Function() estimator.EstimateCompressability(AnalysisResults.ToList, IsHDD, GetThreadCount, GetClusterSize(FolderName), CancellationTokenSource.Token))
+            estimatedData = Await Task.Run(Function() estimator.EstimateCompression(AnalysisResults.ToList, IsHDD, GetThreadCount, Core.SharedMethods.GetClusterSize(FolderName), CancellationTokenSource.Token))
             sw.Stop()
             Debug.WriteLine($"Estimated compression took {sw.ElapsedMilliseconds}ms")
         Catch ex As AggregateException

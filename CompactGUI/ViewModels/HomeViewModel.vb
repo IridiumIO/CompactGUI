@@ -188,7 +188,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
         Await _watcher.DisableBackgrounding()
 
         Compressing = True
-        Core.PreventSleep()
+        Core.SharedMethods.PreventSleep()
         Dim tasks As New List(Of Task)()
         Dim foldersToCompress = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).ToList
         For Each folder In foldersToCompress
@@ -220,7 +220,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
             AddOrUpdateFolderWatcher(folder)
         Next
 
-        Core.RestoreSleep()
+        Core.SharedMethods.RestoreSleep()
 
         Await _watcher.EnableBackgrounding()
     End Function

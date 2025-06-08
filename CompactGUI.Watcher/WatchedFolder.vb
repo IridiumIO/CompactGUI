@@ -2,7 +2,6 @@
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 
-
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class WatchedFolder : Inherits ObservableObject
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>CompactGUI.Core</RootNamespace>
+    <RootNamespace>CompactGUI.CoreVB</RootNamespace>
     <TargetFramework>net9.0-windows</TargetFramework>
   </PropertyGroup>
 

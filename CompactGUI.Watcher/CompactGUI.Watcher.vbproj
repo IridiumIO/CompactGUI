@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.vbproj" />
+    <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.csproj" />
   </ItemGroup>
 
 </Project>
