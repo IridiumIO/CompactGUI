@@ -145,7 +145,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         If containsCompressedFiles OrElse IsFreshlyCompressed Then : FolderActionState = ActionState.Results
         Else : FolderActionState = ActionState.Idle
         End If
-        PoorlyCompressedFiles = Await Analyser.GetPoorlyCompressedExtensions()
+        PoorlyCompressedFiles = Analyser.GetPoorlyCompressedExtensions()
 
         Return 0
 

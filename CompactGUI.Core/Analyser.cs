@@ -47,7 +47,7 @@ public class Analyser
             Debug.WriteLine(ex.Message);
             return null;
         }
-      
+
 
 
     }
@@ -74,47 +74,27 @@ public class Analyser
     }
 
 
-    public async Task<List<ExtensionResult>> GetPoorlyCompressedExtensions()
+    public List<ExtensionResult> GetPoorlyCompressedExtensions()
     {
+        // Only use PLINQ if the list is large enough to benefit from parallel processing
+        IEnumerable<AnalysedFileDetails> query = FileCompressionDetailsList.Count <= 10000
+            ? FileCompressionDetailsList
+            : FileCompressionDetailsList.AsParallel();
 
-        var extRes = new ConcurrentDictionary<string, ExtensionResult>();
-
-        await Task.Run(() =>
-        {
-            Parallel.ForEach(
-            FileCompressionDetailsList, fl =>
-            {
-                if (fl.UncompressedSize == 0) return;
-
-                string ext = Path.GetExtension(fl.FileName); //should probably use ToLowerInvariant() here
-
-                extRes.AddOrUpdate(
-                    ext,
-                    key => new ExtensionResult
-                    {
-                        Extension = ext,
-                        TotalFiles = 1,
-                        CompressedBytes = fl.CompressedSize,
-                        UncompressedBytes = fl.UncompressedSize
-                    },
-                    (key, existing) => new ExtensionResult
-                    {
-                        Extension = ext,
-                        TotalFiles = existing.TotalFiles + 1,
-                        CompressedBytes = existing.CompressedBytes + fl.CompressedSize,
-                        UncompressedBytes = existing.UncompressedBytes + fl.UncompressedSize
-                    });
-            });
-        });
-
-        return extRes.Values.Where(r => r.CRatio > 0.95).ToList();
-
+        return query
+                .Where(fl => fl.UncompressedSize > 0)
+                .GroupBy(fl => Path.GetExtension(fl.FileName), StringComparer.OrdinalIgnoreCase)
+                .Select(g => new ExtensionResult
+                {
+                    Extension = g.Key,
+                    TotalFiles = g.Count(),
+                    CompressedBytes = g.Sum(fl => fl.CompressedSize),
+                    UncompressedBytes = g.Sum(fl => fl.UncompressedSize)
+                })
+                .Where(r => r.CRatio > 0.95)
+                .ToList();
 
     }
-
-
-
-
 
 }
 
