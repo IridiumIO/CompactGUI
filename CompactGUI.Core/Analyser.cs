@@ -97,12 +97,12 @@ public class Analyser
                         CompressedBytes = fl.CompressedSize,
                         UncompressedBytes = fl.UncompressedSize
                     },
-                    (key, existing) =>
+                    (key, existing) => new ExtensionResult
                     {
-                        existing.TotalFiles++;
-                        existing.CompressedBytes += fl.CompressedSize;
-                        existing.UncompressedBytes += fl.UncompressedSize;
-                        return existing;
+                        Extension = ext,
+                        TotalFiles = existing.TotalFiles + 1,
+                        CompressedBytes = existing.CompressedBytes + fl.CompressedSize,
+                        UncompressedBytes = existing.UncompressedBytes + fl.UncompressedSize
                     });
             });
         });
