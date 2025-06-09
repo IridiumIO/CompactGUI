@@ -31,9 +31,8 @@ public class Analyser
                 .AsParallel()
                 .WithCancellation(cancellationToken)
                 .Select(AnalyseFile)
-                .Where(details => details != null)
-                .Cast<AnalysedFileDetails>()
-                .ToList<AnalysedFileDetails>();
+                .OfType<AnalysedFileDetails>()
+                .ToList();
 
             CompressedBytes = fileDetails.Sum(f => f.CompressedSize);
             UncompressedBytes = fileDetails.Sum(f => f.UncompressedSize);

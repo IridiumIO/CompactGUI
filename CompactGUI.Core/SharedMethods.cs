@@ -94,8 +94,8 @@ public static class SharedMethods
     public static void PreventSleep()
     {
         PInvoke.SetThreadExecutionState(
-            EXECUTION_STATE.ES_CONTINUOUS | 
-            EXECUTION_STATE.ES_SYSTEM_REQUIRED | 
+            EXECUTION_STATE.ES_CONTINUOUS |
+            EXECUTION_STATE.ES_SYSTEM_REQUIRED |
             EXECUTION_STATE.ES_DISPLAY_REQUIRED);
     }
 
@@ -116,29 +116,33 @@ public static class SharedMethods
 
 
 
-    public static List<string> AsShortPathNames(this IEnumerable<string> filesList)
+    public static IEnumerable<string> AsShortPathNames(this IEnumerable<string> filesList)
     {
-        return filesList
-            .Select(file => (file.Length >= 255 ? GetShortPath(file) ?? file : file))
-            .ToList();
+        return filesList.Select(file => (file.Length >= 255 ? GetShortPath(file) ?? file : file));
     }
 
 
-    private static string? GetShortPath(string filePath)
+    private static string GetShortPath(string filePath)
     {
-        if (string.IsNullOrWhiteSpace(filePath)) return null;
+        const string LongPathPrefix = @"\\?\";
+        ReadOnlySpan<char> longPathPrefixSpan = LongPathPrefix;
 
-        bool addPrefix = filePath.Length >= 255 && !filePath.StartsWith(@"\\?\");
-        if (addPrefix) filePath = @"\\?\" + filePath;
+        if (string.IsNullOrWhiteSpace(filePath)) return filePath;
+        ReadOnlySpan<char> filePathSpan = filePath;
+
+        bool addPrefix = filePathSpan.Length >= 255 && !filePathSpan.StartsWith(longPathPrefixSpan, StringComparison.Ordinal);
+        string pathToUse = addPrefix ? LongPathPrefix + filePath : filePath;
 
         Span<char> shortPath = stackalloc char[1024];
-        uint res = PInvoke.GetShortPathName(filePath, shortPath);
-        if (res == 0) return null;
+        uint res = PInvoke.GetShortPathName(pathToUse, shortPath);
+        if (res == 0) return filePath;
 
-        var result = new string(shortPath.Slice(0, (int)res));
-        return addPrefix && result.StartsWith(@"\\?\") ? result[4..] : result;
-
+        ReadOnlySpan<char> resultSpan = shortPath[..(int)res];
+        return addPrefix && resultSpan.StartsWith(longPathPrefixSpan, StringComparison.Ordinal)
+            ? resultSpan[longPathPrefixSpan.Length..].ToString()
+            : resultSpan.ToString();
     }
+
 
 
     public static unsafe uint GetClusterSize(string folderPath)
@@ -163,7 +167,7 @@ public static class SharedMethods
     {
         uint highOrder;
         uint lowOrder = PInvoke.GetCompressedFileSize(file, &highOrder);
-        if (lowOrder == 0xFFFFFFFF && (Marshal.GetLastWin32Error() != 0)) return -1;    
+        if (lowOrder == 0xFFFFFFFF && (Marshal.GetLastWin32Error() != 0)) return -1;
         return ((long)highOrder << 32) | lowOrder;
     }
 
@@ -204,7 +208,7 @@ public static class SharedMethods
             return writeAllowed && !writeDenied;
 
         }
-        catch (UnauthorizedAccessException) { return false;}
+        catch (UnauthorizedAccessException) { return false; }
     }
 
 

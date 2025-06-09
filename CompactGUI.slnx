@@ -8,6 +8,7 @@
   </Configurations>
   <Project Path="CompactGUI.Core/CompactGUI.Core.csproj" />
   <Project Path="CompactGUI.CoreVB/CompactGUI.CoreVB.vbproj" />
+  <Project Path="CompactGUI.TestingGround/CompactGUI.TestingGround.csproj" Id="279814db-5112-4c5f-b013-df80d73bcf37" />
   <Project Path="CompactGUI.Watcher/CompactGUI.Watcher.vbproj">
     <BuildDependency Project="CompactGUI.CoreVB/CompactGUI.CoreVB.vbproj" />
   </Project>
