@@ -392,3 +392,20 @@ Public Class FolderActionStateWorkingToVisibilityConverter
     End Function
 
 End Class
+
+Public Class ZeroCountToVisibilityConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim val = CType(value, Integer)
+        If val = 0 Then
+            Return Visibility.Collapsed
+        Else
+            Return Visibility.Visible
+        End If
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class

@@ -27,6 +27,7 @@
     <local:IsSteamFolderConverter x:Key="IsSteamFolderConverter"/>
     <local:AnimationFactorToValueConverter x:Key="AnimationFactorToValueConverter" />
     <local:FolderActionStateWorkingToVisibilityConverter x:Key="FolderActionStateWorkingToVisibilityConverter" />
+    <local:ZeroCountToVisibilityConverter x:Key="ZeroCountToVisibilityConverter"/>
 
     <converters:ValueConverterGroup x:Key="IsSteamFolderToVisibilityConverter">
         <local:IsSteamFolderConverter/>

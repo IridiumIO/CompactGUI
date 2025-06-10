@@ -61,6 +61,15 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
+                <ui:NavigationViewItem Content="Compression DB"
+                       Margin="15,2,15,10"
+                       NavigationCacheMode="Disabled"
+                       Tag="{Binding}"
+                       TargetPageType="{x:Type local:DatabasePage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="Database24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
 
             </ui:NavigationView.MenuItems>
 

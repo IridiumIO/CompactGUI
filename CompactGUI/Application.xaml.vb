@@ -58,6 +58,8 @@ Partial Public Class Application
                                services.AddSingleton(Of SettingsPage)()
                                services.AddSingleton(Of SettingsViewModel)()
 
+                               services.AddSingleton(Of DatabasePage)()
+                               services.AddTransient(Of DatabaseViewModel)()
 
                                'Other services
                                services.AddSingleton(Of Watcher.Watcher)(Function()

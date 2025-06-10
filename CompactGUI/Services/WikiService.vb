@@ -4,6 +4,7 @@ Imports System.Text.Json
 Public Interface IWikiService
     Function GetUpdatedJSONAsync() As Task
     Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult)))
+    Function GetAllDatabaseCompressionResultsAsync() As Task(Of List(Of DatabaseCompressionResult))
     Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean)
     Function SubmitURLForm(url As String, submissionstring As String) As Task(Of Boolean)
 End Interface
@@ -74,6 +75,39 @@ Public Class WikiService : Implements IWikiService
         Return (estimatedRatio, workingGame.Confidence, workingGame.PoorlyCompressedExtensions, workingGame.CompressionResults)
 
     End Function
+
+
+    Public Async Function GetAllDatabaseCompressionResultsAsync() As Task(Of List(Of DatabaseCompressionResult)) Implements IWikiService.GetAllDatabaseCompressionResultsAsync
+        Dim JSONFile As New IO.FileInfo(filePath)
+        If Not JSONFile.Exists Then Return New List(Of DatabaseCompressionResult)()
+
+        Using jStream As IO.FileStream = JSONFile.OpenRead()
+            ' Deserialize the JSON into a list of SteamResultsData (or your source model)
+            Dim parsedResults = Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(jStream, JsonDefaultSettings).ConfigureAwait(False)
+            If parsedResults Is Nothing Then Return New List(Of DatabaseCompressionResult)()
+
+            ' Map each SteamResultsData to DatabaseCompressionResult
+            Dim results As New List(Of DatabaseCompressionResult)
+            For Each item In parsedResults
+                Dim dbResult As New DatabaseCompressionResult With {
+                .GameName = item.GameName,
+                .SteamID = item.SteamID,
+                .Confidence = CType(item.Confidence, DBResultConfidence),
+                .Result_X4K = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 0),
+                .Result_X8K = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 1),
+                .Result_X16K = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 2),
+                .Result_LZX = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 3),
+                .PoorlyCompressedExtensions = item.PoorlyCompressedExtensions?.Select(Function(kvp) New DBPoorlyCompressedExtension With {.Extension = kvp.Key, .Count = kvp.Value}).ToList()
+            }
+                results.Add(dbResult)
+            Next
+
+            Return results
+        End Using
+    End Function
+
+
+
 
 
     Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean) Implements IWikiService.SubmitToWiki
