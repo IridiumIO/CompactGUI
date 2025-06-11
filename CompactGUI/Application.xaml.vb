@@ -12,7 +12,7 @@ Imports System.Drawing
 
 Partial Public Class Application
 
-    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 3)
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 4)
 
 
 
