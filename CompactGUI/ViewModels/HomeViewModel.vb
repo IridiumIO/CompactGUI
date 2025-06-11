@@ -121,7 +121,9 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
             End If
 
             If _watcher.WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
+                Dim watchedFolder = _watcher.WatchedFolders.First(Function(w) w.Folder = newFolder.FolderName)
                 newFolder.CompressionOptions.WatchFolderForChanges = True
+                newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
             End If
 
 
