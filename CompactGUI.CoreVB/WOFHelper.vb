@@ -1,5 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 
+Imports Microsoft.Win32.SafeHandles
+
 Public Module WOFHelper
 
     Public Const WOF_PROVIDER_FILE As ULong = 2
@@ -40,9 +42,10 @@ Public Module WOFHelper
 
     End Function
 
+    <StructLayout(LayoutKind.Sequential)>
     Public Structure WOF_FILE_COMPRESSION_INFO_V1
-        Public Algorithm As WOFCompressionAlgorithm
-        Public Flags As ULong
+        Public Algorithm As UInteger
+        Public Flags As UInteger
     End Structure
 
 
@@ -57,7 +60,7 @@ Public Module WOFHelper
 
     <DllImport("WofUtil.dll")>
     Friend Function WofSetFileDataLocation(
-        FileHandle As IntPtr,
+        FileHandle As SafeFileHandle,
         Provider As ULong,
         ExternalFileInfo As IntPtr,
         Length As ULong) As Integer
@@ -66,14 +69,14 @@ Public Module WOFHelper
     'Most of these should be optional if MS Docs are to be believed -.-
     <DllImport("kernel32.dll")>
     Friend Function DeviceIoControl(
-        hDevice As IntPtr,
+        hDevice As SafeFileHandle,
         dwIoControlCode As UInteger,
         lpInBuffer As IntPtr,
         nInBufferSize As UInteger,
         lpOutBuffer As IntPtr,
         nOutBufferSize As UInteger,
-        <Out> lpBytesReturned As IntPtr,
-        <Out> lpOverlapped As IntPtr) As Integer
+        <Out> ByRef lpBytesReturned As IntPtr,
+        <Out> lpOverlapped As IntPtr) As Boolean
 
     End Function
 

@@ -1,9 +1,11 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.IO
 Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 
 Imports CompactGUI.Core
+Imports CompactGUI.Core.WOFHelper
 
 Imports PropertyChanged
 
@@ -69,50 +71,46 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
 
 
-    Public Compactor As Compactor
+    Public Compressor As ICompressor
 
     Public Async Function CompressFolder() As Task(Of Boolean)
 
-        FolderActionState = ActionState.Working
-
-        CompressionProgress.Report(New CompressionProgress(0, ""))
-
-        Compactor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
-        Dim res = Await Compactor.RunCompactAsync(CompressionProgress, GetThreadCount)
-
-        If res Then
-            FolderActionState = ActionState.Results
-            IsFreshlyCompressed = True
-        Else
-            FolderActionState = ActionState.Results
-            IsFreshlyCompressed = False
-        End If
-
-        Return res
+        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
+        Return Await RunCompressionAsync(Compressor, Nothing, True)
 
     End Function
 
-
-    Public Uncompactor As Uncompactor
 
     Public Async Function UncompressFolder() As Task(Of Boolean)
-        FolderActionState = ActionState.Working
-        CompressionProgress.Report(New CompressionProgress(0, ""))
 
-        Uncompactor = New Uncompactor
-
+        Compressor = New Uncompactor
         Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
+        Return Await RunCompressionAsync(Compressor, compressedFilesList, isCompressing:=False)
 
-        Dim res = Await Uncompactor.UncompactFiles(compressedFilesList, CompressionProgress, GetThreadCount)
-
-        FolderActionState = ActionState.Idle
-        IsFreshlyCompressed = False
-
-        Await AnalyseFolderAsync()
-        Return res
     End Function
 
+    Private Async Function RunCompressionAsync(compressor As ICompressor, filesList As List(Of String), isCompressing As Boolean) As Task(Of Boolean)
+        FolderActionState = ActionState.Working
 
+        If CancellationTokenSource IsNot Nothing AndAlso Not CancellationTokenSource.IsCancellationRequested Then
+            CancellationTokenSource.Cancel()
+        End If
+
+        CompressionProgress.Report(New CompressionProgress(0, ""))
+
+        Dim res = Await compressor.RunAsync(filesList, CompressionProgress, GetThreadCount)
+
+        If isCompressing Then
+            FolderActionState = ActionState.Results
+            IsFreshlyCompressed = res
+        Else
+            FolderActionState = ActionState.Idle
+            IsFreshlyCompressed = False
+            Await AnalyseFolderAsync()
+        End If
+        compressor.Dispose()
+        Return res
+    End Function
 
     Private CancellationTokenSource As CancellationTokenSource
 
@@ -121,13 +119,15 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     Public Async Function AnalyseFolderAsync() As Task(Of Integer)
 
         FolderActionState = ActionState.Analysing
-
+        If CancellationTokenSource IsNot Nothing AndAlso Not CancellationTokenSource.IsCancellationRequested Then
+            CancellationTokenSource.Cancel()
+        End If
         CancellationTokenSource = New CancellationTokenSource()
         Dim token = CancellationTokenSource.Token
 
         Analyser = New Analyser(FolderName)
 
-        If Not Analyser.HasDirectoryWritePermission Then
+        If Not Core.SharedMethods.HasDirectoryWritePermission(FolderName) Then
             FolderActionState = ActionState.Idle
             Return -1
         End If
@@ -145,13 +145,97 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         If containsCompressedFiles OrElse IsFreshlyCompressed Then : FolderActionState = ActionState.Results
         Else : FolderActionState = ActionState.Idle
         End If
-        PoorlyCompressedFiles = Await Analyser.GetPoorlyCompressedExtensions()
+        PoorlyCompressedFiles = Analyser.GetPoorlyCompressedExtensions()
 
         Return 0
 
     End Function
 
 
+
+    Public Property IsGettingEstimate As Boolean = False
+
+    Public Property WikiCompressionResults As WikiCompressionResults
+    Public Property WikiPoorlyCompressedFiles As New List(Of String)
+
+    Public ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
+        Get
+            If AnalysisResults Is Nothing OrElse WikiPoorlyCompressedFiles Is Nothing Then Return 0
+            Return WikiPoorlyCompressedFiles.Count
+        End Get
+    End Property
+
+    Public Overridable Async Function GetEstimatedCompression() As Task
+        IsGettingEstimate = True
+
+        CancellationTokenSource = New CancellationTokenSource()
+
+        Dim estimator As New Estimator
+
+
+        Dim estimatedData As List(Of (AnalysedFile As AnalysedFileDetails, CompressionRatio As Single)) = Nothing
+
+        Try
+            Dim sw As New Stopwatch
+            sw.Start()
+            estimatedData = Await Task.Run(Function() estimator.EstimateCompression(AnalysisResults.ToList, IsHDD, GetThreadCount, Core.SharedMethods.GetClusterSize(FolderName), CancellationTokenSource.Token))
+            sw.Stop()
+            Debug.WriteLine($"Estimated compression took {sw.ElapsedMilliseconds}ms")
+        Catch ex As AggregateException
+            IsGettingEstimate = False
+            Return
+        End Try
+
+        For Each item In estimatedData
+            If item.CompressionRatio >= 0.98 AndAlso item.AnalysedFile.FileName <> "" Then
+                WikiPoorlyCompressedFiles.Add(item.AnalysedFile.FileName)
+            End If
+        Next
+
+        Dim estimatedAfterBytes = estimatedData.Sum(Function(x) x.AnalysedFile.UncompressedSize * x.CompressionRatio)
+
+        'This is absolutely stupid
+
+        Dim X4KResult As New CompressionResult
+        X4KResult.CompType = WOFCompressionAlgorithm.XPRESS4K
+        X4KResult.BeforeBytes = UncompressedBytes
+        X4KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.01, UncompressedBytes)
+        X4KResult.TotalResults = 1
+
+        Dim X8KResult As New CompressionResult
+        X8KResult.CompType = WOFCompressionAlgorithm.XPRESS8K
+        X8KResult.BeforeBytes = UncompressedBytes
+        X8KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.0, UncompressedBytes)
+        X8KResult.TotalResults = 1
+
+        Dim X16KResult As New CompressionResult
+        X16KResult.CompType = WOFCompressionAlgorithm.XPRESS16K
+        X16KResult.BeforeBytes = UncompressedBytes
+        X16KResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.98, UncompressedBytes)
+        X16KResult.TotalResults = 1
+
+        Dim LZXResult As New CompressionResult
+        LZXResult.CompType = WOFCompressionAlgorithm.LZX
+        LZXResult.BeforeBytes = UncompressedBytes
+        LZXResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.95, UncompressedBytes)
+        LZXResult.TotalResults = 1
+
+        WikiCompressionResults = New WikiCompressionResults(New List(Of CompressionResult) From {X4KResult, X8KResult, X16KResult, LZXResult})
+
+        IsGettingEstimate = False
+
+        OnPropertyChanged(NameOf(WikiCompressionResults))
+        OnPropertyChanged(NameOf(WikiPoorlyCompressedFiles))
+        OnPropertyChanged(NameOf(WikiPoorlyCompressedFilesCount))
+        OnPropertyChanged(NameOf(IsGettingEstimate))
+
+    End Function
+
+    Public Sub CancelEstimation()
+        If CancellationTokenSource IsNot Nothing AndAlso Not CancellationTokenSource.IsCancellationRequested Then
+            CancellationTokenSource.Cancel()
+        End If
+    End Sub
 
     Protected Function GetThreadCount() As Integer
         Dim threadCount As Integer = SettingsHandler.AppSettings.MaxCompressionThreads
@@ -161,7 +245,6 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
                 threadCount = 1
             End If
         End If
-        Debug.WriteLine($"Thread count: {threadCount}")
         Return threadCount
     End Function
 
@@ -174,11 +257,20 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         End Try
     End Function
 
+    Private Function IsHDD() As Boolean
+        Dim HDDType As DiskDetector.Models.HardwareType = GetDiskType()
+        Return HDDType = DiskDetector.Models.HardwareType.Hdd
+    End Function
 
     Protected Overridable Function GetSkipList() As String()
         Dim exclist As String() = Array.Empty(Of String)()
         If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
+            Debug.WriteLine("Adding non-compressable list to exclusion list")
             exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
+        End If
+        If CompressionOptions.SkipUserSubmittedFiletypes AndAlso WikiPoorlyCompressedFiles?.Count <> 0 Then
+            Debug.WriteLine("Adding estimator poorly compressed list to exclusion list")
+            exclist = exclist.Union(WikiPoorlyCompressedFiles).ToArray
         End If
 
 

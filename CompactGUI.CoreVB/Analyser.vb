@@ -15,7 +15,7 @@ Public Class Analyser
         FolderName = folder
     End Sub
 
-    <MeasurePerformance.IL.Weaver.MeasurePerformance>
+
     Public Async Function AnalyseFolder(cancellationToken As CancellationToken) As Task(Of Boolean)
         Dim allFiles = Await Task.Run(Function() Directory.EnumerateFiles(FolderName, "*", New EnumerationOptions() With {.RecurseSubdirectories = True, .IgnoreInaccessible = True}).AsShortPathNames, cancellationToken).ConfigureAwait(False)
         Dim fileDetails As New List(Of AnalysedFileDetails)
@@ -118,14 +118,17 @@ Public Class Analyser
         Dim buf As UInt16 = 8
 
         Dim ret = WofIsExternalFile(fInfo.FullName, isextFile, prov, info, buf)
-        If isextFile = 0 Then info.Algorithm = WOFCompressionAlgorithm.NO_COMPRESSION
-        If (fInfo.Attributes And 2048) <> 0 Then info.Algorithm = WOFCompressionAlgorithm.LZNT1
-        Return info.Algorithm
+
+        Dim algorithm As WOFCompressionAlgorithm = info.Algorithm
+
+        If isextFile = 0 Then algorithm = WOFCompressionAlgorithm.NO_COMPRESSION
+        If (fInfo.Attributes And 2048) <> 0 Then algorithm = WOFCompressionAlgorithm.LZNT1
+        Return algorithm
 
     End Function
 
 
-    Public Function HasDirectoryWritePermission() As Boolean
+    Public Shared Function HasDirectoryWritePermission(FolderName As String) As Boolean
         Try
             Dim directoryInfo = New DirectoryInfo(FolderName)
             Dim directorySecurity = directoryInfo.GetAccessControl()

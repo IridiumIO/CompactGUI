@@ -4,6 +4,7 @@ Imports System.Text.Json
 Public Interface IWikiService
     Function GetUpdatedJSONAsync() As Task
     Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult)))
+    Function GetAllDatabaseCompressionResultsAsync() As Task(Of List(Of DatabaseCompressionResult))
     Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean)
     Function SubmitURLForm(url As String, submissionstring As String) As Task(Of Boolean)
 End Interface
@@ -21,9 +22,11 @@ Public Class WikiService : Implements IWikiService
         If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
 
         Dim httpClient As New HttpClient
-        Dim res = Await httpClient.GetStreamAsync(dlPath)
 
         Try
+
+            Dim res = Await httpClient.GetStreamAsync(dlPath)
+
             Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
                 Await res.CopyToAsync(fs)
             End Using
@@ -31,8 +34,11 @@ Public Class WikiService : Implements IWikiService
         Catch ex As IO.IOException
             Debug.WriteLine("Could not update JSON file: file is in use.")
             Return
+        Catch ex As HttpRequestException
+            Debug.WriteLine($"Unable to reach endpoint. Likely no internet connection")
+            Return
         Finally
-            httpClient.Dispose()
+            HttpClient.Dispose()
         End Try
 
 
@@ -71,6 +77,39 @@ Public Class WikiService : Implements IWikiService
     End Function
 
 
+    Public Async Function GetAllDatabaseCompressionResultsAsync() As Task(Of List(Of DatabaseCompressionResult)) Implements IWikiService.GetAllDatabaseCompressionResultsAsync
+        Dim JSONFile As New IO.FileInfo(filePath)
+        If Not JSONFile.Exists Then Return New List(Of DatabaseCompressionResult)()
+
+        Using jStream As IO.FileStream = JSONFile.OpenRead()
+            ' Deserialize the JSON into a list of SteamResultsData (or your source model)
+            Dim parsedResults = Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(jStream, JsonDefaultSettings).ConfigureAwait(False)
+            If parsedResults Is Nothing Then Return New List(Of DatabaseCompressionResult)()
+
+            ' Map each SteamResultsData to DatabaseCompressionResult
+            Dim results As New List(Of DatabaseCompressionResult)
+            For Each item In parsedResults
+                Dim dbResult As New DatabaseCompressionResult With {
+                .GameName = item.GameName,
+                .SteamID = item.SteamID,
+                .Confidence = CType(item.Confidence, DBResultConfidence),
+                .Result_X4K = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 0),
+                .Result_X8K = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 1),
+                .Result_X16K = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 2),
+                .Result_LZX = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 3),
+                .PoorlyCompressedExtensions = item.PoorlyCompressedExtensions?.Select(Function(kvp) New DBPoorlyCompressedExtension With {.Extension = kvp.Key, .Count = kvp.Value}).ToList()
+            }
+                results.Add(dbResult)
+            Next
+
+            Return results
+        End Using
+    End Function
+
+
+
+
+
     Async Function SubmitToWiki(folderpath As String, analysisResults As List(Of Core.AnalysedFileDetails), poorlyCompressedFiles As List(Of Core.ExtensionResult), compressionMode As Integer) As Task(Of Boolean) Implements IWikiService.SubmitToWiki
         Dim wikiSubmitURI = "https://docs.google.com/forms/d/e/1FAIpQLSdQyMwHIfldsuKKdDYBE9DNEyro8bidBDInq8EafGogFu382A/formResponse?entry.1019946248=%3CCompactGUI3%3E"
 
@@ -94,11 +133,11 @@ Public Class WikiService : Implements IWikiService
 
         Dim snackbar = Application.GetService(Of CustomSnackBarService)()
         If Not response Then
-            snackbar.Show("Failed to submit to wiki", "Please check your internet connection and try again", Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(5))
+            snackbar.ShowFailedToSubmitToWiki()
             Return False
         End If
 
-        snackbar.Show("Submitted to wiki", $"UID: {steamsubmitdata.UID}{vbCrLf}Game: {steamsubmitdata.GameName}{vbCrLf}SteamID: {steamsubmitdata.SteamID}{vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
+        snackbar.ShowSubmittedToWiki(steamsubmitdata, compressionMode)
         Return True
 
     End Function

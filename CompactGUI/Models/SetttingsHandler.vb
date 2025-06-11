@@ -1,6 +1,7 @@
 ﻿Imports System.Text.Json
 
-Imports Microsoft.Toolkit.Mvvm.ComponentModel
+Imports CommunityToolkit.Mvvm.ComponentModel
+
 
 Public Class SettingsHandler : Inherits ObservableObject
 

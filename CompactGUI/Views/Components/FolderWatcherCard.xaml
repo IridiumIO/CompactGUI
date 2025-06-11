@@ -11,7 +11,7 @@
              d:DataContext="{d:DesignInstance Type=local:WatcherViewModel}"
              d:DesignHeight="500" d:DesignWidth="800"
              mc:Ignorable="d">
-    <Grid VerticalAlignment="Stretch" Margin="30 10 30 0">
+    <Grid Margin="30,10,30,0" VerticalAlignment="Stretch">
 
         <Grid.Resources>
             <CollectionViewSource x:Key="Src" Source="{Binding Watcher.WatchedFolders}">
@@ -33,7 +33,8 @@
 
         <TextBlock Text="Watched folders"
                    Grid.Row="0"
-                   FontSize="26" VerticalAlignment="Top"
+                   VerticalAlignment="Top"
+                   FontSize="26"
                    Foreground="{StaticResource CardForeground}"
                    Visibility="Visible" />
 
@@ -52,48 +53,57 @@
 
 
 
-        <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
-                   FontSize="20" Foreground="{StaticResource CardForegroundDisabled}">
+        <TextBlock Grid.Row="1"
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
+                   FontSize="20"
+                   Foreground="{StaticResource CardForegroundDisabled}">
             <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" d:Text="51.8GB" />
             <Run Text="saved" />
         </TextBlock>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 3 0"  >
-            <Grid Width="45" Height="25" VerticalAlignment="Center" >
+        <StackPanel Grid.Row="1"
+                    Margin="0,0,3,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Orientation="Horizontal">
+            <Grid Width="45" Height="25"
+                  VerticalAlignment="Center">
                 <ui:Button Background="Transparent" BorderThickness="0"
-            Command="{Binding RefreshWatchedCommand}"
-            Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                           Command="{Binding RefreshWatchedCommand}"
+                           Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
 
                     <ui:FontIcon FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
-                  Glyph="&#xE9F3;" />
+                                 Glyph="&#xE9F3;" />
                     <ui:Button.ToolTip>
                         <ToolTip ToolTipService.InitialShowDelay="100">
                             <TextBlock Text="Re-analyse all watched folders"
-                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
+                                       FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                         </ToolTip>
                     </ui:Button.ToolTip>
                 </ui:Button>
-                <ui:ProgressRing Width="18" Height="18" Margin="-15 0 0 0 "
-       Foreground="#FFBFC7CE" IsIndeterminate="True"
-       Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BoolToVisConverter}}" />
+                <ui:ProgressRing Width="18" Height="18"
+                                 Margin="-15,0,0,0"
+                                 Foreground="#FFBFC7CE" IsIndeterminate="True"
+                                 Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BoolToVisConverter}}" />
             </Grid>
-           
 
-            <TextBlock VerticalAlignment="Center" Margin="0 -2 0 0" Text="{Binding Watcher.LastAnalysed, StringFormat=Last analysed {0}, Converter={StaticResource RelativeDateConverter}}"
-                   
-                   d:Text="Last analysed: just now" FontSize="14" Foreground="#FFBFC7CE" />
+
+            <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=Last analysed {0}, Converter={StaticResource RelativeDateConverter}}"
+                       Margin="0,-2,0,0" VerticalAlignment="Center"
+                       d:Text="Last analysed: just now" FontSize="14" Foreground="#FFBFC7CE" />
         </StackPanel>
 
 
-        <Separator Height="1" Grid.Row="2" VerticalAlignment="Bottom"/>
+        <Separator Grid.Row="2"
+                   Height="1"
+                   VerticalAlignment="Bottom" />
 
 
-            <ListView x:Name="UiWatcherListView" Grid.Row="3" Margin="-10 0 -20 0" Padding="0 0 10 0"
-                   HorizontalAlignment="Stretch" 
+        <ListView x:Name="UiWatcherListView"
+                  Grid.Row="3"
+                  Margin="-10,0,-20,0" Padding="0,0,10,0" HorizontalAlignment="Stretch"
                   d:ItemsSource="{Binding Source={StaticResource Dtd}}"
-                  Background="Transparent" BorderThickness="0" 
-                  ItemsSource="{Binding Source={StaticResource Src}}" 
-                   ScrollViewer.VerticalScrollBarVisibility="Visible">
+                  Background="Transparent" BorderThickness="0"
+                  ItemsSource="{Binding Source={StaticResource Src}}"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -101,14 +111,15 @@
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <Border Name="Border" CornerRadius="5"
+                                <Border Name="Border"
                                         Background="{TemplateBinding Background}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="5">
                                     <ContentPresenter Content="{TemplateBinding Content}"
                                                       Margin="{TemplateBinding Padding}"
                                                       d:Content="{TemplateBinding Content}"
@@ -136,17 +147,17 @@
                             MouseDown="ToggleBorderHeight" MouseEnter="ToggleBorderHeight">
 
 
-                        <Grid> 
-                            
-                            
-                            
-                            <Label >
+                        <Grid>
+
+
+
+                            <Label>
                                 <StackPanel Orientation="Horizontal">
 
                                     <ui:ProgressRing Width="15" Height="15"
                                                      Margin="0,0,6,0" Padding="7"
                                                      Foreground="#FFBFC7CE" IsIndeterminate="True"
-                                                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}}" />
+                                                     Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisConverter}, Mode=OneWay}" />
                                     <Viewbox Grid.Column="1"
                                              Width="12" Height="12"
                                              Margin="0,0,5,0" HorizontalAlignment="Left"
@@ -159,10 +170,23 @@
                                                Margin="0,0,5,0"
                                                FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Foreground="White"
                                                Visibility="{Binding IsSteamGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
-                                    <TextBlock Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}"
-                                               MaxWidth="280"
-                                               Margin="0,-2,0,0" VerticalAlignment="Top"
-                                               FontSize="15" FontWeight="SemiBold" Foreground="White" TextTrimming="CharacterEllipsis" />
+                                    <Grid>
+                                        <TextBlock Text="{Binding DisplayName, Converter={StaticResource StrippedFolderPathConverter}}"
+                                                   MinWidth="100" MaxWidth="280"
+                                                   Margin="0,-2,0,0" VerticalAlignment="Top"
+                                                   FontSize="15" FontWeight="SemiBold" Foreground="White"
+                                                   MouseLeftButtonDown="DisplayNameTextBlock_MouseLeftButtonDown"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Visibility="{Binding IsEditing, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+
+                                        <TextBox Text="{Binding DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 MinWidth="100" MaxWidth="280"
+                                                 Margin="-3,-3,0,0" Padding="0" VerticalAlignment="Top"
+                                                 FontSize="15" FontWeight="SemiBold"
+                                                 Foreground="{StaticResource TextControlForeground}"
+                                                 KeyDown="DisplayNameTextBox_KeyDown" LostFocus="DisplayNameTextBox_LostFocus"
+                                                 Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisConverter}}" />
+                                    </Grid>
 
                                 </StackPanel>
 
@@ -211,7 +235,7 @@
                                     <TextBlock Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"
                                                d:Text="fds" FontSize="12" Foreground="#FF8B9FB3" />
                                 </StackPanel>
-                                <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <StackPanel Margin="0,20,0,-3" Orientation="Horizontal">
                                     <TextBlock Text="last modified:"
                                                Margin="0,0,27,0"
                                                FontSize="12" Foreground="#FF8B9FB3" />
@@ -228,14 +252,14 @@
                                         Foreground="White">
                                     <ui:SymbolIcon FontSize="14" Symbol="Delete16" />
                                     <Button.ToolTip>
-                                        <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                                        <ToolTip ToolTipService.InitialShowDelay="100">
                                             <TextBlock Text="Remove from Watchlist"
                                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
 
-                                <Button Margin="0,0,35,0" HorizontalAlignment="Right"
+                                <Button Margin="0,0,40,0" HorizontalAlignment="Right"
                                         Background="#6B8399"
                                         Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReCompressWatchedCommand}"
                                         CommandParameter="{Binding}"
@@ -251,12 +275,27 @@
                                         </ui:SymbolIcon.RenderTransform>
                                     </ui:SymbolIcon>
                                     <Button.ToolTip>
-                                        <ToolTip Background="#304257" ToolTipService.InitialShowDelay="100">
+                                        <ToolTip  ToolTipService.InitialShowDelay="100">
                                             <TextBlock Text="Add to compression queue"
                                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
+
+                                <Button Margin="0,0,80,0" HorizontalAlignment="Right" Visibility="{Binding IsWorking, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+                                        Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReAnalyseWatchedCommand}"
+                                        CommandParameter="{Binding}"
+                                        Foreground="White">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
+                                                 Glyph="&#xE9F3;" />
+                                    <Button.ToolTip>
+                                        <ToolTip ToolTipService.InitialShowDelay="100">
+                                            <TextBlock Text="Re-analyse this folder"
+                                                       FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
+                                        </ToolTip>
+                                    </Button.ToolTip>
+                                </Button>
+
                             </Grid>
 
 
@@ -268,7 +307,7 @@
 
         </ListView>
 
-    
+
 
     </Grid>
 </UserControl>

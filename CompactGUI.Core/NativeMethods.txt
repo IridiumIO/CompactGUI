@@ -1,0 +1,7 @@
+﻿WofIsExternalFile
+WofSetFileDataLocation
+DeviceIoControl
+GetDiskFreeSpace
+SetThreadExecutionState
+GetShortPathName
+GetCompressedFileSizeW

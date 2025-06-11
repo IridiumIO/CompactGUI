@@ -54,15 +54,15 @@ Public Class MainWindowViewModel : Inherits ObservableObject : Implements IRecip
 
 
 
-
-
-
-
-
-
-
-
     Public Property BackgroundImage As BitmapImage
+    Public ReadOnly Property IsAdmin As Boolean
+        Get
+            Dim principal = New Security.Principal.WindowsPrincipal(Security.Principal.WindowsIdentity.GetCurrent())
+            Return principal.IsInRole(Security.Principal.WindowsBuiltInRole.Administrator)
+        End Get
+    End Property
+
+
     Public Sub Receive(message As BackgroundImageChangedMessage) Implements IRecipient(Of BackgroundImageChangedMessage).Receive
         BackgroundImage = message.Value
     End Sub

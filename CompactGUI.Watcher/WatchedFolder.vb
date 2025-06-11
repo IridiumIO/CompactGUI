@@ -1,6 +1,6 @@
 ﻿Imports System.Text.Json.Serialization
 
-Imports Microsoft.Toolkit.Mvvm.ComponentModel
+Imports CommunityToolkit.Mvvm.ComponentModel
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class WatchedFolder : Inherits ObservableObject
@@ -17,6 +17,9 @@ Public Class WatchedFolder : Inherits ObservableObject
     Public Property CompressionLevel As Core.WOFCompressionAlgorithm
     <JsonIgnore>
     Public Property IsWorking As Boolean
+    <JsonIgnore>
+    Public Property IsEditing As Boolean = False
+
     Public ReadOnly Property DecayPercentage As Decimal
         Get
             If LastCompressedSize = 0 Then Return 1

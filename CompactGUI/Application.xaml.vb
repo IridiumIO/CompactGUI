@@ -12,7 +12,7 @@ Imports System.Drawing
 
 Partial Public Class Application
 
-    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 1)
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 4)
 
 
 
@@ -53,11 +53,13 @@ Partial Public Class Application
                                services.AddSingleton(Of HomeViewModel)()
 
                                services.AddSingleton(Of WatcherPage)()
-                               services.AddSingleton(Of WatcherViewModel)()
+                               services.AddTransient(Of WatcherViewModel)()
 
                                services.AddSingleton(Of SettingsPage)()
                                services.AddSingleton(Of SettingsViewModel)()
 
+                               services.AddSingleton(Of DatabasePage)()
+                               services.AddTransient(Of DatabaseViewModel)()
 
                                'Other services
                                services.AddSingleton(Of Watcher.Watcher)(Function()

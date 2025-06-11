@@ -6,10 +6,11 @@ Imports CommunityToolkit.Mvvm.Input
 
 Imports Wpf.Ui.Controls
 
+<PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class FolderViewModel : Inherits ObservableObject
 
 
-
+    Public Event PropertyChanged As PropertyChangedEventHandler
 
     Public Property Folder As CompressableFolder
 
@@ -55,8 +56,13 @@ Public Class FolderViewModel : Inherits ObservableObject
     End Property
 
 
-    Public Sub New(folder As CompressableFolder)
+    Private _watcher As Watcher.Watcher
+    Private ReadOnly _snackbarService As CustomSnackBarService
+
+    Public Sub New(folder As CompressableFolder, watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
         Me.Folder = folder
+        _watcher = watcher
+        _snackbarService = snackbarService
         AddHandler folder.PropertyChanged, AddressOf OnFolderPropertyChanged
         AddHandler folder.CompressionProgressChanged, AddressOf OnCompressionProgressChanged
         AddHandler folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
@@ -95,7 +101,7 @@ Public Class FolderViewModel : Inherits ObservableObject
 
     Public Async Function UncompressFolderAsync() As Task
         Await Folder.UncompressFolder()
-        Application.GetService(Of Watcher.Watcher).UpdateWatched(Folder.FolderName, Folder.Analyser, True)
+        _watcher.UpdateWatched(Folder.FolderName, Folder.Analyser, False)
 
     End Function
 
@@ -104,39 +110,31 @@ Public Class FolderViewModel : Inherits ObservableObject
     Private Sub ApplyToAll()
         Dim allFolders = Application.GetService(Of HomeViewModel)().Folders
 
-        For Each fl In allFolders
+        For Each fl In allFolders.Where(Function(f) f.FolderActionState <> ActionState.Analysing AndAlso f.FolderActionState <> ActionState.Working AndAlso f.FolderActionState <> ActionState.Paused)
             If fl IsNot Folder Then
                 fl.CompressionOptions = Folder.CompressionOptions.Clone
                 fl.FolderActionState = ActionState.Idle
             End If
         Next
 
-        Dim snackbar = Application.GetService(Of CustomSnackBarService)()
-        snackbar.Show("Applied to all folders", "Success", ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
 
+        _snackbarService.ShowAppliedToAllFolders()
     End Sub
 
 
     Public ReadOnly Property PauseCommand As IRelayCommand = New RelayCommand(Sub()
 
                                                                                   If Folder.FolderActionState = ActionState.Working Then
-                                                                                      Folder.Compactor?.PauseCompression()
-                                                                                      Folder.Uncompactor?.PauseCompression()
+                                                                                      Folder.Compressor?.Pause()
                                                                                       Folder.FolderActionState = ActionState.Paused
                                                                                   Else
-                                                                                      Folder.Compactor?.ResumeCompression()
-                                                                                      Folder.Uncompactor?.ResumeCompression()
+                                                                                      Folder.Compressor?.Resume()
                                                                                       Folder.FolderActionState = ActionState.Working
 
                                                                                   End If
                                                                               End Sub)
 
-    Public ReadOnly Property CancelCommand As IRelayCommand = New RelayCommand(Sub()
-
-                                                                                   Folder.Compactor?.Cancel()
-                                                                                   Folder.Uncompactor?.Cancel()
-
-                                                                               End Sub)
+    Public ReadOnly Property CancelCommand As IRelayCommand = New RelayCommand(Sub() Folder.Compressor?.Cancel())
 
     Public ReadOnly Property SubmitToWikiCommand As IRelayCommand = New AsyncRelayCommand(AddressOf SubmitToWiki, AddressOf CanSubmitToWiki)
 
@@ -185,44 +183,6 @@ Public Class FolderViewModel : Inherits ObservableObject
 
 
 
-
-    Public Async Function InsufficientPermissionHandler() As Task
-
-        Dim snackbarSV = Application.GetService(Of CustomSnackBarService)()
-
-        Dim button = New Button
-        button.Content = "Restart as Admin"
-        button.Command = New RelayCommand(AddressOf RunAsAdmin)
-        button.Margin = New Thickness(-3, 10, 0, 0)
-
-        ' Show the custom snackbar
-        snackbarSV.ShowCustom(button, "Insufficient permission to access this folder.", ControlAppearance.Danger, timeout:=TimeSpan.FromSeconds(60))
-
-    End Function
-
-    Private Sub RunAsAdmin()
-        Dim myproc As New Process With {
-            .StartInfo = New ProcessStartInfo With {
-                .FileName = Environment.ProcessPath,
-                .UseShellExecute = True,
-                .Arguments = $"""{Folder.FolderName}""",
-                .Verb = "runas"}
-        }
-        Dim app As Application = Application.Current
-
-        app.ShutdownPipeServer().ContinueWith(
-            Sub()
-                app.Dispatcher.Invoke(
-                    Sub()
-                        Application.mutex.ReleaseMutex()
-                        Application.mutex.Dispose()
-                    End Sub
-                )
-                myproc.Start()
-                app.Dispatcher.Invoke(Sub() app.Shutdown())
-            End Sub
-        )
-    End Sub
 
 End Class
 

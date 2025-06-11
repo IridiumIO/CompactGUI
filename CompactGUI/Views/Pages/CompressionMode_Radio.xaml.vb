@@ -79,4 +79,19 @@
         End Set
     End Property
 
+    Public Shared ReadOnly IsEstimatingProperty As DependencyProperty = DependencyProperty.RegisterAttached(
+        NameOf(IsEstimating),
+        GetType(Boolean),
+        GetType(CompressionMode_Radio),
+        New FrameworkPropertyMetadata(True, FrameworkPropertyMetadataOptions.None))
+
+    Public Property IsEstimating As Boolean
+        Get
+            Return CType(GetValue(IsEstimatingProperty), Boolean)
+        End Get
+        Set(value As Boolean)
+            SetValue(IsEstimatingProperty, value)
+        End Set
+    End Property
+
 End Class

@@ -72,5 +72,40 @@ Public Class FolderWatcherCard : Inherits UserControl
         Return foundChild
     End Function
 
+    Private Sub DisplayNameTextBlock_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
+        If e.ClickCount = 2 Then
+            Dim fe = TryCast(sender, FrameworkElement)
+            If fe IsNot Nothing AndAlso fe.DataContext IsNot Nothing Then
+                Dim vm = TryCast(fe.DataContext, Watcher.WatchedFolder)
+                If vm IsNot Nothing Then
+                    vm.IsEditing = True
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub DisplayNameTextBox_LostFocus(sender As Object, e As RoutedEventArgs)
+        Dim fe = TryCast(sender, FrameworkElement)
+        If fe IsNot Nothing AndAlso fe.DataContext IsNot Nothing Then
+            Dim vm = TryCast(fe.DataContext, Watcher.WatchedFolder)
+            If vm IsNot Nothing Then
+                vm.IsEditing = False
+                Application.GetService(Of Watcher.Watcher).WriteToFile()
+            End If
+        End If
+    End Sub
+
+    Private Sub DisplayNameTextBox_KeyDown(sender As Object, e As KeyEventArgs)
+        If e.Key = Key.Enter Then
+            Dim fe = TryCast(sender, FrameworkElement)
+            If fe IsNot Nothing AndAlso fe.DataContext IsNot Nothing Then
+                Dim vm = TryCast(fe.DataContext, Watcher.WatchedFolder)
+                If vm IsNot Nothing Then
+                    vm.IsEditing = False
+                    Application.GetService(Of Watcher.Watcher).WriteToFile()
+                End If
+            End If
+        End If
+    End Sub
 
 End Class

@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Toolkit.Mvvm.ComponentModel
+﻿Imports CommunityToolkit.Mvvm.ComponentModel
+
 Imports IWshRuntimeLibrary
 
 Public Class Settings : Inherits ObservableObject
@@ -17,6 +18,7 @@ Public Class Settings : Inherits ObservableObject
 
     Public Property MaxCompressionThreads As Integer = 0
     Public Property LockHDDsToOneThread As Boolean = True
+    Public Property EstimateCompressionForNonSteamFolders As Boolean = False
 
     Private _EnableBackgroundWatcher As Boolean = True
     Public Property EnableBackgroundWatcher As Boolean

@@ -7,7 +7,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 x:Name="MainWindow" Title="MainWindow"
+                 x:Name="MainWindow" Title="CompactGUI"
                  Width="1300" Height="700" MinWidth="768" MinHeight="600"
                  d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -61,6 +61,15 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
+                <ui:NavigationViewItem Content="Compression DB"
+                       Margin="15,2,15,10"
+                       NavigationCacheMode="Disabled"
+                       Tag="{Binding}"
+                       TargetPageType="{x:Type local:DatabasePage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="Database24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
 
             </ui:NavigationView.MenuItems>
 
@@ -167,15 +176,15 @@
 
             </local:ImageControl>
 
-            <TextBlock x:Name="ProgTitle"
-                       Text="CompactGUI" Foreground="#10FFFFFF"
+            <Label x:Name="ProgTitle"
+                      
                        Margin="20,16" HorizontalAlignment="Left"
                        d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
-                <TextBlock.RenderTransform>
+                <Label.RenderTransform>
                     <TranslateTransform x:Name="TransformL" Y="20" />
-                </TextBlock.RenderTransform>
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
+                </Label.RenderTransform>
+                <Label.Style>
+                    <Style TargetType="Label">
                         <Setter Property="Opacity" Value="0" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Visibility, RelativeSource={RelativeSource Self}}" Value="Visible">
@@ -201,8 +210,17 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </Label.Style>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock  Margin="0 0 20 0"  Text="CompactGUI" VerticalAlignment="Center" Foreground="#10FFFFFF" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+                    <Border Background="#20f44336" CornerRadius="10" Width="80" Height="22" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock  Text="Admin" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center"/>
+
+                    </Border>
+                </StackPanel>
+            </Label>
+
+
         </Grid>
         <ui:SnackbarPresenter x:Name="RootSnackbar"
                               Grid.Row="1" Grid.Column="0"

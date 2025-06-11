@@ -6,13 +6,13 @@ Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 
+Imports CompactGUI.Core.SharedMethods
+
 Imports PropertyChanged
 
-Partial Public Class HomeViewModel
-    Inherits ObservableObject
-    Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
+Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
 
-    Public Property Folders As ObservableCollection(Of CompressableFolder)
+    Public Property Folders As New ObservableCollection(Of CompressableFolder)
 
     <OnChangedMethod(NameOf(OnSelectedFolderChanged))>
     <AlsoNotifyFor(NameOf(SelectedFolderViewModel))>
@@ -21,7 +21,7 @@ Partial Public Class HomeViewModel
     Public ReadOnly Property SelectedFolderViewModel As FolderViewModel
         Get
             If SelectedFolder Is Nothing Then Return Nothing
-            Return New FolderViewModel(SelectedFolder)
+            Return New FolderViewModel(SelectedFolder, _watcher, _snackbarService)
         End Get
     End Property
 
@@ -37,6 +37,26 @@ Partial Public Class HomeViewModel
         End Get
     End Property
 
+    Public ReadOnly Property IsAdmin As Boolean
+        Get
+            Dim principal = New Security.Principal.WindowsPrincipal(Security.Principal.WindowsIdentity.GetCurrent())
+            Return principal.IsInRole(Security.Principal.WindowsBuiltInRole.Administrator)
+        End Get
+    End Property
+
+
+
+    Private ReadOnly _watcher As Watcher.Watcher
+    Private ReadOnly _snackbarService As CustomSnackBarService
+
+    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
+        WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
+        AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
+        _watcher = watcher
+        _snackbarService = snackbarService
+    End Sub
+
+
 
     Public Sub OnSelectedFolderChanged()
 
@@ -46,15 +66,7 @@ Partial Public Class HomeViewModel
 
 
 
-    Sub New()
-        Folders = New ObservableCollection(Of CompressableFolder)()
 
-        WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
-
-
-        AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
-
-    End Sub
 
     Private Sub OnAnyFolderPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
         If e.PropertyName = NameOf(SelectedFolder.FolderActionState) Then
@@ -85,6 +97,11 @@ Partial Public Class HomeViewModel
         Dim invalidFolders = GetInvalidFolders(folderPaths.ToArray)
         Dim validFolders = folderPaths.Except(invalidFolders.InvalidFolders)
 
+        If invalidFolders.InvalidFolders.Count > 0 Then
+
+            _snackbarService.ShowInvalidFoldersMessage(invalidFolders.InvalidFolders, invalidFolders.InvalidMessages)
+        End If
+
         For Each folderName In validFolders
 
             Dim newFolder As CompressableFolder = CompressableFolderFactory.CreateCompressableFolder(folderName)
@@ -94,11 +111,25 @@ Partial Public Class HomeViewModel
             End If
 
             Dim res = Await newFolder.AnalyseFolderAsync
-            If res = -1 Then Await SelectedFolderViewModel.InsufficientPermissionHandler()
             If TypeOf (newFolder) Is SteamFolder Then
                 Await CType(newFolder, SteamFolder).GetWikiResults()
+            Else
+                If SettingsHandler.AppSettings.EstimateCompressionForNonSteamFolders Then
+                    Await newFolder.GetEstimatedCompression()
+                End If
+
             End If
+
+            If _watcher.WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
+                Dim watchedFolder = _watcher.WatchedFolders.First(Function(w) w.Folder = newFolder.FolderName)
+                newFolder.CompressionOptions.WatchFolderForChanges = True
+                newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
+            End If
+
+
+
         Next
+
 
     End Function
 
@@ -108,12 +139,13 @@ Partial Public Class HomeViewModel
     Public Property RemoveFolderCommand As IRelayCommand = New RelayCommand(Of CompressableFolder)(Sub(folder) RemoveFolder(folder))
     Public Sub RemoveFolder(folder As CompressableFolder)
         If Not CanRemoveFolder() Then
-            Application.GetService(Of CustomSnackBarService)().Show("Cannot remove folder", "Please wait until the current operation is finished", Wpf.Ui.Controls.ControlAppearance.Caution, Nothing, TimeSpan.FromSeconds(5))
+            Application.GetService(Of CustomSnackBarService)().ShowCannotRemoveFolder()
             Return
         End If
 
         If folder Is Nothing Then Return
         Dim index = Folders.IndexOf(folder)
+        folder.CancelEstimation()
         Folders.Remove(folder)
 
         If SelectedFolder IsNot Nothing OrElse Folders.Count = 0 Then Return
@@ -155,11 +187,13 @@ Partial Public Class HomeViewModel
     Private Property Compressing As Boolean = False
     Private Async Function CompressAllAsync() As Task
 
-        Await Application.GetService(Of Watcher.Watcher).DisableBackgrounding()
+        Await _watcher.DisableBackgrounding()
 
         Compressing = True
+        Core.SharedMethods.PreventSleep()
         Dim tasks As New List(Of Task)()
-        For Each folder In Folders
+        Dim foldersToCompress = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).ToList
+        For Each folder In foldersToCompress
             If folder.FolderActionState = ActionState.Idle Then
                 Await Task.Run(Async Function()
                                    Debug.WriteLine("Compressing " & folder.FolderName)
@@ -172,7 +206,7 @@ Partial Public Class HomeViewModel
 
                                    End If
 
-                                   Application.GetService(Of Watcher.Watcher).UpdateWatched(folder.FolderName, folder.Analyser, True)
+                                   _watcher.UpdateWatched(folder.FolderName, folder.Analyser, True)
 
                                    'For Each poorext In folder.PoorlyCompressedFiles
                                    '    Debug.WriteLine($"{poorext.extension} : {poorext.totalFiles} with ratio of {poorext.cRatio}")
@@ -188,34 +222,35 @@ Partial Public Class HomeViewModel
             AddOrUpdateFolderWatcher(folder)
         Next
 
+        Core.SharedMethods.RestoreSleep()
 
-        Await Application.GetService(Of Watcher.Watcher).EnableBackgrounding()
+        Await _watcher.EnableBackgrounding()
     End Function
 
 
     Public Sub AddOrUpdateFolderWatcher(folder As CompressableFolder)
         Debug.WriteLine("Adding folder to watcher: " & folder.FolderName)
-        Dim newWatched = New Watcher.WatchedFolder With {
-            .Folder = folder.FolderName,
-            .DisplayName = folder.DisplayName,
-            .IsSteamGame = TypeOf (folder) Is SteamFolder,
-            .LastCompressedSize = folder.CompressedBytes,
-            .LastUncompressedSize = folder.UncompressedBytes,
-            .LastCompressedDate = DateTime.Now,
-            .LastCheckedDate = DateTime.Now,
-            .LastCheckedSize = folder.CompressedBytes,
-            .LastSystemModifiedDate = DateTime.Now,
-            .CompressionLevel = folder.AnalysisResults.Select(Function(f) f.CompressionMode).Max
-        }
 
-        Application.GetService(Of Watcher.Watcher).AddOrUpdateWatched(newWatched)
+        Dim newWatched = New Watcher.WatchedFolder
+        newWatched.Folder = folder.FolderName
+        newWatched.DisplayName = folder.DisplayName
+        newWatched.IsSteamGame = TypeOf (folder) Is SteamFolder
+        newWatched.LastCompressedSize = folder.CompressedBytes
+        newWatched.LastUncompressedSize = folder.UncompressedBytes
+        newWatched.LastCompressedDate = DateTime.Now
+        newWatched.LastCheckedDate = DateTime.Now
+        newWatched.LastCheckedSize = folder.CompressedBytes
+        newWatched.LastSystemModifiedDate = DateTime.Now
+        newWatched.CompressionLevel = If(folder.AnalysisResults.Any(), folder.AnalysisResults.Max(Function(f) f.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
+
+        _watcher.AddOrUpdateWatched(newWatched)
 
     End Sub
 
 
 
     Public Async Sub Receive(message As WatcherAddedFolderToQueueMessage) Implements IRecipient(Of WatcherAddedFolderToQueueMessage).Receive
+        Application.GetService(Of CustomSnackBarService).ShowAddedToQueue()
         Await AddFoldersAsync({message.Value})
-        Application.GetService(Of CustomSnackBarService).Show("Success", "Added to Queue", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
     End Sub
 End Class
