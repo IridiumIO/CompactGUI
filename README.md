@@ -42,12 +42,15 @@ Use this tool to compress folders while still being able to use/run them normall
       - Steam game results can be submitted to the online database from within CompactGUI 
  - Integration into Windows Explorer context menus for easier use.
  - Analyze the status of existing folders
- - Background Watcher - keeps track of folders and monitors them for changes (e.g. Steam game updates) and automatically keeps them compressed in the background.
+ - Background Watcher - Keeps track of folders and monitors them for changes (e.g. Steam game updates) and automatically keeps them compressed in the background.
+ - Results Database Viewer - Let's you see and search compression results from user-submitted data
  
 <h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-lightgrey.svg"></a> submissions</b></h3>
 
 
+
 <p align="center"><img src="https://github.com/user-attachments/assets/eaaeb970-99a8-429c-8c00-15d916ea7e33"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/928d27c4-695a-410a-b909-ff594d2b32a3"/></p>
 
 ## Caveat
 **This tool should not be used on games that utilise DirectStorage on Windows 11.** 
