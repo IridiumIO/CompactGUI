@@ -22,6 +22,19 @@ public static class WOFHelper
         };
     }
 
+    public static CompressionMode CompressionModeFromWOFMode(WOFCompressionAlgorithm mode)
+    {
+        return mode switch
+        {
+            WOFCompressionAlgorithm.XPRESS4K => CompressionMode.XPRESS4K,
+            WOFCompressionAlgorithm.XPRESS8K => CompressionMode.XPRESS8K,
+            WOFCompressionAlgorithm.XPRESS16K => CompressionMode.XPRESS16K,
+            WOFCompressionAlgorithm.LZX => CompressionMode.LZX,
+            _ => CompressionMode.None
+        };
+    }
+
+
     public static WOFCompressionAlgorithm WOFConvertCompressionLevel(CompressionMode mode)
     {
         return mode switch
