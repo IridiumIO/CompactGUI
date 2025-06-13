@@ -41,7 +41,7 @@ public static class SharedMethods
         else if (!HasDirectoryWritePermission(folder))
             return FolderVerificationResult.InsufficientPermission;
         else if (IsFolderLZNT1Compressed(folder))
-            return FolderVerificationResult.LZNT1Compressed; // LZNT1 compressed folders are not supported for compression
+            return FolderVerificationResult.LZNT1Compressed;
 
         return FolderVerificationResult.Valid;
     }
@@ -217,14 +217,30 @@ public static class SharedMethods
 
     public static bool IsFolderLZNT1Compressed(string folderPath)
     {
-        if (!Directory.Exists(folderPath))
-            throw new DirectoryNotFoundException($"Directory not found: {folderPath}");
-
         var attributes = File.GetAttributes(folderPath);
         return attributes.HasFlag(FileAttributes.Compressed);
     }
 
+    public static bool IsDirectStorageGameFolder(string folderPath)
+    {
+        if (string.IsNullOrWhiteSpace(folderPath) || !Directory.Exists(folderPath)) return false;
 
+        // List of possible DirectStorage DLL relative paths from https://github.com/SteamDatabase/FileDetectionRuleSets/blob/main/tests/types/SDK.DirectStorage.txt
+        string[] directStoragePaths = new[]
+        {
+            "dstorage.dll",
+            Path.Combine("Bin64", "dstorage.dll"),
+            Path.Combine("Engine", "Binaries", "ThirdParty", "Windows", "DirectStorage", "x64", "dstorage.dll")
+        };
+
+        foreach (var relativePath in directStoragePaths)
+        {
+            string fullPath = Path.Combine(folderPath, relativePath);
+            if (File.Exists(fullPath)) return true;
+        }
+
+        return false;
+    }
 
 
 }

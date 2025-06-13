@@ -257,7 +257,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         End Try
     End Function
 
-    Private Function IsHDD() As Boolean
+    Protected Function IsHDD() As Boolean
         Dim HDDType As DiskDetector.Models.HardwareType = GetDiskType()
         Return HDDType = DiskDetector.Models.HardwareType.Hdd
     End Function

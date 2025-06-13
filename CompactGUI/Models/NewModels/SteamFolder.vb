@@ -21,6 +21,8 @@ Public Class SteamFolder : Inherits CompressableFolder
                                         End If
                                     End Sub, TaskContinuationOptions.OnlyOnFaulted)
 
+        If Not IsHDD() AndAlso Core.SharedMethods.IsDirectStorageGameFolder(folderName) Then Application.GetService(Of CustomSnackBarService).ShowDirectStorageWarning(displayName)
+
     End Sub
 
 

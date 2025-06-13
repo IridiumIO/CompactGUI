@@ -96,4 +96,12 @@ Public Class CustomSnackBarService
         Show("Success", "Added to Queue", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
     End Sub
 
+    Public Sub ShowDirectStorageWarning(displayName As String)
+        Show(displayName,
+            "This game uses DirectStorage technology. If you are using this feature, you should not compress this game.",
+            Wpf.Ui.Controls.ControlAppearance.Info,
+            Nothing,
+            TimeSpan.FromSeconds(20))
+
+    End Sub
 End Class
