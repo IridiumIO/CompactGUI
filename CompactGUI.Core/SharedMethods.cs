@@ -20,7 +20,8 @@ public static class SharedMethods
         DirectoryEmptyOrUnauthorized,
         OneDriveFolder,
         NonNTFSDrive,
-        InsufficientPermission
+        InsufficientPermission,
+        LZNT1Compressed
     }
 
     public static FolderVerificationResult VerifyFolder(string folder)
@@ -39,6 +40,8 @@ public static class SharedMethods
             return FolderVerificationResult.NonNTFSDrive;
         else if (!HasDirectoryWritePermission(folder))
             return FolderVerificationResult.InsufficientPermission;
+        else if (IsFolderLZNT1Compressed(folder))
+            return FolderVerificationResult.LZNT1Compressed; // LZNT1 compressed folders are not supported for compression
 
         return FolderVerificationResult.Valid;
     }
@@ -55,6 +58,7 @@ public static class SharedMethods
             FolderVerificationResult.OneDriveFolder => "Files synced with OneDrive cannot be compressed as they use a different storage structure",
             FolderVerificationResult.NonNTFSDrive => "Cannot compress a directory on a non-NTFS drive",
             FolderVerificationResult.InsufficientPermission => "Insufficient permission to access this folder.",
+            FolderVerificationResult.LZNT1Compressed => "Folders using Windows' compression are not supported. Disable Windows compression on this folder first.",
             _ => "Unknown error"
         };
     }
@@ -211,7 +215,14 @@ public static class SharedMethods
         catch (UnauthorizedAccessException) { return false; }
     }
 
+    public static bool IsFolderLZNT1Compressed(string folderPath)
+    {
+        if (!Directory.Exists(folderPath))
+            throw new DirectoryNotFoundException($"Directory not found: {folderPath}");
 
+        var attributes = File.GetAttributes(folderPath);
+        return attributes.HasFlag(FileAttributes.Compressed);
+    }
 
 
 
