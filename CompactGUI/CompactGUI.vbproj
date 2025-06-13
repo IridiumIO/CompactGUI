@@ -76,7 +76,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.csproj" />
-    <ProjectReference Include="..\CompactGUI.Core\CompactGUI.CoreVB.vbproj" />
     <ProjectReference Include="..\CompactGUI.Watcher\CompactGUI.Watcher.vbproj" />
   </ItemGroup>
 
