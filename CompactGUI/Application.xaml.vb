@@ -61,6 +61,9 @@ Partial Public Class Application
                                services.AddSingleton(Of DatabasePage)()
                                services.AddTransient(Of DatabaseViewModel)()
 
+                               services.AddSingleton(Of SteamMonitorPage)()
+                               services.AddTransient(Of SteamMonitorViewModel)()
+
                                'Other services
                                services.AddSingleton(Of Watcher.Watcher)(Function()
                                                                                         Return New Watcher.Watcher({})

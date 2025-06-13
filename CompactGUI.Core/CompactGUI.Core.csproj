@@ -6,7 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DebugType>none</DebugType>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.3.8" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">

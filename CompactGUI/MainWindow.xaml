@@ -35,8 +35,8 @@
 
 
         <ui:NavigationView x:Name="NavigationView"
-                           Grid.Row="1" Transition="FadeIn"
-                           IsBackButtonVisible="Collapsed" PaneDisplayMode="Top">
+                           Grid.Row="1"
+                           IsBackButtonVisible="Collapsed" PaneDisplayMode="Top" Transition="FadeIn">
             <ui:NavigationView.MenuItems>
 
 
@@ -62,10 +62,20 @@
                 </ui:NavigationViewItem>
 
                 <ui:NavigationViewItem Content="Compression DB"
-                       Margin="15,2,15,10"
-                       NavigationCacheMode="Disabled"
-                       Tag="{Binding}"
-                       TargetPageType="{x:Type local:DatabasePage}">
+                                       Margin="15,2,15,10"
+                                       NavigationCacheMode="Disabled"
+                                       Tag="{Binding}"
+                                       TargetPageType="{x:Type local:DatabasePage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="Database24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+
+                <ui:NavigationViewItem Content="Steam Monitor"
+                                       Margin="15,2,15,10"
+                                       NavigationCacheMode="Disabled"
+                                       Tag="{Binding}"
+                                       TargetPageType="{x:Type local:SteamMonitorPage}">
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Filled="False" Symbol="Database24" />
                     </ui:NavigationViewItem.Icon>
@@ -177,9 +187,8 @@
             </local:ImageControl>
 
             <Label x:Name="ProgTitle"
-                      
-                       Margin="20,16" HorizontalAlignment="Left"
-                       d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
+                   Margin="20,16" HorizontalAlignment="Left"
+                   d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
                 <Label.RenderTransform>
                     <TranslateTransform x:Name="TransformL" Y="20" />
                 </Label.RenderTransform>
@@ -211,10 +220,17 @@
                         </Style.Triggers>
                     </Style>
                 </Label.Style>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock  Margin="0 0 20 0"  Text="CompactGUI" VerticalAlignment="Center" Foreground="#10FFFFFF" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
-                    <Border Background="#20f44336" CornerRadius="10" Width="80" Height="22" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock  Text="Admin" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center"/>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Text="CompactGUI"
+                               Margin="0,0,20,0" VerticalAlignment="Center"
+                               Foreground="#10FFFFFF"
+                               Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+                    <Border Width="80" Height="22"
+                            Background="#20f44336" CornerRadius="10"
+                            Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="Admin"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="White" />
 
                     </Border>
                 </StackPanel>
