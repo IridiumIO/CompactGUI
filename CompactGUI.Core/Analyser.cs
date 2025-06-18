@@ -26,7 +26,7 @@ public class Analyser
     {
         try
         {
-            var allFiles = await Task.Run(() => Directory.EnumerateFiles(FolderName, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true }).AsShortPathNames(), cancellationToken).ConfigureAwait(false);
+            var allFiles = await Task.Run(() => Directory.EnumerateFiles(FolderName, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true, AttributesToSkip = FileAttributes.ReparsePoint }).AsShortPathNames(), cancellationToken).ConfigureAwait(false);
             var fileDetails = allFiles
                 .AsParallel()
                 .WithCancellation(cancellationToken)
