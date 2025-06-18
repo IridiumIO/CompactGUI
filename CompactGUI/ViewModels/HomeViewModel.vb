@@ -105,6 +105,12 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
         For Each folderName In validFolders
 
             Dim newFolder As CompressableFolder = CompressableFolderFactory.CreateCompressableFolder(folderName)
+
+            newFolder.CompressionOptions.WatchFolderForChanges = SettingsHandler.AppSettings.WatchFolderForChanges
+            newFolder.CompressionOptions.SelectedCompressionMode = SettingsHandler.AppSettings.SelectedCompressionMode
+            newFolder.CompressionOptions.SkipPoorlyCompressedFileTypes = SettingsHandler.AppSettings.SkipNonCompressable
+            newFolder.CompressionOptions.SkipUserSubmittedFiletypes = SettingsHandler.AppSettings.SkipUserNonCompressable
+
             If Not Folders.Any(Function(f) f.FolderName = newFolder.FolderName) Then
                 Folders.Add(newFolder)
                 SelectedFolder = newFolder
@@ -123,7 +129,10 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
             If _watcher.WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
                 Dim watchedFolder = _watcher.WatchedFolders.First(Function(w) w.Folder = newFolder.FolderName)
                 newFolder.CompressionOptions.WatchFolderForChanges = True
-                newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
+                If watchedFolder.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION Then
+                    newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
+                End If
+
             End If
 
 

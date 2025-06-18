@@ -28,28 +28,28 @@
                    Orientation="Horizontal">
 
             <local:CompressionMode_Radio Width="185" Height="85"
-                                         Margin="0,0,20,10"
+                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 4K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionPercent}"
                                          Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
-                                         Margin="0,0,20,10"
+                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 8K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionPercent}"
                                          Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
-                                         Margin="0,0,20,10"
+                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 16K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionPercent}"
                                          Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
-                                         Margin="0,0,20,10"
+                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="LZX" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -75,7 +75,7 @@
                           Margin="0,0,0,20" VerticalAlignment="Center"
                           FontSize="18" />
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
-                <CheckBox x:Name="UiChkSkipPoorlyCompressed"
+                <CheckBox x:Name="UiChkSkipPoorlyCompressed" Checked="UiChkSkipPoorlyCompressed_Checked" Unchecked="UiChkSkipPoorlyCompressed_Unchecked"
                           Content="Skip file types specified in settings"
                           Width="330"
                           FontSize="16"
@@ -95,7 +95,7 @@
                 </TextBlock>
             </WrapPanel>
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
-                <CheckBox x:Name="UiChkSkipUserPoorlyCompressed"
+                <CheckBox x:Name="UiChkSkipUserPoorlyCompressed" Checked="UiChkSkipUserPoorlyCompressed_Checked" Unchecked="UiChkSkipUserPoorlyCompressed_Unchecked"
                           Width="330"
                           FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}">
@@ -134,7 +134,7 @@
             </WrapPanel>
 
 
-            <CheckBox Content="Watch folder for changes"
+            <CheckBox x:Name="uiChkWatchFolderForChanges" Content="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked" Unchecked="uiChkWatchFolderForChanges_Unchecked"
                       Margin="0,0,0,15"
                       FontSize="16"
                       IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}" />
