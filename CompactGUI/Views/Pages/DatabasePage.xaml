@@ -24,7 +24,7 @@
              Foreground="{StaticResource CardForeground}"
              Visibility="Visible" />
 
-        <TextBlock Grid.Row="2" Text="{Binding LastUpdatedDatabase, StringFormat=Last Fetched: {0}}" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#10FFFFFF" Margin="0 0 0 0 " FontSize="12"/>
+        <TextBlock Grid.Row="2" Text="{Binding LastUpdatedDatabase, StringFormat=Last Fetched: {0:dd MMM yyy HH:mm:ss}}" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#10FFFFFF" Margin="0 0 0 0 " FontSize="12"/>
 
         <TextBlock Grid.Row="1"
            HorizontalAlignment="Left" VerticalAlignment="Center"

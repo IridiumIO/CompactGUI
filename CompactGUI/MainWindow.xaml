@@ -103,6 +103,7 @@
               Margin="0" Panel.ZIndex="-1"
               ClipToBounds="True">
 
+            <Border Background="#263340"/>
             <Border>
                 <Border.Background>
                     <LinearGradientBrush Opacity="0.4" StartPoint="0,0.5" EndPoint="0.2,1">
@@ -114,13 +115,13 @@
             <local:ImageControl x:Name="SteamBg"
                                 Height="{Binding ActualHeight, ElementName=MainWindow}"
                                 Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                ClipToBounds="True"
+                                ClipToBounds="True" 
                                 NewSource="{Binding BackgroundImage}"
                                 Opacity="1" Stretch="UniformToFill">
 
                 <local:ImageControl.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform ScaleX="2" ScaleY="1.2" />
+                        <ScaleTransform ScaleX="2" ScaleY="2" />
                     </TransformGroup>
 
                 </local:ImageControl.RenderTransform>
@@ -132,20 +133,20 @@
                         <BeginStoryboard>
                             <Storyboard>
 
-                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.6" Duration="0:0:2">
+                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.6" Duration="0:0:0.5">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseInOut" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" From="100" To="12" Duration="0:0:5" />
+                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" From="100" To="14" Duration="0:0:5" />
                                 <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
-                                                 From="2" To="1.0" Duration="0:0:6">
+                                                 From="2" To="1.2" Duration="0:0:6">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
                                 <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
-                                                 From="1.2" To="1.00" Duration="0:0:8">
+                                                 From="2" To="1.2" Duration="0:0:8">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
