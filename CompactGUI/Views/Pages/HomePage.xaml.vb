@@ -29,5 +29,34 @@
         End If
     End Sub
 
+    Private Sub Root_DragOver(sender As Object, e As DragEventArgs)
 
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim paths As String() = e.Data.GetData(DataFormats.FileDrop)
+
+            If paths.All(Function(path) IO.Directory.Exists(path)) Then
+                e.Effects = DragDropEffects.Copy
+            Else
+                e.Effects = DragDropEffects.None
+            End If
+
+
+        Else
+            e.Effects = DragDropEffects.None
+        End If
+
+        e.Handled = True
+
+    End Sub
+
+    Private Sub Root_Drop(sender As Object, e As DragEventArgs)
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim paths As String() = e.Data.GetData(DataFormats.FileDrop)
+            If paths.All(Function(path) IO.Directory.Exists(path)) Then
+                _viewModel.AddFoldersAsync(paths).ConfigureAwait(False)
+            End If
+        End If
+
+    End Sub
 End Class
