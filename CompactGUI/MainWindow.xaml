@@ -16,7 +16,7 @@
                  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                  RenderOptions.BitmapScalingMode="HighQuality" WindowBackdropType="Mica"
                  WindowCornerPreference="Round" WindowStartupLocation="CenterScreen"
-                 mc:Ignorable="d">
+                 mc:Ignorable="d" Closing="MainWindow_Closing">
     <bh:Interaction.Triggers>
 
         <bh:EventTrigger EventName="Closing">

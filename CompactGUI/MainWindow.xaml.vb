@@ -26,6 +26,19 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
 
         AddHandler Application.GetService(Of HomeViewModel)().PropertyChanged, AddressOf HVPropertyChanged
         AddHandler navigationService.GetNavigationControl.Navigated, AddressOf OnNavigated
+
+        If SettingsHandler.AppSettings.WindowWidth > 0 Then
+            Width = SettingsHandler.AppSettings.WindowWidth
+            Height = SettingsHandler.AppSettings.WindowHeight
+            Left = SettingsHandler.AppSettings.WindowLeft
+            Top = SettingsHandler.AppSettings.WindowTop
+            If SettingsHandler.AppSettings.WindowState = WindowState.Maximized Then
+                WindowState = WindowState.Maximized
+            Else
+                WindowState = WindowState.Normal
+            End If
+        End If
+
     End Sub
 
 
@@ -80,4 +93,13 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
     Public Function Navigate(pageType As Type) As Boolean Implements INavigationWindow.Navigate
         Throw New NotImplementedException()
     End Function
+
+    Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs)
+        SettingsHandler.AppSettings.WindowState = WindowState
+        SettingsHandler.AppSettings.WindowWidth = If(Width > 0, Width, 1300)
+        SettingsHandler.AppSettings.WindowHeight = If(Height > 0, Height, 700)
+        SettingsHandler.AppSettings.WindowLeft = Left
+        SettingsHandler.AppSettings.WindowTop = Top
+        SettingsHandler.WriteToFile()
+    End Sub
 End Class

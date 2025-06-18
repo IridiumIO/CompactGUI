@@ -78,6 +78,13 @@ Public Class Settings : Inherits ObservableObject
     End Property
 
 
+    Public Property WindowTop As Double = 0
+    Public Property WindowLeft As Double = 0
+    Public Property WindowWidth As Double = 1300
+    Public Property WindowHeight As Double = 700
+    Public Property WindowState As WindowState = WindowState.Normal
+
+
     Public Shared Async Function AddContextMenus() As Task
         Await Task.Run(Sub()
                            Try
