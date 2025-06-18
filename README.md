@@ -5,10 +5,7 @@
 
 <p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It works directly with the Win32 API to achieve the same thing as the native <code>compact.exe</code> command-line tool available from Windows 10 onwards.</b></p> 
 
-&nbsp;
-&nbsp;
-
-<p align="center"><img src="https://user-images.githubusercontent.com/1491536/172040389-62932137-11ae-49c8-8749-95c0b67f3aab.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040455-6cd06756-6323-44da-b350-daa47f31c5e3.png" width="250"/><img src="https://user-images.githubusercontent.com/1491536/172040456-09c069e3-093a-4c5e-8d69-f52d4dc2f982.png" width="250"/></>
+<p align="center"><img src="https://github.com/user-attachments/assets/18905802-3c9a-4afa-a16d-16f43b041930"/></>
 
 ------
 &nbsp;
@@ -45,12 +42,15 @@ Use this tool to compress folders while still being able to use/run them normall
       - Steam game results can be submitted to the online database from within CompactGUI 
  - Integration into Windows Explorer context menus for easier use.
  - Analyze the status of existing folders
- - Background Watcher - keeps track of folders and monitors them for changes (e.g. Steam game updates) and automatically keeps them compressed in the background.
+ - Background Watcher - Keeps track of folders and monitors them for changes (e.g. Steam game updates) and automatically keeps them compressed in the background.
+ - Results Database Viewer - Let's you see and search compression results from user-submitted data
  
 <h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-lightgrey.svg"></a> submissions</b></h3>
-<p>&nbsp;</p>
 
-<p align="center"><img src="https://github.com/IridiumIO/CompactGUI/assets/1491536/514bb3eb-55c4-488c-8731-61fcfa878dbd" width="250"/></p>
+
+
+<p align="center"><img src="https://github.com/user-attachments/assets/eaaeb970-99a8-429c-8c00-15d916ea7e33"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/928d27c4-695a-410a-b909-ff594d2b32a3"/></p>
 
 ## Caveat
 **This tool should not be used on games that utilise DirectStorage on Windows 11.** 
