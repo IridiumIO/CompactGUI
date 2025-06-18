@@ -95,6 +95,7 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
     End Function
 
     Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs)
+        If Not IsVisible Then Return
         SettingsHandler.AppSettings.WindowState = WindowState
         SettingsHandler.AppSettings.WindowWidth = If(Width > 0, Width, 1300)
         SettingsHandler.AppSettings.WindowHeight = If(Height > 0, Height, 700)
