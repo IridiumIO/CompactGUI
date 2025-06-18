@@ -309,7 +309,7 @@ Public Class CompressableFolderFactory
 
 
     Private Shared Function IsSteamFolder(folderPath As IO.DirectoryInfo) As Boolean
-        Return folderPath.Parent?.Parent?.Name = "steamapps"
+        Return folderPath.Parent?.Parent?.Name.ToLowerInvariant = "steamapps"
     End Function
 
 
