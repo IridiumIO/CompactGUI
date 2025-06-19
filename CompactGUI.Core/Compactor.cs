@@ -12,7 +12,7 @@ public class Compactor : ICompressor, IDisposable
 {
 
     private readonly string workingDirectory;
-    private readonly string[] excludedFileExtensions;
+    private readonly HashSet<string> excludedFileExtensions;
     private readonly WOFCompressionAlgorithm wofCompressionAlgorithm;
 
 
@@ -27,7 +27,7 @@ public class Compactor : ICompressor, IDisposable
     public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes)
     {
         workingDirectory = folderPath;
-        excludedFileExtensions = excludedFileTypes;
+        excludedFileExtensions = new HashSet<string>(excludedFileTypes);
         wofCompressionAlgorithm = compressionLevel;
 
         InitializeCompressionInfoPointer();
@@ -99,28 +99,26 @@ public class Compactor : ICompressor, IDisposable
         }
     }
 
-    private async Task<IEnumerable<FileDetails>> BuildWorkingFilesList()
+    public async Task<IEnumerable<FileDetails>> BuildWorkingFilesList()
     {
         uint clusterSize = SharedMethods.GetClusterSize(workingDirectory);
-
-        var filesList = new ConcurrentBag<FileDetails>();
 
         var analyser = new Analyser(workingDirectory);
         var ret = await analyser.AnalyseFolder(cancellationTokenSource.Token);
 
-        Parallel.ForEach(analyser.FileCompressionDetailsList, (fl) =>
-        {
-            var ft = fl.FileInfo;
-            if ((!excludedFileExtensions.Contains(ft?.Extension) || excludedFileExtensions.Contains(fl.FileName))
-                && ft.Length > clusterSize
-                && fl.CompressionMode != wofCompressionAlgorithm)
-            {
-                filesList.Add(new FileDetails { FileName = fl.FileName, UncompressedSize = fl.UncompressedSize });
-            }
-        });
+        var filesList = analyser.FileCompressionDetailsList
+            .Where(fl =>
+                fl.CompressionMode != wofCompressionAlgorithm
+                && fl.UncompressedSize > clusterSize
+                && ((fl.FileInfo != null && !excludedFileExtensions.Contains(fl.FileInfo.Extension)) || excludedFileExtensions.Contains(fl.FileName))
+            )
+            .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize))
+            .ToList();
 
-        return filesList.ToList();
+        return filesList;
     }
+
+
 
 
     public void Pause()
@@ -154,7 +152,7 @@ public class Compactor : ICompressor, IDisposable
     }
 
 
-    private readonly record struct FileDetails(string FileName, long UncompressedSize);
+    public readonly record struct FileDetails(string FileName, long UncompressedSize);
 
 
 }
