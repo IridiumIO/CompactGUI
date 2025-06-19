@@ -53,7 +53,7 @@ public class Compactor : ICompressor, IDisposable
         totalProcessedBytes = 0;
 
         if(maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
-        ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism };
+        ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
 
         try
         {
@@ -61,30 +61,21 @@ public class Compactor : ICompressor, IDisposable
                 (file, ctx) =>
                 {
                     ctx.ThrowIfCancellationRequested();
+
                     return new ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor));
                 }).ConfigureAwait(false);
         }
-        catch (Exception)
-        {
+        catch (OperationCanceledException){ return false; }
+        catch (Exception){ return false; }
 
-            return false;
-        }
         return true;
     }
 
     private async Task PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress> progressMonitor)
     {
-        try
-        {
-            await pauseSemaphore.WaitAsync(token).ConfigureAwait(false);
-            pauseSemaphore.Release();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
 
-        token.ThrowIfCancellationRequested();
+        await pauseSemaphore.WaitAsync(token).ConfigureAwait(false);
+        pauseSemaphore.Release();
 
         var res = WOFCompressFile(file.FileName);
         Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
