@@ -7,6 +7,7 @@ Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 
 Imports CompactGUI.Core.SharedMethods
+Imports CompactGUI.Logging
 
 Imports Microsoft.Extensions.Logging
 
@@ -97,11 +98,14 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
     Public Async Function AddFoldersAsync(folderPaths As IEnumerable(Of String)) As Task
 
+        HomeViewModelLog.AddingFolders(_logger, folderPaths)
+
         Dim invalidFolders = GetInvalidFolders(folderPaths.ToArray)
         Dim validFolders = folderPaths.Except(invalidFolders.InvalidFolders)
 
         If invalidFolders.InvalidFolders.Count > 0 Then
-
+            'TODO: Move this logger check to the snackbarService class?
+            HomeViewModelLog.InvalidFolders(_logger, invalidFolders.InvalidFolders, invalidFolders.InvalidMessages.Select(Function(x) GetFolderVerificationMessage(x)))
             _snackbarService.ShowInvalidFoldersMessage(invalidFolders.InvalidFolders, invalidFolders.InvalidMessages)
         End If
 
@@ -124,6 +128,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
                 Await CType(newFolder, SteamFolder).GetWikiResults()
             Else
                 If SettingsHandler.AppSettings.EstimateCompressionForNonSteamFolders Then
+                    HomeViewModelLog.GettingEstimatedCompression(_logger, newFolder.FolderName, newFolder.UncompressedBytes)
                     Await newFolder.GetEstimatedCompression()
                 End If
 
@@ -205,10 +210,11 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
         Core.SharedMethods.PreventSleep()
         Dim tasks As New List(Of Task)()
         Dim foldersToCompress = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).ToList
+        HomeViewModelLog.StartingBatchCompression(_logger, foldersToCompress.Count)
         For Each folder In foldersToCompress
             If folder.FolderActionState = ActionState.Idle Then
                 Await Task.Run(Async Function()
-                                   System.Diagnostics.Debug.WriteLine("Compressing " & folder.FolderName)
+                                   HomeViewModelLog.CompressingFolder(_logger, folder.FolderName)
                                    Dim ret = Await folder.CompressFolder()
                                    Dim analysis = Await folder.AnalyseFolderAsync
 
@@ -241,7 +247,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
 
     Public Sub AddOrUpdateFolderWatcher(folder As CompressableFolder)
-        System.Diagnostics.Debug.WriteLine("Adding folder to watcher: " & folder.FolderName)
+        HomeViewModelLog.AddingFolderToWatcher(_logger, folder.FolderName)
 
         Dim newWatched = New Watcher.WatchedFolder
         newWatched.Folder = folder.FolderName
