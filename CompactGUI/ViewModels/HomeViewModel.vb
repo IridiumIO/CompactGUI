@@ -8,6 +8,8 @@ Imports CommunityToolkit.Mvvm.Messaging
 
 Imports CompactGUI.Core.SharedMethods
 
+Imports Microsoft.Extensions.Logging
+
 Imports PropertyChanged
 
 Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
@@ -48,12 +50,14 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _snackbarService As CustomSnackBarService
+    Private ReadOnly _logger As ILogger(Of HomeViewModel)
 
-    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
+    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel))
         WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
         AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
         _watcher = watcher
         _snackbarService = snackbarService
+        _logger = logger
     End Sub
 
 
@@ -92,7 +96,6 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
 
     Public Async Function AddFoldersAsync(folderPaths As IEnumerable(Of String)) As Task
-
 
         Dim invalidFolders = GetInvalidFolders(folderPaths.ToArray)
         Dim validFolders = folderPaths.Except(invalidFolders.InvalidFolders)
@@ -205,7 +208,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
         For Each folder In foldersToCompress
             If folder.FolderActionState = ActionState.Idle Then
                 Await Task.Run(Async Function()
-                                   Debug.WriteLine("Compressing " & folder.FolderName)
+                                   System.Diagnostics.Debug.WriteLine("Compressing " & folder.FolderName)
                                    Dim ret = Await folder.CompressFolder()
                                    Dim analysis = Await folder.AnalyseFolderAsync
 
@@ -238,7 +241,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
 
     Public Sub AddOrUpdateFolderWatcher(folder As CompressableFolder)
-        Debug.WriteLine("Adding folder to watcher: " & folder.FolderName)
+        System.Diagnostics.Debug.WriteLine("Adding folder to watcher: " & folder.FolderName)
 
         Dim newWatched = New Watcher.WatchedFolder
         newWatched.Folder = folder.FolderName

@@ -5,6 +5,7 @@ Imports System.Windows.Threading
 Imports Wpf.Ui
 Imports Wpf.Ui.DependencyInjection
 Imports Microsoft.Extensions.Hosting
+Imports Microsoft.Extensions.Logging
 Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Configuration
 Imports System.Drawing
@@ -14,14 +15,19 @@ Partial Public Class Application
 
     Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 5)
 
+    Private Shared _host As IHost
 
+    Shared Sub New()
+        SettingsHandler.InitialiseSettings()
+        InitializeHost()
 
+        AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnDomainUnhandledException
 
+    End Sub
 
+    Private Shared Sub InitializeHost()
 
-
-
-    Private Shared _host As IHost = Host.CreateDefaultBuilder() _
+        _host = Host.CreateDefaultBuilder() _
         .ConfigureAppConfiguration(Sub(context, configBuilder)
                                        ' Set base path using IConfigurationBuilder
                                        configBuilder.SetBasePath(AppContext.BaseDirectory)
@@ -29,6 +35,19 @@ Partial Public Class Application
         .ConfigureServices(Sub(context, services)
 
                                services.AddHostedService(Of ApplicationHostService)()
+
+                               services.AddLogging(Sub(logging)
+                                                       logging.SetMinimumLevel(SettingsHandler.AppSettings.LogLevel)
+                                                       logging.AddConsole()
+                                                       logging.AddDebug()
+                                                       logging.AddFile(
+                                                        Path.Combine(SettingsHandler.DataFolder.FullName, "log.log"),
+                                                        SettingsHandler.AppSettings.LogLevel,
+                                                        retainedFileCountLimit:=2,
+                                                        fileSizeLimitBytes:=1000000,
+                                                        outputTemplate:="{Timestamp:o} {RequestId,13} [{Level:u3}] {Message}{NewLine}{Exception}"
+                                                        )
+                                                   End Sub)
 
                                ' Theme manipulation
                                services.AddSingleton(Of IThemeService, ThemeService)()
@@ -63,8 +82,8 @@ Partial Public Class Application
 
                                'Other services
                                services.AddSingleton(Of Watcher.Watcher)(Function()
-                                                                                        Return New Watcher.Watcher({})
-                                                                                    End Function)
+                                                                             Return New Watcher.Watcher({})
+                                                                         End Function)
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
                                                                              End Function)
@@ -72,8 +91,11 @@ Partial Public Class Application
             .Build()
 
 
+    End Sub
+
+
     Public Shared Function GetService(Of T As Class)() As T
-        Return TryCast(_host.Services.GetService(GetType(T)), T)
+        Return TryCast(_host?.Services.GetService(GetType(T)), T)
     End Function
 
 
@@ -84,8 +106,8 @@ Partial Public Class Application
 
 
     Private Shadows Async Sub OnStartup(sender As Object, e As StartupEventArgs)
-        SettingsHandler.InitialiseSettings()
 
+        AddHandler Dispatcher.CurrentDispatcher.UnhandledException, AddressOf OnDispatcherUnhandledException
         Dim acquiredMutex As Boolean = mutex.WaitOne(0, False)
 
         If Not acquiredMutex Then
@@ -160,19 +182,21 @@ Partial Public Class Application
 
 
     Private Shadows Async Sub OnExit(sender As Object, e As ExitEventArgs)
-
         Await _host.StopAsync()
         _host.Dispose()
     End Sub
 
     Private Sub OnDispatcherUnhandledException(sender As Object, e As DispatcherUnhandledExceptionEventArgs)
-        ' For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+        GetService(Of ILogger(Of Application))().LogCritical(e.Exception, "Unhandled exception in application: {Message}", e.Exception.Message)
     End Sub
 
-
-
-
-
+    Private Shared Sub OnDomainUnhandledException(sender As Object, e As UnhandledExceptionEventArgs)
+        Dim ex = TryCast(e.ExceptionObject, Exception)
+        Dim logger = GetService(Of ILogger(Of Application))()
+        If logger IsNot Nothing AndAlso ex IsNot Nothing Then
+            logger.LogCritical(ex, "Unhandled domain exception: {Message}", ex.Message)
+        End If
+    End Sub
 
 
 

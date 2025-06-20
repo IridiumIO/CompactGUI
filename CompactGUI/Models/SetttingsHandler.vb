@@ -2,6 +2,10 @@
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 
+Imports CompactGUI.Logging
+
+Imports Microsoft.Extensions.Logging
+
 
 Public Class SettingsHandler : Inherits ObservableObject
 
@@ -10,10 +14,10 @@ Public Class SettingsHandler : Inherits ObservableObject
     Public Shared Property AppSettings As Settings
     Public Shared Property SettingsVersion As Decimal = 1.2
 
-    Shared Async Sub InitialiseSettings()
+    Shared Sub InitialiseSettings()
 
         If Not DataFolder.Exists Then DataFolder.Create()
-        If Not SettingsJSONFile.Exists Then Await SettingsJSONFile.Create().DisposeAsync()
+        If Not SettingsJSONFile.Exists Then SettingsJSONFile.Create().Dispose()
 
         AppSettings = DeserializeAndValidateJSON(SettingsJSONFile)
 
@@ -21,7 +25,7 @@ Public Class SettingsHandler : Inherits ObservableObject
             AppSettings = New Settings With {.SettingsVersion = SettingsVersion}
 
             Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
-            Await msgError.ShowAsync()
+            msgError.ShowAsync()
 
         End If
 
@@ -58,6 +62,11 @@ Public Class SettingsHandler : Inherits ObservableObject
     Shared Sub WriteToFile()
         Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
         IO.File.WriteAllText(SettingsJSONFile.FullName, output)
+        ' Only log if logger is available (after DI is set up)
+        Dim logger = TryCast(Application.GetService(Of ILogger(Of Settings)), ILogger)
+        If logger IsNot Nothing Then
+            SettingsLog.SettingsSaved(logger)
+        End If
     End Sub
 
 End Class
