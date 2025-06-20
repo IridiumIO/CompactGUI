@@ -1,4 +1,5 @@
 ﻿Imports System.Text.Json
+Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 
@@ -29,7 +30,8 @@ Public Class SettingsHandler : Inherits ObservableObject
 
         End If
 
-        WriteToFile()
+        Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
+        IO.File.WriteAllText(SettingsJSONFile.FullName, output)
 
     End Sub
 
@@ -60,13 +62,37 @@ Public Class SettingsHandler : Inherits ObservableObject
 
 
     Shared Sub WriteToFile()
-        Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
-        IO.File.WriteAllText(SettingsJSONFile.FullName, output)
-        ' Only log if logger is available (after DI is set up)
-        Dim logger = TryCast(Application.GetService(Of ILogger(Of Settings)), ILogger)
-        If logger IsNot Nothing Then
-            SettingsLog.SettingsSaved(logger)
-        End If
+        ScheduleWriteToFile()
     End Sub
+
+    Private Shared ReadOnly debounceDelay As TimeSpan = TimeSpan.FromMilliseconds(2000)
+    Private Shared ReadOnly timerLock As New Object()
+    Private Shared debounceTimer As System.Timers.Timer
+
+    Public Shared Sub ScheduleWriteToFile()
+        SyncLock timerLock
+            If debounceTimer Is Nothing Then
+                debounceTimer = New System.Timers.Timer(debounceDelay.TotalMilliseconds)
+                debounceTimer.AutoReset = False
+                AddHandler debounceTimer.Elapsed, Async Sub(__, ___)
+                                                      Await WriteToFileAsync()
+                                                  End Sub
+            Else
+                debounceTimer.Stop()
+            End If
+            debounceTimer.Start()
+        End SyncLock
+    End Sub
+
+    Private Shared Async Function WriteToFileAsync() As Task
+        Try
+            Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
+            Await IO.File.WriteAllTextAsync(SettingsJSONFile.FullName, output)
+            SettingsLog.SettingsSaved(Application.GetService(Of ILogger(Of Settings)))
+        Catch ex As Exception
+            ' Log or handle exception
+        End Try
+    End Function
+
 
 End Class
