@@ -60,6 +60,19 @@ Partial Public Class Application
 
                                services.AddSingleton(Of DatabasePage)()
                                services.AddTransient(Of DatabaseViewModel)()
+                               
+                               ' New pages
+                               services.AddSingleton(Of StatisticsPage)()
+                               services.AddSingleton(Of StatisticsViewModel)()
+                               
+                               services.AddSingleton(Of SchedulerPage)()
+                               services.AddSingleton(Of SchedulerViewModel)()
+                               
+                               services.AddSingleton(Of BatchProcessingPage)()
+                               services.AddSingleton(Of BatchProcessingViewModel)()
+                               
+                               services.AddSingleton(Of ProfilesPage)()
+                               services.AddSingleton(Of ProfilesViewModel)()
 
                                'Other services
                                services.AddSingleton(Of Watcher.Watcher)(Function()
@@ -68,6 +81,22 @@ Partial Public Class Application
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
                                                                              End Function)
+                               
+                               ' New services
+                               services.AddSingleton(Of StatisticsService)()
+                               services.AddSingleton(Of ProfileService)()
+                               services.AddSingleton(Of SchedulerService)(Function(sp)
+                                                                              Return New SchedulerService(sp.GetRequiredService(Of Watcher.Watcher)())
+                                                                          End Function)
+                               services.AddSingleton(Of BatchProcessingService)(Function(sp)
+                                                                                    Return New BatchProcessingService(
+                                                                                        sp.GetRequiredService(Of ProfileService)(),
+                                                                                        sp.GetRequiredService(Of StatisticsService)(),
+                                                                                        sp.GetRequiredService(Of Watcher.Watcher)())
+                                                                                End Function)
+                               services.AddSingleton(Of FileTypeAnalysisService)(Function(sp)
+                                                                                     Return New FileTypeAnalysisService(sp.GetRequiredService(Of StatisticsService)())
+                                                                                 End Function)
                            End Sub) _
             .Build()
 

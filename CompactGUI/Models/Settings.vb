@@ -19,6 +19,15 @@ Public Class Settings : Inherits ObservableObject
     Public Property MaxCompressionThreads As Integer = 0
     Public Property LockHDDsToOneThread As Boolean = True
     Public Property EstimateCompressionForNonSteamFolders As Boolean = False
+    
+    ' New settings for advanced features
+    Public Property EnableScheduledTasks As Boolean = True
+    Public Property EnableBatchProcessing As Boolean = True
+    Public Property EnableCompressionProfiles As Boolean = True
+    Public Property EnableStatisticsTracking As Boolean = True
+    Public Property EnableFileTypeAnalysis As Boolean = True
+    Public Property SchedulerCheckInterval As Integer = 60 ' In seconds
+    Public Property DefaultCompressionProfileId As Guid? = Nothing
 
     Private _EnableBackgroundWatcher As Boolean = True
     Public Property EnableBackgroundWatcher As Boolean

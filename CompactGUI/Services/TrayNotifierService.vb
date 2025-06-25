@@ -84,13 +84,43 @@ Public Class TrayNotifierService
     End Sub
 
     Public Sub Notify_Compressed(DisplayName As String, BytesSaved As Long, CompressionRatio As Decimal)
-
         Dim title = $"{DisplayName}"
         Dim readableSaved = $"{New BytesToReadableConverter().Convert(BytesSaved, GetType(Long), Nothing, Globalization.CultureInfo.CurrentCulture)} saved"
         Dim percentCompressed = $"{100 - CInt(CompressionRatio * 100)}% smaller"
         ShowBalloon(title, $"▸ {readableSaved}{Environment.NewLine}▸ {percentCompressed}")
-
     End Sub
-
+    
+    Public Sub Notify_ScheduledTaskCompleted(taskName As String)
+        Dim title = "Scheduled Task Completed"
+        Dim message = $"The scheduled task '{taskName}' has been completed successfully."
+        ShowBalloon(title, message)
+    End Sub
+    
+    Public Sub Notify_ScheduledTaskFailed(taskName As String, errorMessage As String)
+        Dim title = "Scheduled Task Failed"
+        Dim message = $"The scheduled task '{taskName}' has failed: {errorMessage}"
+        ShowBalloon(title, message, 3) ' Error icon
+    End Sub
+    
+    Public Sub Notify_BatchJobCompleted(jobName As String, folderCount As Integer, spaceSaved As Long)
+        Dim title = "Batch Job Completed"
+        Dim readableSaved = $"{New BytesToReadableConverter().Convert(spaceSaved, GetType(Long), Nothing, Globalization.CultureInfo.CurrentCulture)}"
+        Dim message = $"The batch job '{jobName}' has completed processing {folderCount} folder(s).{Environment.NewLine}Total space saved: {readableSaved}"
+        ShowBalloon(title, message)
+    End Sub
+    
+    Public Sub Notify_BatchJobFailed(jobName As String, errorCount As Integer)
+        Dim title = "Batch Job Failed"
+        Dim message = $"The batch job '{jobName}' has failed with {errorCount} error(s)."
+        ShowBalloon(title, message, 3) ' Error icon
+    End Sub
+    
+    Public Sub ShowMessage(title As String, message As String)
+        ShowBalloon(title, message)
+    End Sub
+    
+    Public Sub ShowError(title As String, message As String)
+        ShowBalloon(title, message, 3) ' Error icon
+    End Sub
 
 End Class
