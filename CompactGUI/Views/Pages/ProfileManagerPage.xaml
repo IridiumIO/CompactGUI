@@ -1,0 +1,234 @@
+<Page x:Class="ProfileManagerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:CompactGUI"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      d:DataContext="{d:DesignInstance Type=local:ProfileManagerViewModel}"
+      d:DesignHeight="600" d:DesignWidth="1000"
+      mc:Ignorable="d">
+    
+    <Grid Margin="40,20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Profile List -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Text="Compression Profiles" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20"/>
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                <ui:Button Content="New Profile" Command="{Binding CreateProfileCommand}" Margin="0,0,10,0"/>
+                <ui:Button Content="Duplicate" Command="{Binding DuplicateProfileCommand}" Margin="0,0,10,0"/>
+                <ui:Button Content="Delete" Command="{Binding DeleteProfileCommand}" 
+                          Background="{StaticResource PaletteRedBrush}"/>
+            </StackPanel>
+            
+            <ListView Grid.Row="2" ItemsSource="{Binding Profiles}" 
+                     SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                     Background="Transparent" BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ui:Card Margin="0,0,0,5" Padding="15">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="16"/>
+                                    <Border Background="{StaticResource AccentFillColorDefaultBrush}" 
+                                           CornerRadius="3" Padding="4,2" Margin="10,0,0,0"
+                                           Visibility="{Binding IsDefault, Converter={StaticResource BoolToVisConverter}}">
+                                        <TextBlock Text="DEFAULT" FontSize="10" Foreground="White"/>
+                                    </Border>
+                                </StackPanel>
+                                
+                                <TextBlock Grid.Row="1" Text="{Binding Description}" 
+                                          Foreground="{StaticResource TextFillColorSecondaryBrush}"
+                                          TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
+                                    <TextBlock Text="{Binding CompressionMode}" 
+                                              Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                                              Padding="6,2" FontSize="12"/>
+                                    <TextBlock Text="{Binding LastUsed, StringFormat='Last used: {0:MM/dd/yyyy}'}" 
+                                              Foreground="{StaticResource TextFillColorTertiaryBrush}"
+                                              FontSize="11" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:Card>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        
+        <!-- Profile Editor -->
+        <Grid Grid.Column="2" Visibility="{Binding IsEditingProfile, Converter={StaticResource BoolToVisConverter}}">
+            <ScrollViewer>
+                <StackPanel>
+                    <TextBlock Text="Profile Settings" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                    
+                    <ui:Card Padding="20" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Basic Information" FontWeight="SemiBold" Margin="0,0,0,15"/>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Text="Name:" VerticalAlignment="Center"/>
+                                <ui:TextBox Grid.Column="1" Text="{Binding EditingProfile.Name, Mode=TwoWay}"/>
+                                
+                                <TextBlock Grid.Row="2" Text="Description:" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                                <ui:TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EditingProfile.Description, Mode=TwoWay}"
+                                           AcceptsReturn="True" Height="60"/>
+                            </Grid>
+                        </StackPanel>
+                    </ui:Card>
+                    
+                    <ui:Card Padding="20" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Compression Settings" FontWeight="SemiBold" Margin="0,0,0,15"/>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Text="Compression Mode:" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="1" SelectedItem="{Binding EditingProfile.CompressionMode, Mode=TwoWay}">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="XPRESS 4K" Tag="XPRESS4K"/>
+                                        <ComboBoxItem Content="XPRESS 8K" Tag="XPRESS8K"/>
+                                        <ComboBoxItem Content="XPRESS 16K" Tag="XPRESS16K"/>
+                                        <ComboBoxItem Content="LZX" Tag="LZX"/>
+                                    </ComboBox.Items>
+                                </ComboBox>
+                                
+                                <TextBlock Grid.Row="2" Text="Max Threads:" VerticalAlignment="Center"/>
+                                <ui:NumberBox Grid.Row="2" Grid.Column="1" 
+                                             Value="{Binding EditingProfile.MaxThreads, Mode=TwoWay}"
+                                             Minimum="1" Maximum="32"/>
+                                
+                                <TextBlock Grid.Row="4" Text="Min File Size:" VerticalAlignment="Center"/>
+                                <ui:NumberBox Grid.Row="4" Grid.Column="1" 
+                                             Value="{Binding EditingProfile.MinimumFileSize, Mode=TwoWay}"
+                                             Minimum="0"/>
+                            </Grid>
+                            
+                            <StackPanel Margin="0,20,0,0">
+                                <CheckBox Content="Skip poorly compressed file types" 
+                                         IsChecked="{Binding EditingProfile.SkipPoorlyCompressedFileTypes, Mode=TwoWay}"
+                                         Margin="0,0,0,10"/>
+                                <CheckBox Content="Skip user submitted file types" 
+                                         IsChecked="{Binding EditingProfile.SkipUserSubmittedFiletypes, Mode=TwoWay}"
+                                         Margin="0,0,0,10"/>
+                                <CheckBox Content="Watch folder for changes" 
+                                         IsChecked="{Binding EditingProfile.WatchFolderForChanges, Mode=TwoWay}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:Card>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <ui:Button Content="Cancel" Command="{Binding CancelEditCommand}" Margin="0,0,10,0"/>
+                        <ui:Button Content="Save Profile" Command="{Binding SaveProfileCommand}" 
+                                  Background="{StaticResource AccentFillColorDefaultBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        
+        <!-- Profile Details View -->
+        <Grid Grid.Column="2" Visibility="{Binding IsEditingProfile, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+            <StackPanel DataContext="{Binding SelectedProfile}">
+                <TextBlock Text="Profile Details" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                
+                <ui:Card Padding="20" Margin="0,0,0,20" 
+                        Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Name}" FontSize="24" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding Description}" Margin="0,10,0,20" 
+                                  Foreground="{StaticResource TextFillColorSecondaryBrush}"/>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Text="Compression Mode:" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Text="{Binding CompressionMode}"/>
+                            
+                            <TextBlock Grid.Row="2" Text="Max Threads:" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding MaxThreads}"/>
+                            
+                            <TextBlock Grid.Row="4" Text="Min File Size:" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding MinimumFileSize, Converter={StaticResource BytesToReadableConverter}}"/>
+                            
+                            <TextBlock Grid.Row="6" Text="Created:" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding CreatedDate, StringFormat='{}{0:MM/dd/yyyy HH:mm}'}"/>
+                            
+                            <TextBlock Grid.Row="8" Text="Last Used:" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding LastUsed, StringFormat='{}{0:MM/dd/yyyy HH:mm}'}"/>
+                        </Grid>
+                        
+                        <StackPanel Margin="0,20,0,0">
+                            <ui:Button Content="Edit Profile" Command="{Binding DataContext.EditProfileCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                      HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ui:Card>
+                
+                <ui:Card Padding="20" Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Inverse}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="DocumentSettings24" FontSize="48" 
+                                      Foreground="{StaticResource TextFillColorTertiaryBrush}" Margin="0,0,0,20"/>
+                        <TextBlock Text="Select a profile to view details" 
+                                  FontSize="16" Foreground="{StaticResource TextFillColorSecondaryBrush}"/>
+                    </StackPanel>
+                </ui:Card>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
