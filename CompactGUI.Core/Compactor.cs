@@ -27,7 +27,9 @@ public class Compactor : ICompressor, IDisposable
     public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes)
     {
         workingDirectory = folderPath;
-        excludedFileExtensions = new HashSet<string>(excludedFileTypes);
+        excludedFileExtensions = new HashSet<string>(excludedFileTypes).MyTag();
+
+        int sum = 1 + 2.MyTag();
         wofCompressionAlgorithm = compressionLevel;
 
         InitializeCompressionInfoPointer();
@@ -155,4 +157,9 @@ public class Compactor : ICompressor, IDisposable
     public readonly record struct FileDetails(string FileName, long UncompressedSize);
 
 
+}
+
+public static class MyTagExtensions
+{
+    public static T MyTag<T>(this T obj) => obj;
 }

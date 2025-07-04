@@ -1,13 +1,22 @@
 ﻿Imports CommunityToolkit.Mvvm.Input
 
 Imports CompactGUI.Core.SharedMethods
+Imports CompactGUI.Logging
+
+Imports Microsoft.Extensions.Logging
 
 Imports Wpf.Ui.Controls
 
 Public Class CustomSnackBarService
     Inherits Wpf.Ui.SnackbarService
 
+    Private ReadOnly logger As ILogger(Of CustomSnackBarService)
     Public _snackbar As Snackbar
+
+    Public Sub New(logger As ILogger(Of CustomSnackBarService))
+        MyBase.New()
+        Me.logger = logger
+    End Sub
 
     Public Sub ShowCustom(message As UIElement, title As String, appearance As ControlAppearance, Optional icon As IconElement = Nothing, Optional timeout As TimeSpan = Nothing)
 
@@ -29,11 +38,11 @@ Public Class CustomSnackBarService
 
         Dim messageString = ""
         For i = 0 To InvalidFolders.Count - 1
-            If InvalidMessages(i) = FolderVerificationResult.InsufficientPermission Then
+            SnackbarServiceLog.ShowInvalidFoldersMessage(logger, InvalidFolders(i), GetFolderVerificationMessage(InvalidMessages(i)))
+            If InvalidFolders.Count = 1 AndAlso InvalidMessages(i) = FolderVerificationResult.InsufficientPermission Then
                 ShowInsufficientPermission(InvalidFolders(i))
                 Return
             End If
-
             messageString &= $"{InvalidFolders(i)}: {GetFolderVerificationMessage(InvalidMessages(i))}" & vbCrLf
         Next
 
@@ -55,6 +64,7 @@ Public Class CustomSnackBarService
         textBlock.Text = "Click to download"
 
         ' Show the custom snackbar
+        SnackbarServiceLog.ShowUpdateAvailable(logger, newVersion, isPreRelease)
         ShowCustom(textBlock, $"Update Available ▸ Version {newVersion}", If(isPreRelease, ControlAppearance.Info, ControlAppearance.Success), timeout:=TimeSpan.FromSeconds(10))
 
         Dim handler As MouseButtonEventHandler = Nothing
@@ -77,23 +87,28 @@ Public Class CustomSnackBarService
 
     Public Sub ShowFailedToSubmitToWiki()
         Show("Failed to submit to wiki", "Please check your internet connection and try again", Wpf.Ui.Controls.ControlAppearance.Danger, Nothing, TimeSpan.FromSeconds(5))
+        SnackbarServiceLog.ShowFailedToSubmitToWiki(logger)
     End Sub
 
     Public Sub ShowSubmittedToWiki(steamsubmitdata As SteamSubmissionData, compressionMode As Integer)
         Show("Submitted to wiki", $"UID: {steamsubmitdata.UID}{vbCrLf}Game: {steamsubmitdata.GameName}{vbCrLf}SteamID: {steamsubmitdata.SteamID}{vbCrLf}Compression: {[Enum].GetName(GetType(Core.WOFCompressionAlgorithm), Core.WOFHelper.WOFConvertCompressionLevel(compressionMode))}", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(10))
+        SnackbarServiceLog.ShowSubmittedToWiki(logger, steamsubmitdata.UID, steamsubmitdata.GameName, steamsubmitdata.SteamID, steamsubmitdata.CompressionMode)
     End Sub
 
 
     Public Sub ShowAppliedToAllFolders()
         Show("Applied to all folders", "Compression options have been applied to all folders", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
+        SnackbarServiceLog.ShowAppliedToAllFolders(logger)
     End Sub
 
     Public Sub ShowCannotRemoveFolder()
         Show("Cannot remove folder", "Please wait until the current operation is finished", Wpf.Ui.Controls.ControlAppearance.Caution, Nothing, TimeSpan.FromSeconds(5))
+        SnackbarServiceLog.ShowCannotRemoveFolder(logger)
     End Sub
 
     Public Sub ShowAddedToQueue()
         Show("Success", "Added to Queue", Wpf.Ui.Controls.ControlAppearance.Success, Nothing, TimeSpan.FromSeconds(5))
+        SnackbarServiceLog.ShowAddedToQueue(logger)
     End Sub
 
     Public Sub ShowDirectStorageWarning(displayName As String)
@@ -102,6 +117,6 @@ Public Class CustomSnackBarService
             Wpf.Ui.Controls.ControlAppearance.Info,
             Nothing,
             TimeSpan.FromSeconds(20))
-
+        SnackbarServiceLog.ShowDirectStorageWarning(logger, displayName)
     End Sub
 End Class
