@@ -1,6 +1,8 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.Threading
 
+Imports Microsoft.Extensions.Logging.Abstractions
+
 Public Class BackgroundCompactor
 
     Public Property IsCompactorActive As Boolean = False
@@ -96,7 +98,7 @@ Public Class BackgroundCompactor
             If result AndAlso folders.Contains(folder) Then
                 ' Ensure the folder is still in the original collection before updating
 
-                Dim analyser As New Core.Analyser(folder.Folder)
+                Dim analyser As New Core.Analyser(folder.Folder, NullLogger(Of Core.Analyser).Instance)
 
                 Await analyser.AnalyseFolder(Nothing)
 

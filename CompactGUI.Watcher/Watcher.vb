@@ -1,8 +1,12 @@
 Imports System.Collections.ObjectModel
 Imports System.Text.Json
-Imports CompactGUI.Core
 Imports System.Threading
+
 Imports CommunityToolkit.Mvvm.ComponentModel
+
+Imports CompactGUI.Core
+
+Imports Microsoft.Extensions.Logging.Abstractions
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class Watcher : Inherits ObservableObject
@@ -325,7 +329,7 @@ Public Class Watcher : Inherits ObservableObject
 
     Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
         Debug.WriteLine("Background Analysing: " & folder)
-        Dim analyser As New Analyser(folder)
+        Dim analyser As New Analyser(folder, NullLogger(Of Analyser).Instance)
 
         Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
         watched.IsWorking = True

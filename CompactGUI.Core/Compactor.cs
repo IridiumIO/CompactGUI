@@ -116,7 +116,7 @@ public class Compactor : ICompressor, IDisposable
     {
         uint clusterSize = SharedMethods.GetClusterSize(workingDirectory);
 
-        var analyser = new Analyser(workingDirectory);
+        var analyser = new Analyser(workingDirectory, NullLogger<Analyser>.Instance);
         var ret = await analyser.AnalyseFolder(cancellationTokenSource.Token);
 
         var filesList = analyser.FileCompressionDetailsList
