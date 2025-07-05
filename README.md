@@ -20,7 +20,7 @@ It's a commandlet with a collection of new algorithms introduced in Windows 10 t
 Transparent compression means that files can still be used normally on the computer as if nothing had happened - they don't get repackaged like Zip and Rar files do. You can still browse, launch games and programs exactly as you did before. 
 
 **How is this different from the built-in compression in older versions of Windows?**
-This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. Those with older HDDs may even see a performance gain in the form of reduced loading times - smaller files can be read into RAM faster, and the CPU can decompress them on the fly much faster than a typical HDD can supply them. [More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
+This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. Those with older HDDs may even see a performance gain in the form of reduced loading times - smaller files can be read into RAM faster, and the CPU can decompress them on the fly much faster than a typical HDD can supply them. [More information can be found here.](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) 
 
 
 
@@ -28,8 +28,8 @@ This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click >
 
 ####
  
-- <p>Download from <a href="https://github.com/IridiumIO/CompactGUI/releases"><b>GitHub Releases</b></a></p>
-- Install using Winget `winget install CompactGUI`
+- <p>Download from <a href="https://github.com/IridiumIO/CompactGUI/releases"><b>GitHub Releases</b></a></p>.
+- Install using Winget `winget install CompactGUI` and run with `Win+R > CompactGUI`. You can then add a shortcut to the start menu from the options.
 
 
 ## Uses
