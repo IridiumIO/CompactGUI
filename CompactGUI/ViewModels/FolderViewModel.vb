@@ -7,7 +7,7 @@ Imports CommunityToolkit.Mvvm.Input
 Imports Wpf.Ui.Controls
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
-Public Class FolderViewModel : Inherits ObservableObject
+Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implements IDisposable
 
 
     Public Event PropertyChanged As PropertyChangedEventHandler
@@ -90,7 +90,6 @@ Public Class FolderViewModel : Inherits ObservableObject
             OnPropertyChanged(NameOf(IsNotResultsOrAnalysing))
             OnPropertyChanged(NameOf(CompressionDisplayLevel))
             OnPropertyChanged(NameOf(DisplayedFolderAfterSize))
-
         End If
     End Sub
 
@@ -181,6 +180,11 @@ Public Class FolderViewModel : Inherits ObservableObject
 
 
 
+    Public Sub Dispose() Implements IDisposable.Dispose
+        RemoveHandler Folder.PropertyChanged, AddressOf OnFolderPropertyChanged
+        RemoveHandler Folder.CompressionProgressChanged, AddressOf OnCompressionProgressChanged
+        RemoveHandler Folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
+    End Sub
 
 
 

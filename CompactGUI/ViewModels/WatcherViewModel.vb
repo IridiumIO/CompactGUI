@@ -4,7 +4,7 @@ Imports CommunityToolkit.Mvvm.Messaging
 
 Imports Wpf.Ui.Controls
 
-Public Class WatcherViewModel : Inherits ObservableObject
+Public NotInheritable Class WatcherViewModel : Inherits ObservableObject
 
     Private ReadOnly _snackbarService As CustomSnackBarService
     Public ReadOnly Property Watcher As Watcher.Watcher

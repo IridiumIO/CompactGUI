@@ -122,18 +122,20 @@ Public Class Watcher : Inherits ObservableObject
 
     End Sub
 
-    Public Sub UpdateWatched(folder As String, ByRef analyser As Analyser, isFreshlyCompressed As Boolean, Optional immediateFlushToDisk As Boolean = True)
+    Public Async Sub UpdateWatched(folder As String, analyser As Analyser, isFreshlyCompressed As Boolean, Optional immediateFlushToDisk As Boolean = True)
 
         Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = folder)
 
         If existingItem IsNot Nothing Then
 
+            Dim analysedFiles = Await analyser.GetAnalysedFilesAsync(CancellationToken.None)
+
             existingItem.LastCheckedDate = DateTime.Now
             existingItem.LastCheckedSize = analyser.CompressedBytes
             existingItem.LastUncompressedSize = analyser.UncompressedBytes
             existingItem.LastSystemModifiedDate = DateTime.Now
-            If analyser.FileCompressionDetailsList.Count <> 0 Then
-                existingItem.CompressionLevel = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
+            If analysedFiles?.Count <> 0 Then
+                existingItem.CompressionLevel = analysedFiles.Select(Function(f) f.CompressionMode).Max
             End If
 
             If isFreshlyCompressed Then
@@ -329,41 +331,38 @@ Public Class Watcher : Inherits ObservableObject
 
     Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
 
-        Dim analyser As New Analyser(folder, NullLogger(Of Analyser).Instance)
+        Using analyser As New Analyser(folder, NullLogger(Of Analyser).Instance)
+            Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
+            watched.IsWorking = True
 
-        Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
-        watched.IsWorking = True
+            Dim analysedFiles = Await analyser.GetAnalysedFilesAsync(CancellationToken.None)
 
-        Dim ret = Await analyser.AnalyseFolder(Nothing)
+            watched.LastCheckedDate = DateTime.Now
+            watched.LastCheckedSize = analyser.CompressedBytes
+            watched.LastUncompressedSize = analyser.UncompressedBytes
 
+            watched.LastSystemModifiedDate = watched.LastChangedDate
 
+            If analysedFiles.Count <> 0 Then
+                Dim mainCompressionLVL = analysedFiles?.Select(Function(f) f.CompressionMode).Max
+                watched.CompressionLevel = If(mainCompressionLVL, WOFCompressionAlgorithm.NO_COMPRESSION)
 
-        watched.LastCheckedDate = DateTime.Now
-        watched.LastCheckedSize = analyser.CompressedBytes
-        watched.LastUncompressedSize = analyser.UncompressedBytes
+                If checkDiskModified Then
+                    Dim lastDiskWriteTime = analysedFiles.Select(Function(fl)
+                                                                     Dim finfo As New IO.FileInfo(fl.FileName)
+                                                                     Return finfo.LastWriteTime
+                                                                 End Function).OrderByDescending(Function(f) f).First
 
-        watched.LastSystemModifiedDate = watched.LastChangedDate
+                    watched.LastSystemModifiedDate = If(watched.LastSystemModifiedDate < lastDiskWriteTime, lastDiskWriteTime, watched.LastSystemModifiedDate)
 
-        If analyser.FileCompressionDetailsList.Count <> 0 Then
-            Dim mainCompressionLVL = analyser.FileCompressionDetailsList?.Select(Function(f) f.CompressionMode).Max
-            watched.CompressionLevel = If(mainCompressionLVL, WOFCompressionAlgorithm.NO_COMPRESSION)
-
-            If checkDiskModified Then
-                Dim lastDiskWriteTime = analyser.FileCompressionDetailsList.Select(Function(fl)
-                                                                                       Dim finfo As New IO.FileInfo(fl.FileName)
-                                                                                       Return finfo.LastWriteTime
-                                                                                   End Function).OrderByDescending(Function(f) f).First
-
-                watched.LastSystemModifiedDate = If(watched.LastSystemModifiedDate < lastDiskWriteTime, lastDiskWriteTime, watched.LastSystemModifiedDate)
-
+                End If
             End If
-        End If
 
+            watched.HasTargetChanged = False
+            watched.IsWorking = False
+            Return True
 
-
-        watched.HasTargetChanged = False
-        watched.IsWorking = False
-        Return True
+        End Using
 
     End Function
 

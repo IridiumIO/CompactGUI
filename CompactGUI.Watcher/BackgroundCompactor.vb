@@ -57,7 +57,7 @@ Public Class BackgroundCompactor
 
         If compressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION Then Return Task.FromResult(False)
 
-        _compactor = New Core.Compactor(folder, compressionLevel, _excludedFileTypes)
+        _compactor = New Core.Compactor(folder, compressionLevel, _excludedFileTypes, New Core.Analyser(folder, NullLogger(Of Core.Analyser).Instance))
 
         Return _compactor.RunAsync(Nothing)
 
@@ -104,13 +104,13 @@ Public Class BackgroundCompactor
 
                 Dim analyser As New Core.Analyser(folder.Folder, NullLogger(Of Core.Analyser).Instance)
 
-                Await analyser.AnalyseFolder(Nothing)
+                Dim analysed = Await analyser.GetAnalysedFilesAsync(Nothing)
 
                 folder.LastCheckedDate = DateTime.Now
                 folder.LastCheckedSize = analyser.CompressedBytes
                 folder.LastCompressedSize = analyser.CompressedBytes
                 folder.LastSystemModifiedDate = DateTime.Now
-                Dim mainCompressionLVL = analyser.FileCompressionDetailsList.Select(Function(f) f.CompressionMode).Max
+                Dim mainCompressionLVL = analysed.Select(Function(f) f.CompressionMode).Max
                 folder.CompressionLevel = mainCompressionLVL
 
                 folder.LastCompressedDate = DateTime.Now

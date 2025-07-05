@@ -13,7 +13,7 @@ Imports PropertyChanged
 
 
 'Need this abstract class so we can use it in XAML
-Public MustInherit Class CompressableFolder : Inherits ObservableObject
+Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implements IDisposable
 
 
     Public Property FolderName As String
@@ -79,7 +79,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
     Public Async Function CompressFolder() As Task(Of Boolean)
 
-        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList, CompactorLogger)
+        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList, Analyser, CompactorLogger)
         Return Await RunCompressionAsync(Compressor, Nothing, True)
 
     End Function
@@ -138,17 +138,17 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
             Return -1
         End If
 
-        Dim containsCompressedFiles = Await Analyser.AnalyseFolder(token)
+        Dim retAnalysisResults = Await Analyser.GetAnalysedFilesAsync(token)
         If CancellationTokenSource.IsCancellationRequested Then
             FolderActionState = ActionState.Idle
             Return 1
         End If
 
-        AnalysisResults = New ObservableCollection(Of AnalysedFileDetails)(Analyser.FileCompressionDetailsList)
+        AnalysisResults = New ObservableCollection(Of AnalysedFileDetails)(retAnalysisResults)
         UncompressedBytes = Analyser.UncompressedBytes
         CompressedBytes = Analyser.CompressedBytes
 
-        If containsCompressedFiles OrElse IsFreshlyCompressed Then : FolderActionState = ActionState.Results
+        If Analyser.ContainsCompressedFiles OrElse IsFreshlyCompressed Then : FolderActionState = ActionState.Results
         Else : FolderActionState = ActionState.Idle
         End If
         PoorlyCompressedFiles = Analyser.GetPoorlyCompressedExtensions()
@@ -283,19 +283,16 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         Return exclist
     End Function
 
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Compressor?.Dispose()
+        Analyser?.Dispose()
+        CancellationTokenSource?.Dispose()
 
-
-
-
-
-
-
-
-
-
-
-
-
+        AnalysisResults?.Clear()
+        PoorlyCompressedFiles?.Clear()
+        WikiPoorlyCompressedFiles?.Clear()
+        GC.SuppressFinalize(Me)
+    End Sub
 End Class
 
 

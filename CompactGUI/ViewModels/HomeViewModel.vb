@@ -13,8 +13,9 @@ Imports Microsoft.Extensions.Logging
 
 Imports PropertyChanged
 
-Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
+Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
 
+    Private ReadOnly _folderViewModels As New Dictionary(Of CompressableFolder, FolderViewModel)
     Public Property Folders As New ObservableCollection(Of CompressableFolder)
 
     <OnChangedMethod(NameOf(OnSelectedFolderChanged))>
@@ -24,7 +25,10 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
     Public ReadOnly Property SelectedFolderViewModel As FolderViewModel
         Get
             If SelectedFolder Is Nothing Then Return Nothing
-            Return New FolderViewModel(SelectedFolder, _watcher, _snackbarService)
+
+            Dim value As FolderViewModel = Nothing
+            Return If(_folderViewModels.TryGetValue(SelectedFolder, value), value, Nothing)
+
         End Get
     End Property
 
@@ -120,6 +124,8 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
 
             If Not Folders.Any(Function(f) f.FolderName = newFolder.FolderName) Then
                 Folders.Add(newFolder)
+                Dim vm As New FolderViewModel(newFolder, _watcher, _snackbarService)
+                _folderViewModels.Add(newFolder, vm)
                 SelectedFolder = newFolder
             End If
 
@@ -163,6 +169,15 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
         If folder Is Nothing Then Return
         Dim index = Folders.IndexOf(folder)
         folder.CancelEstimation()
+        folder.Dispose()
+
+        Dim value As FolderViewModel = Nothing
+
+        If _folderViewModels.TryGetValue(folder, value) Then
+            value.Dispose()
+            _folderViewModels.Remove(folder)
+        End If
+
         Folders.Remove(folder)
 
         If SelectedFolder IsNot Nothing OrElse Folders.Count = 0 Then Return

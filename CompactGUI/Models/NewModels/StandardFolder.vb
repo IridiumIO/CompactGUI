@@ -1,6 +1,6 @@
 ﻿
 
-Public Class StandardFolder : Inherits CompressableFolder
+Public NotInheritable Class StandardFolder : Inherits CompressableFolder
 
     Public Sub New(path As String)
         FolderName = path
