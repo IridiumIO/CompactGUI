@@ -17,11 +17,11 @@ public static partial class HomeViewModelLog
 
 
 
-    [LoggerMessage(Level = LogLevel.Information, Message = "Compressing folder {folderName}.")]
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Compressing folder {folderName}.")]
     public static partial void CompressingFolder(ILogger logger, string folderName);
 
 
-    [LoggerMessage(Level = LogLevel.Information, Message = "Adding folder {folderName} to watcher")]
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding folder {folderName} to watcher")]
     public static partial void AddingFolderToWatcher(ILogger logger, string folderName);
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Starting batch compression of {count} folders")]

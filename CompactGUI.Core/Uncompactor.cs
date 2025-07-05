@@ -41,7 +41,10 @@ public class Uncompactor : ICompressor, IDisposable
                     return new ValueTask(PauseAndProcessFile(file, totalFiles, progressMonitor, cancellationTokenSource.Token));
                 });
         }
-        catch (OperationCanceledException) { return false; }
+        catch (OperationCanceledException) {
+            UncompactorLog.DecompressionCanceled(_logger);
+            return false; 
+        }
         finally { sw.Stop(); }
 
         UncompactorLog.DecompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
@@ -103,7 +106,6 @@ public class Uncompactor : ICompressor, IDisposable
     {
         Resume();
         cancellationTokenSource.Cancel();
-        UncompactorLog.DecompressionCanceled(_logger);
     }
 
 

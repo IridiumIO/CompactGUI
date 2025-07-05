@@ -10,7 +10,7 @@ namespace CompactGUI.Logging.Core;
 public static partial class AnalyserLog
 {
 
-    [LoggerMessage(Level = LogLevel.Information, Message = "Starting analysis of directory: {Directory}")]
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Starting analysis of directory: {Directory}")]
     public static partial void StartingAnalysis(ILogger logger, string directory);
 
     [LoggerMessage(Level = LogLevel.Trace, Message = "Processing file: {FileName}")]

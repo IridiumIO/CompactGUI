@@ -34,4 +34,7 @@ public static partial class CompactorLog
     [LoggerMessage(Level = LogLevel.Information, Message = "Compression completed successfully in {TimeTaken}s.")]
     public static partial void CompressionCompleted(ILogger logger, double timeTaken);
 
+    [LoggerMessage(Level = LogLevel.Error, Message = "Compression failed with error: {ErrorMessage}")]
+    public static partial void CompressionFailed(ILogger logger, string errorMessage);
+
 }

@@ -65,7 +65,7 @@ public class Compactor : ICompressor, IDisposable
         CompactorLog.StartingCompression(_logger, workingDirectory, wofCompressionAlgorithm.ToString(), maxParallelism);
         try
         {
-            await Parallel.ForEachAsync(workingFiles, parallelOptions,
+           await Parallel.ForEachAsync(workingFiles, parallelOptions,
                 (file, ctx) =>
                 {
                     ctx.ThrowIfCancellationRequested();
@@ -73,8 +73,14 @@ public class Compactor : ICompressor, IDisposable
                     return new ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor));
                 }).ConfigureAwait(false);
         }
-        catch (OperationCanceledException){ return false; }
-        catch (Exception){ return false; }
+        catch (OperationCanceledException){
+            CompactorLog.CompressionCanceled(_logger);
+            return false; 
+        }
+        catch (Exception ex){ 
+            CompactorLog.CompressionFailed(_logger, ex.Message);
+            return false; 
+        }
         finally { sw.Stop();}
 
 
@@ -152,7 +158,6 @@ public class Compactor : ICompressor, IDisposable
     {
         Resume();
         cancellationTokenSource.Cancel();
-        CompactorLog.CompressionCanceled(_logger);
     }
 
 
