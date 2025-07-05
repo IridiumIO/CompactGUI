@@ -336,7 +336,6 @@ Public Class Watcher : Inherits ObservableObject
 
         Dim ret = Await analyser.AnalyseFolder(Nothing)
 
-        analyser.FileCompressionDetailsList.Clear()
 
 
         watched.LastCheckedDate = DateTime.Now
