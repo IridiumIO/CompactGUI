@@ -13,8 +13,7 @@ Imports Microsoft.Extensions.Logging.Abstractions
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class Watcher : Inherits ObservableObject
-    <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
-    Public Property FolderMonitors As New List(Of FolderMonitor)
+
     <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
     Public Property WatchedFolders As New ObservableCollection(Of WatchedFolder)
     <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
@@ -92,9 +91,8 @@ Public Class Watcher : Inherits ObservableObject
 
         For Each folder In initialWatchedFolders.Where(Function(f) IO.Directory.Exists(f.Folder))
             WatchedFolders.Add(folder)
+            folder.LastChangedDate = folder.LastSystemModifiedDate
         Next
-
-        FolderMonitors.AddRange(WatchedFolders.Select(Function(w) New FolderMonitor(w.Folder, w.DisplayName) With {.LastChangedDate = w.LastSystemModifiedDate}))
 
         UpdateRegistryBasedOnWatchedFolders()
     End Function
@@ -115,7 +113,7 @@ Public Class Watcher : Inherits ObservableObject
         Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = item.Folder)
         If existingItem Is Nothing Then
             WatchedFolders.Add(item)
-            FolderMonitors.Add(New FolderMonitor(item.Folder, item.DisplayName) With {.LastChangedDate = item.LastSystemModifiedDate})
+            item.LastChangedDate = item.LastSystemModifiedDate
         Else
             UpdateFolderProperties(existingItem, item)
         End If
@@ -128,9 +126,7 @@ Public Class Watcher : Inherits ObservableObject
 
         Dim existingItem = WatchedFolders.FirstOrDefault(Function(f) f.Folder = folder)
 
-        Dim existingFolderMonitor = FolderMonitors.FirstOrDefault(Function(f) f.Folder = folder)
-
-        If existingItem IsNot Nothing AndAlso existingFolderMonitor IsNot Nothing Then
+        If existingItem IsNot Nothing Then
 
             existingItem.LastCheckedDate = DateTime.Now
             existingItem.LastCheckedSize = analyser.CompressedBytes
@@ -148,7 +144,7 @@ Public Class Watcher : Inherits ObservableObject
                 existingItem.LastCompressedSize = analyser.CompressedBytes
             End If
 
-            FolderMonitors.First(Function(f) f.Folder = folder).HasTargetChanged = False
+            existingItem.HasTargetChanged = False
             OnPropertyChanged(NameOf(TotalSaved))
             If immediateFlushToDisk Then WriteToFile()
         End If
@@ -167,17 +163,12 @@ Public Class Watcher : Inherits ObservableObject
             .LastSystemModifiedDate = DateTime.Now
             .CompressionLevel = newItem.CompressionLevel
         End With
-        FolderMonitors.First(Function(f) f.Folder = newItem.Folder).HasTargetChanged = False
+        existingItem.HasTargetChanged = False
     End Sub
 
     Public Sub RemoveWatched(item As WatchedFolder)
 
-        Dim x = FolderMonitors.Find(Function(f) f.Folder = item.Folder)
-        If x IsNot Nothing Then
-            x.Dispose()
-            FolderMonitors.Remove(x)
-        End If
-
+        item.Dispose()
         WatchedFolders.Remove(item)
         WriteToFile()
 
@@ -209,6 +200,12 @@ Public Class Watcher : Inherits ObservableObject
         Try
             validatedResult = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, DeserializeOptions)
 
+            If validatedResult.Item2 IsNot Nothing Then
+                For Each folder In validatedResult.Item2
+                    folder.InitializeMonitoring()
+                Next
+            End If
+
         Catch ex As Exception
             validatedResult = (DateTime.Now, Nothing)
             WatcherLog.DeserializeWatcherJsonFailed(_logger, ex.Message)
@@ -234,9 +231,8 @@ Public Class Watcher : Inherits ObservableObject
         Try
 
             If Not IsWatchingEnabled Then Return
-
             Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
-            If FolderMonitors.Exists(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
+            If WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
 
             If _parseWatchersSemaphore.CurrentCount <> 0 Then
                 Await ParseWatchers()
@@ -258,7 +254,7 @@ Public Class Watcher : Inherits ObservableObject
         Try
             WatcherLog.ParsingWatchers(_logger, ParseAll)
 
-            Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged)).ToList()
+            Dim WatchersToCheck = If(ParseAll, WatchedFolders, WatchedFolders.Where(Function(w) w.HasTargetChanged)).ToList()
 
             If Not WatchersToCheck.Any() Then Return
 
@@ -321,7 +317,7 @@ Public Class Watcher : Inherits ObservableObject
                 Return
             End If
 
-            Await BGCompactor.StartCompactingAsync(WatchedFolders, FolderMonitors)
+            Await BGCompactor.StartCompactingAsync(WatchedFolders)
             OnPropertyChanged(NameOf(TotalSaved))
         Finally
             _parseWatchersSemaphore.Release()
@@ -347,7 +343,7 @@ Public Class Watcher : Inherits ObservableObject
         watched.LastCheckedSize = analyser.CompressedBytes
         watched.LastUncompressedSize = analyser.UncompressedBytes
 
-        watched.LastSystemModifiedDate = FolderMonitors.First(Function(f) f.Folder = folder).LastChangedDate
+        watched.LastSystemModifiedDate = watched.LastChangedDate
 
         If analyser.FileCompressionDetailsList.Count <> 0 Then
             Dim mainCompressionLVL = analyser.FileCompressionDetailsList?.Select(Function(f) f.CompressionMode).Max
@@ -366,7 +362,7 @@ Public Class Watcher : Inherits ObservableObject
 
 
 
-        FolderMonitors.First(Function(f) f.Folder = folder).HasTargetChanged = False
+        watched.HasTargetChanged = False
         watched.IsWorking = False
         Return True
 

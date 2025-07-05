@@ -82,9 +82,7 @@ Public Class WatcherViewModel : Inherits ObservableObject
 
         Dim newFolder = Await AddFolderAsync(path)
 
-        Dim newWatched = New Watcher.WatchedFolder With {
-           .Folder = newFolder.FolderName,
-           .DisplayName = newFolder.DisplayName,
+        Dim newWatched = New Watcher.WatchedFolder(newFolder.FolderName, newFolder.DisplayName) With {
            .IsSteamGame = TypeOf (newFolder) Is SteamFolder,
            .LastCompressedSize = 0,
            .LastUncompressedSize = 0,

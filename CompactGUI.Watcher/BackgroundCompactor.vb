@@ -63,7 +63,7 @@ Public Class BackgroundCompactor
 
     End Function
 
-    Public Async Function StartCompactingAsync(folders As ObservableCollection(Of WatchedFolder), monitors As List(Of FolderMonitor)) As Task(Of Boolean)
+    Public Async Function StartCompactingAsync(folders As ObservableCollection(Of WatchedFolder)) As Task(Of Boolean)
         WatcherLog.BackgroundCompactingStarted(_logger)
         Dim cancellationToken As CancellationToken = cancellationTokenSource.Token
 
@@ -74,7 +74,6 @@ Public Class BackgroundCompactor
 
         Dim foldersCopy As List(Of WatchedFolder) = folders.Where(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION).ToList()
 
-        Dim monitorsCopy As List(Of FolderMonitor) = monitors.ToList()
 
         For Each folder In foldersCopy
             folder.IsWorking = True
@@ -116,11 +115,7 @@ Public Class BackgroundCompactor
 
                 folder.LastCompressedDate = DateTime.Now
 
-                Dim monitor = monitorsCopy.Find(Function(m) m.Folder = folder.Folder)
-                If monitor IsNot Nothing AndAlso monitors.Contains(monitor) Then
-                    monitor.HasTargetChanged = False
-                End If
-
+                folder.HasTargetChanged = False
 
             End If
             folder.IsWorking = False

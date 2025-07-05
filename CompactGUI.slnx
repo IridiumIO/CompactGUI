@@ -13,5 +13,6 @@
   <Project Path="CompactGUI.Watcher/CompactGUI.Watcher.vbproj">
     <BuildDependency Project="CompactGUI.CoreVB/CompactGUI.CoreVB.vbproj" />
   </Project>
+  <Project Path="CompactGUI.WatcherCS/CompactGUI.WatcherCS.csproj" Id="2f8f22c2-66d8-4ac7-ab11-bc1e1086d6c4" />
   <Project Path="CompactGUI/CompactGUI.vbproj" />
 </Solution>

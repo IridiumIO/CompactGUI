@@ -249,9 +249,7 @@ Partial Public Class HomeViewModel : Inherits ObservableObject : Implements IRec
     Public Sub AddOrUpdateFolderWatcher(folder As CompressableFolder)
         HomeViewModelLog.AddingFolderToWatcher(_logger, folder.FolderName)
 
-        Dim newWatched = New Watcher.WatchedFolder
-        newWatched.Folder = folder.FolderName
-        newWatched.DisplayName = folder.DisplayName
+        Dim newWatched = New Watcher.WatchedFolder(folder.FolderName, folder.DisplayName)
         newWatched.IsSteamGame = TypeOf (folder) Is SteamFolder
         newWatched.LastCompressedSize = folder.CompressedBytes
         newWatched.LastUncompressedSize = folder.UncompressedBytes
