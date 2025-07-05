@@ -131,6 +131,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
         CancellationTokenSource = New CancellationTokenSource()
         Dim token = CancellationTokenSource.Token
 
+        Analyser?.Dispose()
         Analyser = New Analyser(FolderName, AnalyserLogger)
 
         If Not Core.SharedMethods.HasDirectoryWritePermission(FolderName) Then
