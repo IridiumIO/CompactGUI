@@ -1,4 +1,7 @@
 ﻿
+using CompactGUI.Logging.Core;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -23,13 +26,14 @@ public class Compactor : ICompressor, IDisposable
     private readonly SemaphoreSlim pauseSemaphore = new SemaphoreSlim(1, 2);
     private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
+    private ILogger<Compactor> _logger;
 
-    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes)
+    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, ILogger<Compactor>? logger = null)
     {
         workingDirectory = folderPath;
         excludedFileExtensions = new HashSet<string>(excludedFileTypes);
         wofCompressionAlgorithm = compressionLevel;
-
+        _logger = logger ?? NullLogger<Compactor>.Instance;
         InitializeCompressionInfoPointer();
     }
 
@@ -47,17 +51,21 @@ public class Compactor : ICompressor, IDisposable
     {
         if(cancellationTokenSource.IsCancellationRequested) { return false; }
 
+        CompactorLog.BuildingWorkingFilesList(_logger, workingDirectory);
         var workingFiles = await BuildWorkingFilesList().ConfigureAwait(false);
         long totalFilesSize = workingFiles.Sum((f) => f.UncompressedSize);
 
         totalProcessedBytes = 0;
 
-        if(maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
+        var sw = Stopwatch.StartNew();
+
+        if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
         ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
 
+        CompactorLog.StartingCompression(_logger, workingDirectory, wofCompressionAlgorithm.ToString(), maxParallelism);
         try
         {
-            await Parallel.ForEachAsync(workingFiles, parallelOptions,
+           await Parallel.ForEachAsync(workingFiles, parallelOptions,
                 (file, ctx) =>
                 {
                     ctx.ThrowIfCancellationRequested();
@@ -65,14 +73,25 @@ public class Compactor : ICompressor, IDisposable
                     return new ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor));
                 }).ConfigureAwait(false);
         }
-        catch (OperationCanceledException){ return false; }
-        catch (Exception){ return false; }
+        catch (OperationCanceledException){
+            CompactorLog.CompressionCanceled(_logger);
+            return false; 
+        }
+        catch (Exception ex){ 
+            CompactorLog.CompressionFailed(_logger, ex.Message);
+            return false; 
+        }
+        finally { sw.Stop();}
 
+
+        
+        CompactorLog.CompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
         return true;
     }
 
     private async Task PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress> progressMonitor)
     {
+        CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize);
 
         await pauseSemaphore.WaitAsync(token).ConfigureAwait(false);
         pauseSemaphore.Release();
@@ -94,7 +113,7 @@ public class Compactor : ICompressor, IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
+            CompactorLog.FileCompressionFailed(_logger, filePath, ex.Message);
             return null;
         }
     }
@@ -103,7 +122,7 @@ public class Compactor : ICompressor, IDisposable
     {
         uint clusterSize = SharedMethods.GetClusterSize(workingDirectory);
 
-        var analyser = new Analyser(workingDirectory);
+        var analyser = new Analyser(workingDirectory, NullLogger<Analyser>.Instance);
         var ret = await analyser.AnalyseFolder(cancellationTokenSource.Token);
 
         var filesList = analyser.FileCompressionDetailsList
@@ -123,6 +142,7 @@ public class Compactor : ICompressor, IDisposable
 
     public void Pause()
     {
+        CompactorLog.CompressionPaused(_logger);
         pauseSemaphore.Wait(cancellationTokenSource.Token);
     }
 
@@ -130,6 +150,7 @@ public class Compactor : ICompressor, IDisposable
     public void Resume()
     {
         if (pauseSemaphore.CurrentCount == 0) pauseSemaphore.Release();  
+        CompactorLog.CompressionResumed(_logger);
     }
 
 

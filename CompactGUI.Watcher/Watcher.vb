@@ -1,8 +1,15 @@
 Imports System.Collections.ObjectModel
 Imports System.Text.Json
-Imports CompactGUI.Core
 Imports System.Threading
+
 Imports CommunityToolkit.Mvvm.ComponentModel
+
+Imports CompactGUI.Core
+Imports CompactGUI.Logging.Watcher
+
+Imports Microsoft.Extensions.Logging
+
+Imports Microsoft.Extensions.Logging.Abstractions
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class Watcher : Inherits ObservableObject
@@ -30,12 +37,14 @@ Public Class Watcher : Inherits ObservableObject
     Private _disableCounter As Integer = 0
     Private _counterLock As New SemaphoreSlim(1, 1)
 
+    Private Shared _logger As ILogger(Of Watcher)
+
     Public Async Function DisableBackgrounding() As Task
         Await _counterLock.WaitAsync()
         Try
             _disableCounter += 1
             If _disableCounter = 1 Then
-                Debug.WriteLine("Backgrounding disabled!")
+                WatcherLog.BackgroundingDisabled(_logger)
                 IdleDetector.Paused = True
                 Await _parseWatchersSemaphore.WaitAsync()
             End If
@@ -52,7 +61,7 @@ Public Class Watcher : Inherits ObservableObject
                 If _disableCounter = 0 Then
                     _parseWatchersSemaphore.Release()
                     IdleDetector.Paused = False
-                    Debug.WriteLine("Backgrounding enabled!")
+                    WatcherLog.BackgroundingEnabled(_logger)
                 End If
             End If
         Finally
@@ -61,14 +70,14 @@ Public Class Watcher : Inherits ObservableObject
     End Function
 
 
-    Sub New(excludedFiletypes As String())
+    Sub New(excludedFiletypes As String(), logger As ILogger(Of Watcher))
 
+        WatcherLog.WatcherStarted(logger)
         IdleDetector.Start()
-        Debug.WriteLine("Idle Detector Started")
         AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
 
-        BGCompactor = New BackgroundCompactor(excludedFiletypes)
-
+        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger)
+        _logger = logger
         InitializeWatchedFoldersAsync()
 
 
@@ -202,7 +211,7 @@ Public Class Watcher : Inherits ObservableObject
 
         Catch ex As Exception
             validatedResult = (DateTime.Now, Nothing)
-
+            WatcherLog.DeserializeWatcherJsonFailed(_logger, ex.Message)
         End Try
 
         Return validatedResult
@@ -224,7 +233,6 @@ Public Class Watcher : Inherits ObservableObject
         _isHandlingIdle = True
         Try
 
-            Debug.WriteLine("System Idle Detected")
             If Not IsWatchingEnabled Then Return
 
             Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
@@ -248,7 +256,7 @@ Public Class Watcher : Inherits ObservableObject
         If Not acquired Then Return
 
         Try
-            Debug.WriteLine("Background Parsing Watchers")
+            WatcherLog.ParsingWatchers(_logger, ParseAll)
 
             Dim WatchersToCheck = If(ParseAll, FolderMonitors, FolderMonitors.Where(Function(w) w.HasTargetChanged)).ToList()
 
@@ -256,14 +264,14 @@ Public Class Watcher : Inherits ObservableObject
 
             Dim watchersToRemove = WatchersToCheck.Where(Function(f) Not IO.Directory.Exists(f.Folder)).ToList()
             If watchersToRemove.Any() Then
-                Debug.WriteLine($"Removing {watchersToRemove.Count} folders that do not exist from watcher list.")
+                WatcherLog.RemovingNonexistentFolders(_logger, watchersToRemove.Count)
                 For Each fsWatcher In watchersToRemove
                     RemoveWatched(WatchedFolders.FirstOrDefault(Function(f) f.Folder = fsWatcher.Folder))
                 Next
             End If
 
             For Each fsWatcher In WatchersToCheck.OrderBy(Function(f) f.DisplayName)
-
+                WatcherLog.FolderChanged(_logger, fsWatcher.DisplayName)
                 Await Analyse(fsWatcher.Folder, ParseAll)
             Next
 
@@ -324,8 +332,8 @@ Public Class Watcher : Inherits ObservableObject
 
 
     Public Async Function Analyse(folder As String, checkDiskModified As Boolean) As Task(Of Boolean)
-        Debug.WriteLine("Background Analysing: " & folder)
-        Dim analyser As New Analyser(folder)
+
+        Dim analyser As New Analyser(folder, NullLogger(Of Analyser).Instance)
 
         Dim watched = WatchedFolders.First(Function(f) f.Folder = folder)
         watched.IsWorking = True

@@ -1,5 +1,7 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Hosting
+Imports Microsoft.Extensions.Logging
+
 Imports System.Linq
 Imports System.Threading
 Imports System.Threading.Tasks
@@ -36,6 +38,7 @@ Public Class ApplicationHostService
     Private Async Function HandleActivationAsync() As Task
         Await Task.CompletedTask
 
+        Application.GetService(Of ILogger(Of ApplicationHostService))().LogInformation("Logging Level: {LogLevel}", SettingsHandler.AppSettings.LogLevel)
 
 
         Dim args As String() = Environment.GetCommandLineArgs()

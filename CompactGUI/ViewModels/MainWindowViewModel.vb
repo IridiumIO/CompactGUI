@@ -39,6 +39,7 @@ Public Class MainWindowViewModel : Inherits ObservableObject : Implements IRecip
         If Keyboard.Modifiers = ModifierKeys.Shift Then
             e.Cancel = False
             If _watcher.WatchedFolders.Count <> 0 Then _watcher.WriteToFile()
+            SettingsHandler.WriteToFile()
             Application.Current.Shutdown()
             Return
         End If

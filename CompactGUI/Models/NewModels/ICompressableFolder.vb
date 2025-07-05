@@ -7,6 +7,8 @@ Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CompactGUI.Core
 Imports CompactGUI.Core.WOFHelper
 
+Imports Microsoft.Extensions.Logging
+
 Imports PropertyChanged
 
 
@@ -72,10 +74,12 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
 
     Public Compressor As ICompressor
+    Private Shared ReadOnly CompactorLogger As ILogger = Application.GetService(Of ILogger(Of Compactor))()
+    Private Shared ReadOnly UncompactorLogger As ILogger = Application.GetService(Of ILogger(Of Uncompactor))()
 
     Public Async Function CompressFolder() As Task(Of Boolean)
 
-        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
+        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList, CompactorLogger)
         Return Await RunCompressionAsync(Compressor, Nothing, True)
 
     End Function
@@ -83,7 +87,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
     Public Async Function UncompressFolder() As Task(Of Boolean)
 
-        Compressor = New Uncompactor
+        Compressor = New Uncompactor(UncompactorLogger)
         Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
         Return Await RunCompressionAsync(Compressor, compressedFilesList, isCompressing:=False)
 
@@ -115,6 +119,8 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     Private CancellationTokenSource As CancellationTokenSource
 
     Public Analyser As Analyser
+    Private Shared ReadOnly AnalyserLogger As ILogger = Application.GetService(Of ILogger(Of Analyser))()
+
 
     Public Async Function AnalyseFolderAsync() As Task(Of Integer)
 
@@ -125,7 +131,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
         CancellationTokenSource = New CancellationTokenSource()
         Dim token = CancellationTokenSource.Token
 
-        Analyser = New Analyser(FolderName)
+        Analyser = New Analyser(FolderName, AnalyserLogger)
 
         If Not Core.SharedMethods.HasDirectoryWritePermission(FolderName) Then
             FolderActionState = ActionState.Idle
@@ -180,7 +186,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
             sw.Start()
             estimatedData = Await Task.Run(Function() estimator.EstimateCompression(AnalysisResults.ToList, IsHDD, GetThreadCount, Core.SharedMethods.GetClusterSize(FolderName), CancellationTokenSource.Token))
             sw.Stop()
-            Debug.WriteLine($"Estimated compression took {sw.ElapsedMilliseconds}ms")
+            'Debug.WriteLine($"Estimated compression took {sw.ElapsedMilliseconds}ms")
         Catch ex As AggregateException
             IsGettingEstimate = False
             Return
@@ -265,11 +271,11 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     Protected Overridable Function GetSkipList() As String()
         Dim exclist As String() = Array.Empty(Of String)()
         If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
-            Debug.WriteLine("Adding non-compressable list to exclusion list")
+            'Debug.WriteLine("Adding non-compressable list to exclusion list")
             exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
         End If
         If CompressionOptions.SkipUserSubmittedFiletypes AndAlso WikiPoorlyCompressedFiles?.Count <> 0 Then
-            Debug.WriteLine("Adding estimator poorly compressed list to exclusion list")
+            'Debug.WriteLine("Adding estimator poorly compressed list to exclusion list")
             exclist = exclist.Union(WikiPoorlyCompressedFiles).ToArray
         End If
 

@@ -67,6 +67,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
     <PackageReference Include="System.Management" Version="9.0.5" />
     <PackageReference Include="ValueConverters" Version="3.0.26" />
     <PackageReference Include="WPF-UI" Version="4.0.2" />
@@ -76,6 +77,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.csproj" />
+    <ProjectReference Include="..\CompactGUI.Logging\CompactGUI.Logging.csproj" />
     <ProjectReference Include="..\CompactGUI.Watcher\CompactGUI.Watcher.vbproj" />
   </ItemGroup>
 

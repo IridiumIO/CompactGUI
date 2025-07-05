@@ -2,9 +2,13 @@
 
 Imports IWshRuntimeLibrary
 
+Imports Microsoft.Extensions.Logging
+Imports CompactGUI.Logging
+
 Public Class Settings : Inherits ObservableObject
     'TODO: Add local saving of per-folder skip list
     Public Property SettingsVersion As Decimal = SettingsHandler.SettingsVersion
+    Public Property LogLevel As LogLevel = LogLevel.Information
     Public Property ResultsDBLastUpdated As DateTime = DateTime.UnixEpoch
     Public Property SelectedCompressionMode As Integer = 0
     Public Property SkipNonCompressable As Boolean = False
@@ -47,35 +51,9 @@ Public Class Settings : Inherits ObservableObject
     Public Property AllowMultiInstance As Boolean = False
     Public Property EnablePreReleaseUpdates As Boolean = True
 
-    Private _IsContextIntegrated As Boolean = True
-    Public Property IsContextIntegrated As Boolean
-        Get
-            Return _IsContextIntegrated
-        End Get
-        Set(value As Boolean)
-            _IsContextIntegrated = value
-            If _IsContextIntegrated Then
-                AddContextMenus()
-            Else
-                RemoveContextMenus()
-            End If
-        End Set
-    End Property
+    Public Property IsContextIntegrated As Boolean = True
+    Public Property IsStartMenuEnabled As Boolean = True
 
-    Private _IsStartMenuEnabled As Boolean = True
-    Public Property IsStartMenuEnabled As Boolean
-        Get
-            Return _IsStartMenuEnabled
-        End Get
-        Set(value As Boolean)
-            _IsStartMenuEnabled = value
-            If _IsStartMenuEnabled Then
-                CreateStartMenuShortcut()
-            Else
-                DeleteStartMenuShortcut()
-            End If
-        End Set
-    End Property
 
 
     Public Property WindowTop As Double = 0
@@ -86,6 +64,7 @@ Public Class Settings : Inherits ObservableObject
 
 
     Public Shared Async Function AddContextMenus() As Task
+        SettingsLog.AddingToContextMenus(Application.GetService(Of ILogger(Of Settings)))
         Await Task.Run(Sub()
                            Try
                                Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\shell\CompactGUI", "", "Compress Folder")
@@ -94,28 +73,31 @@ Public Class Settings : Inherits ObservableObject
                                Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\CompactGUI", "", "Compress Folder")
                                Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\CompactGUI", "Icon", Environment.ProcessPath)
                                Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\CompactGUI\command", "", Environment.ProcessPath & " " & """%V""")
-
+                               SettingsLog.AddingToContextMenusSuccess(Application.GetService(Of ILogger(Of Settings)))
                            Catch ex As Exception
-                               Debug.WriteLine(ex.Message)
+                               SettingsLog.AddingToContextMenusFailed(Application.GetService(Of ILogger(Of Settings)), ex)
                            End Try
                        End Sub)
     End Function
 
     Public Shared Async Function RemoveContextMenus() As Task
+        SettingsLog.RemovingFromContextMenus(Application.GetService(Of ILogger(Of Settings)))
         Await Task.Run(Sub()
                            Try
                                Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI\command")
                                Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\shell\\CompactGUI")
                                Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\Background\\shell\\CompactGUI\command")
                                Microsoft.Win32.Registry.CurrentUser.DeleteSubKey("Software\\Classes\\Directory\\Background\\shell\\CompactGUI")
+                               SettingsLog.RemovingFromContextMenusSuccess(Application.GetService(Of ILogger(Of Settings)))
                            Catch ex As Exception
-                               Debug.WriteLine(ex.Message)
+                               SettingsLog.RemovingFromContextMenusFailed(Application.GetService(Of ILogger(Of Settings)), ex)
                            End Try
                        End Sub)
     End Function
 
 
     Public Shared Sub CreateStartMenuShortcut()
+        SettingsLog.AddingStartMenuShortcut(Application.GetService(Of ILogger(Of Settings)))
         Dim wshShell As New WshShell()
         Dim startMenuPath As String = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)
         Dim shortcutPath As String = IO.Path.Combine(startMenuPath, "CompactGUI.lnk")
@@ -131,6 +113,7 @@ Public Class Settings : Inherits ObservableObject
     End Sub
 
     Public Shared Sub DeleteStartMenuShortcut()
+        SettingsLog.RemovingStartMenuShortcut(Application.GetService(Of ILogger(Of Settings)))
         Dim startMenuPath As String = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)
         Dim shortcutPath As String = IO.Path.Combine(startMenuPath, "CompactGUI.lnk")
 

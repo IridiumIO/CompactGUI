@@ -20,4 +20,9 @@
     <PackageReference Include="ZLinq" Version="1.4.10" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <ProjectReference Include="..\CompactGUI.Logging\CompactGUI.Logging.csproj" />
+  </ItemGroup>
+
 </Project>

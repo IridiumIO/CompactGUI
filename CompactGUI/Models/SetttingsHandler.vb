@@ -1,6 +1,11 @@
 ﻿Imports System.Text.Json
+Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
+
+Imports CompactGUI.Logging
+
+Imports Microsoft.Extensions.Logging
 
 
 Public Class SettingsHandler : Inherits ObservableObject
@@ -10,10 +15,10 @@ Public Class SettingsHandler : Inherits ObservableObject
     Public Shared Property AppSettings As Settings
     Public Shared Property SettingsVersion As Decimal = 1.2
 
-    Shared Async Sub InitialiseSettings()
+    Shared Sub InitialiseSettings()
 
         If Not DataFolder.Exists Then DataFolder.Create()
-        If Not SettingsJSONFile.Exists Then Await SettingsJSONFile.Create().DisposeAsync()
+        If Not SettingsJSONFile.Exists Then SettingsJSONFile.Create().Dispose()
 
         AppSettings = DeserializeAndValidateJSON(SettingsJSONFile)
 
@@ -21,11 +26,12 @@ Public Class SettingsHandler : Inherits ObservableObject
             AppSettings = New Settings With {.SettingsVersion = SettingsVersion}
 
             Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
-            Await msgError.ShowAsync()
+            msgError.ShowAsync()
 
         End If
 
-        WriteToFile()
+        Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
+        IO.File.WriteAllText(SettingsJSONFile.FullName, output)
 
     End Sub
 
@@ -56,8 +62,37 @@ Public Class SettingsHandler : Inherits ObservableObject
 
 
     Shared Sub WriteToFile()
-        Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
-        IO.File.WriteAllText(SettingsJSONFile.FullName, output)
+        ScheduleWriteToFile()
     End Sub
+
+    Private Shared ReadOnly debounceDelay As TimeSpan = TimeSpan.FromMilliseconds(2000)
+    Private Shared ReadOnly timerLock As New Object()
+    Private Shared debounceTimer As System.Timers.Timer
+
+    Public Shared Sub ScheduleWriteToFile()
+        SyncLock timerLock
+            If debounceTimer Is Nothing Then
+                debounceTimer = New System.Timers.Timer(debounceDelay.TotalMilliseconds)
+                debounceTimer.AutoReset = False
+                AddHandler debounceTimer.Elapsed, Async Sub(__, ___)
+                                                      Await WriteToFileAsync()
+                                                  End Sub
+            Else
+                debounceTimer.Stop()
+            End If
+            debounceTimer.Start()
+        End SyncLock
+    End Sub
+
+    Private Shared Async Function WriteToFileAsync() As Task
+        Try
+            Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
+            Await IO.File.WriteAllTextAsync(SettingsJSONFile.FullName, output)
+            SettingsLog.SettingsSaved(Application.GetService(Of ILogger(Of Settings)))
+        Catch ex As Exception
+            ' Log or handle exception
+        End Try
+    End Function
+
 
 End Class

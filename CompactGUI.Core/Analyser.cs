@@ -1,5 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using CompactGUI.Logging.Core;
 
 namespace CompactGUI.Core;
 
@@ -12,18 +15,22 @@ public class Analyser
     public bool ContainsCompressedFiles { get; set; }
     public List<AnalysedFileDetails> FileCompressionDetailsList { get; set; } = new List<AnalysedFileDetails>();
 
+    private ILogger<Analyser> _logger;
 
-    public Analyser(string folder)
+    public Analyser(string folder, ILogger<Analyser> logger)
     {
         FolderName = folder;
         UncompressedBytes = 0;
         CompressedBytes = 0;
         ContainsCompressedFiles = false;
+        _logger = logger;
     }
 
 
     public async Task<Boolean?> AnalyseFolder(CancellationToken cancellationToken)
     {
+        AnalyserLog.StartingAnalysis(_logger, FolderName);
+        Stopwatch sw = Stopwatch.StartNew();
         try
         {
             var allFiles = await Task.Run(() => Directory.EnumerateFiles(FolderName, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true, AttributesToSkip = FileAttributes.ReparsePoint }).AsShortPathNames(), cancellationToken).ConfigureAwait(false);
@@ -39,15 +46,17 @@ public class Analyser
             ContainsCompressedFiles = fileDetails.Any(f => f.CompressionMode != WOFCompressionAlgorithm.NO_COMPRESSION);
 
             FileCompressionDetailsList = fileDetails;
-
-            return ContainsCompressedFiles;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
+            AnalyserLog.AnalysisFailed(_logger, FolderName, ex.Message);
             return null;
         }
+        finally { sw.Stop(); }
+        
+        AnalyserLog.AnalysisCompleted(_logger, FolderName, Math.Round(sw.Elapsed.TotalSeconds, 3), CompressedBytes, UncompressedBytes, ContainsCompressedFiles);
 
+        return ContainsCompressedFiles;
 
 
     }
@@ -55,6 +64,7 @@ public class Analyser
 
     private AnalysedFileDetails? AnalyseFile(string file)
     {
+        AnalyserLog.ProcessingFile(_logger, file);
         try
         {
             FileInfo fileInfo = new FileInfo(file);
@@ -67,8 +77,9 @@ public class Analyser
 
             return new AnalysedFileDetails { FileName = file, CompressedSize = compressedSize, UncompressedSize = uncompressedSize, CompressionMode = compressionMode, FileInfo = fileInfo };
         }
-        catch (IOException)
+        catch (IOException ex)
         {
+            AnalyserLog.ProcessingFileFailed(_logger, file, ex.Message);
             return null;
         }
     }
