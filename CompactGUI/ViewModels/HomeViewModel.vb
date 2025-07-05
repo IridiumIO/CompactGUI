@@ -11,16 +11,16 @@ Imports CompactGUI.Logging
 
 Imports Microsoft.Extensions.Logging
 
-Imports PropertyChanged
-
 Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
 
     Private ReadOnly _folderViewModels As New Dictionary(Of CompressableFolder, FolderViewModel)
-    Public Property Folders As New ObservableCollection(Of CompressableFolder)
 
-    <OnChangedMethod(NameOf(OnSelectedFolderChanged))>
-    <AlsoNotifyFor(NameOf(SelectedFolderViewModel))>
-    Public Property SelectedFolder As CompressableFolder
+    <ObservableProperty>
+    Private _Folders As ObservableCollection(Of CompressableFolder) = New ObservableCollection(Of CompressableFolder)
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(SelectedFolderViewModel))>
+    Private _SelectedFolder As CompressableFolder
 
     Public ReadOnly Property SelectedFolderViewModel As FolderViewModel
         Get
@@ -66,20 +66,19 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
     End Sub
 
 
+    Private Sub OnSelectedFolderChanged(value As CompressableFolder)
 
-    Public Sub OnSelectedFolderChanged()
-
-        WeakReferenceMessenger.Default.Send(New BackgroundImageChangedMessage(SelectedFolder?.FolderBGImage))
+        WeakReferenceMessenger.Default.Send(New BackgroundImageChangedMessage(value?.FolderBGImage))
 
     End Sub
 
 
 
 
-
     Private Sub OnAnyFolderPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
-        If e.PropertyName = NameOf(SelectedFolder.FolderActionState) Then
+        If e.PropertyName = NameOf(CompressableFolder.FolderActionState) Then
             OnPropertyChanged(NameOf(HomeViewModelState))
+            Application.Current.Dispatcher.Invoke(Sub() RemoveFolderCommand.NotifyCanExecuteChanged())
         End If
     End Sub
 
@@ -159,7 +158,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
 
 
 
-    Public Property RemoveFolderCommand As IRelayCommand = New RelayCommand(Of CompressableFolder)(Sub(folder) RemoveFolder(folder))
+    <RelayCommand>
     Public Sub RemoveFolder(folder As CompressableFolder)
         If Not CanRemoveFolder() Then
             Application.GetService(Of CustomSnackBarService)().ShowCannotRemoveFolder()
@@ -193,13 +192,6 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
         OnPropertyChanged(propertyName)
     End Sub
 
-    Public Property CompressAllCommand As AsyncRelayCommand = New AsyncRelayCommand(execute:=AddressOf CompressAllAsync, canExecute:=Function() CanCompressAll())
-
-    Private Function CanCompressAll() As Boolean
-        Return HomeViewModelState <> ActionState.Working AndAlso Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
-    End Function
-
-
     Public ReadOnly Property HomeViewModelState As ActionState
         Get
             If Compressing OrElse Folders.Any(Function(f) f.FolderActionState = ActionState.Working) Then
@@ -215,9 +207,13 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
         End Get
 
     End Property
-
     Private Property Compressing As Boolean = False
-    Private Async Function CompressAllAsync() As Task
+
+
+
+
+    <RelayCommand>
+    Private Async Function CompressAll() As Task
 
         Await _watcher.DisableBackgrounding()
 
@@ -255,9 +251,14 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
             AddOrUpdateFolderWatcher(folder)
         Next
 
+        RemoveFolderCommand.NotifyCanExecuteChanged()
         Core.SharedMethods.RestoreSleep()
-
         Await _watcher.EnableBackgrounding()
+    End Function
+
+
+    Private Function CanCompressAll() As Boolean
+        Return HomeViewModelState <> ActionState.Working AndAlso Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
     End Function
 
 
@@ -277,7 +278,6 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
         _watcher.AddOrUpdateWatched(newWatched)
 
     End Sub
-
 
 
     Public Async Sub Receive(message As WatcherAddedFolderToQueueMessage) Implements IRecipient(Of WatcherAddedFolderToQueueMessage).Receive
