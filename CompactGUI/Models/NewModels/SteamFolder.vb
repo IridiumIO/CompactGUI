@@ -119,13 +119,13 @@ Public Class WikiCompressionResults
     Sub New(compressionResults As List(Of CompressionResult))
         For Each result In compressionResults
             Select Case result.CompType
-                Case Core.WOFCompressionAlgorithm.XPRESS4K
+                Case Core.CompressionMode.XPRESS4K
                     XPress4K = result
-                Case Core.WOFCompressionAlgorithm.XPRESS8K
+                Case Core.CompressionMode.XPRESS8K
                     XPress8K = result
-                Case Core.WOFCompressionAlgorithm.XPRESS16K
+                Case Core.CompressionMode.XPRESS16K
                     XPress16K = result
-                Case Core.WOFCompressionAlgorithm.LZX
+                Case Core.CompressionMode.LZX
                     LZX = result
             End Select
         Next
