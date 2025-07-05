@@ -75,9 +75,10 @@ public class Compactor : ICompressor, IDisposable
         }
         catch (OperationCanceledException){ return false; }
         catch (Exception){ return false; }
+        finally { sw.Stop();}
 
 
-        sw.Stop();
+        
         CompactorLog.CompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
         return true;
     }
@@ -142,16 +143,16 @@ public class Compactor : ICompressor, IDisposable
 
     public void Resume()
     {
-        CompactorLog.CompressionResumed(_logger);
         if (pauseSemaphore.CurrentCount == 0) pauseSemaphore.Release();  
+        CompactorLog.CompressionResumed(_logger);
     }
 
 
     public void Cancel()
     {
-        CompactorLog.CompressionCanceled(_logger);
         Resume();
         cancellationTokenSource.Cancel();
+        CompactorLog.CompressionCanceled(_logger);
     }
 
 

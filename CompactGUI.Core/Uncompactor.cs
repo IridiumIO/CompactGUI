@@ -1,7 +1,11 @@
 ﻿
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System.Collections.Concurrent;
 using Windows.Win32;
+using CompactGUI.Logging.Core;
+using System.Diagnostics;
 
 namespace CompactGUI.Core;
 
@@ -12,6 +16,12 @@ public class Uncompactor : ICompressor, IDisposable
     private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private ConcurrentDictionary<string, int> processedFileCount = new ConcurrentDictionary<string, int>();
 
+    private readonly ILogger<Uncompactor> _logger;
+
+    public Uncompactor(ILogger<Uncompactor>? logger = null)
+    {
+        _logger = logger ?? NullLogger<Uncompactor>.Instance;
+    }
 
     public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1)
     {
@@ -20,6 +30,8 @@ public class Uncompactor : ICompressor, IDisposable
         ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism };
         processedFileCount.Clear();
 
+        UncompactorLog.StartingDecompression(_logger, totalFiles, maxParallelism);
+        Stopwatch sw = Stopwatch.StartNew();
         try
         {
             await Parallel.ForEachAsync(filesList, parallelOptions,
@@ -30,13 +42,16 @@ public class Uncompactor : ICompressor, IDisposable
                 });
         }
         catch (OperationCanceledException) { return false; }
+        finally { sw.Stop(); }
 
+        UncompactorLog.DecompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
         return true;
 
     }
 
     private async Task PauseAndProcessFile(string file, int totalFiles, IProgress<CompressionProgress>? progressMonitor, CancellationToken ctx)
     {
+        UncompactorLog.ProcessingFile(_logger, file);
         try
         {
             await pauseSemaphore.WaitAsync(ctx).ConfigureAwait(false);
@@ -64,11 +79,15 @@ public class Uncompactor : ICompressor, IDisposable
                 return res;
             }  
         }
-        catch (Exception) { return null; }
+        catch (Exception ex) { 
+            UncompactorLog.FileDecompressionFailed(_logger, file, ex.Message);
+            return null; 
+        }
     }
 
     public void Pause()
     {
+        UncompactorLog.DecompressionPaused(_logger);
         pauseSemaphore.Wait();
     }
 
@@ -76,6 +95,7 @@ public class Uncompactor : ICompressor, IDisposable
     public void Resume()
     {
         if (pauseSemaphore.CurrentCount == 0) pauseSemaphore.Release();
+        UncompactorLog.DecompressionResumed(_logger);
     }
 
 
@@ -83,6 +103,7 @@ public class Uncompactor : ICompressor, IDisposable
     {
         Resume();
         cancellationTokenSource.Cancel();
+        UncompactorLog.DecompressionCanceled(_logger);
     }
 
 

@@ -74,10 +74,12 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
 
     Public Compressor As ICompressor
-    Private Shared ReadOnly CompressorLogger As ILogger = Application.GetService(Of ILogger(Of Compactor))()
+    Private Shared ReadOnly CompactorLogger As ILogger = Application.GetService(Of ILogger(Of Compactor))()
+    Private Shared ReadOnly UncompactorLogger As ILogger = Application.GetService(Of ILogger(Of Uncompactor))()
+
     Public Async Function CompressFolder() As Task(Of Boolean)
 
-        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList, CompressorLogger)
+        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList, CompactorLogger)
         Return Await RunCompressionAsync(Compressor, Nothing, True)
 
     End Function
@@ -85,7 +87,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
     Public Async Function UncompressFolder() As Task(Of Boolean)
 
-        Compressor = New Uncompactor
+        Compressor = New Uncompactor(UncompactorLogger)
         Dim compressedFilesList = AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
         Return Await RunCompressionAsync(Compressor, compressedFilesList, isCompressing:=False)
 
