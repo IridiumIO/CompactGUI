@@ -1,0 +1,229 @@
+<Page
+    x:Class="StatisticsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CompactGUI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Statistics Dashboard"
+    d:DataContext="{d:DesignInstance local:StatisticsViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+
+    <Grid Margin="18,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:CardControl Grid.Row="0" Margin="0,12,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="12">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Text="Total Space Saved" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        FontSize="24"
+                        FontWeight="SemiBold"
+                        Text="{Binding TotalSpaceSavedFormatted}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="12">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Text="Average Compression Ratio" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        FontSize="24"
+                        FontWeight="SemiBold"
+                        Text="{Binding AverageCompressionRatioFormatted}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="12">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Text="Total Folders Compressed" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        FontSize="24"
+                        FontWeight="SemiBold"
+                        Text="{Binding TotalFoldersCompressed}" />
+                </StackPanel>
+            </Grid>
+        </ui:CardControl>
+
+        <TabControl Grid.Row="1" Margin="0,0,0,12">
+            <TabItem Header="Compression History">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,12">
+                        <ui:Button
+                            Appearance="Primary"
+                            Command="{Binding ExportStatisticsCommand}"
+                            Content="Export Statistics"
+                            Icon="Save24" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Command="{Binding ClearStatisticsCommand}"
+                            Content="Clear Statistics"
+                            Icon="Delete24" />
+                    </StackPanel>
+
+                    <DataGrid
+                        Grid.Row="1"
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding Statistics}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding FolderName}"
+                                Header="Folder Name" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding CompressionDate, StringFormat=\{0:yyyy-MM-dd HH:mm\}}"
+                                Header="Date" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding OriginalSizeFormatted}"
+                                Header="Original Size" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding CompressedSizeFormatted}"
+                                Header="Compressed Size" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding SpaceSavedFormatted}"
+                                Header="Space Saved" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding CompressionRatioPercent, StringFormat=\{0:N2\}%}"
+                                Header="Ratio" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="File Type Analysis">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="0,12"
+                        FontSize="16"
+                        Text="File Type Compression Effectiveness" />
+
+                    <DataGrid
+                        Grid.Row="1"
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding FileTypeStats}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding FileExtension}"
+                                Header="File Extension" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding FileCount}"
+                                Header="File Count" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding CompressionRatio, StringFormat=\{0:P2\}}"
+                                Header="Compression Ratio" />
+                            <DataGridTemplateColumn Header="Effectiveness" Width="200">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <ProgressBar
+                                                Height="16"
+                                                Maximum="1"
+                                                Value="{Binding CompressionRatio}" />
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontSize="10"
+                                                FontWeight="SemiBold"
+                                                Text="{Binding CompressionRatio, StringFormat=\{0:P0\}}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Monthly Summary">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="0,12"
+                        FontSize="16"
+                        Text="Monthly Compression Summary" />
+
+                    <DataGrid
+                        Grid.Row="1"
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding MonthlyStats}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding CompressionDate, StringFormat=\{0:MMMM yyyy\}}"
+                                Header="Month" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding FileCount}"
+                                Header="Files Compressed" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding OriginalSizeFormatted}"
+                                Header="Original Size" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding CompressedSizeFormatted}"
+                                Header="Compressed Size" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding SpaceSavedFormatted}"
+                                Header="Space Saved" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding CompressionRatioPercent, StringFormat=\{0:N2\}%}"
+                                Header="Ratio" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>

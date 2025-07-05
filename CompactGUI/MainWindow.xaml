@@ -70,6 +70,46 @@
                         <ui:SymbolIcon Filled="False" Symbol="Database24" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+                
+                <ui:NavigationViewItem Content="Batch Processing"
+                       Margin="15,2,15,10"
+                       NavigationCacheMode="Required"
+                       Tag="{Binding}"
+                       TargetPageType="{x:Type local:BatchProcessingPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="Stack24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                
+                <ui:NavigationViewItem Content="Scheduler"
+                       Margin="15,2,15,10"
+                       NavigationCacheMode="Required"
+                       Tag="{Binding}"
+                       TargetPageType="{x:Type local:SchedulerPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="Clock24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                
+                <ui:NavigationViewItem Content="Statistics"
+                       Margin="15,2,15,10"
+                       NavigationCacheMode="Required"
+                       Tag="{Binding}"
+                       TargetPageType="{x:Type local:StatisticsPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="DataHistogram24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                
+                <ui:NavigationViewItem Content="Profiles"
+                       Margin="15,2,15,10"
+                       NavigationCacheMode="Required"
+                       Tag="{Binding}"
+                       TargetPageType="{x:Type local:ProfilesPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="PersonSettings24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
 
             </ui:NavigationView.MenuItems>
 

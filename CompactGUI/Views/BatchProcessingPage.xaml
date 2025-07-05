@@ -1,0 +1,215 @@
+<Page
+    x:Class="BatchProcessingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CompactGUI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Batch Processing"
+    d:DataContext="{d:DesignInstance local:BatchProcessingViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+
+    <Grid Margin="18,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,12">
+            <ui:Button
+                Appearance="Primary"
+                Command="{Binding CreateJobCommand}"
+                Content="Create Job"
+                Icon="Add24" />
+            <ui:Button
+                Margin="8,0,0,0"
+                Command="{Binding StartJobCommand}"
+                Content="Start"
+                Icon="Play24" />
+            <ui:Button
+                Margin="8,0,0,0"
+                Command="{Binding PauseResumeJobCommand}"
+                Content="{Binding PauseResumeButtonText}" />
+            <ui:Button
+                Margin="8,0,0,0"
+                Command="{Binding CancelJobCommand}"
+                Content="Cancel"
+                Icon="Stop24" />
+            <ui:Button
+                Margin="8,0,0,0"
+                Command="{Binding DeleteJobCommand}"
+                Content="Delete"
+                Icon="Delete24" />
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ui:CardControl Grid.Column="0" Margin="0,0,8,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="12"
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Text="Batch Jobs" />
+
+                    <ListView
+                        Grid.Row="1"
+                        Margin="12,0,12,12"
+                        ItemsSource="{Binding Jobs}"
+                        SelectedItem="{Binding SelectedJob}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ui:SymbolIcon
+                                        Grid.Column="0"
+                                        Margin="0,0,12,0"
+                                        FontSize="24"
+                                        Symbol="FolderZip24" />
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            FontSize="14"
+                                            FontWeight="Medium"
+                                            Text="{Binding DisplayName}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding CreatedAt, StringFormat=\{0:yyyy-MM-dd HH:mm\}}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding Status}" />
+                                        <ProgressBar
+                                            Height="4"
+                                            Margin="0,4,0,0"
+                                            Maximum="100"
+                                            Value="{Binding Progress}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </ui:CardControl>
+
+            <GridSplitter
+                Grid.Column="1"
+                Width="4"
+                Margin="0,0,0,12"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch" />
+
+            <ui:CardControl Grid.Column="2" Margin="8,0,0,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="12"
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Text="Job Details" />
+
+                    <ScrollViewer Grid.Row="1" Margin="12,0,12,12">
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,4"
+                                FontSize="14"
+                                FontWeight="Medium"
+                                Text="Name" />
+                            <ui:TextBox Text="{Binding EditingJob.Name, Mode=TwoWay}" />
+
+                            <TextBlock
+                                Margin="0,12,0,4"
+                                FontSize="14"
+                                FontWeight="Medium"
+                                Text="Folders" />
+                            <ui:CardControl>
+                                <Grid Margin="12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                        <ui:Button
+                                            Command="{Binding AddFolderCommand}"
+                                            Content="Add Folder"
+                                            Icon="Add24" />
+                                        <ui:Button
+                                            Margin="8,0,0,0"
+                                            Command="{Binding RemoveFolderCommand}"
+                                            Content="Remove"
+                                            Icon="Delete24" />
+                                    </StackPanel>
+
+                                    <ListView
+                                        Grid.Row="1"
+                                        Height="150"
+                                        Margin="0,8"
+                                        ItemsSource="{Binding FolderPaths}"
+                                        SelectedItem="{Binding SelectedFolder}" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Text="{Binding FolderCountText}"
+                                        TextAlignment="Right" />
+                                </Grid>
+                            </ui:CardControl>
+
+                            <TextBlock
+                                Margin="0,12,0,4"
+                                FontSize="14"
+                                FontWeight="Medium"
+                                Text="Compression Profile" />
+                            <ComboBox
+                                DisplayMemberPath="Name"
+                                ItemsSource="{Binding CompressionProfiles}"
+                                SelectedItem="{Binding SelectedProfile}" />
+
+                            <StackPanel
+                                Margin="0,16,0,0"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                                <ui:Button
+                                    Command="{Binding SaveJobCommand}"
+                                    Content="Save"
+                                    Icon="Save24" />
+                                <ui:Button
+                                    Margin="8,0,0,0"
+                                    Command="{Binding CancelEditCommand}"
+                                    Content="Cancel" />
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </ui:CardControl>
+        </Grid>
+    </Grid>
+</Page>

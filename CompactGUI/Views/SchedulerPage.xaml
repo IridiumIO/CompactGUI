@@ -1,0 +1,262 @@
+<Page
+    x:Class="SchedulerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CompactGUI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Scheduled Tasks"
+    d:DataContext="{d:DesignInstance local:SchedulerViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+
+    <Grid Margin="18,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,12">
+            <ui:Button
+                Appearance="Primary"
+                Command="{Binding AddTaskCommand}"
+                Content="Add Task"
+                Icon="Add24" />
+            <ui:Button
+                Margin="8,0,0,0"
+                Command="{Binding RunSelectedTaskCommand}"
+                Content="Run Now"
+                Icon="Play24" />
+            <ui:Button
+                Margin="8,0,0,0"
+                Command="{Binding EditTaskCommand}"
+                Content="Edit"
+                Icon="Edit24" />
+            <ui:Button
+                Margin="8,0,0,0"
+                Command="{Binding DeleteTaskCommand}"
+                Content="Delete"
+                Icon="Delete24" />
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ui:CardControl Grid.Column="0" Margin="0,0,8,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="12"
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Text="Scheduled Tasks" />
+
+                    <ListView
+                        Grid.Row="1"
+                        Margin="12,0,12,12"
+                        ItemsSource="{Binding Tasks}"
+                        SelectedItem="{Binding SelectedTask}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ui:SymbolIcon
+                                        Grid.Column="0"
+                                        Margin="0,0,12,0"
+                                        FontSize="24"
+                                        Symbol="Clock24" />
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            FontSize="14"
+                                            FontWeight="Medium"
+                                            Text="{Binding DisplayName}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding ScheduledTime, StringFormat=\{0:yyyy-MM-dd HH:mm\}}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding IsRecurring, StringFormat=Recurring: \{0\}}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </ui:CardControl>
+
+            <GridSplitter
+                Grid.Column="1"
+                Width="4"
+                Margin="0,0,0,12"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch" />
+
+            <ui:CardControl Grid.Column="2" Margin="8,0,0,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="12"
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Text="Task Details" />
+
+                    <ScrollViewer Grid.Row="1" Margin="12,0,12,12">
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,4"
+                                FontSize="14"
+                                FontWeight="Medium"
+                                Text="Name" />
+                            <ui:TextBox Text="{Binding EditingTask.Name, Mode=TwoWay}" />
+
+                            <TextBlock
+                                Margin="0,12,0,4"
+                                FontSize="14"
+                                FontWeight="Medium"
+                                Text="Folder Path" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:TextBox Grid.Column="0" Text="{Binding EditingTask.FolderPath, Mode=TwoWay}" />
+                                <ui:Button
+                                    Grid.Column="1"
+                                    Margin="4,0,0,0"
+                                    Command="{Binding BrowseFolderCommand}"
+                                    Content="Browse" />
+                            </Grid>
+
+                            <TextBlock
+                                Margin="0,12,0,4"
+                                FontSize="14"
+                                FontWeight="Medium"
+                                Text="Compression Settings" />
+                            <ui:CardControl>
+                                <StackPanel Margin="12">
+                                    <TextBlock
+                                        Margin="0,0,0,4"
+                                        FontSize="13"
+                                        Text="Compression Algorithm" />
+                                    <ComboBox SelectedIndex="{Binding EditingTask.CompressionMode, Mode=TwoWay}">
+                                        <ComboBoxItem Content="XPRESS4K (Fastest)" />
+                                        <ComboBoxItem Content="XPRESS8K (Balanced)" />
+                                        <ComboBoxItem Content="XPRESS16K (Better Compression)" />
+                                        <ComboBoxItem Content="LZX (Best Compression)" />
+                                    </ComboBox>
+
+                                    <CheckBox
+                                        Margin="0,8,0,0"
+                                        Content="Skip poorly compressed file types"
+                                        IsChecked="{Binding EditingTask.SkipNonCompressable, Mode=TwoWay}" />
+                                    <CheckBox
+                                        Margin="0,4,0,0"
+                                        Content="Skip user-defined file types"
+                                        IsChecked="{Binding EditingTask.SkipUserNonCompressable, Mode=TwoWay}" />
+                                </StackPanel>
+                            </ui:CardControl>
+
+                            <TextBlock
+                                Margin="0,12,0,4"
+                                FontSize="14"
+                                FontWeight="Medium"
+                                Text="Schedule" />
+                            <ui:CardControl>
+                                <StackPanel Margin="12">
+                                    <TextBlock
+                                        Margin="0,0,0,4"
+                                        FontSize="13"
+                                        Text="Date and Time" />
+                                    <DatePicker SelectedDate="{Binding ScheduledDate, Mode=TwoWay}" />
+                                    <TimePicker Margin="0,4,0,0" SelectedTime="{Binding ScheduledTime, Mode=TwoWay}" />
+
+                                    <CheckBox
+                                        Margin="0,8,0,0"
+                                        Content="Recurring task"
+                                        IsChecked="{Binding EditingTask.IsRecurring, Mode=TwoWay}" />
+
+                                    <StackPanel IsEnabled="{Binding EditingTask.IsRecurring}">
+                                        <TextBlock
+                                            Margin="0,8,0,4"
+                                            FontSize="13"
+                                            Text="Recurrence Pattern" />
+                                        <ComboBox SelectedIndex="{Binding RecurrencePatternIndex, Mode=TwoWay}">
+                                            <ComboBoxItem Content="Daily" />
+                                            <ComboBoxItem Content="Weekly" />
+                                            <ComboBoxItem Content="Monthly" />
+                                        </ComboBox>
+
+                                        <TextBlock
+                                            Margin="0,8,0,4"
+                                            FontSize="13"
+                                            Text="Recurrence Interval" />
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ui:NumberBox
+                                                Grid.Column="0"
+                                                Minimum="1"
+                                                Value="{Binding EditingTask.RecurrenceInterval, Mode=TwoWay}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="8,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Text="{Binding RecurrenceIntervalText}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ui:CardControl>
+
+                            <CheckBox
+                                Margin="0,12,0,0"
+                                Content="Enabled"
+                                IsChecked="{Binding EditingTask.IsEnabled, Mode=TwoWay}" />
+
+                            <StackPanel
+                                Margin="0,16,0,0"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                                <ui:Button
+                                    Command="{Binding SaveTaskCommand}"
+                                    Content="Save"
+                                    Icon="Save24" />
+                                <ui:Button
+                                    Margin="8,0,0,0"
+                                    Command="{Binding CancelEditCommand}"
+                                    Content="Cancel" />
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </ui:CardControl>
+        </Grid>
+    </Grid>
+</Page>
