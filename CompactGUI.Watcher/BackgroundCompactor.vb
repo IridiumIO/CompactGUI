@@ -1,6 +1,10 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.Threading
 
+Imports CompactGUI.Logging.Watcher
+
+Imports Microsoft.Extensions.Logging
+
 Imports Microsoft.Extensions.Logging.Abstractions
 
 Public Class BackgroundCompactor
@@ -20,18 +24,19 @@ Public Class BackgroundCompactor
 
     Private Const LAST_SYSTEM_MODIFIED_TIME_THRESHOLD As Integer = 300 ' 5 minutes
 
+    Private _logger As ILogger(Of Watcher)
 
-    Public Sub New(excludedFileTypes As String())
+    Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher))
 
         _excludedFileTypes = excludedFileTypes
-
+        _logger = logger
         AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
         AddHandler IdleDetector.IsNotIdle, AddressOf OnSystemNotIdle
 
     End Sub
 
     Private Sub OnSystemIdle(sender As Object, e As EventArgs)
-        If Not isSystemIdle Then Debug.WriteLine("SYSTEM IDLE!")
+        If Not isSystemIdle Then WatcherLog.SystemIdleDetected(_logger)
         isSystemIdle = True
         ' Attempt to resume only if compacting was paused due to system activity
         If isCompactingPaused AndAlso Not isCompacting Then
@@ -40,7 +45,7 @@ Public Class BackgroundCompactor
     End Sub
 
     Private Sub OnSystemNotIdle(sender As Object, e As EventArgs)
-        If isSystemIdle Then Debug.WriteLine("SYSTEM NOT IDLE!")
+        If isSystemIdle Then WatcherLog.SystemNotIdle(_logger)
         isSystemIdle = False
         ' Attempt to pause only if compacting is currently active and not already paused
         If isCompacting AndAlso Not isCompactingPaused Then
@@ -59,7 +64,7 @@ Public Class BackgroundCompactor
     End Function
 
     Public Async Function StartCompactingAsync(folders As ObservableCollection(Of WatchedFolder), monitors As List(Of FolderMonitor)) As Task(Of Boolean)
-        Debug.WriteLine("Background Compacting Started")
+        WatcherLog.BackgroundCompactingStarted(_logger)
         Dim cancellationToken As CancellationToken = cancellationTokenSource.Token
 
         IsCompactorActive = True
@@ -75,11 +80,11 @@ Public Class BackgroundCompactor
             folder.IsWorking = True
             Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
             If folder.LastSystemModifiedDate > recentThresholdDate Then
-                Debug.WriteLine("    Skipping " & folder.DisplayName)
+                WatcherLog.SkippingRecentlyModifiedFolder(_logger, folder.DisplayName)
                 Continue For
             End If
 
-            Debug.WriteLine("    Compacting " & folder.DisplayName)
+            WatcherLog.CompactingFolder(_logger, folder.DisplayName)
             Dim compactingTask = BeginCompacting(folder.Folder, folder.CompressionLevel)
             isCompacting = True
 
@@ -120,24 +125,24 @@ Public Class BackgroundCompactor
             End If
             folder.IsWorking = False
             _compactor.Dispose()
-            Debug.WriteLine("    Finished Compacting " & folder.DisplayName)
+            WatcherLog.FinishedCompactingFolder(_logger, folder.DisplayName)
         Next
 
         IsCompactorActive = False
         isCompacting = False ' Ensure compacting status is reset after operation
-        Debug.WriteLine("Background Compacting Finished")
+        WatcherLog.BackgroundCompactingFinished(_logger)
         currentProcess.PriorityClass = ProcessPriorityClass.Normal
         Return True
     End Function
 
     Public Sub PauseCompacting()
-        Debug.WriteLine(" - Pausing Background!")
+        WatcherLog.PausingBackgroundCompactor(_logger)
         isCompactingPaused = True ' Indicate compacting is paused
         _compactor.Pause()
     End Sub
 
     Public Sub ResumeCompacting()
-        Debug.WriteLine(" - Resuming Background!")
+        WatcherLog.ResumingBackgroundCompactor(_logger)
         isCompactingPaused = False ' Indicate compacting is no longer paused
         _compactor.Resume()
     End Sub

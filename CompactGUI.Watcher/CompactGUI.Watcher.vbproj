@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.csproj" />
+    <ProjectReference Include="..\CompactGUI.Logging\CompactGUI.Logging.csproj" />
   </ItemGroup>
 
 </Project>

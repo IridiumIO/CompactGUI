@@ -81,8 +81,8 @@ Partial Public Class Application
                                services.AddTransient(Of DatabaseViewModel)()
 
                                'Other services
-                               services.AddSingleton(Of Watcher.Watcher)(Function()
-                                                                             Return New Watcher.Watcher({})
+                               services.AddSingleton(Of Watcher.Watcher)(Function(s)
+                                                                             Return New Watcher.Watcher({}, s.GetRequiredService(Of ILogger(Of Watcher.Watcher)))
                                                                          End Function)
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
