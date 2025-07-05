@@ -7,6 +7,8 @@ Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CompactGUI.Core
 Imports CompactGUI.Core.WOFHelper
 
+Imports Microsoft.Extensions.Logging
+
 Imports PropertyChanged
 
 
@@ -72,10 +74,10 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
 
 
     Public Compressor As ICompressor
-
+    Private Shared ReadOnly CompressorLogger As ILogger = Application.GetService(Of ILogger(Of Compactor))()
     Public Async Function CompressFolder() As Task(Of Boolean)
 
-        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList)
+        Compressor = New Compactor(FolderName, WOFConvertCompressionLevel(CompressionOptions.SelectedCompressionMode), GetSkipList, CompressorLogger)
         Return Await RunCompressionAsync(Compressor, Nothing, True)
 
     End Function
@@ -180,7 +182,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
             sw.Start()
             estimatedData = Await Task.Run(Function() estimator.EstimateCompression(AnalysisResults.ToList, IsHDD, GetThreadCount, Core.SharedMethods.GetClusterSize(FolderName), CancellationTokenSource.Token))
             sw.Stop()
-            Debug.WriteLine($"Estimated compression took {sw.ElapsedMilliseconds}ms")
+            'Debug.WriteLine($"Estimated compression took {sw.ElapsedMilliseconds}ms")
         Catch ex As AggregateException
             IsGettingEstimate = False
             Return
@@ -265,11 +267,11 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject
     Protected Overridable Function GetSkipList() As String()
         Dim exclist As String() = Array.Empty(Of String)()
         If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
-            Debug.WriteLine("Adding non-compressable list to exclusion list")
+            'Debug.WriteLine("Adding non-compressable list to exclusion list")
             exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
         End If
         If CompressionOptions.SkipUserSubmittedFiletypes AndAlso WikiPoorlyCompressedFiles?.Count <> 0 Then
-            Debug.WriteLine("Adding estimator poorly compressed list to exclusion list")
+            'Debug.WriteLine("Adding estimator poorly compressed list to exclusion list")
             exclist = exclist.Union(WikiPoorlyCompressedFiles).ToArray
         End If
 
