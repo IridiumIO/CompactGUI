@@ -1,43 +1,45 @@
 ﻿Imports System.ComponentModel
 
+Imports CompactGUI.Core.Settings
+
 Imports Wpf.Ui
 Imports Wpf.Ui.Abstractions
 Imports Wpf.Ui.Controls
 
 Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
 
-    Private ReadOnly _navigationService As INavigationService
+    Private ReadOnly _NavigationService As INavigationService
     Private _MainWindowViewModel As MainWindowViewModel
-
-    Public Sub New(navigationService As INavigationService, serviceProvider As IServiceProvider, snackbarService As CustomSnackBarService, viewmodel As MainWindowViewModel)
+    Private _SettingsService As ISettingsService
+    Public Sub New(settingsService As ISettingsService, navigationService As INavigationService, serviceProvider As IServiceProvider, snackbarService As CustomSnackBarService, viewmodel As MainWindowViewModel)
 
         ' This call is required by the designer.
         InitializeComponent()
+        ' Add any initialization after the InitializeComponent() call.
 
         snackbarService.SetSnackbarPresenter(RootSnackbar)
         navigationService.SetNavigationControl(NavigationView)
         NavigationView.SetServiceProvider(serviceProvider)
-        ' Add any initialization after the InitializeComponent() call.
 
-        _navigationService = navigationService
-
-        DataContext = viewmodel
+        _NavigationService = navigationService
         _MainWindowViewModel = viewmodel
+        _SettingsService = settingsService
+        DataContext = viewmodel
 
         NotifyIconTrayMenu.DataContext = viewmodel
 
         AddHandler Application.GetService(Of HomeViewModel)().PropertyChanged, AddressOf HVPropertyChanged
         AddHandler navigationService.GetNavigationControl.Navigated, AddressOf OnNavigated
 
-        If SettingsHandler.AppSettings.WindowWidth > 0 Then
-            Width = SettingsHandler.AppSettings.WindowWidth
-            Height = SettingsHandler.AppSettings.WindowHeight
-            Left = SettingsHandler.AppSettings.WindowLeft
-            Top = SettingsHandler.AppSettings.WindowTop
-            If SettingsHandler.AppSettings.WindowState = WindowState.Maximized Then
-                WindowState = WindowState.Maximized
+        If _SettingsService.AppSettings.WindowWidth > 0 Then
+            Width = _SettingsService.AppSettings.WindowWidth
+            Height = _SettingsService.AppSettings.WindowHeight
+            Left = _SettingsService.AppSettings.WindowLeft
+            Top = _SettingsService.AppSettings.WindowTop
+            If _SettingsService.AppSettings.WindowState = Core.Settings.WindowState.Maximized Then
+                WindowState = Core.Settings.WindowState.Maximized
             Else
-                WindowState = WindowState.Normal
+                WindowState = Core.Settings.WindowState.Normal
             End If
         End If
 
@@ -100,11 +102,11 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
 
     Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs)
         If Not IsVisible Then Return
-        SettingsHandler.AppSettings.WindowState = WindowState
-        SettingsHandler.AppSettings.WindowWidth = If(Width > 0, Width, 1300)
-        SettingsHandler.AppSettings.WindowHeight = If(Height > 0, Height, 700)
-        SettingsHandler.AppSettings.WindowLeft = Left
-        SettingsHandler.AppSettings.WindowTop = Top
-        SettingsHandler.WriteToFile()
+        _SettingsService.AppSettings.WindowState = WindowState
+        _SettingsService.AppSettings.WindowWidth = If(Width > 0, Width, 1300)
+        _SettingsService.AppSettings.WindowHeight = If(Height > 0, Height, 700)
+        _SettingsService.AppSettings.WindowLeft = Left
+        _SettingsService.AppSettings.WindowTop = Top
+        _SettingsService.SaveSettings()
     End Sub
 End Class

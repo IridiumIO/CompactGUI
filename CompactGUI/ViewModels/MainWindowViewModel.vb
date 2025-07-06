@@ -4,6 +4,8 @@ Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 Imports CommunityToolkit.Mvvm.Messaging.Messages
 
+Imports CompactGUI.Core.Settings
+
 
 Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of CompressableFolder))
 
@@ -12,10 +14,12 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
 
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _windowService As IWindowService
+    Private ReadOnly _settingsService As ISettingsService
 
-    Public Sub New(windowService As IWindowService, watcher As Watcher.Watcher)
+    Public Sub New(windowService As IWindowService, watcher As Watcher.Watcher, settingsService As ISettingsService)
         _watcher = watcher
         _windowService = windowService
+        _settingsService = settingsService
     End Sub
 
     Public ReadOnly Property IsAdmin As Boolean
@@ -49,7 +53,7 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
         If Keyboard.Modifiers = ModifierKeys.Shift Then
             e.Cancel = False
             If _watcher.WatchedFolders.Count <> 0 Then _watcher.WriteToFile()
-            SettingsHandler.WriteToFile()
+            _settingsService.SaveSettings()
             Application.Current.Shutdown()
             Return
         End If

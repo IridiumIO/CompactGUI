@@ -2,6 +2,8 @@
 Imports System.IO
 Imports System.Net.Http
 
+Imports CompactGUI.Core.Settings
+
 Public Class SteamFolder : Inherits CompressableFolder
 
 
@@ -93,9 +95,9 @@ Public Class SteamFolder : Inherits CompressableFolder
 
     Protected Overrides Function GetSkipList() As String()
         Dim exclist As String() = Array.Empty(Of String)()
-        If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
+        If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Count <> 0 Then
             Debug.WriteLine("Adding non-compressable list to exclusion list")
-            exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
+            exclist = exclist.Union(Application.GetService(Of ISettingsService).AppSettings.NonCompressableList).ToArray
         End If
 
         If CompressionOptions.SkipUserSubmittedFiletypes AndAlso WikiPoorlyCompressedFiles?.Count <> 0 Then

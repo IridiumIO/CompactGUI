@@ -4,6 +4,8 @@ Imports System.ComponentModel
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 
+Imports CompactGUI.Core.Settings
+
 Public Class DatabaseViewModel : Inherits ObservableObject
 
     <ObservableProperty>
@@ -23,24 +25,27 @@ Public Class DatabaseViewModel : Inherits ObservableObject
     Public ReadOnly Property DatabaseSubmissionsCount As Integer
         Get
             Return DatabaseResults.Sum(Function(result) _
-            (If(result.Result_X4K?.TotalResults, 0)) +
-            (If(result.Result_X8K?.TotalResults, 0)) +
-            (If(result.Result_X16K?.TotalResults, 0)) +
-            (If(result.Result_LZX?.TotalResults, 0))
-            )
+                    (If(result.Result_X4K?.TotalResults, 0)) +
+                    (If(result.Result_X8K?.TotalResults, 0)) +
+                    (If(result.Result_X16K?.TotalResults, 0)) +
+                    (If(result.Result_LZX?.TotalResults, 0))
+                    )
         End Get
     End Property
 
     Public ReadOnly Property LastUpdatedDatabase As DateTime
         Get
-            Return SettingsHandler.AppSettings.ResultsDBLastUpdated
+            Return _SettingsService.AppSettings.ResultsDBLastUpdated
         End Get
     End Property
 
 
-    Public Sub New()
-        DatabaseResults = New ObservableCollection(Of DatabaseCompressionResult)(Application.GetService(Of IWikiService).GetAllDatabaseCompressionResultsAsync().GetAwaiter.GetResult)
+    Private ReadOnly _SettingsService As ISettingsService
 
+    Public Sub New(settingsService As ISettingsService, wikiService As IWikiService)
+
+        _SettingsService = settingsService
+        DatabaseResults = New ObservableCollection(Of DatabaseCompressionResult)(wikiService.GetAllDatabaseCompressionResultsAsync().GetAwaiter.GetResult)
         FilteredResults = CollectionViewSource.GetDefaultView(DatabaseResults)
         FilteredResults.Filter = AddressOf FilterResults
     End Sub

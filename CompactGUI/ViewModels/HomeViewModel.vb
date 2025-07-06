@@ -6,6 +6,8 @@ Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 
+Imports CompactGUI.Core.Settings
+
 Imports CompactGUI.Core.SharedMethods
 Imports CompactGUI.Logging
 
@@ -57,13 +59,15 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _snackbarService As CustomSnackBarService
     Private ReadOnly _logger As ILogger(Of HomeViewModel)
+    Private ReadOnly _settingsService As ISettingsService
 
-    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel))
+    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel), settingsService As ISettingsService)
         WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
         AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
         _watcher = watcher
         _snackbarService = snackbarService
         _logger = logger
+        _settingsService = settingsService
     End Sub
 
 
@@ -117,10 +121,10 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
             Dim newFolder As CompressableFolder = CompressableFolderFactory.CreateCompressableFolder(folderName)
 
-            newFolder.CompressionOptions.WatchFolderForChanges = SettingsHandler.AppSettings.WatchFolderForChanges
-            newFolder.CompressionOptions.SelectedCompressionMode = SettingsHandler.AppSettings.SelectedCompressionMode
-            newFolder.CompressionOptions.SkipPoorlyCompressedFileTypes = SettingsHandler.AppSettings.SkipNonCompressable
-            newFolder.CompressionOptions.SkipUserSubmittedFiletypes = SettingsHandler.AppSettings.SkipUserNonCompressable
+            newFolder.CompressionOptions.WatchFolderForChanges = _settingsService.AppSettings.WatchFolderForChanges
+            newFolder.CompressionOptions.SelectedCompressionMode = _settingsService.AppSettings.SelectedCompressionMode
+            newFolder.CompressionOptions.SkipPoorlyCompressedFileTypes = _settingsService.AppSettings.SkipNonCompressable
+            newFolder.CompressionOptions.SkipUserSubmittedFiletypes = _settingsService.AppSettings.SkipUserNonCompressable
 
             If Not Folders.Any(Function(f) f.FolderName = newFolder.FolderName) Then
                 Folders.Add(newFolder)
@@ -133,7 +137,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             If TypeOf (newFolder) Is SteamFolder Then
                 Await CType(newFolder, SteamFolder).GetWikiResults()
             Else
-                If SettingsHandler.AppSettings.EstimateCompressionForNonSteamFolders Then
+                If _settingsService.AppSettings.EstimateCompressionForNonSteamFolders Then
                     HomeViewModelLog.GettingEstimatedCompression(_logger, newFolder.FolderName, newFolder.UncompressedBytes)
                     Await newFolder.GetEstimatedCompression()
                 End If
@@ -230,7 +234,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
                                    Dim ret = Await folder.CompressFolder()
                                    Dim analysis = Await folder.AnalyseFolderAsync
 
-                                   If SettingsHandler.AppSettings.ShowNotifications Then
+                                   If _settingsService.AppSettings.ShowNotifications Then
 
                                        Application.GetService(Of TrayNotifierService).Notify_Compressed(folder.DisplayName, folder.UncompressedBytes - folder.CompressedBytes, folder.CompressionRatio)
 

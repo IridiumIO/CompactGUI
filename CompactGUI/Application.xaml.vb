@@ -9,7 +9,7 @@ Imports Microsoft.Extensions.Logging
 Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Configuration
 Imports System.Drawing
-
+Imports CompactGUI.Core.Settings
 
 Partial Public Class Application
 
@@ -17,13 +17,17 @@ Partial Public Class Application
 
     Private Shared _host As IHost
 
+    Private Shared ReadOnly SettingsService As ISettingsService
+
     Shared Sub New()
-        SettingsHandler.InitialiseSettings()
+        SettingsService = New SettingsService()
+        SettingsService.LoadSettings()
         InitializeHost()
 
         AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnDomainUnhandledException
 
     End Sub
+
 
     Private Shared Sub InitializeHost()
 
@@ -36,13 +40,16 @@ Partial Public Class Application
 
                                services.AddHostedService(Of ApplicationHostService)()
 
+                               'Settings handler
+                               services.AddSingleton(Of ISettingsService)(SettingsService)
+
                                services.AddLogging(Sub(logging)
-                                                       logging.SetMinimumLevel(SettingsHandler.AppSettings.LogLevel)
+                                                       logging.SetMinimumLevel(SettingsService.AppSettings.LogLevel)
                                                        logging.AddConsole()
                                                        logging.AddDebug()
                                                        logging.AddFile(
-                                                        Path.Combine(SettingsHandler.DataFolder.FullName, "log.log"),
-                                                        SettingsHandler.AppSettings.LogLevel,
+                                                        Path.Combine(SettingsService.DataFolder.FullName, "log.log"),
+                                                        SettingsService.AppSettings.LogLevel,
                                                         retainedFileCountLimit:=2,
                                                         fileSizeLimitBytes:=1000000,
                                                         outputTemplate:="{Timestamp:o} {RequestId,13} [{Level:u3}] {Message}{NewLine}{Exception}"
@@ -82,13 +89,18 @@ Partial Public Class Application
 
                                'Other services
                                services.AddSingleton(Of Watcher.Watcher)(Function(s)
-                                                                             Return New Watcher.Watcher({}, s.GetRequiredService(Of ILogger(Of Watcher.Watcher)))
+                                                                             Return New Watcher.Watcher(Array.Empty(Of String)(), s.GetRequiredService(Of ILogger(Of Watcher.Watcher)), SettingsService)
                                                                          End Function)
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
                                                                              End Function)
                            End Sub) _
             .Build()
+
+
+
+
+
 
 
     End Sub
@@ -111,12 +123,12 @@ Partial Public Class Application
         Dim acquiredMutex As Boolean = mutex.WaitOne(0, False)
 
         If Not acquiredMutex Then
-            If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+            If Not SettingsService.AppSettings.AllowMultiInstance Then
                 HandleSecondInstance(e.Args)
                 Return
             End If
         Else
-            If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+            If Not SettingsService.AppSettings.AllowMultiInstance Then
                 pipeServerTask = ProcessNextInstanceMessage()
             End If
         End If
@@ -124,9 +136,9 @@ Partial Public Class Application
         GetService(Of Watcher.Watcher)()
 
         Await _host.StartAsync()
-        Await SettingsViewModel.InitializeEnvironment()
+        Await GetService(Of SettingsViewModel).InitializeEnvironment()
 
-        Dim UpdateTask = GetService(Of IUpdaterService).CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
+        Dim UpdateTask = GetService(Of IUpdaterService).CheckForUpdate(SettingsService.AppSettings.EnablePreReleaseUpdates)
         Dim WikiTask = GetService(Of IWikiService).GetUpdatedJSONAsync()
         Await Task.WhenAll(UpdateTask, WikiTask)
 

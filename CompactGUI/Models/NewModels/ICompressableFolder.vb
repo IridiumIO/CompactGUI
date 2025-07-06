@@ -5,6 +5,7 @@ Imports System.Threading
 Imports CommunityToolkit.Mvvm.ComponentModel
 
 Imports CompactGUI.Core
+Imports CompactGUI.Core.Settings
 Imports CompactGUI.Core.WOFHelper
 
 Imports Microsoft.Extensions.Logging
@@ -48,8 +49,8 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
 
     Public ReadOnly Property GlobalPoorlyCompressedFileCount
         Get
-            If AnalysisResults Is Nothing OrElse SettingsHandler.AppSettings.NonCompressableList.Count = 0 Then Return 0
-            Return AnalysisResults.Where(Function(fl) SettingsHandler.AppSettings.NonCompressableList.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
+            If AnalysisResults Is Nothing OrElse Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Count = 0 Then Return 0
+            Return AnalysisResults.Where(Function(fl) Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
         End Get
     End Property
 
@@ -245,8 +246,8 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     End Sub
 
     Protected Function GetThreadCount() As Integer
-        Dim threadCount As Integer = SettingsHandler.AppSettings.MaxCompressionThreads
-        If SettingsHandler.AppSettings.LockHDDsToOneThread Then
+        Dim threadCount As Integer = Application.GetService(Of ISettingsService).AppSettings.MaxCompressionThreads
+        If Application.GetService(Of ISettingsService).AppSettings.LockHDDsToOneThread Then
             Dim HDDType As DiskDetector.Models.HardwareType = GetDiskType()
             If HDDType = DiskDetector.Models.HardwareType.Hdd Then
                 threadCount = 1
@@ -271,9 +272,9 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
 
     Protected Overridable Function GetSkipList() As String()
         Dim exclist As String() = Array.Empty(Of String)()
-        If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso SettingsHandler.AppSettings.NonCompressableList.Count <> 0 Then
+        If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Count <> 0 Then
             'Debug.WriteLine("Adding non-compressable list to exclusion list")
-            exclist = exclist.Union(SettingsHandler.AppSettings.NonCompressableList).ToArray
+            exclist = exclist.Union(Application.GetService(Of ISettingsService).AppSettings.NonCompressableList).ToArray
         End If
         If CompressionOptions.SkipUserSubmittedFiletypes AndAlso WikiPoorlyCompressedFiles?.Count <> 0 Then
             'Debug.WriteLine("Adding estimator poorly compressed list to exclusion list")

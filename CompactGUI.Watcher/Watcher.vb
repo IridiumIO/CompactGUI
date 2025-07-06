@@ -3,8 +3,11 @@ Imports System.Text.Json
 Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
+Imports CommunityToolkit.Mvvm.Messaging
+Imports CommunityToolkit.Mvvm.Messaging.Messages
 
 Imports CompactGUI.Core
+Imports CompactGUI.Core.Settings
 Imports CompactGUI.Logging.Watcher
 
 Imports Microsoft.Extensions.Logging
@@ -12,18 +15,18 @@ Imports Microsoft.Extensions.Logging
 Imports Microsoft.Extensions.Logging.Abstractions
 
 <PropertyChanged.AddINotifyPropertyChangedInterface>
-Public Class Watcher : Inherits ObservableObject
+Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of Boolean))
 
     <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
     Public Property WatchedFolders As New ObservableCollection(Of WatchedFolder)
     <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
     Public Property LastAnalysed As DateTime
 
-    Public Shared Property IsWatchingEnabled As Boolean = True
-    Public Shared Property IsBackgroundCompactingEnabled As Boolean = True
+    Public Property IsWatchingEnabled As Boolean = True
+    Public Property IsBackgroundCompactingEnabled As Boolean = True
 
-    Private ReadOnly _DataFolder As New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
-    Private ReadOnly Property WatcherJSONFile As IO.FileInfo = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
+    Private ReadOnly _DataFolder As IO.DirectoryInfo
+    Private ReadOnly Property WatcherJSONFile As IO.FileInfo
 
     Public Property BGCompactor As BackgroundCompactor
 
@@ -36,7 +39,8 @@ Public Class Watcher : Inherits ObservableObject
     Private _disableCounter As Integer = 0
     Private _counterLock As New SemaphoreSlim(1, 1)
 
-    Private Shared _logger As ILogger(Of Watcher)
+    Private _logger As ILogger(Of Watcher)
+    Private _settingsService As ISettingsService
 
     Public Async Function DisableBackgrounding() As Task
         Await _counterLock.WaitAsync()
@@ -69,14 +73,21 @@ Public Class Watcher : Inherits ObservableObject
     End Function
 
 
-    Sub New(excludedFiletypes As String(), logger As ILogger(Of Watcher))
+    Sub New(excludedFiletypes As String(), logger As ILogger(Of Watcher), settingsService As ISettingsService)
+        _logger = logger
+        _settingsService = settingsService
+
+        _DataFolder = settingsService.DataFolder
+        WatcherJSONFile = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
 
         WatcherLog.WatcherStarted(logger)
+        IsActive = True
+
+
         IdleDetector.Start()
         AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
 
         BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger)
-        _logger = logger
         InitializeWatchedFoldersAsync()
 
 
@@ -194,7 +205,7 @@ Public Class Watcher : Inherits ObservableObject
     Private Shared ReadOnly DeserializeOptions As New JsonSerializerOptions With {.IncludeFields = True}
     Private Shared ReadOnly SerializeOptions As New JsonSerializerOptions With {.IncludeFields = True, .WriteIndented = True}
 
-    Private Shared Function DeserializeAndValidateJSON(inputjsonFile As IO.FileInfo) As (DateTime, ObservableCollection(Of WatchedFolder))
+    Private Function DeserializeAndValidateJSON(inputjsonFile As IO.FileInfo) As (DateTime, ObservableCollection(Of WatchedFolder))
         Dim WatcherJSON = IO.File.ReadAllText(inputjsonFile.FullName)
         If WatcherJSON = "" Then WatcherJSON = "{}"
 
@@ -366,6 +377,15 @@ Public Class Watcher : Inherits ObservableObject
 
     End Function
 
+    Public Sub Receive(message As PropertyChangedMessage(Of Boolean)) Implements IRecipient(Of PropertyChangedMessage(Of Boolean)).Receive
+        If (message.Sender.GetType() IsNot GetType(Settings)) Then Return
+
+        If message.PropertyName = NameOf(Settings.EnableBackgroundWatcher) Then : IsWatchingEnabled = message.NewValue
+        ElseIf message.PropertyName = NameOf(Settings.EnableBackgroundAutoCompression) Then : IsBackgroundCompactingEnabled = message.NewValue
+        End If
+
+
+    End Sub
 
     Public ReadOnly Property TotalSaved As Long
         Get
