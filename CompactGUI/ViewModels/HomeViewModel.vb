@@ -11,7 +11,7 @@ Imports CompactGUI.Logging
 
 Imports Microsoft.Extensions.Logging
 
-Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
+Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
 
     Private ReadOnly _folderViewModels As New Dictionary(Of CompressableFolder, FolderViewModel)
 
@@ -20,6 +20,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
 
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(SelectedFolderViewModel))>
+    <NotifyPropertyChangedRecipients>
     Private _SelectedFolder As CompressableFolder
 
     Public ReadOnly Property SelectedFolderViewModel As FolderViewModel
@@ -66,11 +67,11 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableObject : 
     End Sub
 
 
-    Private Sub OnSelectedFolderChanged(value As CompressableFolder)
+    'Private Sub OnSelectedFolderChanged(value As CompressableFolder)
 
-        WeakReferenceMessenger.Default.Send(New BackgroundImageChangedMessage(value?.FolderBGImage))
+    '    WeakReferenceMessenger.Default.Send(New BackgroundImageChangedMessage(value?.FolderBGImage))
 
-    End Sub
+    'End Sub
 
 
 

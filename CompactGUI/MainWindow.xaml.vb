@@ -7,6 +7,7 @@ Imports Wpf.Ui.Controls
 Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
 
     Private ReadOnly _navigationService As INavigationService
+    Private _MainWindowViewModel As MainWindowViewModel
 
     Public Sub New(navigationService As INavigationService, serviceProvider As IServiceProvider, snackbarService As CustomSnackBarService, viewmodel As MainWindowViewModel)
 
@@ -21,6 +22,7 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
         _navigationService = navigationService
 
         DataContext = viewmodel
+        _MainWindowViewModel = viewmodel
 
         NotifyIconTrayMenu.DataContext = viewmodel
 
@@ -47,9 +49,11 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
     Private Sub OnNavigated(sender As NavigationView, args As NavigatedEventArgs)
         If args.Page.GetType Is GetType(HomePage) Then
             _isOnHomePage = True
+            _MainWindowViewModel.IsActive = True
             HVPropertyChanged(Application.GetService(Of HomeViewModel)(), New PropertyChangedEventArgs(NameOf(HomeViewModel.HomeViewIsFresh)))
         Else
             _isOnHomePage = False
+            _MainWindowViewModel.IsActive = False
             ProgTitle.Visibility = Visibility.Visible
         End If
     End Sub

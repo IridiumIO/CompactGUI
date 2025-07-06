@@ -2,9 +2,10 @@
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
+Imports CommunityToolkit.Mvvm.Messaging.Messages
 
 
-Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implements IRecipient(Of BackgroundImageChangedMessage)
+Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of CompressableFolder))
 
     <ObservableProperty>
     Private _BackgroundImage As BitmapImage
@@ -15,7 +16,6 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
     Public Sub New(windowService As IWindowService, watcher As Watcher.Watcher)
         _watcher = watcher
         _windowService = windowService
-        IsActive = True
     End Sub
 
     Public ReadOnly Property IsAdmin As Boolean
@@ -64,9 +64,11 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
     End Sub
 
 
-    Public Sub Receive(message As BackgroundImageChangedMessage) Implements IRecipient(Of BackgroundImageChangedMessage).Receive
-        BackgroundImage = message.Value
+    Public Sub Receive(message As PropertyChangedMessage(Of CompressableFolder)) Implements IRecipient(Of PropertyChangedMessage(Of CompressableFolder)).Receive
+
+        If message.Sender.GetType() IsNot GetType(HomeViewModel) Then Return
+        If message.PropertyName <> NameOf(HomeViewModel.SelectedFolder) Then Return
+        BackgroundImage = message.NewValue?.FolderBGImage
+
     End Sub
-
-
 End Class
