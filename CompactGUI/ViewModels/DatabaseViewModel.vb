@@ -6,7 +6,12 @@ Imports CommunityToolkit.Mvvm.Input
 
 Public Class DatabaseViewModel : Inherits ObservableObject
 
-    Public Property DatabaseResults As ObservableCollection(Of DatabaseCompressionResult)
+    <ObservableProperty>
+    Private _DatabaseResults As ObservableCollection(Of DatabaseCompressionResult)
+
+    <ObservableProperty>
+    Private _searchText As String
+
     Public ReadOnly Property FilteredResults As ICollectionView
 
     Public ReadOnly Property DatabaseGamesCount As Integer
@@ -26,24 +31,12 @@ Public Class DatabaseViewModel : Inherits ObservableObject
         End Get
     End Property
 
-
     Public ReadOnly Property LastUpdatedDatabase As DateTime
         Get
             Return SettingsHandler.AppSettings.ResultsDBLastUpdated
         End Get
     End Property
 
-
-    Private _searchText As String
-    Public Property SearchText As String
-        Get
-            Return _searchText
-        End Get
-        Set(value As String)
-            SetProperty(_searchText, value)
-            FilteredResults.Refresh()
-        End Set
-    End Property
 
     Public Sub New()
         DatabaseResults = New ObservableCollection(Of DatabaseCompressionResult)(Application.GetService(Of IWikiService).GetAllDatabaseCompressionResultsAsync().GetAwaiter.GetResult)
@@ -52,6 +45,10 @@ Public Class DatabaseViewModel : Inherits ObservableObject
         FilteredResults.Filter = AddressOf FilterResults
     End Sub
 
+
+    Private Sub OnSearchTextChanged(value As String)
+        FilteredResults.Refresh()
+    End Sub
 
     Private Function NormalizeString(input As String) As String
         If String.IsNullOrEmpty(input) Then Return String.Empty
@@ -71,9 +68,8 @@ Public Class DatabaseViewModel : Inherits ObservableObject
            (item.SteamID.ToString().Contains(SearchText))
     End Function
 
-    Public ReadOnly Property SortCommand As ICommand = New RelayCommand(Of Object)(Sub(f) SortResults(f))
 
-
+    <RelayCommand>
     Private Sub SortResults(param As Object)
         Dim sortOption = param?.ToString()
         FilteredResults.SortDescriptions.Clear()
