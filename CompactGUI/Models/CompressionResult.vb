@@ -1,13 +1,12 @@
 ﻿
-' Used to hold compression results from parsed existing wiki file (above)
 Imports CommunityToolkit.Mvvm.ComponentModel
 
 Public Class CompressionResult : Inherits ObservableObject
 
-    Public Property CompType As Core.CompressionMode
-    Public Property BeforeBytes As Long = 0
-    Public Property AfterBytes As Long = 0
-    Public Property TotalResults As Integer = 0
+    <ObservableProperty> Private _CompType As Core.CompressionMode
+    <ObservableProperty> Private _BeforeBytes As Long = 0
+    <ObservableProperty> Private _AfterBytes As Long = 0
+    <ObservableProperty> Private _TotalResults As Integer = 0
 
 
     Public ReadOnly Property CompressionPercent As Integer
