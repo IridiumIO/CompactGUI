@@ -17,27 +17,43 @@ Imports PropertyChanged
 Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implements IDisposable
 
 
-    Public Property FolderName As String
-    Public Property DisplayName As String
-    Public Property CurrentCompression As CompressionMode
+    Private Shared ReadOnly CompactorLogger As ILogger = Application.GetService(Of ILogger(Of Compactor))()
+    Private Shared ReadOnly UncompactorLogger As ILogger = Application.GetService(Of ILogger(Of Uncompactor))()
+    Private Shared ReadOnly AnalyserLogger As ILogger = Application.GetService(Of ILogger(Of Analyser))()
 
-    <AlsoNotifyFor(NameOf(BytesSaved), NameOf(CompressionRatio))>
-    Public Property FolderActionState As ActionState
 
-    Public Property UncompressedBytes As Long = 0
-    Public Property CompressedBytes As Long = 0
-    Public Property AnalysisResults As New ObservableCollection(Of AnalysedFileDetails)
-    Public Property PoorlyCompressedFiles As List(Of ExtensionResult)
-    Public Property CompressionOptions As CompressionOptions
-    Public Property IsFreshlyCompressed As Boolean
+    <ObservableProperty> Private _FolderName As String
+    <ObservableProperty> Private _DisplayName As String
+    <ObservableProperty> Private _CurrentCompression As CompressionMode
 
-    Public Property FolderBGImage As BitmapImage = Nothing
+    <NotifyPropertyChangedFor(NameOf(BytesSaved), NameOf(CompressionRatio))>
+    <ObservableProperty> Private _FolderActionState As ActionState
+
+    <NotifyPropertyChangedFor(NameOf(BytesSaved), NameOf(CompressionRatio))>
+    <ObservableProperty> Private _UncompressedBytes As Long = 0
+
+    <NotifyPropertyChangedFor(NameOf(BytesSaved), NameOf(CompressionRatio))>
+    <ObservableProperty> Private _CompressedBytes As Long = 0
+
+    <ObservableProperty> Private _AnalysisResults As New ObservableCollection(Of AnalysedFileDetails)
+    <ObservableProperty> Private _PoorlyCompressedFiles As List(Of ExtensionResult)
+    <ObservableProperty> Private _CompressionOptions As New CompressionOptions
+    <ObservableProperty> Private _IsFreshlyCompressed As Boolean
+
+    <ObservableProperty> Private _FolderBGImage As BitmapImage = Nothing
+
+
+    <ObservableProperty> Private _IsGettingEstimate As Boolean = False
+
+    <ObservableProperty> Private _WikiCompressionResults As WikiCompressionResults
+    <ObservableProperty> Private _WikiPoorlyCompressedFiles As New List(Of String)
 
     Public ReadOnly Property BytesSaved As Long
         Get
             Return UncompressedBytes - CompressedBytes
         End Get
     End Property
+
 
     Public ReadOnly Property CompressionRatio As Decimal
         Get
@@ -54,29 +70,24 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
         End Get
     End Property
 
+    Public ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
+        Get
+            If AnalysisResults Is Nothing OrElse WikiPoorlyCompressedFiles Is Nothing Then Return 0
+            Return WikiPoorlyCompressedFiles.Count
+        End Get
+    End Property
 
 
-
-    Sub New()
-        CompressionOptions = New CompressionOptions
-    End Sub
-
-
-    Public Property CompressionProgress As IProgress(Of CompressionProgress) = New Progress(Of CompressionProgress)(Sub(x As CompressionProgress)
-                                                                                                                        ReportProgressChanged(x)
-                                                                                                                    End Sub)
-
-
+    Public ReadOnly Property CompressionProgress As IProgress(Of CompressionProgress) = New Progress(Of CompressionProgress)(Sub(x) RaiseEvent CompressionProgressChanged(Me, x))
     Public Event CompressionProgressChanged As EventHandler(Of CompressionProgress)
-    Public Sub ReportProgressChanged(e As CompressionProgress)
-        RaiseEvent CompressionProgressChanged(Me, e)
-    End Sub
+
 
 
 
     Public Compressor As ICompressor
-    Private Shared ReadOnly CompactorLogger As ILogger = Application.GetService(Of ILogger(Of Compactor))()
-    Private Shared ReadOnly UncompactorLogger As ILogger = Application.GetService(Of ILogger(Of Uncompactor))()
+    Public Analyser As Analyser
+    Private CancellationTokenSource As CancellationTokenSource
+
 
     Public Async Function CompressFolder() As Task(Of Boolean)
 
@@ -117,10 +128,6 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
         Return res
     End Function
 
-    Private CancellationTokenSource As CancellationTokenSource
-
-    Public Analyser As Analyser
-    Private Shared ReadOnly AnalyserLogger As ILogger = Application.GetService(Of ILogger(Of Analyser))()
 
 
     Public Async Function AnalyseFolderAsync() As Task(Of Integer)
@@ -161,17 +168,6 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
 
 
 
-    Public Property IsGettingEstimate As Boolean = False
-
-    Public Property WikiCompressionResults As WikiCompressionResults
-    Public Property WikiPoorlyCompressedFiles As New List(Of String)
-
-    Public ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
-        Get
-            If AnalysisResults Is Nothing OrElse WikiPoorlyCompressedFiles Is Nothing Then Return 0
-            Return WikiPoorlyCompressedFiles.Count
-        End Get
-    End Property
 
     Public Overridable Async Function GetEstimatedCompression() As Task
         IsGettingEstimate = True
@@ -295,43 +291,6 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
         WikiPoorlyCompressedFiles?.Clear()
         GC.SuppressFinalize(Me)
     End Sub
-End Class
-
-
-
-
-Public Class CompressableFolderFactory
-    Public Shared Function CreateCompressableFolder(path As String) As CompressableFolder
-        Dim folderInfo = New IO.DirectoryInfo(path)
-
-        If IsSteamFolder(folderInfo) Then
-            Return If(CreateSteamFolder(folderInfo), New StandardFolder(path))
-        Else
-            Return New StandardFolder(path)
-        End If
-
-    End Function
-
-
-    Private Shared Function IsSteamFolder(folderPath As IO.DirectoryInfo) As Boolean
-        Return folderPath.Parent?.Parent?.Name.ToLowerInvariant = "steamapps"
-    End Function
-
-
-    Private Shared Function CreateSteamFolder(folderInfo As IO.DirectoryInfo) As CompressableFolder
-
-        Dim SteamFolderData? = SteamACFParser.GetSteamNameAndIDFromFolder(folderInfo)
-
-        If SteamFolderData Is Nothing Then Return Nothing
-
-        Dim steamFolder As New SteamFolder(folderInfo.FullName, If(SteamFolderData?.GameName, folderInfo.FullName), SteamFolderData?.AppID)
-
-        Return steamFolder
-    End Function
-
-
-
-
 End Class
 
 

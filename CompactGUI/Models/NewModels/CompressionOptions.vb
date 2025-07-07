@@ -1,19 +1,19 @@
 ﻿Imports CommunityToolkit.Mvvm.ComponentModel
 
 Public Class CompressionOptions : Inherits ObservableObject
-    Public Property SelectedCompressionMode As Core.CompressionMode = Core.CompressionMode.XPRESS4K
-    Public Property SkipPoorlyCompressedFileTypes As Boolean
-    Public Property SkipUserSubmittedFiletypes As Boolean
-    Public Property WatchFolderForChanges As Boolean
+    <ObservableProperty> Private _SelectedCompressionMode As Core.CompressionMode = Core.CompressionMode.XPRESS4K
+    <ObservableProperty> Private _SkipPoorlyCompressedFileTypes As Boolean
+    <ObservableProperty> Private _SkipUserSubmittedFiletypes As Boolean
+    <ObservableProperty> Private _WatchFolderForChanges As Boolean
 
 
     Public Function Clone() As CompressionOptions
-        Dim copy As New CompressionOptions()
-
-        copy.SelectedCompressionMode = SelectedCompressionMode
-        copy.SkipPoorlyCompressedFileTypes = SkipPoorlyCompressedFileTypes
-        copy.SkipUserSubmittedFiletypes = SkipUserSubmittedFiletypes
-        copy.WatchFolderForChanges = WatchFolderForChanges
+        Dim copy As New CompressionOptions With {
+            .SelectedCompressionMode = SelectedCompressionMode,
+            .SkipPoorlyCompressedFileTypes = SkipPoorlyCompressedFileTypes,
+            .SkipUserSubmittedFiletypes = SkipUserSubmittedFiletypes,
+            .WatchFolderForChanges = WatchFolderForChanges
+        }
 
         Return copy
     End Function
