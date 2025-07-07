@@ -51,17 +51,17 @@ Public Class SteamFolder : Inherits CompressableFolder
 
     End Function
 
-    Private Shared Async Function GetSteamHeaderAsync(folder As SteamFolder) As Task
+    Public Shared Async Function GetSteamHeaderAsync(folder As SteamFolder) As Task
 
         If folder.SteamAppID = 0 Then Return
 
         Dim tempImg As BitmapImage = Nothing
 
-
         Dim EnvironmentPath = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
-        Dim imagePath = Path.Combine(EnvironmentPath, "CompactGUI", "SteamCache", $"{folder.SteamAppID}.jpg")
+        Dim imageDir = Path.Combine(EnvironmentPath, "CompactGUI", "SteamCache")
+        Dim imagePath = Path.Combine(imageDir, $"{folder.SteamAppID}.jpg")
 
-        If Not Path.Exists(Path.GetDirectoryName(imagePath)) Then Directory.CreateDirectory(Path.GetDirectoryName(imagePath))
+        If Not Directory.Exists(imageDir) Then Directory.CreateDirectory(imageDir)
 
         If File.Exists(imagePath) Then
             tempImg = LoadImageFromDisk(imagePath)

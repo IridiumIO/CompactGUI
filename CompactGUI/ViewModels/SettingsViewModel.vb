@@ -1,16 +1,16 @@
 ﻿
 Imports System.ComponentModel
+Imports System.Xml
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 
 Imports CompactGUI.Core.Settings
-
 Imports CompactGUI.Logging
 
-Imports IWshRuntimeLibrary
-
 Imports Microsoft.Extensions.Logging
+Imports Microsoft.WindowsAPICodePack.Shell
+Imports Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
 Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
 
@@ -77,18 +77,11 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
 
     Public Shared Sub CreateStartMenuShortcut()
         SettingsLog.AddingStartMenuShortcut(Application.GetService(Of ILogger(Of Settings)))
-        Dim wshShell As New WshShell()
         Dim startMenuPath As String = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu)
         Dim shortcutPath As String = IO.Path.Combine(startMenuPath, "CompactGUI.lnk")
+        Dim exePath As String = Environment.ProcessPath
+        CreateShortcut(shortcutPath, exePath, "CompactGUI", IO.Path.GetDirectoryName(exePath), exePath)
 
-        Dim shortcut As IWshShortcut = DirectCast(wshShell.CreateShortcut(shortcutPath), IWshShortcut)
-        With shortcut
-            .TargetPath = Environment.ProcessPath ' Path to the executable
-            .WorkingDirectory = IO.Path.GetDirectoryName(Environment.ProcessPath)
-            .IconLocation = Environment.ProcessPath ' Path to the executable or icon file
-            .Description = "CompactGUI"
-            .Save()
-        End With
     End Sub
 
     Public Shared Sub DeleteStartMenuShortcut()

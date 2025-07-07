@@ -29,17 +29,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
 
-  <ItemGroup>
-    <COMReference Include="IWshRuntimeLibrary">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>0</VersionMinor>
-      <VersionMajor>1</VersionMajor>
-      <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
 
   <ItemGroup>
     <Import Include="System.Windows" />
@@ -61,7 +50,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
-    <PackageReference Include="IridiumIO.MVVM.VBSourceGenerators" Version="0.5.0" />
+    <PackageReference Include="IridiumIO.MVVM.VBSourceGenerators" Version="0.5.0" PrivateAssets="All" />
     <PackageReference Include="MeasurePerformance.Fody" Version="1.3.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
