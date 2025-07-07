@@ -261,7 +261,7 @@
 
                                 <Button Margin="0,0,40,0" HorizontalAlignment="Right"
                                         Background="#6B8399"
-                                        Command="{Binding ElementName=UiWatcherListView, Path=DataContext.ReCompressWatchedCommand}"
+                                        Command="{Binding ElementName=UiWatcherListView, Path=DataContext.AddWatchedFolderToQueueCommand}"
                                         CommandParameter="{Binding}"
                                         Foreground="White">
                                     <ui:SymbolIcon FontSize="14" RenderTransformOrigin="0.5,0.5" Symbol="ArrowMinimize20">

@@ -179,13 +179,27 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
         existingItem.HasTargetChanged = False
     End Sub
 
-    Public Sub RemoveWatched(item As WatchedFolder)
+    Public Async Function RemoveWatched(item As WatchedFolder, Optional writeToFile As Boolean = True) As Task
 
         item.Dispose()
         WatchedFolders.Remove(item)
-        WriteToFile()
+        If writeToFile Then Await WriteToFileAsync()
 
-    End Sub
+    End Function
+
+
+    Public Async Function DeleteWatchersWithNonExistentFolders() As Task
+
+        For i As Integer = WatchedFolders.Count - 1 To 0 Step -1
+            If Not IO.Directory.Exists(WatchedFolders(i).Folder) Then
+                WatcherLog.RemovingNonexistentFolders(_logger, 1)
+                Await RemoveWatched(WatchedFolders(i), False)
+            End If
+        Next
+
+        Await WriteToFileAsync()
+
+    End Function
 
 
     Private Async Function GetWatchedFoldersFromJson() As Task(Of ObservableCollection(Of WatchedFolder))
@@ -234,7 +248,11 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
 
     End Sub
 
-
+    Public Async Function WriteToFileAsync() As Task
+        Using stream = IO.File.Open(WatcherJSONFile.FullName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
+            Await JsonSerializer.SerializeAsync(stream, (LastAnalysed, WatchedFolders), SerializeOptions)
+        End Using
+    End Function
 
     Private _isHandlingIdle As Boolean = False
 
@@ -266,27 +284,22 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
 
         Try
             WatcherLog.ParsingWatchers(_logger, ParseAll)
+            Await DeleteWatchersWithNonExistentFolders()
 
-            Dim WatchersToCheck = If(ParseAll, WatchedFolders, WatchedFolders.Where(Function(w) w.HasTargetChanged)).ToList()
+            Dim WatchersQuery = If(ParseAll,
+                    WatchedFolders,
+                    WatchedFolders.Where(Function(w) w.HasTargetChanged)
+                    ).OrderBy(Function(f) f.DisplayName)
 
-            If Not WatchersToCheck.Any() Then Return
+            If Not WatchersQuery.Any() Then Return
 
-            Dim watchersToRemove = WatchersToCheck.Where(Function(f) Not IO.Directory.Exists(f.Folder)).ToList()
-            If watchersToRemove.Any() Then
-                WatcherLog.RemovingNonexistentFolders(_logger, watchersToRemove.Count)
-                For Each fsWatcher In watchersToRemove
-                    RemoveWatched(WatchedFolders.FirstOrDefault(Function(f) f.Folder = fsWatcher.Folder))
-                Next
-            End If
-
-            For Each fsWatcher In WatchersToCheck.OrderBy(Function(f) f.DisplayName)
+            For Each fsWatcher In WatchersQuery
                 WatcherLog.FolderChanged(_logger, fsWatcher.DisplayName)
                 Await Analyse(fsWatcher.Folder, ParseAll)
             Next
 
+            Await WriteToFileAsync()
             LastAnalysed = DateTime.Now
-
-            If WatchersToCheck.Any() Then WriteToFile()
         Finally
             _parseWatchersSemaphore.Release()
         End Try
@@ -303,13 +316,13 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
         Try
             If watchedFolder Is Nothing Then Return
             If Not IO.Directory.Exists(watchedFolder.Folder) Then
-                RemoveWatched(watchedFolder)
+                Await RemoveWatched(watchedFolder)
                 Return
             End If
 
             Await Analyse(watchedFolder.Folder, False)
             LastAnalysed = DateTime.Now
-            WriteToFile()
+            Await WriteToFileAsync()
         Finally
             _parseWatchersSemaphore.Release()
         End Try
