@@ -214,7 +214,7 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
             validatedResult = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, DeserializeOptions)
 
             If validatedResult.Item2 IsNot Nothing Then
-                For Each folder In validatedResult.Item2
+                For Each folder In validatedResult.Item2.Where(Function(f) IO.Directory.Exists(f.Folder))
                     folder.InitializeMonitoring()
                 Next
             End If
