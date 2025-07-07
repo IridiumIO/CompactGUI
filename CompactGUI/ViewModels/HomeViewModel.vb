@@ -60,14 +60,16 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Private ReadOnly _snackbarService As CustomSnackBarService
     Private ReadOnly _logger As ILogger(Of HomeViewModel)
     Private ReadOnly _settingsService As ISettingsService
+    Private ReadOnly _compressableFolderService As CompressableFolderService
 
-    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel), settingsService As ISettingsService)
+    Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel), settingsService As ISettingsService, compressableFolderService As CompressableFolderService)
         WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
         AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
         _watcher = watcher
         _snackbarService = snackbarService
         _logger = logger
         _settingsService = settingsService
+        _compressableFolderService = compressableFolderService
     End Sub
 
 
@@ -119,7 +121,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
         For Each folderName In validFolders
 
-            Dim newFolder As CompressableFolder = CompressableFolderFactory.CreateCompressableFolder(folderName)
+            Dim newFolder As CompressableFolder = Await CompressableFolderFactory.CreateCompressableFolder(folderName)
 
             newFolder.CompressionOptions.WatchFolderForChanges = _settingsService.AppSettings.WatchFolderForChanges
             newFolder.CompressionOptions.SelectedCompressionMode = _settingsService.AppSettings.SelectedCompressionMode
@@ -128,18 +130,18 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
             If Not Folders.Any(Function(f) f.FolderName = newFolder.FolderName) Then
                 Folders.Add(newFolder)
-                Dim vm As New FolderViewModel(newFolder, _watcher, _snackbarService)
+                Dim vm As New FolderViewModel(newFolder, _watcher, _snackbarService, _compressableFolderService)
                 _folderViewModels.Add(newFolder, vm)
                 SelectedFolder = newFolder
             End If
 
-            Dim res = Await newFolder.AnalyseFolderAsync
+            Dim res = Await _compressableFolderService.AnalyseFolderAsync(newFolder)
             If TypeOf (newFolder) Is SteamFolder Then
                 Await CType(newFolder, SteamFolder).GetWikiResults()
             Else
                 If _settingsService.AppSettings.EstimateCompressionForNonSteamFolders Then
                     HomeViewModelLog.GettingEstimatedCompression(_logger, newFolder.FolderName, newFolder.UncompressedBytes)
-                    Await newFolder.GetEstimatedCompression()
+                    Await _compressableFolderService.GetEstimatedCompression(newFolder)
                 End If
 
             End If
@@ -172,7 +174,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
         If folder Is Nothing Then Return
         Dim index = Folders.IndexOf(folder)
-        folder.CancelEstimation()
+        _compressableFolderService.CancelEstimation(folder)
         folder.Dispose()
 
         Dim value As FolderViewModel = Nothing
@@ -231,8 +233,8 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             If folder.FolderActionState = ActionState.Idle Then
                 Await Task.Run(Async Function()
                                    HomeViewModelLog.CompressingFolder(_logger, folder.FolderName)
-                                   Dim ret = Await folder.CompressFolder()
-                                   Dim analysis = Await folder.AnalyseFolderAsync
+                                   Dim ret = Await _compressableFolderService.CompressFolder(folder)
+                                   Dim analysis = Await _compressableFolderService.AnalyseFolderAsync(folder)
 
                                    If _settingsService.AppSettings.ShowNotifications Then
 

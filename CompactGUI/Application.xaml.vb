@@ -94,6 +94,9 @@ Partial Public Class Application
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
                                                                              End Function)
+
+                               services.AddSingleton(Of CompressableFolderService)
+
                            End Sub) _
             .Build()
 

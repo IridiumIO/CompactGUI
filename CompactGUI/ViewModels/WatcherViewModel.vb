@@ -81,7 +81,7 @@ Public NotInheritable Class WatcherViewModel : Inherits ObservableObject
             Return Nothing
         End If
 
-        Return CompressableFolderFactory.CreateCompressableFolder(folderPath)
+        Return Await CompressableFolderFactory.CreateCompressableFolder(folderPath)
 
     End Function
 

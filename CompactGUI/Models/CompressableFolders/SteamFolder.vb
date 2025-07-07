@@ -18,16 +18,19 @@ Public Class SteamFolder : Inherits CompressableFolder
         Me.SteamAppID = steamappId
         Me.DisplayName = displayName
 
-        Dim GetSteamHeader As Task = GetSteamHeaderAsync()
-        GetSteamHeader.ContinueWith(Sub(t)
-                                        If t.Exception IsNot Nothing Then
-                                            Debug.WriteLine($"Error getting Steam header: {t.Exception.Message}")
-                                        End If
-                                    End Sub, TaskContinuationOptions.OnlyOnFaulted)
-
-        If Not IsHDD() AndAlso Core.SharedMethods.IsDirectStorageGameFolder(folderName) Then Application.GetService(Of CustomSnackBarService).ShowDirectStorageWarning(displayName)
+        If Not CompressableFolderService.IsHDD(Me) AndAlso Core.SharedMethods.IsDirectStorageGameFolder(folderName) Then Application.GetService(Of CustomSnackBarService).ShowDirectStorageWarning(displayName)
 
     End Sub
+
+
+    Public Async Function InitializeAsync() As Task
+        Try
+            Await GetSteamHeaderAsync(Me)
+        Catch ex As Exception
+            Debug.WriteLine($"Error getting Steam header: {ex.Message}")
+        End Try
+    End Function
+
 
     Public Overloads ReadOnly Property WikiPoorlyCompressedFilesCount As Integer
         Get
@@ -48,15 +51,15 @@ Public Class SteamFolder : Inherits CompressableFolder
 
     End Function
 
-    Private Async Function GetSteamHeaderAsync() As Task
+    Private Shared Async Function GetSteamHeaderAsync(folder As SteamFolder) As Task
 
-        If SteamAppID = 0 Then Return
+        If folder.SteamAppID = 0 Then Return
 
         Dim tempImg As BitmapImage = Nothing
 
 
         Dim EnvironmentPath = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
-        Dim imagePath = Path.Combine(EnvironmentPath, "CompactGUI", "SteamCache", $"{SteamAppID}.jpg")
+        Dim imagePath = Path.Combine(EnvironmentPath, "CompactGUI", "SteamCache", $"{folder.SteamAppID}.jpg")
 
         If Not Path.Exists(Path.GetDirectoryName(imagePath)) Then Directory.CreateDirectory(Path.GetDirectoryName(imagePath))
 
@@ -65,7 +68,7 @@ Public Class SteamFolder : Inherits CompressableFolder
             Debug.WriteLine("Loaded Steam header image from disk")
         Else
 
-            Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{SteamAppID}/page_bg_generated_v6b.jpg"
+            Dim url As String = $"https://steamcdn-a.akamaihd.net/steam/apps/{folder.SteamAppID}/page_bg_generated_v6b.jpg"
             'If FolderBGImage?.UriSource IsNot Nothing AndAlso FolderBGImage.UriSource.ToString() = url Then Return
 
             Try
@@ -82,29 +85,12 @@ Public Class SteamFolder : Inherits CompressableFolder
 
         Application.Current.Dispatcher.Invoke(Sub()
                                                   If tempImg IsNot Nothing Then
-                                                      FolderBGImage = tempImg
+                                                      folder.FolderBGImage = tempImg
                                                   End If
                                               End Sub)
 
 
     End Function
-
-
-    Protected Overrides Function GetSkipList() As String()
-        Dim exclist As String() = Array.Empty(Of String)()
-        If CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Count <> 0 Then
-            Debug.WriteLine("Adding non-compressable list to exclusion list")
-            exclist = exclist.Union(Application.GetService(Of ISettingsService).AppSettings.NonCompressableList).ToArray
-        End If
-
-        If CompressionOptions.SkipUserSubmittedFiletypes AndAlso WikiPoorlyCompressedFiles?.Count <> 0 Then
-            Debug.WriteLine("Adding wiki poorly compressed list to exclusion list")
-            exclist = exclist.Union(WikiPoorlyCompressedFiles).ToArray
-        End If
-
-        Return exclist
-    End Function
-
 
 
 End Class

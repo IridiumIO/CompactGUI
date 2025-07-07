@@ -21,13 +21,14 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
 
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _snackbarService As CustomSnackBarService
+    Private ReadOnly _compressableFolderService As CompressableFolderService
 
-    Public Sub New(folder As CompressableFolder, watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
+    Public Sub New(folder As CompressableFolder, watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, compressableFolderService As CompressableFolderService)
         Me.Folder = folder
         _watcher = watcher
         _snackbarService = snackbarService
+        _compressableFolderService = compressableFolderService
         AddHandler folder.PropertyChanged, AddressOf OnFolderPropertyChanged
-        AddHandler folder.CompressionProgressChanged, AddressOf OnFolderCompressionProgressChanged
         AddHandler folder.CompressionOptions.PropertyChanged, AddressOf OnFolderCompressionOptionsPropertyChanged
     End Sub
 
@@ -101,19 +102,17 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
         End If
     End Sub
 
-
-    Private Sub OnFolderCompressionProgressChanged(sender As Object, e As Core.CompressionProgress)
-        CompressionProgress = e.ProgressPercent
-        CompressionProgressFile = e.FileName.Replace(Folder.FolderName, "")
-    End Sub
-
-
     Private Sub OnFolderPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
         If e.PropertyName = NameOf(Folder.FolderActionState) Then
             OnPropertyChanged(NameOf(IsAnalysing))
             OnPropertyChanged(NameOf(IsNotResultsOrAnalysing))
             OnPropertyChanged(NameOf(CompressionDisplayLevel))
             OnPropertyChanged(NameOf(DisplayedFolderAfterSize))
+
+        ElseIf e.PropertyName = NameOf(Folder.CompressionProgress) Then
+            CompressionProgress = Folder.CompressionProgress.ProgressPercent
+            CompressionProgressFile = Folder.CompressionProgress.FileName.Replace(Folder.FolderName, "")
+
         End If
     End Sub
 
@@ -125,7 +124,7 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
 
     <RelayCommand>
     Private Async Function Uncompress() As Task
-        Await Folder.UncompressFolder()
+        Await _compressableFolderService.UncompressFolder(Folder)
         _watcher.UpdateWatched(Folder.FolderName, Folder.Analyser, False)
     End Function
 
@@ -186,7 +185,6 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
 
     Public Sub Dispose() Implements IDisposable.Dispose
         RemoveHandler Folder.PropertyChanged, AddressOf OnFolderPropertyChanged
-        RemoveHandler Folder.CompressionProgressChanged, AddressOf OnFolderCompressionProgressChanged
         RemoveHandler Folder.CompressionOptions.PropertyChanged, AddressOf OnFolderCompressionOptionsPropertyChanged
     End Sub
 
