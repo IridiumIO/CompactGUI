@@ -1,5 +1,5 @@
 ﻿Imports System.IO
-Imports System.Management
+Imports System.Net.NetworkInformation
 Imports System.Runtime.InteropServices
 Imports System.Text
 
@@ -10,7 +10,7 @@ Imports CompactGUI.Core.SharedMethods
 Imports Gameloop.Vdf
 
 
-Module Helper
+Public Module Helper
     Function GetSteamNameAndIDFromFolder(path As String) As (appID As Integer, gameName As String, installDir As String)
 
         Dim workingDir = New DirectoryInfo(path)
@@ -38,22 +38,21 @@ Module Helper
 
 
     Function getUID() As String
-        Dim MacID As String = String.Empty
-        Dim mc As ManagementClass = New ManagementClass("Win32_NetworkAdapterConfiguration")
-        Dim moc As ManagementObjectCollection = mc.GetInstances()
-        For Each mo As ManagementObject In moc
+        Dim macAddress As String = String.Empty
 
-            If mo.Properties("IPEnabled") IsNot Nothing AndAlso mo.Properties("IPEnabled").Value IsNot Nothing Then
+        For Each nic As NetworkInterface In NetworkInterface.GetAllNetworkInterfaces()
+            If nic.OperationalStatus = OperationalStatus.Up AndAlso
+           nic.NetworkInterfaceType <> NetworkInterfaceType.Loopback AndAlso
+           Not String.IsNullOrEmpty(nic.GetPhysicalAddress().ToString()) Then
 
-                If CBool(mo.Properties("IPEnabled").Value) = True AndAlso mo.Properties("MacAddress") IsNot Nothing AndAlso mo.Properties("MacAddress").Value IsNot Nothing Then
-                    MacID = mo.Properties("MacAddress").Value.ToString()
-                    Exit For
-                End If
+                Dim raw = nic.GetPhysicalAddress().ToString()
+                macAddress = String.Join(":", Enumerable.Range(0, raw.Length \ 2).Select(Function(i) raw.Substring(i * 2, 2)))
+                Exit For
             End If
         Next
-        Return Convert.ToBase64String(Encoding.UTF8.GetBytes(MacID))
-    End Function
 
+        Return Convert.ToBase64String(Encoding.UTF8.GetBytes(macAddress))
+    End Function
 
     Function LoadImageFromDisk(imagePath As String) As BitmapImage
         Dim bImg As New BitmapImage(New Uri(imagePath))

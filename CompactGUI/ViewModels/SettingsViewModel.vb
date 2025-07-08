@@ -9,8 +9,6 @@ Imports CompactGUI.Core.Settings
 Imports CompactGUI.Logging
 
 Imports Microsoft.Extensions.Logging
-Imports Microsoft.WindowsAPICodePack.Shell
-Imports Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
 Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
 
