@@ -201,20 +201,29 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
     Public ReadOnly Property HomeViewModelState As ActionState
         Get
+
+            Dim retState As ActionState
+
             If Compressing OrElse Folders.Any(Function(f) f.FolderActionState = ActionState.Working) Then
-                Return ActionState.Working
+                retState = ActionState.Working
+            ElseIf Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing) Then
+                retState = ActionState.Analysing
+            ElseIf Folders.All(Function(f) f.FolderActionState = ActionState.Results) Then
+                retState = ActionState.Results
+            Else
+                retState = ActionState.Idle
             End If
-            If Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing) Then
-                Return ActionState.Analysing
-            End If
-            If Folders.All(Function(f) f.FolderActionState = ActionState.Results) Then
-                Return ActionState.Results
-            End If
-            Return ActionState.Idle
+
+            Return retState
+
         End Get
 
     End Property
-    Private Property Compressing As Boolean = False
+
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(HomeViewModelState))>
+    Private _Compressing As Boolean = False
 
 
 

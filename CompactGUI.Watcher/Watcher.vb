@@ -1,4 +1,5 @@
 Imports System.Collections.ObjectModel
+Imports System.Collections.Specialized
 Imports System.Text.Json
 Imports System.Threading
 
@@ -13,34 +14,60 @@ Imports CompactGUI.Logging.Watcher
 Imports Microsoft.Extensions.Logging
 
 Imports Microsoft.Extensions.Logging.Abstractions
+Imports Microsoft.Win32
+Imports Microsoft.Win32.Registry
 
-<PropertyChanged.AddINotifyPropertyChangedInterface>
-Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of Boolean))
 
-    <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
-    Public Property WatchedFolders As New ObservableCollection(Of WatchedFolder)
-    <PropertyChanged.AlsoNotifyFor(NameOf(TotalSaved))>
-    Public Property LastAnalysed As DateTime
-
-    Public Property IsWatchingEnabled As Boolean = True
-    Public Property IsBackgroundCompactingEnabled As Boolean = True
+Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of Boolean))
 
     Private ReadOnly _DataFolder As IO.DirectoryInfo
-    Private ReadOnly Property WatcherJSONFile As IO.FileInfo
-
-    Public Property BGCompactor As BackgroundCompactor
-
-
     Private ReadOnly _parseWatchersSemaphore As New SemaphoreSlim(1, 1)
 
+    Private ReadOnly _logger As ILogger(Of Watcher)
+    Private ReadOnly _settingsService As ISettingsService
+
     Private Const LAST_SYSTEM_MODIFIED_TIME_THRESHOLD As Integer = 180 ' 3 minutes
+
+    <NotifyPropertyChangedFor(NameOf(TotalSaved))>
+    <ObservableProperty> Private _LastAnalysed As DateTime
+    <ObservableProperty> Private _WatchedFolders As New ObservableCollection(Of WatchedFolder)
+    <ObservableProperty> Private _IsWatchingEnabled As Boolean = True
+    <ObservableProperty> Private _IsBackgroundCompactingEnabled As Boolean = True
+    <ObservableProperty> Private _BGCompactor As BackgroundCompactor
+
+    Private ReadOnly Property WatcherJSONFile As IO.FileInfo
+
+    Public ReadOnly Property TotalSaved As Long
+        Get
+            Return WatchedFolders.Sum(Function(f) f.LastUncompressedSize - f.LastCheckedSize)
+        End Get
+    End Property
+
+
+    Sub New(excludedFiletypes As String(), logger As ILogger(Of Watcher), settingsService As ISettingsService)
+        _logger = logger
+        _settingsService = settingsService
+
+        _DataFolder = settingsService.DataFolder
+        WatcherJSONFile = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
+
+        WatcherLog.WatcherStarted(logger)
+        IsActive = True
+
+
+        IdleDetector.Start()
+        AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
+        AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
+
+        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger)
+        InitializeWatchedFoldersAsync()
+
+
+    End Sub
 
 
     Private _disableCounter As Integer = 0
     Private _counterLock As New SemaphoreSlim(1, 1)
-
-    Private _logger As ILogger(Of Watcher)
-    Private _settingsService As ISettingsService
 
     Public Async Function DisableBackgrounding() As Task
         Await _counterLock.WaitAsync()
@@ -73,24 +100,9 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
     End Function
 
 
-    Sub New(excludedFiletypes As String(), logger As ILogger(Of Watcher), settingsService As ISettingsService)
-        _logger = logger
-        _settingsService = settingsService
 
-        _DataFolder = settingsService.DataFolder
-        WatcherJSONFile = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
-
-        WatcherLog.WatcherStarted(logger)
-        IsActive = True
-
-
-        IdleDetector.Start()
-        AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
-
-        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger)
-        InitializeWatchedFoldersAsync()
-
-
+    Private Sub WatchedFolders_CollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
+        OnPropertyChanged(NameOf(TotalSaved))
     End Sub
 
     Private Async Function InitializeWatchedFoldersAsync() As Task
@@ -109,7 +121,7 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
     End Function
 
     Private Sub UpdateRegistryBasedOnWatchedFolders()
-        Dim registryKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
+        Dim registryKey As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
 
         If WatchedFolders.Count > 0 Then
             registryKey.SetValue("CompactGUI", Environment.ProcessPath & " -tray")
@@ -399,13 +411,6 @@ Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of P
 
 
     End Sub
-
-    Public ReadOnly Property TotalSaved As Long
-        Get
-            Return WatchedFolders.Sum(Function(f) f.LastUncompressedSize - f.LastCheckedSize)
-        End Get
-    End Property
-
 
 
 End Class

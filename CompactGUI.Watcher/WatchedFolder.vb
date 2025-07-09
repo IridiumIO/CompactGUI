@@ -4,40 +4,41 @@ Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 
-<PropertyChanged.AddINotifyPropertyChangedInterface>
 Public Class WatchedFolder
     Inherits ObservableObject
     Implements IDisposable
 
     ' --- Folder Metadata ---
-    Public Property Folder As String
-    Public Property DisplayName As String
-    Public Property IsSteamGame As Boolean
-    Public Property LastCompressedDate As DateTime
-    Public Property LastCompressedSize As Long
-    Public Property LastUncompressedSize As Long
-    Public Property LastSystemModifiedDate As DateTime
-    Public Property LastCheckedDate As DateTime
-    Public Property LastCheckedSize As Long
-    Public Property CompressionLevel As Core.WOFCompressionAlgorithm
+    <ObservableProperty> Private _Folder As String
+    <ObservableProperty> Private _DisplayName As String
+    <ObservableProperty> Private _IsSteamGame As Boolean
+    <ObservableProperty> Private _LastCompressedDate As DateTime
+    <ObservableProperty> Private _LastCompressedSize As Long
+    <ObservableProperty> Private _LastUncompressedSize As Long
+    <ObservableProperty> Private _LastSystemModifiedDate As DateTime
+    <ObservableProperty> Private _LastCheckedDate As DateTime
+    <ObservableProperty> Private _LastCheckedSize As Long
+    <ObservableProperty> Private _CompressionLevel As Core.WOFCompressionAlgorithm
 
-    <JsonIgnore>
-    Public Property IsWorking As Boolean
-    <JsonIgnore>
-    Public Property IsEditing As Boolean = False
+    <AttachAttribute(GetType(JsonIgnoreAttribute))>
+    <ObservableProperty> Private _IsWorking As Boolean
+
+    <AttachAttribute(GetType(JsonIgnoreAttribute))>
+    <ObservableProperty> Private _IsEditing As Boolean = False
 
     ' --- Monitoring State ---
-    <JsonIgnore>
-    Public Property HasTargetChanged As Boolean = False
-    <JsonIgnore>
-    Public Property LastChangedDate As DateTime
+    <AttachAttribute(GetType(JsonIgnoreAttribute))>
+    <ObservableProperty> Private _HasTargetChanged As Boolean = False
+
+    <AttachAttribute(GetType(JsonIgnoreAttribute))>
+    <ObservableProperty> Private _LastChangedDate As DateTime
 
     ' --- FileSystemWatcher ---
-    <JsonIgnore>
+
     Private WithEvents FSWatcher As FileSystemWatcher
-    <JsonIgnore>
+
     Private debounceTimer As Timer
-    <JsonIgnore>
+
     Private disposedValue As Boolean
 
     Public Sub New(_folder As String, _displayName As String)
