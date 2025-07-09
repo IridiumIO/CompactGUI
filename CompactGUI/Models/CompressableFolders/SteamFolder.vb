@@ -47,6 +47,7 @@ Public Class SteamFolder : Inherits CompressableFolder
         WikiPoorlyCompressedFiles = res.poorlyCompressedList?.Where(Function(k) k.Value > 100 AndAlso k.Key <> "").Select(Function(k) k.Key).ToList
 
         WikiCompressionResults = If(res.compressionResults IsNot Nothing, New WikiCompressionResults(res.compressionResults), Nothing)
+        If WikiCompressionResults Is Nothing Then Return
 
         Dim tempX4KLvl = WikiCompressionResults.XPress4K.CompressionPercent
         WikiCompressionResults.XPress4K.BeforeBytes = UncompressedBytes

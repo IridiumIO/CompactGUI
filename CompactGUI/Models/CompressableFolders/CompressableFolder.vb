@@ -81,7 +81,6 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
 
 
     Public Sub NotifyPropertyChanged(name As String)
-        Trace.WriteLine("bing")
         OnPropertyChanged(name)
     End Sub
 

@@ -103,25 +103,41 @@
               Margin="0" Panel.ZIndex="-1"
               ClipToBounds="True">
 
-            <Border Background="#263340"/>
+            <Border Background="#ffffff"/>
             <Border>
                 <Border.Background>
-                    <LinearGradientBrush Opacity="0.4" StartPoint="0,0.5" EndPoint="0.2,1">
-                        <GradientStop Offset="0" Color="#283e51" />
-                        <GradientStop Offset="1" Color="#2d425d" />
+                    <LinearGradientBrush Opacity="1" StartPoint="0.5,0.5" EndPoint="0.5,1">
+                        <GradientStop Offset="0" Color="#500D2A41" />
+                        <GradientStop Offset="1" Color="#FF0D2A41" />
                     </LinearGradientBrush>
                 </Border.Background>
             </Border>
-            <local:ImageControl x:Name="SteamBg"
+
+            <Border Opacity="0.75" Background="#1f3448">
+              
+            </Border>
+
+            <!--<ui:Image x:Name="DefaultBG" Stretch="UniformToFill" Opacity="0.66" Margin="-20" RenderOptions.BitmapScalingMode="HighQuality">
+                <ui:Image.Effect>
+                    <BlurEffect KernelType="Box" Radius="18" RenderingBias="Quality" />
+                </ui:Image.Effect>
+            </ui:Image>-->
+
+            <local:ImageControl x:Name="SteamBg" RenderOptions.BitmapScalingMode="HighQuality"
                                 Height="{Binding ActualHeight, ElementName=MainWindow}"
                                 Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center"
                                 ClipToBounds="True" 
                                 NewSource="{Binding BackgroundImage}"
                                 Opacity="1" Stretch="UniformToFill">
-
+                <local:ImageControl.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0.2" EndPoint="0,1">
+                        <GradientStop Color="#00FFFFFF" Offset="0.0" />
+                        <GradientStop Color="#FFFFFFFF" Offset="1.0" />
+                    </LinearGradientBrush>
+                </local:ImageControl.OpacityMask>
                 <local:ImageControl.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                        <ScaleTransform ScaleX="1.2" ScaleY="1.2" />
                     </TransformGroup>
 
                 </local:ImageControl.RenderTransform>
@@ -133,20 +149,24 @@
                         <BeginStoryboard>
                             <Storyboard>
 
-                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.6" Duration="0:0:0.5">
+                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.8" Duration="0:0:0.5">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseInOut" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" From="100" To="14" Duration="0:0:5" />
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
-                                                 From="2" To="1.2" Duration="0:0:6">
+                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" From="100" To="22" Duration="0:0:2" >
                                     <DoubleAnimation.EasingFunction>
-                                        <QuinticEase EasingMode="EaseOut" />
+                                        <ExponentialEase/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
+                                                 To="1.2" Duration="0:0:6">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseIn"/>
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
                                 <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
-                                                 From="2" To="1.2" Duration="0:0:8">
+                                                 To="1.2" Duration="0:0:8">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
@@ -171,7 +191,7 @@
 
 
                 <local:ImageControl.Effect>
-                    <BlurEffect KernelType="Box" Radius="0" RenderingBias="Quality" />
+                    <BlurEffect  Radius="0" RenderingBias="Quality" />
                 </local:ImageControl.Effect>
 
 
