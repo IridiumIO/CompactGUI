@@ -33,5 +33,6 @@
         <local:IsSteamFolderConverter/>
         <converters:BoolToVisibilityConverter/>
     </converters:ValueConverterGroup>
-    
+    <converters:IntegerToBoolConverter x:Key="IntegerToBoolConverter" />
+
 </ResourceDictionary>

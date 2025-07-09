@@ -1,6 +1,7 @@
 ﻿Public Class CompressionMode_Radio
     Inherits RadioButton
 
+
     Public Shared ReadOnly CompressionModeProperty As DependencyProperty = DependencyProperty.RegisterAttached(
         NameOf(CompressionMode),
         GetType(String),
@@ -93,5 +94,39 @@
             SetValue(IsEstimatingProperty, value)
         End Set
     End Property
+
+
+    Public Shared ReadOnly BytesSavedProperty As DependencyProperty = DependencyProperty.RegisterAttached(
+        NameOf(BytesSaved),
+        GetType(Long),
+        GetType(CompressionMode_Radio),
+        New FrameworkPropertyMetadata(0L, FrameworkPropertyMetadataOptions.None))
+
+    Public Property BytesSaved As Long
+        Get
+            Return CType(GetValue(BytesSavedProperty), Long)
+        End Get
+        Set(value As Long)
+            SetValue(BytesSavedProperty, value)
+        End Set
+    End Property
+
+
+    Public Shared ReadOnly BytesAfterProperty As DependencyProperty = DependencyProperty.RegisterAttached(
+        NameOf(BytesAfter),
+        GetType(Long),
+        GetType(CompressionMode_Radio),
+        New FrameworkPropertyMetadata(0L, FrameworkPropertyMetadataOptions.None))
+
+    Public Property BytesAfter As Long
+        Get
+            Return CType(GetValue(BytesAfterProperty), Long)
+        End Get
+        Set(value As Long)
+            SetValue(BytesAfterProperty, value)
+        End Set
+    End Property
+
+
 
 End Class

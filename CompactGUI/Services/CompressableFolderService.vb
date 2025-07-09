@@ -134,25 +134,25 @@ Public Class CompressableFolderService
         'This is absolutely stupid
 
         Dim X4KResult As New CompressionResult
-        X4KResult.CompType = WOFCompressionAlgorithm.XPRESS4K
+        X4KResult.CompType = CompressionMode.XPRESS4K
         X4KResult.BeforeBytes = folder.UncompressedBytes
         X4KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.01, folder.UncompressedBytes)
         X4KResult.TotalResults = 1
 
         Dim X8KResult As New CompressionResult
-        X8KResult.CompType = WOFCompressionAlgorithm.XPRESS8K
+        X8KResult.CompType = CompressionMode.XPRESS8K
         X8KResult.BeforeBytes = folder.UncompressedBytes
         X8KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.0, folder.UncompressedBytes)
         X8KResult.TotalResults = 1
 
         Dim X16KResult As New CompressionResult
-        X16KResult.CompType = WOFCompressionAlgorithm.XPRESS16K
+        X16KResult.CompType = CompressionMode.XPRESS16K
         X16KResult.BeforeBytes = folder.UncompressedBytes
         X16KResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.98, folder.UncompressedBytes)
         X16KResult.TotalResults = 1
 
         Dim LZXResult As New CompressionResult
-        LZXResult.CompType = WOFCompressionAlgorithm.LZX
+        LZXResult.CompType = CompressionMode.LZX
         LZXResult.BeforeBytes = folder.UncompressedBytes
         LZXResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.95, folder.UncompressedBytes)
         LZXResult.TotalResults = 1

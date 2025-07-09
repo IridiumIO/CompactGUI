@@ -24,7 +24,7 @@
                       FontSize="18" />
 
         <WrapPanel Grid.Row="1"
-                   Margin="0,0,0,0"
+                   Margin="0,0,0,0" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom"
                    Orientation="Horizontal">
 
             <local:CompressionMode_Radio Width="185" Height="85"
@@ -32,38 +32,57 @@
                                          BorderBrush="Transparent" CompressionMode="XPRESS 4K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionPercent}"
-                                         Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}"
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress4K.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress4K.BytesSaved}"   
+                                         />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 8K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionPercent}"
-                                         Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}"
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress8K.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress8K.BytesSaved}"   
+                                         />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 16K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionPercent}"
-                                         Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}"
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress16K.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress16K.BytesSaved}"   
+                                         />
             <local:CompressionMode_Radio Width="185" Height="85"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="LZX" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
-                                         ProgressValue="{Binding Folder.WikiCompressionResults.LZX.CompressionPercent}"
-                                         Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" />
+                                         ProgressValue="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}"
+                                         Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" 
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.LZX.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.LZX.BytesSaved}"   
+                                         />
 
             <WrapPanel.ToolTip>
-                <ToolTip MaxWidth="500">
-                    <TextBlock TextAlignment="Left">
-                        <Bold>For Steam Games:</Bold> estimate is based on database results
-                        <LineBreak />
-                        <LineBreak />
-                        <Bold>For Non-Steam Folders:</Bold> estimate is calculated by block analysis.<LineBreak />
-                        If estimation is disabled, this will always show 0%</TextBlock>
+                <ToolTip Visibility="Collapsed" MaxWidth="500" Background="Transparent" ClipToBounds="False" BorderThickness="0" BorderBrush="Transparent">
+
+                    <Border Margin="5" Background="#4e6379" Padding="10" CornerRadius="5">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.4" Direction="0"/>
+                        </Border.Effect>
+                        <TextBlock TextAlignment="Left">
+    <Bold>For Steam Games:</Bold> estimate is based on database results
+    <LineBreak />
+    <LineBreak />
+    <Bold>For Non-Steam Folders:</Bold> estimate is calculated by block analysis.<LineBreak />
+    If estimation is disabled, this will always show 0%</TextBlock>
+                    </Border>
+                    
                 </ToolTip>
             </WrapPanel.ToolTip>
 

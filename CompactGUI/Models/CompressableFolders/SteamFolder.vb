@@ -48,6 +48,21 @@ Public Class SteamFolder : Inherits CompressableFolder
 
         WikiCompressionResults = If(res.compressionResults IsNot Nothing, New WikiCompressionResults(res.compressionResults), Nothing)
 
+        Dim tempX4KLvl = WikiCompressionResults.XPress4K.CompressionPercent
+        WikiCompressionResults.XPress4K.BeforeBytes = UncompressedBytes
+        WikiCompressionResults.XPress4K.AfterBytes = UncompressedBytes * tempX4KLvl / 100
+
+        Dim tempX8KLvl = WikiCompressionResults.XPress8K.CompressionPercent
+        WikiCompressionResults.XPress8K.BeforeBytes = UncompressedBytes
+        WikiCompressionResults.XPress8K.AfterBytes = UncompressedBytes * tempX8KLvl / 100
+
+        Dim tempX16KLvl = WikiCompressionResults.XPress16K.CompressionPercent
+        WikiCompressionResults.XPress16K.BeforeBytes = UncompressedBytes
+        WikiCompressionResults.XPress16K.AfterBytes = UncompressedBytes * tempX16KLvl / 100
+
+        Dim tempLZXLvl = WikiCompressionResults.LZX.CompressionPercent
+        WikiCompressionResults.LZX.BeforeBytes = UncompressedBytes
+        WikiCompressionResults.LZX.AfterBytes = UncompressedBytes * tempLZXLvl / 100
 
     End Function
 

@@ -6,6 +6,9 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
   <Project Path="CompactGUI.Core/CompactGUI.Core.csproj" />
   <Project Path="CompactGUI.CoreVB/CompactGUI.CoreVB.vbproj" />
   <Project Path="CompactGUI.Logging/CompactGUI.Logging.csproj" Id="d21e36f8-54bb-401e-9621-b87d03488806" />
