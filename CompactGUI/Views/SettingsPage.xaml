@@ -348,7 +348,31 @@
 
                 </ui:CardExpander>
 
+                <Separator Height="1" />
 
+                <ui:CardExpander Margin="-15,0"
+                  Background="Transparent" BorderBrush="Transparent" ContentPadding="0"
+                  FlowDirection="RightToLeft" IsExpanded="True"
+                  Style="{StaticResource CustomCardExpanderStyle}">
+                    <ui:CardExpander.Header>
+                        <Label Content="UI Settings"
+                Margin="10,0"
+                FlowDirection="LeftToRight" />
+
+                    </ui:CardExpander.Header>
+
+
+                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+                        <StackPanel Margin="-10,10,0,0">
+                            <CheckBox x:Name="UiAlwaysShowDetailedCompressionMode"
+                       Content="Always show details on Compression Mode buttons"
+                       Margin="0,-3"
+                       IsChecked="{Binding AppSettings.AlwaysShowDetailedCompressionMode}" />
+
+                        </StackPanel>
+                    </StackPanel>
+
+                </ui:CardExpander>
 
 
 

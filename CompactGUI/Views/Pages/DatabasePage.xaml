@@ -128,6 +128,7 @@
                                 <TextBlock Text="{Binding GameName}" FontWeight="SemiBold" FontSize="20"/>
                                 <Border Margin="14,2" Padding="6,2" Background="{StaticResource CardBackgroundPressed}" CornerRadius="4">
                                     <StackPanel Orientation="Horizontal">
+                                        
                                         <TextBlock Text="{Binding SteamID, StringFormat={}SteamID: {0}}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>

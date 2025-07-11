@@ -270,7 +270,7 @@ Public Class FolderStatusToColorConverter : Implements IValueConverter
         Dim status = CType(value, ActionState)
         Select Case status
             Case ActionState.Idle
-                Return New SolidColorBrush(ColorConverter.ConvertFromString("#6E9DEF"))
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#92e7f1"))
             Case ActionState.Analysing, ActionState.Working, ActionState.Paused
                 Return New SolidColorBrush(ColorConverter.ConvertFromString("#F1CE92"))
             Case ActionState.Results
@@ -427,5 +427,31 @@ Public Class ZeroCountToVisibilityConverter
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
         Throw New NotImplementedException()
+    End Function
+End Class
+
+
+Public Class NumberWithSpacesConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Then Return String.Empty
+
+        Dim number As Long
+        If Long.TryParse(value.ToString(), number) Then
+            Return number.ToString("#,0", CultureInfo.InvariantCulture).Replace(","c, " "c)
+        End If
+
+        Return value.ToString()
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If value Is Nothing Then Return 0
+        Dim s = value.ToString().Replace(" ", "")
+        Dim result As Long
+        If Long.TryParse(s, result) Then
+            Return result
+        End If
+        Return 0
     End Function
 End Class

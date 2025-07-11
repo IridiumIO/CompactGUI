@@ -47,6 +47,7 @@ public partial class Settings : ObservableRecipient
     [ObservableProperty] private double windowWidth = 1300;
     [ObservableProperty] private double windowHeight = 700;
     [ObservableProperty] private WindowState windowState = WindowState.Normal;
+    [ObservableProperty] private bool alwaysShowDetailedCompressionMode = false;
 
     //partial void OnEnableBackgroundWatcherChanged(bool value)
     //{
@@ -58,7 +59,7 @@ public partial class Settings : ObservableRecipient
     //    Watcher.Watcher.IsBackgroundCompactingEnabled = value;
     //}
 
-  
+
     //public static void Save()
     //{
     //    SettingsHandler.WriteToFile();

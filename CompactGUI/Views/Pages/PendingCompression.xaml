@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             
              d:DataContext="{d:DesignInstance Type=local:FolderViewModel}"
              d:DesignHeight="450" d:DesignWidth="900" d:Foreground="White"
              RenderOptions.ClearTypeHint="Enabled"
@@ -27,7 +28,7 @@
                    Margin="0,0,0,0" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom"
                    Orientation="Horizontal">
 
-            <local:CompressionMode_Radio Width="185" Height="85"
+            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 4K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
@@ -37,7 +38,7 @@
                                          BytesAfter="{Binding Folder.WikiCompressionResults.XPress4K.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.XPress4K.BytesSaved}"   
                                          />
-            <local:CompressionMode_Radio Width="185" Height="85"
+            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 8K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
@@ -47,7 +48,7 @@
                                          BytesAfter="{Binding Folder.WikiCompressionResults.XPress8K.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.XPress8K.BytesSaved}"   
                                          />
-            <local:CompressionMode_Radio Width="185" Height="85"
+            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="XPRESS 16K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
@@ -57,7 +58,7 @@
                                          BytesAfter="{Binding Folder.WikiCompressionResults.XPress16K.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.XPress16K.BytesSaved}"   
                                          />
-            <local:CompressionMode_Radio Width="185" Height="85"
+            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
                                          BorderBrush="Transparent" CompressionMode="LZX" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
@@ -90,6 +91,10 @@
 
 
         <StackPanel Grid.Row="2" Margin="0,20,0,0">
+            <!--<StackPanel.Resources>
+                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#4ca5ff"/>
+                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#6fb6ff"/>
+            </StackPanel.Resources>-->
             <ui:TextBlock Text="Configuration"
                           Margin="0,0,0,20" VerticalAlignment="Center"
                           FontSize="18" />
@@ -97,8 +102,10 @@
                 <CheckBox x:Name="UiChkSkipPoorlyCompressed" Checked="UiChkSkipPoorlyCompressed_Checked" Unchecked="UiChkSkipPoorlyCompressed_Unchecked"
                           Content="Skip file types specified in settings"
                           Width="330"
-                          FontSize="16"
-                          IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" />
+                          FontSize="16" 
+                          IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" >
+                   
+                </CheckBox>
                 <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
                            FontSize="14" Foreground="#FF98A9B9">
                     <TextBlock.Style>
