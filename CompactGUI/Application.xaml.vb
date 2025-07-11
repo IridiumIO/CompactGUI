@@ -75,16 +75,16 @@ Partial Public Class Application
 
 
                                ' Views and ViewModels
-                               services.AddSingleton(Of HomePage)()
+                               services.AddTransient(Of HomePage)()
                                services.AddSingleton(Of HomeViewModel)()
 
-                               services.AddSingleton(Of WatcherPage)()
+                               services.AddTransient(Of WatcherPage)()
                                services.AddTransient(Of WatcherViewModel)()
 
-                               services.AddSingleton(Of SettingsPage)()
+                               services.AddTransient(Of SettingsPage)()
                                services.AddSingleton(Of SettingsViewModel)()
 
-                               services.AddSingleton(Of DatabasePage)()
+                               services.AddTransient(Of DatabasePage)()
                                services.AddTransient(Of DatabaseViewModel)()
 
                                'Other services

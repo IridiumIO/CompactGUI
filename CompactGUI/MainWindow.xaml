@@ -233,7 +233,7 @@
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                     <TextBlock Text="CompactGUI"
                                Margin="0,0,20,0" VerticalAlignment="Center"
-                               Foreground="#10FFFFFF"
+                               Foreground="#20FFFFFF"
                                Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
                     <Border Width="80" Height="22"
                             Background="#20f44336" CornerRadius="10"
