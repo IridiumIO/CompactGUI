@@ -16,6 +16,7 @@ Public Class WatchedFolder
     <ObservableProperty> Private _LastCompressedSize As Long
     <ObservableProperty> Private _LastUncompressedSize As Long
     <ObservableProperty> Private _LastSystemModifiedDate As DateTime
+    <NotifyPropertyChangedFor(NameOf(DecayPercentage), NameOf(SavedSpace))>
     <ObservableProperty> Private _LastCheckedDate As DateTime
     <ObservableProperty> Private _LastCheckedSize As Long
     <ObservableProperty> Private _CompressionLevel As Core.WOFCompressionAlgorithm
