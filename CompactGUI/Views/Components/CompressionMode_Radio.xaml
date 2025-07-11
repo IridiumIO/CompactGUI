@@ -41,7 +41,7 @@
 
 
                     <ui:TextBlock x:Name="estimatedSize_Text"
-                                  Text="Approx. size"
+                                  Text="Estimated size"
                                   Grid.Row="0"
                                   Margin="-10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                                   Foreground="{StaticResource AccentFillColorDisabledBrush}"

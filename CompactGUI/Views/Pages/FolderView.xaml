@@ -25,7 +25,7 @@
                         DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
                 <TextBlock Text="{Binding Folder.FolderActionState}"   
                            HorizontalAlignment="Left"
-                           FontSize="18" />
+                            FontSize="16" FontWeight="SemiBold" />
                 <TextBlock Margin="0 5 0 0" Text="{Binding CompressionProgressFile, Mode=OneWay, Converter={StaticResource TokenisedFolderPathConverter}}"
            HorizontalAlignment="Left" Foreground="{StaticResource AccentFillColorDisabledBrush}" 
            TextTrimming="CharacterEllipsis" />
@@ -86,16 +86,16 @@
             <StackPanel Orientation="Horizontal" Margin="0 12">
                 <ui:TextBlock Text="{Binding Folder.DisplayName}" 
                 d:Text="Hades" FontSize="30" FontWeight="SemiBold" />
-                <!--<Border Margin="14,6" Padding="6,2" Background="Transparent" CornerRadius="4" Visibility="{Binding IsSteamIDVisible, Converter={StaticResource BoolToVisConverter}}">
+                <Border Margin="14,6" Padding="7 2 7 2" Background="#20FFFFFF" CornerRadius="4" Visibility="{Binding IsSteamIDVisible, Converter={StaticResource BoolToVisConverter}}">
                     <StackPanel Orientation="Horizontal">
-                        <Viewbox Grid.Column="1"
+                        <Viewbox 
            Width="12" Height="12"
-           Margin="5 1 5 0" HorizontalAlignment="Left" VerticalAlignment="Center">
-                            <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#80FFFFFF" />
+           Margin="0 1 5 0"  VerticalAlignment="Center">
+                            <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#A0FFFFFF" />
                         </Viewbox>
-                        <TextBlock Text="{Binding Folder.SteamAppID, StringFormat={} {0}}" VerticalAlignment="Center" Margin="0 0 5 0" Foreground="#60FFFFFF" />
+                        <TextBlock Text="{Binding Folder.SteamAppID, StringFormat={} {0}}" VerticalAlignment="Center" Foreground="#60FFFFFF" FontSize="13" />
                     </StackPanel>
-                </Border>-->
+                </Border>
 
             </StackPanel>
           
@@ -177,7 +177,7 @@
                                 CanContentScroll="True" Focusable="False" IsDeferredScrollingEnabled="False">
 
 
-            <ContentControl Content="{Binding Folder.FolderActionState}"
+            <ContentControl Content="{Binding Folder.FolderActionState}" Margin="20 0"
                             VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                             ContentTemplateSelector="{StaticResource FolderActionStateTemplateSelector}" />
 

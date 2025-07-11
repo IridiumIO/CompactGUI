@@ -22,7 +22,7 @@
 
         <ui:TextBlock Text="Compression Mode"
                       Margin="0,30,0,20" VerticalAlignment="Center"
-                      FontSize="18" />
+                      FontSize="16" FontWeight="SemiBold" />
 
         <WrapPanel Grid.Row="1"
                    Margin="0,0,0,0" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom"
@@ -97,7 +97,7 @@
             </StackPanel.Resources>-->
             <ui:TextBlock Text="Configuration"
                           Margin="0,0,0,20" VerticalAlignment="Center"
-                          FontSize="18" />
+                           FontSize="16" FontWeight="SemiBold" />
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
                 <CheckBox x:Name="UiChkSkipPoorlyCompressed" Checked="UiChkSkipPoorlyCompressed_Checked" Unchecked="UiChkSkipPoorlyCompressed_Unchecked"
                           Content="Skip file types specified in settings"

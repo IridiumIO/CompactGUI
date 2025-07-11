@@ -7,25 +7,24 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              d:DesignHeight="450" d:DesignWidth="800"
              mc:Ignorable="d">
-    <Grid Margin="0,10,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+    <Grid Margin="0,30,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           d:DataContext="{d:DesignInstance Type=local:FolderViewModel}">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="10" />
-            <ColumnDefinition MaxWidth="100" />
+            <ColumnDefinition MaxWidth="90" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="60" />
             <RowDefinition Height="60" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
         <TextBlock Text="Compression Summary"
                    HorizontalAlignment="Left"
-                   FontSize="18" />
+                   FontSize="16" FontWeight="SemiBold" />
 
 
         <ProgressBar Grid.Row="1" Grid.Column="0"
@@ -43,7 +42,7 @@
                     VerticalAlignment="Center">
             <TextBlock Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
                        HorizontalAlignment="Right"
-                       FontSize="22" />
+                       FontSize="18" FontWeight="SemiBold" />
             <TextBlock Text="Before"
                        Margin="0,-2" HorizontalAlignment="Right"
                        FontSize="14"
@@ -54,57 +53,62 @@
                     VerticalAlignment="Center">
             <TextBlock Text="{Binding Folder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
                        HorizontalAlignment="Right"
-                       FontSize="22" />
+                       FontSize="18" FontWeight="SemiBold" />
             <TextBlock Text="After"
                        Margin="0,-2" HorizontalAlignment="Right"
                        FontSize="14"
                        Foreground="{StaticResource AccentFillColorDisabledBrush}" />
         </StackPanel>
 
-        <TextBlock Grid.Row="3"
-                   Margin="0,5,0,30" HorizontalAlignment="Left" VerticalAlignment="Top"
-                   FontSize="18" Foreground="#8092F1AB" TextWrapping="Wrap">
-
-            <Run Text="Space Saved:" BaselineAlignment="Center" />
-            <Run Text="{Binding Folder.CompressionRatio, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF'}" />
-
-        </TextBlock>
-
-        <ui:Card Grid.Row="4" Grid.ColumnSpan="2"
-                 Padding="10,10,10,0"
-                 Background="{StaticResource CardBackgroundDisabled}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <TextBlock Text="Files Compressed"
-                           Grid.Row="0"
-                           VerticalAlignment="Center"
-                           FontSize="16" />
-                <TextBlock Text="Compression Method"
-                           Grid.Row="1"
-                           Margin="0,10" VerticalAlignment="Center"
-                           FontSize="16" />
-
-                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center"
-                           FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap">
-                    <Run Text="{Binding TotalCompressedFiles, Mode=OneWay}" />
-                    <Run Text="/" BaselineAlignment="Center" />
-                    <Run Text="{Binding Folder.AnalysisResults.Count, Mode=OneWay}" BaselineAlignment="Center" />
-
-                </TextBlock>
 
 
-                <TextBlock Text="{Binding DominantCompressionMode}"
-                           Grid.Row="2"
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           FontSize="16" FontWeight="SemiBold" />
-            </Grid>
+
+        <WrapPanel Grid.Row="3" Grid.ColumnSpan="2"
+                   Margin="0,20" 
+                   Orientation="Horizontal">
+            <ui:Card Width="200"
+                     Margin="0,0,20,20" Padding="10,20,10,20"
+                     Background="#30FFFFFF" BorderThickness="0">
+                <Grid>
+                    <ui:TextBlock Text="Space Saved"
+                                  Margin="0,0,10,-4" VerticalAlignment="Center"
+                                  FontSize="13" Foreground="#80FFFFFF" />
+                    <ui:TextBlock Text="{Binding Folder.CompressionRatio, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF'}"
+                                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                                  FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB" />
+                </Grid>
+            </ui:Card>
+            <ui:Card Width="200"
+                     Margin="0,0,20,20" Padding="10,20,10,20"
+                     Background="#30FFFFFF" BorderThickness="0">
+                <Grid>
+                    <ui:TextBlock Text="Files Compressed"
+                                  Margin="0,0,10,-4" VerticalAlignment="Center"
+                                  FontSize="13" Foreground="#80FFFFFF" />
+                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                        <ui:TextBlock Text="{Binding TotalCompressedFiles}"
+                                      FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB" />
+                    </StackPanel>
 
 
-        </ui:Card>
+                </Grid>
+            </ui:Card>
+            <ui:Card Width="200"
+                     Margin="0,0,20,20" Padding="10,20,10,20"
+                     Background="#30FFFFFF" BorderThickness="0">
+                <Grid>
+                    <ui:TextBlock Text="Compression Mode"
+                                  Margin="0,0,10,-4" VerticalAlignment="Center"
+                                  FontSize="13" Foreground="#80FFFFFF" />
+                    <ui:TextBlock Text="{Binding DominantCompressionMode, Converter={StaticResource CompressionLevelAbbreviatedConverter}}"
+                                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                                  FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB" />
+                </Grid>
+            </ui:Card>
+
+
+        </WrapPanel>
 
 
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2"
@@ -116,7 +120,7 @@
                        Margin="0,0,0,10"
                        Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                        Command="{Binding UncompressCommand}"
-                       FontSize="16"/>
+                       FontSize="16" />
             <ui:Button Content="Compress Again"
                        Width="140" Height="40"
                        Margin="40,0,0,10"
@@ -133,7 +137,7 @@
                 <ui:Button.Visibility>
                     <MultiBinding Converter="{StaticResource IsSteamFolderAndFreshlyCompressedMultiConverter}">
                         <Binding Path="Folder.IsFreshlyCompressed" />
-                        <Binding Path="Folder" Converter="{StaticResource IsSteamFolderConverter}" />
+                        <Binding Converter="{StaticResource IsSteamFolderConverter}" Path="Folder" />
                     </MultiBinding>
                 </ui:Button.Visibility>
             </ui:Button>
