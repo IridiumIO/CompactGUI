@@ -26,8 +26,6 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Private ReadOnly _logger As ILogger(Of Watcher)
     Private ReadOnly _settingsService As ISettingsService
 
-    Private Const LAST_SYSTEM_MODIFIED_TIME_THRESHOLD As Integer = 180 ' 3 minutes
-
     <NotifyPropertyChangedFor(NameOf(TotalSaved))>
     <ObservableProperty> Private _LastAnalysed As DateTime
     <ObservableProperty> Private _WatchedFolders As New ObservableCollection(Of WatchedFolder)
@@ -36,6 +34,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     <ObservableProperty> Private _BGCompactor As BackgroundCompactor
 
     Private ReadOnly Property WatcherJSONFile As IO.FileInfo
+    Private ReadOnly IdleSettings As IdleSettings
 
     Public ReadOnly Property TotalSaved As Long
         Get
@@ -47,9 +46,11 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Sub New(excludedFiletypes As String(), logger As ILogger(Of Watcher), settingsService As ISettingsService)
         _logger = logger
         _settingsService = settingsService
-
         _DataFolder = settingsService.DataFolder
         WatcherJSONFile = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
+
+        IdleSettings = New IdleSettings
+        IdleDetector.Initialize(IdleSettings)
 
         WatcherLog.WatcherStarted(logger)
         IsActive = True
@@ -59,11 +60,12 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
-        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger)
+        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger, IdleSettings)
         InitializeWatchedFoldersAsync()
 
 
     End Sub
+
 
 
     Private _disableCounter As Integer = 0
@@ -186,7 +188,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             .LastCheckedDate = DateTime.Now
             .LastCheckedSize = newItem.LastCheckedSize
             .LastSystemModifiedDate = DateTime.Now
-            .CompressionLevel = newItem.CompressionLevel
+            .CompressionLevel = If(newItem.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION,newItem.CompressionLevel, existingItem.CompressionLevel)
         End With
         existingItem.HasTargetChanged = False
     End Sub
@@ -274,7 +276,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Try
 
             If Not IsWatchingEnabled Then Return
-            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
+            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
             If WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
 
             If _parseWatchersSemaphore.CurrentCount <> 0 Then
@@ -381,7 +383,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
             If analysedFiles.Count <> 0 Then
                 Dim mainCompressionLVL = analysedFiles?.Select(Function(f) f.CompressionMode).Max
-                watched.CompressionLevel = If(mainCompressionLVL, WOFCompressionAlgorithm.NO_COMPRESSION)
+                watched.CompressionLevel = If(mainCompressionLVL <> WOFCompressionAlgorithm.NO_COMPRESSION, mainCompressionLVL, watched.CompressionLevel)
 
                 If checkDiskModified Then
                     Dim lastDiskWriteTime = analysedFiles.Select(Function(fl)

@@ -6,6 +6,8 @@ Public Class IdleDetector
     Public Shared Event IsIdle As EventHandler
     Public Shared Event IsNotIdle As EventHandler
 
+    Private Shared _settings As IdleSettings
+
     Private Shared _timerTask As Task
     Private Shared _idletimer As PeriodicTimer
     Private Shared ReadOnly _cts As New CancellationTokenSource
@@ -16,9 +18,13 @@ Public Class IdleDetector
 
     Public Shared Property IsAlreadyIdle As Boolean = False
 
-    Shared Sub New()
-        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(5))
+
+    Public Shared Sub Initialize(settings As IdleSettings)
+        _settings = settings
+        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(_settings.IdleCheckIntervalSeconds))
+
     End Sub
+
 
     Public Shared Sub Start()
         If _timerTask Is Nothing OrElse _timerTask.IsCompleted Then _timerTask = IdleTimerDoWorkAsync()
@@ -36,7 +42,7 @@ Public Class IdleDetector
         Try
             While Await _idletimer.WaitForNextTickAsync(_cts.Token) AndAlso Not _cts.Token.IsCancellationRequested
 
-                If GetIdleTime() > 300 AndAlso Not Paused AndAlso IsEnabled Then
+                If GetIdleTime() > _settings.IdleThresholdSeconds AndAlso Not Paused AndAlso IsEnabled Then
                     If Not IsAlreadyIdle Then
                         IsAlreadyIdle = True
                         RaiseEvent IsIdle(Nothing, EventArgs.Empty)

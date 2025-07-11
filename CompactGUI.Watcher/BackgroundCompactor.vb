@@ -22,14 +22,15 @@ Public Class BackgroundCompactor
     Private _excludedFileTypes As String()
 
 
-    Private Const LAST_SYSTEM_MODIFIED_TIME_THRESHOLD As Integer = 300 ' 5 minutes
+    Private ReadOnly _logger As ILogger(Of Watcher)
 
-    Private _logger As ILogger(Of Watcher)
+    Private ReadOnly _idleSettings As IdleSettings
 
-    Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher))
+    Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher), settings As IdleSettings)
 
         _excludedFileTypes = excludedFileTypes
         _logger = logger
+        _idleSettings = settings
         AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
         AddHandler IdleDetector.IsNotIdle, AddressOf OnSystemNotIdle
 
@@ -77,7 +78,7 @@ Public Class BackgroundCompactor
 
         For Each folder In foldersCopy
             folder.IsWorking = True
-            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-LAST_SYSTEM_MODIFIED_TIME_THRESHOLD)
+            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-_idleSettings.LastSystemModifiedTimeThresholdSeconds)
             If folder.LastSystemModifiedDate > recentThresholdDate Then
                 WatcherLog.SkippingRecentlyModifiedFolder(_logger, folder.DisplayName)
                 Continue For
@@ -119,6 +120,7 @@ Public Class BackgroundCompactor
 
             End If
             folder.IsWorking = False
+            folder.RefreshProperties()
             _compactor.Dispose()
             WatcherLog.FinishedCompactingFolder(_logger, folder.DisplayName)
         Next
