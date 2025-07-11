@@ -4,6 +4,7 @@ Imports System.Text.Json
 Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
+Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
 Imports CommunityToolkit.Mvvm.Messaging.Messages
 
@@ -61,7 +62,14 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         AddHandler IdleDetector.IsNotIdle, AddressOf OnSystemNotIdle
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
+
         BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger, IdleSettings)
+
+
+        AddHandler BGCompactor.IsCompactingEvent, Sub(sender, isCompacting)
+                                                      CancelBackgroundingCommand.NotifyCanExecuteChanged()
+                                                  End Sub
+
         InitializeWatchedFoldersAsync()
 
 
@@ -112,6 +120,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             If _disableCounter = 1 Then
                 WatcherLog.BackgroundingDisabled(_logger)
                 IdleDetector.Paused = True
+                BGCompactor.CancelCompacting()
                 Await _parseWatchersSemaphore.WaitAsync()
             End If
         Finally
@@ -222,7 +231,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             .LastCheckedDate = DateTime.Now
             .LastCheckedSize = newItem.LastCheckedSize
             .LastSystemModifiedDate = DateTime.Now
-            .CompressionLevel = If(newItem.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION,newItem.CompressionLevel, existingItem.CompressionLevel)
+            .CompressionLevel = If(newItem.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION, newItem.CompressionLevel, existingItem.CompressionLevel)
         End With
         existingItem.HasTargetChanged = False
     End Sub
@@ -427,6 +436,15 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
     End Sub
 
+    <RelayCommand>
+    Public Sub CancelBackgrounding()
+        BGCompactor.CancelCompacting()
+        CancelBackgroundingCommand.NotifyCanExecuteChanged()
+    End Sub
+
+    Public Function CanCancelBackgrounding() As Boolean
+        Return BGCompactor.IsCompactorActive
+    End Function
 
 End Class
 

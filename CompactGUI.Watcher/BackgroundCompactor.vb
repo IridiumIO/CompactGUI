@@ -9,7 +9,17 @@ Imports Microsoft.Extensions.Logging.Abstractions
 
 Public Class BackgroundCompactor
 
-    Public Property IsCompactorActive As Boolean = False
+    Private _IsCompactorActive As Boolean = False
+    Public Property IsCompactorActive As Boolean
+        Get
+            Return _IsCompactorActive
+        End Get
+        Set(value As Boolean)
+            If _IsCompactorActive = value Then Return
+            _IsCompactorActive = value
+            RaiseEvent IsCompactingEvent(Me, value)
+        End Set
+    End Property
 
     Private cancellationTokenSource As New CancellationTokenSource()
     Private isCompacting As Boolean = False
@@ -23,6 +33,8 @@ Public Class BackgroundCompactor
     Private ReadOnly _logger As ILogger(Of Watcher)
 
     Private ReadOnly _idleSettings As IdleSettings
+
+    Public Event IsCompactingEvent As EventHandler(Of Boolean)
 
     Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher), settings As IdleSettings)
 
@@ -45,7 +57,7 @@ Public Class BackgroundCompactor
 
     Public Async Function StartCompactingAsync(folders As ObservableCollection(Of WatchedFolder)) As Task(Of Boolean)
         WatcherLog.BackgroundCompactingStarted(_logger)
-        Dim cancellationToken As CancellationToken = cancellationTokenSource.Token
+        cancellationTokenSource = New CancellationTokenSource()
 
         IsCompactorActive = True
 
@@ -67,16 +79,25 @@ Public Class BackgroundCompactor
             Dim compactingTask = BeginCompacting(folder.Folder, folder.CompressionLevel)
             isCompacting = True
 
-            While Not cancellationToken.IsCancellationRequested AndAlso Not compactingTask.IsCompleted
-                Await Task.WhenAny(compactingTask, Task.Delay(1000, cancellationToken))
+            'While Not cancellationToken.IsCancellationRequested AndAlso Not compactingTask.IsCompleted AndAlso Not compactingTask.IsCanceled
+            ' Dim ret = Await compactingTask
 
-                '' Check the idle state and adjust compacting status accordingly
-                'If Not isSystemIdle AndAlso Not isCompactingPaused Then
-                '    PauseCompacting()
-                'ElseIf isSystemIdle AndAlso isCompactingPaused Then
-                '    ResumeCompacting()
-                'End If
-            End While
+            '' Check the idle state and adjust compacting status accordingly
+            'If Not isSystemIdle AndAlso Not isCompactingPaused Then
+            '    PauseCompacting()
+            'ElseIf isSystemIdle AndAlso isCompactingPaused Then
+            '    ResumeCompacting()
+            'End If
+            'End While
+
+            If cancellationTokenSource.IsCancellationRequested Then
+                Trace.WriteLine("Compacting cancelled by user.")
+                folder.IsWorking = False
+                IsCompactorActive = False
+                isCompacting = False ' Ensure compacting status is reset after operation
+                _compactor.Dispose()
+                Return False
+            End If
 
             Dim result = Await compactingTask
             If result AndAlso folders.Contains(folder) Then
@@ -129,6 +150,19 @@ Public Class BackgroundCompactor
         WatcherLog.ResumingBackgroundCompactor(_logger)
         isCompactingPaused = False ' Indicate compacting is no longer paused
         _compactor?.Resume()
+    End Sub
+
+    Public Sub CancelCompacting()
+        If Not isCompacting Then
+            Return
+        End If
+        Debug.WriteLine("Cancelling background compactor...")
+        cancellationTokenSource.Cancel()
+        cancellationTokenSource.Dispose()
+        _compactor?.Cancel()
+        _compactor?.Dispose()
+        isCompacting = False
+        isCompactingPaused = False ' Reset pause state on cancellation
     End Sub
 
 End Class

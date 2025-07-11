@@ -83,6 +83,8 @@
                                  Margin="-15,0,0,0"
                                  Foreground="#FFBFC7CE" IsIndeterminate="True"
                                  Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BoolToVisConverter}}" />
+
+                <Button Content="Cancel" Margin="-100" Command="{Binding Watcher.CancelBackgroundingCommand}"/>
             </Grid>
 
 
