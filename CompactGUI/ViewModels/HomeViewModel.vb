@@ -204,7 +204,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
             Dim retState As ActionState
 
-            If Compressing OrElse Folders.Any(Function(f) f.FolderActionState = ActionState.Working) Then
+            If Compressing OrElse Folders.Any(Function(f) f.FolderActionState = ActionState.Working OrElse f.FolderActionState = ActionState.Paused) Then
                 retState = ActionState.Working
             ElseIf Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing) Then
                 retState = ActionState.Analysing

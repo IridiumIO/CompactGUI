@@ -105,7 +105,7 @@
                           Foreground="#30FFFFFF" />
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 5">
-                <ui:TextBlock Text="current size" FontSize="13" Foreground="#30FFFFFF" VerticalAlignment="Bottom" Margin="0 0 8 -1"/>
+                <ui:TextBlock Text="uncompressed size" FontSize="13" Foreground="#30FFFFFF" VerticalAlignment="Bottom" Margin="0 0 8 -1"/>
                 <ui:TextBlock Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" FontSize="20" VerticalAlignment="Bottom" Width="80"/>
                 <ui:TextBlock Text="contained files" FontSize="13" Foreground="#30FFFFFF" VerticalAlignment="Bottom" Margin="30 0 8 -1" />
                 <ui:TextBlock Text="{Binding TotalFiles, Converter={StaticResource NumberWithSpacesConverter}}" FontSize="20" VerticalAlignment="Bottom"/>
