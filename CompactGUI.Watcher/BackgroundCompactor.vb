@@ -15,8 +15,6 @@ Public Class BackgroundCompactor
     Private isCompacting As Boolean = False
     Private isCompactingPaused As Boolean = False ' Track if compacting is paused
 
-    Private isSystemIdle As Boolean = False
-
     Private _compactor As Core.Compactor
 
     Private _excludedFileTypes As String()
@@ -31,28 +29,9 @@ Public Class BackgroundCompactor
         _excludedFileTypes = excludedFileTypes
         _logger = logger
         _idleSettings = settings
-        AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
-        AddHandler IdleDetector.IsNotIdle, AddressOf OnSystemNotIdle
 
     End Sub
 
-    Private Sub OnSystemIdle(sender As Object, e As EventArgs)
-        If Not isSystemIdle Then WatcherLog.SystemIdleDetected(_logger)
-        isSystemIdle = True
-        ' Attempt to resume only if compacting was paused due to system activity
-        If isCompactingPaused AndAlso Not isCompacting Then
-            ResumeCompacting()
-        End If
-    End Sub
-
-    Private Sub OnSystemNotIdle(sender As Object, e As EventArgs)
-        If isSystemIdle Then WatcherLog.SystemNotIdle(_logger)
-        isSystemIdle = False
-        ' Attempt to pause only if compacting is currently active and not already paused
-        If isCompacting AndAlso Not isCompactingPaused Then
-            PauseCompacting()
-        End If
-    End Sub
 
     Public Function BeginCompacting(folder As String, compressionLevel As Core.WOFCompressionAlgorithm) As Task(Of Boolean)
 
@@ -91,12 +70,12 @@ Public Class BackgroundCompactor
             While Not cancellationToken.IsCancellationRequested AndAlso Not compactingTask.IsCompleted
                 Await Task.WhenAny(compactingTask, Task.Delay(1000, cancellationToken))
 
-                ' Check the idle state and adjust compacting status accordingly
-                If Not isSystemIdle AndAlso Not isCompactingPaused Then
-                    PauseCompacting()
-                ElseIf isSystemIdle AndAlso isCompactingPaused Then
-                    ResumeCompacting()
-                End If
+                '' Check the idle state and adjust compacting status accordingly
+                'If Not isSystemIdle AndAlso Not isCompactingPaused Then
+                '    PauseCompacting()
+                'ElseIf isSystemIdle AndAlso isCompactingPaused Then
+                '    ResumeCompacting()
+                'End If
             End While
 
             Dim result = Await compactingTask
@@ -133,15 +112,23 @@ Public Class BackgroundCompactor
     End Function
 
     Public Sub PauseCompacting()
+        If Not isCompacting OrElse isCompactingPaused Then
+            Return
+        End If
+
         WatcherLog.PausingBackgroundCompactor(_logger)
         isCompactingPaused = True ' Indicate compacting is paused
-        _compactor.Pause()
+        _compactor?.Pause()
     End Sub
 
     Public Sub ResumeCompacting()
+        If Not isCompactingPaused OrElse Not isCompacting Then
+            Return
+        End If
+
         WatcherLog.ResumingBackgroundCompactor(_logger)
         isCompactingPaused = False ' Indicate compacting is no longer paused
-        _compactor.Resume()
+        _compactor?.Resume()
     End Sub
 
 End Class

@@ -17,6 +17,7 @@ Public Class IdleDetector
     Public Shared Property IsEnabled As Boolean = True
 
     Public Shared Property IsAlreadyIdle As Boolean = False
+    Public Shared Property LastIdleTime As DateTime = DateTime.MinValue
 
 
     Public Shared Sub Initialize(settings As IdleSettings)
@@ -43,14 +44,18 @@ Public Class IdleDetector
             While Await _idletimer.WaitForNextTickAsync(_cts.Token) AndAlso Not _cts.Token.IsCancellationRequested
 
                 If GetIdleTime() > _settings.IdleThresholdSeconds AndAlso Not Paused AndAlso IsEnabled Then
-                    If Not IsAlreadyIdle Then
+                    If Not IsAlreadyIdle OrElse DateTime.Now.AddSeconds(-_settings.IdleRepeatTimeSeconds) > LastIdleTime Then
                         IsAlreadyIdle = True
+                        LastIdleTime = DateTime.Now
                         RaiseEvent IsIdle(Nothing, EventArgs.Empty)
                     End If
 
                 ElseIf Not Paused AndAlso IsEnabled Then
-                    IsAlreadyIdle = False
-                    RaiseEvent IsNotIdle(Nothing, EventArgs.Empty)
+                    If IsAlreadyIdle Then
+                        IsAlreadyIdle = False
+                        RaiseEvent IsNotIdle(Nothing, EventArgs.Empty)
+                    End If
+
                 End If
 
             End While

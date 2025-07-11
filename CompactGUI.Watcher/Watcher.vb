@@ -57,7 +57,8 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
 
         IdleDetector.Start()
-        AddHandler IdleDetector.IsIdle, AddressOf OnSystemIdle
+        AddHandler IdleDetector.IsIdle, _idleHandler
+        AddHandler IdleDetector.IsNotIdle, AddressOf OnSystemNotIdle
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
         BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger, IdleSettings)
@@ -66,6 +67,39 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
     End Sub
 
+    Private _idleHandler As EventHandler = AddressOf OnSystemIdle
+    Private _isSystemIdle As Boolean = False
+
+    Private Async Sub OnSystemIdle()
+        _isSystemIdle = True
+        WatcherLog.SystemIdleDetected(_logger)
+        BGCompactor.ResumeCompacting()
+
+        RemoveHandler IdleDetector.IsIdle, _idleHandler
+
+        Try
+            If Not IsWatchingEnabled Then Return
+            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
+            If WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
+
+            If _parseWatchersSemaphore.CurrentCount <> 0 Then
+                Await ParseWatchers()
+            End If
+            If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso IsBackgroundCompactingEnabled Then
+                Await BackgroundCompact()
+            End If
+        Finally
+
+            AddHandler IdleDetector.IsIdle, _idleHandler
+        End Try
+    End Sub
+
+    Private Sub OnSystemNotIdle(sender As Object, e As EventArgs)
+        _isSystemIdle = False
+        WatcherLog.SystemNotIdle(_logger)
+
+        BGCompactor.PauseCompacting()
+    End Sub
 
 
     Private _disableCounter As Integer = 0
@@ -268,28 +302,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         End Using
     End Function
 
-    Private _isHandlingIdle As Boolean = False
 
-    Private Async Function OnSystemIdle() As Task
-        If _isHandlingIdle Then Return
-        _isHandlingIdle = True
-        Try
-
-            If Not IsWatchingEnabled Then Return
-            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
-            If WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
-
-            If _parseWatchersSemaphore.CurrentCount <> 0 Then
-                Await ParseWatchers()
-            End If
-            If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso IsBackgroundCompactingEnabled Then
-                Await BackgroundCompact()
-            End If
-        Finally
-
-            _isHandlingIdle = False
-        End Try
-    End Function
 
 
     Public Async Function ParseWatchers(Optional ParseAll As Boolean = False) As Task
