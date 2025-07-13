@@ -32,16 +32,13 @@ Public Class BackgroundCompactor
 
     Private ReadOnly _logger As ILogger(Of Watcher)
 
-    Private ReadOnly _idleSettings As IdleSettings
 
     Public Event IsCompactingEvent As EventHandler(Of Boolean)
 
-    Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher), settings As IdleSettings)
+    Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher))
 
         _excludedFileTypes = excludedFileTypes
         _logger = logger
-        _idleSettings = settings
-
     End Sub
 
 
@@ -55,7 +52,7 @@ Public Class BackgroundCompactor
 
     End Function
 
-    Public Async Function StartCompactingAsync(folders As ObservableCollection(Of WatchedFolder)) As Task(Of Boolean)
+    Public Async Function StartCompactingAsync(folders As IEnumerable(Of WatchedFolder)) As Task(Of Boolean)
         WatcherLog.BackgroundCompactingStarted(_logger)
         cancellationTokenSource = New CancellationTokenSource()
 
@@ -64,31 +61,14 @@ Public Class BackgroundCompactor
         Dim currentProcess As Process = Process.GetCurrentProcess()
         currentProcess.PriorityClass = ProcessPriorityClass.Idle
 
-        Dim foldersCopy As List(Of WatchedFolder) = folders.Where(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION).ToList()
+        isCompacting = True
 
-
-        For Each folder In foldersCopy
+        For Each folder In folders.ToList
             folder.IsWorking = True
-            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-_idleSettings.LastSystemModifiedTimeThresholdSeconds)
-            If folder.LastSystemModifiedDate > recentThresholdDate Then
-                WatcherLog.SkippingRecentlyModifiedFolder(_logger, folder.DisplayName)
-                Continue For
-            End If
 
             WatcherLog.CompactingFolder(_logger, folder.DisplayName)
             Dim compactingTask = BeginCompacting(folder.Folder, folder.CompressionLevel)
-            isCompacting = True
 
-            'While Not cancellationToken.IsCancellationRequested AndAlso Not compactingTask.IsCompleted AndAlso Not compactingTask.IsCanceled
-            ' Dim ret = Await compactingTask
-
-            '' Check the idle state and adjust compacting status accordingly
-            'If Not isSystemIdle AndAlso Not isCompactingPaused Then
-            '    PauseCompacting()
-            'ElseIf isSystemIdle AndAlso isCompactingPaused Then
-            '    ResumeCompacting()
-            'End If
-            'End While
 
             If cancellationTokenSource.IsCancellationRequested Then
                 Trace.WriteLine("Compacting cancelled by user.")

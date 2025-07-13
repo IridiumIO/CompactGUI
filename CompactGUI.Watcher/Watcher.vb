@@ -1,5 +1,6 @@
 Imports System.Collections.ObjectModel
 Imports System.Collections.Specialized
+Imports System.Runtime
 Imports System.Text.Json
 Imports System.Threading
 
@@ -63,7 +64,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
 
-        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger, IdleSettings)
+        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger)
 
 
         AddHandler BGCompactor.IsCompactingEvent, Sub(sender, isCompacting)
@@ -83,24 +84,46 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         WatcherLog.SystemIdleDetected(_logger)
         BGCompactor.ResumeCompacting()
 
+        Await RunWatcher(False)
+
+    End Sub
+
+    <RelayCommand>
+    Public Async Function RunWatcher() As Task(Of Boolean)
+        Return Await RunWatcher(True)
+    End Function
+
+    Public Async Function RunWatcher(Optional runAll As Boolean = True) As Task(Of Boolean)
+        _logger.LogDebug("RunWatcher called")
         RemoveHandler IdleDetector.IsIdle, _idleHandler
 
+        For Each watcher In WatchedFolders
+            watcher.PauseMonitoring()
+        Next
+
         Try
-            If Not IsWatchingEnabled Then Return
+            If Not IsWatchingEnabled Then Return False
             Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
-            If WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return
+            If Not runAll AndAlso WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return False
 
             If _parseWatchersSemaphore.CurrentCount <> 0 Then
-                Await ParseWatchers()
+                Await ParseWatchers(runAll)
             End If
-            If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso IsBackgroundCompactingEnabled Then
-                Await BackgroundCompact()
+            If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso (IsBackgroundCompactingEnabled OrElse runAll) Then
+                Await BackgroundCompact(runAll)
             End If
+            Return True
         Finally
 
             AddHandler IdleDetector.IsIdle, _idleHandler
+            For Each watcher In WatchedFolders
+                watcher.ResumeMonitoring()
+            Next
         End Try
-    End Sub
+        Return False
+    End Function
+
+
 
     Private Sub OnSystemNotIdle(sender As Object, e As EventArgs)
         _isSystemIdle = False
@@ -366,7 +389,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
     End Function
 
-    Public Async Function BackgroundCompact() As Task
+    Public Async Function BackgroundCompact(Optional runAll As Boolean = False) As Task
 
         Dim acquired = Await _parseWatchersSemaphore.WaitAsync(0)
         If Not acquired Then Return
@@ -375,11 +398,22 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
             If BGCompactor.IsCompactorActive Then Return
 
-            If Not WatchedFolders.Any(Function(f) f.DecayPercentage <> 0 AndAlso f.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION) Then
-                Return
-            End If
+            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
 
-            Await BGCompactor.StartCompactingAsync(WatchedFolders)
+            Dim foldersToCompress = WatchedFolders.
+                Where(Function(folder)
+                          Dim eligible = folder.DecayPercentage <> 0 AndAlso folder.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION
+                          Dim recentlyModified = folder.LastSystemModifiedDate > recentThresholdDate AndAlso Not runAll
+                          If eligible AndAlso recentlyModified Then
+                              WatcherLog.SkippingRecentlyModifiedFolder(_logger, folder.DisplayName)
+                          End If
+                          Return eligible AndAlso Not recentlyModified
+                      End Function)
+
+            If foldersToCompress.Any = 0 Then Return
+
+            Await BGCompactor.StartCompactingAsync(foldersToCompress)
+
             OnPropertyChanged(NameOf(TotalSaved))
         Finally
             _parseWatchersSemaphore.Release()

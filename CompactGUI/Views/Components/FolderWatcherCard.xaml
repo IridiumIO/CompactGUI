@@ -85,6 +85,7 @@
                                  Visibility="{Binding RefreshWatchedCommand.IsRunning, Converter={StaticResource BoolToVisConverter}}" />
 
                 <Button Content="Cancel" Margin="-100" Command="{Binding Watcher.CancelBackgroundingCommand}"/>
+                <Button Content="Run Now" Margin="-200" Command="{Binding Watcher.RunWatcherCommand}"/>
             </Grid>
 
 

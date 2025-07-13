@@ -64,6 +64,17 @@ Public Class WatchedFolder
         End If
     End Sub
 
+    Public Sub PauseMonitoring()
+        If FSWatcher IsNot Nothing Then
+            FSWatcher.EnableRaisingEvents = False
+        End If
+    End Sub
+
+    Public Sub ResumeMonitoring()
+        If FSWatcher IsNot Nothing Then
+            FSWatcher.EnableRaisingEvents = True
+        End If
+    End Sub
 
     ' --- Monitoring Events ---
     Private Sub WatcherErrorEvent(sender As Object, e As ErrorEventArgs) Handles FSWatcher.Error
@@ -79,6 +90,7 @@ Public Class WatchedFolder
         LastChangedDate = DateTime.Now
         OnPropertyChanged(NameOf(HasTargetChanged))
         OnPropertyChanged(NameOf(LastChangedDate))
+        OnPropertyChanged(NameOf(LastSystemModifiedDate))
         Debug.WriteLine("Folder " & Folder & " has changed!")
     End Sub
 
