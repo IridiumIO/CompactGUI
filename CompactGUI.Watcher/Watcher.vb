@@ -27,6 +27,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
     Private ReadOnly _logger As ILogger(Of Watcher)
     Private ReadOnly _settingsService As ISettingsService
+    Private ReadOnly _idleDetector As IdleDetector
 
     <NotifyPropertyChangedFor(NameOf(TotalSaved))>
     <ObservableProperty> Private _LastAnalysed As DateTime
@@ -52,15 +53,15 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         WatcherJSONFile = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
 
         IdleSettings = New IdleSettings
-        IdleDetector.Initialize(IdleSettings)
+        _idleDetector = New IdleDetector(IdleSettings)
 
         WatcherLog.WatcherStarted(logger)
         IsActive = True
 
 
-        IdleDetector.Start()
-        AddHandler IdleDetector.IsIdle, _idleHandler
-        AddHandler IdleDetector.IsNotIdle, AddressOf OnSystemNotIdle
+        _idleDetector.Start()
+        AddHandler _idleDetector.IsIdle, _idleHandler
+        AddHandler _idleDetector.IsNotIdle, AddressOf OnSystemNotIdle
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
 
@@ -94,8 +95,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     End Function
 
     Public Async Function RunWatcher(Optional runAll As Boolean = True) As Task(Of Boolean)
-        _logger.LogDebug("RunWatcher called")
-        RemoveHandler IdleDetector.IsIdle, _idleHandler
+        RemoveHandler _idleDetector.IsIdle, _idleHandler
 
         For Each watcher In WatchedFolders
             watcher.PauseMonitoring()
@@ -115,7 +115,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             Return True
         Finally
 
-            AddHandler IdleDetector.IsIdle, _idleHandler
+            AddHandler _idleDetector.IsIdle, _idleHandler
             For Each watcher In WatchedFolders
                 watcher.ResumeMonitoring()
             Next
@@ -142,7 +142,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             _disableCounter += 1
             If _disableCounter = 1 Then
                 WatcherLog.BackgroundingDisabled(_logger)
-                IdleDetector.Paused = True
+                Await _idleDetector.StopAsync()
                 BGCompactor.CancelCompacting()
                 Await _parseWatchersSemaphore.WaitAsync()
             End If
@@ -158,7 +158,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
                 _disableCounter -= 1
                 If _disableCounter = 0 Then
                     _parseWatchersSemaphore.Release()
-                    IdleDetector.Paused = False
+                    _idleDetector.Start()
                     WatcherLog.BackgroundingEnabled(_logger)
                 End If
             End If
