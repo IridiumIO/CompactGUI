@@ -46,7 +46,6 @@ Public Class IdleDetector
     Private Async Function IdleTimerDoWorkAsync() As Task
         Try
             While Await _idletimer.WaitForNextTickAsync(_cts.Token) AndAlso Not _cts.Token.IsCancellationRequested
-                Trace.WriteLine("Doing work!!!")
 
                 If GetIdleTime() > _settings.IdleThresholdSeconds Then
                     If State <> IdleState.Idle OrElse DateTime.Now.AddSeconds(-_settings.IdleRepeatTimeSeconds) > LastIdleTime Then
@@ -71,7 +70,7 @@ Public Class IdleDetector
     End Function
 
     Public Shared Function GetIdleTime() As Double
-        Dim lastInputInfo As New LASTINPUTINFO() With {.cbSize = CType(Marshal.SizeOf(GetType(LASTINPUTINFO)), UInteger)}
+        Dim lastInputInfo As New LASTINPUTINFO() With {.cbSize = CType(Marshal.SizeOf(Of LASTINPUTINFO)(), UInteger)}
         If Not GetLastInputInfo(lastInputInfo) Then Return 0
 
         Dim idleTicks = Environment.TickCount64 - CLng(lastInputInfo.dwTime)

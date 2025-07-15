@@ -29,6 +29,8 @@
     <local:FolderActionStateWorkingToVisibilityConverter x:Key="FolderActionStateWorkingToVisibilityConverter" />
     <local:ZeroCountToVisibilityConverter x:Key="ZeroCountToVisibilityConverter"/>
     <local:NumberWithSpacesConverter x:Key="NumberWithSpacesConverter"/>
+    <local:BackgroundModeToVisibilityConverter x:Key="BackgroundModeToVisibilityConverter"/>
+    <local:EnumToIntConverter x:Key="EnumToIntConverter" />
 
     <converters:ValueConverterGroup x:Key="IsSteamFolderToVisibilityConverter">
         <local:IsSteamFolderConverter/>

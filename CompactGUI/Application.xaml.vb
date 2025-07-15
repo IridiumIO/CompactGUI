@@ -10,6 +10,10 @@ Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Configuration
 Imports System.Drawing
 Imports CompactGUI.Core.Settings
+Imports Coravel
+Imports CompactGUI.Watcher
+Imports Coravel.Scheduling.Schedule.Interfaces
+Imports Coravel.Scheduling.Schedule
 
 Partial Public Class Application
 
@@ -88,22 +92,24 @@ Partial Public Class Application
                                services.AddTransient(Of DatabaseViewModel)()
 
                                'Other services
-                               services.AddSingleton(Of Watcher.Watcher)(Function(s)
-                                                                             Return New Watcher.Watcher(Array.Empty(Of String)(), s.GetRequiredService(Of ILogger(Of Watcher.Watcher)), SettingsService)
-                                                                         End Function)
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
                                                                              End Function)
 
                                services.AddSingleton(Of CompressableFolderService)
 
+                               services.AddSingleton(Of IdleDetector)(Function()
+                                                                          Dim idleDetector = New IdleDetector(New IdleSettings)
+                                                                          idleDetector.Start()
+                                                                          Return idleDetector
+                                                                      End Function)
+                               services.AddSingleton(Of SchedulerService)()
+                               services.AddSingleton(Of Watcher.Watcher)()
+
+                               services.AddScheduler()
+
                            End Sub) _
-            .Build()
-
-
-
-
-
+        .Build()
 
 
     End Sub
@@ -140,6 +146,10 @@ Partial Public Class Application
 
         Await _host.StartAsync()
         Await GetService(Of SettingsViewModel).InitializeEnvironment()
+
+
+        GetService(Of SchedulerService).RegenerateSchedule()
+
 
         Dim UpdateTask = GetService(Of IUpdaterService).CheckForUpdate(SettingsService.AppSettings.EnablePreReleaseUpdates)
         Dim WikiTask = GetService(Of IWikiService).GetUpdatedJSONAsync()

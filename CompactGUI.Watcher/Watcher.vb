@@ -46,26 +46,24 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     End Property
 
 
-    Sub New(excludedFiletypes As String(), logger As ILogger(Of Watcher), settingsService As ISettingsService)
+    Sub New(logger As ILogger(Of Watcher), settingsService As ISettingsService, idleDetector As IdleDetector)
         _logger = logger
         _settingsService = settingsService
         _DataFolder = settingsService.DataFolder
         WatcherJSONFile = New IO.FileInfo(IO.Path.Combine(_DataFolder.FullName, "watcher.json"))
 
         IdleSettings = New IdleSettings
-        _idleDetector = New IdleDetector(IdleSettings)
+        _idleDetector = idleDetector
 
         WatcherLog.WatcherStarted(logger)
         IsActive = True
 
-
-        _idleDetector.Start()
         AddHandler _idleDetector.IsIdle, _idleHandler
         AddHandler _idleDetector.IsNotIdle, AddressOf OnSystemNotIdle
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
 
-        BGCompactor = New BackgroundCompactor(excludedFiletypes, _logger)
+        BGCompactor = New BackgroundCompactor(Array.Empty(Of String), _logger)
 
 
         AddHandler BGCompactor.IsCompactingEvent, Sub(sender, isCompacting)
@@ -83,6 +81,11 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Private Async Sub OnSystemIdle()
         _isSystemIdle = True
         WatcherLog.SystemIdleDetected(_logger)
+
+        'Skip idle analysis if the background mode is not set to IdleOnly
+        Dim bgMode = _settingsService.AppSettings.BackgroundModeSelection
+        If bgMode <> BackgroundMode.IdleOnly Then Return
+
         BGCompactor.ResumeCompacting()
 
         Await RunWatcher(False)
@@ -97,11 +100,13 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Public Async Function RunWatcher(Optional runAll As Boolean = True) As Task(Of Boolean)
         RemoveHandler _idleDetector.IsIdle, _idleHandler
 
+        Trace.WriteLine("Watcher: RunWatcher called")
         For Each watcher In WatchedFolders
             watcher.PauseMonitoring()
         Next
 
         Try
+            Dim now = DateTime.Now
             If Not IsWatchingEnabled Then Return False
             Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
             If Not runAll AndAlso WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return False
@@ -112,6 +117,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso (IsBackgroundCompactingEnabled OrElse runAll) Then
                 Await BackgroundCompact(runAll)
             End If
+            _settingsService.AppSettings.ScheduledBackgroundLastRan = now
             Return True
         Finally
 
@@ -128,6 +134,10 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Private Sub OnSystemNotIdle(sender As Object, e As EventArgs)
         _isSystemIdle = False
         WatcherLog.SystemNotIdle(_logger)
+
+        'Skip idle analysis if the background mode is not set to IdleOnly
+        Dim bgMode = _settingsService.AppSettings.BackgroundModeSelection
+        If bgMode <> BackgroundMode.IdleOnly Then Return
 
         BGCompactor.PauseCompacting()
     End Sub
@@ -464,7 +474,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         If (message.Sender.GetType() IsNot GetType(Settings)) Then Return
 
         If message.PropertyName = NameOf(Settings.EnableBackgroundWatcher) Then : IsWatchingEnabled = message.NewValue
-        ElseIf message.PropertyName = NameOf(Settings.EnableBackgroundAutoCompression) Then : IsBackgroundCompactingEnabled = message.NewValue
+        ElseIf message.PropertyName = NameOf(Settings.BackgroundModeSelection) Then : IsBackgroundCompactingEnabled = (CType(message.NewValue, BackgroundMode) = BackgroundMode.IdleOnly)
         End If
 
 

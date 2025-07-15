@@ -455,3 +455,32 @@ Public Class NumberWithSpacesConverter
         Return 0
     End Function
 End Class
+
+
+Public Class BackgroundModeToVisibilityConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim index As Integer = If(value, 0)
+        Return If(index > 1, Visibility.Visible, Visibility.Collapsed)
+
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException
+    End Function
+End Class
+
+Public Class EnumToIntConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing OrElse Not value.GetType().IsEnum Then Return 0
+        Return CType(value, [Enum]).GetHashCode()
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If targetType Is Nothing OrElse Not targetType.IsEnum OrElse value Is Nothing Then Return Binding.DoNothing
+        Return [Enum].ToObject(targetType, value)
+    End Function
+End Class

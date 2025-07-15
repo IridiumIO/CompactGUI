@@ -8,6 +8,10 @@ Imports CommunityToolkit.Mvvm.Input
 Imports CompactGUI.Core.Settings
 Imports CompactGUI.Logging
 
+Imports Coravel.Scheduling.Schedule
+
+Imports Coravel.Scheduling.Schedule.Interfaces
+
 Imports Microsoft.Extensions.Logging
 
 Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
@@ -50,6 +54,10 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
 
         If e.PropertyName = NameOf(Settings.IsStartMenuEnabled) Then
             ApplyStartMenuIntegration()
+        End If
+
+        If e.PropertyName = NameOf(Settings.ScheduledBackgroundHour) OrElse e.PropertyName = NameOf(Settings.ScheduledBackgroundMinute) Then
+            Application.GetService(Of SchedulerService).RegenerateSchedule()
         End If
 
         Application.GetService(Of ISettingsService).SaveSettings()
@@ -126,12 +134,21 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
                        End Sub)
     End Function
 
+    Public ReadOnly Property HourOptions As IEnumerable(Of Integer)
+        Get
+            Return Enumerable.Range(0, 24)
+        End Get
+    End Property
+    Public ReadOnly Property MinuteOptions As IEnumerable(Of Integer)
+        Get
+            Return Enumerable.Range(0, 60)
+        End Get
+    End Property
 
     Public Property EditSkipListCommand As ICommand = New RelayCommand(Function() (New Settings_skiplistflyout).ShowDialog())
 
 
-    Public Property DisableAutoCompressionCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundAutoCompression = False)
-    Public Property EnableBackgroundWatcherCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundWatcher = True)
+    Public Property EnableBackgroundWatcherCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundWatcher = AppSettings.BackgroundModeSelection <> BackgroundMode.Never)
     Public Property OpenGitHubCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI") With {.UseShellExecute = True}))
     Public Property OpenKoFiCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://ko-fi.com/IridiumIO") With {.UseShellExecute = True}))
 

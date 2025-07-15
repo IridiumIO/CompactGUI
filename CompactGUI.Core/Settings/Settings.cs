@@ -1,13 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CompactGUI.Logging;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CompactGUI.Core.Settings;
 
@@ -34,7 +26,12 @@ public partial class Settings : ObservableRecipient
     [ObservableProperty] private bool estimateCompressionForNonSteamFolders = false;
 
     [ObservableProperty] private bool enableBackgroundWatcher = true;
-    [ObservableProperty] private bool enableBackgroundAutoCompression = true;
+    [ObservableProperty] private BackgroundMode backgroundModeSelection = BackgroundMode.IdleOnly;
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(NextScheduledBackgroundRun))] private int scheduledBackgroundInterval = 1; // in days
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(NextScheduledBackgroundRun))] private int scheduledBackgroundHour = 0; // 0-23
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(NextScheduledBackgroundRun))] private int scheduledBackgroundMinute = 0; // 0-59
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(NextScheduledBackgroundRun))] private DateTime scheduledBackgroundLastRan = DateTime.MinValue;
+    [ObservableProperty] private DateTime nextScheduledBackgroundRun = DateTime.MaxValue;
 
     [ObservableProperty] private bool allowMultiInstance = false;
     [ObservableProperty] private bool enablePreReleaseUpdates = true;
@@ -49,21 +46,33 @@ public partial class Settings : ObservableRecipient
     [ObservableProperty] private WindowState windowState = WindowState.Normal;
     [ObservableProperty] private bool alwaysShowDetailedCompressionMode = false;
 
-    //partial void OnEnableBackgroundWatcherChanged(bool value)
-    //{
-    //    Watcher.Watcher.IsWatchingEnabled = value;
-    //}
 
-    //partial void OnEnableBackgroundAutoCompressionChanged(bool value)
-    //{
-    //    Watcher.Watcher.IsBackgroundCompactingEnabled = value;
-    //}
+    partial void OnScheduledBackgroundIntervalChanged(int value) => UpdateNextScheduledBackgroundRun();
+
+    partial void OnScheduledBackgroundHourChanged(int value) => UpdateNextScheduledBackgroundRun();
+
+    partial void OnScheduledBackgroundMinuteChanged(int value) => UpdateNextScheduledBackgroundRun();
+
+    partial void OnScheduledBackgroundLastRanChanged(DateTime value) => UpdateNextScheduledBackgroundRun();
+
+    private void UpdateNextScheduledBackgroundRun()
+    {
+        DateTime nextRun = scheduledBackgroundLastRan.Date
+                 .AddDays(scheduledBackgroundInterval)
+                 .AddHours(scheduledBackgroundHour)
+                 .AddMinutes(scheduledBackgroundMinute);
+        DateTime now = DateTime.Now;
+        while (nextRun <= now)
+        {
+            nextRun = nextRun.AddDays(scheduledBackgroundInterval == 0 ? 1 : scheduledBackgroundInterval);
+        }
+
+        NextScheduledBackgroundRun = nextRun;
+    }
 
 
-    //public static void Save()
-    //{
-    //    SettingsHandler.WriteToFile();
-    //}
+
+
 }
 
 public enum WindowState
@@ -71,4 +80,12 @@ public enum WindowState
     Normal,
     Minimized,
     Maximized
+}
+
+public enum BackgroundMode
+{
+    Never,
+    IdleOnly,
+    Scheduled,
+    ScheduledAndIdle
 }
