@@ -23,12 +23,29 @@ Public Class SchedulerService
         Dim scheduler = CType(Application.GetService(Of IScheduler), Scheduler)
         If Not scheduler.TryUnschedule(NameOf(Watcher)) Then Return
 
-        scheduler.ScheduleAsync(Async Function() Await Application.GetService(Of Watcher.Watcher).RunWatcher()).
+        scheduler.ScheduleAsync(Async Function() Await RunScheduledTask()).
                                 Cron($"{settings.ScheduledBackgroundMinute} {settings.ScheduledBackgroundHour} * * *").Zoned(TimeZoneInfo.Local).
                                 When(Function() Task.FromResult(IsSchedulerRunnable)).
                                 PreventOverlapping(NameOf(Watcher))
 
     End Sub
+
+
+    Public Async Function RunScheduledTask() As Task(Of Boolean)
+
+        Dim trayService = Application.GetService(Of TrayNotifierService)
+        trayService.Notify_BackgroundSchedulerRunning()
+        Dim task = Await Application.GetService(Of Watcher.Watcher).RunWatcher()
+
+        If task Then
+            trayService.Notify_BackgroundSchedulerCompleted()
+            Return True
+        End If
+        Return False
+
+    End Function
+
+
 
     Public Function IsSchedulerRunnable() As Boolean
 

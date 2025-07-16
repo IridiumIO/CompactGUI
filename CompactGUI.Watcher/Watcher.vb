@@ -102,28 +102,29 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Next
 
         Try
-            Await Task.Run(Async Function()
-                               _settingsService.AppSettings.ScheduledBackgroundLastRan = DateTime.Now
-                               If Not IsWatchingEnabled Then Return False
-                               Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
-                               If Not runAll AndAlso WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return False
 
-                               If _parseWatchersSemaphore.CurrentCount <> 0 Then
-                                   Await ParseWatchers(runAll, cToken)
-                               End If
-                               If cToken <> Nothing AndAlso cToken.IsCancellationRequested Then
-                                   _logger.LogInformation("Watcher run cancelled by user.")
-                                   Return False
-                               End If
-                               If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso (IsBackgroundCompactingEnabled OrElse runAll) Then
-                                   Await BackgroundCompact(runAll) 'Don't need to pass the cancellation token here, as the background compactor handles it internally.
-                               End If
-                               Return True
-                           End Function, cToken)
+            _settingsService.AppSettings.ScheduledBackgroundLastRan = DateTime.Now
+            If Not IsWatchingEnabled Then Return False
+            Dim recentThresholdDate As DateTime = DateTime.Now.AddSeconds(-IdleSettings.LastSystemModifiedTimeThresholdSeconds)
+            If Not runAll AndAlso WatchedFolders.Any(Function(x) x.LastChangedDate > recentThresholdDate) Then Return False
 
-
+            If _parseWatchersSemaphore.CurrentCount <> 0 Then
+                Await ParseWatchers(runAll, cToken)
+            End If
+            If cToken <> Nothing AndAlso cToken.IsCancellationRequested Then
+                _logger.LogInformation("Watcher run cancelled by user.")
+                Return False
+            End If
+            If _parseWatchersSemaphore.CurrentCount <> 0 AndAlso (IsBackgroundCompactingEnabled OrElse runAll) Then
+                Await BackgroundCompact(runAll) 'Don't need to pass the cancellation token here, as the background compactor handles it internally.
+            End If
+            If cToken <> Nothing AndAlso cToken.IsCancellationRequested Then
+                _logger.LogInformation("Watcher run cancelled by user.")
+                Return False
+            End If
             Return True
-        Catch ex As OperationCanceledException
+
+        Catch ex As TaskCanceledException
             Return False
         Finally
 

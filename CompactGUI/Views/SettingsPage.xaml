@@ -302,21 +302,11 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
-                            <!--<CheckBox x:Name="UiEnableBackgroundAutoCompression"
-                                      Content="Run background compressor when system is idle"
-                                      Margin="30,-3,0,-3"
-                                      IsChecked="{Binding AppSettings.EnableBackgroundAutoCompression, Mode=TwoWay}">
 
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Checked">
-                                        <i:InvokeCommandAction Command="{Binding EnableBackgroundWatcherCommand}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </CheckBox>-->
                             <WrapPanel Margin="45,10,0,0"
                                        IsEnabled="{Binding AppSettings.EnableBackgroundWatcher}"
                                        Orientation="Horizontal">
-                                <TextBlock Text="Run background compressor: " VerticalAlignment="Center" />
+                                <TextBlock Text="Compress folders: " VerticalAlignment="Center" />
 
                                 <ComboBox x:Name="BackgroundModeSelector"
                                           Width="290" Height="35"
