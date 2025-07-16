@@ -1,6 +1,10 @@
-﻿Imports CommunityToolkit.Mvvm.ComponentModel
+﻿Imports System.Threading
+
+Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
+
+Imports CompactGUI.Watcher
 
 Imports Wpf.Ui.Controls
 
@@ -12,6 +16,20 @@ Public NotInheritable Class WatcherViewModel : Inherits ObservableObject
     Public Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
         Me.Watcher = watcher
         _snackbarService = snackbarService
+    End Sub
+
+
+
+    <RelayCommand>
+    Public Async Function RunWatcher(token As CancellationToken) As Task
+        Await Watcher.RunWatcher(True, token)
+    End Function
+
+    <RelayCommand>
+    Public Sub CancelBackgrounding()
+        RunWatcherCommand.Cancel()
+        Watcher.BGCompactor.CancelCompacting()
+        Application.Current.Dispatcher.Invoke(Sub() CancelBackgroundingCommand.NotifyCanExecuteChanged())
     End Sub
 
 

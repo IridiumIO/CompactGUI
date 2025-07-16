@@ -26,7 +26,6 @@ Partial Public Class Application
     Shared Sub New()
         SettingsService = New SettingsService()
         SettingsService.LoadSettings()
-        InitializeHost()
 
         AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnDomainUnhandledException
 
@@ -83,7 +82,7 @@ Partial Public Class Application
                                services.AddSingleton(Of HomeViewModel)()
 
                                services.AddTransient(Of WatcherPage)()
-                               services.AddTransient(Of WatcherViewModel)()
+                               services.AddSingleton(Of WatcherViewModel)()
 
                                services.AddTransient(Of SettingsPage)()
                                services.AddSingleton(Of SettingsViewModel)()
@@ -141,6 +140,8 @@ Partial Public Class Application
                 pipeServerTask = ProcessNextInstanceMessage()
             End If
         End If
+
+        InitializeHost()
 
         GetService(Of Watcher.Watcher)()
 
