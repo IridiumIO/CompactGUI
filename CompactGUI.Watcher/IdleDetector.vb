@@ -1,44 +1,65 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Threading
 
+Public Enum IdleState
+    Idle
+    NotIdle
+End Enum
+
 Public Class IdleDetector
 
-    Public Shared Event IsIdle As EventHandler
-    Public Shared Event IsNotIdle As EventHandler
+    Public Event IsIdle As EventHandler
+    Public Event IsNotIdle As EventHandler
 
-    Private Shared _timerTask As Task
-    Private Shared _idletimer As PeriodicTimer
-    Private Shared ReadOnly _cts As New CancellationTokenSource
+    Private ReadOnly _settings As IdleSettings
 
-    Public Shared Property Paused As Boolean = False
+    Private  _timerTask As Task
+    Private _idletimer As PeriodicTimer
+    Private _cts As CancellationTokenSource
 
-    Public Shared Property IsEnabled As Boolean = True
+    Public Property State As IdleState
+    Public Property LastIdleTime As DateTime = DateTime.MinValue
 
-    Shared Sub New()
-        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(5))
+
+    Public Sub New(settings As IdleSettings)
+        _settings = settings
     End Sub
 
-    Public Shared Sub Start()
-        If _timerTask Is Nothing OrElse _timerTask.IsCompleted Then _timerTask = IdleTimerDoWorkAsync()
+
+    Public Async Sub Start()
+        Await StopAsync()
+        _cts = New CancellationTokenSource()
+        _idletimer = New PeriodicTimer(TimeSpan.FromSeconds(_settings.IdleCheckIntervalSeconds))
+        _timerTask = IdleTimerDoWorkAsync()
+        State = IdleState.NotIdle
     End Sub
 
-    Public Shared Async Sub StopAsync()
-        _cts.Cancel()
+    Public Async Function StopAsync() As Task
+        _cts?.Cancel()
+        _idletimer?.Dispose()
+        _idletimer = Nothing
         If _timerTask IsNot Nothing Then Await _timerTask
-        _idletimer.Dispose()
-        _cts.Dispose()
-    End Sub
+        _cts?.Dispose()
+        _cts = Nothing
+    End Function
 
-    Private Shared Async Function IdleTimerDoWorkAsync() As Task
-
+    Private Async Function IdleTimerDoWorkAsync() As Task
         Try
             While Await _idletimer.WaitForNextTickAsync(_cts.Token) AndAlso Not _cts.Token.IsCancellationRequested
 
-                If GetIdleTime() > 300 AndAlso Not Paused AndAlso IsEnabled Then
-                    RaiseEvent IsIdle(Nothing, EventArgs.Empty)
+                If GetIdleTime() > _settings.IdleThresholdSeconds Then
+                    If State <> IdleState.Idle OrElse DateTime.Now.AddSeconds(-_settings.IdleRepeatTimeSeconds) > LastIdleTime Then
+                        State = IdleState.Idle
+                        LastIdleTime = DateTime.Now
+                        RaiseEvent IsIdle(Nothing, EventArgs.Empty)
+                    End If
 
-                ElseIf Not Paused AndAlso IsEnabled Then
-                    RaiseEvent IsNotIdle(Nothing, EventArgs.Empty)
+                Else
+                    If State = IdleState.Idle Then
+                        State = IdleState.NotIdle
+                        RaiseEvent IsNotIdle(Nothing, EventArgs.Empty)
+                    End If
+
                 End If
 
             End While
@@ -49,7 +70,7 @@ Public Class IdleDetector
     End Function
 
     Public Shared Function GetIdleTime() As Double
-        Dim lastInputInfo As New LASTINPUTINFO() With {.cbSize = CType(Marshal.SizeOf(GetType(LASTINPUTINFO)), UInteger)}
+        Dim lastInputInfo As New LASTINPUTINFO() With {.cbSize = CType(Marshal.SizeOf(Of LASTINPUTINFO)(), UInteger)}
         If Not GetLastInputInfo(lastInputInfo) Then Return 0
 
         Dim idleTicks = Environment.TickCount64 - CLng(lastInputInfo.dwTime)

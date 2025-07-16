@@ -11,7 +11,7 @@ using Windows.Win32;
 
 namespace CompactGUI.Core;
 
-public class Compactor : ICompressor, IDisposable
+public sealed class Compactor : ICompressor, IDisposable
 {
 
     private readonly string workingDirectory;
@@ -28,12 +28,15 @@ public class Compactor : ICompressor, IDisposable
 
     private ILogger<Compactor> _logger;
 
-    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, ILogger<Compactor>? logger = null)
+    private Analyser _analyser;
+
+    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, Analyser analyser, ILogger<Compactor>? logger = null)
     {
         workingDirectory = folderPath;
         excludedFileExtensions = new HashSet<string>(excludedFileTypes);
         wofCompressionAlgorithm = compressionLevel;
         _logger = logger ?? NullLogger<Compactor>.Instance;
+        _analyser = analyser;
         InitializeCompressionInfoPointer();
     }
 
@@ -122,10 +125,10 @@ public class Compactor : ICompressor, IDisposable
     {
         uint clusterSize = SharedMethods.GetClusterSize(workingDirectory);
 
-        var analyser = new Analyser(workingDirectory, NullLogger<Analyser>.Instance);
-        var ret = await analyser.AnalyseFolder(cancellationTokenSource.Token);
+        
+        var analysedFiles = await _analyser.GetAnalysedFilesAsync(cancellationTokenSource.Token);
 
-        var filesList = analyser.FileCompressionDetailsList
+        var filesList = analysedFiles?
             .Where(fl =>
                 fl.CompressionMode != wofCompressionAlgorithm
                 && fl.UncompressedSize > clusterSize

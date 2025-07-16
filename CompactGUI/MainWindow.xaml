@@ -12,11 +12,11 @@
                  d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
                  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 ExtendsContentIntoTitleBar="True"
+                 Closing="MainWindow_Closing" ExtendsContentIntoTitleBar="True"
                  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                  RenderOptions.BitmapScalingMode="HighQuality" WindowBackdropType="Mica"
                  WindowCornerPreference="Round" WindowStartupLocation="CenterScreen"
-                 mc:Ignorable="d" Closing="MainWindow_Closing">
+                 mc:Ignorable="d">
     <bh:Interaction.Triggers>
 
         <bh:EventTrigger EventName="Closing">
@@ -35,8 +35,9 @@
 
 
         <ui:NavigationView x:Name="NavigationView"
-                           Grid.Row="1" Transition="FadeIn"
-                           IsBackButtonVisible="Collapsed" PaneDisplayMode="Top">
+                           Grid.Row="1"
+                           Margin="0,10,0,0" 
+                           IsBackButtonVisible="Collapsed" PaneDisplayMode="Top" Transition="FadeIn">
             <ui:NavigationView.MenuItems>
 
 
@@ -46,7 +47,7 @@
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:HomePage}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Home24" />
+                        <ui:SymbolIcon Symbol="Home32" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
@@ -57,17 +58,17 @@
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:WatcherPage}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Filled="False" Symbol="Eye24" />
+                        <ui:SymbolIcon Filled="False" Symbol="Eye32" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
                 <ui:NavigationViewItem Content="Compression DB"
-                       Margin="15,2,15,10"
-                       NavigationCacheMode="Disabled"
-                       Tag="{Binding}"
-                       TargetPageType="{x:Type local:DatabasePage}">
+                                       Margin="15,2,15,10"
+                                       NavigationCacheMode="Disabled"
+                                       Tag="{Binding}"
+                                       TargetPageType="{x:Type local:DatabasePage}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Filled="False" Symbol="Database24" />
+                        <ui:SymbolIcon Filled="False" Symbol="Database16" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
@@ -103,25 +104,39 @@
               Margin="0" Panel.ZIndex="-1"
               ClipToBounds="True">
 
-            <Border Background="#263340"/>
+            <Border Background="#ffffff" />
             <Border>
                 <Border.Background>
-                    <LinearGradientBrush Opacity="0.4" StartPoint="0,0.5" EndPoint="0.2,1">
-                        <GradientStop Offset="0" Color="#283e51" />
-                        <GradientStop Offset="1" Color="#2d425d" />
+                    <LinearGradientBrush Opacity="1" StartPoint="0.5,0.5" EndPoint="0.5,1">
+                        <GradientStop Offset="0" Color="#500D2A41" />
+                        <GradientStop Offset="1" Color="#FF0D2A41" />
                     </LinearGradientBrush>
                 </Border.Background>
             </Border>
+
+            <Border Background="#1f3448" Opacity="0.75" />
+
+            <!--<ui:Image x:Name="DefaultBG" Stretch="UniformToFill" Opacity="0.66" Margin="-20" RenderOptions.BitmapScalingMode="HighQuality">
+                <ui:Image.Effect>
+                    <BlurEffect KernelType="Box" Radius="18" RenderingBias="Quality" />
+                </ui:Image.Effect>
+            </ui:Image>-->
+
             <local:ImageControl x:Name="SteamBg"
                                 Height="{Binding ActualHeight, ElementName=MainWindow}"
                                 Margin="-75" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                ClipToBounds="True" 
+                                ClipToBounds="True"
                                 NewSource="{Binding BackgroundImage}"
-                                Opacity="1" Stretch="UniformToFill">
-
+                                Opacity="1" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill">
+                <local:ImageControl.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0.2" EndPoint="0,1">
+                        <GradientStop Offset="0.0" Color="#00FFFFFF" />
+                        <GradientStop Offset="1.0" Color="#FFFFFFFF" />
+                    </LinearGradientBrush>
+                </local:ImageControl.OpacityMask>
                 <local:ImageControl.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                        <ScaleTransform ScaleX="1.2" ScaleY="1.2" />
                     </TransformGroup>
 
                 </local:ImageControl.RenderTransform>
@@ -133,20 +148,24 @@
                         <BeginStoryboard>
                             <Storyboard>
 
-                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.6" Duration="0:0:0.5">
+                                <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" From="0" To="0.8" Duration="0:0:0.5">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseInOut" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" From="100" To="14" Duration="0:0:5" />
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
-                                                 From="2" To="1.2" Duration="0:0:6">
+                                <DoubleAnimation Storyboard.TargetProperty="(Effect).Radius" From="100" To="22" Duration="0:0:2">
                                     <DoubleAnimation.EasingFunction>
-                                        <QuinticEase EasingMode="EaseOut" />
+                                        <ExponentialEase />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
+                                                 To="1.2" Duration="0:0:6">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseIn" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
                                 <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
-                                                 From="2" To="1.2" Duration="0:0:8">
+                                                 To="1.2" Duration="0:0:8">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
@@ -171,16 +190,15 @@
 
 
                 <local:ImageControl.Effect>
-                    <BlurEffect KernelType="Box" Radius="0" RenderingBias="Quality" />
+                    <BlurEffect Radius="0" RenderingBias="Quality" />
                 </local:ImageControl.Effect>
 
 
             </local:ImageControl>
 
             <Label x:Name="ProgTitle"
-                      
-                       Margin="20,16" HorizontalAlignment="Left"
-                       d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
+                   Margin="20,16" HorizontalAlignment="Left"
+                   d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
                 <Label.RenderTransform>
                     <TranslateTransform x:Name="TransformL" Y="20" />
                 </Label.RenderTransform>
@@ -212,10 +230,17 @@
                         </Style.Triggers>
                     </Style>
                 </Label.Style>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock  Margin="0 0 20 0"  Text="CompactGUI" VerticalAlignment="Center" Foreground="#10FFFFFF" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
-                    <Border Background="#20f44336" CornerRadius="10" Width="80" Height="22" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock  Text="Admin" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center"/>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Text="CompactGUI"
+                               Margin="0,0,20,0" VerticalAlignment="Center"
+                               Foreground="#20FFFFFF"
+                               Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+                    <Border Width="80" Height="22"
+                            Background="#20f44336" CornerRadius="10"
+                            Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="Admin"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="White" />
 
                     </Border>
                 </StackPanel>

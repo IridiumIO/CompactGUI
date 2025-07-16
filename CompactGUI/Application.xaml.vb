@@ -9,21 +9,28 @@ Imports Microsoft.Extensions.Logging
 Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Configuration
 Imports System.Drawing
-
+Imports CompactGUI.Core.Settings
+Imports Coravel
+Imports CompactGUI.Watcher
+Imports Coravel.Scheduling.Schedule.Interfaces
+Imports Coravel.Scheduling.Schedule
 
 Partial Public Class Application
 
-    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 5)
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 6)
 
     Private Shared _host As IHost
 
+    Private Shared ReadOnly SettingsService As ISettingsService
+
     Shared Sub New()
-        SettingsHandler.InitialiseSettings()
-        InitializeHost()
+        SettingsService = New SettingsService()
+        SettingsService.LoadSettings()
 
         AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnDomainUnhandledException
 
     End Sub
+
 
     Private Shared Sub InitializeHost()
 
@@ -36,13 +43,16 @@ Partial Public Class Application
 
                                services.AddHostedService(Of ApplicationHostService)()
 
+                               'Settings handler
+                               services.AddSingleton(Of ISettingsService)(SettingsService)
+
                                services.AddLogging(Sub(logging)
-                                                       logging.SetMinimumLevel(SettingsHandler.AppSettings.LogLevel)
+                                                       logging.SetMinimumLevel(SettingsService.AppSettings.LogLevel)
                                                        logging.AddConsole()
                                                        logging.AddDebug()
                                                        logging.AddFile(
-                                                        Path.Combine(SettingsHandler.DataFolder.FullName, "log.log"),
-                                                        SettingsHandler.AppSettings.LogLevel,
+                                                        Path.Combine(SettingsService.DataFolder.FullName, "log.log"),
+                                                        SettingsService.AppSettings.LogLevel,
                                                         retainedFileCountLimit:=2,
                                                         fileSizeLimitBytes:=1000000,
                                                         outputTemplate:="{Timestamp:o} {RequestId,13} [{Level:u3}] {Message}{NewLine}{Exception}"
@@ -68,27 +78,37 @@ Partial Public Class Application
 
 
                                ' Views and ViewModels
-                               services.AddSingleton(Of HomePage)()
+                               services.AddTransient(Of HomePage)()
                                services.AddSingleton(Of HomeViewModel)()
 
-                               services.AddSingleton(Of WatcherPage)()
-                               services.AddTransient(Of WatcherViewModel)()
+                               services.AddTransient(Of WatcherPage)()
+                               services.AddSingleton(Of WatcherViewModel)()
 
-                               services.AddSingleton(Of SettingsPage)()
+                               services.AddTransient(Of SettingsPage)()
                                services.AddSingleton(Of SettingsViewModel)()
 
-                               services.AddSingleton(Of DatabasePage)()
+                               services.AddTransient(Of DatabasePage)()
                                services.AddTransient(Of DatabaseViewModel)()
 
                                'Other services
-                               services.AddSingleton(Of Watcher.Watcher)(Function(s)
-                                                                             Return New Watcher.Watcher({}, s.GetRequiredService(Of ILogger(Of Watcher.Watcher)))
-                                                                         End Function)
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
                                                                              End Function)
+
+                               services.AddSingleton(Of CompressableFolderService)
+
+                               services.AddSingleton(Of IdleDetector)(Function()
+                                                                          Dim idleDetector = New IdleDetector(New IdleSettings)
+                                                                          idleDetector.Start()
+                                                                          Return idleDetector
+                                                                      End Function)
+                               services.AddSingleton(Of SchedulerService)()
+                               services.AddSingleton(Of Watcher.Watcher)()
+
+                               services.AddScheduler()
+
                            End Sub) _
-            .Build()
+        .Build()
 
 
     End Sub
@@ -111,22 +131,28 @@ Partial Public Class Application
         Dim acquiredMutex As Boolean = mutex.WaitOne(0, False)
 
         If Not acquiredMutex Then
-            If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+            If Not SettingsService.AppSettings.AllowMultiInstance Then
                 HandleSecondInstance(e.Args)
                 Return
             End If
         Else
-            If Not SettingsHandler.AppSettings.AllowMultiInstance Then
+            If Not SettingsService.AppSettings.AllowMultiInstance Then
                 pipeServerTask = ProcessNextInstanceMessage()
             End If
         End If
 
+        InitializeHost()
+
         GetService(Of Watcher.Watcher)()
 
         Await _host.StartAsync()
-        Await SettingsViewModel.InitializeEnvironment()
+        Await GetService(Of SettingsViewModel).InitializeEnvironment()
 
-        Dim UpdateTask = GetService(Of IUpdaterService).CheckForUpdate(SettingsHandler.AppSettings.EnablePreReleaseUpdates)
+
+        GetService(Of SchedulerService).RegenerateSchedule()
+
+
+        Dim UpdateTask = GetService(Of IUpdaterService).CheckForUpdate(SettingsService.AppSettings.EnablePreReleaseUpdates)
         Dim WikiTask = GetService(Of IWikiService).GetUpdatedJSONAsync()
         Await Task.WhenAll(UpdateTask, WikiTask)
 

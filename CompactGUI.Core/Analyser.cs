@@ -6,29 +6,66 @@ using CompactGUI.Logging.Core;
 
 namespace CompactGUI.Core;
 
-public class Analyser
+public sealed class Analyser : IDisposable
 {
 
     public string FolderName { get; set; }
-    public long UncompressedBytes { get; set; }
-    public long CompressedBytes { get; set; }
-    public bool ContainsCompressedFiles { get; set; }
-    public List<AnalysedFileDetails> FileCompressionDetailsList { get; set; } = new List<AnalysedFileDetails>();
-
     private ILogger<Analyser> _logger;
+    private readonly FolderChangeMonitor _folderMonitor;
+    public bool HasFolderChanged => _folderMonitor.HasChanged;
+    public DateTime LastFolderChanged => _folderMonitor.LastChanged;
+
 
     public Analyser(string folder, ILogger<Analyser> logger)
     {
         FolderName = folder;
-        UncompressedBytes = 0;
-        CompressedBytes = 0;
-        ContainsCompressedFiles = false;
         _logger = logger;
+
+        _folderMonitor = new FolderChangeMonitor(folder);
+        _folderMonitor.Changed += (s, e) =>
+            _logger.LogInformation("Folder change detected by FolderChangeMonitor for {FolderName}", FolderName);
     }
 
 
-    public async Task<Boolean?> AnalyseFolder(CancellationToken cancellationToken)
+    public long CompressedBytes;
+    public long UncompressedBytes;
+    public bool ContainsCompressedFiles;
+
+    private static long GetTotalCompressedBytes(List<AnalysedFileDetails> fileCompressionDetailsList)
     {
+        return fileCompressionDetailsList.Sum(f => f.CompressedSize);
+    }
+    private static long GetTotalUncompressedBytes(List<AnalysedFileDetails> fileCompressionDetailsList)
+    {
+        return fileCompressionDetailsList.Sum(f => f.UncompressedSize);
+    }
+    private static bool GetContainsCompressedFiles(List<AnalysedFileDetails> fileCompressionDetailsList)
+    {
+        return fileCompressionDetailsList.Any(f => f.CompressionMode != WOFCompressionAlgorithm.NO_COMPRESSION);
+    }
+
+
+    private List<AnalysedFileDetails>? _analysedFileDetails;
+
+    public async ValueTask<List<AnalysedFileDetails>?> GetAnalysedFilesAsync(CancellationToken token)
+    {
+        if (_analysedFileDetails != null && !HasFolderChanged)
+        {
+            _logger.LogInformation("Returning cached analysed files for folder {FolderName}", FolderName);
+            return _analysedFileDetails;
+        }
+
+        _logger.LogInformation("Analysing folder {FolderName} for the first time or after a change", FolderName);
+        _analysedFileDetails = await AnalyseFolder(token).ConfigureAwait(false);
+        return _analysedFileDetails;
+    }
+
+
+    private async Task<List<AnalysedFileDetails>?> AnalyseFolder(CancellationToken cancellationToken)
+    {
+
+        List<AnalysedFileDetails>? AnalysedFileDetails;
+
         AnalyserLog.StartingAnalysis(_logger, FolderName);
         Stopwatch sw = Stopwatch.StartNew();
         try
@@ -41,11 +78,7 @@ public class Analyser
                 .OfType<AnalysedFileDetails>()
                 .ToList();
 
-            CompressedBytes = fileDetails.Sum(f => f.CompressedSize);
-            UncompressedBytes = fileDetails.Sum(f => f.UncompressedSize);
-            ContainsCompressedFiles = fileDetails.Any(f => f.CompressionMode != WOFCompressionAlgorithm.NO_COMPRESSION);
-
-            FileCompressionDetailsList = fileDetails;
+            AnalysedFileDetails = fileDetails;
         }
         catch (Exception ex)
         {
@@ -54,9 +87,14 @@ public class Analyser
         }
         finally { sw.Stop(); }
         
+        _folderMonitor.Reset();
+
+        CompressedBytes = GetTotalCompressedBytes(AnalysedFileDetails);
+        UncompressedBytes = GetTotalUncompressedBytes(AnalysedFileDetails);
+        ContainsCompressedFiles = GetContainsCompressedFiles(AnalysedFileDetails);
         AnalyserLog.AnalysisCompleted(_logger, FolderName, Math.Round(sw.Elapsed.TotalSeconds, 3), CompressedBytes, UncompressedBytes, ContainsCompressedFiles);
 
-        return ContainsCompressedFiles;
+        return AnalysedFileDetails;
 
 
     }
@@ -88,9 +126,9 @@ public class Analyser
     public List<ExtensionResult> GetPoorlyCompressedExtensions()
     {
         // Only use PLINQ if the list is large enough to benefit from parallel processing
-        IEnumerable<AnalysedFileDetails> query = FileCompressionDetailsList.Count <= 10000
-            ? FileCompressionDetailsList
-            : FileCompressionDetailsList.AsParallel();
+        IEnumerable<AnalysedFileDetails> query = _analysedFileDetails?.Count <= 10000
+            ? _analysedFileDetails
+            : _analysedFileDetails.AsParallel();
 
         return query
                 .Where(fl => fl.UncompressedSize > 0)
@@ -107,6 +145,11 @@ public class Analyser
 
     }
 
+    public void Dispose()
+    {
+        _folderMonitor.Dispose();
+        _analysedFileDetails?.Clear();
+    }
 }
 
 

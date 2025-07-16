@@ -56,16 +56,16 @@
                 <ui:DropDownButton.Flyout>
                     <ContextMenu>
                         <MenuItem Header="Game Name">
-                            <MenuItem Header="Ascending" Command="{Binding SortCommand}" CommandParameter="GameNameAsc"/>
-                            <MenuItem Header="Descending" Command="{Binding SortCommand}" CommandParameter="GameNameDesc"/>
+                            <MenuItem Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameAsc"/>
+                            <MenuItem Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameDesc"/>
                         </MenuItem>
                         <MenuItem Header="SteamID">
-                            <MenuItem Header="Ascending" Command="{Binding SortCommand}" CommandParameter="SteamIDAsc"/>
-                            <MenuItem Header="Descending" Command="{Binding SortCommand}" CommandParameter="SteamIDDesc"/>
+                            <MenuItem Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDAsc"/>
+                            <MenuItem Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDDesc"/>
                         </MenuItem>
                         <MenuItem Header="Max Savings">
-                            <MenuItem Header="Ascending" Command="{Binding SortCommand}" CommandParameter="MaxSavingsAsc"/>
-                            <MenuItem Header="Descending" Command="{Binding SortCommand}" CommandParameter="MaxSavingsDesc"/>
+                            <MenuItem Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsAsc"/>
+                            <MenuItem Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsDesc"/>
                         </MenuItem>
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
@@ -128,6 +128,7 @@
                                 <TextBlock Text="{Binding GameName}" FontWeight="SemiBold" FontSize="20"/>
                                 <Border Margin="14,2" Padding="6,2" Background="{StaticResource CardBackgroundPressed}" CornerRadius="4">
                                     <StackPanel Orientation="Horizontal">
+                                        
                                         <TextBlock Text="{Binding SteamID, StringFormat={}SteamID: {0}}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>

@@ -152,7 +152,7 @@
               Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToInverseVisibilityConverter}, Mode=OneWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="370" MinWidth="370" MaxWidth="700"/>
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="2" />
                 <ColumnDefinition Width="*" MinWidth="200" />
             </Grid.ColumnDefinitions>
 
@@ -221,7 +221,7 @@
                                     <Border Grid.Column="0"
                                             Width="4" Height="30"
                                             Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                            Background="{StaticResource PaletteBlueBrush}"
+                                            Background="{StaticResource AccentFillColorDefaultBrush}"
                                             CornerRadius="2"
                                             Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
 
@@ -318,7 +318,7 @@
 
             </ui:Card>
 
-            <GridSplitter Width="2"
+            <GridSplitter Width="2" Margin="0 20"
                           Background="{StaticResource SeparatorBorderBrush}"
                           ResizeBehavior="BasedOnAlignment"  />
 

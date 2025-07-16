@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace CompactGUI.Core;
 
-public class Uncompactor : ICompressor, IDisposable
+public sealed class Uncompactor : ICompressor, IDisposable
 {
 
     private SemaphoreSlim pauseSemaphore = new SemaphoreSlim(1, 2);

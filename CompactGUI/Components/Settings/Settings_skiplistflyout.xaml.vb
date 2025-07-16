@@ -1,27 +1,27 @@
-﻿Public Class Settings_skiplistflyout
+﻿Imports CompactGUI.Core.Settings
+
+Public Class Settings_skiplistflyout
+
+    Private _settingsService As ISettingsService
 
     Sub New()
 
         InitializeComponent()
-        'Me.MainGrid.LayoutTransform = New ScaleTransform(SettingsHandler.AppSettings.WindowScalingFactor, SettingsHandler.AppSettings.WindowScalingFactor)
-        'Me.MainGrid.Margin = New Thickness(20 * SettingsHandler.AppSettings.WindowScalingFactor)
-        'Me.Width = 500 * SettingsHandler.AppSettings.WindowScalingFactor
-        'Me.Height = 400 * SettingsHandler.AppSettings.WindowScalingFactor
+        _settingsService = Application.GetService(Of ISettingsService)()
         UiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" "c) OrElse text.EndsWith(";"c) OrElse text.EndsWith(","c), text.Substring(0, text.Length - 1).Trim(), Nothing)
         PopulateTokens()
-
     End Sub
 
     Private Sub PopulateTokens()
         UiTokenizedText.Document.Blocks.Clear()
-        For Each i In SettingsHandler.AppSettings.NonCompressableList
+        For Each i In _settingsService.AppSettings.NonCompressableList
             UiTokenizedText.InsertText(i)
         Next
     End Sub
 
     Private Sub UIReset_Click(sender As Object, e As RoutedEventArgs)
-        SettingsHandler.AppSettings.NonCompressableList = New Settings().NonCompressableList
-        Settings.Save()
+        _settingsService.AppSettings.NonCompressableList = New Settings().NonCompressableList
+        _settingsService.SaveSettings()
         PopulateTokens()
     End Sub
 
@@ -36,8 +36,8 @@
                         Return cl.Content.ToString
                     End Function).ToList
 
-        SettingsHandler.AppSettings.NonCompressableList = allObj.Where(Function(c) c.StartsWith("."c) AndAlso c.Length > 1).Distinct().ToList
-        Settings.Save()
+        _settingsService.AppSettings.NonCompressableList = allObj.Where(Function(c) c.StartsWith("."c) AndAlso c.Length > 1).Distinct().ToList
+        _settingsService.SaveSettings()
 
         PopulateTokens()
 

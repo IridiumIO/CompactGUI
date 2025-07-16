@@ -1,6 +1,8 @@
 ﻿Imports System.Net.Http
 Imports System.Text.Json
 
+Imports CompactGUI.Core.Settings
+
 Public Interface IWikiService
     Function GetUpdatedJSONAsync() As Task
     Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult)))
@@ -11,15 +13,24 @@ End Interface
 
 Public Class WikiService : Implements IWikiService
 
-    Private ReadOnly filePath = IO.Path.Combine(SettingsHandler.DataFolder.FullName, "databasev2.json")
-    Private ReadOnly dlPath As String = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
+    Private ReadOnly filePath As String
+    Private ReadOnly dlPath As String
 
+    Private ReadOnly _settingsService As ISettingsService
+
+    Public Sub New(settingsService As ISettingsService)
+        _settingsService = settingsService
+        filePath = IO.Path.Combine(_settingsService.DataFolder.FullName, "databasev2.json")
+
+        dlPath = "https://raw.githubusercontent.com/IridiumIO/CompactGUI/database/database.json"
+
+    End Sub
 
     Async Function GetUpdatedJSONAsync() As Task Implements IWikiService.GetUpdatedJSONAsync
         Debug.WriteLine("Updating JSON file")
         Dim JSONFile As New IO.FileInfo(filePath)
 
-        If JSONFile.Exists AndAlso SettingsHandler.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
+        If JSONFile.Exists AndAlso _settingsService.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
 
         Dim httpClient As New HttpClient
 
@@ -38,17 +49,18 @@ Public Class WikiService : Implements IWikiService
             Debug.WriteLine($"Unable to reach endpoint. Likely no internet connection")
             Return
         Finally
-            HttpClient.Dispose()
+            httpClient.Dispose()
         End Try
 
 
-        SettingsHandler.AppSettings.ResultsDBLastUpdated = DateTime.Now
-        Settings.Save()
+        _settingsService.AppSettings.ResultsDBLastUpdated = DateTime.Now
+        _settingsService.SaveSettings()
         Debug.WriteLine("Updated JSON file")
 
     End Function
 
     Private ReadOnly JsonDefaultSettings As New JsonSerializerOptions With {.IncludeFields = True}
+
     Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult))) Implements IWikiService.ParseData
         Dim JSONFile As New IO.FileInfo(filePath)
         If Not JSONFile.Exists Then Return Nothing

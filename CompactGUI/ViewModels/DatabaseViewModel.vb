@@ -4,9 +4,16 @@ Imports System.ComponentModel
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 
+Imports CompactGUI.Core.Settings
+
 Public Class DatabaseViewModel : Inherits ObservableObject
 
-    Public Property DatabaseResults As ObservableCollection(Of DatabaseCompressionResult)
+    <ObservableProperty>
+    Private _DatabaseResults As ObservableCollection(Of DatabaseCompressionResult)
+
+    <ObservableProperty>
+    Private _searchText As String
+
     Public ReadOnly Property FilteredResults As ICollectionView
 
     Public ReadOnly Property DatabaseGamesCount As Integer
@@ -18,40 +25,35 @@ Public Class DatabaseViewModel : Inherits ObservableObject
     Public ReadOnly Property DatabaseSubmissionsCount As Integer
         Get
             Return DatabaseResults.Sum(Function(result) _
-            (If(result.Result_X4K?.TotalResults, 0)) +
-            (If(result.Result_X8K?.TotalResults, 0)) +
-            (If(result.Result_X16K?.TotalResults, 0)) +
-            (If(result.Result_LZX?.TotalResults, 0))
-            )
+                    (If(result.Result_X4K?.TotalResults, 0)) +
+                    (If(result.Result_X8K?.TotalResults, 0)) +
+                    (If(result.Result_X16K?.TotalResults, 0)) +
+                    (If(result.Result_LZX?.TotalResults, 0))
+                    )
         End Get
     End Property
-
 
     Public ReadOnly Property LastUpdatedDatabase As DateTime
         Get
-            Return SettingsHandler.AppSettings.ResultsDBLastUpdated
+            Return _SettingsService.AppSettings.ResultsDBLastUpdated
         End Get
     End Property
 
 
-    Private _searchText As String
-    Public Property SearchText As String
-        Get
-            Return _searchText
-        End Get
-        Set(value As String)
-            SetProperty(_searchText, value)
-            FilteredResults.Refresh()
-        End Set
-    End Property
+    Private ReadOnly _SettingsService As ISettingsService
 
-    Public Sub New()
-        DatabaseResults = New ObservableCollection(Of DatabaseCompressionResult)(Application.GetService(Of IWikiService).GetAllDatabaseCompressionResultsAsync().GetAwaiter.GetResult)
+    Public Sub New(settingsService As ISettingsService, wikiService As IWikiService)
 
+        _SettingsService = settingsService
+        DatabaseResults = New ObservableCollection(Of DatabaseCompressionResult)(wikiService.GetAllDatabaseCompressionResultsAsync().GetAwaiter.GetResult)
         FilteredResults = CollectionViewSource.GetDefaultView(DatabaseResults)
         FilteredResults.Filter = AddressOf FilterResults
     End Sub
 
+
+    Private Sub OnSearchTextChanged(value As String)
+        FilteredResults.Refresh()
+    End Sub
 
     Private Function NormalizeString(input As String) As String
         If String.IsNullOrEmpty(input) Then Return String.Empty
@@ -71,9 +73,8 @@ Public Class DatabaseViewModel : Inherits ObservableObject
            (item.SteamID.ToString().Contains(SearchText))
     End Function
 
-    Public ReadOnly Property SortCommand As ICommand = New RelayCommand(Of Object)(Sub(f) SortResults(f))
 
-
+    <RelayCommand>
     Private Sub SortResults(param As Object)
         Dim sortOption = param?.ToString()
         FilteredResults.SortDescriptions.Clear()

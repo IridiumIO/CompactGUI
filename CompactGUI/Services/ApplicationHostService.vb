@@ -1,4 +1,6 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports CompactGUI.Core.Settings
+
+Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Hosting
 Imports Microsoft.Extensions.Logging
 
@@ -11,9 +13,11 @@ Public Class ApplicationHostService
     Implements IHostedService
 
     Private ReadOnly _serviceProvider As IServiceProvider
+    Private ReadOnly _settingsService As ISettingsService
 
-    Public Sub New(serviceProvider As IServiceProvider)
+    Public Sub New(serviceProvider As IServiceProvider, settingsService As ISettingsService)
         _serviceProvider = serviceProvider
+        _settingsService = settingsService
     End Sub
 
     ''' <summary>
@@ -38,13 +42,13 @@ Public Class ApplicationHostService
     Private Async Function HandleActivationAsync() As Task
         Await Task.CompletedTask
 
-        Application.GetService(Of ILogger(Of ApplicationHostService))().LogInformation("Logging Level: {LogLevel}", SettingsHandler.AppSettings.LogLevel)
+        Application.GetService(Of ILogger(Of ApplicationHostService))().LogInformation("Logging Level: {LogLevel}", _settingsService.AppSettings.LogLevel)
 
 
         Dim args As String() = Environment.GetCommandLineArgs()
 
         Dim shouldMinimizeToTray As Boolean = (args.Length = 2 AndAlso args(1).ToString = "-tray") OrElse
-                                          (SettingsHandler.AppSettings.StartInSystemTray AndAlso args.Length = 1)
+                                          (_settingsService.AppSettings.StartInSystemTray AndAlso args.Length = 1)
 
         If Not Application.Current.Windows.OfType(Of MainWindow)().Any() Then
 

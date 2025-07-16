@@ -2,16 +2,16 @@
 
 Public Class DatabaseCompressionResult : Inherits ObservableObject
 
-    Public Property GameName As String
-    Public Property SteamID As Integer
-    Public Property Confidence As DBResultConfidence
+    <ObservableProperty> Private _GameName As String
+    <ObservableProperty> Private _SteamID As Integer
+    <ObservableProperty> Private _Confidence As DBResultConfidence
 
-    Public Property Result_X4K As CompressionResult
-    Public Property Result_X8K As CompressionResult
-    Public Property Result_X16K As CompressionResult
-    Public Property Result_LZX As CompressionResult
+    <ObservableProperty> Private _Result_X4K As CompressionResult
+    <ObservableProperty> Private _Result_X8K As CompressionResult
+    <ObservableProperty> Private _Result_X16K As CompressionResult
+    <ObservableProperty> Private _Result_LZX As CompressionResult
 
-    Public Property PoorlyCompressedExtensions As List(Of DBPoorlyCompressedExtension)
+    <ObservableProperty> Private _PoorlyCompressedExtensions As List(Of DBPoorlyCompressedExtension)
 
     Public ReadOnly Property MaxSavings As Decimal
         Get

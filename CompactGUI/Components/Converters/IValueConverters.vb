@@ -24,18 +24,33 @@ Public Class BytesToReadableConverter : Implements IValueConverter
         Dim bytes As Long = Math.Abs(value)
         Dim place As Integer = CInt(Math.Floor(Math.Log(bytes, 1024)))
 
-        Dim roundingPrecision As Integer = 1
-        If parameter IsNot Nothing AndAlso Integer.TryParse(parameter.ToString(), roundingPrecision) Then
-            roundingPrecision = Math.Max(0, roundingPrecision)
-            'We want to round to 1 decimal place if the value is in the GB range or higher
-            If Array.IndexOf(suf, suf(place)) > 2 AndAlso roundingPrecision = 0 Then
-                roundingPrecision = 1
-            End If
+        'Dim roundingPrecision As Integer = 1
+        'If parameter IsNot Nothing AndAlso Integer.TryParse(parameter.ToString(), roundingPrecision) Then
+        '    roundingPrecision = Math.Max(0, roundingPrecision)
+        '    'We want to round to 1 decimal place if the value is in the GB range or higher
+        '    If Array.IndexOf(suf, suf(place)) > 2 AndAlso roundingPrecision = 0 Then
+        '        roundingPrecision = 1
+        '    End If
+        'End If
+
+        'Dim num As Double = Math.Round(bytes / Math.Pow(1024, place), roundingPrecision)
+
+        'Return (Math.Sign(value) * num).ToString() & suf(place)
+
+        Dim roundingSigDigits As Integer = 3 ' Default significant digits
+        If parameter IsNot Nothing AndAlso Integer.TryParse(parameter.ToString(), roundingSigDigits) Then
+            roundingSigDigits = Math.Max(1, roundingSigDigits)
         End If
 
-        Dim num As Double = Math.Round(bytes / Math.Pow(1024, place), roundingPrecision)
+        Dim num As Double = bytes / Math.Pow(1024, place)
+        Dim absNum As Double = Math.Abs(num)
+        Dim digitsBeforeDecimal As Integer = If(absNum < 1, 0, Math.Floor(Math.Log10(absNum)) + 1)
+        Dim decimalPlaces As Integer = Math.Max(0, roundingSigDigits - digitsBeforeDecimal)
+        Dim roundedNum As Double = Math.Round(num, decimalPlaces)
 
-        Return (Math.Sign(value) * num).ToString() & suf(place)
+        Return (Math.Sign(value) * roundedNum).ToString() & suf(place)
+
+
     End Function
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
@@ -255,7 +270,7 @@ Public Class FolderStatusToColorConverter : Implements IValueConverter
         Dim status = CType(value, ActionState)
         Select Case status
             Case ActionState.Idle
-                Return New SolidColorBrush(ColorConverter.ConvertFromString("#6E9DEF"))
+                Return New SolidColorBrush(ColorConverter.ConvertFromString("#92e7f1"))
             Case ActionState.Analysing, ActionState.Working, ActionState.Paused
                 Return New SolidColorBrush(ColorConverter.ConvertFromString("#F1CE92"))
             Case ActionState.Results
@@ -397,7 +412,12 @@ Public Class ZeroCountToVisibilityConverter
     Implements IValueConverter
 
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-        Dim val = CType(value, Integer)
+        Dim val = CType(value, Long)
+
+        If parameter IsNot Nothing AndAlso parameter.ToString() = "invert" Then
+            If val = 0 Then val = 1 Else val = 0
+        End If
+
         If val = 0 Then
             Return Visibility.Collapsed
         Else
@@ -407,5 +427,60 @@ Public Class ZeroCountToVisibilityConverter
 
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
         Throw New NotImplementedException()
+    End Function
+End Class
+
+
+Public Class NumberWithSpacesConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Then Return String.Empty
+
+        Dim number As Long
+        If Long.TryParse(value.ToString(), number) Then
+            Return number.ToString("#,0", CultureInfo.InvariantCulture).Replace(","c, " "c)
+        End If
+
+        Return value.ToString()
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If value Is Nothing Then Return 0
+        Dim s = value.ToString().Replace(" ", "")
+        Dim result As Long
+        If Long.TryParse(s, result) Then
+            Return result
+        End If
+        Return 0
+    End Function
+End Class
+
+
+Public Class BackgroundModeToVisibilityConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim index As Integer = If(value, 0)
+        Return If(index > 1, Visibility.Visible, Visibility.Collapsed)
+
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException
+    End Function
+End Class
+
+Public Class EnumToIntConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing OrElse Not value.GetType().IsEnum Then Return 0
+        Return CType(value, [Enum]).GetHashCode()
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If targetType Is Nothing OrElse Not targetType.IsEnum OrElse value Is Nothing Then Return Binding.DoNothing
+        Return [Enum].ToObject(targetType, value)
     End Function
 End Class

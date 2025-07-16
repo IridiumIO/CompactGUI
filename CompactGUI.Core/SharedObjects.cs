@@ -1,7 +1,7 @@
 ﻿namespace CompactGUI.Core;
 
 
-public class AnalysedFileDetails
+public sealed class AnalysedFileDetails
 {
     public required string FileName { get; set; }
     public long UncompressedSize { get; set; }
@@ -11,7 +11,7 @@ public class AnalysedFileDetails
 }
 
 
-public class ExtensionResult
+public sealed class ExtensionResult
 {
     public required string Extension { get; set; }
     public long UncompressedBytes { get; set; }

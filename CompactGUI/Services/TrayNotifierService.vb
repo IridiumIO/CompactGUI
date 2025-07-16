@@ -2,6 +2,8 @@
 Imports System.Runtime.InteropServices
 Imports System.Windows.Interop
 
+Imports CompactGUI.Core.Settings
+
 Public Class TrayNotifierService
     Private Const NIM_ADD As Integer = &H0
     Private Const NIM_MODIFY As Integer = &H1
@@ -92,5 +94,16 @@ Public Class TrayNotifierService
 
     End Sub
 
+    Public Sub Notify_BackgroundSchedulerRunning()
+        Dim title = "Scheduled Compression Running"
+        Dim message = "CompactGUI is running a scheduled task and will compress monitored folders in the background"
+        ShowBalloon(title, message)
+    End Sub
+
+    Public Sub Notify_BackgroundSchedulerCompleted()
+        Dim title = "Scheduled Compression Completed"
+        Dim message = $"Next scheduled task is on {Application.GetService(Of ISettingsService).AppSettings.NextScheduledBackgroundRun}"
+        ShowBalloon(title, message)
+    End Sub
 
 End Class
