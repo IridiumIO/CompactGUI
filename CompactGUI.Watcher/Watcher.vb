@@ -75,8 +75,8 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Private _isSystemIdle As Boolean = False
 
     Private Async Sub OnSystemIdle()
+        If Not _isSystemIdle Then WatcherLog.SystemIdleDetected(_logger)
         _isSystemIdle = True
-        WatcherLog.SystemIdleDetected(_logger)
 
         'Skip idle analysis if the background mode is not set to IdleOnly
         Dim bgMode = _settingsService.AppSettings.BackgroundModeSelection
