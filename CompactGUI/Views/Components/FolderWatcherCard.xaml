@@ -118,7 +118,7 @@
                   Grid.Row="3" Grid.ColumnSpan="2"
                   Margin="-10,0,-20,0" Padding="0,0,10,0" HorizontalAlignment="Stretch"
                   d:ItemsSource="{Binding Source={StaticResource Dtd}}"
-                  Background="Transparent" BorderThickness="0"
+                  Background="Transparent" BorderThickness="0" VirtualizingPanel.ScrollUnit="Pixel"
                   ItemsSource="{Binding Source={StaticResource Src}}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible">
 
