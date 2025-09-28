@@ -93,6 +93,7 @@ Public Class CompressableFolderService
         folder.AnalysisResults = New ObservableCollection(Of AnalysedFileDetails)(retAnalysisResults)
         folder.UncompressedBytes = folder.Analyser.UncompressedBytes
         folder.CompressedBytes = folder.Analyser.CompressedBytes
+        folder.UsesDirectStorage = folder.Analyser.UsesDirectStorage
 
         If folder.Analyser.ContainsCompressedFiles OrElse folder.IsFreshlyCompressed Then
             folder.FolderActionState = ActionState.Results

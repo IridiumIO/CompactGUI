@@ -24,9 +24,24 @@
                       Margin="0,30,0,20" VerticalAlignment="Center"
                       FontSize="16" FontWeight="SemiBold" />
 
-        <WrapPanel Grid.Row="1"
-                   Margin="0,0,0,0" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom"
-                   Orientation="Horizontal">
+        <StackPanel Grid.Row="1">
+            <Border Background="#614A19" CornerRadius="4" Padding="10,5" Margin="0,0,0,10"
+                    Visibility="{Binding Folder.UsesDirectStorage, Converter={StaticResource BoolToVisConverter}}">
+                <TextBlock Text="Compression is disabled. This folder contains DirectStorage files, which should not be compressed as it may cause performance issues or crashes."
+                           Foreground="#FFD783" TextWrapping="Wrap" />
+            </Border>
+            <WrapPanel Margin="0,0,0,0" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom"
+                       Orientation="Horizontal">
+                <WrapPanel.Style>
+                    <Style TargetType="WrapPanel">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Folder.UsesDirectStorage}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </WrapPanel.Style>
 
             <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
@@ -87,7 +102,8 @@
                 </ToolTip>
             </WrapPanel.ToolTip>
 
-        </WrapPanel>
+            </WrapPanel>
+        </StackPanel>
 
 
         <StackPanel Grid.Row="2" Margin="0,20,0,0">
