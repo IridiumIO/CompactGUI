@@ -30,6 +30,7 @@ public sealed class Analyser : IDisposable
     public long CompressedBytes;
     public long UncompressedBytes;
     public bool ContainsCompressedFiles;
+    public bool UsesDirectStorage { get; private set; }
 
     private static long GetTotalCompressedBytes(List<AnalysedFileDetails> fileCompressionDetailsList)
     {
@@ -70,7 +71,29 @@ public sealed class Analyser : IDisposable
         Stopwatch sw = Stopwatch.StartNew();
         try
         {
-            var allFiles = await Task.Run(() => Directory.EnumerateFiles(FolderName, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true, AttributesToSkip = FileAttributes.ReparsePoint }).AsShortPathNames(), cancellationToken).ConfigureAwait(false);
+            var allFiles = (await Task.Run(() => Directory.EnumerateFiles(FolderName, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true, AttributesToSkip = FileAttributes.ReparsePoint }).AsShortPathNames(), cancellationToken).ConfigureAwait(false)).ToList();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            bool dstorageFound = false;
+            bool dstorageCoreFound = false;
+
+            foreach(var file in allFiles)
+            {
+                var fileName = Path.GetFileName(file);
+                if (string.Equals(fileName, "dstorage.dll", StringComparison.OrdinalIgnoreCase))
+                {
+                    dstorageFound = true;
+                } else if (string.Equals(fileName, "dstoragecore.dll", StringComparison.OrdinalIgnoreCase))
+                {
+                    dstorageCoreFound = true;
+                }
+
+                if (dstorageFound && dstorageCoreFound) break;
+            }
+
+            this.UsesDirectStorage = dstorageFound && dstorageCoreFound;
+
+
             var fileDetails = allFiles
                 .AsParallel()
                 .WithCancellation(cancellationToken)

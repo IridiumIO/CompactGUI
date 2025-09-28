@@ -85,6 +85,15 @@
             <StackPanel Orientation="Horizontal" Margin="0 12" Grid.ColumnSpan="3">
                 <ui:TextBlock Text="{Binding Folder.DisplayName}" 
                 d:Text="Hades" FontSize="30" FontWeight="SemiBold" />
+
+                <StackPanel Orientation="Horizontal" Margin="20,0,0,0" VerticalAlignment="Center"
+                            Visibility="{Binding Folder.UsesDirectStorage, Converter={StaticResource BoolToVisConverter}}"
+                            ToolTipService.ToolTip="This game uses DirectStorage. Compressing it may lead to performance issues or prevent the game from launching.">
+                    <ui:SymbolIcon Symbol="Warning24" FontSize="24" Foreground="{StaticResource PaletteYellowBrush}" />
+                    <TextBlock Margin="8,0,0,0" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource PaletteYellowBrush}" Text="DirectStorage Detected" />
+                </StackPanel>
+
                 <Border Margin="14,6" Padding="7 2 7 2" Background="#20FFFFFF" CornerRadius="4" Visibility="{Binding IsSteamIDVisible, Converter={StaticResource BoolToVisConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Viewbox 

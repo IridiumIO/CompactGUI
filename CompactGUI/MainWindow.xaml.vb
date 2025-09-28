@@ -110,4 +110,36 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
         _SettingsService.AppSettings.WindowTop = Top
         _SettingsService.SaveSettings()
     End Sub
+
+    Private Sub MainWindow_DragEnter(sender As Object, e As DragEventArgs)
+        Dim homeVM As HomeViewModel = Application.GetService(Of HomeViewModel)()
+        If homeVM.IsBusy Then
+            e.Effects = DragDropEffects.None
+            e.Handled = True
+            Return
+        End If
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim files = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            If files.Length = 1 AndAlso IO.Directory.Exists(files(0)) Then
+                e.Effects = DragDropEffects.Copy
+                e.Handled = True
+                Return
+            End If
+        End If
+
+        e.Effects = DragDropEffects.None
+        e.Handled = True
+    End Sub
+
+    Private Sub MainWindow_Drop(sender As Object, e As DragEventArgs)
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim files = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            If files.Length = 1 AndAlso IO.Directory.Exists(files(0)) Then
+                _NavigationService.Navigate(GetType(HomePage))
+                Dim homeVM As HomeViewModel = Application.GetService(Of HomeViewModel)()
+                homeVM.FolderPath = files(0)
+            End If
+        End If
+    End Sub
 End Class

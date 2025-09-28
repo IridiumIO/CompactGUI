@@ -54,6 +54,17 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         End Get
     End Property
 
+    Public WriteOnly Property FolderPath As String
+        Set(value As String)
+            If Not String.IsNullOrEmpty(value) Then
+                ' Fire and forget is okay here
+                Async Sub()
+                    Await AddFoldersAsync({value})
+                End Sub()
+            End If
+        End Set
+    End Property
+
 
 
     Private ReadOnly _watcher As Watcher.Watcher
