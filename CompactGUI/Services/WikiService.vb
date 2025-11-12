@@ -42,6 +42,10 @@ Public Class WikiService : Implements IWikiService
                 Await res.CopyToAsync(fs)
             End Using
 
+        Catch ex As TaskCanceledException
+            Debug.WriteLine("HTTP request timed out.")
+            Return
+
         Catch ex As IO.IOException
             Debug.WriteLine("Could not update JSON file: file is in use.")
             Return
