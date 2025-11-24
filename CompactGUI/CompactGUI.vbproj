@@ -63,12 +63,7 @@
     <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.csproj" />
     <ProjectReference Include="..\CompactGUI.Logging\CompactGUI.Logging.csproj" />
     <ProjectReference Include="..\CompactGUI.Watcher\CompactGUI.Watcher.vbproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="FunctionalConverters">
-      <HintPath>..\..\FunctionalConverters\FunctionalConverters\bin\Release\net6.0-windows\FunctionalConverters.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\FunctionalConverters\FunctionalConverters\FunctionalConverters.vbproj" />
   </ItemGroup>
 
   <Target Name="RenamePublishedExe" AfterTargets="Publish" Condition="'$(IsMonolithic)' == 'true'">
@@ -90,5 +85,10 @@
     <Copy SourceFiles="@(PublishedFiles)" DestinationFolder="$(FinalPublishDir)" SkipUnchangedFiles="true" />
   </Target>
 
+  <ItemGroup>
+    <None Update="i18n\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   
 </Project>

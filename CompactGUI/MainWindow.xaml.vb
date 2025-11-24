@@ -15,6 +15,7 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
 
         ' This call is required by the designer.
         InitializeComponent()
+        TranslationHelper.StartAutoTranslate()
         ' Add any initialization after the InitializeComponent() call.
 
         snackbarService.SetSnackbarPresenter(RootSnackbar)
