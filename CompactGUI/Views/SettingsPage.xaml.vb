@@ -11,7 +11,6 @@ Public Class SettingsPage
 
         ScrollViewer.SetCanContentScroll(Me, False)
 
-        ' Initialize Language Selection
         Dim currentLang = LanguageConfig.GetLanguage()
         
         For i As Integer = 0 To UiLanguageComboBox.Items.Count - 1
@@ -22,7 +21,6 @@ Public Class SettingsPage
             End If
         Next
         
-        ' Fallback to English if no match
         If UiLanguageComboBox.SelectedIndex = -1 Then
              UiLanguageComboBox.SelectedIndex = 0
         End If
@@ -38,11 +36,16 @@ Public Class SettingsPage
         Dim selectedItem = CType(UiLanguageComboBox.SelectedItem, ComboBoxItem)
         Dim langCode = selectedItem.Tag.ToString()
 
-        ' Avoid triggering on initial load if it matches
         Dim currentSaved = LanguageConfig.GetLanguage()
         If langCode <> currentSaved Then
             LanguageConfig.SaveLanguage(langCode)
-            MessageBox.Show("Language settings saved. Please restart CompactGUI to apply changes." & vbCrLf & "语言设置已保存，请重启软件以生效。", "CompactGUI", MessageBoxButton.OK, MessageBoxImage.Information)
+            
+            Dim msg = TranslationHelper.GetStringForLanguage(langCode, "RestartRequired")
+            If msg = "RestartRequired" Then
+                msg = "Language settings saved. Please restart CompactGUI to apply changes."
+            End If
+            
+            MessageBox.Show(msg, "CompactGUI", MessageBoxButton.OK, MessageBoxImage.Information)
         End If
     End Sub
 
