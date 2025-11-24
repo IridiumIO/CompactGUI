@@ -14,7 +14,6 @@ Public Class LanguageConfig
             Dim jsonString = JsonSerializer.Serialize(data)
             File.WriteAllText(ConfigPath, jsonString)
         Catch ex As Exception
-            ' Ignore errors
         End Try
     End Sub
 
@@ -24,9 +23,14 @@ Public Class LanguageConfig
                 Dim jsonString = File.ReadAllText(ConfigPath)
                 Dim data = JsonSerializer.Deserialize(Of ConfigData)(jsonString)
                 Return If(data IsNot Nothing AndAlso Not String.IsNullOrEmpty(data.LanguageCode), data.LanguageCode, "en-US")
+            Else
+                Dim sysLang = System.Globalization.CultureInfo.CurrentUICulture.Name
+                Dim i18nPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "i18n", $"{sysLang}.json")
+                If File.Exists(i18nPath) Then
+                    Return sysLang
+                End If
             End If
         Catch ex As Exception
-            ' Ignore errors
         End Try
         Return "en-US"
     End Function

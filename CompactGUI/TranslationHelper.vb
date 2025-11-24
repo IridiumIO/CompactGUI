@@ -17,17 +17,13 @@ Public Class TranslationHelper
         If _isInitialized Then Return
         _isInitialized = True
         
-        ' Check configured language
         Dim currentLang = LanguageConfig.GetLanguage()
         
-        ' Only proceed if language is NOT en-US (default)
         If currentLang <> "en-US" Then
-            ' Try to load language file from i18n folder
             Dim langFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "i18n", $"{currentLang}.json")
             If File.Exists(langFile) Then
                 LoadLanguageFile(langFile)
                 
-                ' Register global loaded events ONLY if translation is enabled
                 EventManager.RegisterClassHandler(GetType(FrameworkElement), FrameworkElement.LoadedEvent, New RoutedEventHandler(AddressOf OnElementLoaded))
                 EventManager.RegisterClassHandler(GetType(FrameworkContentElement), FrameworkContentElement.LoadedEvent, New RoutedEventHandler(AddressOf OnElementLoaded))
             End If
@@ -46,7 +42,6 @@ Public Class TranslationHelper
         End Try
     End Sub
 
-    ' Empty stub for compatibility
     Public Shared Sub TranslateWindow(obj As DependencyObject)
     End Sub
 
@@ -54,62 +49,74 @@ Public Class TranslationHelper
         Dim element As DependencyObject = TryCast(sender, DependencyObject)
         If element Is Nothing Then Return
 
-        ' Use ContextIdle priority to ensure the visual tree is populated and properties are set
         If TypeOf element Is DispatcherObject Then
             DirectCast(element, DispatcherObject).Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, Sub()
                                                                                                             Try
                                                                                                                 RecursiveTranslate(element)
                                                                                                             Catch ex As Exception
-                                                                                                                ' Ignore errors during recursive translation
                                                                                                             End Try
                                                                                                         End Sub)
         End If
     End Sub
 
-    ' Text normalization: remove newlines, tabs, and merge spaces
     Private Shared Function NormalizeText(input As String) As String
         If String.IsNullOrEmpty(input) Then Return ""
         Dim normalized As String = Regex.Replace(input, "\s+", " ")
         Return normalized.Trim()
     End Function
 
-    ' Core translation logic with Exact and Partial matching
+    Public Shared Function GetString(key As String) As String
+        If Translations.ContainsKey(key) Then
+            Return Translations(key)
+        End If
+        Return key
+    End Function
+
+    Public Shared Function GetStringForLanguage(langCode As String, key As String) As String
+        Dim filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "i18n", $"{langCode}.json")
+        If File.Exists(filePath) Then
+            Try
+                Dim jsonContent = File.ReadAllText(filePath)
+                Dim tempDict = JsonSerializer.Deserialize(Of Dictionary(Of String, String))(jsonContent)
+                If tempDict IsNot Nothing AndAlso tempDict.ContainsKey(key) Then
+                    Return tempDict(key)
+                End If
+            Catch
+            End Try
+        End If
+
+        If langCode = "en-US" Then Return key
+
+        Return GetString(key)
+    End Function
+
     Private Shared Sub TryReplace(original As String, applyAction As Action(Of String))
         If String.IsNullOrWhiteSpace(original) Then Return
 
         Dim normalizedText As String = NormalizeText(original)
         Dim found As Boolean = False
 
-        ' 1. Exact Match (Priority)
         If Translations.ContainsKey(normalizedText) Then
             applyAction(Translations(normalizedText))
             found = True
         Else
-            ' 2. Partial / Fuzzy Match (for dynamic content like "6.52 GB saved")
             For Each kvp In Translations
-                ' Only attempt match if the key is meaningful (length > 1) to avoid false positives
-                If kvp.Key.Length > 1 AndAlso normalizedText.Contains(kvp.Key) Then
+                If kvp.Key.Length > 3 AndAlso normalizedText.Contains(kvp.Key) Then
                     Dim translated As String = normalizedText.Replace(kvp.Key, kvp.Value)
                     
-                    ' Only apply if replacement actually happened
                     If translated <> normalizedText Then
                         applyAction(translated)
                         found = True
-                        Exit For ' Apply the first matching translation found
+                        Exit For
                     End If
                 End If
             Next
         End If
-        
-        ' Debug log
-        ' System.Diagnostics.Debug.WriteLine("Scanning: [" & normalizedText & "] -> " & If(found, "Translated", "Unmatched"))
     End Sub
 
-    ' Recursive Reflection Translation
     Private Shared Sub RecursiveTranslate(element As Object)
         If element Is Nothing Then Return
 
-        ' 1. Reflection scan for common text properties
         Dim targetProperties As String() = {"Text", "Content", "Header", "Title", "Description", "Label", "ToolTip", "PlaceholderText"}
         Dim type As Type = element.GetType()
 
@@ -118,10 +125,8 @@ Public Class TranslationHelper
             If prop IsNot Nothing AndAlso prop.CanRead AndAlso prop.CanWrite Then
                 Try
                     Dim val = prop.GetValue(element)
-                    ' If property is String -> Try translate
                     If TypeOf val Is String Then
                         TryReplace(CStr(val), Sub(newVal) prop.SetValue(element, newVal))
-                    ' If property is Object (e.g. StackPanel inside Content) -> Recurse
                     ElseIf val IsNot Nothing AndAlso Not TypeOf val Is ValueType Then 
                         RecursiveTranslate(val)
                     End If
@@ -130,7 +135,6 @@ Public Class TranslationHelper
             End If
         Next
 
-        ' 2. Special handling for TextBlock Inlines (Run elements)
         If TypeOf element Is TextBlock Then
             Dim tb = DirectCast(element, TextBlock)
             For Each inline In tb.Inlines
@@ -140,10 +144,8 @@ Public Class TranslationHelper
             Next
         End If
 
-        ' 3. Deep traversal of Visual Tree children
         If TypeOf element Is DependencyObject Then
             Dim depObj = DirectCast(element, DependencyObject)
-            ' Only traverse Visual or Visual3D to avoid issues with logical-only elements
             If TypeOf depObj Is Visual OrElse TypeOf depObj Is System.Windows.Media.Media3D.Visual3D Then
                 Dim childCount = VisualTreeHelper.GetChildrenCount(depObj)
                 For i = 0 To childCount - 1
