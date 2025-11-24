@@ -12,7 +12,6 @@
   "edit": "изм.",
   "Agression of online skiplist": "Агрессивность онлайн-списка пропуска",
   "(?)": "(?)",
-  "low": "низкая",
   "medium": "средняя",
   "high": "высокая",
   "System Integration": "Интеграция в систему",
@@ -34,7 +33,6 @@
   "On Schedule if system is also idle": "По расписанию (если простой)",
   "every": "каждые",
   "day(s)": "дн.",
-  "at": "в",
   "Last ran:": "Последний запуск:",
   "Next scheduled:": "Следующий запуск:",
   "Update Settings": "Настройки обновлений",
@@ -90,7 +88,6 @@
   "Savings": "Экономия",
   "unknown": "неизвестно",
   "Watched Folders": "Наблюдаемые папки",
-  "Add": "Добавить",
   "Add a custom folder to the watchlist": "Добавить свою папку в список наблюдения",
   "saved": "сэкономлено",
   "Last analysed": "Последний анализ",
@@ -142,5 +139,8 @@
   "GB saved": "ГБ сэкономлено",
   "MB saved": "МБ сэкономлено",
   "files being watched": "файлов наблюдается",
-  "Closing CompactGUI will stop them from being monitored.": "Закрытие CompactGUI остановит наблюдение."
+  "Closing CompactGUI will stop them from being monitored.": "Закрытие CompactGUI остановит наблюдение.",
+  "Language (Requires Restart)": "  Язык (Требуется перезагрузка)",
+  "folders being watched": "папок отслеживается",
+  "RestartRequired": "Настройки языка сохранены. Пожалуйста, перезапустите CompactGUI для применения изменений."
 }

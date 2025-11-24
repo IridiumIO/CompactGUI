@@ -12,7 +12,6 @@
   "edit": "éditer",
   "Agression of online skiplist": "Agressivité de la liste d'exclusion en ligne",
   "(?)": "(?)",
-  "low": "faible",
   "medium": "moyen",
   "high": "élevé",
   "System Integration": "Intégration système",
@@ -34,7 +33,6 @@
   "On Schedule if system is also idle": "Planifié (si système inactif)",
   "every": "tous les",
   "day(s)": "jour(s)",
-  "at": "à",
   "Last ran:": "Dernière exécution :",
   "Next scheduled:": "Prochaine planification :",
   "Update Settings": "Paramètres de mise à jour",
@@ -90,7 +88,6 @@
   "Savings": "Économies",
   "unknown": "inconnu",
   "Watched Folders": "Dossiers surveillés",
-  "Add": "Ajouter",
   "Add a custom folder to the watchlist": "Ajouter un dossier personnalisé à la liste de surveillance",
   "saved": "économisé",
   "Last analysed": "Dernière analyse",
@@ -142,5 +139,8 @@
   "GB saved": "Go économisés",
   "MB saved": "Mo économisés",
   "files being watched": "fichiers surveillés",
-  "Closing CompactGUI will stop them from being monitored.": "Fermer CompactGUI arrêtera leur surveillance."
+  "Closing CompactGUI will stop them from being monitored.": "Fermer CompactGUI arrêtera leur surveillance.",
+  "Language (Requires Restart)": "  Langue (Redémarrage requis)",
+  "folders being watched": "dossiers surveillés",
+  "RestartRequired": "Paramètres de langue enregistrés. Veuillez redémarrer CompactGUI pour appliquer les modifications."
 }

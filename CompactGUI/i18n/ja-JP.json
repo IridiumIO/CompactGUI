@@ -12,7 +12,6 @@
   "edit": "編集",
   "Agression of online skiplist": "オンラインスキップリストの強度",
   "(?)": "(?)",
-  "low": "低",
   "medium": "中",
   "high": "高",
   "System Integration": "システム統合",
@@ -34,7 +33,6 @@
   "On Schedule if system is also idle": "スケジュール（システムアイドル時のみ）",
   "every": "間隔",
   "day(s)": "日",
-  "at": "時刻",
   "Last ran:": "前回の実行：",
   "Next scheduled:": "次回の予定：",
   "Update Settings": "更新設定",
@@ -90,7 +88,6 @@
   "Savings": "削減",
   "unknown": "不明",
   "Watched Folders": "監視中のフォルダ",
-  "Add": "追加",
   "Add a custom folder to the watchlist": "カスタムフォルダをウォッチリストに追加",
   "saved": "節約",
   "Last analysed": "最終分析",
@@ -142,5 +139,8 @@
   "GB saved": "GB 節約",
   "MB saved": "MB 節約",
   "files being watched": "ファイル監視中",
-  "Closing CompactGUI will stop them from being monitored.": "CompactGUIを閉じると監視が停止します。"
+  "Closing CompactGUI will stop them from being monitored.": "CompactGUIを閉じると監視が停止します。",
+  "Language (Requires Restart)": "  言語 (再起動が必要)",
+  "folders being watched": "個のフォルダーが監視されています",
+  "RestartRequired": "言語設定が保存されました。変更を適用するには CompactGUI を再起動してください。"
 }

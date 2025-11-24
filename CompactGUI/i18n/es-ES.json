@@ -12,7 +12,6 @@
   "edit": "editar",
   "Agression of online skiplist": "Agresividad de la lista de omisión online",
   "(?)": "(?)",
-  "low": "baja",
   "medium": "media",
   "high": "alta",
   "System Integration": "Integración del sistema",
@@ -34,7 +33,6 @@
   "On Schedule if system is also idle": "Programado (si el sistema está inactivo)",
   "every": "cada",
   "day(s)": "día(s)",
-  "at": "a las",
   "Last ran:": "Última ejecución:",
   "Next scheduled:": "Próxima programada:",
   "Update Settings": "Ajustes de actualización",
@@ -90,7 +88,6 @@
   "Savings": "Ahorro",
   "unknown": "desconocido",
   "Watched Folders": "Carpetas monitorizadas",
-  "Add": "Añadir",
   "Add a custom folder to the watchlist": "Añadir carpeta personalizada a la lista",
   "saved": "ahorrado",
   "Last analysed": "Último análisis",
@@ -142,5 +139,8 @@
   "GB saved": "GB ahorrados",
   "MB saved": "MB ahorrados",
   "files being watched": "archivos monitorizados",
-  "Closing CompactGUI will stop them from being monitored.": "Cerrar CompactGUI detendrá la monitorización."
+  "Closing CompactGUI will stop them from being monitored.": "Cerrar CompactGUI detendrá la monitorización.",
+  "Language (Requires Restart)": "  Idioma (Requiere reinicio)",
+  "folders being watched": "carpetas siendo vigiladas",
+  "RestartRequired": "Configuración de idioma guardada. Por favor, reinicie CompactGUI para aplicar los cambios."
 }

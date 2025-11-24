@@ -12,7 +12,6 @@
   "edit": "编辑",
   "Agression of online skiplist": "在线跳过列表的激进程度",
   "(?)": "(?)",
-  "low": "低",
   "medium": "中",
   "high": "高",
   "System Integration": "系统集成",
@@ -34,7 +33,6 @@
   "On Schedule if system is also idle": "按计划且系统空闲时",
   "every": "每",
   "day(s)": "天",
-  "at": "在",
   "Last ran:": "上次运行：",
   "Next scheduled:": "下次计划：",
   "Update Settings": "更新设置",
@@ -90,7 +88,6 @@
   "Savings": "节省",
   "unknown": "未知",
   "Watched Folders": "受监控文件夹",
-  "Add": "添加",
   "Add a custom folder to the watchlist": "添加自定义文件夹到监控列表",
   "saved": "已节省",
   "Last analysed": "上次分析",
@@ -142,5 +139,8 @@
   "GB saved": "GB 已节省",
   "MB saved": "MB 已节省",
   "files being watched": "个文件正在被监控",
-  "Closing CompactGUI will stop them from being monitored.": "关闭 CompactGUI 将停止监控这些文件。"
+  "Closing CompactGUI will stop them from being monitored.": "关闭 CompactGUI 将停止监控这些文件。",
+  "Language (Requires Restart)": "  语言 (需要重启)",
+  "folders being watched": "个文件夹正在被监控",
+  "RestartRequired": "语言设置已保存，请重启软件以生效。"
 }
