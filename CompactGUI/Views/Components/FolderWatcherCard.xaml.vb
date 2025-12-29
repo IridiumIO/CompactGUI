@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Media.Animation
+Imports System.Windows.Media.Animation
 
 Public Class FolderWatcherCard : Inherits UserControl
     Private currentlyExpandedBorder As Border = Nothing
@@ -108,4 +108,7 @@ Public Class FolderWatcherCard : Inherits UserControl
         End If
     End Sub
 
+    Private Sub UiWatcherListView_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+    End Sub
 End Class

@@ -1,4 +1,4 @@
-﻿Imports System.Globalization
+Imports System.Globalization
 
 Public Class DecimalToPercentageConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
@@ -88,20 +88,24 @@ End Class
 
 Public Class RelativeDateConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Or Not TypeOf value Is DateTime Then
+            Return LanguageHelper.GetString("RelativeTimeUnknown")
+        End If
+
         Dim dt = CType(value, DateTime)
         Dim ts As TimeSpan = DateTime.Now - dt
 
         If ts > TimeSpan.FromDays(19000) Then
-            Return String.Format("Unknown")
+            Return LanguageHelper.GetString("RelativeTimeUnknown")
         End If
         If ts > TimeSpan.FromDays(2) Then
-            Return String.Format("{0:0} days ago", ts.TotalDays)
+            Return String.Format(LanguageHelper.GetString("RelativeTimeDaysAgo"), ts.TotalDays)
         ElseIf ts > TimeSpan.FromHours(2) Then
-            Return String.Format("{0:0} hours ago", ts.TotalHours)
+            Return String.Format(LanguageHelper.GetString("RelativeTimeHoursAgo"), ts.TotalHours)
         ElseIf ts > TimeSpan.FromMinutes(2) Then
-            Return String.Format("{0:0} minutes ago", ts.TotalMinutes)
+            Return String.Format(LanguageHelper.GetString("RelativeTimeMinutesAgo"), ts.TotalMinutes)
         Else
-            Return "just now"
+            Return LanguageHelper.GetString("RelativeTimeJustNow")
         End If
     End Function
 

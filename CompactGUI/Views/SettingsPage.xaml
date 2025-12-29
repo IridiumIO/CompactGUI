@@ -1,4 +1,4 @@
-﻿<Page x:Class="SettingsPage"
+<Page x:Class="SettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +11,8 @@
       mc:Ignorable="d">
     <Grid Margin="40,20" ScrollViewer.CanContentScroll="False">
         <Grid>
-            <TextBlock Text="Settings"
+            <TextBlock Text="{local:Localize PageSettingsName}"
+                       d:Text="Settings"
                        FontSize="26"
                        Foreground="{StaticResource CardForeground}" />
 
@@ -95,7 +96,8 @@
                                  FlowDirection="RightToLeft" IsExpanded="True"
                                  Style="{StaticResource CustomCardExpanderStyle}">
                     <ui:CardExpander.Header>
-                        <Label Content="Filetype Management"
+                        <Label Content="{local:Localize SettingsFiletypeManagement}"
+                               d:Content="Filetype Management"
                                Margin="10,0"
                                FlowDirection="LeftToRight" />
 
@@ -114,27 +116,29 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <Label Content="Manage local skipped filetypes" VerticalAlignment="Center" />
+                            <Label Content="{local:Localize SettingsFiletypeManagementLocalSkipFiletypes}" d:Content="Manage local skipped filetypes" VerticalAlignment="Center" />
                             <Button x:Name="UiEditSkipListBtn"
-                                    Content="edit"
+                                    Content="{local:Localize UniEdit}"
+                                    d:Content="edit"
                                     Grid.Column="1"
                                     Width="100" Height="37"
                                     BorderThickness="0"
                                     Command="{Binding EditSkipListCommand}"
                                     IsEnabled="True" />
 
-                            <Label Content="Agression of online skiplist"
+                            <Label Content="{local:Localize SettingsFiletypeManagementOnlineSkiplistAgression}"
+                                   d:Content="Agression of online skiplist"
                                    Grid.Row="2"
                                    VerticalAlignment="Center" />
                             <TextBlock x:Name="SkipHelpIcon"
                                        Text="(?)"
                                        Grid.Row="2"
-                                       Margin="175,0,0,0" VerticalAlignment="Center"
+                                       Margin="225,0,0,0" VerticalAlignment="Center"
                                        Cursor="Hand" FontSize="14" Foreground="#FF98A9B9" TextDecorations="Underline">
 
                                 <ToolTipService.ToolTip>
                                     <ToolTip Placement="Top">
-                                        <TextBlock Text="For Steam games only.&#x0a;When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well."
+                                        <TextBlock Text="{local:Localize SettingsFiletypeManagementAgressionTip}"
                                                    Width="200"
                                                    TextAlignment="Left" TextWrapping="Wrap" />
                                     </ToolTip>
@@ -145,15 +149,15 @@
                                       Grid.Row="2" Grid.Column="1"
                                       Foreground="#98A9B9" IsEnabled="False" SelectedIndex="0">
                                 <ComboBoxItem>
-                                    <TextBlock Text="low"
+                                    <TextBlock Text="{local:Localize SettingsFiletypeManagementAgressionLow}" d:Text="low"
                                                FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
                                 </ComboBoxItem>
                                 <ComboBoxItem>
-                                    <TextBlock Text="medium"
+                                    <TextBlock Text="{local:Localize SettingsFiletypeManagementAgressionMedium}" d:Text="medium"
                                                FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
                                 </ComboBoxItem>
                                 <ComboBoxItem>
-                                    <TextBlock Text="high"
+                                    <TextBlock Text="{local:Localize SettingsFiletypeManagementAgressionHigh}" d:Text="high"
                                                FontSize="14" FontWeight="SemiBold" Foreground="#98A9B9" />
                                 </ComboBoxItem>
                             </ComboBox>
@@ -171,7 +175,8 @@
                                  FlowDirection="RightToLeft" IsExpanded="True"
                                  Style="{StaticResource CustomCardExpanderStyle}">
                     <ui:CardExpander.Header>
-                        <Label Content="System Integration"
+                        <Label Content="{local:Localize SettingsSystemIntegration}"
+                               d:Content="System Integration"
                                Margin="10,0"
                                FlowDirection="LeftToRight" />
 
@@ -180,19 +185,23 @@
                     <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
                         <StackPanel Margin="-10,10,0,0">
                             <CheckBox x:Name="UiIsContextEnabled"
-                                      Content="Add to right-click context menu"
+                                      Content="{local:Localize SettingsSystemIntegrationRightClickMenu}"
+                                      d:Content="Add to right-click context menu"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.IsContextIntegrated, Mode=TwoWay}" />
                             <CheckBox x:Name="UiIsStartMenuEnabled"
-                                      Content="Add to start menu"
+                                      Content="{local:Localize SettingsSystemIntegrationStartMenu}"
+                                      d:Content="Add to start menu"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.IsStartMenuEnabled, Mode=TwoWay}" />
                             <CheckBox x:Name="UiShowNotifications"
-                                      Content="Show notification on completion"
+                                      Content="{local:Localize SettingsSystemIntegrationNotificationOnCompletion}"
+                                      d:Content="Show notification on completion"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.ShowNotifications, Mode=TwoWay}" />
                             <CheckBox x:Name="UiAlwaysStartInTray"
-                                      Content="Start CompactGUI in system tray"
+                                      Content="{local:Localize SettingsSystemIntegrationSystemTrayStartup}"
+                                      d:Content="Start CompactGUI in system tray"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.StartInSystemTray}" />
 
@@ -210,7 +219,8 @@
                                  FlowDirection="RightToLeft" IsExpanded="True"
                                  Style="{StaticResource CustomCardExpanderStyle}">
                     <ui:CardExpander.Header>
-                        <Label Content="Compression Settings"
+                        <Label Content="{local:Localize SettingsCompressionSettingsCompressionSettings}"
+                               d:Content="Compression Settings"
                                Margin="10,0"
                                FlowDirection="LeftToRight" />
 
@@ -234,7 +244,7 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <Label Content="Maximum Compression Threads" />
+                            <Label Content="{local:Localize SettingsCompressionSettingsMaxThreads}" d:Content="Maximum Compression Threads" />
                             <StackPanel Grid.Column="1"
                                         Margin="15,0,15,0"
                                         Orientation="Horizontal">
@@ -251,13 +261,15 @@
                             </StackPanel>
 
                             <CheckBox x:Name="UiLockHddToOneThread"
-                                      Content="HDDs only use 1 thread"
+                                      Content="{local:Localize SettingsCompressionSettingsHDDThread}"
+                                      d:Content="HDDs only use 1 thread"
                                       Grid.Row="2"
                                       Margin="-10,0"
                                       IsChecked="{Binding AppSettings.LockHDDsToOneThread}" />
 
                             <CheckBox x:Name="UiUseEstimator"
-                                      Content="Estimate Compression for non-Steam Folders (beta)"
+                                      Content="{local:Localize SettingsCompressionSettingsNonSteamFolders}"
+                                      d:Content="Estimate Compression for non-Steam Folders (beta)"
                                       Grid.Row="4" Grid.ColumnSpan="2"
                                       Margin="-10,0"
                                       IsChecked="{Binding AppSettings.EstimateCompressionForNonSteamFolders}">
@@ -282,7 +294,8 @@
                                  FlowDirection="RightToLeft" IsExpanded="True"
                                  Style="{StaticResource CustomCardExpanderStyle}">
                     <ui:CardExpander.Header>
-                        <Label Content="Background Watcher Settings"
+                        <Label Content="{local:Localize SettingsBackgroundWatcherSettings}"
+                               d:Content="Background Watcher Settings"
                                Margin="10,0"
                                FlowDirection="LeftToRight" />
 
@@ -292,7 +305,8 @@
                     <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
                         <StackPanel Margin="-10,10,0,0">
                             <CheckBox x:Name="UiEnableBackgroundWatcher"
-                                      Content="Monitor compressed folders for changes"
+                                      Content="{local:Localize SettingsBackgroundWatcherSettingsFoldersChanges}"
+                                      d:Content="Monitor compressed folders for changes"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.EnableBackgroundWatcher, Mode=TwoWay}">
 
@@ -306,7 +320,7 @@
                             <WrapPanel Margin="45,10,0,0"
                                        IsEnabled="{Binding AppSettings.EnableBackgroundWatcher}"
                                        Orientation="Horizontal">
-                                <TextBlock Text="Compress folders: " VerticalAlignment="Center" />
+                                <TextBlock Text="{local:Localize SettingsBackgroundWatcherSettingsCompressFolders}" d:Text="Compress folders: " VerticalAlignment="Center" />
 
                                 <ComboBox x:Name="BackgroundModeSelector"
                                           Width="290" Height="35"
@@ -322,16 +336,16 @@
                                 <StackPanel Margin="0,10"
                                             Orientation="Horizontal"
                                             Visibility="{Binding AppSettings.BackgroundModeSelection, Mode=OneWay, Converter={StaticResource BackgroundModeToVisibilityConverter}}">
-                                    <TextBlock Text="every"
+                                    <TextBlock Text="{local:Localize SettingsBackgroundWatcherSettingsTimeEvery}" d:Text="every"
                                                Margin="10,0,10,0" VerticalAlignment="Center" />
                                     <ui:NumberBox Width="150"
                                                   Margin="5,0,0,0"
                                                   ClearButtonEnabled="False" Maximum="28" Minimum="1"
                                                   Value="{Binding AppSettings.ScheduledBackgroundInterval, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="day(s)"
+                                    <TextBlock Text="{local:Localize SettingsBackgroundWatcherSettingsTimeDay}" d:Text="day(s)"
                                                Margin="-110,0,0,0" VerticalAlignment="Center"
                                                Foreground="#80FFFFFF" IsHitTestVisible="False" />
-                                    <TextBlock Text="at"
+                                    <TextBlock Text="{local:Localize SettingsBackgroundWatcherSettingsTimeAt}" d:Text="at"
                                                Margin="20,0,20,0" VerticalAlignment="Center" />
                                     <ComboBox Width="60"
                                               Padding="8,8,0,8"
@@ -388,7 +402,8 @@
                                  FlowDirection="RightToLeft" IsExpanded="True"
                                  Style="{StaticResource CustomCardExpanderStyle}">
                     <ui:CardExpander.Header>
-                        <Label Content="Update Settings"
+                        <Label Content="{local:Localize SettingsUpdateSettings}"
+                               d:Content="Update Settings"
                                Margin="10,0"
                                FlowDirection="LeftToRight" />
 
@@ -398,7 +413,8 @@
                     <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
                         <StackPanel Margin="-10,10,0,0">
                             <CheckBox x:Name="UiEnablePreReleaseUpdates"
-                                      Content="Check for pre-release updates"
+                                      Content="{local:Localize SettingsUpdateSettingsCheckPreUpdates}"
+                                      d:Content="Check for pre-release updates"
                                       Margin="0,-3"
                                       IsChecked="{Binding AppSettings.EnablePreReleaseUpdates}" />
 
@@ -414,22 +430,36 @@
                                  FlowDirection="RightToLeft" IsExpanded="True"
                                  Style="{StaticResource CustomCardExpanderStyle}">
                     <ui:CardExpander.Header>
-                        <Label Content="UI Settings"
+                        <Label Content="{local:Localize SettingsUiSettings}" 
+                               d:Content="UI Settings" 
                                Margin="10,0"
                                FlowDirection="LeftToRight" />
 
                     </ui:CardExpander.Header>
 
 
-                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
-                        <StackPanel Margin="-10,10,0,0">
-                            <CheckBox x:Name="UiAlwaysShowDetailedCompressionMode"
-                                      Content="Always show details on Compression Mode buttons"
-                                      Margin="0,-3"
-                                      IsChecked="{Binding AppSettings.AlwaysShowDetailedCompressionMode}" />
-
-                        </StackPanel>
-                    </StackPanel>
+					<StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+						<!-- Language Selector -->
+						<Grid Margin="0,10,0,10">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto" />
+							</Grid.ColumnDefinitions>
+                            <Label Content="{Binding SettingsUiSettingsLanguageChangedLabel, RelativeSource={RelativeSource AncestorType=Page}}"
+                                   d:Content="Language (Requires Restart)" VerticalAlignment="Center"/>
+							<ComboBox x:Name="UiLanguageComboBox" Grid.Column="1" Width="150" SelectedIndex="0" SelectionChanged="UiLanguageComboBox_SelectionChanged">
+								<ComboBoxItem Content="English" Tag="en-US" />
+								<ComboBoxItem Content="简体中文" Tag="zh-CN" />
+							</ComboBox>
+						</Grid>
+						<StackPanel Margin="-10,10,0,0">
+							<CheckBox x:Name="UiAlwaysShowDetailedCompressionMode"
+									  Content="{local:Localize SettingsUiSettingsCompressionButtons}"
+                                      d:Content="Always show details on Compression Mode buttons"
+									  Margin="0,-3"
+									  IsChecked="{Binding AppSettings.AlwaysShowDetailedCompressionMode}" Cursor="Hand" />
+						</StackPanel>
+					</StackPanel>
 
                 </ui:CardExpander>
 

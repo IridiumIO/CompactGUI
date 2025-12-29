@@ -29,7 +29,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
 
-
   <ItemGroup>
     <Import Include="System.Windows" />
     <Import Include="System.Windows.Controls" />
@@ -70,6 +69,22 @@
     <Reference Include="FunctionalConverters">
       <HintPath>..\..\FunctionalConverters\FunctionalConverters\bin\Release\net6.0-windows\FunctionalConverters.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="i18n\i18n.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>i18n.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="i18n\i18n.resx">
+      <CustomToolNamespace>i18n</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>i18n.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="RenamePublishedExe" AfterTargets="Publish" Condition="'$(IsMonolithic)' == 'true'">

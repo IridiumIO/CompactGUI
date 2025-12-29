@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MessageWelcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="SettingsUiSettingsLanguageChangedLabel" xml:space="preserve">
+    <value>Language (Requires Restart)</value>
+  </data>
+  <data name="SettingsUiSettingsLanguageChangedMsg" xml:space="preserve">
+    <value>Language changed successfully. You may need to restart the application for all changes to take effect.</value>
+  </data>
+  <data name="SettingsUiSettingsLanguageChangeTitle" xml:space="preserve">
+    <value>Language Changed</value>
+  </data>
+  <data name="SettingsUiSettings" xml:space="preserve">
+    <value>UI Settings</value>
+  </data>
+  <data name="SettingsUiSettingsCompressionButtons" xml:space="preserve">
+    <value>Always show details on Compression Mode buttons</value>
+  </data>
+  <data name="SettingsUpdateSettings" xml:space="preserve">
+    <value>Update Settings</value>
+  </data>
+  <data name="SettingsUpdateSettingsCheckPreUpdates" xml:space="preserve">
+    <value>Check for pre-release updates</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettings" xml:space="preserve">
+    <value>Background Watcher Settings</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsFoldersChanges" xml:space="preserve">
+    <value>Monitor compressed folders for changes</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsCompressFolders" xml:space="preserve">
+    <value>Compress folders: </value>
+    <comment>@MutedRule(WhiteSpaceTail)</comment>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsTimeEvery" xml:space="preserve">
+    <value>every</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsTimeDay" xml:space="preserve">
+    <value>day(s)</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsTimeAt" xml:space="preserve">
+    <value>at</value>
+    <comment>@MutedRule(WhiteSpaceLead)@MutedRule(WhiteSpaceTail)</comment>
+  </data>
+  <data name="SettingsCompressionSettingsCompressionSettings" xml:space="preserve">
+    <value>Compression Settings</value>
+  </data>
+  <data name="SettingsCompressionSettingsMaxThreads" xml:space="preserve">
+    <value>Maximum Compression Threads</value>
+  </data>
+  <data name="SettingsCompressionSettingsHDDThread" xml:space="preserve">
+    <value>HDDs only use 1 thread</value>
+  </data>
+  <data name="SettingsCompressionSettingsNonSteamFolders" xml:space="preserve">
+    <value>Estimate Compression for non-Steam Folders (beta)</value>
+  </data>
+  <data name="SettingsSystemIntegration" xml:space="preserve">
+    <value>System Integration</value>
+  </data>
+  <data name="SettingsSystemIntegrationRightClickMenu" xml:space="preserve">
+    <value>Add to right-click context menu</value>
+  </data>
+  <data name="SettingsSystemIntegrationStartMenu" xml:space="preserve">
+    <value>Add to start menu</value>
+  </data>
+  <data name="SettingsSystemIntegrationNotificationOnCompletion" xml:space="preserve">
+    <value>Show notification on completion</value>
+  </data>
+  <data name="SettingsSystemIntegrationSystemTrayStartup" xml:space="preserve">
+    <value>Start CompactGUI in system tray</value>
+  </data>
+  <data name="SettingsFiletypeManagement" xml:space="preserve">
+    <value>Filetype Management</value>
+  </data>
+  <data name="SettingsFiletypeManagementLocalSkipFiletypes" xml:space="preserve">
+    <value>Manage local skipped filetypes</value>
+  </data>
+  <data name="UniEdit" xml:space="preserve">
+    <value>edit</value>
+  </data>
+  <data name="SettingsFiletypeManagementOnlineSkiplistAgression" xml:space="preserve">
+    <value>Agression of online skiplist</value>
+  </data>
+  <data name="SettingsFiletypeManagementAgressionTip" xml:space="preserve">
+    <value>For Steam games only.When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well.</value>
+  </data>
+  <data name="SettingsFiletypeManagementAgressionLow" xml:space="preserve">
+    <value>low</value>
+  </data>
+  <data name="SettingsFiletypeManagementAgressionMedium" xml:space="preserve">
+    <value>medium</value>
+  </data>
+  <data name="SettingsFiletypeManagementAgressionHigh" xml:space="preserve">
+    <value>high</value>
+  </data>
+  <data name="PageSettingsName" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="PageWatcherName" xml:space="preserve">
+    <value>WatcherPage</value>
+  </data>
+  <data name="PageDatabaseResults" xml:space="preserve">
+    <value>Database Results</value>
+  </data>
+  <data name="DatabaseResultsSearchSteamID" xml:space="preserve">
+    <value>Search by game name or SteamID...</value>
+  </data>
+  <data name="DatabaseResultsSort" xml:space="preserve">
+    <value>Sort By</value>
+  </data>
+  <data name="DatabaseResultsSortGameName" xml:space="preserve">
+    <value>Game Name</value>
+  </data>
+  <data name="DatabaseResultsSortSteamID" xml:space="preserve">
+    <value>SteamID</value>
+  </data>
+  <data name="DatabaseResultsSortMaxSavings" xml:space="preserve">
+    <value>Max Savings</value>
+  </data>
+  <data name="DatabaseResultsGames" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="FolderViewUncompressedSize" xml:space="preserve">
+    <value>uncompressed size</value>
+  </data>
+  <data name="FolderViewContainedFiles" xml:space="preserve">
+    <value>contained files</value>
+  </data>
+  <data name="HomePageAddFolder" xml:space="preserve">
+    <value>Add Folder to Queue</value>
+  </data>
+  <data name="HomePageCompressSelected" xml:space="preserve">
+    <value>Compress Selected</value>
+  </data>
+  <data name="HomePageWorking" xml:space="preserve">
+    <value>Working</value>
+  </data>
+  <data name="HomePageResultsState" xml:space="preserve">
+    <value>Results State</value>
+  </data>
+  <data name="PendingCompressionCompressionMode" xml:space="preserve">
+    <value>Compression Mode</value>
+  </data>
+  <data name="PendingCompressionModeXPRESS4K" xml:space="preserve">
+    <value>XPRESS 4K</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="PendingCompressionXPRESSMode8K" xml:space="preserve">
+    <value>XPRESS 8K</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="PendingCompressionXPRESSMode16K" xml:space="preserve">
+    <value>XPRESS 16K</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="PendingCompressionModeLZX" xml:space="preserve">
+    <value>LZX</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="PendingCompressionConfiguration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="PendingCompressionConfigurationSkipFileTypesSpecified" xml:space="preserve">
+    <value>Skip file types specified in settings</value>
+  </data>
+  <data name="PendingCompressionConfigurationSkipFileTypesLikelyPoorly" xml:space="preserve">
+    <value>Skip file types likely to compress poorly</value>
+  </data>
+  <data name="PendingCompressionConfigurationSkipFileTypesLikelyPoorlyTip" xml:space="preserve">
+    <value>For Steam Games:
+skips files based on database results
+
+For Non-Steam Folders:
+skips files based on compression estimate</value>
+  </data>
+  <data name="PendingCompressionWatchFolderChanges" xml:space="preserve">
+    <value>Watch folder for changes</value>
+  </data>
+  <data name="PendingCompressionApplyAll" xml:space="preserve">
+    <value>Apply to all</value>
+  </data>
+  <data name="CompressionModeRadioEstimatedSize" xml:space="preserve">
+    <value>Estimated size</value>
+  </data>
+  <data name="CompressionModeRadioSavings" xml:space="preserve">
+    <value>Savings</value>
+  </data>
+  <data name="CompressionModeRadioUnknown" xml:space="preserve">
+    <value>unknown</value>
+  </data>
+  <data name="PageFolderWatcherCardWatchedFoldersName" xml:space="preserve">
+    <value>Watched Folders</value>
+  </data>
+  <data name="FolderWatcherCardSaved" xml:space="preserve">
+    <value>saved</value>
+  </data>
+  <data name="FolderWatcherCardCancelBackgroundCompressor" xml:space="preserve">
+    <value>Cancel Background Compressor</value>
+  </data>
+  <data name="FolderWatcherCardCompressAllNow" xml:space="preserve">
+    <value>Compress All Now</value>
+  </data>
+  <data name="FolderWatcherCardLastAnalysed" xml:space="preserve">
+    <value>Last analysed</value>
+  </data>
+  <data name="RelativeTimeUnknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="RelativeTimeDaysAgo" xml:space="preserve">
+    <value>{0:0} days ago</value>
+  </data>
+  <data name="RelativeTimeHoursAgo" xml:space="preserve">
+    <value>{0:0} hours ago</value>
+  </data>
+  <data name="RelativeTimeMinutesAgo" xml:space="preserve">
+    <value>{0:0} minutes ago</value>
+  </data>
+  <data name="RelativeTimeJustNow" xml:space="preserve">
+    <value>just now</value>
+  </data>
+  <data name="ResultsTemplateCompressionSummary" xml:space="preserve">
+    <value>Compression Summary</value>
+  </data>
+  <data name="ResultsTemplateSpaceSaved" xml:space="preserve">
+    <value>Space Saved</value>
+  </data>
+  <data name="ResultsTemplateFilesCompressed" xml:space="preserve">
+    <value>Files Compressed</value>
+  </data>
+  <data name="ResultsTemplateCompressionMode" xml:space="preserve">
+    <value>Compression Mode</value>
+  </data>
+  <data name="ResultsTemplateUncompress" xml:space="preserve">
+    <value>Uncompress</value>
+  </data>
+  <data name="ResultsTemplateCompressAgain" xml:space="preserve">
+    <value>Compress Again</value>
+  </data>
+  <data name="ResultsTemplateSubmitResults" xml:space="preserve">
+    <value>Submit Results</value>
+  </data>
+  <data name="ResultsTemplateBefore" xml:space="preserve">
+    <value>Before</value>
+  </data>
+  <data name="ResultsTemplateAfter" xml:space="preserve">
+    <value>After</value>
+  </data>
+  <data name="DatabasePageMODE" xml:space="preserve">
+    <value>MODE</value>
+  </data>
+  <data name="DatabasePageBEFORE" xml:space="preserve">
+    <value>BEFORE</value>
+  </data>
+  <data name="DatabasePageAFTER" xml:space="preserve">
+    <value>AFTER</value>
+  </data>
+  <data name="DatabasePageSAVINGS" xml:space="preserve">
+    <value>SAVINGS</value>
+  </data>
+  <data name="DatabasePageTOTALRESULTS" xml:space="preserve">
+    <value>TOTAL RESULTS</value>
+  </data>
+  <data name="DatabasePage_Ascending" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="DatabasePage_Descending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+</root>

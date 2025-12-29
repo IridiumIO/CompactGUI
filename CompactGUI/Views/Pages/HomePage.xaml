@@ -1,4 +1,4 @@
-﻿<Page x:Class="HomePage"
+<Page x:Class="HomePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,7 +14,8 @@
 
         <DataTemplate x:Key="IdleTemplate">
 
-            <Button Content="Compress Selected"
+            <Button Content="{local:Localize HomePageCompressSelected}"
+                    d:Content="Compress Selected"
                     Width="160" Height="40"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
                     Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
@@ -32,13 +33,13 @@
             <ui:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center"
                   IsIndeterminate="True" />
             <!--<StackPanel Margin="0,20">
-                <TextBlock Text="Working" FontSize="18" />
+                <TextBlock Text="{local:Localize HomePageWorking}" d:Text="Working" FontSize="18" />
                 <ProgressBar Margin="0,10" IsIndeterminate="True" />
             </StackPanel>-->
         </DataTemplate>
 
         <DataTemplate x:Key="ResultsTemplate">
-            <!--<TextBlock Text="Results State" />-->
+            <!--<TextBlock Text="{local:Localize HomePageResultsState}" d:Text="Results State" />-->
 
         </DataTemplate>
 
@@ -174,7 +175,8 @@
                                    Background="{StaticResource CardBackgroundFillColorSecondaryBrush}">
                             <ui:SymbolIcon Symbol="Add16" />
                         </ui:Button>
-                        <TextBlock Text="Add Folder to Queue"
+                        <TextBlock Text="{local:Localize HomePageAddFolder}"
+                                   d:Text="Add Folder to Queue"
                                    Margin="15,-1,0,0" VerticalAlignment="Center" />
                     </StackPanel>
 

@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.IO.Pipes
 Imports System.Threading
 Imports System.Windows.Threading
@@ -31,7 +31,11 @@ Partial Public Class Application
 
     End Sub
 
+    Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+        ' 启动时调用语言配置
+        LanguageHelper.Initialize()
 
+    End Sub
     Private Shared Sub InitializeHost()
 
         _host = Host.CreateDefaultBuilder() _
