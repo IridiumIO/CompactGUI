@@ -159,7 +159,7 @@
   </data>
   <data name="SettingsBackgroundWatcherSettingsTimeAt" xml:space="preserve">
     <value>at</value>
-    <comment>@MutedRule(WhiteSpaceLead)@MutedRule(WhiteSpaceTail)</comment>
+    <comment>@MutedRule(WhiteSpaceLead)@MutedRule(WhiteSpaceTail)@Invariant</comment>
   </data>
   <data name="SettingsCompressionSettingsCompressionSettings" xml:space="preserve">
     <value>Compression Settings</value>
@@ -201,7 +201,9 @@
     <value>Agression of online skiplist</value>
   </data>
   <data name="SettingsFiletypeManagementAgressionTip" xml:space="preserve">
-    <value>For Steam games only.When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well.</value>
+    <value>For Steam games only.
+When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 
+'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well.</value>
   </data>
   <data name="SettingsFiletypeManagementAgressionLow" xml:space="preserve">
     <value>low</value>

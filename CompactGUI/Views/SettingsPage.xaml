@@ -139,7 +139,6 @@
                                 <ToolTipService.ToolTip>
                                     <ToolTip Placement="Top">
                                         <TextBlock Text="{local:Localize SettingsFiletypeManagementAgressionTip}"
-                                                   Width="200"
                                                    TextAlignment="Left" TextWrapping="Wrap" />
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
@@ -457,7 +456,7 @@
 									  Content="{local:Localize SettingsUiSettingsCompressionButtons}"
                                       d:Content="Always show details on Compression Mode buttons"
 									  Margin="0,-3"
-									  IsChecked="{Binding AppSettings.AlwaysShowDetailedCompressionMode}" Cursor="Hand" />
+									  IsChecked="{Binding AppSettings.AlwaysShowDetailedCompressionMode}" />
 						</StackPanel>
 					</StackPanel>
 

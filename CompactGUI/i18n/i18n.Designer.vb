@@ -699,7 +699,9 @@ Namespace i18n
         End Property
         
         '''<summary>
-        '''  查找类似 For Steam games only.When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. &apos;low&apos; is generally best, as higher options run the risk of skipping files that would otherwise compress well. 的本地化字符串。
+        '''  查找类似 For Steam games only.
+        '''When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 
+        '''&apos;low&apos; is generally best, as higher options run the risk of skipping files that would otherwise compress well. 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property SettingsFiletypeManagementAgressionTip() As String
             Get

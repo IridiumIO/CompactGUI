@@ -88,9 +88,6 @@ End Class
 
 Public Class RelativeDateConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-        If value Is Nothing Or Not TypeOf value Is DateTime Then
-            Return LanguageHelper.GetString("RelativeTimeUnknown")
-        End If
 
         Dim dt = CType(value, DateTime)
         Dim ts As TimeSpan = DateTime.Now - dt

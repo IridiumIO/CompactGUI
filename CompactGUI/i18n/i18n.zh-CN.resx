@@ -196,7 +196,9 @@
     <value>在线跳过列表的激进程度</value>
   </data>
   <data name="SettingsFiletypeManagementAgressionTip" xml:space="preserve">
-    <value>仅限 Steam 游戏。在选择跳过用户提交的文件类型时，此设置决定每个文件类型需要多少提交才能考虑跳过它。"低"通常是最佳选择，因为较高的选项有跳过原本可以良好压缩的文件的风险。</value>
+    <value>仅限 Steam 游戏。
+在选择跳过用户提交的文件类型时，该设置决定了每种文件类型需要提交多少次才能考虑跳过该类型。
+“低”通常是最好的，因为高档有跳过本来可以很好地压缩的文件的风险。</value>
   </data>
   <data name="SettingsFiletypeManagementAgressionLow" xml:space="preserve">
     <value>低</value>

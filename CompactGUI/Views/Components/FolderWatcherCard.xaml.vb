@@ -108,7 +108,4 @@ Public Class FolderWatcherCard : Inherits UserControl
         End If
     End Sub
 
-    Private Sub UiWatcherListView_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
-    End Sub
 End Class
