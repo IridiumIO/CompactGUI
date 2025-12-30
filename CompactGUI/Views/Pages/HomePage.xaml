@@ -62,10 +62,10 @@
                     Margin="0,-90,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Label HorizontalAlignment="Center">
-                <TextBlock Text="CompactGUI" FontSize="32" />
+                <TextBlock Text="{local:Localize TitleCompactGUI}" d:Text="CompactGUI" FontSize="32" />
             </Label>
             <Border Background="#20f44336" CornerRadius="10" Width="70" Height="20" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock  Text="Admin" Foreground="White" HorizontalAlignment="Center" FontSize="12" VerticalAlignment="Center"/>
+                <TextBlock  Text="{local:Localize UniAdmin}" d:Text="Admin" Foreground="White" HorizontalAlignment="Center" FontSize="12" VerticalAlignment="Center"/>
 
             </Border>
             <Button x:Name="BtnAddFolder1"
@@ -73,7 +73,7 @@
                     Margin="0,20,0,0" HorizontalContentAlignment="Stretch">
                 <Grid>
                     <ui:SymbolIcon HorizontalAlignment="Left" Symbol="Search12" />
-                    <TextBlock Text="select a folder" HorizontalAlignment="Center" />
+                    <TextBlock Text="{local:Localize HomePageSelectFolder}" d:Text="select a folder" HorizontalAlignment="Center" />
                 </Grid>
             </Button>
 

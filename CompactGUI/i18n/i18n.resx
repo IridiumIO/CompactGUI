@@ -414,4 +414,25 @@ skips files based on compression estimate</value>
   <data name="SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat" xml:space="preserve">
     <value>Next scheduled: {0:dd MMM yyyy \a\t HH:mm:ss}</value>
   </data>
+  <data name="TitleCompactGUI" xml:space="preserve">
+    <value>CompactGUI</value>
+  </data>
+  <data name="HomePageSelectFolder" xml:space="preserve">
+    <value>select a folder</value>
+  </data>
+  <data name="UniAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="NameMainWindowCompressionDB" xml:space="preserve">
+    <value>Compression DB</value>
+  </data>
+  <data name="NameMainWindowWatcher" xml:space="preserve">
+    <value>Watcher</value>
+  </data>
+  <data name="NameMainWindowHome" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="DatabaseLastFetched" xml:space="preserve">
+    <value>Last Fetched: {0:dd MMM yyyy HH:mm:ss}</value>
+  </data>
 </root>

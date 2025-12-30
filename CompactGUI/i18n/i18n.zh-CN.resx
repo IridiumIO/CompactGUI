@@ -396,4 +396,25 @@
   <data name="SettingsBackgroundWatcherSettingsTimeAt" xml:space="preserve">
     <value> </value>
   </data>
+  <data name="UniAdmin" xml:space="preserve">
+    <value>管理员权限</value>
+  </data>
+  <data name="HomePageSelectFolder" xml:space="preserve">
+    <value>选择文件夹</value>
+  </data>
+  <data name="TitleCompactGUI" xml:space="preserve">
+    <value>CompactGUI</value>
+  </data>
+  <data name="NameMainWindowCompressionDB" xml:space="preserve">
+    <value>压缩数据库</value>
+  </data>
+  <data name="NameMainWindowWatcher" xml:space="preserve">
+    <value>监控</value>
+  </data>
+  <data name="NameMainWindowHome" xml:space="preserve">
+    <value>主页</value>
+  </data>
+  <data name="DatabaseLastFetched" xml:space="preserve">
+    <value>最后获取: {0:yyyy年 M月 d日 HH:mm:ss}</value>
+  </data>
 </root>

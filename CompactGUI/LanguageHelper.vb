@@ -7,6 +7,7 @@ Imports System.Reflection
 
 Public Class LanguageHelper
     ' 支持的语言列表
+    ' @i18n
     Private Shared ReadOnly SupportedCultures As String() = {"en-US", "zh-CN"}
     Private Shared resourceManager As ResourceManager = i18n.i18n.ResourceManager
     Private Shared currentCulture As CultureInfo = Nothing
@@ -60,9 +61,6 @@ Public Class LanguageHelper
             Thread.CurrentThread.CurrentCulture = culture
             currentCulture = culture
 
-            ' 额外：如果是WPF/WinForms，刷新界面（可选）
-            ' WinForms示例：Application.CurrentCulture = culture
-            ' WPF示例：FrameworkElement.LanguageProperty.OverrideMetadata(GetType(FrameworkElement), New FrameworkPropertyMetadata(XmlLanguage.GetLanguage(culture.IetfLanguageTag)))
         Catch ex As Exception
             Debug.WriteLine($"应用语言失败：{cultureName}，错误：{ex.Message}")
             SetDefaultLanguage()
@@ -82,6 +80,7 @@ Public Class LanguageHelper
 
     Private Shared Sub SetDefaultLanguage()
         ' 根据系统语言设置默认语言
+        '@i18n
         Dim langMapping As New Dictionary(Of String, String) From {
         {"en", "en-US"},
         {"zh", "zh-CN"}

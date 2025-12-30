@@ -92,6 +92,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 Last Fetched: {0:dd MMM yyyy HH:mm:ss} 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property DatabaseLastFetched() As String
+            Get
+                Return ResourceManager.GetString("DatabaseLastFetched", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Ascending 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property DatabasePage_Ascending() As String
@@ -290,6 +299,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 select a folder 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property HomePageSelectFolder() As String
+            Get
+                Return ResourceManager.GetString("HomePageSelectFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Working 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property HomePageWorking() As String
@@ -304,6 +322,33 @@ Namespace i18n
         Public Shared ReadOnly Property MessageWelcome() As String
             Get
                 Return ResourceManager.GetString("MessageWelcome", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compression DB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property NameMainWindowCompressionDB() As String
+            Get
+                Return ResourceManager.GetString("NameMainWindowCompressionDB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Home 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property NameMainWindowHome() As String
+            Get
+                Return ResourceManager.GetString("NameMainWindowHome", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Watcher 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property NameMainWindowWatcher() As String
+            Get
+                Return ResourceManager.GetString("NameMainWindowWatcher", resourceCulture)
             End Get
         End Property
         
@@ -895,6 +940,24 @@ Namespace i18n
         Public Shared ReadOnly Property SettingsUpdateSettingsCheckPreUpdates() As String
             Get
                 Return ResourceManager.GetString("SettingsUpdateSettingsCheckPreUpdates", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 CompactGUI 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property TitleCompactGUI() As String
+            Get
+                Return ResourceManager.GetString("TitleCompactGUI", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Admin 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniAdmin() As String
+            Get
+                Return ResourceManager.GetString("UniAdmin", resourceCulture)
             End Get
         End Property
         
