@@ -591,6 +591,60 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 When System is Idle 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersIdle() As String
+            Get
+                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersIdle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Last ran: {0:dd MMM yyyy \a\t HH:mm:ss} 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersLastRanFormat() As String
+            Get
+                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersLastRanFormat", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Never 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersNever() As String
+            Get
+                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersNever", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Next scheduled: {0:dd MMM yyyy \a\t HH:mm:ss} 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat() As String
+            Get
+                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 On Schedule 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersOnSchedule() As String
+            Get
+                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersOnSchedule", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 On Schedule if system is also idle 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersOnScheduleIdle() As String
+            Get
+                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersOnScheduleIdle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Monitor compressed folders for changes 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsFoldersChanges() As String
@@ -728,6 +782,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 edit skipped filetypes 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SettingsSkiplistflyoutEditSkippedFiletypes() As String
+            Get
+                Return ResourceManager.GetString("SettingsSkiplistflyoutEditSkippedFiletypes", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 System Integration 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property SettingsSystemIntegration() As String
@@ -841,6 +904,24 @@ Namespace i18n
         Public Shared ReadOnly Property UniEdit() As String
             Get
                 Return ResourceManager.GetString("UniEdit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Reset 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniReset() As String
+            Get
+                Return ResourceManager.GetString("UniReset", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Save 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniSave() As String
+            Get
+                Return ResourceManager.GetString("UniSave", resourceCulture)
             End Get
         End Property
     End Class

@@ -325,10 +325,10 @@
                                           Width="290" Height="35"
                                           Margin="10,0,0,0" HorizontalAlignment="Left"
                                           SelectedIndex="{Binding AppSettings.BackgroundModeSelection, Mode=TwoWay, Converter={StaticResource EnumToIntConverter}}">
-                                    <ComboBoxItem Content="Never" />
-                                    <ComboBoxItem Content="When System is Idle" />
-                                    <ComboBoxItem Content="On Schedule" />
-                                    <ComboBoxItem Content="On Schedule if system is also idle" />
+                                    <ComboBoxItem Content="{local:Localize SettingsBackgroundWatcherSettingsCompressFoldersNever}" d:Content="Never" />
+                                    <ComboBoxItem Content="{local:Localize SettingsBackgroundWatcherSettingsCompressFoldersIdle}" d:Content="When System is Idle" />
+                                    <ComboBoxItem Content="{local:Localize SettingsBackgroundWatcherSettingsCompressFoldersOnSchedule}" d:Content="On Schedule" />
+                                    <ComboBoxItem Content="{local:Localize SettingsBackgroundWatcherSettingsCompressFoldersOnScheduleIdle}" d:Content="On Schedule if system is also idle" />
 
                                 </ComboBox>
 
@@ -374,15 +374,15 @@
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                 
+
                                 </StackPanel>
 
                             </WrapPanel>
-                            <TextBlock Text="{Binding AppSettings.ScheduledBackgroundLastRan, StringFormat='{}Last ran: {0:dd MMM yyyy \\a\\t HH:mm:ss }', Mode=OneWay}"
+                            <TextBlock Text="{Binding AppSettings.ScheduledBackgroundLastRan, StringFormat={local:Localize SettingsBackgroundWatcherSettingsCompressFoldersLastRanFormat},Mode=OneWay}"
                                        Margin="45,10,0,0"
                                        Foreground="#30FFFFFF" />
 
-                            <TextBlock Text="{Binding AppSettings.NextScheduledBackgroundRun, StringFormat='{}Next scheduled: {0:dd MMM yyyy \\a\\t HH:mm:ss }', Mode=OneWay}"
+                            <TextBlock Text="{Binding AppSettings.NextScheduledBackgroundRun, StringFormat={local:Localize SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat},Mode=OneWay}"
                                        Margin="45,10,0,0"
                                        Foreground="#30FFFFFF"
                                        Visibility="{Binding AppSettings.BackgroundModeSelection, Mode=OneWay, Converter={StaticResource BackgroundModeToVisibilityConverter}}" />
@@ -437,28 +437,30 @@
                     </ui:CardExpander.Header>
 
 
-					<StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
-						<!-- Language Selector -->
-						<Grid Margin="0,10,0,10">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*" />
-								<ColumnDefinition Width="Auto" />
-							</Grid.ColumnDefinitions>
+                    <StackPanel Margin="15,-10,15,10" FlowDirection="LeftToRight">
+                        <!-- Language Selector -->
+                        <Grid Margin="0,10,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
                             <Label Content="{Binding SettingsUiSettingsLanguageChangedLabel, RelativeSource={RelativeSource AncestorType=Page}}"
                                    d:Content="Language (Requires Restart)" VerticalAlignment="Center"/>
-							<ComboBox x:Name="UiLanguageComboBox" Grid.Column="1" Width="150" SelectedIndex="0" SelectionChanged="UiLanguageComboBox_SelectionChanged">
-								<ComboBoxItem Content="English" Tag="en-US" />
-								<ComboBoxItem Content="简体中文" Tag="zh-CN" />
-							</ComboBox>
-						</Grid>
-						<StackPanel Margin="-10,10,0,0">
-							<CheckBox x:Name="UiAlwaysShowDetailedCompressionMode"
+                            <ComboBox x:Name="UiLanguageComboBox"
+                                      Width="120" Margin="250,0,0,0" HorizontalAlignment="Left"
+                                      SelectedIndex="0" SelectionChanged="UiLanguageComboBox_SelectionChanged">
+                                <ComboBoxItem Content="English" Tag="en-US" />
+                                <ComboBoxItem Content="简体中文" Tag="zh-CN" />
+                            </ComboBox>
+                        </Grid>
+                        <StackPanel Margin="-10,10,0,0">
+                            <CheckBox x:Name="UiAlwaysShowDetailedCompressionMode"
 									  Content="{local:Localize SettingsUiSettingsCompressionButtons}"
                                       d:Content="Always show details on Compression Mode buttons"
 									  Margin="0,-3"
 									  IsChecked="{Binding AppSettings.AlwaysShowDetailedCompressionMode}" />
-						</StackPanel>
-					</StackPanel>
+                        </StackPanel>
+                    </StackPanel>
 
                 </ui:CardExpander>
 

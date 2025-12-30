@@ -105,32 +105,6 @@ Public Class LanguageHelper
         '    End If
         'End If
 
-        '@@@
-        'Dim systemLang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName
-        'Dim defaultLang As String = "en-US"
-
-        ''匹配多语言
-        'Select Case systemLang.ToLower()
-        '    Case "zh" ' 中文
-        '        defaultLang = "zh-CN"
-        '    Case "en" ' 英文
-        '        defaultLang = "en-US"
-        '    Case "ja" ' 日语
-        '        defaultLang = "ja-JP"
-        '    Case "ko" ' 韩语
-        '        defaultLang = "ko-KR"
-        '    Case "fr" ' 法语
-        '        defaultLang = "fr-FR"
-        '    Case "de" ' 德语
-        '        defaultLang = "de-DE"
-        '    Case "es" ' 西班牙语
-        '        defaultLang = "es-ES"
-        '    Case "ru" ' 俄语
-        '        defaultLang = "ru-RU"
-        '    Case Else ' 未匹配语言，默认英文
-        '        defaultLang = "en-US"
-        'End Select
-
         ApplyCulture(defaultLang)
         WriteAppConfig("language", defaultLang)
     End Sub

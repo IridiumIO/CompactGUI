@@ -159,7 +159,7 @@
   </data>
   <data name="SettingsBackgroundWatcherSettingsTimeAt" xml:space="preserve">
     <value>at</value>
-    <comment>@MutedRule(WhiteSpaceLead)@MutedRule(WhiteSpaceTail)@Invariant</comment>
+    <comment>@MutedRule(WhiteSpaceLead)@MutedRule(WhiteSpaceTail)</comment>
   </data>
   <data name="SettingsCompressionSettingsCompressionSettings" xml:space="preserve">
     <value>Compression Settings</value>
@@ -386,5 +386,32 @@ skips files based on compression estimate</value>
   </data>
   <data name="DatabasePage_Descending" xml:space="preserve">
     <value>Descending</value>
+  </data>
+  <data name="SettingsSkiplistflyoutEditSkippedFiletypes" xml:space="preserve">
+    <value>edit skipped filetypes</value>
+  </data>
+  <data name="UniSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="UniReset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsCompressFoldersNever" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsCompressFoldersIdle" xml:space="preserve">
+    <value>When System is Idle</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsCompressFoldersOnSchedule" xml:space="preserve">
+    <value>On Schedule</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsCompressFoldersOnScheduleIdle" xml:space="preserve">
+    <value>On Schedule if system is also idle</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsCompressFoldersLastRanFormat" xml:space="preserve">
+    <value>Last ran: {0:dd MMM yyyy \a\t HH:mm:ss}</value>
+  </data>
+  <data name="SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat" xml:space="preserve">
+    <value>Next scheduled: {0:dd MMM yyyy \a\t HH:mm:ss}</value>
   </data>
 </root>

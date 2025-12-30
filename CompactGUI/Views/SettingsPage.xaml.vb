@@ -1,6 +1,19 @@
 Imports System.Windows.Data
 
 Partial Public Class SettingsPage
+    Sub New(settingsviewmodel As SettingsViewModel)
+
+        InitializeComponent()
+
+
+        DataContext = settingsviewmodel
+
+
+        ScrollViewer.SetCanContentScroll(Me, False)
+
+    End Sub
+
+
     Public Property LanguageChangedLabelContent As String
         Get
             Return CType(GetValue(LanguageChangedLabelContentProperty), String)
