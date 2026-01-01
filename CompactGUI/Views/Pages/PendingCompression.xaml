@@ -42,7 +42,7 @@
                                          />
             <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize PendingCompressionModeXPRESS8K}"
+                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_XPRESS8K}"
                                          d:CompressionMode="XPRESS 8K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -53,7 +53,7 @@
                                          />
             <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize PendingCompressionModeXPRESS16K}"
+                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_XPRESS16K}"
                                          d:CompressionMode="XPRESS 16K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -115,12 +115,14 @@
                            FontSize="14" Foreground="#FF98A9B9">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Text" Value="" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsChecked, ElementName=UiChkSkipPoorlyCompressed}" Value="True">
-                                    <Setter Property="Text" Value="{Binding Folder.GlobalPoorlyCompressedFileCount, StringFormat={}{0} files will be skipped}" />
-                                </DataTrigger>
-                            </Style.Triggers>
+                            <Setter Property="Text">
+                                <Setter.Value>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="Folder.GlobalPoorlyCompressedFileCount" />
+                                        <Binding Source="{local:Localize CompressionConfiguration_SkipFile}" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
@@ -148,12 +150,14 @@
                            FontSize="14" Foreground="#FF98A9B9">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Text" Value="" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsChecked, ElementName=UiChkSkipUserPoorlyCompressed}" Value="True">
-                                    <Setter Property="Text" Value="{Binding Folder.WikiPoorlyCompressedFilesCount, StringFormat={}{0} files will be skipped}" />
-                                </DataTrigger>
-                            </Style.Triggers>
+                            <Setter Property="Text">
+                                <Setter.Value>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="Folder.WikiPoorlyCompressedFilesCount" />
+                                        <Binding Source="{local:Localize CompressionConfiguration_SkipFile}" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>

@@ -259,8 +259,8 @@
                          FocusOnLeftClick="True" MenuOnRightClick="True" TooltipText="CompactGUI">
             <tray:NotifyIcon.Menu>
                 <ContextMenu x:Name="NotifyIconTrayMenu">
-                    <MenuItem Command="{Binding NotifyIconOpenCommand}" Header="Open" />
-                    <MenuItem Command="{Binding NotifyIconExitCommand}" Header="Exit" />
+                    <MenuItem Command="{Binding NotifyIconOpenCommand}" Header="{local:Localize UniOpen}" />
+                    <MenuItem Command="{Binding NotifyIconExitCommand}" Header="{local:Localize UniExit}" />
                 </ContextMenu>
             </tray:NotifyIcon.Menu>
         </tray:NotifyIcon>
