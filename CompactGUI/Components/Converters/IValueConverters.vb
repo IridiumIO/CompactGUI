@@ -102,7 +102,7 @@ Public Class RelativeDateConverter : Implements IValueConverter
         ElseIf ts > TimeSpan.FromMinutes(2) Then
             Return String.Format(LanguageHelper.GetString("Time_MinutesAgo"), ts.TotalMinutes)
         Else
-            Return LanguageHelper.GetString("RelativeTimeJustNow")
+            Return LanguageHelper.GetString("Time_Now")
         End If
     End Function
 
