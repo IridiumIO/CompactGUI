@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DatabasePage"
+<UserControl x:Class="DatabasePage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,19 +13,24 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        
-        
-        
-        <TextBlock Text="Database Results"
-             Grid.Row="0"
-             VerticalAlignment="Top"
-             FontSize="26"
-             Foreground="{StaticResource CardForeground}"
-             Visibility="Visible" />
 
-        <TextBlock Grid.Row="2" Text="{Binding LastUpdatedDatabase, StringFormat=Last Fetched: {0:dd MMM yyy HH:mm:ss}}" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#10FFFFFF" Margin="0 0 0 0 " FontSize="12"/>
+        <TextBlock Text="{local:Localize CompressionDB_DatabaseResults}"
+                   d:Text="Database Results"
+                   Grid.Row="0"
+                   VerticalAlignment="Top"
+                   FontSize="26"
+                   Foreground="{StaticResource CardForeground}"
+                   Visibility="Visible" />
 
+        <TextBlock Grid.Row="2"  HorizontalAlignment="Right" VerticalAlignment="Top"
+                   Foreground="#10FFFFFF" Margin="0 0 0 0" FontSize="12">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{local:Localize Status_LastFetched}">
+                    <Binding Path="LastUpdatedDatabase" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        
         <TextBlock Grid.Row="1"
            HorizontalAlignment="Left" VerticalAlignment="Center"
            FontSize="20"
@@ -34,7 +39,7 @@
             <Run Text="Submissions" />
             <Run Text="across" />-->
             <Run Text="{Binding DatabaseGamesCount, Mode=OneWay }" />  
-            <Run Text="Games" />
+            <Run Text="{local:Localize CompressionDB_DatabaseResults_Games}" d:Text="Games" />
         </TextBlock>
 
         <Grid Grid.Row="0" Margin="20 0 0 0" HorizontalAlignment="Right" Grid.RowSpan="1">
@@ -43,41 +48,42 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            
+
             <!-- Search Box -->
             <ui:TextBox VerticalAlignment="Center"
                FontSize="14" Width="250"
-               PlaceholderText="Search by game name or SteamID..."
+               PlaceholderText="{local:Localize CompressionDB_DatabaseResults_SearchSteamID}"
+               d:PlaceholderText="Search by game name or SteamID..."
                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
             <!-- Sorting Menu -->
             <ui:DropDownButton Grid.Column="1" Margin="20 0 0 0" Foreground="{StaticResource LabelForeground}" Height="36" VerticalAlignment="Center" HorizontalAlignment="Stretch">
-                <TextBlock Text="Sort By"/>
+                <TextBlock Text="{local:Localize CompressionDB_DatabaseResults_Sort}" d:Text="Sort By"/>
                 <ui:DropDownButton.Flyout>
                     <ContextMenu>
-                        <MenuItem Header="Game Name">
-                            <MenuItem Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameAsc"/>
-                            <MenuItem Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameDesc"/>
+                        <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortGameName}" d:Header="Game Name">
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortAscending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameAsc"/>
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortDescending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameDesc"/>
                         </MenuItem>
-                        <MenuItem Header="SteamID">
-                            <MenuItem Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDAsc"/>
-                            <MenuItem Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDDesc"/>
+                        <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortSteamID}" d:Header="SteamID">
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortAscending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDAsc"/>
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortDescending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDDesc"/>
                         </MenuItem>
-                        <MenuItem Header="Max Savings">
-                            <MenuItem Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsAsc"/>
-                            <MenuItem Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsDesc"/>
+                        <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortMaxSavings}" d:Header="Max Savings">
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortAscending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsAsc"/>
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortDescending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsDesc"/>
                         </MenuItem>
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
             </ui:DropDownButton>
 
         </Grid>
-        
-        
+
+
         <Separator Grid.Row="2"
            Height="1"
            VerticalAlignment="Bottom" />
-       
+
         <!-- Results ListView -->
         <ListView Grid.Row="3" Background="Transparent" VirtualizingPanel.VirtualizationMode="Recycling"
                   ItemsSource="{Binding FilteredResults}"
@@ -128,11 +134,11 @@
                                 <TextBlock Text="{Binding GameName}" FontWeight="SemiBold" FontSize="20"/>
                                 <Border Margin="14,2" Padding="6,2" Background="{StaticResource CardBackgroundPressed}" CornerRadius="4">
                                     <StackPanel Orientation="Horizontal">
-                                        
+
                                         <TextBlock Text="{Binding SteamID, StringFormat={}SteamID: {0}}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
-                                
+
                             </StackPanel>
 
                             <!-- Compression Results -->
@@ -141,98 +147,98 @@
 
                                 <ui:Card>
 
-                                <Grid>
-                                    <Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
 
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
 
-                                    <Grid Margin="0 0 0 10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="130"/>
-                                        </Grid.ColumnDefinitions>
+                                        <Grid Margin="0 0 0 10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="130"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="MODE" FontWeight="SemiBold" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                        <TextBlock Grid.Column="1" Text="BEFORE" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                        <TextBlock Grid.Column="2" Text="AFTER" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                        <TextBlock Grid.Column="3" Text="SAVINGS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                        <TextBlock Grid.Column="4" Text="TOTAL RESULTS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Text="{local:Localize Status_CompressionMode}" d:Text="MODE" FontWeight="SemiBold" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="1" Text="{local:Localize Status_Before}" d:Text="BEFORE" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="2" Text="{local:Localize Status_After}" d:Text="AFTER" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="3" Text="{local:Localize CompressionModeRadio_Savings}" d:Text="SAVINGS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="4" Text="{local:Localize CompressionModeRadio_TotalResults}" d:Text="TOTAL RESULTS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
 
+                                        </Grid>
+
+                                        <Grid Grid.Row="1" Visibility="{Binding Result_X4K, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="130"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Content="XPRESS4K"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Result_X4K.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Result_X4K.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding Result_X4K.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding Result_X4K.TotalResults}" HorizontalAlignment="Right"/>
+                                        </Grid>
+
+                                        <Grid Grid.Row="2" Visibility="{Binding Result_X8K, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="130"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Content="XPRESS8K"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Result_X8K.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Result_X8K.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding Result_X8K.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding Result_X8K.TotalResults}" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <Grid Grid.Row="3" Visibility="{Binding Result_X16K, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="130"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Content="XPRESS16K"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Result_X16K.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Result_X16K.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding Result_X16K.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding Result_X16K.TotalResults}" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <Grid Grid.Row="4" Visibility="{Binding Result_LZX, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="130"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Content="LZX"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Result_LZX.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Result_LZX.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding Result_LZX.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding Result_LZX.TotalResults}" HorizontalAlignment="Right"/>
+                                        </Grid>
                                     </Grid>
-
-                                    <Grid Grid.Row="1" Visibility="{Binding Result_X4K, Converter={StaticResource NullToVisibilityConverter}}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="130"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label Content="XPRESS4K"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Result_X4K.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding Result_X4K.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding Result_X4K.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="4" Text="{Binding Result_X4K.TotalResults}" HorizontalAlignment="Right"/>
-                                    </Grid>
-
-                                    <Grid Grid.Row="2" Visibility="{Binding Result_X8K, Converter={StaticResource NullToVisibilityConverter}}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="130"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label Content="XPRESS8K"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Result_X8K.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding Result_X8K.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding Result_X8K.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="4" Text="{Binding Result_X8K.TotalResults}" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                    <Grid Grid.Row="3" Visibility="{Binding Result_X16K, Converter={StaticResource NullToVisibilityConverter}}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="130"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label Content="XPRESS16K"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Result_X16K.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding Result_X16K.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding Result_X16K.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="4" Text="{Binding Result_X16K.TotalResults}" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                    <Grid Grid.Row="4" Visibility="{Binding Result_LZX, Converter={StaticResource NullToVisibilityConverter}}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="130"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label Content="LZX"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Result_LZX.BeforeBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding Result_LZX.AfterBytes, Converter={StaticResource BytesToReadableConverter}}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding Result_LZX.CompressionSavings, StringFormat={}{0}%}" Foreground="#92f1ab" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="4" Text="{Binding Result_LZX.TotalResults}" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                </Grid>
                                 </ui:Card>
-                                
-                               
+
+
                             </StackPanel>
 
                             <!-- Poorly Compressed Extensions -->

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FolderWatcherCard"
+<UserControl x:Class="FolderWatcherCard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -36,7 +36,8 @@
 
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-              <TextBlock Text="Watched Folders"
+              <TextBlock Text="{local:Localize Watcher_WatchedFolders}"
+                        d:Text="Watched Folders"
                    Grid.Row="0"
                    VerticalAlignment="Top"
                    FontSize="26"
@@ -50,11 +51,11 @@
                 Command="{Binding ManuallyAddFolderToWatcherCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="FolderAdd24"/>
-                    <TextBlock Text="Add" Margin="8 0 0 0 " FontSize="13" FontWeight="SemiBold"/>
+                    <TextBlock Text="{local:Localize UniAdd}" d:Text="Add" Margin="8 0 0 0 " FontSize="13" FontWeight="SemiBold"/>
                 </StackPanel>
             <Button.ToolTip>
                 <ToolTip ToolTipService.InitialShowDelay="100">
-                    <TextBlock Text="Add a custom folder to the watchlist"
+                    <TextBlock Text="{local:Localize Watcher_AddTip}" d:Text="Add a custom folder to the watchlist"
                                FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                 </ToolTip>
             </Button.ToolTip>
@@ -70,16 +71,23 @@
                    FontSize="18" FontWeight="SemiBold"
                    Foreground="#40FFFFFF">
             <Run Text="{Binding Watcher.TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" d:Text="51.8GB" />
-            <Run Text="saved" />
+            <Run Text="{local:Localize Watcher_WatchedSaved}" d:Text="saved" />
         </TextBlock>
 
         <StackPanel Grid.Row="1" Grid.RowSpan="2"
                     Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                     Orientation="Horizontal">
 
-            <TextBlock Text="{Binding Watcher.LastAnalysed, StringFormat=Last analysed {0}, Converter={StaticResource RelativeDateConverter}}"
-                       Margin="0,-2,0,0" VerticalAlignment="Center"
-                       d:Text="Last analysed: just now" FontSize="14" FontWeight="SemiBold" Foreground="#40FFFFFF" />
+            <TextBlock Margin="0,-2,0,0" VerticalAlignment="Center"
+                       d:Text="Last analysed: just now"
+                       FontSize="14" FontWeight="SemiBold" Foreground="#40FFFFFF">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} {1}">
+                        <Binding Source="{local:Localize Watcher_LastAnalysed}" />
+                        <Binding Path="Watcher.LastAnalysed" Converter="{StaticResource RelativeDateConverter}" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
             <Grid Width="45" Height="25"
                   VerticalAlignment="Center">
                 <ui:Button Background="Transparent" BorderThickness="0" Margin="2 0"
@@ -89,7 +97,7 @@
                     <ui:SymbolIcon Symbol="ArrowClockwiseDashes24" FontSize="18"/>
                     <ui:Button.ToolTip>
                         <ToolTip ToolTipService.InitialShowDelay="100">
-                            <TextBlock Text="Re-analyse all watched folders"
+                            <TextBlock Text="{local:Localize Watcher_ReAnalyse}" d:Text="Re-analyse all watched folders"
                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                         </ToolTip>
                     </ui:Button.ToolTip>
@@ -104,8 +112,8 @@
 
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right">
 
-            <Button Content="Cancel Background Compressor"  Command="{Binding CancelBackgroundingCommand}" Visibility="{Binding Watcher.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <Button Content="Compress All Now"  Command="{Binding RunWatcherCommand}" Visibility="{Binding Watcher.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+            <Button Content="{local:Localize Watcher_CancelBackgroundCompressor}" d:Content="Cancel Background Compressor"  Command="{Binding CancelBackgroundingCommand}" Visibility="{Binding Watcher.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Content="{local:Localize Watcher_CompressAllNow}" d:Content="Compress All Now"  Command="{Binding RunWatcherCommand}" Visibility="{Binding Watcher.IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
         </StackPanel>
        
 
@@ -228,11 +236,11 @@
                                 </TextBlock.ToolTip>
                             </TextBlock>
                             <TextBlock x:Name="DecayedText"
-                                       Text="{Binding DecayPercentage, StringFormat={}{0}% decayed, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}"
+                                       Text="{Binding DecayPercentage, StringFormat='{}{0}% {local:Localize Watcher_WatchedDecayed}', Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}}"
                                        Margin="0,-2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                                        d:Text="7% decayed" FontSize="12" Foreground="#FFBFC7CE" />
                             <TextBlock x:Name="SavedText"
-                                       Text="{Binding SavedSpace, StringFormat={}{0} saved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}, ConverterParameter=0}"
+                                       Text="{Binding SavedSpace, StringFormat='{}{0} {local:Localize Watcher_WatchedSaved}', Mode=OneWay, Converter={StaticResource BytesToReadableConverter}, ConverterParameter=0}"
                                        Margin="0,-2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                                        d:Text="39GB saved" FontSize="12" Foreground="#FFBFC7CE" Visibility="Collapsed" />
                             <ProgressBar Width="160" Height="6"
@@ -246,15 +254,17 @@
 
                             <Grid Margin="0,45,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="last compressed:"
+                                    <TextBlock Text="{local:Localize Watcher_LastCompressed}"
+                                               d:Text="last compressed:"
                                                Margin="0,0,10,0"
                                                FontSize="12" Foreground="#FF8B9FB3" />
                                     <TextBlock Text="{Binding LastCompressedDate, Converter={StaticResource RelativeDateConverter}}"
                                                d:Text="fds" FontSize="12" Foreground="#FF8B9FB3" />
                                 </StackPanel>
                                 <StackPanel Margin="0,20,0,-3" Orientation="Horizontal">
-                                    <TextBlock Text="last modified:"
-                                               Margin="0,0,27,0"
+                                    <TextBlock Text="{local:Localize Watcher_LastModified}"
+                                               d:Text="last modified:"
+                                               Margin="0,0,10,0"
                                                FontSize="12" Foreground="#FF8B9FB3" />
                                     <TextBlock Text="{Binding LastSystemModifiedDate, Converter={StaticResource RelativeDateConverter}}"
                                                d:Text="fds" FontSize="12" Foreground="#FF8B9FB3" />
@@ -270,7 +280,7 @@
                                     <ui:SymbolIcon FontSize="14" Symbol="Delete16" />
                                     <Button.ToolTip>
                                         <ToolTip ToolTipService.InitialShowDelay="100">
-                                            <TextBlock Text="Remove from Watchlist"
+                                            <TextBlock Text="{local:Localize Watcher_RemoveWatchlist}" d:Text="Remove from Watchlist"
                                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
@@ -293,7 +303,7 @@
                                     </ui:SymbolIcon>
                                     <Button.ToolTip>
                                         <ToolTip  ToolTipService.InitialShowDelay="100">
-                                            <TextBlock Text="Add to compression queue"
+                                            <TextBlock Text="{local:Localize Watcher_AddQueue}" d:Text="Add to compression queue"
                                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>
@@ -307,7 +317,7 @@
                                                  Glyph="&#xE9F3;" />
                                     <Button.ToolTip>
                                         <ToolTip ToolTipService.InitialShowDelay="100">
-                                            <TextBlock Text="Re-analyse this folder"
+                                            <TextBlock Text="{local:Localize Watcher_ReAnalyseFolder}" d:Text="Re-analyse this folder"
                                                        FontSize="12" Foreground="#FFBFC7CE" TextWrapping="NoWrap" />
                                         </ToolTip>
                                     </Button.ToolTip>

@@ -1,4 +1,4 @@
-﻿Imports System.Collections.ObjectModel
+Imports System.Collections.ObjectModel
 Imports System.IO
 Imports System.Threading
 
@@ -10,7 +10,7 @@ Imports CompactGUI.Core.WOFHelper
 
 Imports Microsoft.Extensions.Logging
 
-Imports PropertyChanged
+'Imports PropertyChanged
 
 
 'Need this abstract class so we can use it in XAML

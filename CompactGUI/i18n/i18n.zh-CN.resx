@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SetUi" xml:space="preserve">
+    <value>UI 设置</value>
+  </data>
+  <data name="SetUi_CompressionDetails" xml:space="preserve">
+    <value>始终显示压缩模式按钮的详细信息</value>
+  </data>
+  <data name="SetUi_LanguageChanged" xml:space="preserve">
+    <value>语言 (需要重启)</value>
+  </data>
+  <data name="SetUi_LanguageChangedTitle" xml:space="preserve">
+    <value>语言更改</value>
+  </data>
+  <data name="SetUi_LanguageChangedMsg" xml:space="preserve">
+    <value>语言更改成功。您可能需要重启应用程序以使所有更改生效。</value>
+  </data>
+  <data name="SetUpdate" xml:space="preserve">
+    <value>更新设置</value>
+  </data>
+  <data name="SetUpdate_CheckPreUpdates" xml:space="preserve">
+    <value>检查预发布更新</value>
+  </data>
+  <data name="SetBackgroundWatch" xml:space="preserve">
+    <value>后台监控设置</value>
+  </data>
+  <data name="SetBackgroundWatch_FoldersChanges" xml:space="preserve">
+    <value>监控已压缩文件夹的更改</value>
+  </data>
+  <data name="SetBackgroundWatch_CompressFolders" xml:space="preserve">
+    <value>压缩文件夹：</value>
+  </data>
+  <data name="SetBackgroundWatch_Time_Every" xml:space="preserve">
+    <value>每</value>
+  </data>
+  <data name="SetBackgroundWatch_Time_Day" xml:space="preserve">
+    <value>天</value>
+  </data>
+  <data name="SetCompression" xml:space="preserve">
+    <value>压缩设置</value>
+  </data>
+  <data name="SetCompression_MaxThreads" xml:space="preserve">
+    <value>最大压缩线程数</value>
+  </data>
+  <data name="SetCompression_HDDThread" xml:space="preserve">
+    <value>HDD 仅使用 1 个线程</value>
+  </data>
+  <data name="SetCompression_NonSteamFolders" xml:space="preserve">
+    <value>估算非 Steam 文件夹的压缩率 (测试版)</value>
+  </data>
+  <data name="SetSystemIntegration" xml:space="preserve">
+    <value>系统集成</value>
+  </data>
+  <data name="SetSystemIntegration_RightClickMenu" xml:space="preserve">
+    <value>添加到右键菜单</value>
+  </data>
+  <data name="SetSystemIntegration_StartMenu" xml:space="preserve">
+    <value>添加到开始菜单</value>
+  </data>
+  <data name="SetSystemIntegration_CompletionNotification" xml:space="preserve">
+    <value>完成后显示通知</value>
+  </data>
+  <data name="SetSystemIntegration_Startup" xml:space="preserve">
+    <value>在系统托盘启动 CompactGUI</value>
+  </data>
+  <data name="SetFiletypeManagement" xml:space="preserve">
+    <value>文件类型管理</value>
+  </data>
+  <data name="SetFiletypeManagement_LocalSkipFiletypes" xml:space="preserve">
+    <value>管理本地跳过的文件类型</value>
+  </data>
+  <data name="UniEdit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="SetFiletypeManagement_OnlineSkiplistAgression" xml:space="preserve">
+    <value>在线跳过列表的激进程度</value>
+  </data>
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionTip" xml:space="preserve">
+    <value>仅限 Steam 游戏。
+在选择跳过用户提交的文件类型时，该设置决定了每种文件类型需要提交多少次才能考虑跳过该类型。
+“低”通常是最好的，因为高档有跳过本来可以很好地压缩的文件的风险。</value>
+  </data>
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionLow" xml:space="preserve">
+    <value>低</value>
+  </data>
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionMedium" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionHigh" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="PageNameWatcher" xml:space="preserve">
+    <value>监控页</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults" xml:space="preserve">
+    <value>数据库结果</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_SearchSteamID" xml:space="preserve">
+    <value>按游戏名称或 SteamID 搜索...</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_Sort" xml:space="preserve">
+    <value>排序方式</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_SortGameName" xml:space="preserve">
+    <value>游戏名称</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_SortSteamID" xml:space="preserve">
+    <value>SteamID</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_SortMaxSavings" xml:space="preserve">
+    <value>最大节省</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_Games" xml:space="preserve">
+    <value>游戏列表</value>
+  </data>
+  <data name="Status_UncompressedSize" xml:space="preserve">
+    <value>未压缩大小</value>
+  </data>
+  <data name="Status_ContainedFiles" xml:space="preserve">
+    <value>包含文件</value>
+  </data>
+  <data name="Home_AddFolder" xml:space="preserve">
+    <value>添加文件夹到队列</value>
+  </data>
+  <data name="Home_CompressSelected" xml:space="preserve">
+    <value>压缩选中项</value>
+  </data>
+  <data name="Status_Working" xml:space="preserve">
+    <value>正在处理</value>
+  </data>
+  <data name="Status_ResultsState" xml:space="preserve">
+    <value>数据库状态</value>
+  </data>
+  <data name="CompressionMode" xml:space="preserve">
+    <value>压缩模式</value>
+  </data>
+  <data name="CompressionConfiguration" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="CompressionConfiguration_SkipFileTypes" xml:space="preserve">
+    <value>跳过设置中指定的文件类型</value>
+  </data>
+  <data name="CompressionConfiguration_SkipFileTypesLikelyPoorly" xml:space="preserve">
+    <value>跳过可能压缩效果不佳的文件类型</value>
+  </data>
+  <data name="CompressionConfiguration_SkipFileTypesLikelyPoorlyTip" xml:space="preserve">
+    <value>对于 Steam 游戏：
+根据数据库结果跳过文件
+
+对于非 Steam 文件夹：
+基于压缩估计跳过文件</value>
+  </data>
+  <data name="CompressionConfiguration_WatchFolderChanges" xml:space="preserve">
+    <value>监控文件夹更改</value>
+  </data>
+  <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
+    <value>应用到所有</value>
+  </data>
+  <data name="CompressionModeRadio_EstimatedSize" xml:space="preserve">
+    <value>预估大小</value>
+  </data>
+  <data name="CompressionModeRadio_Savings" xml:space="preserve">
+    <value>节省</value>
+  </data>
+  <data name="CompressionModeRadio_Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="Watcher_WatchedFolders" xml:space="preserve">
+    <value>受监控文件夹</value>
+  </data>
+  <data name="Watcher_WatchedSaved" xml:space="preserve">
+    <value>已节省</value>
+  </data>
+  <data name="Watcher_CancelBackgroundCompressor" xml:space="preserve">
+    <value>取消后台压缩</value>
+  </data>
+  <data name="Watcher_CompressAllNow" xml:space="preserve">
+    <value>立即全部压缩</value>
+  </data>
+  <data name="Watcher_LastAnalysed" xml:space="preserve">
+    <value>上次分析</value>
+  </data>
+  <data name="Time_Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="Time_DaysAgo" xml:space="preserve">
+    <value>{0:0} 天前</value>
+  </data>
+  <data name="Time_HoursAgo" xml:space="preserve">
+    <value>{0:0} 小时前</value>
+  </data>
+  <data name="Time_MinutesAgo" xml:space="preserve">
+    <value>{0:0} 分钟前</value>
+  </data>
+  <data name="Time_Now" xml:space="preserve">
+    <value>刚刚</value>
+  </data>
+  <data name="Status_CompressionSummary" xml:space="preserve">
+    <value>压缩摘要</value>
+  </data>
+  <data name="Status_SpaceSaved" xml:space="preserve">
+    <value>节省空间</value>
+  </data>
+  <data name="Status_FilesCompressed" xml:space="preserve">
+    <value>文件已压缩</value>
+  </data>
+  <data name="Status_CompressionMode" xml:space="preserve">
+    <value>压缩模式</value>
+  </data>
+  <data name="Home_Uncompress" xml:space="preserve">
+    <value>解压缩</value>
+  </data>
+  <data name="Home_CompressAgain" xml:space="preserve">
+    <value>再次压缩</value>
+  </data>
+  <data name="Home_SubmitResults" xml:space="preserve">
+    <value>提交结果</value>
+  </data>
+  <data name="Status_Before" xml:space="preserve">
+    <value>压缩前</value>
+  </data>
+  <data name="Status_After" xml:space="preserve">
+    <value>压缩后</value>
+  </data>
+  <data name="CompressionModeRadio_TotalResults" xml:space="preserve">
+    <value>总结果</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_SortAscending" xml:space="preserve">
+    <value>升序</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_SortDescending" xml:space="preserve">
+    <value>降序</value>
+  </data>
+  <data name="UniSave" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="UniReset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
+    <value>编辑跳过类型</value>
+  </data>
+  <data name="SetBackgroundWatch_CompressFolders_Never" xml:space="preserve">
+    <value>从不</value>
+  </data>
+  <data name="SetBackgroundWatch_CompressFolders_Idle" xml:space="preserve">
+    <value>当系统空闲时</value>
+  </data>
+  <data name="SetBackgroundWatch_CompressFolders_OnSchedule" xml:space="preserve">
+    <value>按计划</value>
+  </data>
+  <data name="SetBackgroundWatch_CompressFolders_OnScheduleIdle" xml:space="preserve">
+    <value>按计划且系统空闲时</value>
+  </data>
+  <data name="SetBackgroundWatch_CompressFolders_LastRanFormat" xml:space="preserve">
+    <value>上次运行: {0:yyyy年 M月 d日 HH:mm:ss}</value>
+  </data>
+  <data name="SetBackgroundWatch_CompressFolders_NextScheduledFormat" xml:space="preserve">
+    <value>下次计划: {0:yyyy年 M月 d日 HH:mm:ss}</value>
+  </data>
+  <data name="Message_Welcome" xml:space="preserve">
+    <value>欢迎</value>
+  </data>
+  <data name="SetBackgroundWatch_Time_At" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="UniAdmin" xml:space="preserve">
+    <value>管理员权限</value>
+  </data>
+  <data name="Home_SelectFolder" xml:space="preserve">
+    <value>选择文件夹</value>
+  </data>
+  <data name="Title_CompactGUI" xml:space="preserve">
+    <value>CompactGUI</value>
+  </data>
+  <data name="Title_CompressionDB" xml:space="preserve">
+    <value>压缩数据库</value>
+  </data>
+  <data name="Title_Watcher" xml:space="preserve">
+    <value>监控</value>
+  </data>
+  <data name="Title_Home" xml:space="preserve">
+    <value>主页</value>
+  </data>
+  <data name="Status_LastFetched" xml:space="preserve">
+    <value>最后获取: {0:yyyy年 M月 d日 HH:mm:ss}</value>
+  </data>
+  <data name="Watcher_LastModified" xml:space="preserve">
+    <value>上次修改:</value>
+  </data>
+  <data name="Watcher_LastCompressed" xml:space="preserve">
+    <value>上次压缩:</value>
+  </data>
+  <data name="Watcher_ReAnalyse" xml:space="preserve">
+    <value>重新分析所有受监控文件夹</value>
+  </data>
+  <data name="Watcher_RemoveWatchlist" xml:space="preserve">
+    <value>从监控列表移除</value>
+  </data>
+  <data name="Watcher_AddQueue" xml:space="preserve">
+    <value>添加到压缩队列</value>
+  </data>
+  <data name="Watcher_ReAnalyseFolder" xml:space="preserve">
+    <value>重新分析此文件夹</value>
+  </data>
+  <data name="Watcher_WatchedDecayed" xml:space="preserve">
+    <value>已衰减</value>
+  </data>
+  <data name="Watcher_AddTip" xml:space="preserve">
+    <value>添加自定义文件夹到监控列表</value>
+  </data>
+  <data name="UniAdd" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Status_Analysing" xml:space="preserve">
+    <value>正在分析</value>
+  </data>
+  <data name="Status_AwaitingCompression" xml:space="preserve">
+    <value>等待压缩</value>
+  </data>
+  <data name="Status_Compressed" xml:space="preserve">
+    <value>已压缩</value>
+  </data>
+  <data name="Status_Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="CompressionConfiguration_SkipFile" xml:space="preserve">
+    <value>个文件将被跳过</value>
+  </data>
+  <data name="SnackBar_SnackbarPresenter" xml:space="preserve">
+    <value>SnackbarPresenter 从未被设置</value>
+  </data>
+  <data name="SnackBar_RestartAdmin" xml:space="preserve">
+    <value>以管理员身份重新启动</value>
+  </data>
+  <data name="SnackBar_RestartAdminTip" xml:space="preserve">
+    <value>没有足够的权限访问此文件夹</value>
+  </data>
+  <data name="SnackBar_UpdateDownload" xml:space="preserve">
+    <value>点击下载</value>
+  </data>
+  <data name="SnackBar_UpdateAvailable" xml:space="preserve">
+    <value>更新可用 ▸ 版本 {0}</value>
+  </data>
+  <data name="SnackBar_SubmitWikiFailed" xml:space="preserve">
+    <value>提交到 Wiki 失败</value>
+  </data>
+  <data name="SnackBar_DirectStorageTechnology" xml:space="preserve">
+    <value>此游戏使用 DirectStorage 技术。如果您正在使用此功能，则不应压缩此游戏。</value>
+  </data>
+  <data name="SnackBar_CannotRemoveFolderTip" xml:space="preserve">
+    <value>请等待当前操作完成</value>
+  </data>
+  <data name="SnackBar_CannotRemoveFolder" xml:space="preserve">
+    <value>无法移除文件夹</value>
+  </data>
+  <data name="SnackBar_AppliedAllFoldersTip" xml:space="preserve">
+    <value>压缩选项已应用到所有文件夹</value>
+  </data>
+  <data name="SnackBar_AppliedAllFolders" xml:space="preserve">
+    <value>已应用到所有文件夹</value>
+  </data>
+  <data name="SnackBar_SubmitWikiFailedTip" xml:space="preserve">
+    <value>请检查您的网络连接并重试</value>
+  </data>
+  <data name="SnackBar_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="SnackBar_SuccessTip" xml:space="preserve">
+    <value>已添加到队列</value>
+  </data>
+  <data name="SnackBar_SubmitWikiTitle" xml:space="preserve">
+    <value>已提交到 Wiki</value>
+  </data>
+  <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
+    <value>压缩模式</value>
+  </data>
+  <data name="SnackBar_SubmitWiki_Game" xml:space="preserve">
+    <value>游戏</value>
+  </data>
+  <data name="Status_NotCompressed" xml:space="preserve">
+    <value>未压缩</value>
+  </data>
+  <data name="MessageBox_ExitText" xml:space="preserve">
+    <value>你目前有 {0} 个文件夹正在被监控。关闭 CompactGUI 将停止对它们的监控。
+
+你确定要退出吗？</value>
+  </data>
+  <data name="UniExit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="UniOpen" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="UniYes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="UniCancel" xml:space="preserve">
+    <value>否</value>
+  </data>
+</root>

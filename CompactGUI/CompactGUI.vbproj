@@ -29,7 +29,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
 
-
   <ItemGroup>
     <Import Include="System.Windows" />
     <Import Include="System.Windows.Controls" />
@@ -46,6 +45,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Coravel" Version="6.0.2" />
     <PackageReference Include="diskdetector-net" Version="0.3.2" />
+    <PackageReference Include="FunctionalConverters" Version="0.1.0" />
     <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
     <PackageReference Include="IridiumIO.MVVM.VBSourceGenerators" Version="0.6.1" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.7" />
@@ -69,6 +69,22 @@
     <Reference Include="FunctionalConverters">
       <HintPath>..\..\FunctionalConverters\FunctionalConverters\bin\Release\net6.0-windows\FunctionalConverters.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="i18n\i18n.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>i18n.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="i18n\i18n.resx">
+      <CustomToolNamespace>i18n</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>i18n.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="RenamePublishedExe" AfterTargets="Publish" Condition="'$(IsMonolithic)' == 'true'">

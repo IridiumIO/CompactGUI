@@ -1,4 +1,4 @@
-﻿Imports System.Globalization
+Imports System.Globalization
 
 Public Class DecimalToPercentageConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
@@ -88,20 +88,21 @@ End Class
 
 Public Class RelativeDateConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+
         Dim dt = CType(value, DateTime)
         Dim ts As TimeSpan = DateTime.Now - dt
 
         If ts > TimeSpan.FromDays(19000) Then
-            Return String.Format("Unknown")
+            Return LanguageHelper.GetString("Time_Unknown")
         End If
         If ts > TimeSpan.FromDays(2) Then
-            Return String.Format("{0:0} days ago", ts.TotalDays)
+            Return String.Format(LanguageHelper.GetString("Time_DaysAgo"), ts.TotalDays)
         ElseIf ts > TimeSpan.FromHours(2) Then
-            Return String.Format("{0:0} hours ago", ts.TotalHours)
+            Return String.Format(LanguageHelper.GetString("Time_HoursAgo"), ts.TotalHours)
         ElseIf ts > TimeSpan.FromMinutes(2) Then
-            Return String.Format("{0:0} minutes ago", ts.TotalMinutes)
+            Return String.Format(LanguageHelper.GetString("Time_MinutesAgo"), ts.TotalMinutes)
         Else
-            Return "just now"
+            Return LanguageHelper.GetString("Time_Now")
         End If
     End Function
 
@@ -290,15 +291,15 @@ Public Class FolderStatusToStringConverter : Implements IValueConverter
         Dim status = CType(value, ActionState)
         Select Case status
             Case ActionState.Idle
-                Return "Awaiting Compression"
+                Return LanguageHelper.GetString("Status_AwaitingCompression")
             Case ActionState.Analysing
-                Return "Analysing"
+                Return LanguageHelper.GetString("Status_Analysing")
             Case ActionState.Working, ActionState.Paused
-                Return "Working"
+                Return LanguageHelper.GetString("Status_Working")
             Case ActionState.Results
-                Return "Compressed"
+                Return LanguageHelper.GetString("Status_Compressed")
             Case Else
-                Return "Unknown"
+                Return LanguageHelper.GetString("Status_Unknown")
         End Select
     End Function
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack

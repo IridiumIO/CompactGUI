@@ -1,10 +1,10 @@
-﻿Imports System.Collections.ObjectModel
+Imports System.Collections.ObjectModel
 Imports System.Threading
 
 Imports CompactGUI.Core
 Imports CompactGUI.Core.Settings
 
-Imports Microsoft.CodeAnalysis.Diagnostics
+'Imports Microsoft.CodeAnalysis.Diagnostics
 
 Imports Microsoft.Extensions.Logging
 
