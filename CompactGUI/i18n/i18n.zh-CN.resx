@@ -117,250 +117,238 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SettingsUiSettings" xml:space="preserve">
+  <data name="SetUi" xml:space="preserve">
     <value>UI 设置</value>
   </data>
-  <data name="SettingsUiSettingsCompressionButtons" xml:space="preserve">
+  <data name="SetUi_CompressionDetails" xml:space="preserve">
     <value>始终显示压缩模式按钮的详细信息</value>
   </data>
-  <data name="SettingsUiSettingsLanguageChangedLabel" xml:space="preserve">
+  <data name="SetUi_LanguageChanged" xml:space="preserve">
     <value>语言 (需要重启)</value>
   </data>
-  <data name="SettingsUiSettingsLanguageChangeTitle" xml:space="preserve">
+  <data name="SetUi_LanguageChangedTitle" xml:space="preserve">
     <value>语言更改</value>
   </data>
-  <data name="SettingsUiSettingsLanguageChangedMsg" xml:space="preserve">
+  <data name="SetUi_LanguageChangedMsg" xml:space="preserve">
     <value>语言更改成功。您可能需要重启应用程序以使所有更改生效。</value>
   </data>
-  <data name="SettingsUpdateSettings" xml:space="preserve">
+  <data name="SetUpdate" xml:space="preserve">
     <value>更新设置</value>
   </data>
-  <data name="SettingsUpdateSettingsCheckPreUpdates" xml:space="preserve">
+  <data name="SetUpdate_CheckPreUpdates" xml:space="preserve">
     <value>检查预发布更新</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettings" xml:space="preserve">
+  <data name="SetBackgroundWatch" xml:space="preserve">
     <value>后台监控设置</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsFoldersChanges" xml:space="preserve">
+  <data name="SetBackgroundWatch_FoldersChanges" xml:space="preserve">
     <value>监控已压缩文件夹的更改</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsCompressFolders" xml:space="preserve">
+  <data name="SetBackgroundWatch_CompressFolders" xml:space="preserve">
     <value>压缩文件夹：</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsTimeEvery" xml:space="preserve">
+  <data name="SetBackgroundWatch_Time_Every" xml:space="preserve">
     <value>每</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsTimeDay" xml:space="preserve">
+  <data name="SetBackgroundWatch_Time_Day" xml:space="preserve">
     <value>天</value>
   </data>
-  <data name="SettingsCompressionSettingsCompressionSettings" xml:space="preserve">
+  <data name="SetCompression" xml:space="preserve">
     <value>压缩设置</value>
   </data>
-  <data name="SettingsCompressionSettingsMaxThreads" xml:space="preserve">
+  <data name="SetCompression_MaxThreads" xml:space="preserve">
     <value>最大压缩线程数</value>
   </data>
-  <data name="SettingsCompressionSettingsHDDThread" xml:space="preserve">
+  <data name="SetCompression_HDDThread" xml:space="preserve">
     <value>HDD 仅使用 1 个线程</value>
   </data>
-  <data name="SettingsCompressionSettingsNonSteamFolders" xml:space="preserve">
+  <data name="SetCompression_NonSteamFolders" xml:space="preserve">
     <value>估算非 Steam 文件夹的压缩率 (测试版)</value>
   </data>
-  <data name="SettingsSystemIntegration" xml:space="preserve">
+  <data name="SetSystemIntegration" xml:space="preserve">
     <value>系统集成</value>
   </data>
-  <data name="SettingsSystemIntegrationRightClickMenu" xml:space="preserve">
+  <data name="SetSystemIntegration_RightClickMenu" xml:space="preserve">
     <value>添加到右键菜单</value>
   </data>
-  <data name="SettingsSystemIntegrationStartMenu" xml:space="preserve">
+  <data name="SetSystemIntegration_StartMenu" xml:space="preserve">
     <value>添加到开始菜单</value>
   </data>
-  <data name="SettingsSystemIntegrationNotificationOnCompletion" xml:space="preserve">
+  <data name="SetSystemIntegration_CompletionNotification" xml:space="preserve">
     <value>完成后显示通知</value>
   </data>
-  <data name="SettingsSystemIntegrationSystemTrayStartup" xml:space="preserve">
+  <data name="SetSystemIntegration_Startup" xml:space="preserve">
     <value>在系统托盘启动 CompactGUI</value>
   </data>
-  <data name="SettingsFiletypeManagement" xml:space="preserve">
+  <data name="SetFiletypeManagement" xml:space="preserve">
     <value>文件类型管理</value>
   </data>
-  <data name="SettingsFiletypeManagementLocalSkipFiletypes" xml:space="preserve">
+  <data name="SetFiletypeManagement_LocalSkipFiletypes" xml:space="preserve">
     <value>管理本地跳过的文件类型</value>
   </data>
   <data name="UniEdit" xml:space="preserve">
     <value>编辑</value>
   </data>
-  <data name="SettingsFiletypeManagementOnlineSkiplistAgression" xml:space="preserve">
+  <data name="SetFiletypeManagement_OnlineSkiplistAgression" xml:space="preserve">
     <value>在线跳过列表的激进程度</value>
   </data>
-  <data name="SettingsFiletypeManagementAgressionTip" xml:space="preserve">
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionTip" xml:space="preserve">
     <value>仅限 Steam 游戏。
 在选择跳过用户提交的文件类型时，该设置决定了每种文件类型需要提交多少次才能考虑跳过该类型。
 “低”通常是最好的，因为高档有跳过本来可以很好地压缩的文件的风险。</value>
   </data>
-  <data name="SettingsFiletypeManagementAgressionLow" xml:space="preserve">
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionLow" xml:space="preserve">
     <value>低</value>
   </data>
-  <data name="SettingsFiletypeManagementAgressionMedium" xml:space="preserve">
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionMedium" xml:space="preserve">
     <value>中</value>
   </data>
-  <data name="SettingsFiletypeManagementAgressionHigh" xml:space="preserve">
+  <data name="SetFiletypeManagement_OnlineSkiplistAgressionHigh" xml:space="preserve">
     <value>高</value>
   </data>
-  <data name="PageWatcherName" xml:space="preserve">
+  <data name="PageNameWatcher" xml:space="preserve">
     <value>监控页</value>
   </data>
-  <data name="PageSettingsName" xml:space="preserve">
+  <data name="Set" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="PageDatabaseResults" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults" xml:space="preserve">
     <value>数据库结果</value>
   </data>
-  <data name="DatabaseResultsSearchSteamID" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_SearchSteamID" xml:space="preserve">
     <value>按游戏名称或 SteamID 搜索...</value>
   </data>
-  <data name="DatabaseResultsSort" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_Sort" xml:space="preserve">
     <value>排序方式</value>
   </data>
-  <data name="DatabaseResultsSortGameName" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_SortGameName" xml:space="preserve">
     <value>游戏名称</value>
   </data>
-  <data name="DatabaseResultsSortSteamID" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_SortSteamID" xml:space="preserve">
     <value>SteamID</value>
   </data>
-  <data name="DatabaseResultsSortMaxSavings" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_SortMaxSavings" xml:space="preserve">
     <value>最大节省</value>
   </data>
-  <data name="DatabaseResultsGames" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_Games" xml:space="preserve">
     <value>游戏列表</value>
   </data>
-  <data name="FolderViewUncompressedSize" xml:space="preserve">
+  <data name="Status_UncompressedSize" xml:space="preserve">
     <value>未压缩大小</value>
   </data>
-  <data name="FolderViewContainedFiles" xml:space="preserve">
+  <data name="Status_ContainedFiles" xml:space="preserve">
     <value>包含文件</value>
   </data>
-  <data name="HomePageAddFolder" xml:space="preserve">
+  <data name="Home_AddFolder" xml:space="preserve">
     <value>添加文件夹到队列</value>
   </data>
-  <data name="HomePageCompressSelected" xml:space="preserve">
+  <data name="Home_CompressSelected" xml:space="preserve">
     <value>压缩选中项</value>
   </data>
-  <data name="HomePageWorking" xml:space="preserve">
+  <data name="Status_Working" xml:space="preserve">
     <value>正在处理</value>
   </data>
-  <data name="HomePageResultsState" xml:space="preserve">
+  <data name="Status_ResultsState" xml:space="preserve">
     <value>数据库状态</value>
   </data>
-  <data name="PendingCompressionCompressionMode" xml:space="preserve">
+  <data name="CompressionMode" xml:space="preserve">
     <value>压缩模式</value>
   </data>
-  <data name="PendingCompressionConfiguration" xml:space="preserve">
+  <data name="CompressionConfiguration" xml:space="preserve">
     <value>配置</value>
   </data>
-  <data name="PendingCompressionConfigurationSkipFileTypesSpecified" xml:space="preserve">
+  <data name="CompressionConfiguration_SkipFileTypes" xml:space="preserve">
     <value>跳过设置中指定的文件类型</value>
   </data>
-  <data name="PendingCompressionConfigurationSkipFileTypesLikelyPoorly" xml:space="preserve">
+  <data name="CompressionConfiguration_SkipFileTypesLikelyPoorly" xml:space="preserve">
     <value>跳过可能压缩效果不佳的文件类型</value>
   </data>
-  <data name="PendingCompressionConfigurationSkipFileTypesLikelyPoorlyTip" xml:space="preserve">
+  <data name="CompressionConfiguration_SkipFileTypesLikelyPoorlyTip" xml:space="preserve">
     <value>对于 Steam 游戏：
 根据数据库结果跳过文件
 
 对于非 Steam 文件夹：
 基于压缩估计跳过文件</value>
   </data>
-  <data name="PendingCompressionWatchFolderChanges" xml:space="preserve">
+  <data name="CompressionConfiguration_WatchFolderChanges" xml:space="preserve">
     <value>监控文件夹更改</value>
   </data>
-  <data name="PendingCompressionApplyAll" xml:space="preserve">
+  <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>应用到所有</value>
   </data>
-  <data name="CompressionModeRadioEstimatedSize" xml:space="preserve">
+  <data name="CompressionModeRadio_EstimatedSize" xml:space="preserve">
     <value>预估大小</value>
   </data>
-  <data name="CompressionModeRadioSavings" xml:space="preserve">
+  <data name="CompressionModeRadio_Savings" xml:space="preserve">
     <value>节省</value>
   </data>
-  <data name="CompressionModeRadioUnknown" xml:space="preserve">
+  <data name="CompressionModeRadio_Unknown" xml:space="preserve">
     <value>未知</value>
   </data>
-  <data name="PageFolderWatcherCardWatchedFoldersName" xml:space="preserve">
+  <data name="Watcher_WatchedFolders" xml:space="preserve">
     <value>受监控文件夹</value>
   </data>
-  <data name="FolderWatcherCardSaved" xml:space="preserve">
+  <data name="Watcher_WatchedSaved" xml:space="preserve">
     <value>已节省</value>
   </data>
-  <data name="FolderWatcherCardCancelBackgroundCompressor" xml:space="preserve">
+  <data name="Watcher_CancelBackgroundCompressor" xml:space="preserve">
     <value>取消后台压缩</value>
   </data>
-  <data name="FolderWatcherCardCompressAllNow" xml:space="preserve">
+  <data name="Watcher_CompressAllNow" xml:space="preserve">
     <value>立即全部压缩</value>
   </data>
-  <data name="FolderWatcherCardLastAnalysed" xml:space="preserve">
+  <data name="Watcher_LastAnalysed" xml:space="preserve">
     <value>上次分析</value>
   </data>
-  <data name="RelativeTimeUnknown" xml:space="preserve">
+  <data name="Time_Unknown" xml:space="preserve">
     <value>未知</value>
   </data>
-  <data name="RelativeTimeDaysAgo" xml:space="preserve">
+  <data name="Time_DaysAgo" xml:space="preserve">
     <value>{0:0} 天前</value>
   </data>
-  <data name="RelativeTimeHoursAgo" xml:space="preserve">
+  <data name="Time_HoursAgo" xml:space="preserve">
     <value>{0:0} 小时前</value>
   </data>
-  <data name="RelativeTimeMinutesAgo" xml:space="preserve">
+  <data name="Time_MinutesAgo" xml:space="preserve">
     <value>{0:0} 分钟前</value>
   </data>
-  <data name="RelativeTimeJustNow" xml:space="preserve">
+  <data name="Time_Now" xml:space="preserve">
     <value>刚刚</value>
   </data>
-  <data name="ResultsTemplateCompressionSummary" xml:space="preserve">
+  <data name="Status_CompressionSummary" xml:space="preserve">
     <value>压缩摘要</value>
   </data>
-  <data name="ResultsTemplateSpaceSaved" xml:space="preserve">
+  <data name="Status_SpaceSaved" xml:space="preserve">
     <value>节省空间</value>
   </data>
-  <data name="ResultsTemplateFilesCompressed" xml:space="preserve">
+  <data name="Status_FilesCompressed" xml:space="preserve">
     <value>文件已压缩</value>
   </data>
-  <data name="ResultsTemplateCompressionMode" xml:space="preserve">
+  <data name="Status_CompressionMode" xml:space="preserve">
     <value>压缩模式</value>
   </data>
-  <data name="ResultsTemplateUncompress" xml:space="preserve">
+  <data name="Home_Uncompress" xml:space="preserve">
     <value>解压缩</value>
   </data>
-  <data name="ResultsTemplateCompressAgain" xml:space="preserve">
+  <data name="Home_CompressAgain" xml:space="preserve">
     <value>再次压缩</value>
   </data>
-  <data name="ResultsTemplateSubmitResults" xml:space="preserve">
+  <data name="Home_SubmitResults" xml:space="preserve">
     <value>提交结果</value>
   </data>
-  <data name="ResultsTemplateBefore" xml:space="preserve">
+  <data name="Status_Before" xml:space="preserve">
     <value>压缩前</value>
   </data>
-  <data name="ResultsTemplateAfter" xml:space="preserve">
+  <data name="Status_After" xml:space="preserve">
     <value>压缩后</value>
   </data>
-  <data name="DatabasePageMODE" xml:space="preserve">
-    <value>模式</value>
-  </data>
-  <data name="DatabasePageBEFORE" xml:space="preserve">
-    <value>压缩前</value>
-  </data>
-  <data name="DatabasePageAFTER" xml:space="preserve">
-    <value>压缩后</value>
-  </data>
-  <data name="DatabasePageSAVINGS" xml:space="preserve">
-    <value>节省</value>
-  </data>
-  <data name="DatabasePageTOTALRESULTS" xml:space="preserve">
+  <data name="CompressionModeRadio_TotalResults" xml:space="preserve">
     <value>总结果</value>
   </data>
-  <data name="DatabasePage_Ascending" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_SortAscending" xml:space="preserve">
     <value>升序</value>
   </data>
-  <data name="DatabasePage_Descending" xml:space="preserve">
+  <data name="CompressionDB_DatabaseResults_SortDescending" xml:space="preserve">
     <value>降序</value>
   </data>
   <data name="UniSave" xml:space="preserve">
@@ -369,52 +357,52 @@
   <data name="UniReset" xml:space="preserve">
     <value>重置</value>
   </data>
-  <data name="SettingsSkiplistflyoutEditSkippedFiletypes" xml:space="preserve">
+  <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
     <value>编辑跳过类型</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsCompressFoldersNever" xml:space="preserve">
+  <data name="SetBackgroundWatch_CompressFolders_Never" xml:space="preserve">
     <value>从不</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsCompressFoldersIdle" xml:space="preserve">
+  <data name="SetBackgroundWatch_CompressFolders_Idle" xml:space="preserve">
     <value>当系统空闲时</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsCompressFoldersOnSchedule" xml:space="preserve">
+  <data name="SetBackgroundWatch_CompressFolders_OnSchedule" xml:space="preserve">
     <value>按计划</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsCompressFoldersOnScheduleIdle" xml:space="preserve">
+  <data name="SetBackgroundWatch_CompressFolders_OnScheduleIdle" xml:space="preserve">
     <value>按计划且系统空闲时</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsCompressFoldersLastRanFormat" xml:space="preserve">
+  <data name="SetBackgroundWatch_CompressFolders_LastRanFormat" xml:space="preserve">
     <value>上次运行: {0:yyyy年 M月 d日 HH:mm:ss}</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat" xml:space="preserve">
+  <data name="SetBackgroundWatch_CompressFolders_NextScheduledFormat" xml:space="preserve">
     <value>下次计划: {0:yyyy年 M月 d日 HH:mm:ss}</value>
   </data>
   <data name="MessageWelcome" xml:space="preserve">
     <value>欢迎</value>
   </data>
-  <data name="SettingsBackgroundWatcherSettingsTimeAt" xml:space="preserve">
+  <data name="SetBackgroundWatch_Time_At" xml:space="preserve">
     <value> </value>
   </data>
   <data name="UniAdmin" xml:space="preserve">
     <value>管理员权限</value>
   </data>
-  <data name="HomePageSelectFolder" xml:space="preserve">
+  <data name="Home_SelectFolder" xml:space="preserve">
     <value>选择文件夹</value>
   </data>
-  <data name="TitleCompactGUI" xml:space="preserve">
+  <data name="Title_CompactGUI" xml:space="preserve">
     <value>CompactGUI</value>
   </data>
-  <data name="NameMainWindowCompressionDB" xml:space="preserve">
+  <data name="Title_CompressionDB" xml:space="preserve">
     <value>压缩数据库</value>
   </data>
-  <data name="NameMainWindowWatcher" xml:space="preserve">
+  <data name="Title_Watcher" xml:space="preserve">
     <value>监控</value>
   </data>
-  <data name="NameMainWindowHome" xml:space="preserve">
+  <data name="Title_Home" xml:space="preserve">
     <value>主页</value>
   </data>
-  <data name="DatabaseLastFetched" xml:space="preserve">
+  <data name="Status_LastFetched" xml:space="preserve">
     <value>最后获取: {0:yyyy年 M月 d日 HH:mm:ss}</value>
   </data>
 </root>

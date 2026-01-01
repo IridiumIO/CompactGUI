@@ -20,7 +20,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TextBlock Text="{local:Localize PendingCompressionCompressionMode}"
+        <ui:TextBlock Text="{local:Localize CompressionMode}"
                       d:Text="Compression Mode"
                       Margin="0,30,0,20" VerticalAlignment="Center"
                       FontSize="16" FontWeight="SemiBold" />
@@ -31,7 +31,7 @@
 
             <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize PendingCompressionModeXPRESS4K}"
+                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_XPRESS4K}"
                                          d:CompressionMode="XPRESS 4K" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -64,7 +64,7 @@
                                          />
             <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize PendingCompressionModeLZX}"
+                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_LZX}"
                                          d:CompressionMode="LZX" EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -100,12 +100,12 @@
                 <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#4ca5ff"/>
                 <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#6fb6ff"/>
             </StackPanel.Resources>-->
-            <ui:TextBlock Text="{local:Localize PendingCompressionConfiguration}" d:Text="Configuration"
+            <ui:TextBlock Text="{local:Localize CompressionConfiguration}" d:Text="Configuration"
                           Margin="0,0,0,20" VerticalAlignment="Center"
                            FontSize="16" FontWeight="SemiBold" />
             <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
                 <CheckBox x:Name="UiChkSkipPoorlyCompressed" Checked="UiChkSkipPoorlyCompressed_Checked" Unchecked="UiChkSkipPoorlyCompressed_Unchecked"
-                          Content="{local:Localize PendingCompressionConfigurationSkipFileTypesSpecified}"
+                          Content="{local:Localize CompressionConfiguration_SkipFileTypes}"
                           d:Content="Skip file types specified in settings"
                           FontSize="16" 
                           IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" >
@@ -130,13 +130,13 @@
                           FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}">
                     <TextBlock>
-                        <Run Text="{local:Localize PendingCompressionConfigurationSkipFileTypesLikelyPoorly}" d:Text="Skip file types likely to compress poorly" />
+                        <Run Text="{local:Localize CompressionConfiguration_SkipFileTypesLikelyPoorly}" d:Text="Skip file types likely to compress poorly" />
                         <InlineUIContainer>
                             <TextBlock Text="(?)"
                                     Cursor="Hand" Foreground="#FF98A9B9" TextDecorations="Underline">
                                     <ToolTipService.ToolTip>
                                         <ToolTip MaxWidth="450" Placement="Top">
-                                            <TextBlock Text="{local:Localize PendingCompressionConfigurationSkipFileTypesLikelyPoorlyTip}"
+                                            <TextBlock Text="{local:Localize CompressionConfiguration_SkipFileTypesLikelyPoorlyTip}"
                                                        TextAlignment="Left" TextWrapping="Wrap" />
                                         </ToolTip>
                                     </ToolTipService.ToolTip>
@@ -160,7 +160,7 @@
             </WrapPanel>
 
 
-            <CheckBox x:Name="uiChkWatchFolderForChanges" Content="{local:Localize PendingCompressionWatchFolderChanges}" 
+            <CheckBox x:Name="uiChkWatchFolderForChanges" Content="{local:Localize CompressionConfiguration_WatchFolderChanges}" 
                       d:Content="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked" Unchecked="uiChkWatchFolderForChanges_Unchecked"
                       Margin="0,0,0,15"
                       FontSize="16"
@@ -169,7 +169,7 @@
         </StackPanel>
 
 
-        <ui:Button Content="{local:Localize PendingCompressionApplyAll}"
+        <ui:Button Content="{local:Localize CompressionConfiguration_ApplyAll}"
                    d:Content="Apply to all"
                    Grid.Row="3"
                    Width="140" Height="40"

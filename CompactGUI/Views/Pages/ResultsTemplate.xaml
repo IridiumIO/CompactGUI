@@ -22,7 +22,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{local:Localize ResultsTemplateCompressionSummary}"
+        <TextBlock Text="{local:Localize Status_CompressionSummary}"
                    d:Text="Compression Summary"
                    HorizontalAlignment="Left"
                    FontSize="16" FontWeight="SemiBold" />
@@ -44,7 +44,7 @@
             <TextBlock Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
                        HorizontalAlignment="Right"
                        FontSize="18" FontWeight="SemiBold" />
-            <TextBlock Text="{local:Localize ResultsTemplateBefore}" d:Text="Before"
+            <TextBlock Text="{local:Localize Status_Before}" d:Text="Before"
                        Margin="0,-2" HorizontalAlignment="Right"
                        FontSize="14"
                        Foreground="{StaticResource AccentFillColorDisabledBrush}" />
@@ -55,7 +55,7 @@
             <TextBlock Text="{Binding Folder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
                        HorizontalAlignment="Right"
                        FontSize="18" FontWeight="SemiBold" />
-            <TextBlock Text="{local:Localize ResultsTemplateAfter}" d:Text="After"
+            <TextBlock Text="{local:Localize Status_After}" d:Text="After"
                        Margin="0,-2" HorizontalAlignment="Right"
                        FontSize="14"
                        Foreground="{StaticResource AccentFillColorDisabledBrush}" />
@@ -71,7 +71,7 @@
                      Margin="0,0,20,20" Padding="10,20,10,20"
                      Background="#30FFFFFF" BorderThickness="0">
                 <Grid>
-                    <ui:TextBlock Text="{local:Localize ResultsTemplateSpaceSaved}" d:Text="Space Saved"
+                    <ui:TextBlock Text="{local:Localize Status_SpaceSaved}" d:Text="Space Saved"
                                   Margin="0,0,10,-4" VerticalAlignment="Center"
                                   FontSize="13" Foreground="#80FFFFFF" />
                     <ui:TextBlock Text="{Binding Folder.CompressionRatio, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF'}"
@@ -83,7 +83,7 @@
                      Margin="0,0,20,20" Padding="10,20,10,20"
                      Background="#30FFFFFF" BorderThickness="0">
                 <Grid>
-                    <ui:TextBlock Text="{local:Localize ResultsTemplateFilesCompressed}" d:Text="Files Compressed"
+                    <ui:TextBlock Text="{local:Localize Status_FilesCompressed}" d:Text="Files Compressed"
                                   Margin="0,0,10,-4" VerticalAlignment="Center"
                                   FontSize="13" Foreground="#80FFFFFF" />
                     <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
@@ -99,7 +99,7 @@
                      Margin="0,0,20,20" Padding="10,20,10,20"
                      Background="#30FFFFFF" BorderThickness="0">
                 <Grid>
-                    <ui:TextBlock Text="{local:Localize ResultsTemplateCompressionMode}" d:Text="Compression Mode"
+                    <ui:TextBlock Text="{local:Localize Status_CompressionMode}" d:Text="Compression Mode"
                                   Margin="0,0,10,-4" VerticalAlignment="Center"
                                   FontSize="13" Foreground="#80FFFFFF" />
                     <ui:TextBlock Text="{Binding DominantCompressionMode, Converter={StaticResource CompressionLevelAbbreviatedConverter}}"
@@ -116,14 +116,14 @@
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Orientation="Horizontal">
 
-            <ui:Button Content="{local:Localize ResultsTemplateUncompress}"
+            <ui:Button Content="{local:Localize Home_Uncompress}"
                        d:Content="Uncompress"
                        Width="140" Height="40"
                        Margin="0,0,0,10"
                        Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                        Command="{Binding UncompressCommand}"
                        FontSize="16" />
-            <ui:Button Content="{local:Localize ResultsTemplateCompressAgain}"
+            <ui:Button Content="{local:Localize Home_CompressAgain}"
                        d:Content="Compress Again"
                        Width="140" Height="40"
                        Margin="40,0,0,10"
@@ -131,7 +131,7 @@
                        Command="{Binding CompressAgainCommand}"
                        FontSize="16"
                        Visibility="{Binding Folder.IsFreshlyCompressed, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
-            <ui:Button Content="{local:Localize ResultsTemplateSubmitResults}"
+            <ui:Button Content="{local:Localize Home_SubmitResults}"
                        d:Content="Submit Results"
                        Width="140" Height="40"
                        Margin="40,0,0,10"

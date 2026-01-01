@@ -24,7 +24,7 @@ Partial Public Class SettingsPage
     End Property
 
     Public Shared ReadOnly LanguageChangedLabelContentProperty As DependencyProperty =
-        DependencyProperty.Register("SettingsUiSettingsLanguageChangedLabel", GetType(String), GetType(SettingsPage),
+        DependencyProperty.Register("SetUi_LanguageChanged", GetType(String), GetType(SettingsPage),
                                    New PropertyMetadata("Language (Requires Restart)"))
 
     Private Sub SettingsPage_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -42,7 +42,7 @@ Partial Public Class SettingsPage
 
     Private Sub UpdateLocalizedText()
         ' 更新语言标签内容
-        LanguageChangedLabelContent = LanguageHelper.GetString("SettingsUiSettingsLanguageChangedLabel")
+        LanguageChangedLabelContent = LanguageHelper.GetString("SetUi_LanguageChanged")
 
     End Sub
 
@@ -56,8 +56,8 @@ Partial Public Class SettingsPage
             LanguageHelper.WriteAppConfig("language", languageCode)
             UpdateLocalizedText()
 
-            MessageBox.Show(LanguageHelper.GetString("SettingsUiSettingsLanguageChangedMsg"),
-                       LanguageHelper.GetString("SettingsUiSettingsLanguageChangeTitle"),
+            MessageBox.Show(LanguageHelper.GetString("SetUi_LanguageChangedMsg"),
+                       LanguageHelper.GetString("SetUi_LanguageChangedTitle"),
                        MessageBoxButton.OK, MessageBoxImage.Information)
         End If
     End Sub

@@ -93,16 +93,16 @@ Public Class RelativeDateConverter : Implements IValueConverter
         Dim ts As TimeSpan = DateTime.Now - dt
 
         If ts > TimeSpan.FromDays(19000) Then
-            Return LanguageHelper.GetString("RelativeTimeUnknown")
+            Return LanguageHelper.GetString("Time_Unknown")
         End If
         If ts > TimeSpan.FromDays(2) Then
-            Return String.Format(LanguageHelper.GetString("RelativeTimeDaysAgo"), ts.TotalDays)
+            Return String.Format(LanguageHelper.GetString("Time_DaysAgo"), ts.TotalDays)
         ElseIf ts > TimeSpan.FromHours(2) Then
-            Return String.Format(LanguageHelper.GetString("RelativeTimeHoursAgo"), ts.TotalHours)
+            Return String.Format(LanguageHelper.GetString("Time_HoursAgo"), ts.TotalHours)
         ElseIf ts > TimeSpan.FromMinutes(2) Then
-            Return String.Format(LanguageHelper.GetString("RelativeTimeMinutesAgo"), ts.TotalMinutes)
+            Return String.Format(LanguageHelper.GetString("Time_MinutesAgo"), ts.TotalMinutes)
         Else
-            Return LanguageHelper.GetString("RelativeTimeJustNow")
+            Return LanguageHelper.GetString("Time_Now")
         End If
     End Function
 

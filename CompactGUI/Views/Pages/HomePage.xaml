@@ -14,7 +14,7 @@
 
         <DataTemplate x:Key="IdleTemplate">
 
-            <Button Content="{local:Localize HomePageCompressSelected}"
+            <Button Content="{local:Localize Home_CompressSelected}"
                     d:Content="Compress Selected"
                     Width="160" Height="40"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
@@ -33,13 +33,13 @@
             <ui:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center"
                   IsIndeterminate="True" />
             <!--<StackPanel Margin="0,20">
-                <TextBlock Text="{local:Localize HomePageWorking}" d:Text="Working" FontSize="18" />
+                <TextBlock Text="{local:Localize Status_Working}" d:Text="Working" FontSize="18" />
                 <ProgressBar Margin="0,10" IsIndeterminate="True" />
             </StackPanel>-->
         </DataTemplate>
 
         <DataTemplate x:Key="ResultsTemplate">
-            <!--<TextBlock Text="{local:Localize HomePageResultsState}" d:Text="Results State" />-->
+            <!--<TextBlock Text="{local:Localize Status_ResultsState}" d:Text="Results State" />-->
 
         </DataTemplate>
 
@@ -62,7 +62,7 @@
                     Margin="0,-90,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Label HorizontalAlignment="Center">
-                <TextBlock Text="{local:Localize TitleCompactGUI}" d:Text="CompactGUI" FontSize="32" />
+                <TextBlock Text="{local:Localize Title_CompactGUI}" d:Text="CompactGUI" FontSize="32" />
             </Label>
             <Border Background="#20f44336" CornerRadius="10" Width="70" Height="20" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock  Text="{local:Localize UniAdmin}" d:Text="Admin" Foreground="White" HorizontalAlignment="Center" FontSize="12" VerticalAlignment="Center"/>
@@ -73,7 +73,7 @@
                     Margin="0,20,0,0" HorizontalContentAlignment="Stretch">
                 <Grid>
                     <ui:SymbolIcon HorizontalAlignment="Left" Symbol="Search12" />
-                    <TextBlock Text="{local:Localize HomePageSelectFolder}" d:Text="select a folder" HorizontalAlignment="Center" />
+                    <TextBlock Text="{local:Localize Home_SelectFolder}" d:Text="select a folder" HorizontalAlignment="Center" />
                 </Grid>
             </Button>
 
@@ -175,7 +175,7 @@
                                    Background="{StaticResource CardBackgroundFillColorSecondaryBrush}">
                             <ui:SymbolIcon Symbol="Add16" />
                         </ui:Button>
-                        <TextBlock Text="{local:Localize HomePageAddFolder}"
+                        <TextBlock Text="{local:Localize Home_AddFolder}"
                                    d:Text="Add Folder to Queue"
                                    Margin="15,-1,0,0" VerticalAlignment="Center" />
                     </StackPanel>

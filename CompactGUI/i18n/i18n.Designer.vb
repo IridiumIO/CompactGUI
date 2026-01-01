@@ -65,254 +65,285 @@ Namespace i18n
         End Property
         
         '''<summary>
-        '''  查找类似 Estimated size 的本地化字符串。
+        '''  查找类似 Settings 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property CompressionModeRadioEstimatedSize() As String
+        Public Shared ReadOnly Property _Set() As String
             Get
-                Return ResourceManager.GetString("CompressionModeRadioEstimatedSize", resourceCulture)
+                Return ResourceManager.GetString("Set", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Savings 的本地化字符串。
+        '''  查找类似 Configuration 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property CompressionModeRadioSavings() As String
+        Public Shared ReadOnly Property CompressionConfiguration() As String
             Get
-                Return ResourceManager.GetString("CompressionModeRadioSavings", resourceCulture)
+                Return ResourceManager.GetString("CompressionConfiguration", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 unknown 的本地化字符串。
+        '''  查找类似 Apply to all 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property CompressionModeRadioUnknown() As String
+        Public Shared ReadOnly Property CompressionConfiguration_ApplyAll() As String
             Get
-                Return ResourceManager.GetString("CompressionModeRadioUnknown", resourceCulture)
+                Return ResourceManager.GetString("CompressionConfiguration_ApplyAll", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Last Fetched: {0:dd MMM yyyy HH:mm:ss} 的本地化字符串。
+        '''  查找类似 Skip file types specified in settings 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabaseLastFetched() As String
+        Public Shared ReadOnly Property CompressionConfiguration_SkipFileTypes() As String
             Get
-                Return ResourceManager.GetString("DatabaseLastFetched", resourceCulture)
+                Return ResourceManager.GetString("CompressionConfiguration_SkipFileTypes", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Ascending 的本地化字符串。
+        '''  查找类似 Skip file types likely to compress poorly 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabasePage_Ascending() As String
+        Public Shared ReadOnly Property CompressionConfiguration_SkipFileTypesLikelyPoorly() As String
             Get
-                Return ResourceManager.GetString("DatabasePage_Ascending", resourceCulture)
+                Return ResourceManager.GetString("CompressionConfiguration_SkipFileTypesLikelyPoorly", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Descending 的本地化字符串。
+        '''  查找类似 For Steam Games:
+        '''skips files based on database results
+        '''
+        '''For Non-Steam Folders:
+        '''skips files based on compression estimate 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabasePage_Descending() As String
+        Public Shared ReadOnly Property CompressionConfiguration_SkipFileTypesLikelyPoorlyTip() As String
             Get
-                Return ResourceManager.GetString("DatabasePage_Descending", resourceCulture)
+                Return ResourceManager.GetString("CompressionConfiguration_SkipFileTypesLikelyPoorlyTip", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 AFTER 的本地化字符串。
+        '''  查找类似 Watch folder for changes 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabasePageAFTER() As String
+        Public Shared ReadOnly Property CompressionConfiguration_WatchFolderChanges() As String
             Get
-                Return ResourceManager.GetString("DatabasePageAFTER", resourceCulture)
+                Return ResourceManager.GetString("CompressionConfiguration_WatchFolderChanges", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 BEFORE 的本地化字符串。
+        '''  查找类似 Database Results 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabasePageBEFORE() As String
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults() As String
             Get
-                Return ResourceManager.GetString("DatabasePageBEFORE", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 MODE 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property DatabasePageMODE() As String
-            Get
-                Return ResourceManager.GetString("DatabasePageMODE", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 SAVINGS 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property DatabasePageSAVINGS() As String
-            Get
-                Return ResourceManager.GetString("DatabasePageSAVINGS", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 TOTAL RESULTS 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property DatabasePageTOTALRESULTS() As String
-            Get
-                Return ResourceManager.GetString("DatabasePageTOTALRESULTS", resourceCulture)
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Games 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabaseResultsGames() As String
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_Games() As String
             Get
-                Return ResourceManager.GetString("DatabaseResultsGames", resourceCulture)
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_Games", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Search by game name or SteamID... 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabaseResultsSearchSteamID() As String
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_SearchSteamID() As String
             Get
-                Return ResourceManager.GetString("DatabaseResultsSearchSteamID", resourceCulture)
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_SearchSteamID", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Sort By 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabaseResultsSort() As String
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_Sort() As String
             Get
-                Return ResourceManager.GetString("DatabaseResultsSort", resourceCulture)
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_Sort", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Ascending 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_SortAscending() As String
+            Get
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_SortAscending", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Descending 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_SortDescending() As String
+            Get
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_SortDescending", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Game Name 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabaseResultsSortGameName() As String
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_SortGameName() As String
             Get
-                Return ResourceManager.GetString("DatabaseResultsSortGameName", resourceCulture)
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_SortGameName", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Max Savings 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabaseResultsSortMaxSavings() As String
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_SortMaxSavings() As String
             Get
-                Return ResourceManager.GetString("DatabaseResultsSortMaxSavings", resourceCulture)
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_SortMaxSavings", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 SteamID 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property DatabaseResultsSortSteamID() As String
+        Public Shared ReadOnly Property CompressionDB_DatabaseResults_SortSteamID() As String
             Get
-                Return ResourceManager.GetString("DatabaseResultsSortSteamID", resourceCulture)
+                Return ResourceManager.GetString("CompressionDB_DatabaseResults_SortSteamID", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 contained files 的本地化字符串。
+        '''  查找类似 Compression Mode 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property FolderViewContainedFiles() As String
+        Public Shared ReadOnly Property CompressionMode() As String
             Get
-                Return ResourceManager.GetString("FolderViewContainedFiles", resourceCulture)
+                Return ResourceManager.GetString("CompressionMode", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 uncompressed size 的本地化字符串。
+        '''  查找类似 LZX 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property FolderViewUncompressedSize() As String
+        Public Shared ReadOnly Property CompressionMode_LZX() As String
             Get
-                Return ResourceManager.GetString("FolderViewUncompressedSize", resourceCulture)
+                Return ResourceManager.GetString("CompressionMode_LZX", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Cancel Background Compressor 的本地化字符串。
+        '''  查找类似 XPRESS 16K 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property FolderWatcherCardCancelBackgroundCompressor() As String
+        Public Shared ReadOnly Property CompressionMode_XPRESS16K() As String
             Get
-                Return ResourceManager.GetString("FolderWatcherCardCancelBackgroundCompressor", resourceCulture)
+                Return ResourceManager.GetString("CompressionMode_XPRESS16K", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Compress All Now 的本地化字符串。
+        '''  查找类似 XPRESS 4K 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property FolderWatcherCardCompressAllNow() As String
+        Public Shared ReadOnly Property CompressionMode_XPRESS4K() As String
             Get
-                Return ResourceManager.GetString("FolderWatcherCardCompressAllNow", resourceCulture)
+                Return ResourceManager.GetString("CompressionMode_XPRESS4K", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Last analysed 的本地化字符串。
+        '''  查找类似 XPRESS 8K 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property FolderWatcherCardLastAnalysed() As String
+        Public Shared ReadOnly Property CompressionMode_XPRESS8K() As String
             Get
-                Return ResourceManager.GetString("FolderWatcherCardLastAnalysed", resourceCulture)
+                Return ResourceManager.GetString("CompressionMode_XPRESS8K", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 saved 的本地化字符串。
+        '''  查找类似 Estimated size 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property FolderWatcherCardSaved() As String
+        Public Shared ReadOnly Property CompressionModeRadio_EstimatedSize() As String
             Get
-                Return ResourceManager.GetString("FolderWatcherCardSaved", resourceCulture)
+                Return ResourceManager.GetString("CompressionModeRadio_EstimatedSize", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Savings 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property CompressionModeRadio_Savings() As String
+            Get
+                Return ResourceManager.GetString("CompressionModeRadio_Savings", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 TOTAL RESULTS 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property CompressionModeRadio_TotalResults() As String
+            Get
+                Return ResourceManager.GetString("CompressionModeRadio_TotalResults", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 unknown 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property CompressionModeRadio_Unknown() As String
+            Get
+                Return ResourceManager.GetString("CompressionModeRadio_Unknown", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Add Folder to Queue 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property HomePageAddFolder() As String
+        Public Shared ReadOnly Property Home_AddFolder() As String
             Get
-                Return ResourceManager.GetString("HomePageAddFolder", resourceCulture)
+                Return ResourceManager.GetString("Home_AddFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compress Again 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Home_CompressAgain() As String
+            Get
+                Return ResourceManager.GetString("Home_CompressAgain", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Compress Selected 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property HomePageCompressSelected() As String
+        Public Shared ReadOnly Property Home_CompressSelected() As String
             Get
-                Return ResourceManager.GetString("HomePageCompressSelected", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Results State 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property HomePageResultsState() As String
-            Get
-                Return ResourceManager.GetString("HomePageResultsState", resourceCulture)
+                Return ResourceManager.GetString("Home_CompressSelected", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 select a folder 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property HomePageSelectFolder() As String
+        Public Shared ReadOnly Property Home_SelectFolder() As String
             Get
-                Return ResourceManager.GetString("HomePageSelectFolder", resourceCulture)
+                Return ResourceManager.GetString("Home_SelectFolder", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  查找类似 Working 的本地化字符串。
+        '''  查找类似 Submit Results 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property HomePageWorking() As String
+        Public Shared ReadOnly Property Home_SubmitResults() As String
             Get
-                Return ResourceManager.GetString("HomePageWorking", resourceCulture)
+                Return ResourceManager.GetString("Home_SubmitResults", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Uncompress 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Home_Uncompress() As String
+            Get
+                Return ResourceManager.GetString("Home_Uncompress", resourceCulture)
             End Get
         End Property
         
@@ -326,474 +357,218 @@ Namespace i18n
         End Property
         
         '''<summary>
-        '''  查找类似 Compression DB 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property NameMainWindowCompressionDB() As String
-            Get
-                Return ResourceManager.GetString("NameMainWindowCompressionDB", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Home 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property NameMainWindowHome() As String
-            Get
-                Return ResourceManager.GetString("NameMainWindowHome", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Watcher 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property NameMainWindowWatcher() As String
-            Get
-                Return ResourceManager.GetString("NameMainWindowWatcher", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Database Results 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PageDatabaseResults() As String
-            Get
-                Return ResourceManager.GetString("PageDatabaseResults", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Watched Folders 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PageFolderWatcherCardWatchedFoldersName() As String
-            Get
-                Return ResourceManager.GetString("PageFolderWatcherCardWatchedFoldersName", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Settings 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PageSettingsName() As String
-            Get
-                Return ResourceManager.GetString("PageSettingsName", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  查找类似 WatcherPage 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property PageWatcherName() As String
+        Public Shared ReadOnly Property PageNameWatcher() As String
             Get
-                Return ResourceManager.GetString("PageWatcherName", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Apply to all 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionApplyAll() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionApplyAll", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Compression Mode 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionCompressionMode() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionCompressionMode", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Configuration 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionConfiguration() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionConfiguration", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Skip file types likely to compress poorly 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionConfigurationSkipFileTypesLikelyPoorly() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionConfigurationSkipFileTypesLikelyPoorly", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 For Steam Games:
-        '''skips files based on database results
-        '''
-        '''For Non-Steam Folders:
-        '''skips files based on compression estimate 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionConfigurationSkipFileTypesLikelyPoorlyTip() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionConfigurationSkipFileTypesLikelyPoorlyTip", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Skip file types specified in settings 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionConfigurationSkipFileTypesSpecified() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionConfigurationSkipFileTypesSpecified", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 LZX 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionModeLZX() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionModeLZX", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 XPRESS 4K 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionModeXPRESS4K() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionModeXPRESS4K", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Watch folder for changes 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionWatchFolderChanges() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionWatchFolderChanges", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 XPRESS 16K 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionXPRESSMode16K() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionXPRESSMode16K", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 XPRESS 8K 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property PendingCompressionXPRESSMode8K() As String
-            Get
-                Return ResourceManager.GetString("PendingCompressionXPRESSMode8K", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 {0:0} days ago 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property RelativeTimeDaysAgo() As String
-            Get
-                Return ResourceManager.GetString("RelativeTimeDaysAgo", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 {0:0} hours ago 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property RelativeTimeHoursAgo() As String
-            Get
-                Return ResourceManager.GetString("RelativeTimeHoursAgo", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 just now 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property RelativeTimeJustNow() As String
-            Get
-                Return ResourceManager.GetString("RelativeTimeJustNow", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 {0:0} minutes ago 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property RelativeTimeMinutesAgo() As String
-            Get
-                Return ResourceManager.GetString("RelativeTimeMinutesAgo", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Unknown 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property RelativeTimeUnknown() As String
-            Get
-                Return ResourceManager.GetString("RelativeTimeUnknown", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 After 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateAfter() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateAfter", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Before 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateBefore() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateBefore", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Compress Again 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateCompressAgain() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateCompressAgain", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Compression Mode 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateCompressionMode() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateCompressionMode", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Compression Summary 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateCompressionSummary() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateCompressionSummary", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Files Compressed 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateFilesCompressed() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateFilesCompressed", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Space Saved 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateSpaceSaved() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateSpaceSaved", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Submit Results 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateSubmitResults() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateSubmitResults", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Uncompress 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property ResultsTemplateUncompress() As String
-            Get
-                Return ResourceManager.GetString("ResultsTemplateUncompress", resourceCulture)
+                Return ResourceManager.GetString("PageNameWatcher", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Background Watcher Settings 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettings() As String
+        Public Shared ReadOnly Property SetBackgroundWatch() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettings", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Compress folders:  的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFolders() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_CompressFolders() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFolders", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_CompressFolders", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 When System is Idle 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersIdle() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_CompressFolders_Idle() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersIdle", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_CompressFolders_Idle", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Last ran: {0:dd MMM yyyy \a\t HH:mm:ss} 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersLastRanFormat() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_CompressFolders_LastRanFormat() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersLastRanFormat", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_CompressFolders_LastRanFormat", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Never 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersNever() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_CompressFolders_Never() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersNever", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_CompressFolders_Never", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Next scheduled: {0:dd MMM yyyy \a\t HH:mm:ss} 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_CompressFolders_NextScheduledFormat() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersNextScheduledFormat", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_CompressFolders_NextScheduledFormat", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 On Schedule 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersOnSchedule() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_CompressFolders_OnSchedule() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersOnSchedule", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_CompressFolders_OnSchedule", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 On Schedule if system is also idle 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsCompressFoldersOnScheduleIdle() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_CompressFolders_OnScheduleIdle() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsCompressFoldersOnScheduleIdle", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_CompressFolders_OnScheduleIdle", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Monitor compressed folders for changes 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsFoldersChanges() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_FoldersChanges() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsFoldersChanges", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_FoldersChanges", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 at 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsTimeAt() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_Time_At() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsTimeAt", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_Time_At", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 day(s) 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsTimeDay() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_Time_Day() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsTimeDay", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_Time_Day", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 every 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsBackgroundWatcherSettingsTimeEvery() As String
+        Public Shared ReadOnly Property SetBackgroundWatch_Time_Every() As String
             Get
-                Return ResourceManager.GetString("SettingsBackgroundWatcherSettingsTimeEvery", resourceCulture)
+                Return ResourceManager.GetString("SetBackgroundWatch_Time_Every", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Compression Settings 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsCompressionSettingsCompressionSettings() As String
+        Public Shared ReadOnly Property SetCompression() As String
             Get
-                Return ResourceManager.GetString("SettingsCompressionSettingsCompressionSettings", resourceCulture)
+                Return ResourceManager.GetString("SetCompression", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 HDDs only use 1 thread 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsCompressionSettingsHDDThread() As String
+        Public Shared ReadOnly Property SetCompression_HDDThread() As String
             Get
-                Return ResourceManager.GetString("SettingsCompressionSettingsHDDThread", resourceCulture)
+                Return ResourceManager.GetString("SetCompression_HDDThread", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Maximum Compression Threads 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsCompressionSettingsMaxThreads() As String
+        Public Shared ReadOnly Property SetCompression_MaxThreads() As String
             Get
-                Return ResourceManager.GetString("SettingsCompressionSettingsMaxThreads", resourceCulture)
+                Return ResourceManager.GetString("SetCompression_MaxThreads", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Estimate Compression for non-Steam Folders (beta) 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsCompressionSettingsNonSteamFolders() As String
+        Public Shared ReadOnly Property SetCompression_NonSteamFolders() As String
             Get
-                Return ResourceManager.GetString("SettingsCompressionSettingsNonSteamFolders", resourceCulture)
+                Return ResourceManager.GetString("SetCompression_NonSteamFolders", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Filetype Management 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsFiletypeManagement() As String
+        Public Shared ReadOnly Property SetFiletypeManagement() As String
             Get
-                Return ResourceManager.GetString("SettingsFiletypeManagement", resourceCulture)
+                Return ResourceManager.GetString("SetFiletypeManagement", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Manage local skipped filetypes 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SetFiletypeManagement_LocalSkipFiletypes() As String
+            Get
+                Return ResourceManager.GetString("SetFiletypeManagement_LocalSkipFiletypes", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 edit skipped filetypes 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SetFiletypeManagement_LocalSkipFiletypesEdit() As String
+            Get
+                Return ResourceManager.GetString("SetFiletypeManagement_LocalSkipFiletypesEdit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Agression of online skiplist 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SetFiletypeManagement_OnlineSkiplistAgression() As String
+            Get
+                Return ResourceManager.GetString("SetFiletypeManagement_OnlineSkiplistAgression", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 high 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsFiletypeManagementAgressionHigh() As String
+        Public Shared ReadOnly Property SetFiletypeManagement_OnlineSkiplistAgressionHigh() As String
             Get
-                Return ResourceManager.GetString("SettingsFiletypeManagementAgressionHigh", resourceCulture)
+                Return ResourceManager.GetString("SetFiletypeManagement_OnlineSkiplistAgressionHigh", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 low 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsFiletypeManagementAgressionLow() As String
+        Public Shared ReadOnly Property SetFiletypeManagement_OnlineSkiplistAgressionLow() As String
             Get
-                Return ResourceManager.GetString("SettingsFiletypeManagementAgressionLow", resourceCulture)
+                Return ResourceManager.GetString("SetFiletypeManagement_OnlineSkiplistAgressionLow", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 medium 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsFiletypeManagementAgressionMedium() As String
+        Public Shared ReadOnly Property SetFiletypeManagement_OnlineSkiplistAgressionMedium() As String
             Get
-                Return ResourceManager.GetString("SettingsFiletypeManagementAgressionMedium", resourceCulture)
+                Return ResourceManager.GetString("SetFiletypeManagement_OnlineSkiplistAgressionMedium", resourceCulture)
             End Get
         End Property
         
@@ -802,153 +577,297 @@ Namespace i18n
         '''When choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. 
         '''&apos;low&apos; is generally best, as higher options run the risk of skipping files that would otherwise compress well. 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsFiletypeManagementAgressionTip() As String
+        Public Shared ReadOnly Property SetFiletypeManagement_OnlineSkiplistAgressionTip() As String
             Get
-                Return ResourceManager.GetString("SettingsFiletypeManagementAgressionTip", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Manage local skipped filetypes 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property SettingsFiletypeManagementLocalSkipFiletypes() As String
-            Get
-                Return ResourceManager.GetString("SettingsFiletypeManagementLocalSkipFiletypes", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 Agression of online skiplist 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property SettingsFiletypeManagementOnlineSkiplistAgression() As String
-            Get
-                Return ResourceManager.GetString("SettingsFiletypeManagementOnlineSkiplistAgression", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  查找类似 edit skipped filetypes 的本地化字符串。
-        '''</summary>
-        Public Shared ReadOnly Property SettingsSkiplistflyoutEditSkippedFiletypes() As String
-            Get
-                Return ResourceManager.GetString("SettingsSkiplistflyoutEditSkippedFiletypes", resourceCulture)
+                Return ResourceManager.GetString("SetFiletypeManagement_OnlineSkiplistAgressionTip", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 System Integration 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsSystemIntegration() As String
+        Public Shared ReadOnly Property SetSystemIntegration() As String
             Get
-                Return ResourceManager.GetString("SettingsSystemIntegration", resourceCulture)
+                Return ResourceManager.GetString("SetSystemIntegration", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Show notification on completion 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsSystemIntegrationNotificationOnCompletion() As String
+        Public Shared ReadOnly Property SetSystemIntegration_CompletionNotification() As String
             Get
-                Return ResourceManager.GetString("SettingsSystemIntegrationNotificationOnCompletion", resourceCulture)
+                Return ResourceManager.GetString("SetSystemIntegration_CompletionNotification", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Add to right-click context menu 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsSystemIntegrationRightClickMenu() As String
+        Public Shared ReadOnly Property SetSystemIntegration_RightClickMenu() As String
             Get
-                Return ResourceManager.GetString("SettingsSystemIntegrationRightClickMenu", resourceCulture)
+                Return ResourceManager.GetString("SetSystemIntegration_RightClickMenu", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Add to start menu 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsSystemIntegrationStartMenu() As String
+        Public Shared ReadOnly Property SetSystemIntegration_StartMenu() As String
             Get
-                Return ResourceManager.GetString("SettingsSystemIntegrationStartMenu", resourceCulture)
+                Return ResourceManager.GetString("SetSystemIntegration_StartMenu", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Start CompactGUI in system tray 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsSystemIntegrationSystemTrayStartup() As String
+        Public Shared ReadOnly Property SetSystemIntegration_Startup() As String
             Get
-                Return ResourceManager.GetString("SettingsSystemIntegrationSystemTrayStartup", resourceCulture)
+                Return ResourceManager.GetString("SetSystemIntegration_Startup", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 UI Settings 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsUiSettings() As String
+        Public Shared ReadOnly Property SetUi() As String
             Get
-                Return ResourceManager.GetString("SettingsUiSettings", resourceCulture)
+                Return ResourceManager.GetString("SetUi", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Always show details on Compression Mode buttons 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsUiSettingsCompressionButtons() As String
+        Public Shared ReadOnly Property SetUi_CompressionDetails() As String
             Get
-                Return ResourceManager.GetString("SettingsUiSettingsCompressionButtons", resourceCulture)
+                Return ResourceManager.GetString("SetUi_CompressionDetails", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Language (Requires Restart) 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsUiSettingsLanguageChangedLabel() As String
+        Public Shared ReadOnly Property SetUi_LanguageChanged() As String
             Get
-                Return ResourceManager.GetString("SettingsUiSettingsLanguageChangedLabel", resourceCulture)
+                Return ResourceManager.GetString("SetUi_LanguageChanged", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Language changed successfully. You may need to restart the application for all changes to take effect. 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsUiSettingsLanguageChangedMsg() As String
+        Public Shared ReadOnly Property SetUi_LanguageChangedMsg() As String
             Get
-                Return ResourceManager.GetString("SettingsUiSettingsLanguageChangedMsg", resourceCulture)
+                Return ResourceManager.GetString("SetUi_LanguageChangedMsg", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Language Changed 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsUiSettingsLanguageChangeTitle() As String
+        Public Shared ReadOnly Property SetUi_LanguageChangedTitle() As String
             Get
-                Return ResourceManager.GetString("SettingsUiSettingsLanguageChangeTitle", resourceCulture)
+                Return ResourceManager.GetString("SetUi_LanguageChangedTitle", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Update Settings 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsUpdateSettings() As String
+        Public Shared ReadOnly Property SetUpdate() As String
             Get
-                Return ResourceManager.GetString("SettingsUpdateSettings", resourceCulture)
+                Return ResourceManager.GetString("SetUpdate", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 Check for pre-release updates 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property SettingsUpdateSettingsCheckPreUpdates() As String
+        Public Shared ReadOnly Property SetUpdate_CheckPreUpdates() As String
             Get
-                Return ResourceManager.GetString("SettingsUpdateSettingsCheckPreUpdates", resourceCulture)
+                Return ResourceManager.GetString("SetUpdate_CheckPreUpdates", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 After 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_After() As String
+            Get
+                Return ResourceManager.GetString("Status_After", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Before 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_Before() As String
+            Get
+                Return ResourceManager.GetString("Status_Before", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compression Mode 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_CompressionMode() As String
+            Get
+                Return ResourceManager.GetString("Status_CompressionMode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compression Summary 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_CompressionSummary() As String
+            Get
+                Return ResourceManager.GetString("Status_CompressionSummary", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 contained files 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_ContainedFiles() As String
+            Get
+                Return ResourceManager.GetString("Status_ContainedFiles", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Files Compressed 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_FilesCompressed() As String
+            Get
+                Return ResourceManager.GetString("Status_FilesCompressed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Last Fetched: {0:dd MMM yyyy HH:mm:ss} 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_LastFetched() As String
+            Get
+                Return ResourceManager.GetString("Status_LastFetched", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Results State 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_ResultsState() As String
+            Get
+                Return ResourceManager.GetString("Status_ResultsState", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Space Saved 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_SpaceSaved() As String
+            Get
+                Return ResourceManager.GetString("Status_SpaceSaved", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 uncompressed size 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_UncompressedSize() As String
+            Get
+                Return ResourceManager.GetString("Status_UncompressedSize", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Working 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_Working() As String
+            Get
+                Return ResourceManager.GetString("Status_Working", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 {0:0} days ago 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Time_DaysAgo() As String
+            Get
+                Return ResourceManager.GetString("Time_DaysAgo", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 {0:0} hours ago 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Time_HoursAgo() As String
+            Get
+                Return ResourceManager.GetString("Time_HoursAgo", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 {0:0} minutes ago 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Time_MinutesAgo() As String
+            Get
+                Return ResourceManager.GetString("Time_MinutesAgo", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 just now 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Time_Now() As String
+            Get
+                Return ResourceManager.GetString("Time_Now", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Unknown 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Time_Unknown() As String
+            Get
+                Return ResourceManager.GetString("Time_Unknown", resourceCulture)
             End Get
         End Property
         
         '''<summary>
         '''  查找类似 CompactGUI 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property TitleCompactGUI() As String
+        Public Shared ReadOnly Property Title_CompactGUI() As String
             Get
-                Return ResourceManager.GetString("TitleCompactGUI", resourceCulture)
+                Return ResourceManager.GetString("Title_CompactGUI", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compression DB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Title_CompressionDB() As String
+            Get
+                Return ResourceManager.GetString("Title_CompressionDB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Home 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Title_Home() As String
+            Get
+                Return ResourceManager.GetString("Title_Home", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Watcher 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Title_Watcher() As String
+            Get
+                Return ResourceManager.GetString("Title_Watcher", resourceCulture)
             End Get
         End Property
         
@@ -985,6 +904,51 @@ Namespace i18n
         Public Shared ReadOnly Property UniSave() As String
             Get
                 Return ResourceManager.GetString("UniSave", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Cancel Background Compressor 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_CancelBackgroundCompressor() As String
+            Get
+                Return ResourceManager.GetString("Watcher_CancelBackgroundCompressor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compress All Now 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_CompressAllNow() As String
+            Get
+                Return ResourceManager.GetString("Watcher_CompressAllNow", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Last analysed 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_LastAnalysed() As String
+            Get
+                Return ResourceManager.GetString("Watcher_LastAnalysed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Watched Folders 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_WatchedFolders() As String
+            Get
+                Return ResourceManager.GetString("Watcher_WatchedFolders", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 saved 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_WatchedSaved() As String
+            Get
+                Return ResourceManager.GetString("Watcher_WatchedSaved", resourceCulture)
             End Get
         End Property
     End Class

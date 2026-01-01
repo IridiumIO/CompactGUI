@@ -41,7 +41,7 @@
             <ui:NavigationView.MenuItems>
 
 
-                <ui:NavigationViewItem Content="{local:Localize NameMainWindowHome}"
+                <ui:NavigationViewItem Content="{local:Localize Title_Home}"
                                        d:Content="Home"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Required"
@@ -53,7 +53,7 @@
                 </ui:NavigationViewItem>
 
 
-                <ui:NavigationViewItem Content="{local:Localize NameMainWindowWatcher}"
+                <ui:NavigationViewItem Content="{local:Localize Title_Watcher}"
                                        d:Content="Watcher"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Required"
@@ -64,7 +64,7 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItem Content="{local:Localize NameMainWindowCompressionDB}"
+                <ui:NavigationViewItem Content="{local:Localize Title_CompressionDB}"
                                        d:Content="Compression DB"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Disabled"
@@ -234,7 +234,7 @@
                     </Style>
                 </Label.Style>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock Text="{local:Localize TitleCompactGUI}" d:Text="CompactGUI"
+                    <TextBlock Text="{local:Localize Title_CompactGUI}" d:Text="CompactGUI"
                                Margin="0,0,20,0" VerticalAlignment="Center"
                                Foreground="#20FFFFFF"
                                Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />

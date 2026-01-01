@@ -14,7 +14,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{local:Localize PageDatabaseResults}"
+        <TextBlock Text="{local:Localize CompressionDB_DatabaseResults}"
                    d:Text="Database Results"
                    Grid.Row="0"
                    VerticalAlignment="Top"
@@ -25,7 +25,7 @@
         <TextBlock Grid.Row="2"  HorizontalAlignment="Right" VerticalAlignment="Top"
                    Foreground="#10FFFFFF" Margin="0 0 0 0" FontSize="12">
             <TextBlock.Text>
-                <MultiBinding StringFormat="{local:Localize DatabaseLastFetched}">
+                <MultiBinding StringFormat="{local:Localize Status_LastFetched}">
                     <Binding Path="LastUpdatedDatabase" />
                 </MultiBinding>
             </TextBlock.Text>
@@ -39,7 +39,7 @@
             <Run Text="Submissions" />
             <Run Text="across" />-->
             <Run Text="{Binding DatabaseGamesCount, Mode=OneWay }" />  
-            <Run Text="{local:Localize DatabaseResultsGames}" d:Text="Games" />
+            <Run Text="{local:Localize CompressionDB_DatabaseResults_Games}" d:Text="Games" />
         </TextBlock>
 
         <Grid Grid.Row="0" Margin="20 0 0 0" HorizontalAlignment="Right" Grid.RowSpan="1">
@@ -52,26 +52,26 @@
             <!-- Search Box -->
             <ui:TextBox VerticalAlignment="Center"
                FontSize="14" Width="250"
-               PlaceholderText="{local:Localize DatabaseResultsSearchSteamID}"
+               PlaceholderText="{local:Localize CompressionDB_DatabaseResults_SearchSteamID}"
                d:PlaceholderText="Search by game name or SteamID..."
                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
             <!-- Sorting Menu -->
             <ui:DropDownButton Grid.Column="1" Margin="20 0 0 0" Foreground="{StaticResource LabelForeground}" Height="36" VerticalAlignment="Center" HorizontalAlignment="Stretch">
-                <TextBlock Text="{local:Localize DatabaseResultsSort}" d:Text="Sort By"/>
+                <TextBlock Text="{local:Localize CompressionDB_DatabaseResults_Sort}" d:Text="Sort By"/>
                 <ui:DropDownButton.Flyout>
                     <ContextMenu>
-                        <MenuItem Header="{local:Localize DatabaseResultsSortGameName}" d:Header="Game Name">
-                            <MenuItem Header="{local:Localize DatabasePage_Ascending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameAsc"/>
-                            <MenuItem Header="{local:Localize DatabasePage_Descending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameDesc"/>
+                        <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortGameName}" d:Header="Game Name">
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortAscending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameAsc"/>
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortDescending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="GameNameDesc"/>
                         </MenuItem>
-                        <MenuItem Header="{local:Localize DatabaseResultsSortSteamID}" d:Header="SteamID">
-                            <MenuItem Header="{local:Localize DatabasePage_Ascending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDAsc"/>
-                            <MenuItem Header="{local:Localize DatabasePage_Descending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDDesc"/>
+                        <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortSteamID}" d:Header="SteamID">
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortAscending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDAsc"/>
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortDescending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="SteamIDDesc"/>
                         </MenuItem>
-                        <MenuItem Header="{local:Localize DatabaseResultsSortMaxSavings}" d:Header="Max Savings">
-                            <MenuItem Header="{local:Localize DatabasePage_Ascending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsAsc"/>
-                            <MenuItem Header="{local:Localize DatabasePage_Descending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsDesc"/>
+                        <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortMaxSavings}" d:Header="Max Savings">
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortAscending}" d:Header="Ascending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsAsc"/>
+                            <MenuItem Header="{local:Localize CompressionDB_DatabaseResults_SortDescending}" d:Header="Descending" Command="{Binding SortResultsCommand}" CommandParameter="MaxSavingsDesc"/>
                         </MenuItem>
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
@@ -166,11 +166,11 @@
                                                 <ColumnDefinition Width="130"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <TextBlock Text="{local:Localize DatabasePageMODE}" d:Text="MODE" FontWeight="SemiBold" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                            <TextBlock Grid.Column="1" Text="{local:Localize DatabasePageBEFORE}" d:Text="BEFORE" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                            <TextBlock Grid.Column="2" Text="{local:Localize DatabasePageAFTER}" d:Text="AFTER" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                            <TextBlock Grid.Column="3" Text="{local:Localize DatabasePageSAVINGS}" d:Text="SAVINGS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
-                                            <TextBlock Grid.Column="4" Text="{local:Localize DatabasePageTOTALRESULTS}" d:Text="TOTAL RESULTS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Text="{local:Localize Status_CompressionMode}" d:Text="MODE" FontWeight="SemiBold" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="1" Text="{local:Localize Status_Before}" d:Text="BEFORE" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="2" Text="{local:Localize Status_After}" d:Text="AFTER" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="3" Text="{local:Localize CompressionModeRadio_Savings}" d:Text="SAVINGS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
+                                            <TextBlock Grid.Column="4" Text="{local:Localize CompressionModeRadio_TotalResults}" d:Text="TOTAL RESULTS" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{StaticResource CardForegroundDisabled}"/>
 
                                         </Grid>
 

@@ -45,7 +45,7 @@
     <Grid x:Name="MainGrid">
         <ui:TitleBar Panel.ZIndex="10"
                      ShowMaximize="False" ShowMinimize="False" />
-        <TextBlock Text="{local:Localize SettingsSkiplistflyoutEditSkippedFiletypes}"
+        <TextBlock Text="{local:Localize SetFiletypeManagement_LocalSkipFiletypesEdit}"
                    d:Text="edit skipped filetypes"
                    Margin="10"
                    FontSize="22" FontWeight="SemiBold" />
