@@ -378,7 +378,7 @@
   <data name="SetBackgroundWatch_CompressFolders_NextScheduledFormat" xml:space="preserve">
     <value>下次计划: {0:yyyy年 M月 d日 HH:mm:ss}</value>
   </data>
-  <data name="MessageWelcome" xml:space="preserve">
+  <data name="Message_Welcome" xml:space="preserve">
     <value>欢迎</value>
   </data>
   <data name="SetBackgroundWatch_Time_At" xml:space="preserve">
@@ -404,5 +404,118 @@
   </data>
   <data name="Status_LastFetched" xml:space="preserve">
     <value>最后获取: {0:yyyy年 M月 d日 HH:mm:ss}</value>
+  </data>
+  <data name="Watcher_LastModified" xml:space="preserve">
+    <value>上次修改:</value>
+  </data>
+  <data name="Watcher_LastCompressed" xml:space="preserve">
+    <value>上次压缩:</value>
+  </data>
+  <data name="Watcher_ReAnalyse" xml:space="preserve">
+    <value>重新分析所有受监控文件夹</value>
+  </data>
+  <data name="Watcher_RemoveWatchlist" xml:space="preserve">
+    <value>从监控列表移除</value>
+  </data>
+  <data name="Watcher_AddQueue" xml:space="preserve">
+    <value>添加到压缩队列</value>
+  </data>
+  <data name="Watcher_ReAnalyseFolder" xml:space="preserve">
+    <value>重新分析此文件夹</value>
+  </data>
+  <data name="Watcher_WatchedDecayed" xml:space="preserve">
+    <value>已衰减</value>
+  </data>
+  <data name="Watcher_AddTip" xml:space="preserve">
+    <value>添加自定义文件夹到监控列表</value>
+  </data>
+  <data name="UniAdd" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Status_Analysing" xml:space="preserve">
+    <value>正在分析</value>
+  </data>
+  <data name="Status_AwaitingCompression" xml:space="preserve">
+    <value>等待压缩</value>
+  </data>
+  <data name="Status_Compressed" xml:space="preserve">
+    <value>已压缩</value>
+  </data>
+  <data name="Status_Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="CompressionConfiguration_SkipFile" xml:space="preserve">
+    <value>个文件将被跳过</value>
+  </data>
+  <data name="SnackBar_SnackbarPresenter" xml:space="preserve">
+    <value>SnackbarPresenter 从未被设置</value>
+  </data>
+  <data name="SnackBar_RestartAdmin" xml:space="preserve">
+    <value>以管理员身份重新启动</value>
+  </data>
+  <data name="SnackBar_RestartAdminTip" xml:space="preserve">
+    <value>没有足够的权限访问此文件夹</value>
+  </data>
+  <data name="SnackBar_UpdateDownload" xml:space="preserve">
+    <value>点击下载</value>
+  </data>
+  <data name="SnackBar_UpdateAvailable" xml:space="preserve">
+    <value>更新可用 ▸ 版本 {0}</value>
+  </data>
+  <data name="SnackBar_SubmitWikiFailed" xml:space="preserve">
+    <value>提交到 Wiki 失败</value>
+  </data>
+  <data name="SnackBar_DirectStorageTechnology" xml:space="preserve">
+    <value>此游戏使用 DirectStorage 技术。如果您正在使用此功能，则不应压缩此游戏。</value>
+  </data>
+  <data name="SnackBar_CannotRemoveFolderTip" xml:space="preserve">
+    <value>请等待当前操作完成</value>
+  </data>
+  <data name="SnackBar_CannotRemoveFolder" xml:space="preserve">
+    <value>无法移除文件夹</value>
+  </data>
+  <data name="SnackBar_AppliedAllFoldersTip" xml:space="preserve">
+    <value>压缩选项已应用到所有文件夹</value>
+  </data>
+  <data name="SnackBar_AppliedAllFolders" xml:space="preserve">
+    <value>已应用到所有文件夹</value>
+  </data>
+  <data name="SnackBar_SubmitWikiFailedTip" xml:space="preserve">
+    <value>请检查您的网络连接并重试</value>
+  </data>
+  <data name="SnackBar_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="SnackBar_SuccessTip" xml:space="preserve">
+    <value>已添加到队列</value>
+  </data>
+  <data name="SnackBar_SubmitWikiTitle" xml:space="preserve">
+    <value>已提交到 Wiki</value>
+  </data>
+  <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
+    <value>压缩模式</value>
+  </data>
+  <data name="SnackBar_SubmitWiki_Game" xml:space="preserve">
+    <value>游戏</value>
+  </data>
+  <data name="Status_NotCompressed" xml:space="preserve">
+    <value>未压缩</value>
+  </data>
+  <data name="MessageBox_ExitText" xml:space="preserve">
+    <value>你目前有 {0} 个文件夹正在被监控。关闭 CompactGUI 将停止对它们的监控。
+
+你确定要退出吗？</value>
+  </data>
+  <data name="UniExit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="UniOpen" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="UniYes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="UniCancel" xml:space="preserve">
+    <value>否</value>
   </data>
 </root>

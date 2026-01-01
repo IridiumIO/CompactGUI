@@ -33,7 +33,7 @@
                     <ui:TextBlock x:Name="Mode_Text"
                                   Text="{Binding CompressionMode, FallbackValue=XPRESS4K, RelativeSource={RelativeSource TemplatedParent}}"
                                   HorizontalAlignment="Left" VerticalAlignment="Center"
-                                  FontSize="15" FontWeight="SemiBold">
+                                  FontSize="14" FontWeight="SemiBold">
                         <ui:TextBlock.RenderTransform>
                             <TranslateTransform x:Name="ModeTextTransform" Y="0" />
                         </ui:TextBlock.RenderTransform>

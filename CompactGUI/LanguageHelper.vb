@@ -6,7 +6,7 @@ Imports System.Windows.Data
 Imports System.Reflection
 
 Public Class LanguageHelper
-    ' 支持的语言列表
+    ' Supported language list
     ' @i18n
     Private Shared ReadOnly SupportedCultures As String() = {"en-US", "zh-CN"}
     Private Shared resourceManager As ResourceManager = i18n.i18n.ResourceManager
@@ -49,7 +49,7 @@ Public Class LanguageHelper
                 Return rawValue
             End If
         Catch ex As Exception
-            Debug.WriteLine($"获取多语言文本失败：{key}，错误：{ex.Message}")
+            Debug.WriteLine($"Failed to get multilingual text：{key}，Error：{ex.Message}")
             Return key
         End Try
     End Function
@@ -62,7 +62,7 @@ Public Class LanguageHelper
             currentCulture = culture
 
         Catch ex As Exception
-            Debug.WriteLine($"应用语言失败：{cultureName}，错误：{ex.Message}")
+            Debug.WriteLine($"Application language failure：{cultureName}，Error：{ex.Message}")
             SetDefaultLanguage()
         End Try
     End Sub
@@ -79,30 +79,15 @@ Public Class LanguageHelper
     End Function
 
     Private Shared Sub SetDefaultLanguage()
-        ' 根据系统语言设置默认语言
+        ' Set the default language according to the system language.
         '@i18n
         Dim langMapping As New Dictionary(Of String, String) From {
         {"en", "en-US"},
         {"zh", "zh-CN"}
     }
-        '{"ja", "ja-JP"},
-        '{"ko", "ko-KR"},
-        '{"fr", "fr-FR"},
-        '{"de", "de-DE"},
-        '{"es", "es-ES"},
-        '{"ru", "ru-RU"}
 
         Dim systemLang As String = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLower()
         Dim defaultLang As String = If(langMapping.ContainsKey(systemLang), langMapping(systemLang), "en-US")
-
-        ' 特殊处理中文简/繁
-        'If systemLang = "zh" Then
-        '    If Thread.CurrentThread.CurrentUICulture.Name.StartsWith("zh-TW") Then
-        '        defaultLang = "zh-TW"
-        '    ElseIf Thread.CurrentThread.CurrentUICulture.Name.StartsWith("zh-HK") Then
-        '        defaultLang = "zh-HK"
-        '    End If
-        'End If
 
         ApplyCulture(defaultLang)
         WriteAppConfig("language", defaultLang)
@@ -117,7 +102,7 @@ Public Class LanguageHelper
             Dim config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None)
             Return If(config.AppSettings.Settings(key)?.Value, String.Empty)
         Catch ex As Exception
-            Debug.WriteLine($"读取配置失败：{key}，错误：{ex.Message}")
+            Debug.WriteLine($"Read configuration failed：{key}，Error：{ex.Message}")
             Return String.Empty
         End Try
     End Function
@@ -133,7 +118,7 @@ Public Class LanguageHelper
             config.Save(System.Configuration.ConfigurationSaveMode.Modified)
             System.Configuration.ConfigurationManager.RefreshSection("appSettings")
         Catch ex As Exception
-            Debug.WriteLine($"写入配置失败：{key}，错误：{ex.Message}")
+            Debug.WriteLine($"Write configuration failed：{key}，Error：{ex.Message}")
         End Try
     End Sub
 End Class

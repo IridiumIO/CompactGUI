@@ -32,7 +32,7 @@ Partial Public Class Application
     End Sub
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-        ' 启动时调用语言配置
+        ' Call the language configuration at startup
         LanguageHelper.Initialize()
 
     End Sub

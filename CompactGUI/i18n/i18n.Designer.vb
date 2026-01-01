@@ -92,6 +92,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 files will be skipped 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property CompressionConfiguration_SkipFile() As String
+            Get
+                Return ResourceManager.GetString("CompressionConfiguration_SkipFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Skip file types specified in settings 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property CompressionConfiguration_SkipFileTypes() As String
@@ -350,9 +359,20 @@ Namespace i18n
         '''<summary>
         '''  查找类似 Welcome 的本地化字符串。
         '''</summary>
-        Public Shared ReadOnly Property MessageWelcome() As String
+        Public Shared ReadOnly Property Message_Welcome() As String
             Get
-                Return ResourceManager.GetString("MessageWelcome", resourceCulture)
+                Return ResourceManager.GetString("Message_Welcome", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.
+        '''
+        '''Are you sure you want to exit? 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property MessageBox_ExitText() As String
+            Get
+                Return ResourceManager.GetString("MessageBox_ExitText", resourceCulture)
             End Get
         End Property
         
@@ -692,6 +712,177 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 Applied to all folders 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_AppliedAllFolders() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_AppliedAllFolders", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compression options have been applied to all folders 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_AppliedAllFoldersTip() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_AppliedAllFoldersTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Cannot remove folder 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_CannotRemoveFolder() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_CannotRemoveFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Please wait until the current operation is finished 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_CannotRemoveFolderTip() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_CannotRemoveFolderTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 This game uses DirectStorage technology. If you are using this feature, you should not compress this game. 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_DirectStorageTechnology() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_DirectStorageTechnology", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Restart as Admin 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_RestartAdmin() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_RestartAdmin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Insufficient permission to access this folder 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_RestartAdminTip() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_RestartAdminTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 The SnackbarPresenter was never set 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SnackbarPresenter() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SnackbarPresenter", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compression 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SubmitWiki_Compression() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SubmitWiki_Compression", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Game 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SubmitWiki_Game() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SubmitWiki_Game", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 SteamID 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SubmitWiki_SteamID() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SubmitWiki_SteamID", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 UID 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SubmitWiki_UID() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SubmitWiki_UID", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Failed to submit to wiki 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SubmitWikiFailed() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SubmitWikiFailed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Please check your internet connection and try again 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SubmitWikiFailedTip() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SubmitWikiFailedTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Submitted to wiki 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SubmitWikiTitle() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SubmitWikiTitle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Success 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_Success() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_Success", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Added to Queue 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_SuccessTip() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_SuccessTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Update Available ▸ Version {0} 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_UpdateAvailable() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_UpdateAvailable", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Click to download 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SnackBar_UpdateDownload() As String
+            Get
+                Return ResourceManager.GetString("SnackBar_UpdateDownload", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 After 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property Status_After() As String
@@ -701,11 +892,38 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 Analysing 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_Analysing() As String
+            Get
+                Return ResourceManager.GetString("Status_Analysing", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Awaiting Compression 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_AwaitingCompression() As String
+            Get
+                Return ResourceManager.GetString("Status_AwaitingCompression", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Before 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property Status_Before() As String
             Get
                 Return ResourceManager.GetString("Status_Before", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Compressed 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_Compressed() As String
+            Get
+                Return ResourceManager.GetString("Status_Compressed", resourceCulture)
             End Get
         End Property
         
@@ -755,6 +973,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 Not Compressed 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_NotCompressed() As String
+            Get
+                Return ResourceManager.GetString("Status_NotCompressed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Results State 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property Status_ResultsState() As String
@@ -778,6 +1005,15 @@ Namespace i18n
         Public Shared ReadOnly Property Status_UncompressedSize() As String
             Get
                 Return ResourceManager.GetString("Status_UncompressedSize", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Unknown 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Status_Unknown() As String
+            Get
+                Return ResourceManager.GetString("Status_Unknown", resourceCulture)
             End Get
         End Property
         
@@ -872,6 +1108,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 Add 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniAdd() As String
+            Get
+                Return ResourceManager.GetString("UniAdd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Admin 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property UniAdmin() As String
@@ -881,11 +1126,38 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 Cancel 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniCancel() As String
+            Get
+                Return ResourceManager.GetString("UniCancel", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 edit 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property UniEdit() As String
             Get
                 Return ResourceManager.GetString("UniEdit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Exit 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniExit() As String
+            Get
+                Return ResourceManager.GetString("UniExit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Open 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniOpen() As String
+            Get
+                Return ResourceManager.GetString("UniOpen", resourceCulture)
             End Get
         End Property
         
@@ -904,6 +1176,33 @@ Namespace i18n
         Public Shared ReadOnly Property UniSave() As String
             Get
                 Return ResourceManager.GetString("UniSave", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Yes 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property UniYes() As String
+            Get
+                Return ResourceManager.GetString("UniYes", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Add to compression queue 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_AddQueue() As String
+            Get
+                Return ResourceManager.GetString("Watcher_AddQueue", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Add a custom folder to the watchlist 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_AddTip() As String
+            Get
+                Return ResourceManager.GetString("Watcher_AddTip", resourceCulture)
             End Get
         End Property
         
@@ -931,6 +1230,60 @@ Namespace i18n
         Public Shared ReadOnly Property Watcher_LastAnalysed() As String
             Get
                 Return ResourceManager.GetString("Watcher_LastAnalysed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 last compressed: 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_LastCompressed() As String
+            Get
+                Return ResourceManager.GetString("Watcher_LastCompressed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 last modified: 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_LastModified() As String
+            Get
+                Return ResourceManager.GetString("Watcher_LastModified", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Re-analyse all watched folders 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_ReAnalyse() As String
+            Get
+                Return ResourceManager.GetString("Watcher_ReAnalyse", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Re-analyse this folder 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_ReAnalyseFolder() As String
+            Get
+                Return ResourceManager.GetString("Watcher_ReAnalyseFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 Remove from Watchlist 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_RemoveWatchlist() As String
+            Get
+                Return ResourceManager.GetString("Watcher_RemoveWatchlist", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 decayed 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Watcher_WatchedDecayed() As String
+            Get
+                Return ResourceManager.GetString("Watcher_WatchedDecayed", resourceCulture)
             End Get
         End Property
         

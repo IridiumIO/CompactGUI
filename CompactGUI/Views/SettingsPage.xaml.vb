@@ -28,7 +28,7 @@ Partial Public Class SettingsPage
                                    New PropertyMetadata("Language (Requires Restart)"))
 
     Private Sub SettingsPage_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        ' 设置当前选择的语言
+        ' Set the currently selected language
         Dim currentLanguage As String = LanguageHelper.GetCurrentLanguage()
 
         For i As Integer = 0 To UiLanguageComboBox.Items.Count - 1
@@ -41,7 +41,7 @@ Partial Public Class SettingsPage
     End Sub
 
     Private Sub UpdateLocalizedText()
-        ' 更新语言标签内容
+        ' Update language tag content
         LanguageChangedLabelContent = LanguageHelper.GetString("SetUi_LanguageChanged")
 
     End Sub
