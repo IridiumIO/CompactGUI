@@ -1,9 +1,8 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Text.Json
-
 Imports CompactGUI.Core.Settings
 Imports CompactGUI.Logging
-
 Imports Microsoft.Extensions.Logging
 
 Public Class SettingsService : Implements ISettingsService
@@ -15,7 +14,8 @@ Public Class SettingsService : Implements ISettingsService
 
     Public Sub New()
 
-        DataFolder = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
+        Dim appRootPath As String = SteamFolder.GetAppRootPath()
+        DataFolder = New IO.DirectoryInfo(IO.Path.Combine(appRootPath, "data"))
         SettingsJSONFile = New IO.FileInfo(IO.Path.Combine(DataFolder.FullName, "settings.json"))
 
         SettingsVersion = 1.2

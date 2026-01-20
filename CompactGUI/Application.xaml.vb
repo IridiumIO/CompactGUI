@@ -17,7 +17,7 @@ Imports Coravel.Scheduling.Schedule
 
 Partial Public Class Application
 
-    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 7)
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 8)
 
     Private Shared _host As IHost
 
