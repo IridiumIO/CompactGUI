@@ -50,7 +50,7 @@
 - Анализ состояния существующих папок
 - Фоновый наблюдатель — отслеживает изменения в папках (например, обновления игр Steam) и автоматически поддерживает их в сжатом состоянии в фоне.
 
-<h4 align="center"><b>Смотрите <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Вики</a> со списком <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a>, протестированных на основе <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-отчётов-lightgrey.svg"></a></b></h3>
+<h4 align="center"><b>Смотрите <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Вики</a> со списком <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a>, протестированных на основе <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-lightgrey.svg"></a> отчётов</b></h3>
 <p>&nbsp;</p>
 
 <p align="center"><img src="CompactGUI/assets/Watcher.png" width="750"/></p>
