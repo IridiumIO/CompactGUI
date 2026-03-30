@@ -19,6 +19,12 @@ Partial Public Class Application
 
     Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 8)
 
+    Public Shared ReadOnly Property AppVersionText As String
+        Get
+            Return AppVersion.ToString()
+        End Get
+    End Property
+
     Private Shared _host As IHost
 
     Private Shared ReadOnly SettingsService As ISettingsService

@@ -51,7 +51,7 @@
 
             <!-- Search Box -->
             <ui:TextBox VerticalAlignment="Center"
-               FontSize="14" Width="250"
+               FontSize="14" MinWidth="250"
                PlaceholderText="{local:Localize CompressionDB_DatabaseResults_SearchSteamID}"
                d:PlaceholderText="Search by game name or SteamID..."
                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />

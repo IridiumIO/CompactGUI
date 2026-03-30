@@ -357,6 +357,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 Version 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property Home_Version() As String
+            Get
+                Return ResourceManager.GetString("Home_Version", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Welcome 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property Message_Welcome() As String

@@ -107,7 +107,7 @@
 
                         <Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="Auto" MinWidth="250" />
                                 <ColumnDefinition Width="100" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -116,7 +116,8 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <Label Content="{local:Localize SetFiletypeManagement_LocalSkipFiletypes}" d:Content="Manage local skipped filetypes" VerticalAlignment="Center" />
+                            <Label Content="{local:Localize SetFiletypeManagement_LocalSkipFiletypes}"
+                                   d:Content="Manage local skipped filetypes" VerticalAlignment="Center"/>
                             <Button x:Name="UiEditSkipListBtn"
                                     Content="{local:Localize UniEdit}"
                                     d:Content="edit"
@@ -451,6 +452,7 @@
                                       Width="120" Margin="250,0,0,0" HorizontalAlignment="Left"
                                       SelectedIndex="0" SelectionChanged="UiLanguageComboBox_SelectionChanged">
                                 <ComboBoxItem Content="English" Tag="en-US" />
+                                <ComboBoxItem Content="Русский" Tag="ru-RU" />
                                 <ComboBoxItem Content="简体中文" Tag="zh-CN" />
                             </ComboBox>
                         </Grid>

@@ -544,4 +544,7 @@ Are you sure you want to exit?</value>
   <data name="UniCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Home_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
 </root>
