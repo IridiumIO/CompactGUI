@@ -12,6 +12,7 @@
 ---
 <p align="center">
   <a href="README.md">English</a> -
+  <a href="README_ru.md">Русский</a> -
   <a href="README_cn.md">简体中文</a>
 </p>
 &nbsp;
@@ -67,7 +68,7 @@ Windows 10 introduced a little-known but very useful tool called `compact.exe` t
 
 As program folders and games can be shrunk by up to 60%, this has the added bonus of potentially reducing load times - especially on slower HDDs.
 
-More information on the inbuilt Windows function can be found [here](https://technet.microsoft.com/en-au/library/bb490884.aspx) and [here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx) or by typing `compact /q` into the commandline
+More information on the inbuilt Windows function can be found [here](https://technet.microsoft.com/library/bb490884.aspx) and [here](https://msdn.microsoft.com/library/windows/desktop/hh920921(v=vs.85).aspx) or by typing `compact /q` into the commandline
 
 This tool is intentionally designed to only compress folders and files. Whole drives and entire Windows installations cannot be modified from within CompactGUI - users seeking that functionality should use `compact /compactOS` from the commandline.
 
