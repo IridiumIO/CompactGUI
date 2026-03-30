@@ -224,7 +224,7 @@
     <value>Результаты базы данных</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SearchSteamID" xml:space="preserve">
-    <value>Поиск по названию игры или Steam...</value>
+    <value>Поиск по названию игры или SteamID...</value>
   </data>
   <data name="CompressionDB_DatabaseResults_Sort" xml:space="preserve">
     <value>Сортировать по</value>
@@ -263,19 +263,19 @@
     <value>Режим сжатия</value>
   </data>
   <data name="CompressionMode_XPRESS4K" xml:space="preserve">
-    <value>XPRESS 4K</value>
+    <value></value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_XPRESS8K" xml:space="preserve">
-    <value>XPRESS 8K</value>
+    <value></value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_XPRESS16K" xml:space="preserve">
-    <value>XPRESS 16K</value>
+    <value></value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_LZX" xml:space="preserve">
-    <value>LZX</value>
+    <value></value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionConfiguration" xml:space="preserve">
@@ -511,14 +511,14 @@
     <value>Отправлено в Вики</value>
   </data>
   <data name="SnackBar_SubmitWiki_UID" xml:space="preserve">
-    <value>UID</value>
+    <value></value>
     <comment>@Invariant</comment>
   </data>
   <data name="SnackBar_SubmitWiki_Game" xml:space="preserve">
     <value>Игра</value>
   </data>
   <data name="SnackBar_SubmitWiki_SteamID" xml:space="preserve">
-    <value>SteamID</value>
+    <value></value>
     <comment>@Invariant</comment>
   </data>
   <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
@@ -546,5 +546,26 @@
   </data>
   <data name="Home_Version" xml:space="preserve">
     <value>Версия</value>
+  </data>
+  <data name="SizeUnit_B" xml:space="preserve">
+    <value>б</value>
+  </data>
+  <data name="SizeUnit_KB" xml:space="preserve">
+    <value>Кб</value>
+  </data>
+  <data name="SizeUnit_MB" xml:space="preserve">
+    <value>Мб</value>
+  </data>
+  <data name="SizeUnit_GB" xml:space="preserve">
+    <value>Гб</value>
+  </data>
+  <data name="SizeUnit_TB" xml:space="preserve">
+    <value>Тб</value>
+  </data>
+  <data name="SizeUnit_PB" xml:space="preserve">
+    <value>Пб</value>
+  </data>
+  <data name="SizeUnit_EB" xml:space="preserve">
+    <value>Эб</value>
   </data>
 </root>

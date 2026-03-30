@@ -721,6 +721,69 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  查找类似 B 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SizeUnit_B() As String
+            Get
+                Return ResourceManager.GetString("SizeUnit_B", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 EB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SizeUnit_EB() As String
+            Get
+                Return ResourceManager.GetString("SizeUnit_EB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 GB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SizeUnit_GB() As String
+            Get
+                Return ResourceManager.GetString("SizeUnit_GB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 KB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SizeUnit_KB() As String
+            Get
+                Return ResourceManager.GetString("SizeUnit_KB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 MB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SizeUnit_MB() As String
+            Get
+                Return ResourceManager.GetString("SizeUnit_MB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 PB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SizeUnit_PB() As String
+            Get
+                Return ResourceManager.GetString("SizeUnit_PB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找类似 TB 的本地化字符串。
+        '''</summary>
+        Public Shared ReadOnly Property SizeUnit_TB() As String
+            Get
+                Return ResourceManager.GetString("SizeUnit_TB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  查找类似 Applied to all folders 的本地化字符串。
         '''</summary>
         Public Shared ReadOnly Property SnackBar_AppliedAllFolders() As String

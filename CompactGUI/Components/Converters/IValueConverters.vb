@@ -16,7 +16,16 @@ End Class
 
 Public Class BytesToReadableConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-        Dim suf As String() = {" B", " KB", " MB", " GB", " TB", " PB", " EB"}
+
+        Dim suf As String() = {
+            LanguageHelper.GetString("SizeUnit_B"),
+            LanguageHelper.GetString("SizeUnit_KB"),
+            LanguageHelper.GetString("SizeUnit_MB"),
+            LanguageHelper.GetString("SizeUnit_GB"),
+            LanguageHelper.GetString("SizeUnit_TB"),
+            LanguageHelper.GetString("SizeUnit_PB"),
+            LanguageHelper.GetString("SizeUnit_EB")
+        }
 
         If value = 1010101010101010 Then Return "?"
 

@@ -15,7 +15,13 @@
     <Copyright>Copyright © 2025</Copyright>
     <PackageProjectUrl>https://github.com/IridiumIO/CompactGUI/</PackageProjectUrl>
     <ApplicationIcon>icon.ico</ApplicationIcon>
- 
+
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
+
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

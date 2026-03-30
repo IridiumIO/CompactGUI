@@ -521,4 +521,25 @@
   <data name="Home_Version" xml:space="preserve">
     <value>版本</value>
   </data>
+  <data name="SizeUnit_B" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="SizeUnit_KB" xml:space="preserve">
+    <value>KB</value>
+  </data>
+  <data name="SizeUnit_MB" xml:space="preserve">
+    <value>MB</value>
+  </data>
+  <data name="SizeUnit_GB" xml:space="preserve">
+    <value>GB</value>
+  </data>
+  <data name="SizeUnit_TB" xml:space="preserve">
+    <value>TB</value>
+  </data>
+  <data name="SizeUnit_PB" xml:space="preserve">
+    <value>PB</value>
+  </data>
+  <data name="SizeUnit_EB" xml:space="preserve">
+    <value>EB</value>
+  </data>
 </root>
