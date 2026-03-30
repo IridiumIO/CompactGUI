@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Message_Welcome" xml:space="preserve">
-    <value>Добро пожаловать</value>
+        <value>Добро пожаловать</value>
   </data>
   <data name="SetUi_LanguageChanged" xml:space="preserve">
     <value>Язык (требуется перезапуск)</value>
@@ -224,7 +224,7 @@
     <value>Результаты базы данных</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SearchSteamID" xml:space="preserve">
-    <value>Поиск по названию игры или SteamID...</value>
+    <value>Поиск по названию игры или Steam...</value>
   </data>
   <data name="CompressionDB_DatabaseResults_Sort" xml:space="preserve">
     <value>Сортировать по</value>
