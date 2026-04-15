@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.IO.Pipes
 Imports System.Threading
 Imports System.Windows.Threading
@@ -17,7 +17,13 @@ Imports Coravel.Scheduling.Schedule
 
 Partial Public Class Application
 
-    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 6)
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 7)
+
+    Public Shared ReadOnly Property AppVersionText As String
+        Get
+            Return AppVersion.ToString()
+        End Get
+    End Property
 
     Private Shared _host As IHost
 
@@ -31,7 +37,11 @@ Partial Public Class Application
 
     End Sub
 
+    Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+        ' Call the language configuration at startup
+        LanguageHelper.Initialize()
 
+    End Sub
     Private Shared Sub InitializeHost()
 
         _host = Host.CreateDefaultBuilder() _

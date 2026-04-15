@@ -367,3 +367,4 @@ FodyWeavers.xsd
 # IntelliJ
 .idea/
 /CompactGUI.WatcherCS
+/.history

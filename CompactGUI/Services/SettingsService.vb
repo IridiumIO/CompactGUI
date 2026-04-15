@@ -1,9 +1,8 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Text.Json
-
 Imports CompactGUI.Core.Settings
 Imports CompactGUI.Logging
-
 Imports Microsoft.Extensions.Logging
 
 Public Class SettingsService : Implements ISettingsService

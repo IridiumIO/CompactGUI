@@ -1,4 +1,4 @@
-﻿<ui:FluentWindow x:Class="MainWindow"
+<ui:FluentWindow x:Class="MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
@@ -41,7 +41,8 @@
             <ui:NavigationView.MenuItems>
 
 
-                <ui:NavigationViewItem Content="Home"
+                <ui:NavigationViewItem Content="{local:Localize Title_Home}"
+                                       d:Content="Home"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Required"
                                        Tag="{Binding}"
@@ -52,7 +53,8 @@
                 </ui:NavigationViewItem>
 
 
-                <ui:NavigationViewItem Content="Watcher"
+                <ui:NavigationViewItem Content="{local:Localize Title_Watcher}"
+                                       d:Content="Watcher"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Required"
                                        Tag="{Binding}"
@@ -62,7 +64,8 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItem Content="Compression DB"
+                <ui:NavigationViewItem Content="{local:Localize Title_CompressionDB}"
+                                       d:Content="Compression DB"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Disabled"
                                        Tag="{Binding}"
@@ -231,14 +234,14 @@
                     </Style>
                 </Label.Style>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock Text="CompactGUI"
+                    <TextBlock Text="{local:Localize Title_CompactGUI}" d:Text="CompactGUI"
                                Margin="0,0,20,0" VerticalAlignment="Center"
                                Foreground="#20FFFFFF"
                                Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
                     <Border Width="80" Height="22"
                             Background="#20f44336" CornerRadius="10"
                             Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="Admin"
+                        <TextBlock Text="{local:Localize UniAdmin}" d:Text="Admin"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    Foreground="White" />
 
@@ -256,8 +259,8 @@
                          FocusOnLeftClick="True" MenuOnRightClick="True" TooltipText="CompactGUI">
             <tray:NotifyIcon.Menu>
                 <ContextMenu x:Name="NotifyIconTrayMenu">
-                    <MenuItem Command="{Binding NotifyIconOpenCommand}" Header="Open" />
-                    <MenuItem Command="{Binding NotifyIconExitCommand}" Header="Exit" />
+                    <MenuItem Command="{Binding NotifyIconOpenCommand}" Header="{local:Localize UniOpen}" />
+                    <MenuItem Command="{Binding NotifyIconExitCommand}" Header="{local:Localize UniExit}" />
                 </ContextMenu>
             </tray:NotifyIcon.Menu>
         </tray:NotifyIcon>

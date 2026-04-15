@@ -39,7 +39,8 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
     <RelayCommand>
     Private Async Function NotifyIconExit() As Task
         If _watcher.WatchedFolders.Count = 0 Then Application.Current.Shutdown()
-        Dim confirmed = Await _windowService.ShowMessageBox("CompactGUI", $"You currently have {_watcher.WatchedFolders.Count} folders being watched. Closing CompactGUI will stop them from being monitored.{Environment.NewLine}{Environment.NewLine}Are you sure you want to exit?")
+        Dim message As String = String.Format(LanguageHelper.GetString("MessageBox_ExitText"), _watcher.WatchedFolders.Count)
+        Dim confirmed = Await _windowService.ShowMessageBox(LanguageHelper.GetString("Title_CompactGUI"), message)
         If Not confirmed Then Return
         _watcher.WriteToFile()
         Application.Current.Shutdown()

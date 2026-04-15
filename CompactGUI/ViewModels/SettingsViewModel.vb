@@ -1,6 +1,8 @@
 ﻿
 Imports System.ComponentModel
+Imports System.Reflection
 Imports System.Xml
+Imports System.IO
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
@@ -43,7 +45,6 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
         Dim desiredValue = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO")
         Dim currentValue = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
         If currentValue <> desiredValue Then Await Task.Run(Sub() Environment.SetEnvironmentVariable("IridiumIO", desiredValue, EnvironmentVariableTarget.User))
-
     End Function
 
     Private Async Sub SettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
@@ -151,5 +152,12 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
     Public Property EnableBackgroundWatcherCommand As ICommand = New RelayCommand(Sub() AppSettings.EnableBackgroundWatcher = AppSettings.BackgroundModeSelection <> BackgroundMode.Never)
     Public Property OpenGitHubCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI") With {.UseShellExecute = True}))
     Public Property OpenKoFiCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://ko-fi.com/IridiumIO") With {.UseShellExecute = True}))
+
+    Public Property LanguageItems As New List(Of LanguageItem) From {
+        New LanguageItem With {.Name = "English", .CultureCode = "en-US", .ISOCountryCode = "US"},
+        New LanguageItem With {.Name = "Русский", .CultureCode = "ru-RU", .ISOCountryCode = "RU"},
+        New LanguageItem With {.Name = "简体中文", .CultureCode = "zh-CN", .ISOCountryCode = "CN"}
+    }
+
 
 End Class

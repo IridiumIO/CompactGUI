@@ -1,6 +1,11 @@
 ﻿
+Imports System
 Imports System.IO
 Imports System.Net.Http
+Imports System.Threading.Tasks
+Imports System.Windows.Forms
+Imports System.Reflection
+Imports System.Runtime.InteropServices
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 
@@ -66,6 +71,7 @@ Public Class SteamFolder : Inherits CompressableFolder
         WikiCompressionResults.LZX.AfterBytes = UncompressedBytes * tempLZXLvl / 100
 
     End Function
+
 
     Public Shared Async Function GetSteamHeaderAsync(folder As SteamFolder) As Task
 

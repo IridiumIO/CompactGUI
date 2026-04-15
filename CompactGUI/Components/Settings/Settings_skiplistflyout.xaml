@@ -1,4 +1,4 @@
-﻿<ui:FluentWindow x:Class="Settings_skiplistflyout"
+<ui:FluentWindow x:Class="Settings_skiplistflyout"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -45,7 +45,8 @@
     <Grid x:Name="MainGrid">
         <ui:TitleBar Panel.ZIndex="10"
                      ShowMaximize="False" ShowMinimize="False" />
-        <TextBlock Text="edit skipped filetypes"
+        <TextBlock Text="{local:Localize SetFiletypeManagement_LocalSkipFiletypesEdit}"
+                   d:Text="edit skipped filetypes"
                    Margin="10"
                    FontSize="22" FontWeight="SemiBold" />
         <local:TokenizedTextBox x:Name="UiTokenizedText"
@@ -64,12 +65,14 @@
         </local:TokenizedTextBox>
 
         <Button x:Name="UiSave"
-                Content="Save"
+                Content="{local:Localize UniSave}"
+                d:Content="Save"
                 Width="100"
                 Margin="0,0,130,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Click="UISave_Click" />
         <Button x:Name="UiReset"
-                Content="Reset"
+                Content="{local:Localize UniReset}"
+                d:Content="Reset"
                 Width="100"
                 Margin="0,0,10,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Click="UIReset_Click" />
