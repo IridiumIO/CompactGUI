@@ -1,4 +1,4 @@
-﻿Class HomePage
+Class HomePage
 
     Private _viewModel As HomeViewModel
 
@@ -18,7 +18,7 @@
 
     Private Async Sub AddFolderButton_Click(sender As Object, e As RoutedEventArgs) Handles BtnAddFolder1.Click, BtnAddFolder2.Click
         Dim folderBrowser As New Microsoft.Win32.OpenFolderDialog With {
-            .Title = "Select a folder to compress",
+            .Title = CompactGUI.i18n.i18n.Home_SelectFolderSysteam,
             .Multiselect = True,
             .ValidateNames = True
         }

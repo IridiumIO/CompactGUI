@@ -174,7 +174,7 @@ Partial Public Class Application
                 End Using
             End Using
         Else
-            MessageBox.Show("An instance of CompactGUI is already running")
+            MessageBox.Show(CompactGUI.i18n.i18n.Message_RunTwoPrograms)
         End If
         Current.Shutdown()
     End Sub

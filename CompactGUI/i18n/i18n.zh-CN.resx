@@ -548,4 +548,14 @@
   <data name="UniOK" xml:space="preserve">
     <value>好</value>
   </data>
+  <data name="Home_SelectFolderSysteam" xml:space="preserve">
+    <value>选择要压缩的文件夹</value>
+  </data>
+  <data name="SetCompression_NonSteamFoldersTip" xml:space="preserve">
+    <value>快速遍历文件并预估压缩率，无需写入磁盘。
+在机械硬盘上运行可能会非常卡顿！</value>
+  </data>
+  <data name="Message_RunTwoPrograms" xml:space="preserve">
+    <value>CompactGUI 已在运行中</value>
+  </data>
 </root>

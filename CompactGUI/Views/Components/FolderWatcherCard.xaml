@@ -56,8 +56,9 @@
                                Text="{local:Localize UniAdd}" />
                 </StackPanel>
                 <Button.ToolTip>
-                    <ToolTip ToolTipService.InitialShowDelay="100">
-                        <TextBlock d:Text="Add a custom folder to the watchlist" FontSize="12" Foreground="#FFBFC7CE"
+                    <ToolTip ToolTipService.InitialShowDelay="100" Width="Auto" MaxWidth="Infinity">
+                        <TextBlock d:Text="Add a custom folder to the watchlist" 
+                                   FontSize="12" Foreground="#FFBFC7CE"
                                    Text="{local:Localize Watcher_AddTip}"
                                    TextWrapping="NoWrap" />
                     </ToolTip>
@@ -97,7 +98,7 @@
 
                     <ui:SymbolIcon FontSize="18" Symbol="ArrowClockwiseDashes24" />
                     <ui:Button.ToolTip>
-                        <ToolTip ToolTipService.InitialShowDelay="100">
+                        <ToolTip ToolTipService.InitialShowDelay="100" Width="Auto" MaxWidth="Infinity">
                             <TextBlock d:Text="Re-analyse all watched folders" FontSize="12" Foreground="#FFBFC7CE"
                                        Text="{local:Localize Watcher_ReAnalyse}"
                                        TextWrapping="NoWrap" />

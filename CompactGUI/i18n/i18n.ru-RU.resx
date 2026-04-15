@@ -574,4 +574,14 @@
   <data name="UniOK" xml:space="preserve">
     <value>хорошо</value>
   </data>
+  <data name="Home_SelectFolderSysteam" xml:space="preserve">
+    <value>Выберите папку для сжатия</value>
+  </data>
+  <data name="SetCompression_NonSteamFoldersTip" xml:space="preserve">
+    <value>Быстро анализирует файлы и оценивает их степень сжатия без записи на диск.
+Это, вероятно, будет очень медленно работать на HDD!</value>
+  </data>
+  <data name="Message_RunTwoPrograms" xml:space="preserve">
+    <value>Один экземпляр CompactGUI уже работает</value>
+  </data>
 </root>

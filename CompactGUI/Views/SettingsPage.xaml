@@ -259,8 +259,8 @@
                         <Grid Margin="0 10 0 0">
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="250" />
-                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="Auto" MinWidth="250" />
+                                <ColumnDefinition Width="Auto" MinWidth="200" />
 
                             </Grid.ColumnDefinitions>
 
@@ -299,8 +299,9 @@
                                       IsChecked="{Binding AppSettings.EstimateCompressionForNonSteamFolders}">
                                 <CheckBox.ToolTip>
                                     <ToolTip Placement="Top">
-                                        <TextBlock Width="200"
-                                                   Text="Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " TextAlignment="Left" TextWrapping="Wrap" />
+                                        <TextBlock x:Name="UiUseEstimatorTip" 
+                                                   Text="{local:Localize SetCompression_NonSteamFoldersTip}"
+                                                   d:Text="Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " TextAlignment="Left" TextWrapping="Wrap" />
                                     </ToolTip>
                                 </CheckBox.ToolTip>
                             </CheckBox>

@@ -575,4 +575,14 @@ Are you sure you want to exit?</value>
   <data name="UniOK" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="Home_SelectFolderSysteam" xml:space="preserve">
+    <value>Select a folder to compress</value>
+  </data>
+  <data name="SetCompression_NonSteamFoldersTip" xml:space="preserve">
+    <value>Quickly parses over files and estimates their compression ratio without writing to disk.
+This will likely be super laggy on HDDs!</value>
+  </data>
+  <data name="Message_RunTwoPrograms" xml:space="preserve">
+    <value>An instance of CompactGUI is already running</value>
+  </data>
 </root>
