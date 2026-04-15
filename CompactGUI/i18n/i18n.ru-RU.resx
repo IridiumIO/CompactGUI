@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Message_Welcome" xml:space="preserve">
-        <value>Добро пожаловать</value>
+    <value>Добро пожаловать</value>
   </data>
   <data name="SetUi_LanguageChanged" xml:space="preserve">
     <value>Язык (требуется перезапуск)</value>
@@ -263,19 +263,19 @@
     <value>Режим сжатия</value>
   </data>
   <data name="CompressionMode_XPRESS4K" xml:space="preserve">
-    <value></value>
+    <value />
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_XPRESS8K" xml:space="preserve">
-    <value></value>
+    <value />
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_XPRESS16K" xml:space="preserve">
-    <value></value>
+    <value />
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_LZX" xml:space="preserve">
-    <value></value>
+    <value />
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionConfiguration" xml:space="preserve">
@@ -511,14 +511,14 @@
     <value>Отправлено в Вики</value>
   </data>
   <data name="SnackBar_SubmitWiki_UID" xml:space="preserve">
-    <value></value>
+    <value />
     <comment>@Invariant</comment>
   </data>
   <data name="SnackBar_SubmitWiki_Game" xml:space="preserve">
     <value>Игра</value>
   </data>
   <data name="SnackBar_SubmitWiki_SteamID" xml:space="preserve">
-    <value></value>
+    <value />
     <comment>@Invariant</comment>
   </data>
   <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
@@ -567,5 +567,8 @@
   </data>
   <data name="SizeUnit_EB" xml:space="preserve">
     <value>Эб</value>
+  </data>
+  <data name="SetOpenSettingsFolder" xml:space="preserve">
+    <value>Открыть папку настроек</value>
   </data>
 </root>

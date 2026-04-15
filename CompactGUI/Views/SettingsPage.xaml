@@ -19,13 +19,19 @@
 
     <Grid Margin="40 20" ScrollViewer.CanContentScroll="False">
         <Grid>
-            <TextBlock d:Text="Settings" FontSize="26"
-                       Foreground="{StaticResource CardForeground}"
-                       Text="{local:Localize Set}" />
+            <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
+                <TextBlock d:Text="Settings" FontSize="26"
+                           Foreground="{StaticResource CardForeground}"
+                           Text="{local:Localize Set}" />
+                <ui:Button Margin="15 5 0 0" Click="Button_Click" Icon="{ui:SymbolIcon Symbol=Open20}">
+                    <TextBlock d:Text="Open Settings Folder" Text="{local:Localize SetOpenSettingsFolder}" />
+                </ui:Button>
+            </StackPanel>
 
 
 
-            <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+
+            <Grid Margin="0 -10 0 0" HorizontalAlignment="Right" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -34,19 +40,23 @@
 
                 <!--  There are less stupid ways of adding customised SVG to XAML than this...  -->
 
-                <ComboBox x:Name="UiLanguageComboBox" Width="60" Padding="10 8 0 8" SelectedIndex="0" ItemsSource="{Binding LanguageItems}" SelectionChanged="UiLanguageComboBox_SelectionChanged">
+                <ComboBox x:Name="UiLanguageComboBox"
+                          Width="60"
+                          Margin="10" Padding="10 8 0 8"
+                          ItemsSource="{Binding LanguageItems}"
+                          SelectedIndex="0" SelectionChanged="UiLanguageComboBox_SelectionChanged">
 
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Image Width="20"  Source="{Binding ISOCountryCode, Converter={StaticResource CountryIdToFlagImageSourceConverter}}" />
+                                <Image Width="20" Source="{Binding ISOCountryCode, Converter={StaticResource CountryIdToFlagImageSourceConverter}}" />
 
                                 <TextBlock x:Name="LanguageText"
                                            Margin="6 0 0 0" VerticalAlignment="Center"
                                            Text="{Binding Name}" />
                             </StackPanel>
 
-                          
+
 
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

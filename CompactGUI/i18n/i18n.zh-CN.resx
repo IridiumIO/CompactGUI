@@ -117,20 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Message_Welcome" xml:space="preserve">
+    <value>欢迎</value>
+  </data>
+  <data name="SetUi_LanguageChanged" xml:space="preserve">
+    <value>语言 (需要重启)</value>
+  </data>
+  <data name="SetUi_LanguageChangedMsg" xml:space="preserve">
+    <value>语言更改成功。您可能需要重启应用程序以使所有更改生效。</value>
+  </data>
+  <data name="SetUi_LanguageChangedTitle" xml:space="preserve">
+    <value>语言更改</value>
+  </data>
   <data name="SetUi" xml:space="preserve">
     <value>UI 设置</value>
   </data>
   <data name="SetUi_CompressionDetails" xml:space="preserve">
     <value>始终显示压缩模式按钮的详细信息</value>
-  </data>
-  <data name="SetUi_LanguageChanged" xml:space="preserve">
-    <value>语言 (需要重启)</value>
-  </data>
-  <data name="SetUi_LanguageChangedTitle" xml:space="preserve">
-    <value>语言更改</value>
-  </data>
-  <data name="SetUi_LanguageChangedMsg" xml:space="preserve">
-    <value>语言更改成功。您可能需要重启应用程序以使所有更改生效。</value>
   </data>
   <data name="SetUpdate" xml:space="preserve">
     <value>更新设置</value>
@@ -152,6 +155,9 @@
   </data>
   <data name="SetBackgroundWatch_Time_Day" xml:space="preserve">
     <value>天</value>
+  </data>
+  <data name="SetBackgroundWatch_Time_At" xml:space="preserve">
+    <value> </value>
   </data>
   <data name="SetCompression" xml:space="preserve">
     <value>压缩设置</value>
@@ -206,11 +212,11 @@
   <data name="SetFiletypeManagement_OnlineSkiplistAgressionHigh" xml:space="preserve">
     <value>高</value>
   </data>
-  <data name="PageNameWatcher" xml:space="preserve">
-    <value>监控页</value>
-  </data>
   <data name="Set" xml:space="preserve">
     <value>设置</value>
+  </data>
+  <data name="PageNameWatcher" xml:space="preserve">
+    <value>监控页</value>
   </data>
   <data name="CompressionDB_DatabaseResults" xml:space="preserve">
     <value>数据库结果</value>
@@ -351,14 +357,14 @@
   <data name="CompressionDB_DatabaseResults_SortDescending" xml:space="preserve">
     <value>降序</value>
   </data>
+  <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
+    <value>编辑跳过类型</value>
+  </data>
   <data name="UniSave" xml:space="preserve">
     <value>保存</value>
   </data>
   <data name="UniReset" xml:space="preserve">
     <value>重置</value>
-  </data>
-  <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
-    <value>编辑跳过类型</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders_Never" xml:space="preserve">
     <value>从不</value>
@@ -378,20 +384,14 @@
   <data name="SetBackgroundWatch_CompressFolders_NextScheduledFormat" xml:space="preserve">
     <value>下次计划: {0:yyyy年 M月 d日 HH:mm:ss}</value>
   </data>
-  <data name="Message_Welcome" xml:space="preserve">
-    <value>欢迎</value>
-  </data>
-  <data name="SetBackgroundWatch_Time_At" xml:space="preserve">
-    <value> </value>
-  </data>
-  <data name="UniAdmin" xml:space="preserve">
-    <value>管理员权限</value>
+  <data name="Title_CompactGUI" xml:space="preserve">
+    <value>CompactGUI</value>
   </data>
   <data name="Home_SelectFolder" xml:space="preserve">
     <value>选择文件夹</value>
   </data>
-  <data name="Title_CompactGUI" xml:space="preserve">
-    <value>CompactGUI</value>
+  <data name="UniAdmin" xml:space="preserve">
+    <value>管理员权限</value>
   </data>
   <data name="Title_CompressionDB" xml:space="preserve">
     <value>压缩数据库</value>
@@ -405,14 +405,14 @@
   <data name="Status_LastFetched" xml:space="preserve">
     <value>最后获取: {0:yyyy年 M月 d日 HH:mm:ss}</value>
   </data>
+  <data name="Watcher_ReAnalyse" xml:space="preserve">
+    <value>重新分析所有受监控文件夹</value>
+  </data>
   <data name="Watcher_LastModified" xml:space="preserve">
     <value>上次修改:</value>
   </data>
   <data name="Watcher_LastCompressed" xml:space="preserve">
     <value>上次压缩:</value>
-  </data>
-  <data name="Watcher_ReAnalyse" xml:space="preserve">
-    <value>重新分析所有受监控文件夹</value>
   </data>
   <data name="Watcher_RemoveWatchlist" xml:space="preserve">
     <value>从监控列表移除</value>
@@ -426,17 +426,17 @@
   <data name="Watcher_WatchedDecayed" xml:space="preserve">
     <value>已衰减</value>
   </data>
-  <data name="Watcher_AddTip" xml:space="preserve">
-    <value>添加自定义文件夹到监控列表</value>
-  </data>
   <data name="UniAdd" xml:space="preserve">
     <value>添加</value>
   </data>
-  <data name="Status_Analysing" xml:space="preserve">
-    <value>正在分析</value>
+  <data name="Watcher_AddTip" xml:space="preserve">
+    <value>添加自定义文件夹到监控列表</value>
   </data>
   <data name="Status_AwaitingCompression" xml:space="preserve">
     <value>等待压缩</value>
+  </data>
+  <data name="Status_Analysing" xml:space="preserve">
+    <value>正在分析</value>
   </data>
   <data name="Status_Compressed" xml:space="preserve">
     <value>已压缩</value>
@@ -465,23 +465,20 @@
   <data name="SnackBar_SubmitWikiFailed" xml:space="preserve">
     <value>提交到 Wiki 失败</value>
   </data>
-  <data name="SnackBar_DirectStorageTechnology" xml:space="preserve">
-    <value>此游戏使用 DirectStorage 技术。如果您正在使用此功能，则不应压缩此游戏。</value>
-  </data>
-  <data name="SnackBar_CannotRemoveFolderTip" xml:space="preserve">
-    <value>请等待当前操作完成</value>
-  </data>
-  <data name="SnackBar_CannotRemoveFolder" xml:space="preserve">
-    <value>无法移除文件夹</value>
-  </data>
-  <data name="SnackBar_AppliedAllFoldersTip" xml:space="preserve">
-    <value>压缩选项已应用到所有文件夹</value>
+  <data name="SnackBar_SubmitWikiFailedTip" xml:space="preserve">
+    <value>请检查您的网络连接并重试</value>
   </data>
   <data name="SnackBar_AppliedAllFolders" xml:space="preserve">
     <value>已应用到所有文件夹</value>
   </data>
-  <data name="SnackBar_SubmitWikiFailedTip" xml:space="preserve">
-    <value>请检查您的网络连接并重试</value>
+  <data name="SnackBar_AppliedAllFoldersTip" xml:space="preserve">
+    <value>压缩选项已应用到所有文件夹</value>
+  </data>
+  <data name="SnackBar_CannotRemoveFolder" xml:space="preserve">
+    <value>无法移除文件夹</value>
+  </data>
+  <data name="SnackBar_CannotRemoveFolderTip" xml:space="preserve">
+    <value>请等待当前操作完成</value>
   </data>
   <data name="SnackBar_Success" xml:space="preserve">
     <value>成功</value>
@@ -489,14 +486,17 @@
   <data name="SnackBar_SuccessTip" xml:space="preserve">
     <value>已添加到队列</value>
   </data>
+  <data name="SnackBar_DirectStorageTechnology" xml:space="preserve">
+    <value>此游戏使用 DirectStorage 技术。如果您正在使用此功能，则不应压缩此游戏。</value>
+  </data>
   <data name="SnackBar_SubmitWikiTitle" xml:space="preserve">
     <value>已提交到 Wiki</value>
   </data>
-  <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
-    <value>压缩模式</value>
-  </data>
   <data name="SnackBar_SubmitWiki_Game" xml:space="preserve">
     <value>游戏</value>
+  </data>
+  <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
+    <value>压缩模式</value>
   </data>
   <data name="Status_NotCompressed" xml:space="preserve">
     <value>未压缩</value>
@@ -506,11 +506,11 @@
 
 你确定要退出吗？</value>
   </data>
-  <data name="UniExit" xml:space="preserve">
-    <value>退出</value>
-  </data>
   <data name="UniOpen" xml:space="preserve">
     <value>打开</value>
+  </data>
+  <data name="UniExit" xml:space="preserve">
+    <value>退出</value>
   </data>
   <data name="UniYes" xml:space="preserve">
     <value>是</value>
@@ -541,5 +541,8 @@
   </data>
   <data name="SizeUnit_EB" xml:space="preserve">
     <value>EB</value>
+  </data>
+  <data name="SetOpenSettingsFolder" xml:space="preserve">
+    <value>打开设置文件夹</value>
   </data>
 </root>

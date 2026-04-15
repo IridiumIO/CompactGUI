@@ -61,4 +61,9 @@ Partial Public Class SettingsPage
 
         End If
     End Sub
+
+    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+        Dim varx = IO.Path.Combine(Environment.GetEnvironmentVariable("IridiumIO"), "CompactGUI")
+        Process.Start("explorer.exe", varx)
+    End Sub
 End Class

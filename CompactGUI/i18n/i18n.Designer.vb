@@ -613,6 +613,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Open Settings Folder.
+        '''</summary>
+        Public Shared ReadOnly Property SetOpenSettingsFolder() As String
+            Get
+                Return ResourceManager.GetString("SetOpenSettingsFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to System Integration.
         '''</summary>
         Public Shared ReadOnly Property SetSystemIntegration() As String

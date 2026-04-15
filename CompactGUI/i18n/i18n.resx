@@ -569,4 +569,7 @@ Are you sure you want to exit?</value>
   <data name="SizeUnit_EB" xml:space="preserve">
     <value>EB</value>
   </data>
+  <data name="SetOpenSettingsFolder" xml:space="preserve">
+    <value>Open Settings Folder</value>
+  </data>
 </root>
