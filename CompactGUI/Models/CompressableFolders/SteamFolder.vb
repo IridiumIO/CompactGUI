@@ -72,21 +72,6 @@ Public Class SteamFolder : Inherits CompressableFolder
 
     End Function
 
-    Public Shared Function GetAppRootPath() As String
-        Try
-            If AppContext.TryGetSwitch("System.AppContext.SingleFile", Nothing) Then
-                Dim pathBuffer As New String(Chr(0), 260)
-                Dim exePath As String = pathBuffer.TrimEnd(Chr(0))
-                Dim appRootPath As String = Path.GetDirectoryName(exePath)
-                Return If(appRootPath.EndsWith("\"), appRootPath.TrimEnd("\"), appRootPath)
-            Else
-                Dim appRootPath As String = AppContext.BaseDirectory
-                Return If(appRootPath.EndsWith("\"), appRootPath.TrimEnd("\"), appRootPath)
-            End If
-        Catch ex As Exception
-            Return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-        End Try
-    End Function
 
     Public Shared Async Function GetSteamHeaderAsync(folder As SteamFolder) As Task
 
@@ -94,19 +79,11 @@ Public Class SteamFolder : Inherits CompressableFolder
 
         Dim tempImg As BitmapImage = Nothing
 
-        Dim appRootPath As String = GetAppRootPath()
-        Dim EnvironmentPath = Path.Combine(appRootPath, "data")
-        Dim imageDir = Path.Combine(EnvironmentPath, "SteamCache")
+        Dim EnvironmentPath = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
+        Dim imageDir = Path.Combine(EnvironmentPath, "CompactGUI", "SteamCache")
         Dim imagePath = Path.Combine(imageDir, $"{folder.SteamAppID}.jpg")
 
-        Try
-            Directory.CreateDirectory(imageDir)
-        Catch ex As Exception
-            EnvironmentPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI")
-            imageDir = Path.Combine(EnvironmentPath, "SteamCache")
-            imagePath = Path.Combine(imageDir, $"{folder.SteamAppID}.jpg")
-            Directory.CreateDirectory(imageDir)
-        End Try
+        If Not Directory.Exists(imageDir) Then Directory.CreateDirectory(imageDir)
 
         If File.Exists(imagePath) Then
             tempImg = LoadImageFromDisk(imagePath)

@@ -14,8 +14,7 @@ Public Class SettingsService : Implements ISettingsService
 
     Public Sub New()
 
-        Dim appRootPath As String = SteamFolder.GetAppRootPath()
-        DataFolder = New IO.DirectoryInfo(IO.Path.Combine(appRootPath, "data"))
+        DataFolder = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
         SettingsJSONFile = New IO.FileInfo(IO.Path.Combine(DataFolder.FullName, "settings.json"))
 
         SettingsVersion = 1.2

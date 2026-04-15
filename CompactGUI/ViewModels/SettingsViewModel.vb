@@ -42,8 +42,7 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
 
     Private Shared Async Function SetEnv() As Task
         SettingsLog.SettingEnvironmentVariables(Application.GetService(Of ILogger(Of Settings)))
-        Dim appRootPath As String = SteamFolder.GetAppRootPath()
-        Dim desiredValue = IO.Path.Combine(appRootPath, "data")
+        Dim desiredValue = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO")
         Dim currentValue = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
         If currentValue <> desiredValue Then Await Task.Run(Sub() Environment.SetEnvironmentVariable("IridiumIO", desiredValue, EnvironmentVariableTarget.User))
     End Function
