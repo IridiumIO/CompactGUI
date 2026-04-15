@@ -25,7 +25,7 @@ Namespace i18n
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>  _
-    Public Class i18n
+    Public Class i18n___Copy
         
         Private Shared resourceMan As Global.System.Resources.ResourceManager
         
@@ -43,7 +43,7 @@ Namespace i18n
         Public Shared ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
             Get
                 If Object.ReferenceEquals(resourceMan, Nothing) Then
-                    Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("CompactGUI.i18n", GetType(i18n).Assembly)
+                    Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("CompactGUI.i18n - Copy", GetType(i18n___Copy).Assembly)
                     resourceMan = temp
                 End If
                 Return resourceMan
@@ -155,15 +155,6 @@ Namespace i18n
         Public Shared ReadOnly Property CompressionDB_DatabaseResults_Games() As String
             Get
                 Return ResourceManager.GetString("CompressionDB_DatabaseResults_Games", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Mode.
-        '''</summary>
-        Public Shared ReadOnly Property CompressionDB_DatabaseResults_Mode() As String
-            Get
-                Return ResourceManager.GetString("CompressionDB_DatabaseResults_Mode", resourceCulture)
             End Get
         End Property
         
@@ -294,7 +285,7 @@ Namespace i18n
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Total Results.
+        '''  Looks up a localized string similar to TOTAL RESULTS.
         '''</summary>
         Public Shared ReadOnly Property CompressionModeRadio_TotalResults() As String
             Get

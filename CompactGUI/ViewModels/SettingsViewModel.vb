@@ -156,7 +156,8 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
     Public Property LanguageItems As New List(Of LanguageItem) From {
         New LanguageItem With {.Name = "English", .CultureCode = "en-US", .ISOCountryCode = "US"},
         New LanguageItem With {.Name = "Русский", .CultureCode = "ru-RU", .ISOCountryCode = "RU"},
-        New LanguageItem With {.Name = "简体中文", .CultureCode = "zh-CN", .ISOCountryCode = "CN"}
+        New LanguageItem With {.Name = "简体中文", .CultureCode = "zh-CN", .ISOCountryCode = "CN"},
+        New LanguageItem With {.Name = "Español", .CultureCode = "es-ES", .ISOCountryCode = "ES"}
     }
 
 

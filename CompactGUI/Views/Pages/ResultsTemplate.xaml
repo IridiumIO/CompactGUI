@@ -5,9 +5,10 @@
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              mc:Ignorable="d">
-    <Grid Margin="0,30,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+    <Grid Margin="0 30 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           d:DataContext="{d:DesignInstance Type=local:FolderViewModel}">
 
         <Grid.ColumnDefinitions>
@@ -22,10 +23,9 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{local:Localize Status_CompressionSummary}"
-                   d:Text="Compression Summary"
-                   HorizontalAlignment="Left"
-                   FontSize="16" FontWeight="SemiBold" />
+        <TextBlock HorizontalAlignment="Left"
+                   d:Text="Compression Summary" FontSize="16" FontWeight="SemiBold"
+                   Text="{local:Localize Status_CompressionSummary}" />
 
 
         <ProgressBar Grid.Row="1" Grid.Column="0"
@@ -39,72 +39,69 @@
                      Maximum="{Binding Folder.UncompressedBytes}"
                      Value="{Binding Folder.CompressedBytes}" />
 
-        <StackPanel Grid.Row="1" Grid.Column="1"
-                    VerticalAlignment="Center">
-            <TextBlock Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
-                       HorizontalAlignment="Right"
-                       FontSize="18" FontWeight="SemiBold" />
-            <TextBlock Text="{local:Localize Status_Before}" d:Text="Before"
-                       Margin="0,-2" HorizontalAlignment="Right"
-                       FontSize="14"
-                       Foreground="{StaticResource AccentFillColorDisabledBrush}" />
+        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock HorizontalAlignment="Right"
+                       FontSize="18" FontWeight="SemiBold"
+                       Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
+            <TextBlock Margin="0 -2" HorizontalAlignment="Right"
+                       d:Text="Before" FontSize="14"
+                       Foreground="{StaticResource AccentFillColorDisabledBrush}"
+                       Text="{local:Localize Status_Before}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Grid.Column="1"
-                    VerticalAlignment="Center">
-            <TextBlock Text="{Binding Folder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}"
-                       HorizontalAlignment="Right"
-                       FontSize="18" FontWeight="SemiBold" />
-            <TextBlock Text="{local:Localize Status_After}" d:Text="After"
-                       Margin="0,-2" HorizontalAlignment="Right"
-                       FontSize="14"
-                       Foreground="{StaticResource AccentFillColorDisabledBrush}" />
+        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock HorizontalAlignment="Right"
+                       FontSize="18" FontWeight="SemiBold"
+                       Text="{Binding Folder.CompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
+            <TextBlock Margin="0 -2" HorizontalAlignment="Right"
+                       d:Text="After" FontSize="14"
+                       Foreground="{StaticResource AccentFillColorDisabledBrush}"
+                       Text="{local:Localize Status_After}" />
         </StackPanel>
 
 
 
 
         <WrapPanel Grid.Row="3" Grid.ColumnSpan="2"
-                   Margin="0,20" 
+                   Margin="0 20"
                    Orientation="Horizontal">
             <ui:Card Width="200"
-                     Margin="0,0,20,20" Padding="10,20,10,20"
+                     Margin="0 0 20 20" Padding="10 20 10 20"
                      Background="#30FFFFFF" BorderThickness="0">
                 <Grid>
-                    <ui:TextBlock Text="{local:Localize Status_SpaceSaved}" d:Text="Space Saved"
-                                  Margin="0,0,10,-4" VerticalAlignment="Center"
-                                  FontSize="13" Foreground="#80FFFFFF" />
-                    <ui:TextBlock Text="{Binding Folder.CompressionRatio, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF'}"
-                                  HorizontalAlignment="Right" VerticalAlignment="Center"
-                                  FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB" />
+                    <ui:TextBlock Margin="0 0 10 -4" VerticalAlignment="Center"
+                                  d:Text="Space Saved" FontSize="13" Foreground="#80FFFFFF"
+                                  Text="{local:Localize Status_SpaceSaved}" />
+                    <ui:TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                                  FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB"
+                                  Text="{Binding Folder.CompressionRatio, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF'}" />
                 </Grid>
             </ui:Card>
             <ui:Card Width="200"
-                     Margin="0,0,20,20" Padding="10,20,10,20"
+                     Margin="0 0 20 20" Padding="10 20 10 20"
                      Background="#30FFFFFF" BorderThickness="0">
                 <Grid>
-                    <ui:TextBlock Text="{local:Localize Status_FilesCompressed}" d:Text="Files Compressed"
-                                  Margin="0,0,10,-4" VerticalAlignment="Center"
-                                  FontSize="13" Foreground="#80FFFFFF" />
-                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
-                                Orientation="Horizontal">
-                        <ui:TextBlock Text="{Binding TotalCompressedFiles}"
-                                      FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB" />
+                    <ui:TextBlock Margin="0 0 10 -4" VerticalAlignment="Center"
+                                  d:Text="Files Compressed" FontSize="13" Foreground="#80FFFFFF"
+                                  Text="{local:Localize Status_FilesCompressed}" />
+                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                        <ui:TextBlock FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB"
+                                      Text="{Binding TotalCompressedFiles}" />
                     </StackPanel>
 
 
                 </Grid>
             </ui:Card>
             <ui:Card Width="200"
-                     Margin="0,0,20,20" Padding="10,20,10,20"
+                     Margin="0 0 20 20" Padding="10 20 10 20"
                      Background="#30FFFFFF" BorderThickness="0">
                 <Grid>
-                    <ui:TextBlock Text="{local:Localize Status_CompressionMode}" d:Text="Compression Mode"
-                                  Margin="0,0,10,-4" VerticalAlignment="Center"
-                                  FontSize="13" Foreground="#80FFFFFF" />
-                    <ui:TextBlock Text="{Binding DominantCompressionMode, Converter={StaticResource CompressionLevelAbbreviatedConverter}}"
-                                  HorizontalAlignment="Right" VerticalAlignment="Center"
-                                  FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB" />
+                    <ui:TextBlock Margin="0 0 10 -4" VerticalAlignment="Center"
+                                  d:Text="Compression Mode" FontSize="13" Foreground="#80FFFFFF"
+                                  Text="{local:Localize Status_CompressionMode}" />
+                    <ui:TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                                  FontSize="18" FontWeight="SemiBold" Foreground="#92F1AB"
+                                  Text="{Binding DominantCompressionMode, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" />
                 </Grid>
             </ui:Card>
 
@@ -116,27 +113,27 @@
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Orientation="Horizontal">
 
-            <ui:Button Content="{local:Localize Home_Uncompress}"
+            <ui:Button Width="140" Height="40"
+                       Margin="0 0 0 10"
                        d:Content="Uncompress"
-                       Width="140" Height="40"
-                       Margin="0,0,0,10"
                        Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                        Command="{Binding UncompressCommand}"
+                       Content="{local:Localize Home_Uncompress}"
                        FontSize="16" />
-            <ui:Button Content="{local:Localize Home_CompressAgain}"
+            <ui:Button Width="140" Height="40"
+                       Margin="40 0 0 10"
                        d:Content="Compress Again"
-                       Width="140" Height="40"
-                       Margin="40,0,0,10"
                        Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                        Command="{Binding CompressAgainCommand}"
+                       Content="{local:Localize Home_CompressAgain}"
                        FontSize="16"
                        Visibility="{Binding Folder.IsFreshlyCompressed, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
-            <ui:Button Content="{local:Localize Home_SubmitResults}"
+            <ui:Button Width="140" Height="40"
+                       Margin="40 0 0 10"
                        d:Content="Submit Results"
-                       Width="140" Height="40"
-                       Margin="40,0,0,10"
                        Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                        Command="{Binding SubmitToWikiCommand}"
+                       Content="{local:Localize Home_SubmitResults}"
                        FontSize="16">
                 <ui:Button.Visibility>
                     <MultiBinding Converter="{StaticResource IsSteamFolderAndFreshlyCompressedMultiConverter}">

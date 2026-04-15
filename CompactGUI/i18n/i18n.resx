@@ -368,7 +368,7 @@ skips files based on compression estimate</value>
     <value>After</value>
   </data>
   <data name="CompressionModeRadio_TotalResults" xml:space="preserve">
-    <value>TOTAL RESULTS</value>
+    <value>Total Results</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SortAscending" xml:space="preserve">
     <value>Ascending</value>
@@ -574,5 +574,8 @@ Are you sure you want to exit?</value>
   </data>
   <data name="UniOK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="CompressionDB_DatabaseResults_Mode" xml:space="preserve">
+    <value>Mode</value>
   </data>
 </root>

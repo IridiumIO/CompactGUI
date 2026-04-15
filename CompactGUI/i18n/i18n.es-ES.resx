@@ -118,463 +118,417 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Message_Welcome" xml:space="preserve">
-    <value>Добро пожаловать</value>
+    <value>Bienvenido</value>
   </data>
   <data name="SetUi_LanguageChanged" xml:space="preserve">
-    <value>Язык (требуется перезапуск)</value>
-  </data>
-  <data name="SetUi_LanguageChangedMsg" xml:space="preserve">
-    <value>Смена языка выполнена. Возможно, потребуется перезапустить приложение, чтобы все изменения вступили в силу.</value>
-  </data>
-  <data name="SetUi_LanguageChangedTitle" xml:space="preserve">
-    <value>Язык изменён</value>
+    <value>Idioma (Requiere reinicio)</value>
   </data>
   <data name="SetUi" xml:space="preserve">
-    <value>Настройки интерфейса</value>
+    <value>Ajustes de interfaz</value>
   </data>
   <data name="SetUi_CompressionDetails" xml:space="preserve">
-    <value>Всегда показывать подробности на кнопках режимов сжатия</value>
+    <value>Mostrar siempre detalles en botones de modo de compresión</value>
   </data>
   <data name="SetUpdate" xml:space="preserve">
-    <value>Настройки обновлений</value>
+    <value>Ajustes de actualización</value>
   </data>
   <data name="SetUpdate_CheckPreUpdates" xml:space="preserve">
-    <value>Проверять предварительные версии обновлений</value>
+    <value>Buscar actualizaciones preliminares</value>
   </data>
   <data name="SetBackgroundWatch" xml:space="preserve">
-    <value>Настройки фонового отслеживания</value>
+    <value>Ajustes del Monitor en segundo plano</value>
   </data>
   <data name="SetBackgroundWatch_FoldersChanges" xml:space="preserve">
-    <value>Отслеживать изменения в сжатых папках</value>
+    <value>Monitorizar cambios en carpetas comprimidas</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders" xml:space="preserve">
-    <value>Сжимать папки: </value>
-    <comment>@MutedRule(WhiteSpaceTail)</comment>
+    <value>Comprimir carpetas:</value>
   </data>
   <data name="SetBackgroundWatch_Time_Every" xml:space="preserve">
-    <value>каждые</value>
+    <value>cada</value>
   </data>
   <data name="SetBackgroundWatch_Time_Day" xml:space="preserve">
-    <value>дн.</value>
+    <value>día(s)</value>
   </data>
   <data name="SetBackgroundWatch_Time_At" xml:space="preserve">
-    <value>в</value>
-    <comment>@MutedRule(WhiteSpaceLead)@MutedRule(WhiteSpaceTail)</comment>
+    <value>a las</value>
   </data>
   <data name="SetCompression" xml:space="preserve">
-    <value>Настройки сжатия</value>
+    <value>Ajustes de compresión</value>
   </data>
   <data name="SetCompression_MaxThreads" xml:space="preserve">
-    <value>Максимум потоков сжатия</value>
+    <value>Hilos máximos de compresión</value>
   </data>
   <data name="SetCompression_HDDThread" xml:space="preserve">
-    <value>Для HDD использовать только 1 поток</value>
+    <value>Los HDD usan solo 1 hilo</value>
   </data>
   <data name="SetCompression_NonSteamFolders" xml:space="preserve">
-    <value>Оценивать сжатие для папок не из Steam (бета)</value>
+    <value>Estimar compresión para carpetas no-Steam (beta)</value>
   </data>
   <data name="SetSystemIntegration" xml:space="preserve">
-    <value>Интеграция в систему</value>
+    <value>Integración del sistema</value>
   </data>
   <data name="SetSystemIntegration_RightClickMenu" xml:space="preserve">
-    <value>Добавить в контекстное меню правой кнопки мыши</value>
+    <value>Añadir al menú contextual</value>
   </data>
   <data name="SetSystemIntegration_StartMenu" xml:space="preserve">
-    <value>Добавить в меню «Пуск»</value>
+    <value>Añadir al menú inicio</value>
   </data>
   <data name="SetSystemIntegration_CompletionNotification" xml:space="preserve">
-    <value>Показывать уведомление о завершении</value>
+    <value>Mostrar notificación al finalizar</value>
   </data>
   <data name="SetSystemIntegration_Startup" xml:space="preserve">
-    <value>Запускать CompactGUI в области уведомлений</value>
+    <value>Iniciar CompactGUI en la bandeja del sistema</value>
   </data>
   <data name="SetFiletypeManagement" xml:space="preserve">
-    <value>Управление типами файлов</value>
+    <value>Gestión de tipos de archivo</value>
   </data>
   <data name="SetFiletypeManagement_LocalSkipFiletypes" xml:space="preserve">
-    <value>Управление локальным списком пропускаемых типов файлов</value>
+    <value>Gestionar tipos de archivo omitidos locales</value>
   </data>
   <data name="UniEdit" xml:space="preserve">
-    <value>изменить</value>
+    <value>editar</value>
   </data>
   <data name="SetFiletypeManagement_OnlineSkiplistAgression" xml:space="preserve">
-    <value>Уровень агрессивности онлайн-списка пропуска</value>
+    <value>Agresividad de la lista de omisión online</value>
   </data>
   <data name="SetFiletypeManagement_OnlineSkiplistAgressionTip" xml:space="preserve">
-    <value>Только для игр Steam.
-При выборе пропуска файлов, предложенных пользователями, этот параметр определяет, сколько подтверждений необходимо для каждого типа файлов, чтобы его пропускать.
-«Низкий» обычно оптимален, так как более высокие значения могут привести к пропуску файлов, которые на самом деле хорошо сжимаются.</value>
+    <value>Solo para juegos de Steam.
+Al elegir omitir los tipos de archivo enviados por los usuarios, esta configuración determina cuántas solicitudes se requieren para cada tipo de archivo para considerar su omisión.
+Generalmente, la opción "baja" es la mejor, ya que las opciones más altas conllevan el riesgo de omitir archivos que, de otro modo, se comprimirían correctamente.</value>
   </data>
   <data name="SetFiletypeManagement_OnlineSkiplistAgressionLow" xml:space="preserve">
-    <value>низкий</value>
+    <value>bajo</value>
   </data>
   <data name="SetFiletypeManagement_OnlineSkiplistAgressionMedium" xml:space="preserve">
-    <value>средний</value>
+    <value>media</value>
   </data>
   <data name="SetFiletypeManagement_OnlineSkiplistAgressionHigh" xml:space="preserve">
-    <value>высокий</value>
+    <value>alta</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Ajustes</value>
   </data>
   <data name="PageNameWatcher" xml:space="preserve">
-    <value>Страница отслеживания</value>
+    <value>Monitor</value>
   </data>
   <data name="CompressionDB_DatabaseResults" xml:space="preserve">
-    <value>Результаты базы данных</value>
+    <value>Resultados de la base de datos</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SearchSteamID" xml:space="preserve">
-    <value>Поиск по названию игры или SteamID...</value>
+    <value>Buscar por nombre o SteamID...</value>
   </data>
   <data name="CompressionDB_DatabaseResults_Sort" xml:space="preserve">
-    <value>Сортировать по</value>
+    <value>Ordenar por</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SortGameName" xml:space="preserve">
-    <value>Названию игры</value>
+    <value>Nombre del juego</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SortSteamID" xml:space="preserve">
     <value>SteamID</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SortMaxSavings" xml:space="preserve">
-    <value>Максимальной экономии</value>
+    <value>Ahorro máx.</value>
   </data>
   <data name="CompressionDB_DatabaseResults_Games" xml:space="preserve">
-    <value>Игры</value>
+    <value>Juegos</value>
   </data>
   <data name="Status_UncompressedSize" xml:space="preserve">
-    <value>исходный размер</value>
+    <value>tamaño sin comprimir</value>
   </data>
   <data name="Status_ContainedFiles" xml:space="preserve">
-    <value>содержит файлов</value>
+    <value>archivos contenidos</value>
   </data>
   <data name="Home_AddFolder" xml:space="preserve">
-    <value>Добавить папку в очередь</value>
+    <value>Añadir carpeta a la cola</value>
   </data>
   <data name="Home_CompressSelected" xml:space="preserve">
-    <value>Сжать выбранное</value>
+    <value>Comprimir seleccionados</value>
   </data>
   <data name="Status_Working" xml:space="preserve">
-    <value>Выполняется</value>
+    <value>Trabajando</value>
   </data>
   <data name="Status_ResultsState" xml:space="preserve">
-    <value>Состояние результатов</value>
+    <value>Estado de los resultados</value>
   </data>
   <data name="CompressionMode" xml:space="preserve">
-    <value>Режим сжатия</value>
+    <value>Modo de compresión</value>
   </data>
-  <data name="CompressionMode_XPRESS4K" xml:space="preserve">
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CompressionMode_LZX" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
-    <comment>@Invariant</comment>
-  </data>
-  <data name="CompressionMode_XPRESS8K" xml:space="preserve">
-    <value />
-    <comment>@Invariant</comment>
-  </data>
-  <data name="CompressionMode_XPRESS16K" xml:space="preserve">
-    <value />
-    <comment>@Invariant</comment>
-  </data>
-  <data name="CompressionMode_LZX" xml:space="preserve">
-    <value />
-    <comment>@Invariant</comment>
   </data>
   <data name="CompressionConfiguration" xml:space="preserve">
-    <value>Конфигурация</value>
+    <value>Configuración</value>
   </data>
   <data name="CompressionConfiguration_SkipFileTypes" xml:space="preserve">
-    <value>Пропускать типы файлов, указанные в настройках</value>
+    <value>Omitir tipos de archivo especificados en ajustes</value>
   </data>
   <data name="CompressionConfiguration_SkipFileTypesLikelyPoorly" xml:space="preserve">
-    <value>Пропускать типы файлов, которые сжимаются плохо</value>
+    <value>Omitir tipos de archivo difícilmente comprimibles</value>
   </data>
   <data name="CompressionConfiguration_SkipFileTypesLikelyPoorlyTip" xml:space="preserve">
-    <value>Для игр Steam:
-пропускает файлы на основе результатов базы данных
+    <value>Para juegos de Steam:
+omite archivos basado en resultados de la BD
 
-Для папок не из Steam:
-пропускает файлы на основе оценки сжатия</value>
+Para carpetas no-Steam:
+omite archivos basado en estimación de compresión</value>
   </data>
   <data name="CompressionConfiguration_WatchFolderChanges" xml:space="preserve">
-    <value>Отслеживать изменения в папке</value>
+    <value>Monitorizar cambios en carpeta</value>
   </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
-    <value>Применить ко всем</value>
+    <value>Aplicar a todo</value>
   </data>
   <data name="CompressionModeRadio_EstimatedSize" xml:space="preserve">
-    <value>Предполагаемый размер</value>
+    <value>Tamaño estimado</value>
   </data>
   <data name="CompressionModeRadio_Savings" xml:space="preserve">
-    <value>Экономия</value>
+    <value>Ahorro</value>
   </data>
   <data name="CompressionModeRadio_Unknown" xml:space="preserve">
-    <value>неизвестно</value>
+    <value>desconocido</value>
   </data>
   <data name="Watcher_WatchedFolders" xml:space="preserve">
-    <value>Отслеживаемые папки</value>
+    <value>Carpetas monitorizadas</value>
   </data>
   <data name="Watcher_WatchedSaved" xml:space="preserve">
-    <value>сэкономлено</value>
+    <value>ahorrado</value>
   </data>
   <data name="Watcher_CancelBackgroundCompressor" xml:space="preserve">
-    <value>Отменить фоновое сжатие</value>
+    <value>Cancelar compresor en segundo plano</value>
   </data>
   <data name="Watcher_CompressAllNow" xml:space="preserve">
-    <value>Сжать всё сейчас</value>
+    <value>Comprimir todo ahora</value>
   </data>
   <data name="Watcher_LastAnalysed" xml:space="preserve">
-    <value>Последний анализ</value>
+    <value>Último análisis</value>
   </data>
   <data name="Time_Unknown" xml:space="preserve">
-    <value>Неизвестно</value>
+    <value>Desconocido</value>
   </data>
   <data name="Time_DaysAgo" xml:space="preserve">
-    <value>{0:0} дн. назад</value>
+    <value>{0:0} hace días</value>
   </data>
   <data name="Time_HoursAgo" xml:space="preserve">
-    <value>{0:0} ч. назад</value>
+    <value>{0:0} hace horas</value>
   </data>
   <data name="Time_MinutesAgo" xml:space="preserve">
-    <value>{0:0} мин. назад</value>
+    <value>{0:0} hace minutos</value>
   </data>
   <data name="Time_Now" xml:space="preserve">
-    <value>только что</value>
+    <value>ahora mismo</value>
   </data>
   <data name="Status_CompressionSummary" xml:space="preserve">
-    <value>Сводка сжатия</value>
+    <value>Resumen de compresión</value>
   </data>
   <data name="Status_SpaceSaved" xml:space="preserve">
-    <value>Сэкономлено места</value>
+    <value>Espacio ahorrado</value>
   </data>
   <data name="Status_FilesCompressed" xml:space="preserve">
-    <value>Файлов сжато</value>
+    <value>Archivos comprimidos</value>
   </data>
   <data name="Status_CompressionMode" xml:space="preserve">
-    <value>Режим сжатия</value>
+    <value>Modo de compresión</value>
   </data>
   <data name="Home_Uncompress" xml:space="preserve">
-    <value>Распаковать</value>
+    <value>Descomprimir</value>
   </data>
   <data name="Home_CompressAgain" xml:space="preserve">
-    <value>Сжать заново</value>
+    <value>Comprimir de nuevo</value>
   </data>
   <data name="Home_SubmitResults" xml:space="preserve">
-    <value>Отправить результаты</value>
+    <value>Enviar resultados</value>
   </data>
   <data name="Status_Before" xml:space="preserve">
-    <value>До</value>
+    <value>Antes</value>
   </data>
   <data name="Status_After" xml:space="preserve">
-    <value>После</value>
+    <value>Después</value>
   </data>
   <data name="CompressionModeRadio_TotalResults" xml:space="preserve">
-    <value>Всего результатов</value>
+    <value>Totales</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SortAscending" xml:space="preserve">
-    <value>По возрастанию</value>
+    <value>Ascendente</value>
   </data>
   <data name="CompressionDB_DatabaseResults_SortDescending" xml:space="preserve">
-    <value>По убыванию</value>
+    <value>Descendente</value>
   </data>
   <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
-    <value>изменить список пропускаемых типов</value>
+    <value>editar tipos de archivo omitidos</value>
   </data>
   <data name="UniSave" xml:space="preserve">
-    <value>Сохранить</value>
+    <value>Ahorrar</value>
   </data>
   <data name="UniReset" xml:space="preserve">
-    <value>Сбросить</value>
+    <value>Reiniciar</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders_Never" xml:space="preserve">
-    <value>Никогда</value>
+    <value>Nunca</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders_Idle" xml:space="preserve">
-    <value>Когда система бездействует</value>
+    <value>Cuando el sistema esté inactivo</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders_OnSchedule" xml:space="preserve">
-    <value>По расписанию</value>
+    <value>Programado</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders_OnScheduleIdle" xml:space="preserve">
-    <value>По расписанию, если система также бездействует</value>
+    <value>Programado (si el sistema está inactivo)</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders_LastRanFormat" xml:space="preserve">
-    <value>Последний запуск: {0:dd MMM yyyy \a\t HH:mm:ss}</value>
+    <value>Última ejecución: {0:dd MMM yyyy \a\t HH:mm:ss}</value>
   </data>
   <data name="SetBackgroundWatch_CompressFolders_NextScheduledFormat" xml:space="preserve">
-    <value>Следующее по расписанию: {0:dd MMM yyyy \a\t HH:mm:ss}</value>
+    <value>Próxima programada: {0:dd MMM yyyy \a\t HH:mm:ss}</value>
   </data>
   <data name="Title_CompactGUI" xml:space="preserve">
     <value>CompactGUI</value>
   </data>
   <data name="Home_SelectFolder" xml:space="preserve">
-    <value>выберите папку</value>
+    <value>seleccionar carpeta</value>
   </data>
   <data name="UniAdmin" xml:space="preserve">
-    <value>Администратор</value>
+    <value>Admin</value>
   </data>
   <data name="Title_CompressionDB" xml:space="preserve">
-    <value>База сжатия</value>
+    <value>DB de Compresión</value>
   </data>
   <data name="Title_Watcher" xml:space="preserve">
-    <value>Наблюдение</value>
+    <value>Monitor</value>
   </data>
   <data name="Title_Home" xml:space="preserve">
-    <value>Главная</value>
+    <value>Inicio</value>
   </data>
   <data name="Status_LastFetched" xml:space="preserve">
-    <value>Последнее получение: {0:dd MMM yyyy HH:mm:ss}</value>
+    <value>Última obtención: {0:dd MMM yyyy HH:mm:ss}</value>
   </data>
   <data name="Watcher_ReAnalyse" xml:space="preserve">
-    <value>Переанализировать все отслеживаемые папки</value>
+    <value>Reanalizar todas las carpetas monitorizadas</value>
   </data>
   <data name="Watcher_LastModified" xml:space="preserve">
-    <value>последнее изменение:</value>
+    <value>última modificación:</value>
   </data>
   <data name="Watcher_LastCompressed" xml:space="preserve">
-    <value>последнее сжатие:</value>
+    <value>última compresión:</value>
   </data>
   <data name="Watcher_RemoveWatchlist" xml:space="preserve">
-    <value>Удалить из списка отслеживания</value>
+    <value>Eliminar de la lista</value>
   </data>
   <data name="Watcher_AddQueue" xml:space="preserve">
-    <value>Добавить в очередь сжатия</value>
+    <value>Añadir a la cola de compresión</value>
   </data>
   <data name="Watcher_ReAnalyseFolder" xml:space="preserve">
-    <value>Повторно проанализировать эту папку</value>
+    <value>Reanalizar esta carpeta</value>
   </data>
   <data name="Watcher_WatchedDecayed" xml:space="preserve">
-    <value>устарело</value>
+    <value>degradado</value>
   </data>
   <data name="UniAdd" xml:space="preserve">
-    <value>Добавить</value>
+    <value>Añadir </value>
   </data>
   <data name="Watcher_AddTip" xml:space="preserve">
-    <value>Добавить свою папку в список отслеживания</value>
+    <value>Añadir carpeta personalizada a la lista</value>
   </data>
   <data name="Status_AwaitingCompression" xml:space="preserve">
-    <value>Ожидание сжатия</value>
+    <value>Esperando compresión</value>
   </data>
   <data name="Status_Analysing" xml:space="preserve">
-    <value>Анализ</value>
+    <value>Analizando</value>
   </data>
   <data name="Status_Compressed" xml:space="preserve">
-    <value>Сжато</value>
+    <value>Comprimido</value>
   </data>
   <data name="Status_Unknown" xml:space="preserve">
-    <value>Неизвестно</value>
+    <value>Desconocido</value>
   </data>
   <data name="CompressionConfiguration_SkipFile" xml:space="preserve">
-    <value>фл. будет пропущено</value>
+    <value>archivos serán omitidos</value>
   </data>
-  <data name="SnackBar_SnackbarPresenter" xml:space="preserve">
-    <value>SnackbarPresenter не установлен</value>
+  <data name="SnackBar_SnackbarPresenter" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="SnackBar_RestartAdmin" xml:space="preserve">
-    <value>Перезапустить от имени администратора</value>
+    <value>Reiniciar como Admin</value>
   </data>
   <data name="SnackBar_RestartAdminTip" xml:space="preserve">
-    <value>Недостаточно прав для доступа к этой папке</value>
+    <value>Permiso insuficiente para acceder a esta carpeta.</value>
   </data>
   <data name="SnackBar_UpdateDownload" xml:space="preserve">
-    <value>Нажмите, чтобы скачать</value>
+    <value>Clic para descargar</value>
   </data>
   <data name="SnackBar_UpdateAvailable" xml:space="preserve">
-    <value>Доступно обновление ▸ Версия {0}</value>
+    <value>Actualización disponible ▸ Versión {0}</value>
   </data>
   <data name="SnackBar_SubmitWikiFailed" xml:space="preserve">
-    <value>Не удалось отправить в Вики</value>
+    <value>Fallo al enviar a la wiki</value>
   </data>
   <data name="SnackBar_SubmitWikiFailedTip" xml:space="preserve">
-    <value>Проверьте подключение к интернету и повторите попытку</value>
+    <value>Por favor verifique su conexión a internet e intente de nuevo</value>
   </data>
   <data name="SnackBar_AppliedAllFolders" xml:space="preserve">
-    <value>Применено ко всем папкам</value>
+    <value>Aplicado a todas las carpetas</value>
   </data>
   <data name="SnackBar_AppliedAllFoldersTip" xml:space="preserve">
-    <value>Параметры сжатия применены ко всем папкам</value>
+    <value>Las opciones de compresión se han aplicado a todas las carpetas</value>
   </data>
   <data name="SnackBar_CannotRemoveFolder" xml:space="preserve">
-    <value>Не удаётся удалить папку</value>
+    <value>No se puede eliminar la carpeta</value>
   </data>
   <data name="SnackBar_CannotRemoveFolderTip" xml:space="preserve">
-    <value>Подождите завершения текущей операции</value>
+    <value>Por favor espere hasta que la operación actual termine</value>
   </data>
   <data name="SnackBar_Success" xml:space="preserve">
-    <value>Успешно</value>
+    <value>Éxito</value>
   </data>
   <data name="SnackBar_SuccessTip" xml:space="preserve">
-    <value>Добавлено в очередь</value>
+    <value>Añadido a la cola</value>
   </data>
   <data name="SnackBar_DirectStorageTechnology" xml:space="preserve">
-    <value>Эта игра использует технологию DirectStorage. Если вы используете эту функцию, вам не следует сжимать эту игру.</value>
+    <value>Este juego usa tecnología DirectStorage. Si usa esta función, no debería comprimir este juego.</value>
   </data>
   <data name="SnackBar_SubmitWikiTitle" xml:space="preserve">
-    <value>Отправлено в Вики</value>
+    <value>Enviado a la wiki</value>
   </data>
-  <data name="SnackBar_SubmitWiki_UID" xml:space="preserve">
+  <data name="SnackBar_SubmitWiki_UID" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
-    <comment>@Invariant</comment>
   </data>
   <data name="SnackBar_SubmitWiki_Game" xml:space="preserve">
-    <value>Игра</value>
-  </data>
-  <data name="SnackBar_SubmitWiki_SteamID" xml:space="preserve">
-    <value />
-    <comment>@Invariant</comment>
+    <value>Juego</value>
   </data>
   <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
-    <value>Сжатие</value>
+    <value>Compresión</value>
   </data>
   <data name="Status_NotCompressed" xml:space="preserve">
-    <value>Не сжато</value>
+    <value>No comprimido</value>
   </data>
   <data name="MessageBox_ExitText" xml:space="preserve">
-    <value>В данный момент отслеживается папок ({0}). Закрытие CompactGUI прекратит их отслеживание.
+    <value>Actualmente tiene {0} carpetas siendo monitorizadas. Cerrar CompactGUI detendrá su monitorización.
 
-Вы уверены, что хотите выйти?</value>
+: "¿Está seguro de que desea sal</value>
   </data>
   <data name="UniOpen" xml:space="preserve">
-    <value>Открыть</value>
+    <value>Abrir</value>
   </data>
   <data name="UniExit" xml:space="preserve">
-    <value>Выход</value>
+    <value>Salir</value>
   </data>
   <data name="UniYes" xml:space="preserve">
-    <value>Да</value>
+    <value>Sí</value>
   </data>
   <data name="UniCancel" xml:space="preserve">
-    <value>Отмена</value>
+    <value>Cancelar </value>
   </data>
   <data name="Home_Version" xml:space="preserve">
-    <value>Версия</value>
+    <value>Versión</value>
   </data>
-  <data name="SizeUnit_B" xml:space="preserve">
-    <value>б</value>
-  </data>
-  <data name="SizeUnit_KB" xml:space="preserve">
-    <value>Кб</value>
-  </data>
-  <data name="SizeUnit_MB" xml:space="preserve">
-    <value>Мб</value>
-  </data>
-  <data name="SizeUnit_GB" xml:space="preserve">
-    <value>Гб</value>
-  </data>
-  <data name="SizeUnit_TB" xml:space="preserve">
-    <value>Тб</value>
-  </data>
-  <data name="SizeUnit_PB" xml:space="preserve">
-    <value>Пб</value>
-  </data>
-  <data name="SizeUnit_EB" xml:space="preserve">
-    <value>Эб</value>
+  <data name="SizeUnit_B" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="SetOpenSettingsFolder" xml:space="preserve">
-    <value>Открыть папку настроек</value>
-  </data>
-  <data name="UniOK" xml:space="preserve">
-    <value>хорошо</value>
+    <value>Abrir Ajustes carpetas </value>
   </data>
   <data name="CompressionDB_DatabaseResults_Mode" xml:space="preserve">
-    <value>Режим</value>
+    <value>Modo </value>
   </data>
 </root>

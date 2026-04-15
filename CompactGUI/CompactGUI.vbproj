@@ -79,6 +79,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="i18n\i18n.es-ES.Designer.vb">
+      <DependentUpon>i18n.es-ES.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="i18n\i18n.Designer.vb">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -87,6 +92,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="i18n\i18n.es-ES.resx">
+      <CustomToolNamespace>i18n</CustomToolNamespace>
+      <LastGenOutput>i18n.es-ES.Designer.vb</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="i18n\i18n.resx">
       <CustomToolNamespace>i18n</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -548,4 +548,7 @@
   <data name="UniOK" xml:space="preserve">
     <value>好</value>
   </data>
+  <data name="CompressionDB_DatabaseResults_Mode" xml:space="preserve">
+    <value>压缩模式</value>
+  </data>
 </root>
