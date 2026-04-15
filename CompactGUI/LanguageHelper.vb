@@ -4,6 +4,7 @@ Imports System.Threading
 Imports System.Windows.Markup
 Imports System.Windows.Data
 Imports System.Reflection
+Imports CompactGUI.Core.Settings
 
 
 Public Class LanguageItem
@@ -19,12 +20,16 @@ Public Class LanguageHelper
     Private Shared resourceManager As ResourceManager = i18n.i18n.ResourceManager
     Private Shared currentCulture As CultureInfo = Nothing
 
+    Private Shared _applicationSettings As Settings
+
     Public Shared Function GetText(key As String) As String
         Return GetString(key)
     End Function
 
-    Public Shared Sub Initialize()
-        Dim savedLanguage As String = ReadAppConfig("language")
+    Public Shared Sub Initialize(applicationSettings As Settings)
+        _applicationSettings = applicationSettings
+        Dim savedLanguage = _applicationSettings.Language
+
         If Not String.IsNullOrEmpty(savedLanguage) AndAlso SupportedCultures.Contains(savedLanguage) Then
             ApplyCulture(savedLanguage)
         Else
@@ -40,7 +45,6 @@ Public Class LanguageHelper
         Dim nextLang As String = GetNextLanguage(currentLang)
 
         ApplyCulture(nextLang)
-        WriteAppConfig("language", nextLang)
     End Sub
 
     Public Shared Function GetString(key As String, ParamArray args As Object()) As String
@@ -67,6 +71,9 @@ Public Class LanguageHelper
             Thread.CurrentThread.CurrentUICulture = culture
             Thread.CurrentThread.CurrentCulture = culture
             currentCulture = culture
+
+            _applicationSettings.Language = cultureName
+            Application.GetService(Of ISettingsService).SaveSettings()
 
         Catch ex As Exception
             Debug.WriteLine($"Application language failure：{cultureName}，Error：{ex.Message}")
@@ -98,37 +105,14 @@ Public Class LanguageHelper
         Dim defaultLang As String = If(langMapping.ContainsKey(systemLang), langMapping(systemLang), "en-US")
 
         ApplyCulture(defaultLang)
-        WriteAppConfig("language", defaultLang)
+
     End Sub
 
     Public Shared Function GetCurrentLanguage() As String
         Return If(currentCulture, Thread.CurrentThread.CurrentUICulture).Name
     End Function
 
-    Public Shared Function ReadAppConfig(key As String) As String
-        Try
-            Dim config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None)
-            Return If(config.AppSettings.Settings(key)?.Value, String.Empty)
-        Catch ex As Exception
-            Debug.WriteLine($"Read configuration failed：{key}，Error：{ex.Message}")
-            Return String.Empty
-        End Try
-    End Function
 
-    Public Shared Sub WriteAppConfig(key As String, value As String)
-        Try
-            Dim config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None)
-            If config.AppSettings.Settings(key) IsNot Nothing Then
-                config.AppSettings.Settings(key).Value = value
-            Else
-                config.AppSettings.Settings.Add(key, value)
-            End If
-            config.Save(System.Configuration.ConfigurationSaveMode.Modified)
-            System.Configuration.ConfigurationManager.RefreshSection("appSettings")
-        Catch ex As Exception
-            Debug.WriteLine($"Write configuration failed：{key}，Error：{ex.Message}")
-        End Try
-    End Sub
 End Class
 
 <MarkupExtensionReturnType(GetType(String))>

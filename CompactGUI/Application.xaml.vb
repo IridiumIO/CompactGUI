@@ -37,11 +37,6 @@ Partial Public Class Application
 
     End Sub
 
-    Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-        ' Call the language configuration at startup
-        LanguageHelper.Initialize()
-
-    End Sub
     Private Shared Sub InitializeHost()
 
         _host = Host.CreateDefaultBuilder() _
@@ -152,6 +147,7 @@ Partial Public Class Application
         End If
 
         InitializeHost()
+        LanguageHelper.Initialize(GetService(Of ISettingsService).AppSettings)
 
         GetService(Of Watcher.Watcher)()
 

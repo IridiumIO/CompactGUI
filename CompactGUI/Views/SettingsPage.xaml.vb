@@ -53,12 +53,16 @@ Partial Public Class SettingsPage
             Dim languageCode As String = CStr(selectedLanguage.CultureCode)
 
             LanguageHelper.ApplyCulture(languageCode)
-            LanguageHelper.WriteAppConfig("language", languageCode)
             UpdateLocalizedText()
 
-            Application.GetService(Of IWindowService).ShowMessageBox(LanguageHelper.GetString("SetUi_LanguageChangedTitle"), LanguageHelper.GetString("SetUi_LanguageChangedMsg"))
-
-
+            Dim msgBox = New Wpf.Ui.Controls.MessageBox With {
+               .Title = LanguageHelper.GetString("SetUi_LanguageChangedTitle"),
+               .Content = LanguageHelper.GetString("SetUi_LanguageChangedMsg"),
+               .IsPrimaryButtonEnabled = False,
+               .IsCloseButtonEnabled = True,
+               .CloseButtonText = LanguageHelper.GetString("UniOK")
+            }
+            msgBox.ShowDialogAsync()
         End If
     End Sub
 

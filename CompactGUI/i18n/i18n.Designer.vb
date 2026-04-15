@@ -1234,6 +1234,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to OK.
+        '''</summary>
+        Public Shared ReadOnly Property UniOK() As String
+            Get
+                Return ResourceManager.GetString("UniOK", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Open.
         '''</summary>
         Public Shared ReadOnly Property UniOpen() As String
