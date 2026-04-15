@@ -263,19 +263,19 @@
     <value>Режим сжатия</value>
   </data>
   <data name="CompressionMode_XPRESS4K" xml:space="preserve">
-    <value />
+    <value>XPRESS 4K</value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_XPRESS8K" xml:space="preserve">
-    <value />
+    <value>XPRESS 8K</value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_XPRESS16K" xml:space="preserve">
-    <value />
+    <value>XPRESS 16K</value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionMode_LZX" xml:space="preserve">
-    <value />
+    <value>LZX</value>
     <comment>@Invariant</comment>
   </data>
   <data name="CompressionConfiguration" xml:space="preserve">
@@ -421,7 +421,7 @@
     <value>Главная</value>
   </data>
   <data name="Status_LastFetched" xml:space="preserve">
-    <value>Последнее получение: {0:dd MMM yyyy HH:mm:ss}</value>
+    <value>Последняя проверка: {0:dd MMM yyyy HH:mm:ss}</value>
   </data>
   <data name="Watcher_ReAnalyse" xml:space="preserve">
     <value>Переанализировать все отслеживаемые папки</value>
@@ -511,14 +511,14 @@
     <value>Отправлено в Вики</value>
   </data>
   <data name="SnackBar_SubmitWiki_UID" xml:space="preserve">
-    <value />
+    <value>UID</value>
     <comment>@Invariant</comment>
   </data>
   <data name="SnackBar_SubmitWiki_Game" xml:space="preserve">
     <value>Игра</value>
   </data>
   <data name="SnackBar_SubmitWiki_SteamID" xml:space="preserve">
-    <value />
+    <value>SteamID</value>
     <comment>@Invariant</comment>
   </data>
   <data name="SnackBar_SubmitWiki_Compression" xml:space="preserve">
@@ -548,25 +548,25 @@
     <value>Версия</value>
   </data>
   <data name="SizeUnit_B" xml:space="preserve">
-    <value>б</value>
+    <value> б</value>
   </data>
   <data name="SizeUnit_KB" xml:space="preserve">
-    <value>Кб</value>
+    <value> Кб</value>
   </data>
   <data name="SizeUnit_MB" xml:space="preserve">
-    <value>Мб</value>
+    <value> Мб</value>
   </data>
   <data name="SizeUnit_GB" xml:space="preserve">
-    <value>Гб</value>
+    <value> Гб</value>
   </data>
   <data name="SizeUnit_TB" xml:space="preserve">
-    <value>Тб</value>
+    <value> Тб</value>
   </data>
   <data name="SizeUnit_PB" xml:space="preserve">
-    <value>Пб</value>
+    <value> Пб</value>
   </data>
   <data name="SizeUnit_EB" xml:space="preserve">
-    <value>Эб</value>
+    <value> Эб</value>
   </data>
   <data name="SetOpenSettingsFolder" xml:space="preserve">
     <value>Открыть папку настроек</value>
