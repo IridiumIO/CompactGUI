@@ -1,13 +1,21 @@
 <p align="center"><img src="https://github.com/IridiumIO/CompactGUI/assets/1491536/64f66b5d-0710-4f66-8b88-6a69f7eb9b63" width="500"></p>
 
-&nbsp;
+<p align="center">
+  <a href="https://github.com/IridiumIO/CompactGUI/releases">
+    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github">
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge">
+  </a>
+  </br> 
+</p>
+
 
 <p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It works directly with the Win32 API to achieve the same thing as the native <code>compact.exe</code> command-line tool available from Windows 10 onwards.</b></p>
 
 &nbsp;
 &nbsp;
 
-<p align="center"><img src="CompactGUI/assets/Home.png" width="750"/></>
+<p align="center"><img src="CompactGUI/assets/Home.png" width="750"/></p>
+
 
 ---
 <p align="center">
@@ -18,20 +26,24 @@
 &nbsp;
 
 **What is `compact.exe`?**
-It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss.
+It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss. CompactGUI simply leverages the same API to expose the functionality in a more user-friendly way. 
 
 **Transparently? What does that mean?**
-Transparent compression means that files can still be used normally on the computer as if nothing had happened - they don't get repackaged like Zip and Rar files do. You can still browse, launch games and programs exactly as you did before.
+Transparent compression means that files can still be used normally on the computer as if nothing had happened - they don't get repackaged like Zip and Rar files do. You can still browse, launch games and programs exactly as you did before, except they take up less space.
 
 **How is this different from the built-in compression in older versions of Windows?**
-This is similar to the NTFS-LZNT1 compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. Those with older HDDs may even see a performance gain in the form of reduced loading times - smaller files can be read into RAM faster, and the CPU can decompress them on the fly much faster than a typical HDD can supply them. [More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx)
+This is similar to the old compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. Those with older HDDs may even see a performance gain in the form of reduced loading times - smaller files can be read into RAM faster, and the CPU can decompress them on the fly much faster than a typical HDD can supply them. [More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx)
 
-<h2>Installation  </h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>   <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
-
+<h2>Installation  </h> 
+   
 ####
 
-- <p>Download from <a href="https://github.com/IridiumIO/CompactGUI/releases"><b>GitHub Releases</b></a></p>
-- Install using Winget `winget install CompactGUI`
+<img alt="Static Badge" src="https://img.shields.io/badge/DOWNLOAD%20From%20Github-steelblue?style=for-the-badge&logo=github&link=https%3A%2F%2Fgithub.com%2FIridiumIO%2FCompactGUI%2Freleases">
+
+Or install with Winget: 
+```py
+winget install CompactGUI
+```
 
 ## Uses
 
@@ -51,7 +63,7 @@ Use this tool to compress folders while still being able to use/run them normall
 - Analyze the status of existing folders
 - Background Watcher - keeps track of folders and monitors them for changes (e.g. Steam game updates) and automatically keeps them compressed in the background.
 
-<h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a> that have been tested from <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-lightgrey.svg"></a> submissions</b></h3>
+<h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/12809-Games-blue.svg"></a> that have been tested from over 100,000 submissions </b></h3>
 <p>&nbsp;</p>
 
 <p align="center"><img src="CompactGUI/assets/Watcher.png" width="750"/></p>
@@ -88,6 +100,10 @@ XPRESS16K|Slower, but stronger|Suitable for scenarios with limited storage space
 LZX|Slowest, but strongest|Suitable for storing archived files, backup data, or cold data that is not frequently accessed.
 
  ---
+
+### Screenshots
+<p align="center"><img src="CompactGUI/assets/Compression.png" width="750"/></p>
+<p align="center"><img src="CompactGUI/assets/Database.png" width="750"/></p>
 
 ### Like this project?
 
