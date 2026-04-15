@@ -153,4 +153,11 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
     Public Property OpenGitHubCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI") With {.UseShellExecute = True}))
     Public Property OpenKoFiCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://ko-fi.com/IridiumIO") With {.UseShellExecute = True}))
 
+    Public Property LanguageItems As New List(Of LanguageItem) From {
+        New LanguageItem With {.Name = "English", .CultureCode = "en-US", .ISOCountryCode = "US"},
+        New LanguageItem With {.Name = "Русский", .CultureCode = "ru-RU", .ISOCountryCode = "RU"},
+        New LanguageItem With {.Name = "简体中文", .CultureCode = "zh-CN", .ISOCountryCode = "CN"}
+    }
+
+
 End Class

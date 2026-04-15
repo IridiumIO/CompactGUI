@@ -5,6 +5,13 @@ Imports System.Windows.Markup
 Imports System.Windows.Data
 Imports System.Reflection
 
+
+Public Class LanguageItem
+    Public Property Name As String
+    Public Property ISOCountryCode As String
+    Public Property CultureCode As String
+End Class
+
 Public Class LanguageHelper
     ' Supported language list
     ' @i18n

@@ -32,8 +32,8 @@ Partial Public Class SettingsPage
         Dim currentLanguage As String = LanguageHelper.GetCurrentLanguage()
 
         For i As Integer = 0 To UiLanguageComboBox.Items.Count - 1
-            Dim item As ComboBoxItem = CType(UiLanguageComboBox.Items(i), ComboBoxItem)
-            If CStr(item.Tag) = currentLanguage Then
+            Dim item As LanguageItem = CType(UiLanguageComboBox.Items(i), LanguageItem)
+            If item.CultureCode = currentLanguage Then
                 UiLanguageComboBox.SelectedIndex = i
                 Exit For
             End If
@@ -49,16 +49,16 @@ Partial Public Class SettingsPage
     Private Sub UiLanguageComboBox_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
         Dim comboBox As ComboBox = CType(sender, ComboBox)
         If comboBox.IsDropDownOpen AndAlso UiLanguageComboBox.SelectedItem IsNot Nothing Then
-            Dim selectedLanguage As ComboBoxItem = CType(UiLanguageComboBox.SelectedItem, ComboBoxItem)
-            Dim languageCode As String = CStr(selectedLanguage.Tag)
+            Dim selectedLanguage As LanguageItem = CType(UiLanguageComboBox.SelectedItem, LanguageItem)
+            Dim languageCode As String = CStr(selectedLanguage.CultureCode)
 
             LanguageHelper.ApplyCulture(languageCode)
             LanguageHelper.WriteAppConfig("language", languageCode)
             UpdateLocalizedText()
 
-            MessageBox.Show(LanguageHelper.GetString("SetUi_LanguageChangedMsg"),
-                       LanguageHelper.GetString("SetUi_LanguageChangedTitle"),
-                       MessageBoxButton.OK, MessageBoxImage.Information)
+            Application.GetService(Of IWindowService).ShowMessageBox(LanguageHelper.GetString("SetUi_LanguageChangedTitle"), LanguageHelper.GetString("SetUi_LanguageChangedMsg"))
+
+
         End If
     End Sub
 End Class
