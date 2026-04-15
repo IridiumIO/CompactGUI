@@ -571,4 +571,7 @@
   <data name="SetOpenSettingsFolder" xml:space="preserve">
     <value>Открыть папку настроек</value>
   </data>
+  <data name="UniOK" xml:space="preserve">
+    <value>хорошо</value>
+  </data>
 </root>

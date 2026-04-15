@@ -572,4 +572,7 @@ Are you sure you want to exit?</value>
   <data name="SetOpenSettingsFolder" xml:space="preserve">
     <value>Open Settings Folder</value>
   </data>
+  <data name="UniOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

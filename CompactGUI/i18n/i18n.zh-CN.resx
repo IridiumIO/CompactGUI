@@ -545,4 +545,7 @@
   <data name="SetOpenSettingsFolder" xml:space="preserve">
     <value>打开设置文件夹</value>
   </data>
+  <data name="UniOK" xml:space="preserve">
+    <value>好</value>
+  </data>
 </root>
