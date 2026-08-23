@@ -29,6 +29,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     <NotifyPropertyChangedFor(NameOf(BytesSaved), NameOf(CompressionRatio))>
     <ObservableProperty> Private _CompressedBytes As Long = 0
 
+    <NotifyPropertyChangedFor(NameOf(GlobalPoorlyCompressedFileCount), NameOf(WikiPoorlyCompressedFilesCount), NameOf(CustomPoorlyCompressedFileCount), NameOf(SkippedFileCount))>
     <ObservableProperty> Private _AnalysisResults As New ObservableCollection(Of AnalysedFileDetails)
     <ObservableProperty> Private _PoorlyCompressedFiles As List(Of ExtensionResult)
     <ObservableProperty> Private _CompressionOptions As New CompressionOptions
@@ -40,6 +41,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     <ObservableProperty> Private _IsGettingEstimate As Boolean = False
 
     <ObservableProperty> Private _WikiCompressionResults As WikiCompressionResults
+    <NotifyPropertyChangedFor(NameOf(WikiPoorlyCompressedFilesCount), NameOf(SkippedFileCount))>
     <ObservableProperty> Private _WikiPoorlyCompressedFiles As New List(Of String)
 
 
@@ -63,6 +65,36 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
             Dim skipList = Application.GetService(Of ISettingsService).AppSettings.NonCompressableList
             If AnalysisResults Is Nothing OrElse skipList.Count = 0 Then Return 0
             Dim excluded = SkipListMatcher.GetExcludedFiles(FolderName, AnalysisResults.Select(Function(fl) fl.FileName), skipList)
+            Return AnalysisResults.Where(Function(fl) excluded.Contains(fl.FileName)).Count
+        End Get
+    End Property
+
+    Public ReadOnly Property CustomPoorlyCompressedFileCount
+        Get
+            If AnalysisResults Is Nothing OrElse CompressionOptions.SkipList Is Nothing OrElse CompressionOptions.SkipList.Count = 0 Then Return 0
+            Dim excluded = SkipListMatcher.GetExcludedFiles(FolderName, AnalysisResults.Select(Function(fl) fl.FileName), CompressionOptions.SkipList)
+            Return AnalysisResults.Where(Function(fl) excluded.Contains(fl.FileName)).Count
+        End Get
+    End Property
+
+    Public ReadOnly Property SkippedFileCount As Integer
+        Get
+            If Not CompressionOptions.SkipListEnabled Then Return 0
+
+            Dim effectiveList As New List(Of String)
+            If CompressionOptions.SkipList IsNot Nothing Then
+                effectiveList.AddRange(CompressionOptions.SkipList)
+            Else
+                If CompressionOptions.SkipPoorlyCompressedFileTypes Then
+                    effectiveList.AddRange(Application.GetService(Of ISettingsService).AppSettings.NonCompressableList)
+                End If
+                If CompressionOptions.SkipUserSubmittedFiletypes AndAlso WikiPoorlyCompressedFiles IsNot Nothing Then
+                    effectiveList.AddRange(WikiPoorlyCompressedFiles)
+                End If
+            End If
+
+            If AnalysisResults Is Nothing OrElse effectiveList.Count = 0 Then Return 0
+            Dim excluded = SkipListMatcher.GetExcludedFiles(FolderName, AnalysisResults.Select(Function(fl) fl.FileName), effectiveList)
             Return AnalysisResults.Where(Function(fl) excluded.Contains(fl.FileName)).Count
         End Get
     End Property

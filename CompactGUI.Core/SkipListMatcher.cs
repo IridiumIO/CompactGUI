@@ -10,7 +10,7 @@ public static class SkipListMatcher
         if (!patterns.Any()) return excluded;
 
         var matcher = new Matcher(StringComparison.OrdinalIgnoreCase);
-        foreach (string glob in NormalisePatterns(patterns))
+        foreach (string glob in NormalisePatterns(patterns, rootDirectory))
         {
             matcher.AddInclude(glob);
         }
@@ -25,12 +25,30 @@ public static class SkipListMatcher
         return excluded;
     }
 
-    private static IEnumerable<string> NormalisePatterns(IEnumerable<string> entries)
+    private static IEnumerable<string> NormalisePatterns(IEnumerable<string> entries, string rootDirectory)
     {
         foreach (string entry in entries)
         {
             string pattern = entry.Trim().Trim(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             if (pattern.Length == 0) continue;
+
+            // Absolute path entries (e.g. estimator full file names for non-Steam folders):
+            // relativize against the root so they match the relative paths the matcher sees.
+            if (Path.IsPathRooted(pattern))
+            {
+                try
+                {
+                    string relative = Path.GetRelativePath(rootDirectory, pattern).Replace('\\', '/');
+                    if (!relative.StartsWith("../", StringComparison.Ordinal) && relative != "..")
+                    {
+                        pattern = relative;
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    // Unrelated roots; leave as-is (won't match).
+                }
+            }
 
             bool hasWildcard = pattern.Contains('*') || pattern.Contains('?');
             bool hasSeparator = pattern.Contains(Path.DirectorySeparatorChar) || pattern.Contains(Path.AltDirectorySeparatorChar);

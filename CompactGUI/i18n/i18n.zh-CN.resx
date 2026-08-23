@@ -282,6 +282,9 @@
   <data name="CompressionConfiguration_EditSkipList" xml:space="preserve">
     <value>编辑此文件夹的跳过列表</value>
   </data>
+  <data name="CompressionConfiguration_SkipListEnabled" xml:space="preserve">
+    <value>使用跳过列表</value>
+  </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>应用到所有</value>
   </data>
@@ -370,7 +373,34 @@
     <value>包含全局跳过的文件类型</value>
   </data>
   <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
-    <value>包含 wiki/估算器中的压缩效果差的文件类型</value>
+    <value>包含智能跳过的文件类型</value>
+  </data>
+  <data name="SkipListSummary_Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="SkipListSummary_GlobalOnly" xml:space="preserve">
+    <value>全局 — {0} 个文件</value>
+  </data>
+  <data name="SkipListSummary_WikiOnly" xml:space="preserve">
+    <value>Wiki — {0} 个文件</value>
+  </data>
+  <data name="SkipListSummary_GlobalAndWiki" xml:space="preserve">
+    <value>全局 + Wiki — {0} 个文件</value>
+  </data>
+  <data name="SkipListSummary_Custom" xml:space="preserve">
+    <value>自定义列表 — {0} 条</value>
+  </data>
+  <data name="SkipListSummary_NotConfigured" xml:space="preserve">
+    <value>未配置</value>
+  </data>
+  <data name="SkipListSummary_GlobalPill" xml:space="preserve">
+    <value>全局: 已跳过 {0}</value>
+  </data>
+  <data name="SkipListSummary_SmartPill" xml:space="preserve">
+    <value>智能: 已跳过 {0}</value>
+  </data>
+  <data name="SkipListSummary_CustomPill" xml:space="preserve">
+    <value>自定义: {0} 条</value>
   </data>
   <data name="UniSave" xml:space="preserve">
     <value>保存</value>

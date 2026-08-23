@@ -19,29 +19,6 @@ Public Class PendingCompression
 
     End Sub
 
-    Private Sub UiChkSkipPoorlyCompressed_Checked(sender As Object, e As RoutedEventArgs)
-        _settingsService.AppSettings.SkipNonCompressable = True
-        _settingsService.SaveSettings()
-
-    End Sub
-
-    Private Sub UiChkSkipPoorlyCompressed_Unchecked(sender As Object, e As RoutedEventArgs)
-        If Not IsVisible Then Return ' Prevents issues when the page is not fully loaded
-        _settingsService.AppSettings.SkipNonCompressable = False
-        _settingsService.SaveSettings()
-    End Sub
-
-    Private Sub UiChkSkipUserPoorlyCompressed_Checked(sender As Object, e As RoutedEventArgs)
-        _settingsService.AppSettings.SkipUserNonCompressable = True
-        _settingsService.SaveSettings()
-    End Sub
-
-    Private Sub UiChkSkipUserPoorlyCompressed_Unchecked(sender As Object, e As RoutedEventArgs)
-        If Not IsVisible Then Return
-        _settingsService.AppSettings.SkipUserNonCompressable = False
-        _settingsService.SaveSettings()
-    End Sub
-
     Private Sub uiChkWatchFolderForChanges_Checked(sender As Object, e As RoutedEventArgs)
         _settingsService.AppSettings.WatchFolderForChanges = True
         _settingsService.SaveSettings()
@@ -60,5 +37,21 @@ Public Class PendingCompression
         Dim flyout As New Settings_skiplistflyout(folderViewModel.Folder)
         flyout.Owner = Window.GetWindow(Me)
         flyout.ShowDialog()
+
+        folderViewModel.Folder.NotifyPropertyChanged(NameOf(CompressableFolder.SkippedFileCount))
+    End Sub
+
+    Private Sub UiChkSkipListEnabled_Checked(sender As Object, e As RoutedEventArgs)
+        NotifySkippedFileCount()
+    End Sub
+
+    Private Sub UiChkSkipListEnabled_Unchecked(sender As Object, e As RoutedEventArgs)
+        NotifySkippedFileCount()
+    End Sub
+
+    Private Sub NotifySkippedFileCount()
+        Dim folderViewModel = TryCast(DataContext, FolderViewModel)
+        If folderViewModel Is Nothing Then Return
+        folderViewModel.Folder.NotifyPropertyChanged(NameOf(CompressableFolder.SkippedFileCount))
     End Sub
 End Class

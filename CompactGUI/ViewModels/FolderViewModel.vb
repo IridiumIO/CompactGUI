@@ -40,6 +40,8 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
     Private Sub OnAppSettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
         If e.PropertyName Is NameOf(Core.Settings.Settings.AlwaysShowDetailedCompressionMode) Then
             AlwaysShowDetailsCompressionMode = Application.GetService(Of Core.Settings.ISettingsService).AppSettings.AlwaysShowDetailedCompressionMode
+        ElseIf e.PropertyName = NameOf(Core.Settings.Settings.NonCompressableList) Then
+            Folder.NotifyPropertyChanged(NameOf(CompressableFolder.SkippedFileCount))
         End If
     End Sub
 

@@ -300,6 +300,9 @@
   <data name="CompressionConfiguration_EditSkipList" xml:space="preserve">
     <value>Изменить список исключений для этой папки</value>
   </data>
+  <data name="CompressionConfiguration_SkipListEnabled" xml:space="preserve">
+    <value>Использовать список исключений</value>
+  </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>Применить ко всем</value>
   </data>
@@ -388,7 +391,34 @@
     <value>Включить глобальный список пропускаемых типов</value>
   </data>
   <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
-    <value>Включить плохо сжимаемые типы из вики/оценщика</value>
+    <value>Включить умные пропускаемые типы файлов</value>
+  </data>
+  <data name="SkipListSummary_Off" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="SkipListSummary_GlobalOnly" xml:space="preserve">
+    <value>Глобальный — {0} файлов</value>
+  </data>
+  <data name="SkipListSummary_WikiOnly" xml:space="preserve">
+    <value>Вики — {0} файлов</value>
+  </data>
+  <data name="SkipListSummary_GlobalAndWiki" xml:space="preserve">
+    <value>Глобальный + Вики — {0} файлов</value>
+  </data>
+  <data name="SkipListSummary_Custom" xml:space="preserve">
+    <value>Свой список — {0} записей</value>
+  </data>
+  <data name="SkipListSummary_NotConfigured" xml:space="preserve">
+    <value>не настроено</value>
+  </data>
+  <data name="SkipListSummary_GlobalPill" xml:space="preserve">
+    <value>Глобальный: {0} пропущено</value>
+  </data>
+  <data name="SkipListSummary_SmartPill" xml:space="preserve">
+    <value>Умный: {0} пропущено</value>
+  </data>
+  <data name="SkipListSummary_CustomPill" xml:space="preserve">
+    <value>Свой: {0} записей</value>
   </data>
   <data name="UniSave" xml:space="preserve">
     <value>Сохранить</value>

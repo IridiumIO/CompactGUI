@@ -113,8 +113,12 @@ Public Class Settings_skiplistflyout
     Private Sub UiChkIncludeGlobal_Unchecked(sender As Object, e As RoutedEventArgs)
         If _suppressCheckboxEvents OrElse _folder Is Nothing Then Return
         _folder.CompressionOptions.SkipPoorlyCompressedFileTypes = False
+
+        Dim wikiItems = If(_folder.CompressionOptions.SkipUserSubmittedFiletypes, GetWikiBaselineItems(), New List(Of String))
         For Each item In GetGlobalBaselineItems()
-            _tokens.Remove(item)
+            If Not wikiItems.Any(Function(w) String.Equals(w, item, StringComparison.OrdinalIgnoreCase)) Then
+                RemoveToken(item)
+            End If
         Next
     End Sub
 
@@ -129,9 +133,18 @@ Public Class Settings_skiplistflyout
     Private Sub UiChkIncludeWiki_Unchecked(sender As Object, e As RoutedEventArgs)
         If _suppressCheckboxEvents OrElse _folder Is Nothing Then Return
         _folder.CompressionOptions.SkipUserSubmittedFiletypes = False
+
+        Dim globalItems = If(_folder.CompressionOptions.SkipPoorlyCompressedFileTypes, GetGlobalBaselineItems(), New List(Of String))
         For Each item In GetWikiBaselineItems()
-            _tokens.Remove(item)
+            If Not globalItems.Any(Function(g) String.Equals(g, item, StringComparison.OrdinalIgnoreCase)) Then
+                RemoveToken(item)
+            End If
         Next
+    End Sub
+
+    Private Sub RemoveToken(value As String)
+        Dim match = _tokens.FirstOrDefault(Function(t) String.Equals(t, value, StringComparison.OrdinalIgnoreCase))
+        If match IsNot Nothing Then _tokens.Remove(match)
     End Sub
 
     Private Sub UiExtensionList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)

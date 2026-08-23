@@ -92,6 +92,15 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Edit skip list for this folder.
+        '''</summary>
+        Public Shared ReadOnly Property CompressionConfiguration_EditSkipList() As String
+            Get
+                Return ResourceManager.GetString("CompressionConfiguration_EditSkipList", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to files will be skipped.
         '''</summary>
         Public Shared ReadOnly Property CompressionConfiguration_SkipFile() As String
@@ -128,6 +137,15 @@ Namespace i18n
         Public Shared ReadOnly Property CompressionConfiguration_SkipFileTypesLikelyPoorlyTip() As String
             Get
                 Return ResourceManager.GetString("CompressionConfiguration_SkipFileTypesLikelyPoorlyTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Use skip list.
+        '''</summary>
+        Public Shared ReadOnly Property CompressionConfiguration_SkipListEnabled() As String
+            Get
+                Return ResourceManager.GetString("CompressionConfiguration_SkipListEnabled", resourceCulture)
             End Get
         End Property
         
@@ -798,6 +816,78 @@ Namespace i18n
         Public Shared ReadOnly Property SizeUnit_TB() As String
             Get
                 Return ResourceManager.GetString("SizeUnit_TB", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Extensions in this folder.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListFlyout_ExtensionsInFolder() As String
+            Get
+                Return ResourceManager.GetString("SkipListFlyout_ExtensionsInFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Include global skipped file types.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListFlyout_IncludeGlobal() As String
+            Get
+                Return ResourceManager.GetString("SkipListFlyout_IncludeGlobal", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Include wiki/estimator skipped file types.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListFlyout_IncludeWiki() As String
+            Get
+                Return ResourceManager.GetString("SkipListFlyout_IncludeWiki", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Custom list — {0} entries.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_Custom() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_Custom", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Global + DB — {0} files.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_GlobalAndWiki() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_GlobalAndWiki", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Global — {0} files.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_GlobalOnly() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_GlobalOnly", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Off.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_Off() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_Off", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to DB — {0} files.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_WikiOnly() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_WikiOnly", resourceCulture)
             End Get
         End Property
         

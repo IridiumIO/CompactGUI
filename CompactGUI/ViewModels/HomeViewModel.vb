@@ -295,9 +295,11 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         newWatched.CompressionLevel = If(folder.AnalysisResults.Any(), folder.AnalysisResults.Max(Function(f) f.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
 
         Dim skipList As New List(Of String)
-        If folder.CompressionOptions.SkipList?.Count > 0 Then skipList.AddRange(folder.CompressionOptions.SkipList)
-        If folder.CompressionOptions.SkipUserSubmittedFiletypes AndAlso folder.WikiPoorlyCompressedFiles?.Count > 0 Then
-            skipList.AddRange(folder.WikiPoorlyCompressedFiles)
+        If folder.CompressionOptions.SkipListEnabled Then
+            If folder.CompressionOptions.SkipList?.Count > 0 Then skipList.AddRange(folder.CompressionOptions.SkipList)
+            If folder.CompressionOptions.SkipUserSubmittedFiletypes AndAlso folder.WikiPoorlyCompressedFiles?.Count > 0 Then
+                skipList.AddRange(folder.WikiPoorlyCompressedFiles)
+            End If
         End If
         newWatched.SkipList = skipList.Distinct(StringComparer.OrdinalIgnoreCase).ToList
 

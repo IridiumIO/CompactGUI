@@ -201,6 +201,11 @@ Public Class CompressableFolderService
     End Function
 
     Private Function GetSkipList(folder As CompressableFolder) As String()
+        ' Master toggle: when off, nothing is skipped regardless of configured sources.
+        If Not folder.CompressionOptions.SkipListEnabled Then
+            Return Array.Empty(Of String)()
+        End If
+
         ' A configured (non-null) per-folder list is authoritative: whatever is saved (even empty) is the priority
         If folder.CompressionOptions.SkipList IsNot Nothing Then
             Return folder.CompressionOptions.SkipList.ToArray

@@ -301,6 +301,9 @@ skips files based on compression estimate</value>
   <data name="CompressionConfiguration_EditSkipList" xml:space="preserve">
     <value>Edit skip list for this folder</value>
   </data>
+  <data name="CompressionConfiguration_SkipListEnabled" xml:space="preserve">
+    <value>Use skip list</value>
+  </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>Apply to all</value>
   </data>
@@ -389,7 +392,34 @@ skips files based on compression estimate</value>
     <value>Include global skipped file types</value>
   </data>
   <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
-    <value>Include wiki/estimator skipped file types</value>
+    <value>Include smart skipped file types</value>
+  </data>
+  <data name="SkipListSummary_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="SkipListSummary_GlobalOnly" xml:space="preserve">
+    <value>Global — {0} files</value>
+  </data>
+  <data name="SkipListSummary_WikiOnly" xml:space="preserve">
+    <value>DB — {0} files</value>
+  </data>
+  <data name="SkipListSummary_GlobalAndWiki" xml:space="preserve">
+    <value>Global + DB — {0} files</value>
+  </data>
+  <data name="SkipListSummary_Custom" xml:space="preserve">
+    <value>Custom list — {0} entries</value>
+  </data>
+  <data name="SkipListSummary_NotConfigured" xml:space="preserve">
+    <value>not configured</value>
+  </data>
+  <data name="SkipListSummary_GlobalPill" xml:space="preserve">
+    <value>Global: {0} skipped</value>
+  </data>
+  <data name="SkipListSummary_SmartPill" xml:space="preserve">
+    <value>Smart: {0} skipped</value>
+  </data>
+  <data name="SkipListSummary_CustomPill" xml:space="preserve">
+    <value>Custom: {0} entries</value>
   </data>
   <data name="UniSave" xml:space="preserve">
     <value>Save</value>
