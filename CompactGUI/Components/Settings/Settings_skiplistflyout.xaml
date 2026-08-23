@@ -108,7 +108,7 @@
             </ScrollViewer>
         </Border>
         <ui:TextBox x:Name="UiTokenInput" Margin="10 10 10 20"
-                 Padding="5 8 5 8" Grid.Row="1" PlaceholderText="Enter file/folder pattern..."
+                 Padding="5 8 5 8" Grid.Row="1" PlaceholderText="Enter a file/folder pattern. Press [Enter] to add"
                   BorderThickness="0"
                  CaretBrush="{StaticResource CardForeground}"
                  Foreground="{StaticResource CardForeground}" />
