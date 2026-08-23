@@ -5,14 +5,18 @@
                  xmlns:local="clr-namespace:CompactGUI"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 Width="620" Height="400"
-                 d:DesignHeight="400" d:DesignWidth="500"
-                 Background="{DynamicResource ApplicationBackgroundBrush}"
+                 Width="620"
+                 Height="400"
+                 d:DesignHeight="400"
+                 d:DesignWidth="500"
                  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                 Background="{DynamicResource ApplicationBackgroundBrush}"
                  ExtendsContentIntoTitleBar="True"
                  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.ClearTypeHint="Enabled"
-                 WindowBackdropType="Mica" WindowStartupLocation="CenterScreen"
+                 RenderOptions.BitmapScalingMode="HighQuality"
+                 RenderOptions.ClearTypeHint="Enabled"
+                 WindowBackdropType="Mica"
+                 WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d">
     <ui:FluentWindow.Resources>
         <DataTemplate x:Key="NameTokenTemplate">
@@ -25,17 +29,51 @@
                 </Storyboard>
             </DataTemplate.Resources>
             <Border x:Name="border"
-                    Height="28" MinWidth="50"
-                    Margin="5,8,5,0" Padding="10,0"
-                    Background="#7AB3C6D8" BorderThickness="0" CornerRadius="5">
-
-                <TextBlock Text="{Binding}"
-                           Grid.Column="0"
-                           Margin="0,-1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                           FontSize="13" Foreground="Black" TextWrapping="NoWrap" />
-
+                    Height="28" MinWidth="70"
+                    Margin="5 8 5 0" Padding="10 0"
+                    Background="#7AB3C6D8" BorderThickness="0" CornerRadius="5" Cursor="Hand">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Margin="0 -1 4 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                               FontSize="13" Foreground="Black" MouseLeftButtonUp="Chip_MouseLeftButtonUp"
+                               Text="{Binding}"
+                               TextWrapping="NoWrap" />
+                    <Button x:Name="deleteButton" Margin="0 0 -4 0"
+                            Grid.Column="1" HorizontalAlignment="Right"
+                            Padding="3" VerticalAlignment="Center"
+                            Click="ChipDelete_Click" Content="&#x2715;" Cursor="Hand" FontSize="11" FontWeight="Bold"
+                            Foreground="#FF404040" Visibility="Collapsed">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" CornerRadius="3">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#22000000" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
             </Border>
             <DataTemplate.Triggers>
+                <Trigger SourceName="border" Property="IsMouseOver" Value="True">
+                    <Setter TargetName="deleteButton" Property="Visibility" Value="Visible" />
+                </Trigger>
                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource OnLoaded1}" />
                 </EventTrigger>
@@ -43,39 +81,47 @@
         </DataTemplate>
     </ui:FluentWindow.Resources>
     <Grid x:Name="MainGrid">
-        <ui:TitleBar Panel.ZIndex="10"
-                     ShowMaximize="False" ShowMinimize="False" />
-        <TextBlock Text="{local:Localize SetFiletypeManagement_LocalSkipFiletypesEdit}"
-                   d:Text="edit skipped filetypes"
-                   Margin="10"
-                   FontSize="22" FontWeight="SemiBold" />
-        <local:TokenizedTextBox x:Name="UiTokenizedText"
-                                Margin="10,50,10,80"
-                                AcceptsTab="False"
-                                Background="{StaticResource CardBackground}"
-                                CaretBrush="{StaticResource CardForeground}"
-                                Foreground="{StaticResource CardForeground}"
-                                TokenTemplate="{DynamicResource NameTokenTemplate}"
-                                VerticalScrollBarVisibility="Visible">
-            <FlowDocument>
-                <Paragraph>
-                    <Run />
-                </Paragraph>
-            </FlowDocument>
-        </local:TokenizedTextBox>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ui:TitleBar Panel.ZIndex="10" ShowMaximize="False" ShowMinimize="False" />
+        <TextBlock Margin="10"
+                   d:Text="edit skipped filetypes" FontSize="22" FontWeight="SemiBold"
+                   Text="{local:Localize SetFiletypeManagement_LocalSkipFiletypesEdit}" />
+        <Border Margin="10 50 10 0"
+                Background="{StaticResource CardBackground}"
+                BorderBrush="{StaticResource CardBackground}"
+                BorderThickness="1">
+            <ScrollViewer x:Name="UiTokenScroller" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="4 0 4 0">
+                    <ItemsControl x:Name="UiTokenList" Margin="0 0 0 4" ItemTemplate="{StaticResource NameTokenTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
 
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <ui:TextBox x:Name="UiTokenInput" Margin="10 10 10 20"
+                 Padding="5 8 5 8" Grid.Row="1" PlaceholderText="Enter file/folder pattern..."
+                  BorderThickness="0"
+                 CaretBrush="{StaticResource CardForeground}"
+                 Foreground="{StaticResource CardForeground}" />
         <Button x:Name="UiSave"
-                Content="{local:Localize UniSave}"
-                d:Content="Save"
-                Width="100"
-                Margin="0,0,130,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                Click="UISave_Click" />
+                Width="100" Grid.Row="2"
+                Margin="0 0 130 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                d:Content="Save" Click="UISave_Click"
+                Content="{local:Localize UniSave}" />
         <Button x:Name="UiReset"
-                Content="{local:Localize UniReset}"
-                d:Content="Reset"
-                Width="100"
-                Margin="0,0,10,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                Click="UIReset_Click" />
+                Width="100" Grid.Row="2"
+                Margin="0 0 10 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                d:Content="Reset" Click="UIReset_Click"
+                Content="{local:Localize UniReset}" />
 
     </Grid>
 </ui:FluentWindow>
