@@ -36,7 +36,7 @@ Public Class Settings_skiplistflyout
                         Return cl.Content.ToString
                     End Function).ToList
 
-        _settingsService.AppSettings.NonCompressableList = allObj.Where(Function(c) c.StartsWith("."c) AndAlso c.Length > 1).Distinct().ToList
+        _settingsService.AppSettings.NonCompressableList = allObj.Select(Function(c) c.Trim()).Where(Function(c) c.Length > 0).Distinct().ToList
         _settingsService.SaveSettings()
 
         PopulateTokens()

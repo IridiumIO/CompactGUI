@@ -15,7 +15,7 @@ public sealed class Compactor : ICompressor, IDisposable
 {
 
     private readonly string workingDirectory;
-    private readonly HashSet<string> excludedFileExtensions;
+    private readonly HashSet<string> exclusionList;
     private readonly WOFCompressionAlgorithm wofCompressionAlgorithm;
 
 
@@ -33,7 +33,7 @@ public sealed class Compactor : ICompressor, IDisposable
     public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, Analyser analyser, ILogger<Compactor>? logger = null)
     {
         workingDirectory = folderPath;
-        excludedFileExtensions = new HashSet<string>(excludedFileTypes);
+        exclusionList = new HashSet<string>(excludedFileTypes, StringComparer.OrdinalIgnoreCase);
         wofCompressionAlgorithm = compressionLevel;
         _logger = logger ?? NullLogger<Compactor>.Instance;
         _analyser = analyser;
@@ -128,16 +128,18 @@ public sealed class Compactor : ICompressor, IDisposable
         
         var analysedFiles = await _analyser.GetAnalysedFilesAsync(cancellationTokenSource.Token);
 
-        var filesList = analysedFiles?
+        if (analysedFiles is null) return Enumerable.Empty<FileDetails>();
+
+        var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(f => f.FileName), exclusionList);
+
+        return analysedFiles
             .Where(fl =>
                 fl.CompressionMode != wofCompressionAlgorithm
                 && fl.UncompressedSize > clusterSize
-                && ((fl.FileInfo != null && !excludedFileExtensions.Contains(fl.FileInfo.Extension)) || excludedFileExtensions.Contains(fl.FileName))
+                && !excludedFiles.Contains(fl.FileName)
             )
             .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize))
             .ToList();
-
-        return filesList;
     }
 
 

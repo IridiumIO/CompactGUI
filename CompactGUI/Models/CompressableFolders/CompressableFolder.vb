@@ -60,8 +60,10 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
 
     Public ReadOnly Property GlobalPoorlyCompressedFileCount
         Get
-            If AnalysisResults Is Nothing OrElse Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Count = 0 Then Return 0
-            Return AnalysisResults.Where(Function(fl) Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Contains(New IO.FileInfo(fl.FileName).Extension)).Count
+            Dim skipList = Application.GetService(Of ISettingsService).AppSettings.NonCompressableList
+            If AnalysisResults Is Nothing OrElse skipList.Count = 0 Then Return 0
+            Dim excluded = SkipListMatcher.GetExcludedFiles(FolderName, AnalysisResults.Select(Function(fl) fl.FileName), skipList)
+            Return AnalysisResults.Where(Function(fl) excluded.Contains(fl.FileName)).Count
         End Get
     End Property
 
