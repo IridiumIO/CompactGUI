@@ -157,7 +157,10 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
 
         For Each fl In allFolders.Where(Function(f) f.FolderActionState <> ActionState.Analysing AndAlso f.FolderActionState <> ActionState.Working AndAlso f.FolderActionState <> ActionState.Paused)
             If fl IsNot Folder Then
+                ' The skiplist is folder-specific so make sure we preseve each folder's separate one even if we select apply to all
+                Dim previousSkipList = fl.CompressionOptions.SkipList
                 fl.CompressionOptions = Folder.CompressionOptions.Clone
+                fl.CompressionOptions.SkipList = previousSkipList
                 fl.FolderActionState = ActionState.Idle
             End If
         Next

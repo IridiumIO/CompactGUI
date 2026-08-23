@@ -1,36 +1,193 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.Collections.Specialized
 
 Imports CompactGUI.Core.Settings
 
 Public Class Settings_skiplistflyout
 
     Private _settingsService As ISettingsService
+    Private _folder As CompressableFolder = Nothing
     Private _tokens As New ObservableCollection(Of String)
+    Private _availableExtensions As New ObservableCollection(Of KeyValuePair(Of String, Integer))
+    Private _folderExtensionCounts As Dictionary(Of String, Integer) = Nothing
     Private _editingToken As String = Nothing
     Private _editingChipBorder As Border = Nothing
     Private _originalChipBackground As Brush = Nothing
     Private _suppressTextChanged As Boolean = False
+    Private _suppressCheckboxEvents As Boolean = False
+    Private _suppressSidebarRefresh As Boolean = False
 
-    Sub New()
+    Sub New(Optional folder As CompressableFolder = Nothing)
 
         InitializeComponent()
         _settingsService = Application.GetService(Of ISettingsService)()
+        _folder = folder
         UiTokenList.ItemsSource = _tokens
+        UiExtensionList.ItemsSource = _availableExtensions
         AddHandler UiTokenInput.TextChanged, AddressOf UiTokenInput_TextChanged
         AddHandler UiTokenInput.KeyDown, AddressOf UiTokenInput_KeyDown
         AddHandler UiTokenInput.LostFocus, AddressOf UiTokenInput_LostFocus
+        AddHandler _tokens.CollectionChanged, AddressOf Tokens_CollectionChanged
+        If _folder IsNot Nothing Then
+            UiTitle.Text = $"Skip list for {_folder.DisplayName}"
+            BuildFolderExtensionCounts()
+            UiExtensionSidebar.Visibility = Visibility.Visible
+            UiCheckboxPanel.Visibility = Visibility.Visible
+            _suppressCheckboxEvents = True
+            UiChkIncludeGlobal.IsChecked = _folder.CompressionOptions.SkipPoorlyCompressedFileTypes
+            UiChkIncludeWiki.IsChecked = _folder.CompressionOptions.SkipUserSubmittedFiletypes
+            _suppressCheckboxEvents = False
+        End If
         PopulateTokens()
     End Sub
 
-    Private Sub PopulateTokens()
-        _tokens.Clear()
-        For Each i In _settingsService.AppSettings.NonCompressableList
-            _tokens.Add(i)
+    Private Function BuildBaseline() As List(Of String)
+        Dim result As New List(Of String)
+
+        If _folder.CompressionOptions.SkipPoorlyCompressedFileTypes Then
+            result.AddRange(GetGlobalBaselineItems())
+        End If
+        If _folder.CompressionOptions.SkipUserSubmittedFiletypes AndAlso _folder.WikiPoorlyCompressedFiles IsNot Nothing Then
+            result.AddRange(_folder.WikiPoorlyCompressedFiles)
+        End If
+
+        Return result
+    End Function
+
+    Private Function GetGlobalBaselineItems() As List(Of String)
+        Dim result As New List(Of String)
+        For Each entry In _settingsService.AppSettings.NonCompressableList
+            If entry.StartsWith("."c) Then
+                ' Plain extensions: only those present in this folder are relevant.
+                If _folderExtensionCounts IsNot Nothing AndAlso _folderExtensionCounts.ContainsKey(entry) Then
+                    result.Add(entry)
+                End If
+            Else
+                ' Globs/folder names can't be presence-checked wihtout performance hit so keep them as-is.
+                result.Add(entry)
+            End If
         Next
+        Return result
+    End Function
+
+    Private Function GetWikiBaselineItems() As List(Of String)
+        If _folder.WikiPoorlyCompressedFiles Is Nothing Then Return New List(Of String)
+        Return New List(Of String)(_folder.WikiPoorlyCompressedFiles)
+    End Function
+
+    Private Sub BuildFolderExtensionCounts()
+        _folderExtensionCounts = Nothing
+        If _folder Is Nothing OrElse _folder.AnalysisResults Is Nothing Then Return
+
+        _folderExtensionCounts = _folder.AnalysisResults.
+            Select(Function(fl) System.IO.Path.GetExtension(fl.FileName)).
+            Where(Function(ext) Not String.IsNullOrEmpty(ext)).
+            GroupBy(Function(ext) ext, StringComparer.OrdinalIgnoreCase).
+            ToDictionary(Function(g) g.Key, Function(g) g.Count(), StringComparer.OrdinalIgnoreCase)
+    End Sub
+
+    Private Sub RefreshAvailableExtensions()
+        _availableExtensions.Clear()
+        If _folderExtensionCounts Is Nothing Then Return
+
+        For Each kvp In _folderExtensionCounts.
+            Where(Function(entry) Not _tokens.Any(Function(t) String.Equals(t, entry.Key, StringComparison.OrdinalIgnoreCase))).
+            OrderByDescending(Function(k) k.Value)
+            _availableExtensions.Add(New KeyValuePair(Of String, Integer)(kvp.Key, kvp.Value))
+        Next
+    End Sub
+
+    Private Sub Tokens_CollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
+        If _suppressSidebarRefresh Then Return
+        RefreshAvailableExtensions()
+    End Sub
+
+    Private Sub UiChkIncludeGlobal_Checked(sender As Object, e As RoutedEventArgs)
+        If _suppressCheckboxEvents OrElse _folder Is Nothing Then Return
+        _folder.CompressionOptions.SkipPoorlyCompressedFileTypes = True
+        For Each item In GetGlobalBaselineItems()
+            AddToken(item)
+        Next
+    End Sub
+
+    Private Sub UiChkIncludeGlobal_Unchecked(sender As Object, e As RoutedEventArgs)
+        If _suppressCheckboxEvents OrElse _folder Is Nothing Then Return
+        _folder.CompressionOptions.SkipPoorlyCompressedFileTypes = False
+        For Each item In GetGlobalBaselineItems()
+            _tokens.Remove(item)
+        Next
+    End Sub
+
+    Private Sub UiChkIncludeWiki_Checked(sender As Object, e As RoutedEventArgs)
+        If _suppressCheckboxEvents OrElse _folder Is Nothing Then Return
+        _folder.CompressionOptions.SkipUserSubmittedFiletypes = True
+        For Each item In GetWikiBaselineItems()
+            AddToken(item)
+        Next
+    End Sub
+
+    Private Sub UiChkIncludeWiki_Unchecked(sender As Object, e As RoutedEventArgs)
+        If _suppressCheckboxEvents OrElse _folder Is Nothing Then Return
+        _folder.CompressionOptions.SkipUserSubmittedFiletypes = False
+        For Each item In GetWikiBaselineItems()
+            _tokens.Remove(item)
+        Next
+    End Sub
+
+    Private Sub UiExtensionList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        If UiExtensionList.SelectedItem Is Nothing Then Return
+
+        Dim item = DirectCast(UiExtensionList.SelectedItem, KeyValuePair(Of String, Integer))
+        UiExtensionList.SelectedItem = Nothing
+        AddToken(item.Key)
+    End Sub
+
+    Private Function GetList() As List(Of String)
+        Return _settingsService.AppSettings.NonCompressableList
+    End Function
+
+    Private Sub SaveList(values As List(Of String))
+        If _folder Is Nothing Then
+            _settingsService.AppSettings.NonCompressableList = values
+            _settingsService.SaveSettings()
+        Else
+            _folder.CompressionOptions.SkipList = values
+        End If
+    End Sub
+
+    Private Sub PopulateTokens()
+        _suppressSidebarRefresh = True
+        _tokens.Clear()
+        If _folder Is Nothing Then
+            For Each i In GetList()
+                _tokens.Add(i)
+            Next
+        Else
+            Dim source = _folder.CompressionOptions.SkipList
+            If source Is Nothing Then
+                ' Unconfigured: get from the baseline (per current flags).
+                For Each i In BuildBaseline()
+                    AddTokenSilent(i)
+                Next
+            Else
+                ' Configured: the saved list has priority
+                For Each i In source
+                    AddTokenSilent(i)
+                Next
+            End If
+        End If
+        _suppressSidebarRefresh = False
+        RefreshAvailableExtensions()
         UiTokenInput.Clear()
         _editingToken = Nothing
         _editingChipBorder = Nothing
         _originalChipBackground = Nothing
+    End Sub
+
+    Private Sub AddTokenSilent(value As String)
+        If value.Length = 0 Then Return
+        If _tokens.Any(Function(t) String.Equals(t, value, StringComparison.OrdinalIgnoreCase)) Then Return
+        _tokens.Add(value)
     End Sub
 
     Private Sub ChipDelete_Click(sender As Object, e As RoutedEventArgs)
@@ -148,8 +305,12 @@ Public Class Settings_skiplistflyout
     End Sub
 
     Private Sub UIReset_Click(sender As Object, e As RoutedEventArgs)
-        _settingsService.AppSettings.NonCompressableList = New Settings().NonCompressableList
-        _settingsService.SaveSettings()
+        If _folder Is Nothing Then
+            SaveList(New Settings().NonCompressableList)
+        Else
+            ' Restore baseline: clear the override, back to flag-driven behavior.
+            _folder.CompressionOptions.SkipList = Nothing
+        End If
         PopulateTokens()
     End Sub
 
@@ -159,8 +320,7 @@ Public Class Settings_skiplistflyout
         Dim pending = UiTokenInput.Text.Trim()
         If pending.Length > 0 Then finalList.Add(pending)
 
-        _settingsService.AppSettings.NonCompressableList = finalList.Distinct(StringComparer.OrdinalIgnoreCase).ToList
-        _settingsService.SaveSettings()
+        SaveList(finalList.Distinct(StringComparer.OrdinalIgnoreCase).ToList)
 
         PopulateTokens()
 

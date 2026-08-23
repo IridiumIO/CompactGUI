@@ -164,11 +164,18 @@
             </WrapPanel>
 
 
-            <CheckBox x:Name="uiChkWatchFolderForChanges" Content="{local:Localize CompressionConfiguration_WatchFolderChanges}" 
-                      d:Content="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked" Unchecked="uiChkWatchFolderForChanges_Unchecked"
-                      Margin="0,0,0,15"
-                      FontSize="16"
-                      IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}" />
+            <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
+                <CheckBox x:Name="uiChkWatchFolderForChanges" Content="{local:Localize CompressionConfiguration_WatchFolderChanges}"
+                          d:Content="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked" Unchecked="uiChkWatchFolderForChanges_Unchecked"
+                          VerticalAlignment="Center"
+                          FontSize="16"
+                          IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}" />
+                <ui:Button Content="{local:Localize CompressionConfiguration_EditSkipList}"
+                           d:Content="Edit skip list for this folder"
+                           Margin="12,0,0,0" VerticalAlignment="Center"
+                           FontSize="13"
+                           Click="UiEditSkipList_Click" />
+            </WrapPanel>
 
         </StackPanel>
 

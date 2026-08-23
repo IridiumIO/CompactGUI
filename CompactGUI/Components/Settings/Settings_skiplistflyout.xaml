@@ -34,7 +34,7 @@
                     Background="#7AB3C6D8" BorderThickness="0" CornerRadius="5" Cursor="Hand">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition  />
+                        <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
@@ -42,9 +42,9 @@
                                FontSize="13" Foreground="Black" MouseLeftButtonUp="Chip_MouseLeftButtonUp"
                                Text="{Binding}"
                                TextWrapping="NoWrap" />
-                    <Button x:Name="deleteButton" Margin="0 0 -4 0"
-                            Grid.Column="1" HorizontalAlignment="Right"
-                            Padding="3" VerticalAlignment="Center"
+                    <Button x:Name="deleteButton"
+                            Grid.Column="1"
+                            Margin="0 0 -4 0" Padding="3" HorizontalAlignment="Right" VerticalAlignment="Center"
                             Click="ChipDelete_Click" Content="&#x2715;" Cursor="Hand" FontSize="11" FontWeight="Bold"
                             Foreground="#FF404040" Visibility="Collapsed">
                         <Button.Style>
@@ -82,43 +82,95 @@
     </ui:FluentWindow.Resources>
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ui:TitleBar Panel.ZIndex="10" ShowMaximize="False" ShowMinimize="False" />
-        <TextBlock Margin="10"
+        <TextBlock x:Name="UiTitle"
+                   Margin="10"
                    d:Text="edit skipped filetypes" FontSize="22" FontWeight="SemiBold"
                    Text="{local:Localize SetFiletypeManagement_LocalSkipFiletypesEdit}" />
-        <Border Margin="10 50 10 0"
-                Background="{StaticResource CardBackground}"
-                BorderBrush="{StaticResource CardBackground}"
-                BorderThickness="1">
-            <ScrollViewer x:Name="UiTokenScroller" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="4 0 4 0">
-                    <ItemsControl x:Name="UiTokenList" Margin="0 0 0 4" ItemTemplate="{StaticResource NameTokenTemplate}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
+        <Grid Grid.Row="0" Margin="10 50 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border x:Name="UiExtensionSidebar"
+                    Grid.Column="0"
+                    Width="190"
+                    Margin="0 0 10 0"
+                    Background="{StaticResource CardBackground}"
+                    Visibility="Collapsed">
+                <DockPanel>
+                    <TextBlock Margin="10 8 10 8"
+                               d:Text="Extensions in this folder" DockPanel.Dock="Top" FontSize="13" FontWeight="SemiBold"
+                               Text="{local:Localize SkipListFlyout_ExtensionsInFolder}" />
+                    <ListBox x:Name="UiExtensionList"
+                             Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="UiExtensionList_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Consolas" FontSize="13" Text="{Binding Key}" />
+                                    <TextBlock Margin="6 0 0 0"
+                                               FontSize="13" Foreground="#FF98A9B9"
+                                               Text="{Binding Value, StringFormat=({0})}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+            <Border Grid.Column="1"
+                    Background="{StaticResource CardBackground}"
+                    BorderBrush="{StaticResource CardBackground}"
+                    BorderThickness="1">
+                <ScrollViewer x:Name="UiTokenScroller" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="4 0 4 0">
+                        <ItemsControl x:Name="UiTokenList" Margin="0 0 0 4" ItemTemplate="{StaticResource NameTokenTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
 
-                </StackPanel>
-            </ScrollViewer>
-        </Border>
-        <ui:TextBox x:Name="UiTokenInput" Margin="10 10 10 20"
-                 Padding="5 8 5 8" Grid.Row="1" PlaceholderText="Enter a file/folder pattern. Press [Enter] to add"
-                  BorderThickness="0"
-                 CaretBrush="{StaticResource CardForeground}"
-                 Foreground="{StaticResource CardForeground}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+        <WrapPanel x:Name="UiCheckboxPanel"
+                   Grid.Row="1"
+                   Margin="10 10 10 0"
+                   Visibility="Collapsed">
+            <CheckBox x:Name="UiChkIncludeGlobal"
+                      Margin="0 0 20 0" VerticalAlignment="Center"
+                      d:Content="Include global skipped file types" Checked="UiChkIncludeGlobal_Checked"
+                      Content="{local:Localize SkipListFlyout_IncludeGlobal}"
+                      Unchecked="UiChkIncludeGlobal_Unchecked" />
+            <CheckBox x:Name="UiChkIncludeWiki"
+                      VerticalAlignment="Center"
+                      d:Content="Include wiki/estimator skipped file types" Checked="UiChkIncludeWiki_Checked"
+                      Content="{local:Localize SkipListFlyout_IncludeWiki}"
+                      Unchecked="UiChkIncludeWiki_Unchecked" />
+        </WrapPanel>
+        <ui:TextBox x:Name="UiTokenInput"
+                    Grid.Row="2"
+                    Margin="10 10 10 20" Padding="5 8 5 8"
+                    BorderThickness="0"
+                    CaretBrush="{StaticResource CardForeground}"
+                    Foreground="{StaticResource CardForeground}"
+                    PlaceholderText="Enter a file/folder pattern. Press [Enter] to add" />
         <Button x:Name="UiSave"
-                Width="100" Grid.Row="2"
+                Grid.Row="3"
+                Width="100"
                 Margin="0 0 130 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 d:Content="Save" Click="UISave_Click"
                 Content="{local:Localize UniSave}" />
         <Button x:Name="UiReset"
-                Width="100" Grid.Row="2"
+                Grid.Row="3"
+                Width="100"
                 Margin="0 0 10 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 d:Content="Reset" Click="UIReset_Click"
                 Content="{local:Localize UniReset}" />

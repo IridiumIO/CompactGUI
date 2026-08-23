@@ -201,6 +201,11 @@ Public Class CompressableFolderService
     End Function
 
     Private Function GetSkipList(folder As CompressableFolder) As String()
+        ' A configured (non-null) per-folder list is authoritative: whatever is saved (even empty) is the priority
+        If folder.CompressionOptions.SkipList IsNot Nothing Then
+            Return folder.CompressionOptions.SkipList.ToArray
+        End If
+
         Dim exclist As String() = Array.Empty(Of String)()
 
         If folder.CompressionOptions.SkipPoorlyCompressedFileTypes AndAlso Application.GetService(Of ISettingsService).AppSettings.NonCompressableList.Count <> 0 Then

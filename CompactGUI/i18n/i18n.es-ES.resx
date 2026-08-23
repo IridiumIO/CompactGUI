@@ -277,6 +277,9 @@ omite archivos basado en estimación de compresión</value>
   <data name="CompressionConfiguration_WatchFolderChanges" xml:space="preserve">
     <value>Monitorizar cambios en carpeta</value>
   </data>
+  <data name="CompressionConfiguration_EditSkipList" xml:space="preserve">
+    <value>Editar lista de exclusión de esta carpeta</value>
+  </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>Aplicar a todo</value>
   </data>
@@ -357,6 +360,15 @@ omite archivos basado en estimación de compresión</value>
   </data>
   <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
     <value>editar tipos de archivo omitidos</value>
+  </data>
+  <data name="SkipListFlyout_ExtensionsInFolder" xml:space="preserve">
+    <value>Extensiones en esta carpeta</value>
+  </data>
+  <data name="SkipListFlyout_IncludeGlobal" xml:space="preserve">
+    <value>Incluir tipos de archivo omitidos globales</value>
+  </data>
+  <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
+    <value>Incluir tipos de archivo con compresión deficiente (wiki/estimador)</value>
   </data>
   <data name="UniSave" xml:space="preserve">
     <value>Ahorrar</value>

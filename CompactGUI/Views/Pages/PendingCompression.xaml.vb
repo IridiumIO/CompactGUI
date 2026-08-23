@@ -52,4 +52,13 @@ Public Class PendingCompression
         _settingsService.AppSettings.WatchFolderForChanges = False
         _settingsService.SaveSettings()
     End Sub
+
+    Private Sub UiEditSkipList_Click(sender As Object, e As RoutedEventArgs)
+        Dim folderViewModel = TryCast(DataContext, FolderViewModel)
+        If folderViewModel Is Nothing Then Return
+
+        Dim flyout As New Settings_skiplistflyout(folderViewModel.Folder)
+        flyout.Owner = Window.GetWindow(Me)
+        flyout.ShowDialog()
+    End Sub
 End Class

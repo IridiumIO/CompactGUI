@@ -152,6 +152,9 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
                 If watchedFolder.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION Then
                     newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
                 End If
+                If watchedFolder.SkipList IsNot Nothing Then
+                    newFolder.CompressionOptions.SkipList = New List(Of String)(watchedFolder.SkipList)
+                End If
 
             End If
 
@@ -290,6 +293,13 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         newWatched.LastCheckedSize = folder.CompressedBytes
         newWatched.LastSystemModifiedDate = DateTime.Now
         newWatched.CompressionLevel = If(folder.AnalysisResults.Any(), folder.AnalysisResults.Max(Function(f) f.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
+
+        Dim skipList As New List(Of String)
+        If folder.CompressionOptions.SkipList?.Count > 0 Then skipList.AddRange(folder.CompressionOptions.SkipList)
+        If folder.CompressionOptions.SkipUserSubmittedFiletypes AndAlso folder.WikiPoorlyCompressedFiles?.Count > 0 Then
+            skipList.AddRange(folder.WikiPoorlyCompressedFiles)
+        End If
+        newWatched.SkipList = skipList.Distinct(StringComparer.OrdinalIgnoreCase).ToList
 
         _watcher.AddOrUpdateWatched(newWatched)
 

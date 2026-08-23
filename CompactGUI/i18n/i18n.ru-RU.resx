@@ -297,6 +297,9 @@
   <data name="CompressionConfiguration_WatchFolderChanges" xml:space="preserve">
     <value>Отслеживать изменения в папке</value>
   </data>
+  <data name="CompressionConfiguration_EditSkipList" xml:space="preserve">
+    <value>Изменить список исключений для этой папки</value>
+  </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>Применить ко всем</value>
   </data>
@@ -377,6 +380,15 @@
   </data>
   <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
     <value>изменить список пропускаемых типов</value>
+  </data>
+  <data name="SkipListFlyout_ExtensionsInFolder" xml:space="preserve">
+    <value>Расширения в этой папке</value>
+  </data>
+  <data name="SkipListFlyout_IncludeGlobal" xml:space="preserve">
+    <value>Включить глобальный список пропускаемых типов</value>
+  </data>
+  <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
+    <value>Включить плохо сжимаемые типы из вики/оценщика</value>
   </data>
   <data name="UniSave" xml:space="preserve">
     <value>Сохранить</value>

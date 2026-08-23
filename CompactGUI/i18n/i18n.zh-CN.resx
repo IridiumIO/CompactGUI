@@ -279,6 +279,9 @@
   <data name="CompressionConfiguration_WatchFolderChanges" xml:space="preserve">
     <value>监控文件夹更改</value>
   </data>
+  <data name="CompressionConfiguration_EditSkipList" xml:space="preserve">
+    <value>编辑此文件夹的跳过列表</value>
+  </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>应用到所有</value>
   </data>
@@ -359,6 +362,15 @@
   </data>
   <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
     <value>编辑跳过类型</value>
+  </data>
+  <data name="SkipListFlyout_ExtensionsInFolder" xml:space="preserve">
+    <value>此文件夹中的扩展名</value>
+  </data>
+  <data name="SkipListFlyout_IncludeGlobal" xml:space="preserve">
+    <value>包含全局跳过的文件类型</value>
+  </data>
+  <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
+    <value>包含 wiki/估算器中的压缩效果差的文件类型</value>
   </data>
   <data name="UniSave" xml:space="preserve">
     <value>保存</value>

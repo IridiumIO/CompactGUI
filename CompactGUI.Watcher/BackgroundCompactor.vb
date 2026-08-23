@@ -42,11 +42,13 @@ Public Class BackgroundCompactor
     End Sub
 
 
-    Public Function BeginCompacting(folder As String, compressionLevel As Core.WOFCompressionAlgorithm) As Task(Of Boolean)
+    Public Function BeginCompacting(folder As String, compressionLevel As Core.WOFCompressionAlgorithm, Optional excludedFileTypes As String() = Nothing) As Task(Of Boolean)
 
         If compressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION Then Return Task.FromResult(False)
 
-        _compactor = New Core.Compactor(folder, compressionLevel, _excludedFileTypes, New Core.Analyser(folder, NullLogger(Of Core.Analyser).Instance))
+        Dim effectiveExclusions = If(excludedFileTypes Is Nothing, _excludedFileTypes, excludedFileTypes)
+
+        _compactor = New Core.Compactor(folder, compressionLevel, effectiveExclusions, New Core.Analyser(folder, NullLogger(Of Core.Analyser).Instance))
 
         Return _compactor.RunAsync(Nothing)
 
@@ -67,7 +69,8 @@ Public Class BackgroundCompactor
             folder.IsWorking = True
 
             WatcherLog.CompactingFolder(_logger, folder.DisplayName)
-            Dim compactingTask = BeginCompacting(folder.Folder, folder.CompressionLevel)
+            Dim folderSkipList = If(folder.SkipList Is Nothing, Array.Empty(Of String), folder.SkipList.ToArray())
+            Dim compactingTask = BeginCompacting(folder.Folder, folder.CompressionLevel, folderSkipList)
 
 
             If cancellationTokenSource.IsCancellationRequested Then

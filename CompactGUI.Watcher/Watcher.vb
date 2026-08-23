@@ -273,6 +273,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             .LastCheckedSize = newItem.LastCheckedSize
             .LastSystemModifiedDate = DateTime.Now
             .CompressionLevel = If(newItem.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION, newItem.CompressionLevel, existingItem.CompressionLevel)
+            .SkipList = newItem.SkipList
         End With
         existingItem.HasTargetChanged = False
     End Sub

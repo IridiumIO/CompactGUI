@@ -20,6 +20,7 @@ Public Class WatchedFolder
     <ObservableProperty> Private _LastCheckedDate As DateTime
     <ObservableProperty> Private _LastCheckedSize As Long
     <ObservableProperty> Private _CompressionLevel As Core.WOFCompressionAlgorithm
+    <ObservableProperty> Private _SkipList As List(Of String)
 
     <AttachAttribute(GetType(JsonIgnoreAttribute))>
     <ObservableProperty> Private _IsWorking As Boolean

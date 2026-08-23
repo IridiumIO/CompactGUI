@@ -298,6 +298,9 @@ skips files based on compression estimate</value>
   <data name="CompressionConfiguration_WatchFolderChanges" xml:space="preserve">
     <value>Watch folder for changes</value>
   </data>
+  <data name="CompressionConfiguration_EditSkipList" xml:space="preserve">
+    <value>Edit skip list for this folder</value>
+  </data>
   <data name="CompressionConfiguration_ApplyAll" xml:space="preserve">
     <value>Apply to all</value>
   </data>
@@ -378,6 +381,15 @@ skips files based on compression estimate</value>
   </data>
   <data name="SetFiletypeManagement_LocalSkipFiletypesEdit" xml:space="preserve">
     <value>edit skipped filetypes</value>
+  </data>
+  <data name="SkipListFlyout_ExtensionsInFolder" xml:space="preserve">
+    <value>Extensions in this folder</value>
+  </data>
+  <data name="SkipListFlyout_IncludeGlobal" xml:space="preserve">
+    <value>Include global skipped file types</value>
+  </data>
+  <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
+    <value>Include wiki/estimator skipped file types</value>
   </data>
   <data name="UniSave" xml:space="preserve">
     <value>Save</value>
