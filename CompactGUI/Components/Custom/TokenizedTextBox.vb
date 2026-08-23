@@ -14,6 +14,8 @@ Public Class TokenizedTextBox : Inherits RichTextBox
 
     Public Property TokenMatcher As Func(Of String, Object)
 
+    Public Property TokenDelimiter As String = ";"
+
     Public Sub New()
 
         AddHandler TextChanged, AddressOf OnTokenTextChanged
@@ -32,7 +34,7 @@ Public Class TokenizedTextBox : Inherits RichTextBox
     End Sub
 
     Public Sub InsertText(text As String)
-        text &= " "
+        text &= TokenDelimiter
         AppendText(text)
         If TokenMatcher Is Nothing Then Return
         Dim token = TokenMatcher(text)

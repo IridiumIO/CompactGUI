@@ -8,7 +8,7 @@ Public Class Settings_skiplistflyout
 
         InitializeComponent()
         _settingsService = Application.GetService(Of ISettingsService)()
-        UiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(" "c) OrElse text.EndsWith(";"c) OrElse text.EndsWith(","c), text.Substring(0, text.Length - 1).Trim(), Nothing)
+        UiTokenizedText.TokenMatcher = Function(text) If(text.EndsWith(";"c) OrElse text.EndsWith(","c), text.Substring(0, text.Length - 1).Trim(), Nothing)
         PopulateTokens()
     End Sub
 
