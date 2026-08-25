@@ -17,7 +17,7 @@ Imports Coravel.Scheduling.Schedule
 
 Partial Public Class Application
 
-    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 7)
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 8)
 
     Public Shared ReadOnly Property AppVersionText As String
         Get
@@ -30,7 +30,15 @@ Partial Public Class Application
     Private Shared ReadOnly SettingsService As ISettingsService
 
     Shared Sub New()
-        SettingsService = New SettingsService()
+
+        Dim currentDir = AppContext.BaseDirectory
+        If New IO.DirectoryInfo(currentDir).Name.ToLower = "compactgui" Then
+            SettingsService = New SettingsService(True)
+        Else
+            SettingsService = New SettingsService(False)
+        End If
+
+
         SettingsService.LoadSettings()
 
         AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnDomainUnhandledException

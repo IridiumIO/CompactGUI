@@ -78,8 +78,8 @@ Public Class SteamFolder : Inherits CompressableFolder
 
         Dim tempImg As BitmapImage = Nothing
 
-        Dim EnvironmentPath = Environment.GetEnvironmentVariable("IridiumIO", EnvironmentVariableTarget.User)
-        Dim imageDir = Path.Combine(EnvironmentPath, "CompactGUI", "SteamCache")
+        Dim EnvironmentPath = Application.GetService(Of ISettingsService).DataFolder.FullName
+        Dim imageDir = Path.Combine(EnvironmentPath, "SteamCache")
         Dim imagePath = Path.Combine(imageDir, $"{folder.SteamAppID}.jpg")
 
         If Not Directory.Exists(imageDir) Then Directory.CreateDirectory(imageDir)
