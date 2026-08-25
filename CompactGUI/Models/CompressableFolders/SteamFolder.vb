@@ -19,11 +19,10 @@ Public Class SteamFolder : Inherits CompressableFolder
 
 
     Public Sub New(folderName As String, displayName As String, steamappId As Integer)
+        MyBase.New()
         Me.FolderName = folderName
         Me.SteamAppID = steamappId
         Me.DisplayName = displayName
-
-        If Not CompressableFolderService.IsHDD(Me) AndAlso Core.SharedMethods.IsDirectStorageGameFolder(folderName) Then Application.GetService(Of CustomSnackBarService).ShowDirectStorageWarning(displayName)
 
     End Sub
 

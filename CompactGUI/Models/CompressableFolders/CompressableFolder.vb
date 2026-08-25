@@ -44,6 +44,17 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     <NotifyPropertyChangedFor(NameOf(WikiPoorlyCompressedFilesCount), NameOf(SkippedFileCount))>
     <ObservableProperty> Private _WikiPoorlyCompressedFiles As New List(Of String)
 
+    <ObservableProperty> Private _IsDirectStorage As Boolean = False
+
+    Public Sub New()
+
+        If Not CompressableFolderService.IsHDD(Me) AndAlso Core.SharedMethods.IsDirectStorageGameFolder(FolderName) Then
+            Application.GetService(Of CustomSnackBarService).ShowDirectStorageWarning(DisplayName)
+            IsDirectStorage = True
+        End If
+
+    End Sub
+
 
     Public ReadOnly Property BytesSaved As Long
         Get
