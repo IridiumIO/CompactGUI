@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>CompactGUI.CoreVB</RootNamespace>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
