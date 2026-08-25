@@ -393,6 +393,9 @@
   <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
     <value>Включить умные пропускаемые типы файлов</value>
   </data>
+  <data name="SkipListFlyout_IncludeWikiTip" xml:space="preserve">
+    <value>Для игр Steam используется база данных для определения пропускаемых типов. Для папок не из Steam это основано на умном анализаторе.</value>
+  </data>
   <data name="SkipListSummary_Off" xml:space="preserve">
     <value>Выкл</value>
   </data>

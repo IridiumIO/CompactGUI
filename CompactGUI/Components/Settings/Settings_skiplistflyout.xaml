@@ -153,7 +153,7 @@
                       VerticalAlignment="Center"
                       d:Content="Include wiki/estimator skipped file types" Checked="UiChkIncludeWiki_Checked"
                       Content="{local:Localize SkipListFlyout_IncludeWiki}"
-                      Unchecked="UiChkIncludeWiki_Unchecked" />
+                      ToolTip="{local:Localize SkipListFlyout_IncludeWikiTip}" Unchecked="UiChkIncludeWiki_Unchecked" />
         </WrapPanel>
         <ui:TextBox x:Name="UiTokenInput"
                     Grid.Row="2"

@@ -373,6 +373,9 @@ omite archivos basado en estimación de compresión</value>
   <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
     <value>Incluir tipos de archivo inteligentes omitidos</value>
   </data>
+  <data name="SkipListFlyout_IncludeWikiTip" xml:space="preserve">
+    <value>Para juegos de Steam, esto utiliza la base de datos para determinar los tipos a omitir. Para carpetas que no son de Steam, se basa en el analizador inteligente.</value>
+  </data>
   <data name="SkipListSummary_Off" xml:space="preserve">
     <value>Desactivado</value>
   </data>

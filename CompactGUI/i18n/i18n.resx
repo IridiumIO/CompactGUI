@@ -394,6 +394,9 @@ skips files based on compression estimate</value>
   <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
     <value>Include smart skipped file types</value>
   </data>
+  <data name="SkipListFlyout_IncludeWikiTip" xml:space="preserve">
+    <value>For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser.</value>
+  </data>
   <data name="SkipListSummary_Off" xml:space="preserve">
     <value>Off</value>
   </data>

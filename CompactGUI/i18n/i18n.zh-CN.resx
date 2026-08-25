@@ -375,6 +375,9 @@
   <data name="SkipListFlyout_IncludeWiki" xml:space="preserve">
     <value>包含智能跳过的文件类型</value>
   </data>
+  <data name="SkipListFlyout_IncludeWikiTip" xml:space="preserve">
+    <value>对于 Steam 游戏，使用数据库来确定要跳过的类型。对于非 Steam 文件夹，则基于智能分析器。</value>
+  </data>
   <data name="SkipListSummary_Off" xml:space="preserve">
     <value>关闭</value>
   </data>
