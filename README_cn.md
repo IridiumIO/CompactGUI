@@ -1,12 +1,18 @@
 <p align="center"><img src="https://github.com/IridiumIO/CompactGUI/assets/1491536/64f66b5d-0710-4f66-8b88-6a69f7eb9b63" width="500"></p>
 
+<p align="center">
+  <a href="https://github.com/IridiumIO/CompactGUI/releases">
+    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github">
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge">
+  </a>
+  </br>
+</p>
+
+<p align="center"><b>CompactGUI 可以无损地压缩您的游戏和程序，减少它们占用的空间，同时不影响其功能。</br>它直接与 Win32 API 交互，实现与 Windows 10 及更高版本中提供的原生命令行工具 <code>compact.exe</code> 相同的功能。</b></p>
+&nbsp;
 &nbsp;
 
-<p align="center"><b>CompactGUI 可以透明地压缩您的游戏和程序，减少它们占用的空间，同时不影响其功能。</br>它直接与 Win32 API 交互，实现与 Windows 10 及更高版本中提供的原生命令行工具 <code>compact.exe</code> 相同的功能。</b></p>
-&nbsp;
-&nbsp;
-
-<p align="center"><img src="CompactGUI/assets/Home_zh.png" width="750"/></>
+<p align="center"><img src="CompactGUI/assets/Home_zh.png" width="750"/></p>
 
 ---
 <p align="center">
@@ -17,20 +23,27 @@
 &nbsp;
 
 **什么是 `compact.exe`?**
-它是一个命令行工具，包含 Windows 10 中引入的新算法集合，可以让你几乎不损失性能的情况下透明地压缩游戏、程序和其他文件夹。
+它是一个命令行工具，包含 Windows 10 中引入的新算法集合，可以让你几乎不损失性能的情况下无损地压缩游戏、程序和其他文件夹。CompactGUI 只是利用相同的 API，以更友好的用户界面呈现该功能。
 
-**透明？这是什么意思？**
-透明压缩意味着文件仍然可以像以前一样在计算机上正常使用——它们不会像 Zip 和 Rar 文件那样被重新打包。您可以像以前一样浏览网页、启动游戏和程序。
+**无损？这是什么意思？**
+无损压缩意味着文件仍然可以像以前一样在计算机上正常使用——它们不会像 Zip 和 Rar 文件那样被重新打包。您可以像以前一样浏览网页、启动游戏和程序，只是它们占用的空间更小。
 
 **这和旧版 Windows 内置压缩有什么不同？**
-这与 Windows 内置的 NTFS-LZNT1 压缩类似（右键点击 > 属性 > 压缩以节省空间），但是 Windows 10 及更高版本引入的新算法要优越得多，能够实现更高的压缩率，且几乎不会影响性能。对于拥有旧硬盘的用户来说，甚至可能看到性能提升，表现为加载时间减少——较小的文件可以更快地读入内存，而 CPU 能够比原本硬盘更快地即时解压缩它们。[更多信息请点击此处](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx)
+这与 Windows 内置的压缩类似（右键点击 > 属性 > 压缩以节省空间），但是 Windows 10 及更高版本引入的新算法要优越得多，能够实现更高的压缩率，且几乎不会影响性能。对于拥有旧硬盘的用户来说，甚至可能看到性能提升，表现为加载时间减少——较小的文件可以更快地读入内存，而 CPU 能够比原本硬盘更快地即时解压缩它们。
 
-<h2>安装  </h> <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/release/ImminentFate/compactgui/all.svg""></a>   <a href="https://github.com/ImminentFate/CompactGUI/releases"><img src="https://img.shields.io/github/downloads/ImminentFate/CompactGUI/total.svg""></a>
+[更多信息请点击此处](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx)
+
+<h2>安装  </h>
 
 ####
 
-- <p>从 <a href="https://github.com/IridiumIO/CompactGUI/releases"><b>GitHub 发行版</b></a> 下载</p>
-- 使用 Winget 安装： `winget install CompactGUI`
+<img alt="Static Badge" src="https://img.shields.io/badge/在%20Github%20下载-steelblue?style=for-the-badge&logo=github&link=https%3A%2F%2Fgithub.com%2FIridiumIO%2FCompactGUI%2Freleases">
+
+或者使用 Winget 安装：
+
+```py
+winget install CompactGUI
+```
 
 ## 使用
 
@@ -50,7 +63,7 @@
 - 分析现有文件夹的状态
 - 后台监视器 - 跟踪文件夹并监视其变化（例如 Steam 游戏更新），并在后台自动对其进行压缩。
 
-<h4 align="center"><br>已统计的游戏列表见 <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a></br></br>现在已提交的测试记录 <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-lightgrey.svg"></a></b></h3>
+<h4 align="center"><b>查看 <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> 以获取已测试的 <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/12809-Games-blue.svg"></a> 列表，数据来自超过 10 万次提交 </b></h3>
 <p>&nbsp;</p>
 
 <p align="center"><img src="CompactGUI/assets/Watcher_zh.png" width="750"/></p>
@@ -71,7 +84,7 @@ Windows 10 引入了一个鲜为人知但非常有用的工具，称为“compac
 
 该工具设计时专门只压缩文件夹和文件。整个硬盘和整个 Windows 安装无法在 CompactGUI 内部修改——寻求此功能的用户应使用命令行中的`compact /compactOS`。
 
-压缩完全透明——程序、游戏和文件仍可正常访问，并在资源管理器中显示，只是运行时解压到内存中，保持压缩在磁盘上。
+压缩完全无损——程序、游戏和文件仍可正常访问，并在资源管理器中显示，只是运行时解压到内存中，保持压缩在磁盘上。
 
 ## 压缩模式
 
@@ -87,6 +100,11 @@ XPRESS16K|高压缩率，处理速度较慢|适合用于存储空间紧张且对
 LZX|压缩率最高，解压速度最慢|适合用于存档文件、备份数据或不经常访问的冷数据存储
 
 ---
+
+### 截图
+
+<p align="center"><img src="CompactGUI/assets/Compression.png" width="750"/></p>
+<p align="center"><img src="CompactGUI/assets/Database.png" width="750"/></p>
 
 ### 喜欢这个项目吗？
 
