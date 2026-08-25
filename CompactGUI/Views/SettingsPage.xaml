@@ -150,7 +150,9 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <Label VerticalAlignment="Center" d:Content="Manage local skipped filetypes" Content="{local:Localize SetFiletypeManagement_LocalSkipFiletypes}" />
+                            <Label Margin="0 0 20 0" VerticalAlignment="Center"
+                                   d:Content="Manage local skipped filetypes"
+                                   Content="{local:Localize SetFiletypeManagement_LocalSkipFiletypes}" />
                             <Button x:Name="UiEditSkipListBtn"
                                     Grid.Column="1"
                                     Width="100" Height="37"
@@ -159,21 +161,21 @@
                                     Content="{local:Localize UniEdit}"
                                     IsEnabled="True" />
 
-                            <Label Grid.Row="2"
-                                   VerticalAlignment="Center"
-                                   d:Content="Agression of online skiplist"
-                                   Content="{local:Localize SetFiletypeManagement_OnlineSkiplistAgression}" />
-                            <TextBlock x:Name="SkipHelpIcon"
-                                       Grid.Row="2"
-                                       Margin="225 0 0 0" VerticalAlignment="Center"
-                                       Cursor="Hand" FontSize="14" Foreground="#FF98A9B9" Text="(?)" TextDecorations="Underline">
+                            <StackPanel Grid.Row="2" Margin="0 0 20 0" Orientation="Horizontal">
+                                <Label VerticalAlignment="Center" d:Content="Agression of online skiplist" Content="{local:Localize SetFiletypeManagement_OnlineSkiplistAgression}" />
+                                <TextBlock x:Name="SkipHelpIcon"
+                                           Margin="10 -4 0 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                           Cursor="Hand" FontSize="14" Foreground="#FF98A9B9" Text="(?)" TextDecorations="Underline">
 
-                                <ToolTipService.ToolTip>
-                                    <ToolTip Placement="Top">
-                                        <TextBlock Text="{local:Localize SetFiletypeManagement_OnlineSkiplistAgressionTip}" TextAlignment="Left" TextWrapping="Wrap" />
-                                    </ToolTip>
-                                </ToolTipService.ToolTip>
-                            </TextBlock>
+                                    <ToolTipService.ToolTip>
+                                        <ToolTip Placement="Top">
+                                            <TextBlock Text="{local:Localize SetFiletypeManagement_OnlineSkiplistAgressionTip}" TextAlignment="Left" TextWrapping="Wrap" />
+                                        </ToolTip>
+                                    </ToolTipService.ToolTip>
+                                </TextBlock>
+
+                            </StackPanel>
+
 
                             <ComboBox x:Name="ComboBoxSkipUserResultsAggression"
                                       Grid.Row="2" Grid.Column="1"
