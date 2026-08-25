@@ -21,7 +21,8 @@
 <p align="center">
   <a href="README.md">English</a> -
   <a href="README_ru.md">Русский</a> -
-  <a href="README_cn.md">简体中文</a>
+  <a href="README_cn.md">简体中文</a> -
+  <a href="README_tr.md">Türkçe</a>
 </p>
 &nbsp;
 
@@ -34,7 +35,7 @@ Transparent compression means that files can still be used normally on the compu
 **How is this different from the built-in compression in older versions of Windows?**
 This is similar to the old compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. Those with older HDDs may even see a performance gain in the form of reduced loading times - smaller files can be read into RAM faster, and the CPU can decompress them on the fly much faster than a typical HDD can supply them. [More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx)
 
-<h2>Installation  </h> 
+<h2>Installation  </h2> 
    
 ####
 
@@ -110,4 +111,9 @@ LZX|Slowest, but strongest|Suitable for storing archived files, backup data, or 
  Please consider leaving a tip on Ko-Fi :)
 
  <p align="center"><a href='https://ko-fi.com/iridiumio' target='_blank'><img height='42' style='border:0px;height:42px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></p>
-  
+
+ ---
+
+ **Turkish Translation by [Abdullah Ertürk](https://github.com/abdullah-erturk)**
+
+ <p align="center"><a href='https://buymeacoffee.com/abdullaherturk' target='_blank'><img height='42' style='border:0px;height:42px;' src='https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png' border='0' alt='Buy Me A Coffee' /></a></p>

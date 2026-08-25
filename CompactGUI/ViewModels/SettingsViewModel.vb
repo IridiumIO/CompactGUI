@@ -1,4 +1,4 @@
-﻿
+
 Imports System.ComponentModel
 Imports System.Reflection
 Imports System.Xml
@@ -157,7 +157,8 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
         New LanguageItem With {.Name = "English", .CultureCode = "en-US", .ISOCountryCode = "US"},
         New LanguageItem With {.Name = "Русский", .CultureCode = "ru-RU", .ISOCountryCode = "RU"},
         New LanguageItem With {.Name = "简体中文", .CultureCode = "zh-CN", .ISOCountryCode = "CN"},
-        New LanguageItem With {.Name = "Español", .CultureCode = "es-ES", .ISOCountryCode = "ES"}
+        New LanguageItem With {.Name = "Español", .CultureCode = "es-ES", .ISOCountryCode = "ES"},
+        New LanguageItem With {.Name = "Türkçe", .CultureCode = "tr-TR", .ISOCountryCode = "TR"}
     }
 
 

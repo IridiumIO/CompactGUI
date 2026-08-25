@@ -16,7 +16,7 @@ End Class
 Public Class LanguageHelper
     ' Supported language list
     ' @i18n
-    Private Shared ReadOnly SupportedCultures As String() = {"en-US", "ru-RU", "zh-CN", "es-ES"}
+    Private Shared ReadOnly SupportedCultures As String() = {"en-US", "ru-RU", "zh-CN", "es-ES", "tr-TR"}
     Private Shared resourceManager As ResourceManager = i18n.i18n.ResourceManager
     Private Shared currentCulture As CultureInfo = Nothing
 
@@ -82,7 +82,8 @@ Public Class LanguageHelper
         {"en", "en-US"},
         {"ru", "ru-RU"},
         {"zh", "zh-CN"},
-        {"es", "es-ES"}
+        {"es", "es-ES"},
+        {"tr", "tr-TR"}
     }
 
         Dim systemLang As String = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLower()
