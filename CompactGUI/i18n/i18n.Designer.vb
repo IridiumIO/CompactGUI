@@ -593,7 +593,7 @@ Namespace i18n
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Agression of online skiplist.
+        '''  Looks up a localized string similar to Aggression of online skiplist.
         '''</summary>
         Public Shared ReadOnly Property SetFiletypeManagement_OnlineSkiplistAgression() As String
             Get
@@ -838,11 +838,20 @@ Namespace i18n
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Include wiki/estimator skipped file types.
+        '''  Looks up a localized string similar to Include smart skipped file types.
         '''</summary>
         Public Shared ReadOnly Property SkipListFlyout_IncludeWiki() As String
             Get
                 Return ResourceManager.GetString("SkipListFlyout_IncludeWiki", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser..
+        '''</summary>
+        Public Shared ReadOnly Property SkipListFlyout_IncludeWikiTip() As String
+            Get
+                Return ResourceManager.GetString("SkipListFlyout_IncludeWikiTip", resourceCulture)
             End Get
         End Property
         
@@ -852,6 +861,15 @@ Namespace i18n
         Public Shared ReadOnly Property SkipListSummary_Custom() As String
             Get
                 Return ResourceManager.GetString("SkipListSummary_Custom", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Custom: {0} entries.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_CustomPill() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_CustomPill", resourceCulture)
             End Get
         End Property
         
@@ -874,11 +892,38 @@ Namespace i18n
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Global: {0} skipped.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_GlobalPill() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_GlobalPill", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to not configured.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_NotConfigured() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_NotConfigured", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Off.
         '''</summary>
         Public Shared ReadOnly Property SkipListSummary_Off() As String
             Get
                 Return ResourceManager.GetString("SkipListSummary_Off", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Smart: {0} skipped.
+        '''</summary>
+        Public Shared ReadOnly Property SkipListSummary_SmartPill() As String
+            Get
+                Return ResourceManager.GetString("SkipListSummary_SmartPill", resourceCulture)
             End Get
         End Property
         
