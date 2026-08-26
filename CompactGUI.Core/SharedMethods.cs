@@ -229,6 +229,7 @@ public static class SharedMethods
         string[] directStoragePaths = new[]
         {
             "dstorage.dll",
+            Path.Combine("bin", "dstorage.dll"),
             Path.Combine("Bin64", "dstorage.dll"),
             Path.Combine("Engine", "Binaries", "ThirdParty", "Windows", "DirectStorage", "x64", "dstorage.dll")
         };

@@ -19,11 +19,10 @@ Public Class SteamFolder : Inherits CompressableFolder
 
 
     Public Sub New(folderName As String, displayName As String, steamappId As Integer)
-        MyBase.New()
         Me.FolderName = folderName
         Me.SteamAppID = steamappId
         Me.DisplayName = displayName
-
+        CheckDirectStorage()
     End Sub
 
 
