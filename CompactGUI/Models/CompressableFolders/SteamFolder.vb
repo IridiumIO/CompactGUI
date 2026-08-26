@@ -22,7 +22,6 @@ Public Class SteamFolder : Inherits CompressableFolder
         Me.FolderName = folderName
         Me.SteamAppID = steamappId
         Me.DisplayName = displayName
-        CheckDirectStorage()
     End Sub
 
 

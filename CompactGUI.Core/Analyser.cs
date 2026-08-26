@@ -15,6 +15,7 @@ public sealed class Analyser : IDisposable
     public bool HasFolderChanged => _folderMonitor.HasChanged;
     public DateTime LastFolderChanged => _folderMonitor.LastChanged;
 
+    public bool IsDirectStorage { get; private set; }
 
     public Analyser(string folder, ILogger<Analyser> logger)
     {
@@ -65,7 +66,7 @@ public sealed class Analyser : IDisposable
     {
 
         List<AnalysedFileDetails>? AnalysedFileDetails;
-
+        IsDirectStorage = false;
         AnalyserLog.StartingAnalysis(_logger, FolderName);
         Stopwatch sw = Stopwatch.StartNew();
         try
@@ -77,6 +78,8 @@ public sealed class Analyser : IDisposable
                 .Select(AnalyseFile)
                 .OfType<AnalysedFileDetails>()
                 .ToList();
+
+            IsDirectStorage = allFiles.Any(f => Path.GetFileName(f).Equals("dstorage.dll", StringComparison.OrdinalIgnoreCase));
 
             AnalysedFileDetails = fileDetails;
         }

@@ -221,27 +221,5 @@ public static class SharedMethods
         return attributes.HasFlag(FileAttributes.Compressed);
     }
 
-    public static bool IsDirectStorageGameFolder(string folderPath)
-    {
-        if (string.IsNullOrWhiteSpace(folderPath) || !Directory.Exists(folderPath)) return false;
-
-        // List of possible DirectStorage DLL relative paths from https://github.com/SteamDatabase/FileDetectionRuleSets/blob/main/tests/types/SDK.DirectStorage.txt
-        string[] directStoragePaths = new[]
-        {
-            "dstorage.dll",
-            Path.Combine("bin", "dstorage.dll"),
-            Path.Combine("Bin64", "dstorage.dll"),
-            Path.Combine("Engine", "Binaries", "ThirdParty", "Windows", "DirectStorage", "x64", "dstorage.dll")
-        };
-
-        foreach (var relativePath in directStoragePaths)
-        {
-            string fullPath = Path.Combine(folderPath, relativePath);
-            if (File.Exists(fullPath)) return true;
-        }
-
-        return false;
-    }
-
 
 }

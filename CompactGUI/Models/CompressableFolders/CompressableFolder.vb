@@ -47,13 +47,6 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     <ObservableProperty> Private _IsDirectStorage As Boolean = False
 
 
-    Public Sub CheckDirectStorage()
-        If Not CompressableFolderService.IsHDD(Me) AndAlso Core.SharedMethods.IsDirectStorageGameFolder(FolderName) Then
-            Application.GetService(Of CustomSnackBarService).ShowDirectStorageWarning(DisplayName)
-            IsDirectStorage = True
-        End If
-    End Sub
-
     Public ReadOnly Property BytesSaved As Long
         Get
             Return UncompressedBytes - CompressedBytes
