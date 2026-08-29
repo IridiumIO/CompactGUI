@@ -1,0 +1,17 @@
+schema = 1
+
+[locales."en-AU"]
+version = 1
+file = "en-AU.toml"
+
+[locales."es-ES"]
+version = 1
+file = "es-ES.toml"
+
+[locales."ru-RU"]
+version = 1
+file = "ru-RU.toml"
+
+[locales."zh-CN"]
+version = 1
+file = "zh-CN.toml"

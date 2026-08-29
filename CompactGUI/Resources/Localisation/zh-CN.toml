@@ -78,6 +78,7 @@
 "Please wait until the current operation is finished" = "请等待当前操作完成"
 "Re-analyse all watched folders" = "重新分析所有受监控文件夹"
 "Re-analyse this folder" = "重新分析此文件夹"
+"Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
 "Remove from Watchlist" = "从监控列表移除"
 "Reset" = "重置"
 "Restart as Admin" = "以管理员身份重新启动"
@@ -127,6 +128,7 @@
 "{0:0} days ago" = "{0:0} 天前"
 "{0:0} hours ago" = "{0:0} 小时前"
 "{0:0} minutes ago" = "{0:0} 分钟前"
+"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} 已节省"
 "{0}% decayed" = "{0}% 已衰减"
 

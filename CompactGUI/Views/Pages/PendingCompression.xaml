@@ -136,7 +136,7 @@
                     <TextBlock VerticalAlignment="Center"
                                d:Text="123 files will be skipped" FontSize="13"
                                Foreground="{StaticResource CardForeground}"
-                               Text="{Binding Folder.SkippedFileCount, StringFormat={} {0} files will be skipped}" />
+                               Text="{loc:Binding Folder.SkippedFileCount, Format={} {0} files will be skipped}" />
                 </Border>
                 <ui:Button Margin="14 0 0 0" VerticalAlignment="Center" Click="UiEditSkipList_Click"
                            loc:L.Value="Edit skip list for this folder"

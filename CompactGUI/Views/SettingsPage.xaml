@@ -280,7 +280,7 @@
                             </StackPanel>
 
                             <CheckBox x:Name="UiLockHddToOneThread"
-                                      Grid.Row="2"
+                                      Grid.Row="2" Grid.ColumnSpan="2"
                                       Margin="-10 0"
                                       loc:L.Value="HDDs only use 1 thread"
                                       IsChecked="{Binding AppSettings.LockHDDsToOneThread}" />

@@ -78,6 +78,7 @@
 "Please wait until the current operation is finished" = "Please wait until the current operation is finished"
 "Re-analyse all watched folders" = "Re-analyse all watched folders"
 "Re-analyse this folder" = "Re-analyse this folder"
+"Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions"
 "Remove from Watchlist" = "Remove from Watchlist"
 "Reset" = "Reset"
 "Restart as Admin" = "Restart as Admin"
@@ -127,6 +128,7 @@
 "{0:0} days ago" = "{0:0} days ago"
 "{0:0} hours ago" = "{0:0} hours ago"
 "{0:0} minutes ago" = "{0:0} minutes ago"
+"{0} files will be skipped" = "{0} files will be skipped"
 "{0} saved" = "{0} saved"
 "{0}% decayed" = "{0}% decayed"
 

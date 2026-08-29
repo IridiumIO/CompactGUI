@@ -78,6 +78,7 @@
 "Please wait until the current operation is finished" = "Подождите завершения текущей операции"
 "Re-analyse all watched folders" = "Переанализировать все отслеживаемые папки"
 "Re-analyse this folder" = "Повторно проанализировать эту папку"
+"Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
 "Remove from Watchlist" = "Удалить из списка отслеживания"
 "Reset" = "Сбросить"
 "Restart as Admin" = "Перезапустить от имени администратора"
@@ -127,6 +128,7 @@
 "{0:0} days ago" = "{0:0} дн. назад"
 "{0:0} hours ago" = "{0:0} ч. назад"
 "{0:0} minutes ago" = "{0:0} мин. назад"
+"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} сэкономлено"
 "{0}% decayed" = "{0}% устарело"
 

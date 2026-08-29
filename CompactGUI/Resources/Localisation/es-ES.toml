@@ -58,7 +58,7 @@
 "Include global skipped file types" = "Incluir tipos de archivo omitidos globales"
 "Include smart skipped file types" = "Incluir tipos de archivo inteligentes omitidos"
 "Insufficient permission to access this folder" = "Permiso insuficiente para acceder a esta carpeta."
-"LZX" = "LZX" # LOC:TODO
+"LZX" = "LZX"
 "Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "Última obtención: {0:dd MMM yyyy HH:mm:ss}"
 "Last analysed {0}" = "Último análisis {0}"
 "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Última ejecución: {0:dd MMM yyyy} a las {0:HH:mm:ss}"
@@ -78,6 +78,7 @@
 "Please wait until the current operation is finished" = "Por favor espere hasta que la operación actual termine"
 "Re-analyse all watched folders" = "Reanalizar todas las carpetas monitorizadas"
 "Re-analyse this folder" = "Reanalizar esta carpeta"
+"Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
 "Remove from Watchlist" = "Eliminar de la lista"
 "Reset" = "Reiniciar"
 "Restart as Admin" = "Reiniciar como Admin"
@@ -127,6 +128,7 @@
 "{0:0} days ago" = "{0:0} hace días"
 "{0:0} hours ago" = "{0:0} hace horas"
 "{0:0} minutes ago" = "{0:0} hace minutos"
+"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} ahorrado"
 "{0}% decayed" = "{0}% degradado"
 
