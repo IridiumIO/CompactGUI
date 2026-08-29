@@ -27,6 +27,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <WarningsAsErrors></WarningsAsErrors>
+    <CopyDebugSymbolFilesFromPackages>true</CopyDebugSymbolFilesFromPackages>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -56,6 +57,8 @@
     <PackageReference Include="FunctionalConverters" Version="0.1.0" />
     <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
     <PackageReference Include="IridiumIO.MVVM.VBSourceGenerators" Version="0.6.1" PrivateAssets="All" />
+    <PackageReference Include="LazyTranslate" Version="0.1.1" />
+    <PackageReference Include="LazyTranslate.CatalogueBuilder" Version="0.1.1" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
@@ -71,8 +74,6 @@
     <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.csproj" />
     <ProjectReference Include="..\CompactGUI.Logging\CompactGUI.Logging.csproj" />
     <ProjectReference Include="..\CompactGUI.Watcher\CompactGUI.Watcher.vbproj" />
-    <ProjectReference Include="..\..\LazyTranslate\LazyTranslate\LazyTranslate.vbproj" />
-    <ProjectReference Include="..\..\LazyTranslate\LazyTranslate.CatalogueBuilder\LazyTranslate.CatalogueBuilder.vbproj" Condition="'$(Configuration)' == 'Debug'" />
   </ItemGroup>
 
   <ItemGroup>
