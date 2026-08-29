@@ -46,7 +46,7 @@ public partial class Settings : ObservableRecipient
     [ObservableProperty] private WindowState windowState = WindowState.Normal;
     [ObservableProperty] private bool alwaysShowDetailedCompressionMode = false;
 
-    [ObservableProperty] private string language = "en-US";
+    [ObservableProperty] private string language = "en-AU";
 
     partial void OnScheduledBackgroundIntervalChanged(int value) => UpdateNextScheduledBackgroundRun();
 

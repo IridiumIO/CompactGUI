@@ -33,8 +33,8 @@ Public Class WindowService
                .Title = title,
                .Content = content,
                .IsPrimaryButtonEnabled = True,
-               .PrimaryButtonText = LanguageHelper.GetString("UniYes"),
-               .CloseButtonText = LanguageHelper.GetString("UniCancel")
+               .PrimaryButtonText = "Yes".LT(),
+               .CloseButtonText = "Cancel".LT()
            }
         Dim result = Await msgBox.ShowDialogAsync()
         Return result = Wpf.Ui.Controls.MessageBoxResult.Primary

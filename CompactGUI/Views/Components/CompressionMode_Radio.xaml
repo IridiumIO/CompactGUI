@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:CompactGUI"
+      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              x:Name="Root"
@@ -41,8 +42,7 @@
 
 
                     <ui:TextBlock x:Name="estimatedSize_Text"
-                                  Text="{local:Localize CompressionModeRadio_EstimatedSize}"
-                                  d:Text="Estimated size"
+                                  loc:L.Value="Estimated size"
                                   Grid.Row="0"
                                   Margin="-10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                                   Foreground="{StaticResource AccentFillColorDisabledBrush}"
@@ -54,8 +54,7 @@
                     </ui:TextBlock>
 
                     <ui:TextBlock x:Name="savings_Text"
-                                  Text="{local:Localize CompressionModeRadio_Savings}"
-                                  d:Text="Savings"
+                                  loc:L.Value="Savings"
                                   Grid.Row="0"
                                   Margin="0,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                                   Foreground="{StaticResource AccentFillColorDisabledBrush}"
@@ -68,7 +67,7 @@
 
 
                     <Grid Grid.Column="1" Visibility="{Binding IsEstimating, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                        <ui:TextBlock Text="{local:Localize CompressionModeRadio_Unknown}" d:Text="unknown"
+                        <ui:TextBlock loc:L.Context="Compression estimate" loc:L.Value="unknown"
                                       HorizontalAlignment="Right" VerticalAlignment="Center"
                                       FontSize="13" Foreground="#30FFFFFF"
                                       Visibility="{Binding BytesAfter, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ZeroCountToVisibilityConverter}, ConverterParameter=invert}" />
@@ -279,3 +278,4 @@
         </ControlTemplate>
     </RadioButton.Template>
 </RadioButton>
+

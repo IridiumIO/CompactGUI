@@ -61,9 +61,9 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
         Get
             If Folder.AnalysisResults Is Nothing OrElse
             Not Folder.AnalysisResults.Any(Function(x) x.CompressionMode <> Core.WOFCompressionAlgorithm.NO_COMPRESSION) Then
-                Return LanguageHelper.GetString("Status_NotCompressed") 'Not Compressed
+                Return "Not Compressed".LT()
             End If
-            Return LanguageHelper.GetString("Status_Compressed") 'Compressed
+            Return "Compressed".LT()
         End Get
     End Property
 

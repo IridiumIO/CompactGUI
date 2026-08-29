@@ -18,13 +18,13 @@ Public Class BytesToReadableConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
 
         Dim suf As String() = {
-            LanguageHelper.GetString("SizeUnit_B"),
-            LanguageHelper.GetString("SizeUnit_KB"),
-            LanguageHelper.GetString("SizeUnit_MB"),
-            LanguageHelper.GetString("SizeUnit_GB"),
-            LanguageHelper.GetString("SizeUnit_TB"),
-            LanguageHelper.GetString("SizeUnit_PB"),
-            LanguageHelper.GetString("SizeUnit_EB")
+            "B".LT("File size"),
+            "KB".LT("File size"),
+            "MB".LT("File size"),
+            "GB".LT("File size"),
+            "TB".LT("File size"),
+            "PB".LT("File size"),
+            "EB".LT("File size")
         }
 
         If value = 1010101010101010 Then Return "?"
@@ -102,16 +102,16 @@ Public Class RelativeDateConverter : Implements IValueConverter
         Dim ts As TimeSpan = DateTime.Now - dt
 
         If ts > TimeSpan.FromDays(19000) Then
-            Return LanguageHelper.GetString("Time_Unknown")
+            Return "Unknown".LT("Relative date")
         End If
         If ts > TimeSpan.FromDays(2) Then
-            Return String.Format(LanguageHelper.GetString("Time_DaysAgo"), ts.TotalDays)
+            Return "{0:0} days ago".LTF(ts.TotalDays)
         ElseIf ts > TimeSpan.FromHours(2) Then
-            Return String.Format(LanguageHelper.GetString("Time_HoursAgo"), ts.TotalHours)
+            Return "{0:0} hours ago".LTF(ts.TotalHours)
         ElseIf ts > TimeSpan.FromMinutes(2) Then
-            Return String.Format(LanguageHelper.GetString("Time_MinutesAgo"), ts.TotalMinutes)
+            Return "{0:0} minutes ago".LTF(ts.TotalMinutes)
         Else
-            Return LanguageHelper.GetString("Time_Now")
+            Return "just now".LT()
         End If
     End Function
 
@@ -300,15 +300,15 @@ Public Class FolderStatusToStringConverter : Implements IValueConverter
         Dim status = CType(value, ActionState)
         Select Case status
             Case ActionState.Idle
-                Return LanguageHelper.GetString("Status_AwaitingCompression")
+                Return "Awaiting Compression".LT()
             Case ActionState.Analysing
-                Return LanguageHelper.GetString("Status_Analysing")
+                Return "Analysing".LT()
             Case ActionState.Working, ActionState.Paused
-                Return LanguageHelper.GetString("Status_Working")
+                Return "Working".LT()
             Case ActionState.Results
-                Return LanguageHelper.GetString("Status_Compressed")
+                Return "Compressed".LT()
             Case Else
-                Return LanguageHelper.GetString("Status_Unknown")
+                Return "Unknown".LT("Folder status")
         End Select
     End Function
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack

@@ -45,6 +45,7 @@
     <Import Include="System.Windows.Media.Imaging" />
     <Import Include="System.Windows.Navigation" />
     <Import Include="System.Windows.Shapes" />
+    <Import Include="LazyTranslate.LocalisationExtensions" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +71,8 @@
     <ProjectReference Include="..\CompactGUI.Core\CompactGUI.Core.csproj" />
     <ProjectReference Include="..\CompactGUI.Logging\CompactGUI.Logging.csproj" />
     <ProjectReference Include="..\CompactGUI.Watcher\CompactGUI.Watcher.vbproj" />
+    <ProjectReference Include="..\..\LazyTranslate\LazyTranslate\LazyTranslate.vbproj" />
+    <ProjectReference Include="..\..\LazyTranslate\LazyTranslate.CatalogueBuilder\LazyTranslate.CatalogueBuilder.vbproj" Condition="'$(Configuration)' == 'Debug'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,29 +82,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="i18n\i18n.es-ES.Designer.vb">
-      <DependentUpon>i18n.es-ES.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="i18n\i18n.Designer.vb">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>i18n.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="i18n\i18n.es-ES.resx">
-      <CustomToolNamespace>i18n</CustomToolNamespace>
-      <LastGenOutput>i18n.es-ES.Designer.vb</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="i18n\i18n.resx">
-      <CustomToolNamespace>i18n</CustomToolNamespace>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>i18n.Designer.vb</LastGenOutput>
-    </EmbeddedResource>
+    <None Remove="Resources\Localisation\*.toml" />
+    <EmbeddedResource Include="Resources\Localisation\*.toml" />
   </ItemGroup>
 
   <Target Name="RenamePublishedExe" AfterTargets="Publish" Condition="'$(IsMonolithic)' == 'true'">

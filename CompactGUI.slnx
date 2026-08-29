@@ -13,4 +13,6 @@
   <Project Path="CompactGUI.Logging/CompactGUI.Logging.csproj" Id="d21e36f8-54bb-401e-9621-b87d03488806" />
   <Project Path="CompactGUI.Watcher/CompactGUI.Watcher.vbproj" />
   <Project Path="CompactGUI/CompactGUI.vbproj" />
+  <Project Path="../LazyTranslate/LazyTranslate/LazyTranslate.vbproj" />
+  <Project Path="../LazyTranslate/LazyTranslate.CatalogueBuilder/LazyTranslate.CatalogueBuilder.vbproj" />
 </Solution>

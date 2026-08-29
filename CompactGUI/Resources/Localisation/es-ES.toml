@@ -1,0 +1,190 @@
+﻿# CompactGUI Localisation
+# @version 1
+
+# ===================
+# Translations
+
+"Add" = "Añadir "
+"Add Folder to Queue" = "Añadir carpeta a la cola"
+"Add a custom folder to the watchlist" = "Añadir carpeta personalizada a la lista"
+"Add to compression queue" = "Añadir a la cola de compresión"
+"Add to right-click context menu" = "Añadir al menú contextual"
+"Add to start menu" = "Añadir al menú inicio"
+"Added to Queue" = "Añadido a la cola"
+"Admin" = "Admin"
+"Aggression of online skiplist" = "Agresividad de la lista de omisión online"
+"Always show details on Compression Mode buttons" = "Mostrar siempre detalles en botones de modo de compresión"
+"Analysing" = "Analizando"
+"Applied to all folders" = "Aplicado a todas las carpetas"
+"Apply to all" = "Aplicar a todo"
+"Ascending" = "Ascendente"
+"Awaiting Compression" = "Esperando compresión"
+"Background Watcher Settings" = "Ajustes del Monitor en segundo plano"
+"Cancel" = "Cancelar "
+"Cancel Background Compressor" = "Cancelar compresor en segundo plano"
+"Cannot remove folder" = "No se puede eliminar la carpeta"
+"Check for pre-release updates" = "Buscar actualizaciones preliminares"
+"Click to download" = "Clic para descargar"
+"CompactGUI" = "CompactGUI"
+"Compress Again" = "Comprimir de nuevo"
+"Compress All Now" = "Comprimir todo ahora"
+"Compress Selected" = "Comprimir seleccionados"
+"Compress folders: " = "Comprimir carpetas:"
+"Compressed" = "Comprimido"
+"Compression" = "Compresión"
+"Compression DB" = "DB de Compresión"
+"Compression Mode" = "Modo de compresión"
+"Compression Settings" = "Ajustes de compresión"
+"Compression Summary" = "Resumen de compresión"
+"Compression options have been applied to all folders" = "Las opciones de compresión se han aplicado a todas las carpetas"
+"Configuration" = "Configuración"
+"Database Results" = "Resultados de la base de datos"
+"Descending" = "Descendente"
+"Edit skip list for this folder" = "Editar lista de exclusión de esta carpeta"
+"Estimate Compression for non-Steam Folders (beta)" = "Estimar compresión para carpetas no-Steam (beta)"
+"Estimated size" = "Tamaño estimado"
+"Exit" = "Salir"
+"Extensions in this folder" = "Extensiones en esta carpeta"
+"Failed to submit to wiki" = "Fallo al enviar a la wiki"
+"Files Compressed" = "Archivos comprimidos"
+"Filetype Management" = "Gestión de tipos de archivo"
+"For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Para juegos de Steam, esto utiliza la base de datos para determinar los tipos a omitir. Para carpetas que no son de Steam, se basa en el analizador inteligente."
+"For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "Solo para juegos de Steam.\nAl elegir omitir los tipos de archivo enviados por los usuarios, esta configuración determina cuántas solicitudes se requieren para cada tipo de archivo para considerar su omisión.\nGeneralmente, la opción \"baja\" es la mejor, ya que las opciones más altas conllevan el riesgo de omitir archivos que, de otro modo, se comprimirían correctamente."
+"Game" = "Juego"
+"Game Name" = "Nombre del juego"
+"Games" = "Juegos"
+"HDDs only use 1 thread" = "Los HDD usan solo 1 hilo"
+"Home" = "Inicio"
+"Include global skipped file types" = "Incluir tipos de archivo omitidos globales"
+"Include smart skipped file types" = "Incluir tipos de archivo inteligentes omitidos"
+"Insufficient permission to access this folder" = "Permiso insuficiente para acceder a esta carpeta."
+"LZX" = "LZX" # LOC:TODO
+"Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "Última obtención: {0:dd MMM yyyy HH:mm:ss}"
+"Last analysed {0}" = "Último análisis {0}"
+"Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Última ejecución: {0:dd MMM yyyy} a las {0:HH:mm:ss}"
+"Manage local skipped filetypes" = "Gestionar tipos de archivo omitidos locales"
+"Max Savings" = "Ahorro máx."
+"Maximum Compression Threads" = "Hilos máximos de compresión"
+"Mode" = "Modo "
+"Monitor compressed folders for changes" = "Monitorizar cambios en carpetas comprimidas"
+"Never" = "Nunca"
+"Next scheduled: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Próxima programada: {0:dd MMM yyyy} a las {0:HH:mm:ss}"
+"Not Compressed" = "No comprimido"
+"On Schedule" = "Programado"
+"On Schedule if system is also idle" = "Programado (si el sistema está inactivo)"
+"Open" = "Abrir"
+"Open Settings Folder" = "Abrir Ajustes carpetas "
+"Please check your internet connection and try again" = "Por favor verifique su conexión a internet e intente de nuevo"
+"Please wait until the current operation is finished" = "Por favor espere hasta que la operación actual termine"
+"Re-analyse all watched folders" = "Reanalizar todas las carpetas monitorizadas"
+"Re-analyse this folder" = "Reanalizar esta carpeta"
+"Remove from Watchlist" = "Eliminar de la lista"
+"Reset" = "Reiniciar"
+"Restart as Admin" = "Reiniciar como Admin"
+"Savings" = "Ahorro"
+"Search by game name or SteamID..." = "Buscar por nombre o SteamID..."
+"Settings" = "Ajustes"
+"Show notification on completion" = "Mostrar notificación al finalizar"
+"Sort By" = "Ordenar por"
+"Space Saved" = "Espacio ahorrado"
+"Start CompactGUI in system tray" = "Iniciar CompactGUI en la bandeja del sistema"
+"SteamID" = "SteamID"
+"Submit Results" = "Enviar resultados"
+"Submitted to wiki" = "Enviado a la wiki"
+"Success" = "Éxito"
+"System Integration" = "Integración del sistema"
+"The SnackbarPresenter was never set" = "The SnackbarPresenter was never set" # LOC:TODO
+"This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Este juego usa tecnología DirectStorage. Si usa esta función, no debería comprimir este juego."
+"Total Results" = "Totales"
+"UI Settings" = "Ajustes de interfaz"
+"UID" = "UID" # LOC:TODO
+"Uncompress" = "Descomprimir"
+"Update Available ▸ Version {0}" = "Actualización disponible ▸ Versión {0}"
+"Update Settings" = "Ajustes de actualización"
+"Use skip list" = "Usar lista de exclusión"
+"Version" = "Versión"
+"Watch folder for changes" = "Monitorizar cambios en carpeta"
+"Watched Folders" = "Carpetas monitorizadas"
+"Watcher" = "Monitor"
+"WatcherPage" = "Monitor"
+"When System is Idle" = "Cuando el sistema esté inactivo"
+"Working" = "Trabajando"
+"XPRESS 16K" = "XPRESS 16K" # LOC:TODO
+"XPRESS 4K" = "XPRESS 4K" # LOC:TODO
+"XPRESS 8K" = "XPRESS 8K" # LOC:TODO
+"Yes" = "Sí"
+"You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "Actualmente tiene {0} carpetas siendo monitorizadas. Cerrar CompactGUI detendrá su monitorización.{1}{1}¿Está seguro de que desea salir?"
+"contained files" = "archivos contenidos"
+"day(s)" = "día(s)"
+"edit" = "editar"
+"edit skipped filetypes" = "editar tipos de archivo omitidos"
+"every" = "cada"
+"just now" = "ahora mismo"
+"last compressed:" = "última compresión:"
+"last modified:" = "última modificación:"
+"select a folder" = "seleccionar carpeta"
+"uncompressed size" = "tamaño sin comprimir"
+"{0:0} days ago" = "{0:0} hace días"
+"{0:0} hours ago" = "{0:0} hace horas"
+"{0:0} minutes ago" = "{0:0} hace minutos"
+"{0} saved" = "{0} ahorrado"
+"{0}% decayed" = "{0}% degradado"
+
+[context."Compression estimate"]
+"unknown" = "desconocido"
+
+[context."Compression size"]
+"After" = "Después"
+"Before" = "Antes"
+
+[context."File size"]
+"B" = "B" # LOC:TODO
+"EB" = "EB" # LOC:TODO
+"GB" = "GB" # LOC:TODO
+"KB" = "KB" # LOC:TODO
+"MB" = "MB" # LOC:TODO
+"PB" = "PB" # LOC:TODO
+"TB" = "TB" # LOC:TODO
+
+[context."Folder status"]
+"Unknown" = "Desconocido"
+
+[context."Relative date"]
+"Unknown" = "Desconocido"
+
+[context."Schedule"]
+"at" = "a las"
+
+[context."Skiplist aggression"]
+"high" = "alta"
+"low" = "bajo"
+"medium" = "media"
+
+[context."Skiplist editor"]
+"Save" = "Ahorrar"
+
+[context."Storage savings"]
+"saved" = "ahorrado"
+
+[obsolete]
+"Custom list — {0} entries" = "Lista personalizada — {0} entradas"
+"Custom: {0} entries" = "Personalizada: {0} entradas"
+"DB — {0} files" = "Wiki — {0} archivos"
+"For Steam Games:\nskips files based on database results\n\nFor Non-Steam Folders:\nskips files based on compression estimate" = "Para juegos de Steam:\nomite archivos basado en resultados de la BD\n\nPara carpetas no-Steam:\nomite archivos basado en estimación de compresión"
+"Global + DB — {0} files" = "Global + Wiki — {0} archivos"
+"Global — {0} files" = "Global — {0} archivos"
+"Global: {0} skipped" = "Global: {0} omitidos"
+"Language (Requires Restart)" = "Idioma (Requiere reinicio)"
+"Language Changed" = "Language Changed" # LOC:TODO
+"Language changed successfully. You may need to restart the application for all changes to take effect." = "Language changed successfully. You may need to restart the application for all changes to take effect." # LOC:TODO
+"Last analysed" = "Último análisis"
+"OK" = "OK" # LOC:TODO
+"Off" = "Desactivado"
+"Results State" = "Estado de los resultados"
+"Skip file types likely to compress poorly" = "Omitir tipos de archivo difícilmente comprimibles"
+"Skip file types specified in settings" = "Omitir tipos de archivo especificados en ajustes"
+"Smart: {0} skipped" = "Inteligente: {0} omitidos"
+"Welcome" = "Bienvenido"
+"decayed" = "degradado"
+"files will be skipped" = "archivos serán omitidos"
+"not configured" = "no configurado"

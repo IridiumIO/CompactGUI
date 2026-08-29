@@ -3,6 +3,7 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:local="clr-namespace:CompactGUI"
+      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  Width="620"
@@ -89,9 +90,8 @@
         </Grid.RowDefinitions>
         <ui:TitleBar Panel.ZIndex="10" ShowMaximize="False" ShowMinimize="False" />
         <TextBlock x:Name="UiTitle"
-                   Margin="10"
-                   d:Text="edit skipped filetypes" FontSize="22" FontWeight="SemiBold"
-                   Text="{local:Localize SetFiletypeManagement_LocalSkipFiletypesEdit}" />
+                   Margin="10" FontSize="22" FontWeight="SemiBold"
+                   loc:L.Value="edit skipped filetypes" />
         <Grid Grid.Row="0" Margin="10 50 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -104,9 +104,8 @@
                     Background="{StaticResource CardBackground}"
                     Visibility="Collapsed">
                 <DockPanel>
-                    <TextBlock Margin="10 8 10 8"
-                               d:Text="Extensions in this folder" DockPanel.Dock="Top" FontSize="13" FontWeight="SemiBold"
-                               Text="{local:Localize SkipListFlyout_ExtensionsInFolder}" />
+                    <TextBlock Margin="10 8 10 8" DockPanel.Dock="Top" FontSize="13" FontWeight="SemiBold"
+                               loc:L.Value="Extensions in this folder" />
                     <ListBox x:Name="UiExtensionList"
                              Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="UiExtensionList_SelectionChanged">
                         <ListBox.ItemTemplate>
@@ -145,15 +144,13 @@
                    Margin="10 10 10 0"
                    Visibility="Collapsed">
             <CheckBox x:Name="UiChkIncludeGlobal"
-                      Margin="0 0 20 0" VerticalAlignment="Center"
-                      d:Content="Include global skipped file types" Checked="UiChkIncludeGlobal_Checked"
-                      Content="{local:Localize SkipListFlyout_IncludeGlobal}"
+                      Margin="0 0 20 0" VerticalAlignment="Center" Checked="UiChkIncludeGlobal_Checked"
+                      loc:L.Value="Include global skipped file types"
                       Unchecked="UiChkIncludeGlobal_Unchecked" />
             <CheckBox x:Name="UiChkIncludeWiki"
-                      VerticalAlignment="Center"
-                      d:Content="Include wiki/estimator skipped file types" Checked="UiChkIncludeWiki_Checked"
-                      Content="{local:Localize SkipListFlyout_IncludeWiki}"
-                      ToolTip="{local:Localize SkipListFlyout_IncludeWikiTip}" Unchecked="UiChkIncludeWiki_Unchecked" />
+                      VerticalAlignment="Center" Checked="UiChkIncludeWiki_Checked"
+                      loc:L.Value="Include smart skipped file types"
+                      ToolTip="{loc:T 'For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser.'}" Unchecked="UiChkIncludeWiki_Unchecked" />
         </WrapPanel>
         <ui:TextBox x:Name="UiTokenInput"
                     Grid.Row="2"
@@ -165,15 +162,15 @@
         <Button x:Name="UiSave"
                 Grid.Row="3"
                 Width="100"
-                Margin="0 0 130 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                d:Content="Save" Click="UISave_Click"
-                Content="{local:Localize UniSave}" />
+                Margin="0 0 130 20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="UISave_Click"
+                loc:L.Context="Skiplist editor"
+                loc:L.Value="Save" />
         <Button x:Name="UiReset"
                 Grid.Row="3"
                 Width="100"
-                Margin="0 0 10 20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                d:Content="Reset" Click="UIReset_Click"
-                Content="{local:Localize UniReset}" />
+                Margin="0 0 10 20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="UIReset_Click"
+                loc:L.Value="Reset" />
 
     </Grid>
 </ui:FluentWindow>
+
