@@ -174,6 +174,8 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
     Public Async Function CheckForLanguageUpdates() As Task
         If Await _localisationService.CheckForLanguageUpdate() Then
             _localisationService.LoadLanguage(AppSettings.Language)
+        Else
+            _localisationService.LoadLanguage(AppSettings.Language)
         End If
     End Function
 
