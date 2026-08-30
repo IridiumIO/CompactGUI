@@ -26,15 +26,19 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _snackbarService As CustomSnackBarService
     Private ReadOnly _compressableFolderService As CompressableFolderService
+    Private ReadOnly _appSettings As Core.Settings.Settings
 
     Public Sub New(folder As CompressableFolder, watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, compressableFolderService As CompressableFolderService)
         Me.Folder = folder
         _watcher = watcher
         _snackbarService = snackbarService
         _compressableFolderService = compressableFolderService
+        _appSettings = Application.GetService(Of Core.Settings.ISettingsService)().AppSettings
+
         AddHandler folder.PropertyChanged, AddressOf OnFolderPropertyChanged
         AddHandler folder.CompressionOptions.PropertyChanged, AddressOf OnFolderCompressionOptionsPropertyChanged
-        AddHandler Application.GetService(Of Core.Settings.ISettingsService).AppSettings.PropertyChanged, AddressOf OnAppSettingsPropertyChanged
+        AddHandler _appSettings.PropertyChanged, AddressOf OnAppSettingsPropertyChanged
+
     End Sub
 
     Private Sub OnAppSettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
@@ -214,6 +218,7 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
     Public Sub Dispose() Implements IDisposable.Dispose
         RemoveHandler Folder.PropertyChanged, AddressOf OnFolderPropertyChanged
         RemoveHandler Folder.CompressionOptions.PropertyChanged, AddressOf OnFolderCompressionOptionsPropertyChanged
+        RemoveHandler _appSettings.PropertyChanged, AddressOf OnAppSettingsPropertyChanged
     End Sub
 
 

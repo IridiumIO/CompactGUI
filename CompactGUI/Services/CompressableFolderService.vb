@@ -41,28 +41,33 @@ Public Class CompressableFolderService
         CancelEstimation(folder)
         Dim cts = New CancellationTokenSource()
         folderTokens(folder) = cts
-        Dim progress As IProgress(Of CompressionProgress) = New Progress(Of CompressionProgress)(Sub(x) folder.CompressionProgress = x)
 
-        progress.Report(New CompressionProgress(0, ""))
+        Try
 
-        Dim res = Await compressor.RunAsync(filesList, progress, GetThreadCount(folder))
+            Dim progress As IProgress(Of CompressionProgress) = New Progress(Of CompressionProgress)(Sub(x) folder.CompressionProgress = x)
 
-        If isCompressing Then
-            folder.FolderActionState = ActionState.Results
-            folder.IsFreshlyCompressed = res
-        Else
-            folder.FolderActionState = ActionState.Idle
-            folder.IsFreshlyCompressed = False
-            Await AnalyseFolderAsync(folder)
-        End If
-        compressor.Dispose()
+            progress.Report(New CompressionProgress(0, ""))
 
+            Dim res = Await compressor.RunAsync(filesList, progress, GetThreadCount(folder))
 
-        folderTokens(folder).Dispose()
-        folderTokens.Remove(folder)
+            If isCompressing Then
+                folder.FolderActionState = ActionState.Results
+                folder.IsFreshlyCompressed = res
+            Else
+                folder.FolderActionState = ActionState.Idle
+                folder.IsFreshlyCompressed = False
+                Await AnalyseFolderAsync(folder)
+            End If
+            compressor.Dispose()
 
+            Return res
 
-        Return res
+        Finally
+
+            ReleaseToken(folder, cts)
+
+        End Try
+
     End Function
 
 
@@ -75,35 +80,40 @@ Public Class CompressableFolderService
         folderTokens(folder) = cts
         Dim token = cts.Token
 
+        Try
 
-        folder.Analyser?.Dispose()
-        folder.Analyser = New Analyser(folder.FolderName, AnalyserLogger)
 
-        If Not Core.SharedMethods.HasDirectoryWritePermission(folder.FolderName) Then
-            folder.FolderActionState = ActionState.Idle
-            Return -1
-        End If
+            folder.Analyser?.Dispose()
+            folder.Analyser = New Analyser(folder.FolderName, AnalyserLogger)
 
-        Dim retAnalysisResults = Await folder.Analyser.GetAnalysedFilesAsync(token)
-        If cts.IsCancellationRequested Then
-            folder.FolderActionState = ActionState.Idle
-            Return 1
-        End If
+            If Not Core.SharedMethods.HasDirectoryWritePermission(folder.FolderName) Then
+                folder.FolderActionState = ActionState.Idle
+                Return -1
+            End If
 
-        folder.AnalysisResults = New ObservableCollection(Of AnalysedFileDetails)(retAnalysisResults)
-        folder.UncompressedBytes = folder.Analyser.UncompressedBytes
-        folder.CompressedBytes = folder.Analyser.CompressedBytes
-        folder.IsDirectStorage = folder.Analyser.IsDirectStorage
+            Dim retAnalysisResults = Await folder.Analyser.GetAnalysedFilesAsync(token)
+            If cts.IsCancellationRequested Then
+                folder.FolderActionState = ActionState.Idle
+                Return 1
+            End If
 
-        If folder.Analyser.ContainsCompressedFiles OrElse folder.IsFreshlyCompressed Then
-            folder.FolderActionState = ActionState.Results
-        Else
-            folder.FolderActionState = ActionState.Idle
-        End If
-        folder.PoorlyCompressedFiles = folder.Analyser.GetPoorlyCompressedExtensions()
+            folder.AnalysisResults = New ObservableCollection(Of AnalysedFileDetails)(retAnalysisResults)
+            folder.UncompressedBytes = folder.Analyser.UncompressedBytes
+            folder.CompressedBytes = folder.Analyser.CompressedBytes
+            folder.IsDirectStorage = folder.Analyser.IsDirectStorage
 
-        Return 0
+            If folder.Analyser.ContainsCompressedFiles OrElse folder.IsFreshlyCompressed Then
+                folder.FolderActionState = ActionState.Results
+            Else
+                folder.FolderActionState = ActionState.Idle
+            End If
+            folder.PoorlyCompressedFiles = folder.Analyser.GetPoorlyCompressedExtensions()
 
+            Return 0
+
+        Finally
+            ReleaseToken(folder, cts)
+        End Try
     End Function
 
     Public Overridable Async Function GetEstimatedCompression(folder As CompressableFolder) As Task
@@ -113,61 +123,65 @@ Public Class CompressableFolderService
         Dim cts = New CancellationTokenSource()
         folderTokens(folder) = cts
 
-        Dim estimator As New Estimator
-        Dim estimatedData As List(Of (AnalysedFile As AnalysedFileDetails, CompressionRatio As Single)) = Nothing
-
         Try
-            estimatedData = Await Task.Run(Function() estimator.EstimateCompression(folder.AnalysisResults.ToList, IsHDD(folder), GetThreadCount(folder), Core.SharedMethods.GetClusterSize(folder.FolderName), cts.Token))
+            Dim estimator As New Estimator
+            Dim estimatedData As List(Of (AnalysedFile As AnalysedFileDetails, CompressionRatio As Single)) = Nothing
 
-        Catch ex As AggregateException
+            Try
+                estimatedData = Await Task.Run(Function() estimator.EstimateCompression(folder.AnalysisResults.ToList, IsHDD(folder), GetThreadCount(folder), Core.SharedMethods.GetClusterSize(folder.FolderName), cts.Token))
+
+            Catch ex As AggregateException
+                folder.IsGettingEstimate = False
+                Return
+            End Try
+
+            For Each item In estimatedData
+                If item.CompressionRatio >= 0.98 AndAlso item.AnalysedFile.FileName <> "" Then
+                    folder.WikiPoorlyCompressedFiles.Add(item.AnalysedFile.FileName)
+                End If
+            Next
+
+            Dim estimatedAfterBytes = estimatedData.Sum(Function(x) x.AnalysedFile.UncompressedSize * x.CompressionRatio)
+
+            'This is absolutely stupid
+
+            Dim X4KResult As New CompressionResult
+            X4KResult.CompType = CompressionMode.XPRESS4K
+            X4KResult.BeforeBytes = folder.UncompressedBytes
+            X4KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.01, folder.UncompressedBytes)
+            X4KResult.TotalResults = 1
+
+            Dim X8KResult As New CompressionResult
+            X8KResult.CompType = CompressionMode.XPRESS8K
+            X8KResult.BeforeBytes = folder.UncompressedBytes
+            X8KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.0, folder.UncompressedBytes)
+            X8KResult.TotalResults = 1
+
+            Dim X16KResult As New CompressionResult
+            X16KResult.CompType = CompressionMode.XPRESS16K
+            X16KResult.BeforeBytes = folder.UncompressedBytes
+            X16KResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.98, folder.UncompressedBytes)
+            X16KResult.TotalResults = 1
+
+            Dim LZXResult As New CompressionResult
+            LZXResult.CompType = CompressionMode.LZX
+            LZXResult.BeforeBytes = folder.UncompressedBytes
+            LZXResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.95, folder.UncompressedBytes)
+            LZXResult.TotalResults = 1
+
+            folder.WikiCompressionResults = New WikiCompressionResults(New List(Of CompressionResult) From {X4KResult, X8KResult, X16KResult, LZXResult})
+
             folder.IsGettingEstimate = False
-            Return
+
+
+            folder.NotifyPropertyChanged(NameOf(folder.WikiCompressionResults))
+            folder.NotifyPropertyChanged(NameOf(folder.WikiPoorlyCompressedFiles))
+            folder.NotifyPropertyChanged(NameOf(folder.WikiPoorlyCompressedFilesCount))
+            folder.NotifyPropertyChanged(NameOf(folder.IsGettingEstimate))
+
+        Finally
+            ReleaseToken(folder, cts)
         End Try
-
-        For Each item In estimatedData
-            If item.CompressionRatio >= 0.98 AndAlso item.AnalysedFile.FileName <> "" Then
-                folder.WikiPoorlyCompressedFiles.Add(item.AnalysedFile.FileName)
-            End If
-        Next
-
-        Dim estimatedAfterBytes = estimatedData.Sum(Function(x) x.AnalysedFile.UncompressedSize * x.CompressionRatio)
-
-        'This is absolutely stupid
-
-        Dim X4KResult As New CompressionResult
-        X4KResult.CompType = CompressionMode.XPRESS4K
-        X4KResult.BeforeBytes = folder.UncompressedBytes
-        X4KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.01, folder.UncompressedBytes)
-        X4KResult.TotalResults = 1
-
-        Dim X8KResult As New CompressionResult
-        X8KResult.CompType = CompressionMode.XPRESS8K
-        X8KResult.BeforeBytes = folder.UncompressedBytes
-        X8KResult.AfterBytes = Math.Min(estimatedAfterBytes * 1.0, folder.UncompressedBytes)
-        X8KResult.TotalResults = 1
-
-        Dim X16KResult As New CompressionResult
-        X16KResult.CompType = CompressionMode.XPRESS16K
-        X16KResult.BeforeBytes = folder.UncompressedBytes
-        X16KResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.98, folder.UncompressedBytes)
-        X16KResult.TotalResults = 1
-
-        Dim LZXResult As New CompressionResult
-        LZXResult.CompType = CompressionMode.LZX
-        LZXResult.BeforeBytes = folder.UncompressedBytes
-        LZXResult.AfterBytes = Math.Min(estimatedAfterBytes * 0.95, folder.UncompressedBytes)
-        LZXResult.TotalResults = 1
-
-        folder.WikiCompressionResults = New WikiCompressionResults(New List(Of CompressionResult) From {X4KResult, X8KResult, X16KResult, LZXResult})
-
-        folder.IsGettingEstimate = False
-
-
-        folder.NotifyPropertyChanged(NameOf(folder.WikiCompressionResults))
-        folder.NotifyPropertyChanged(NameOf(folder.WikiPoorlyCompressedFiles))
-        folder.NotifyPropertyChanged(NameOf(folder.WikiPoorlyCompressedFilesCount))
-        folder.NotifyPropertyChanged(NameOf(folder.IsGettingEstimate))
-
     End Function
     Public Sub CancelEstimation(folder As CompressableFolder)
         If folderTokens.ContainsKey(folder) AndAlso Not folderTokens(folder).IsCancellationRequested Then
@@ -225,6 +239,17 @@ Public Class CompressableFolderService
 
         Return exclist
     End Function
+
+    Private Sub ReleaseToken(folder As CompressableFolder, cts As CancellationTokenSource)
+        Dim current As CancellationTokenSource = Nothing
+
+        If folderTokens.TryGetValue(folder, current) AndAlso
+           ReferenceEquals(current, cts) Then
+            folderTokens.Remove(folder)
+        End If
+
+        cts.Dispose()
+    End Sub
 
 
 End Class
