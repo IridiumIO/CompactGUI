@@ -16,19 +16,24 @@ Imports Coravel.Scheduling.Schedule.Interfaces
 
 Imports Microsoft.Extensions.Logging
 
+Imports LazyTranslate
+
 Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
 
     Private ReadOnly _logger As ILogger(Of Settings)
     Private ReadOnly _settingsService As ISettingsService
+    Private ReadOnly _localisationService As LocalisationService
 
     Public ReadOnly Property AppSettings As Settings
 
 
-    Public Sub New(settingsService As ISettingsService, logger As ILogger(Of Settings))
+    Public Sub New(settingsService As ISettingsService, logger As ILogger(Of Settings), localisationService As LocalisationService)
 
         Me._logger = logger
         _settingsService = settingsService
+        _localisationService = localisationService
         AppSettings = settingsService.AppSettings
+        LanguageItems = LazyTranslate.GetAvailableLanguages()
         AddHandler AppSettings.PropertyChanged, AddressOf SettingsPropertyChanged
     End Sub
 
@@ -153,12 +158,26 @@ Public NotInheritable Class SettingsViewModel : Inherits ObservableObject
     Public Property OpenGitHubCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://github.com/IridiumIO/CompactGUI") With {.UseShellExecute = True}))
     Public Property OpenKoFiCommand As ICommand = New RelayCommand(Sub() Process.Start(New ProcessStartInfo("https://ko-fi.com/IridiumIO") With {.UseShellExecute = True}))
 
-    Public Property LanguageItems As New List(Of LanguageItem) From {
-        New LanguageItem With {.Name = "English", .CultureCode = "en-US", .ISOCountryCode = "US"},
-        New LanguageItem With {.Name = "Русский", .CultureCode = "ru-RU", .ISOCountryCode = "RU"},
-        New LanguageItem With {.Name = "简体中文", .CultureCode = "zh-CN", .ISOCountryCode = "CN"},
-        New LanguageItem With {.Name = "Español", .CultureCode = "es-ES", .ISOCountryCode = "ES"}
-    }
+    Public Property LanguageItems As List(Of LanguageItem)
+
+    Public ReadOnly Property CurrentLanguage As String
+        Get
+            Return L.CurrentCulture.Name
+        End Get
+    End Property
+
+    Public Function LoadLanguage(languageCode As String) As Boolean
+        Return _localisationService.LoadLanguage(languageCode)
+    End Function
+
+    <RelayCommand>
+    Public Async Function CheckForLanguageUpdates() As Task
+        If Await _localisationService.CheckForLanguageUpdate() Then
+            _localisationService.LoadLanguage(AppSettings.Language)
+        Else
+            _localisationService.LoadLanguage(AppSettings.Language)
+        End If
+    End Function
 
 
 End Class

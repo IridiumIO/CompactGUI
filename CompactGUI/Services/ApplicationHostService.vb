@@ -75,5 +75,9 @@ Public Class ApplicationHostService
 
         Dim navigationWindow = DirectCast(sender, MainWindow)
         navigationWindow.NavigationView.Navigate(GetType(HomePage))
+
+#If DEBUG Then
+        LazyTranslate.LocalisationCatalogueBuilder.Build(sourceCulture:="en-AU")
+#End If
     End Sub
 End Class

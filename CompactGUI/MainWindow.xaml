@@ -4,6 +4,7 @@
                  xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:local="clr-namespace:CompactGUI"
+      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -41,8 +42,7 @@
             <ui:NavigationView.MenuItems>
 
 
-                <ui:NavigationViewItem Content="{local:Localize Title_Home}"
-                                       d:Content="Home"
+                <ui:NavigationViewItem loc:L.Value="Home"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Required"
                                        Tag="{Binding}"
@@ -53,8 +53,7 @@
                 </ui:NavigationViewItem>
 
 
-                <ui:NavigationViewItem Content="{local:Localize Title_Watcher}"
-                                       d:Content="Watcher"
+                <ui:NavigationViewItem loc:L.Value="Watcher"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Required"
                                        Tag="{Binding}"
@@ -64,8 +63,7 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItem Content="{local:Localize Title_CompressionDB}"
-                                       d:Content="Compression DB"
+                <ui:NavigationViewItem loc:L.Value="Compression DB"
                                        Margin="15,2,15,10"
                                        NavigationCacheMode="Disabled"
                                        Tag="{Binding}"
@@ -234,14 +232,14 @@
                     </Style>
                 </Label.Style>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock Text="{local:Localize Title_CompactGUI}" d:Text="CompactGUI"
+                    <TextBlock loc:L.Value="CompactGUI"
                                Margin="0,0,20,0" VerticalAlignment="Center"
                                Foreground="#20FFFFFF"
                                Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
                     <Border Width="80" Height="22"
                             Background="#20f44336" CornerRadius="10"
                             Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{local:Localize UniAdmin}" d:Text="Admin"
+                        <TextBlock loc:L.Value="Admin"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    Foreground="White" />
 
@@ -259,11 +257,12 @@
                          FocusOnLeftClick="True" MenuOnRightClick="True" TooltipText="CompactGUI">
             <tray:NotifyIcon.Menu>
                 <ContextMenu x:Name="NotifyIconTrayMenu">
-                    <MenuItem Command="{Binding NotifyIconOpenCommand}" Header="{local:Localize UniOpen}" />
-                    <MenuItem Command="{Binding NotifyIconExitCommand}" Header="{local:Localize UniExit}" />
+                    <MenuItem Command="{Binding NotifyIconOpenCommand}" loc:L.Value="Open" />
+                    <MenuItem Command="{Binding NotifyIconExitCommand}" loc:L.Value="Exit" />
                 </ContextMenu>
             </tray:NotifyIcon.Menu>
         </tray:NotifyIcon>
 
     </Grid>
 </ui:FluentWindow>
+

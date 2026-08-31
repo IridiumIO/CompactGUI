@@ -58,6 +58,7 @@ Partial Public Class Application
 
                                'Settings handler
                                services.AddSingleton(Of ISettingsService)(SettingsService)
+                               services.AddSingleton(Of LocalisationService)()
 
                                services.AddLogging(Sub(logging)
                                                        logging.SetMinimumLevel(SettingsService.AppSettings.LogLevel)
@@ -131,7 +132,6 @@ Partial Public Class Application
         Return TryCast(_host?.Services.GetService(GetType(T)), T)
     End Function
 
-
     Public Shared ReadOnly mutex As New Mutex(False, "Global\CompactGUI")
     Private pipeServerCancellation As New CancellationTokenSource()
     Private pipeServerTask As Task
@@ -155,7 +155,7 @@ Partial Public Class Application
         End If
 
         InitializeHost()
-        LanguageHelper.Initialize(GetService(Of ISettingsService).AppSettings)
+        Await GetService(Of LocalisationService).InitializeAsync()
 
         GetService(Of Watcher.Watcher)()
 

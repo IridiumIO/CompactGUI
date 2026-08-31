@@ -4,6 +4,7 @@
              xmlns:core="clr-namespace:CompactGUI.Core;assembly=CompactGUI.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:CompactGUI"
+      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              d:DataContext="{d:DesignInstance Type=local:FolderViewModel}"
@@ -21,9 +22,8 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TextBlock Margin="0 30 0 20" VerticalAlignment="Center"
-                      d:Text="Compression Mode" FontSize="16" FontWeight="SemiBold"
-                      Text="{local:Localize CompressionMode}" />
+        <ui:TextBlock Margin="0 30 0 20" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold"
+                      loc:L.Value="Compression Mode" />
 
         <WrapPanel Grid.Row="1"
                    Margin="0 0 0 0"
@@ -35,7 +35,7 @@
                                          BytesAfter="{Binding Folder.WikiCompressionResults.XPress4K.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.XPress4K.BytesSaved}"
                                          Checked="CompressionMode_Radio_Checked"
-                                         CompressionMode="{local:Localize CompressionMode_XPRESS4K}"
+                                         CompressionMode="{loc:T 'XPRESS 4K'}"
                                          EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -48,7 +48,7 @@
                                          BytesAfter="{Binding Folder.WikiCompressionResults.XPress8K.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.XPress8K.BytesSaved}"
                                          Checked="CompressionMode_Radio_Checked"
-                                         CompressionMode="{local:Localize CompressionMode_XPRESS8K}"
+                                         CompressionMode="{loc:T 'XPRESS 8K'}"
                                          EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -61,7 +61,7 @@
                                          BytesAfter="{Binding Folder.WikiCompressionResults.XPress16K.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.XPress16K.BytesSaved}"
                                          Checked="CompressionMode_Radio_Checked"
-                                         CompressionMode="{local:Localize CompressionMode_XPRESS16K}"
+                                         CompressionMode="{loc:T 'XPRESS 16K'}"
                                          EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -74,7 +74,7 @@
                                          BytesAfter="{Binding Folder.WikiCompressionResults.LZX.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.LZX.BytesSaved}"
                                          Checked="CompressionMode_Radio_Checked"
-                                         CompressionMode="{local:Localize CompressionMode_LZX}"
+                                         CompressionMode="{loc:T 'LZX'}"
                                          EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
@@ -111,14 +111,12 @@
                 <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#4ca5ff"/>
                 <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#6fb6ff"/>
             </StackPanel.Resources>-->
-            <ui:TextBlock Margin="0 0 0 20" VerticalAlignment="Center"
-                          d:Text="Configuration" FontSize="16" FontWeight="SemiBold"
-                          Text="{local:Localize CompressionConfiguration}" />
+            <ui:TextBlock Margin="0 0 0 20" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold"
+                          loc:L.Value="Configuration" />
             <WrapPanel Margin="0 0 0 15" Orientation="Horizontal">
                 <CheckBox x:Name="UiChkSkipListEnabled"
-                          VerticalAlignment="Center"
-                          d:Content="Use skip list" Checked="UiChkSkipListEnabled_Checked"
-                          Content="{local:Localize CompressionConfiguration_SkipListEnabled}"
+                          VerticalAlignment="Center" Checked="UiChkSkipListEnabled_Checked"
+                          loc:L.Value="Use skip list"
                           FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.SkipListEnabled, Mode=TwoWay}"
                           Unchecked="UiChkSkipListEnabled_Unchecked" />
@@ -138,18 +136,16 @@
                     <TextBlock VerticalAlignment="Center"
                                d:Text="123 files will be skipped" FontSize="13"
                                Foreground="{StaticResource CardForeground}"
-                               Text="{Binding Folder.SkippedFileCount, StringFormat={} {0} files will be skipped}" />
+                               Text="{loc:Binding Folder.SkippedFileCount, Format={} {0} files will be skipped}" />
                 </Border>
-                <ui:Button Margin="14 0 0 0" VerticalAlignment="Center"
-                           d:Content="Edit skip list for this folder" Click="UiEditSkipList_Click"
-                           Content="{local:Localize CompressionConfiguration_EditSkipList}"
+                <ui:Button Margin="14 0 0 0" VerticalAlignment="Center" Click="UiEditSkipList_Click"
+                           loc:L.Value="Edit skip list for this folder"
                            FontSize="13" />
             </WrapPanel>
             <WrapPanel Margin="0 0 0 15" Orientation="Horizontal">
                 <CheckBox x:Name="uiChkWatchFolderForChanges"
-                          VerticalAlignment="Center"
-                          d:Content="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked"
-                          Content="{local:Localize CompressionConfiguration_WatchFolderChanges}"
+                          VerticalAlignment="Center" Checked="uiChkWatchFolderForChanges_Checked"
+                          loc:L.Value="Watch folder for changes"
                           FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}"
                           Unchecked="uiChkWatchFolderForChanges_Unchecked" />
@@ -161,11 +157,11 @@
         <ui:Button Grid.Row="3"
                    Width="140" Height="40"
                    Margin="0 0 0 10" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                   d:Content="Apply to all"
                    Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                    Command="{Binding ApplyToAllCommand}"
-                   Content="{local:Localize CompressionConfiguration_ApplyAll}"
+                   loc:L.Value="Apply to all"
                    FontSize="16" />
 
     </Grid>
 </UserControl>
+

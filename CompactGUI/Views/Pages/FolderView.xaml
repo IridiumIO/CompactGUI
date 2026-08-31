@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:CompactGUI"
+      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              d:DataContext="{d:DesignInstance Type=local:FolderViewModel}"
@@ -105,7 +106,7 @@
                         Visibility="{Binding Folder.IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
                     <StackPanel Orientation="Horizontal" >
                         <ui:SymbolIcon Margin="0 2 4 0" Foreground="{StaticResource PaletteAmberBrush}" Symbol="Warning20" />
-                        <TextBlock  Foreground="{StaticResource ButtonForeground}" Text="Direct Storage" ToolTip="{local:Localize SnackBar_DirectStorageTechnology}" />
+                        <TextBlock  Foreground="{StaticResource ButtonForeground}" Text="Direct Storage" ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}" />
                     </StackPanel>
                 </Border>
 
@@ -118,16 +119,14 @@
                           TextTrimming="WordEllipsis" />
 
             <StackPanel Grid.Row="1" Margin="0 0 0 5" Orientation="Horizontal">
-                <ui:TextBlock Margin="0 0 8 -1" VerticalAlignment="Bottom"
-                              d:Text="uncompressed size" FontSize="13" Foreground="#30FFFFFF"
-                              Text="{local:Localize Status_UncompressedSize}" />
+                <ui:TextBlock Margin="0 0 8 -1" VerticalAlignment="Bottom" FontSize="13" Foreground="#30FFFFFF"
+                              loc:L.Value="uncompressed size" />
                 <ui:TextBlock Width="80"
                               VerticalAlignment="Bottom"
                               FontSize="20"
                               Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
-                <ui:TextBlock Margin="30 0 8 -1" VerticalAlignment="Bottom"
-                              d:Text="contained files" FontSize="13" Foreground="#30FFFFFF"
-                              Text="{local:Localize Status_ContainedFiles}" />
+                <ui:TextBlock Margin="30 0 8 -1" VerticalAlignment="Bottom" FontSize="13" Foreground="#30FFFFFF"
+                              loc:L.Value="contained files" />
                 <ui:TextBlock VerticalAlignment="Bottom" FontSize="20" Text="{Binding TotalFiles, Converter={StaticResource NumberWithSpacesConverter}}" />
             </StackPanel>
 
@@ -213,3 +212,4 @@
     </Grid>
 
 </UserControl>
+

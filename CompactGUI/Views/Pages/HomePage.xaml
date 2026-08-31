@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:CompactGUI"
+      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" Background="Transparent"
       x:Name="Root" Title="HomePage" AllowDrop="True" DragOver="Root_DragOver" Drop="Root_Drop"
@@ -14,8 +15,7 @@
 
         <DataTemplate x:Key="IdleTemplate">
 
-            <Button Content="{local:Localize Home_CompressSelected}"
-                    d:Content="Compress Selected"
+            <Button loc:L.Value="Compress Selected"
                     Width="160" Height="40"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
                     Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
@@ -33,13 +33,13 @@
             <ui:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center"
                   IsIndeterminate="True" />
             <!--<StackPanel Margin="0,20">
-                <TextBlock Text="{local:Localize Status_Working}" d:Text="Working" FontSize="18" />
+                <TextBlock loc:L.Value="Working" FontSize="18" />
                 <ProgressBar Margin="0,10" IsIndeterminate="True" />
             </StackPanel>-->
         </DataTemplate>
 
         <DataTemplate x:Key="ResultsTemplate">
-            <!--<TextBlock Text="{local:Localize Status_ResultsState}" d:Text="Results State" />-->
+            <!--<TextBlock loc:L.Value="Results State" />-->
 
         </DataTemplate>
 
@@ -62,10 +62,10 @@
                     Margin="0,-90,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Label HorizontalAlignment="Center">
-                <TextBlock Text="{local:Localize Title_CompactGUI}" d:Text="CompactGUI" FontSize="32" />
+                <TextBlock loc:L.Value="CompactGUI" FontSize="32" />
             </Label>
             <Border Background="#20f44336" CornerRadius="10" Width="70" Height="20" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock  Text="{local:Localize UniAdmin}" d:Text="Admin" Foreground="White" HorizontalAlignment="Center" FontSize="12" VerticalAlignment="Center"/>
+                <TextBlock  loc:L.Value="Admin" Foreground="White" HorizontalAlignment="Center" FontSize="12" VerticalAlignment="Center"/>
 
             </Border>
             <Button x:Name="BtnAddFolder1"
@@ -73,7 +73,7 @@
                     Margin="0,20,0,0" HorizontalContentAlignment="Stretch">
                 <Grid>
                     <ui:SymbolIcon HorizontalAlignment="Left" Symbol="Search12" />
-                    <TextBlock Text="{local:Localize Home_SelectFolder}" d:Text="select a folder" HorizontalAlignment="Center" />
+                    <TextBlock loc:L.Value="select a folder" HorizontalAlignment="Center" />
                 </Grid>
             </Button>
 
@@ -112,7 +112,7 @@
         </StackPanel>
         <Label Grid.Row="1" VerticalAlignment="Bottom" Margin="0 0 0 20" Foreground="{StaticResource CardForegroundDisabled}" HorizontalAlignment="Center" Visibility="{Binding HomeViewIsFresh, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
-                <TextBlock Text="{local:Localize Home_Version}" />
+                <TextBlock loc:L.Value="Version" />
                 <TextBlock Text=" " />
                 <TextBlock Text="{Binding DisplayVersion}" />
             </StackPanel>
@@ -179,8 +179,7 @@
                                    Background="{StaticResource CardBackgroundFillColorSecondaryBrush}">
                             <ui:SymbolIcon Symbol="Add16" />
                         </ui:Button>
-                        <TextBlock Text="{local:Localize Home_AddFolder}"
-                                   d:Text="Add Folder to Queue"
+                        <TextBlock loc:L.Value="Add Folder to Queue"
                                    Margin="15,-1,0,0" VerticalAlignment="Center" />
                     </StackPanel>
 
@@ -341,3 +340,4 @@
 
     </Grid>
 </Page>
+

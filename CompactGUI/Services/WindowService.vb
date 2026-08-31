@@ -26,6 +26,9 @@ Public Class WindowService
     Public Sub HideMainWindow() Implements IWindowService.HideMainWindow
         Dim mainWindow = Application.GetService(Of MainWindow)()
         mainWindow.Hide()
+        System.GC.Collect()
+        System.GC.WaitForPendingFinalizers()
+        System.GC.Collect()
     End Sub
 
     Public Async Function ShowMessageBox(title As String, content As String) As Task(Of Boolean) Implements IWindowService.ShowMessageBox
@@ -33,8 +36,8 @@ Public Class WindowService
                .Title = title,
                .Content = content,
                .IsPrimaryButtonEnabled = True,
-               .PrimaryButtonText = LanguageHelper.GetString("UniYes"),
-               .CloseButtonText = LanguageHelper.GetString("UniCancel")
+               .PrimaryButtonText = "Yes".LT(),
+               .CloseButtonText = "Cancel".LT()
            }
         Dim result = Await msgBox.ShowDialogAsync()
         Return result = Wpf.Ui.Controls.MessageBoxResult.Primary

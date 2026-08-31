@@ -171,26 +171,34 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     <RelayCommand>
     Public Sub RemoveFolder(folder As CompressableFolder)
         If Not CanRemoveFolder() Then
-            Application.GetService(Of CustomSnackBarService)().ShowCannotRemoveFolder()
+            _snackbarService.ShowCannotRemoveFolder()
             Return
         End If
 
         If folder Is Nothing Then Return
+
         Dim index = Folders.IndexOf(folder)
+        Dim wasSelected = ReferenceEquals(SelectedFolder, folder)
+
         _compressableFolderService.CancelEstimation(folder)
-        folder.Dispose()
 
-        Dim value As FolderViewModel = Nothing
-
-        If _folderViewModels.TryGetValue(folder, value) Then
-            value.Dispose()
+        Dim folderViewModel As FolderViewModel = Nothing
+        If _folderViewModels.TryGetValue(folder, folderViewModel) Then
+            folderViewModel.Dispose()
             _folderViewModels.Remove(folder)
         End If
 
         Folders.Remove(folder)
 
-        If SelectedFolder IsNot Nothing OrElse Folders.Count = 0 Then Return
-        SelectedFolder = If(index < Folders.Count, Folders(index), Folders.Last())
+        If wasSelected Then
+            If Folders.Count = 0 Then
+                SelectedFolder = Nothing
+            Else
+                SelectedFolder = If(index < Folders.Count, Folders(index), Folders.Last())
+            End If
+        End If
+
+        folder.Dispose()
     End Sub
 
     Public Function CanRemoveFolder() As Boolean
