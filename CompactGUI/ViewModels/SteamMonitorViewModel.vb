@@ -1,4 +1,5 @@
 Imports System.Collections.ObjectModel
+Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.IO
 Imports System.Net.Http
@@ -28,6 +29,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private ReadOnly _settingsService As ISettingsService
     Private ReadOnly _operationGate As New SemaphoreSlim(1, 1)
     Private ReadOnly _imageDownloadGate As New SemaphoreSlim(4, 4)
+    Private ReadOnly _trackedSteamGames As New HashSet(Of SteamDetailedResult)
     Private Shared ReadOnly SteamImageClient As New HttpClient()
     Private _activeFolder As StandardFolder
     Private _activeGame As SteamDetailedResult
@@ -61,6 +63,18 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         End Get
     End Property
 
+    Public ReadOnly Property TotalSaved As Long
+        Get
+            Return SteamGamesData.Where(Function(game) game.IsCompressed).Sum(Function(game) Math.Max(0L, game.UncompressedBytes - game.CurrentFolderSize))
+        End Get
+    End Property
+
+    Public ReadOnly Property TotalCanBeSaved As Long
+        Get
+            Return SteamGamesData.Where(Function(game) Not game.IsCompressed AndAlso game.RecommendedCompressionMode.HasValue AndAlso game.HasCompressionEstimate).Sum(Function(game) Math.Max(0L, game.ExpectedCompressionSavings))
+        End Get
+    End Property
+
     Public Sub New(wikiService As IWikiService, watcher As Watcher.Watcher, compressableFolderService As CompressableFolderService, analyserLogger As ILogger(Of Core.Analyser), navigationService As INavigationService, settingsService As ISettingsService)
         _wikiService = wikiService
         _watcher = watcher
@@ -70,6 +84,44 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         _settingsService = settingsService
         FilteredSteamGames = CollectionViewSource.GetDefaultView(SteamGamesData)
         FilteredSteamGames.Filter = AddressOf FilterGames
+        AddHandler SteamGamesData.CollectionChanged, AddressOf OnSteamGamesCollectionChanged
+    End Sub
+
+    Private Sub OnSteamGamesCollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
+        If e.Action = NotifyCollectionChangedAction.Reset Then
+            For Each game In _trackedSteamGames
+                RemoveHandler game.PropertyChanged, AddressOf OnSteamGamePropertyChanged
+            Next
+            _trackedSteamGames.Clear()
+        Else
+            If e.OldItems IsNot Nothing Then
+                For Each game As SteamDetailedResult In e.OldItems
+                    RemoveHandler game.PropertyChanged, AddressOf OnSteamGamePropertyChanged
+                    _trackedSteamGames.Remove(game)
+                Next
+            End If
+
+            If e.NewItems IsNot Nothing Then
+                For Each game As SteamDetailedResult In e.NewItems
+                    If _trackedSteamGames.Add(game) Then AddHandler game.PropertyChanged, AddressOf OnSteamGamePropertyChanged
+                Next
+            End If
+        End If
+
+        OnPropertyChanged(NameOf(HasNoGames))
+        NotifySavingsTotalsChanged()
+    End Sub
+
+    Private Sub OnSteamGamePropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        Select Case e.PropertyName
+            Case Nothing, String.Empty, NameOf(SteamDetailedResult.UncompressedBytes), NameOf(SteamDetailedResult.CurrentFolderSize), NameOf(SteamDetailedResult.IsCompressed), NameOf(SteamDetailedResult.RecommendedCompressionMode), NameOf(SteamDetailedResult.ExpectedCompressionSavings), NameOf(SteamDetailedResult.HasCompressionEstimate)
+                NotifySavingsTotalsChanged()
+        End Select
+    End Sub
+
+    Private Sub NotifySavingsTotalsChanged()
+        OnPropertyChanged(NameOf(TotalSaved))
+        OnPropertyChanged(NameOf(TotalCanBeSaved))
     End Sub
 
     Private Sub OnSearchTextChanged(value As String)

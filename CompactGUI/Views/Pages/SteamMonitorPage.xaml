@@ -13,21 +13,22 @@
              Loaded="OnLoaded"
              mc:Ignorable="d">
 
-    <Grid Margin="40 20 20 24">
+    <Grid Margin="40 20 20 0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock VerticalAlignment="Center"
+            <TextBlock VerticalAlignment="Top"
                        FontSize="26"
                        Foreground="{StaticResource CardForeground}"
-                       Text="Steam Games" />
+                       Text="Steam Library" />
             <ui:Button Width="32" Height="32"
-                       Margin="10 0 0 0" Padding="0" VerticalAlignment="Center"
+                       Margin="10 2 0 0" Padding="0" VerticalAlignment="Top"
                        Background="Transparent" BorderThickness="0"
                        Command="{Binding RefreshAllCommand}"
                        ToolTip="Refresh all games">
@@ -74,12 +75,76 @@
             </ui:DropDownButton>
         </Grid>
 
-        <TextBlock Grid.Row="1"
-                   Margin="0 5 0 22"
-                   Foreground="{StaticResource CardForegroundDisabled}"
-                   Text="Installed games, current disk usage, and recommendations from the CompactGUI compression database." />
+        <StackPanel Grid.Row="1" Grid.RowSpan="2"
+                    Margin="0 -10 0 20"
+                    Orientation="Horizontal"
+                    TextBlock.Foreground="{StaticResource TextControlForeground}">
+            
+            <TextBlock Text="{Binding SteamGamesData.Count}" VerticalAlignment="Bottom" FontSize="20"/>
+            <TextBlock Text="games" VerticalAlignment="Bottom" Foreground="{StaticResource TextControlForegroundDisabled}" Margin="10 0 0 1"/>
+            <Separator Margin="10 0 10 -2" VerticalAlignment="Bottom" Height="30" Padding="0" BorderThickness="1"/>
+            <TextBlock Text="{Binding TotalSaved, Converter={StaticResource BytesToReadableConverter}}" VerticalAlignment="Bottom" FontSize="20" Foreground="#63ffa1" Opacity="0.6"/>
+            <TextBlock Text="saved" VerticalAlignment="Bottom" Foreground="{StaticResource TextControlForegroundDisabled}" Margin="10 0 0 1"/>
+            <Separator Margin="10 0 10 -2" VerticalAlignment="Bottom" Height="30" Padding="0" BorderThickness="1"/>
+            <TextBlock Text="{Binding TotalCanBeSaved, Converter={StaticResource BytesToReadableConverter}}" VerticalAlignment="Bottom" FontSize="20" Foreground="#57dbff" Opacity="0.6"/>
+            <TextBlock Text="can be saved" VerticalAlignment="Bottom" Foreground="{StaticResource TextControlForegroundDisabled}" Margin="10 0 0 1"/>
+            
+            <!--<Border Height="55"
+                    Padding="15 5 20 5"
+                    Background="{StaticResource CardBackground}"
+                    CornerRadius="4">
 
-        <Grid Grid.Row="2" Margin="14 0 34 8">
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" TextBlock.Foreground="{StaticResource TextControlForegroundDisabled}">
+                        <ui:SymbolIcon Margin="0 0 5 0" FontSize="12" Symbol="Library16" />
+                        <TextBlock FontSize="12" Text="Installed Games" />
+                    </StackPanel>
+                    <TextBlock FontSize="20" Text="{Binding SteamGamesData.Count}" />
+                </StackPanel>
+
+
+            </Border>
+
+            <Border Height="55"
+                    Margin="20 0" Padding="15 5 20 5"
+                    Background="{StaticResource CardBackground}"
+                    CornerRadius="4">
+
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel Opacity="0.6" Orientation="Horizontal" TextBlock.Foreground="#63ffa1">
+                        <ui:SymbolIcon Margin="0 0 5 0" FontSize="12" Symbol="Box16" />
+                        <TextBlock FontSize="12" Text="Space Saved" />
+                    </StackPanel>
+                    <TextBlock FontSize="20" Text="{Binding TotalSaved, Converter={StaticResource BytesToReadableConverter}}" />
+                </StackPanel>
+
+
+            </Border>
+
+            <Border Height="55"
+                    Padding="15 5 20 5"
+                    Background="{StaticResource CardBackground}"
+                    CornerRadius="4">
+
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel Opacity="0.8" Orientation="Horizontal" TextBlock.Foreground="#57dbff">
+                        <ui:SymbolIcon Margin="0 0 5 0" FontSize="12" Symbol="Sparkle16" />
+                        <TextBlock FontSize="12" Text="Can be saved" />
+                    </StackPanel>
+                    <TextBlock FontSize="20" Text="{Binding TotalCanBeSaved, Converter={StaticResource BytesToReadableConverter}}" />
+                </StackPanel>
+
+
+            </Border>-->
+
+
+
+
+        </StackPanel>
+
+
+        <Separator Grid.Row="2" Height="1" VerticalAlignment="Bottom" />
+        <Grid Grid.Row="3" Margin="14 10 34 8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="108" />
                 <ColumnDefinition Width="*" />
@@ -114,7 +179,7 @@
                        Text="RECOMMENDED ACTION" />
         </Grid>
 
-        <ListView Grid.Row="3"
+        <ListView Grid.Row="4"
                   Margin="0 0 0 0" Padding="0" HorizontalContentAlignment="Stretch"
                   Background="Transparent" BorderThickness="0"
                   ItemsSource="{Binding FilteredSteamGames}"
@@ -340,9 +405,9 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackPanel Grid.Row="3"
+        <StackPanel Grid.Row="4"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Background="#90000000"
+                    Background="#90000000" IsHitTestVisible="False"
                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ui:ProgressRing Width="42" Height="42"
                              Margin="0 20 0 0" HorizontalAlignment="Center"
@@ -350,16 +415,17 @@
             <TextBlock Margin="20 12 20 20" Foreground="{StaticResource CardForegroundDisabled}" Text="Scanning installed Steam games..." />
         </StackPanel>
 
-        <StackPanel Grid.Row="3"
+        <StackPanel Grid.Row="4"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                    IsHitTestVisible="False"
                     Visibility="{Binding HasNoGames, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ui:SymbolIcon HorizontalAlignment="Center" FontSize="36" Symbol="Games24" />
             <TextBlock Margin="0 12 0 0" FontSize="16" Text="No installed Steam games were found." />
         </StackPanel>
 
-        <Border Grid.Row="3"
+        <Border Grid.Row="4"
                 Margin="0 12 0 0" Padding="12" HorizontalAlignment="Stretch" VerticalAlignment="Top"
-                Background="#33D9534F" CornerRadius="6"
+                Background="#33D9534F" CornerRadius="6" IsHitTestVisible="False"
                 Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock Foreground="{StaticResource CardForeground}" Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
         </Border>
