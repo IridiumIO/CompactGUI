@@ -171,7 +171,7 @@
                                         <VisualBrush.Visual>
                                             <Border Width="196" Height="78" CornerRadius="4">
                                                 <Border.Background>
-                                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="0.85,0.5">
                                                         <GradientStop Offset="0" Color="White" />
                                                         <GradientStop Offset="1" Color="Transparent" />
                                                     </LinearGradientBrush>
@@ -274,8 +274,7 @@
                                                     <Setter Property="Text" Value="{Binding RecommendedAction}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
-                                                            <Setter Property="Text" Value="Update in Steam first" />
-                                                            <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                                            <Setter Property="Text" Value="Update in Steam" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
                                                             <Setter Property="Text" Value="" />

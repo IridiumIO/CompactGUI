@@ -2,6 +2,7 @@ Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.IO
 Imports System.Net.Http
+Imports System.Text.Json
 Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
@@ -155,7 +156,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         ErrorMessage = Nothing
 
         Try
-            Dim games = Await Task.Run(AddressOf GetInstalledSteamGames)
+            Dim steamFolder = GetSteamFolderFromRegistry()
+            Dim games = Await Task.Run(Function() GetInstalledSteamGames(steamFolder))
             Dim databaseResults As List(Of DatabaseCompressionResult)
 
             Try
@@ -178,7 +180,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 Await AnalyseGameAsync(detailedResult)
                 If detailedResult.CurrentFolderSize > 0 Then
                     SteamGamesData.Add(detailedResult)
-                    imageLoadTasks.Add(LoadGameHeaderAsync(detailedResult))
+                    imageLoadTasks.Add(LoadGameHeaderAsync(detailedResult, steamFolder))
                 End If
             Next
         Catch ex As Exception
@@ -191,7 +193,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         If imageLoadTasks.Count > 0 Then Await Task.WhenAll(imageLoadTasks)
     End Function
 
-    Private Async Function LoadGameHeaderAsync(game As SteamDetailedResult) As Task
+    Private Async Function LoadGameHeaderAsync(game As SteamDetailedResult, steamFolder As DirectoryInfo) As Task
         If game.AppID = 0 Then Return
 
         Dim imageDirectory = Path.Combine(_settingsService.DataFolder.FullName, "SteamCache")
@@ -201,8 +203,12 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             Directory.CreateDirectory(imageDirectory)
 
             If File.Exists(imagePath) Then
-                game.HeaderImage = LoadImageFromDisk(imagePath)
-                Return
+                Try
+                    game.HeaderImage = LoadImageFromDisk(imagePath)
+                    Return
+                Catch ex As Exception
+                    File.Delete(imagePath)
+                End Try
             End If
 
             Await _imageDownloadGate.WaitAsync()
@@ -212,15 +218,103 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                     Return
                 End If
 
-                Dim imageUrl = $"https://steamcdn-a.akamaihd.net/steam/apps/{game.AppID}/header.jpg"
-                Dim imageData = Await SteamImageClient.GetByteArrayAsync(imageUrl)
-                game.HeaderImage = LoadImageFromMemoryStream(imageData)
+                Dim steamCachedHeader = FindSteamCachedHeader(steamFolder, game.AppID)
+                If steamCachedHeader IsNot Nothing Then
+                    Try
+                        Dim cachedImageData = Await File.ReadAllBytesAsync(steamCachedHeader)
+                        game.HeaderImage = LoadImageFromMemoryStream(cachedImageData)
+                        Await File.WriteAllBytesAsync(imagePath, cachedImageData)
+                        Return
+                    Catch ex As Exception
+                        Diagnostics.Debug.WriteLine($"Failed to use Steam's cached header for {game.AppID}: {ex.Message}")
+                    End Try
+                End If
+
+                Dim imageData = Await TryDownloadImageAsync($"https://steamcdn-a.akamaihd.net/steam/apps/{game.AppID}/header.jpg")
+                Dim headerImage As BitmapImage = Nothing
+                If imageData IsNot Nothing Then
+                    Try
+                        headerImage = LoadImageFromMemoryStream(imageData)
+                    Catch ex As Exception
+                        imageData = Nothing
+                    End Try
+                End If
+
+                If imageData Is Nothing Then
+                    Dim storeHeaderUrl = Await GetStoreHeaderUrlAsync(game.AppID)
+                    imageData = Await TryDownloadImageAsync(storeHeaderUrl)
+                    If imageData IsNot Nothing Then headerImage = LoadImageFromMemoryStream(imageData)
+                End If
+
+                If imageData Is Nothing Then Return
+                game.HeaderImage = headerImage
                 Await File.WriteAllBytesAsync(imagePath, imageData)
             Finally
                 _imageDownloadGate.Release()
             End Try
         Catch ex As Exception
             Diagnostics.Debug.WriteLine($"Failed to load Steam header for {game.AppID}: {ex.Message}")
+        End Try
+    End Function
+
+    Private Shared Function FindSteamCachedHeader(steamFolder As DirectoryInfo, appId As Integer) As String
+        If steamFolder Is Nothing Then Return Nothing
+
+        Dim appCacheDirectory = Path.Combine(steamFolder.FullName, "appcache", "librarycache", appId.ToString())
+        If Not Directory.Exists(appCacheDirectory) Then Return Nothing
+
+        Try
+            Dim directories = {appCacheDirectory}.Concat(Directory.EnumerateDirectories(appCacheDirectory))
+            Return directories.SelectMany(Function(directoryPath) Directory.EnumerateFiles(directoryPath, "*header*", SearchOption.TopDirectoryOnly)).Where(AddressOf IsSupportedHeaderImage).OrderBy(Function(filePath) If(String.Equals(Path.GetFileName(filePath), "library_header.jpg", StringComparison.OrdinalIgnoreCase), 0, 1)).FirstOrDefault()
+        Catch ex As Exception When TypeOf ex Is IOException OrElse TypeOf ex Is UnauthorizedAccessException
+            Return Nothing
+        End Try
+    End Function
+
+    Private Shared Function IsSupportedHeaderImage(filePath As String) As Boolean
+        Select Case Path.GetExtension(filePath).ToLowerInvariant()
+            Case ".jpg", ".jpeg", ".png"
+                Return True
+            Case Else
+                Return False
+        End Select
+    End Function
+
+    Private Shared Async Function TryDownloadImageAsync(url As String) As Task(Of Byte())
+        If String.IsNullOrWhiteSpace(url) Then Return Nothing
+
+        Try
+            Using response = Await SteamImageClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead)
+                If Not response.IsSuccessStatusCode Then Return Nothing
+                Return Await response.Content.ReadAsByteArrayAsync()
+            End Using
+        Catch ex As Exception When TypeOf ex Is HttpRequestException OrElse TypeOf ex Is TaskCanceledException
+            Return Nothing
+        End Try
+    End Function
+
+    Private Shared Async Function GetStoreHeaderUrlAsync(appId As Integer) As Task(Of String)
+        Dim detailsUrl = $"https://store.steampowered.com/api/appdetails?appids={appId}"
+
+        Try
+            Using response = Await SteamImageClient.GetAsync(detailsUrl, HttpCompletionOption.ResponseHeadersRead)
+                If Not response.IsSuccessStatusCode Then Return Nothing
+
+                Using responseStream = Await response.Content.ReadAsStreamAsync()
+                    Using document = Await JsonDocument.ParseAsync(responseStream)
+                        Dim appDetails As JsonElement
+                        Dim data As JsonElement
+                        Dim headerImage As JsonElement
+
+                        If Not document.RootElement.TryGetProperty(appId.ToString(), appDetails) Then Return Nothing
+                        If Not appDetails.TryGetProperty("data", data) Then Return Nothing
+                        If Not data.TryGetProperty("header_image", headerImage) Then Return Nothing
+                        Return headerImage.GetString()
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception When TypeOf ex Is HttpRequestException OrElse TypeOf ex Is TaskCanceledException OrElse TypeOf ex Is JsonException
+            Return Nothing
         End Try
     End Function
 
@@ -341,8 +435,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         If operationException IsNot Nothing Then Throw operationException
     End Function
 
-    Private Shared Function GetInstalledSteamGames() As List(Of SteamACFResult)
-        Dim steamFolder = GetSteamFolderFromRegistry()
+    Private Shared Function GetInstalledSteamGames(steamFolder As DirectoryInfo) As List(Of SteamACFResult)
         If steamFolder Is Nothing Then Return New List(Of SteamACFResult)
 
         Dim games As New List(Of SteamACFResult)
