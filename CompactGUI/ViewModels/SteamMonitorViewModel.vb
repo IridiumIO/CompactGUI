@@ -19,46 +19,20 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private ReadOnly _analyserLogger As ILogger(Of Core.Analyser)
     Private ReadOnly _operationGate As New SemaphoreSlim(1, 1)
     Private _hasLoaded As Boolean
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(HasNoGames))>
     Private _isLoading As Boolean
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(HasError))>
     Private _errorMessage As String
+
+    <ObservableProperty>
     Private _searchText As String
 
     Public ReadOnly Property SteamGamesData As New ObservableCollection(Of SteamDetailedResult)
     Public ReadOnly Property FilteredSteamGames As ICollectionView
-
-    Public Property SearchText As String
-        Get
-            Return _searchText
-        End Get
-        Set(value As String)
-            If Not SetProperty(_searchText, value) Then Return
-            FilteredSteamGames.Refresh()
-        End Set
-    End Property
-
-    Public Property IsLoading As Boolean
-        Get
-            Return _isLoading
-        End Get
-        Private Set(value As Boolean)
-            If _isLoading = value Then Return
-            _isLoading = value
-            OnPropertyChanged()
-            OnPropertyChanged(NameOf(HasNoGames))
-        End Set
-    End Property
-
-    Public Property ErrorMessage As String
-        Get
-            Return _errorMessage
-        End Get
-        Private Set(value As String)
-            If _errorMessage = value Then Return
-            _errorMessage = value
-            OnPropertyChanged()
-            OnPropertyChanged(NameOf(HasError))
-        End Set
-    End Property
 
     Public ReadOnly Property HasError As Boolean
         Get
@@ -72,10 +46,6 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         End Get
     End Property
 
-    Public ReadOnly Property CompressCommand As IAsyncRelayCommand(Of SteamDetailedResult)
-    Public ReadOnly Property UncompressCommand As IAsyncRelayCommand(Of SteamDetailedResult)
-    Public ReadOnly Property SortCommand As IRelayCommand(Of Object)
-
     Public Sub New(wikiService As IWikiService, watcher As Watcher.Watcher, compressableFolderService As CompressableFolderService, analyserLogger As ILogger(Of Core.Analyser))
         _wikiService = wikiService
         _watcher = watcher
@@ -83,9 +53,10 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         _analyserLogger = analyserLogger
         FilteredSteamGames = CollectionViewSource.GetDefaultView(SteamGamesData)
         FilteredSteamGames.Filter = AddressOf FilterGames
-        CompressCommand = New AsyncRelayCommand(Of SteamDetailedResult)(AddressOf CompressGameAsync)
-        UncompressCommand = New AsyncRelayCommand(Of SteamDetailedResult)(AddressOf UncompressGameAsync)
-        SortCommand = New RelayCommand(Of Object)(AddressOf SortGames)
+    End Sub
+
+    Private Sub OnSearchTextChanged(value As String)
+        FilteredSteamGames.Refresh()
     End Sub
 
     Private Function FilterGames(value As Object) As Boolean
@@ -104,7 +75,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         Return New String(value.Where(Function(character) Char.IsLetterOrDigit(character) OrElse Char.IsWhiteSpace(character)).ToArray()).ToLowerInvariant()
     End Function
 
-    Private Sub SortGames(parameter As Object)
+    <RelayCommand>
+    Private Sub Sort(parameter As Object)
         FilteredSteamGames.SortDescriptions.Clear()
 
         Select Case parameter?.ToString()
@@ -192,12 +164,14 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         End Using
     End Function
 
-    Private Async Function CompressGameAsync(game As SteamDetailedResult) As Task
+    <RelayCommand>
+    Private Async Function Compress(game As SteamDetailedResult) As Task
         If game Is Nothing OrElse Not game.CanCompress Then Return
         Await RunGameOperationAsync(game, False)
     End Function
 
-    Private Async Function UncompressGameAsync(game As SteamDetailedResult) As Task
+    <RelayCommand>
+    Private Async Function Uncompress(game As SteamDetailedResult) As Task
         If game Is Nothing OrElse Not game.CanUncompress Then Return
         Await RunGameOperationAsync(game, True)
     End Function
@@ -340,18 +314,47 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private Const MinimumUsefulSaving As Double = 0.05
     Private Const MaximumIncrementalSaving As Double = 0.02
 
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(DisplayedSavings))>
     Private _uncompressedBytes As Long
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(DisplayedSavings))>
     Private _currentFolderSize As Long
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(CanUncompress))>
     Private _isCompressed As Boolean
+
     Private ReadOnly _lastSteamUpdate As DateTime
     Private _lastCompactGuiUpdate As DateTime?
     Private ReadOnly _hasPendingSteamUpdate As Boolean
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(StatusMessage), NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(HasSavingsData), NameOf(CanCompress))>
     Private _status As SteamGameStatus
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(CanCompress))>
     Private _recommendedCompressionMode As Core.CompressionMode?
+
+    <ObservableProperty>
     Private _recommendedAction As String
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(DisplayedSavings))>
     Private _expectedCompressionSavings As Long
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(HasSavingsData))>
     Private _hasCompressionEstimate As Boolean
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(CanCompress), NameOf(CanUncompress))>
     Private _isWorking As Boolean
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(HasOperationMessage))>
     Private _operationMessage As String
 
     Public ReadOnly Property GameName As String
@@ -359,29 +362,10 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Public ReadOnly Property AppID As Integer
     Public ReadOnly Property WikiCompressionResults As WikiCompressionResults
     Public ReadOnly Property WikiPoorlyCompressedFiles As List(Of String)
-    Public ReadOnly Property SelectCompressionModeCommand As IRelayCommand(Of Core.CompressionMode)
 
     Public ReadOnly Property DisplayPath As String
         Get
             Return New DirectoryInfo(GamePath).Parent?.Parent?.Parent?.FullName
-        End Get
-    End Property
-
-    Public ReadOnly Property CurrentFolderSize As Long
-        Get
-            Return _currentFolderSize
-        End Get
-    End Property
-
-    Public ReadOnly Property IsCompressed As Boolean
-        Get
-            Return _isCompressed
-        End Get
-    End Property
-
-    Public ReadOnly Property Status As SteamGameStatus
-        Get
-            Return _status
         End Get
     End Property
 
@@ -402,27 +386,9 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         End Get
     End Property
 
-    Public ReadOnly Property RecommendedCompressionMode As Core.CompressionMode?
-        Get
-            Return _recommendedCompressionMode
-        End Get
-    End Property
-
-    Public ReadOnly Property RecommendedAction As String
-        Get
-            Return _recommendedAction
-        End Get
-    End Property
-
-    Public ReadOnly Property ExpectedCompressionSavings As Long
-        Get
-            Return _expectedCompressionSavings
-        End Get
-    End Property
-
     Public ReadOnly Property DisplayedSavings As Long
         Get
-            If IsDisplayingActualSavings Then Return Math.Max(0, _uncompressedBytes - CurrentFolderSize)
+            If IsDisplayingActualSavings Then Return Math.Max(0, UncompressedBytes - CurrentFolderSize)
             Return ExpectedCompressionSavings
         End Get
     End Property
@@ -436,31 +402,6 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Public ReadOnly Property HasSavingsData As Boolean
         Get
             Return IsDisplayingActualSavings OrElse HasCompressionEstimate
-        End Get
-    End Property
-
-    Public ReadOnly Property HasCompressionEstimate As Boolean
-        Get
-            Return _hasCompressionEstimate
-        End Get
-    End Property
-
-    Public Property IsWorking As Boolean
-        Get
-            Return _isWorking
-        End Get
-        Private Set(value As Boolean)
-            If _isWorking = value Then Return
-            _isWorking = value
-            OnPropertyChanged()
-            OnPropertyChanged(NameOf(CanCompress))
-            OnPropertyChanged(NameOf(CanUncompress))
-        End Set
-    End Property
-
-    Public ReadOnly Property OperationMessage As String
-        Get
-            Return _operationMessage
         End Get
     End Property
 
@@ -491,32 +432,15 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         _lastCompactGuiUpdate = lastCompactGuiUpdate
         Me.WikiCompressionResults = wikiResults
         Me.WikiPoorlyCompressedFiles = poorlyCompressedFiles
-        SelectCompressionModeCommand = New RelayCommand(Of Core.CompressionMode)(AddressOf SelectCompressionMode)
     End Sub
 
     Public Sub UpdateAnalysis(uncompressedBytes As Long, currentFolderSize As Long, isCompressed As Boolean)
-        _uncompressedBytes = uncompressedBytes
-        _currentFolderSize = currentFolderSize
-        _isCompressed = isCompressed
+        Me.UncompressedBytes = uncompressedBytes
+        Me.CurrentFolderSize = currentFolderSize
+        Me.IsCompressed = isCompressed
         SetRecommendation()
         SetGameStatus()
-        _operationMessage = Nothing
-
-        OnPropertyChanged(NameOf(currentFolderSize))
-        OnPropertyChanged(NameOf(isCompressed))
-        OnPropertyChanged(NameOf(Status))
-        OnPropertyChanged(NameOf(StatusMessage))
-        OnPropertyChanged(NameOf(RecommendedCompressionMode))
-        OnPropertyChanged(NameOf(RecommendedAction))
-        OnPropertyChanged(NameOf(ExpectedCompressionSavings))
-        OnPropertyChanged(NameOf(DisplayedSavings))
-        OnPropertyChanged(NameOf(IsDisplayingActualSavings))
-        OnPropertyChanged(NameOf(HasCompressionEstimate))
-        OnPropertyChanged(NameOf(HasSavingsData))
-        OnPropertyChanged(NameOf(OperationMessage))
-        OnPropertyChanged(NameOf(HasOperationMessage))
-        OnPropertyChanged(NameOf(CanCompress))
-        OnPropertyChanged(NameOf(CanUncompress))
+        OperationMessage = Nothing
     End Sub
 
     Public Sub SetWorking(value As Boolean, Optional status As String = Nothing)
@@ -525,31 +449,23 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     End Sub
 
     Public Sub SetStatus(status As String)
-        _operationMessage = status
-        OnPropertyChanged(NameOf(OperationMessage))
-        OnPropertyChanged(NameOf(HasOperationMessage))
+        OperationMessage = status
     End Sub
 
     Public Sub SetLastCompactGuiUpdate(updated As DateTime)
         _lastCompactGuiUpdate = updated
         SetGameStatus()
-        OnPropertyChanged(NameOf(Status))
-        OnPropertyChanged(NameOf(StatusMessage))
-        OnPropertyChanged(NameOf(DisplayedSavings))
-        OnPropertyChanged(NameOf(IsDisplayingActualSavings))
-        OnPropertyChanged(NameOf(HasSavingsData))
-        OnPropertyChanged(NameOf(CanCompress))
     End Sub
 
     Private Sub SetGameStatus()
         If _hasPendingSteamUpdate Then
-            _status = SteamGameStatus.PendingSteamUpdate
+            Status = SteamGameStatus.PendingSteamUpdate
         ElseIf _lastCompactGuiUpdate.HasValue AndAlso _lastSteamUpdate > _lastCompactGuiUpdate.Value Then
-            _status = SteamGameStatus.RecentlyUpdated
+            Status = SteamGameStatus.RecentlyUpdated
         ElseIf IsCompressed Then
-            _status = SteamGameStatus.Compressed
+            Status = SteamGameStatus.Compressed
         Else
-            _status = SteamGameStatus.Uncompressed
+            Status = SteamGameStatus.Uncompressed
         End If
     End Sub
 
@@ -564,20 +480,20 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         Dim validResults = candidates.Where(Function(candidate) candidate.Result IsNot Nothing AndAlso candidate.Result.TotalResults > 0 AndAlso candidate.Result.BeforeBytes > 0 AndAlso candidate.Result.AfterBytes > 0).Select(Function(candidate) (candidate.Mode, Savings:=Math.Max(0, 1 - (CDbl(candidate.Result.AfterBytes) / candidate.Result.BeforeBytes)))).ToList()
 
         If validResults.Count = 0 Then
-            _recommendedCompressionMode = Nothing
-            _recommendedAction = "No wiki data"
-            _expectedCompressionSavings = 0
-            _hasCompressionEstimate = False
+            RecommendedCompressionMode = Nothing
+            RecommendedAction = "No wiki data"
+            ExpectedCompressionSavings = 0
+            HasCompressionEstimate = False
             Return
         End If
 
-        _hasCompressionEstimate = True
+        HasCompressionEstimate = True
         Dim bestSaving = validResults.Max(Function(result) result.Savings)
 
         If bestSaving < MinimumUsefulSaving Then
-            _recommendedCompressionMode = Nothing
-            _recommendedAction = "Do not compress"
-            _expectedCompressionSavings = 0
+            RecommendedCompressionMode = Nothing
+            RecommendedAction = "Do not compress"
+            ExpectedCompressionSavings = 0
             Return
         End If
 
@@ -585,21 +501,14 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         SelectCompressionMode(recommendation.Mode)
     End Sub
 
+    <RelayCommand>
     Private Sub SelectCompressionMode(mode As Core.CompressionMode)
-        _recommendedCompressionMode = mode
-        _recommendedAction = $"Compress with {GetCompressionModeName(mode)}"
+        RecommendedCompressionMode = mode
+        RecommendedAction = $"Compress with {GetCompressionModeName(mode)}"
 
         Dim result = GetCompressionResult(mode)
-        _hasCompressionEstimate = result IsNot Nothing AndAlso result.TotalResults > 0 AndAlso result.BeforeBytes > 0 AndAlso result.AfterBytes > 0
-        _expectedCompressionSavings = If(_hasCompressionEstimate, CLng(Math.Round(_uncompressedBytes * Math.Max(0, 1 - (CDbl(result.AfterBytes) / result.BeforeBytes)))), 0)
-
-        OnPropertyChanged(NameOf(RecommendedCompressionMode))
-        OnPropertyChanged(NameOf(RecommendedAction))
-        OnPropertyChanged(NameOf(ExpectedCompressionSavings))
-        OnPropertyChanged(NameOf(DisplayedSavings))
-        OnPropertyChanged(NameOf(HasCompressionEstimate))
-        OnPropertyChanged(NameOf(HasSavingsData))
-        OnPropertyChanged(NameOf(CanCompress))
+        HasCompressionEstimate = result IsNot Nothing AndAlso result.TotalResults > 0 AndAlso result.BeforeBytes > 0 AndAlso result.AfterBytes > 0
+        ExpectedCompressionSavings = If(HasCompressionEstimate, CLng(Math.Round(UncompressedBytes * Math.Max(0, 1 - (CDbl(result.AfterBytes) / result.BeforeBytes)))), 0)
     End Sub
 
     Private Function GetCompressionResult(mode As Core.CompressionMode) As CompressionResult
