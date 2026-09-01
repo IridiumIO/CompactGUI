@@ -170,30 +170,30 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="1"
-                       FontWeight="SemiBold"
+                       
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T GAME,
                                     Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="2"
-                       FontWeight="SemiBold"
+                       
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T STATUS,
                                     Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="3"
                        HorizontalAlignment="Right"
-                       FontWeight="SemiBold"
+                       
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T CURRENT SIZE,
                                     Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="4"
                        HorizontalAlignment="Right"
-                       FontWeight="SemiBold"
+                       
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T SAVINGS,
                                     Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="5"
                        Margin="24 0 0 0" HorizontalAlignment="Right"
-                       FontWeight="SemiBold"
+                       
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T RECOMMENDED ACTION,
                                     Context='Steam Library Tab Headings'}" />
@@ -270,9 +270,28 @@
                             </Border>
 
                             <StackPanel Grid.Column="1" Margin="0 0 16 0" VerticalAlignment="Center">
-                                <TextBlock FontSize="16" FontWeight="SemiBold"
-                                           Text="{Binding GameName}"
-                                           TextTrimming="CharacterEllipsis" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="16" FontWeight="SemiBold"
+                                               Text="{Binding GameName}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <Border Grid.Column="1"
+                                            Height="25" Margin="8 0 0 0" Padding="6 3"
+                                            Background="#30FFAA00" CornerRadius="4"
+                                            ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}"
+                                            Visibility="{Binding IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Margin="0 2 4 0" Foreground="#ffe207" Symbol="Warning20" />
+                                            <TextBlock loc:L.Value="Direct Storage" Foreground="#ffe207" FontSize="11" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
                                 <TextBlock Margin="0 3 0 0"
                                            FontSize="12"
                                            Foreground="{StaticResource CardForegroundDisabled}"
@@ -292,20 +311,20 @@
                                             <Setter Property="Fill" Value="#D14A4F" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
-                                                    <Setter Property="Fill" Value="#4CC27B" />
+                                                    <Setter Property="Fill" Value="#4bd18a" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.RecentlyUpdated}">
                                                     <Setter Property="Fill" Value="#D1B13C" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
-                                                    <Setter Property="Fill" Value="#43A9C4" />
+                                                    <Setter Property="Fill" Value="#44bedf" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Ellipse.Style>
                                 </Ellipse>
                                 <TextBlock VerticalAlignment="Center" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding StatusMessage}" />
-                                <Border Width="40" Height="15"
+                                <Border Width="40" Height="25"
                                         Margin="10 0 0 0" VerticalAlignment="Center"
                                         Background="#8373808C" CornerRadius="5">
                                     <Border.Style>
@@ -335,10 +354,10 @@
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Text" Value="{Binding DisplayedSavings, Converter={StaticResource BytesToReadableConverter}}" />
-                                        <Setter Property="Foreground" Value="#43A9C4" />
+                                        <Setter Property="Foreground" Value="#45c1e8" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsDisplayingActualSavings}" Value="True">
-                                                <Setter Property="Foreground" Value="#92F1AB" />
+                                                <Setter Property="Foreground" Value="#65dc9d" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding HasSavingsData}" Value="False">
                                                 <Setter Property="Text" Value="—" />

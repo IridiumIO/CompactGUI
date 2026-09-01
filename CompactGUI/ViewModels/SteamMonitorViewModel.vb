@@ -394,7 +394,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             Dim analysedFiles = Await analyser.GetAnalysedFilesAsync(CancellationToken.None)
             If analysedFiles Is Nothing Then Return
             Dim compressionLevel = If(analyser.ContainsCompressedFiles, analysedFiles.Max(Function(file) file.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
-            game.UpdateAnalysis(analyser.UncompressedBytes, analyser.CompressedBytes, compressionLevel)
+            game.UpdateAnalysis(analyser.UncompressedBytes, analyser.CompressedBytes, compressionLevel, analyser.IsDirectStorage)
         End Using
     End Function
 
@@ -465,7 +465,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             End If
 
             Dim compressionLevel = If(folder.AnalysisResults.Any(Function(file) file.CompressionMode <> Core.WOFCompressionAlgorithm.NO_COMPRESSION), folder.AnalysisResults.Max(Function(file) file.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
-            game.UpdateAnalysis(folder.UncompressedBytes, folder.CompressedBytes, compressionLevel)
+            game.UpdateAnalysis(folder.UncompressedBytes, folder.CompressedBytes, compressionLevel, folder.IsDirectStorage)
 
             If folder.Analyser IsNot Nothing Then
                 Dim completedAnalyser = folder.Analyser
@@ -608,6 +608,9 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     <ObservableProperty>
     Private _headerImage As BitmapImage
 
+    <ObservableProperty>
+    Private _isDirectStorage As Boolean
+
     Public ReadOnly Property GameName As String
     Public ReadOnly Property GamePath As String
     Public ReadOnly Property AppID As Integer
@@ -685,11 +688,12 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         Me.WikiPoorlyCompressedFiles = poorlyCompressedFiles
     End Sub
 
-    Public Sub UpdateAnalysis(uncompressedBytes As Long, currentFolderSize As Long, compressionLevel As Core.WOFCompressionAlgorithm)
+    Public Sub UpdateAnalysis(uncompressedBytes As Long, currentFolderSize As Long, compressionLevel As Core.WOFCompressionAlgorithm, isDirectStorage As Boolean)
         Me.UncompressedBytes = uncompressedBytes
         Me.CurrentFolderSize = currentFolderSize
         Me.CompressionLevel = compressionLevel
         Me.IsCompressed = compressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION
+        Me.IsDirectStorage = isDirectStorage
         SetRecommendation()
         SetGameStatus()
         OperationMessage = Nothing

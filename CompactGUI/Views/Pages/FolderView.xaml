@@ -106,7 +106,7 @@
                         Visibility="{Binding Folder.IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
                     <StackPanel Orientation="Horizontal" >
                         <ui:SymbolIcon Margin="0 2 4 0" Foreground="{StaticResource PaletteAmberBrush}" Symbol="Warning20" />
-                        <TextBlock  Foreground="{StaticResource ButtonForeground}" Text="Direct Storage" ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}" />
+                        <TextBlock  Foreground="{StaticResource ButtonForeground}" loc:L.Value="Direct Storage" ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}" />
                     </StackPanel>
                 </Border>
 

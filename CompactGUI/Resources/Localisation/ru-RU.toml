@@ -45,6 +45,7 @@
 "Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "Результаты базы данных"
 "Descending" = "По убыванию"
+"Direct Storage" = "Direct Storage" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
 "Edit skip list for this folder" = "Изменить список исключений для этой папки"
