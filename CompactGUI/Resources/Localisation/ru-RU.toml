@@ -46,6 +46,7 @@
 "Database Results" = "Результаты базы данных"
 "Descending" = "По убыванию"
 "Do not compress" = "Do not compress" # LOC:TODO
+"Drive unavailable" = "Drive unavailable" # LOC:TODO
 "Edit skip list for this folder" = "Изменить список исключений для этой папки"
 "Estimate Compression for non-Steam Folders (beta)" = "Оценивать сжатие для папок не из Steam (бета)"
 "Estimated size" = "Предполагаемый размер"

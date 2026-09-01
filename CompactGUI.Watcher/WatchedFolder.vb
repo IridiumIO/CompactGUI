@@ -28,6 +28,9 @@ Public Class WatchedFolder
     <AttachAttribute(GetType(JsonIgnoreAttribute))>
     <ObservableProperty> Private _IsEditing As Boolean = False
 
+    <AttachAttribute(GetType(JsonIgnoreAttribute))>
+    <ObservableProperty> Private _IsDriveUnavailable As Boolean = False
+
     ' --- Monitoring State ---
     <AttachAttribute(GetType(JsonIgnoreAttribute))>
     <ObservableProperty> Private _HasTargetChanged As Boolean = False
@@ -66,13 +69,13 @@ Public Class WatchedFolder
     End Sub
 
     Public Sub PauseMonitoring()
-        If FSWatcher IsNot Nothing Then
+        If FSWatcher IsNot Nothing AndAlso Not IsDriveUnavailable Then
             FSWatcher.EnableRaisingEvents = False
         End If
     End Sub
 
     Public Sub ResumeMonitoring()
-        If FSWatcher IsNot Nothing Then
+        If FSWatcher IsNot Nothing AndAlso Not IsDriveUnavailable Then
             FSWatcher.EnableRaisingEvents = True
         End If
     End Sub

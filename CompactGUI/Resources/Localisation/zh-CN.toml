@@ -46,6 +46,7 @@
 "Database Results" = "数据库结果"
 "Descending" = "降序"
 "Do not compress" = "Do not compress" # LOC:TODO
+"Drive unavailable" = "Drive unavailable" # LOC:TODO
 "Edit skip list for this folder" = "编辑此文件夹的跳过列表"
 "Estimate Compression for non-Steam Folders (beta)" = "估算非 Steam 文件夹的压缩率 (测试版)"
 "Estimated size" = "预估大小"

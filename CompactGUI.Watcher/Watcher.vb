@@ -198,9 +198,18 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
         WatchedFolders.Clear()
 
-        For Each folder In initialWatchedFolders.Where(Function(f) IO.Directory.Exists(f.Folder))
-            WatchedFolders.Add(folder)
+        For Each folder In initialWatchedFolders
+            If IO.Directory.Exists(folder.Folder) Then
+                folder.IsDriveUnavailable = False
+                folder.InitializeMonitoring()
+            ElseIf IsRootUnavailable(folder.Folder) Then
+                folder.IsDriveUnavailable = True
+            Else
+                Continue For
+            End If
+
             folder.LastChangedDate = folder.LastSystemModifiedDate
+            WatchedFolders.Add(folder)
         Next
 
         UpdateRegistryBasedOnWatchedFolders()
@@ -290,14 +299,32 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Public Async Function DeleteWatchersWithNonExistentFolders() As Task
 
         For i As Integer = WatchedFolders.Count - 1 To 0 Step -1
-            If Not IO.Directory.Exists(WatchedFolders(i).Folder) Then
-                WatcherLog.RemovingNonexistentFolders(_logger, 1)
-                Await RemoveWatched(WatchedFolders(i), False)
+            Dim watchedFolder = WatchedFolders(i)
+
+            If IO.Directory.Exists(watchedFolder.Folder) Then
+                If watchedFolder.IsDriveUnavailable Then watchedFolder.InitializeMonitoring()
+                watchedFolder.IsDriveUnavailable = False
+                Continue For
             End If
+
+            watchedFolder.IsDriveUnavailable = IsRootUnavailable(watchedFolder.Folder)
+            If watchedFolder.IsDriveUnavailable Then Continue For
+
+            WatcherLog.RemovingNonexistentFolders(_logger, 1)
+            Await RemoveWatched(watchedFolder, False)
         Next
 
         Await WriteToFileAsync()
 
+    End Function
+
+    Private Shared Function IsRootUnavailable(folderPath As String) As Boolean
+        Try
+            Dim rootPath = IO.Path.GetPathRoot(folderPath)
+            Return Not String.IsNullOrWhiteSpace(rootPath) AndAlso Not IO.Directory.Exists(rootPath)
+        Catch ex As Exception When TypeOf ex Is ArgumentException OrElse TypeOf ex Is IO.IOException OrElse TypeOf ex Is UnauthorizedAccessException
+            Return False
+        End Try
     End Function
 
 
@@ -325,12 +352,6 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Dim validatedResult As (DateTime, ObservableCollection(Of WatchedFolder))
         Try
             validatedResult = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, DeserializeOptions)
-
-            If validatedResult.Item2 IsNot Nothing Then
-                For Each folder In validatedResult.Item2.Where(Function(f) IO.Directory.Exists(f.Folder))
-                    folder.InitializeMonitoring()
-                Next
-            End If
 
         Catch ex As Exception
             validatedResult = (DateTime.Now, Nothing)
@@ -364,10 +385,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             WatcherLog.ParsingWatchers(_logger, ParseAll)
             Await DeleteWatchersWithNonExistentFolders()
 
-            Dim WatchersQuery = If(ParseAll,
-                    WatchedFolders,
-                    WatchedFolders.Where(Function(w) w.HasTargetChanged)
-                    ).OrderBy(Function(f) f.DisplayName)
+            Dim WatchersQuery = WatchedFolders.Where(Function(w) Not w.IsDriveUnavailable AndAlso (ParseAll OrElse w.HasTargetChanged)).OrderBy(Function(f) f.DisplayName)
 
             If Not WatchersQuery.Any() Then Return
 
@@ -396,10 +414,14 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Try
             If watchedFolder Is Nothing Then Return
             If Not IO.Directory.Exists(watchedFolder.Folder) Then
+                watchedFolder.IsDriveUnavailable = IsRootUnavailable(watchedFolder.Folder)
+                If watchedFolder.IsDriveUnavailable Then Return
                 Await RemoveWatched(watchedFolder)
                 Return
             End If
 
+            If watchedFolder.IsDriveUnavailable Then watchedFolder.InitializeMonitoring()
+            watchedFolder.IsDriveUnavailable = False
             Await Analyse(watchedFolder.Folder, False)
             LastAnalysed = DateTime.Now
             Await WriteToFileAsync()
@@ -423,7 +445,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
             Dim foldersToCompress = WatchedFolders.
                 Where(Function(folder)
-                          Dim eligible = folder.DecayPercentage <> 0 AndAlso folder.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION
+                          Dim eligible = Not folder.IsDriveUnavailable AndAlso folder.DecayPercentage <> 0 AndAlso folder.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION
                           Dim recentlyModified = folder.LastSystemModifiedDate > recentThresholdDate AndAlso Not runAll
                           If eligible AndAlso recentlyModified Then
                               WatcherLog.SkippingRecentlyModifiedFolder(_logger, folder.DisplayName)

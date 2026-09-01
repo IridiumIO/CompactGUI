@@ -213,6 +213,13 @@
                                                  Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisConverter}}" />
                                     </Grid>
 
+                                    <Border Margin="8 -2 0 0" Padding="7 2"
+                                            VerticalAlignment="Top"
+                                            Background="#807F6500" CornerRadius="5"
+                                            Visibility="{Binding IsDriveUnavailable, Converter={StaticResource BoolToVisConverter}}">
+                                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="#FFFFD45C" loc:L.Value="Drive unavailable" />
+                                    </Border>
+
                                 </StackPanel>
 
                             </Label>
