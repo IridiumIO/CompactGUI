@@ -21,7 +21,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock FontSize="26" Foreground="{StaticResource CardForeground}" Text="Steam Games Monitor" />
+        <StackPanel Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" FontSize="26" Foreground="{StaticResource CardForeground}" Text="Steam Games Monitor" />
+            <ui:Button Width="32" Height="32" Margin="10 0 0 0" Padding="0"
+                       VerticalAlignment="Center"
+                       Background="Transparent" BorderThickness="0"
+                       Command="{Binding RefreshAllCommand}"
+                       ToolTip="Refresh all games">
+                <ui:SymbolIcon Symbol="ArrowClockwise16" FontSize="18" Margin="0 5 0 0" />
+            </ui:Button>
+        </StackPanel>
 
         <Grid Grid.Row="0" Margin="20 0 20 0" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
@@ -29,13 +38,14 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ui:TextBox Width="250" VerticalAlignment="Center"
-                        FontSize="14"
-                        PlaceholderText="Search by game name or SteamID..."
+            <ui:TextBox Width="250"
+                        VerticalAlignment="Center"
+                        FontSize="14" PlaceholderText="Search by game name or SteamID..."
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
-            <ui:DropDownButton Grid.Column="1" Height="36" Margin="20 0 0 0"
-                               VerticalAlignment="Center"
+            <ui:DropDownButton Grid.Column="1"
+                               Height="36"
+                               Margin="20 0 0 0" VerticalAlignment="Center"
                                Foreground="{StaticResource LabelForeground}">
                 <TextBlock Text="Sort By" />
                 <ui:DropDownButton.Flyout>
@@ -71,9 +81,9 @@
                 <ColumnDefinition Width="108" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="190" />
-                <ColumnDefinition Width="115" />
-                <ColumnDefinition Width="135" />
-                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="145" />
+                <ColumnDefinition Width="145" />
+                <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="1"
@@ -95,7 +105,7 @@
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="SAVINGS" />
             <TextBlock Grid.Column="5"
-                       Margin="24 0 0 0"
+                       Margin="24 0 0 0" HorizontalAlignment="Right"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="RECOMMENDED ACTION" />
@@ -129,6 +139,13 @@
                             Tag="{Binding DataContext, ElementName=PageRoot}">
                         <Border.ContextMenu>
                             <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}"
+                                          CommandParameter="{Binding DataContext}"
+                                          Header="Add to Compression Queue" />
+                                <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}"
+                                          CommandParameter="{Binding DataContext}"
+                                          Header="Go to Database Results" />
+                                <Separator />
                                 <MenuItem Command="{Binding Tag.UncompressCommand}"
                                           CommandParameter="{Binding DataContext}"
                                           Header="Uncompress"
@@ -141,9 +158,9 @@
                                 <ColumnDefinition Width="108" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="190" />
-                                <ColumnDefinition Width="115" />
-                                <ColumnDefinition Width="135" />
-                                <ColumnDefinition Width="220" />
+                                <ColumnDefinition Width="145" />
+                                <ColumnDefinition Width="145" />
+                                <ColumnDefinition Width="250" />
                             </Grid.ColumnDefinitions>
 
                             <Border Width="96" Height="54"
@@ -190,10 +207,10 @@
                             </StackPanel>
 
                             <TextBlock Grid.Column="3"
-                                       HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12"
                                        Text="{Binding CurrentFolderSize, Converter={StaticResource BytesToReadableConverter}}" />
 
-                            <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Text" Value="{Binding DisplayedSavings, Converter={StaticResource BytesToReadableConverter}}" />
@@ -214,7 +231,8 @@
                             <Grid Grid.Column="5" Margin="24 -10 -14 -10">
                                 <Grid.Resources>
                                     <DataTemplate x:Key="ActionTextTemplate">
-                                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="-10 0 0 0">
+                                        <TextBlock Margin="0 0 20 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Text" Value="{Binding RecommendedAction}" />
@@ -233,7 +251,7 @@
                                     </DataTemplate>
 
                                     <DataTemplate x:Key="CompressActionTemplate">
-                                        <ui:SplitButton Padding="14 8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                        <ui:SplitButton Padding="14 8" HorizontalAlignment="Right" Width="200" VerticalAlignment="Stretch" Background="#3000FF00"
                                                         Command="{Binding DataContext.CompressCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                         CommandParameter="{Binding}"
                                                         Content="{Binding RecommendedAction}"
@@ -250,9 +268,15 @@
                                     </DataTemplate>
 
                                     <DataTemplate x:Key="WorkingActionTemplate">
-                                        <ui:ProgressRing Width="24" Height="24"
-                                                         HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                         IsIndeterminate="True" />
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                            <ui:ProgressRing Width="24" Height="24" IsIndeterminate="True" />
+                                            <ui:Button Width="32" Height="32" Margin="12 0 0 0" Padding="0"
+                                                       Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                       CommandParameter="{Binding}"
+                                                       ToolTip="Cancel operation">
+                                                <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                                            </ui:Button>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </Grid.Resources>
 
@@ -280,11 +304,12 @@
 
         <StackPanel Grid.Row="3"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="#90000000"
                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ui:ProgressRing Width="42" Height="42"
-                             HorizontalAlignment="Center"
+                             Margin="0 20 0 0" HorizontalAlignment="Center"
                              IsIndeterminate="True" />
-            <TextBlock Margin="0 12 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="Scanning installed Steam games..." />
+            <TextBlock Margin="20 12 20 20" Foreground="{StaticResource CardForegroundDisabled}" Text="Scanning installed Steam games..." />
         </StackPanel>
 
         <StackPanel Grid.Row="3"

@@ -5,11 +5,14 @@ Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
+Imports CommunityToolkit.Mvvm.Messaging
 
 Imports Gameloop.Vdf
 Imports Gameloop.Vdf.JsonConverter
 
 Imports Microsoft.Extensions.Logging
+
+Imports Wpf.Ui
 
 Public Class SteamMonitorViewModel : Inherits ObservableObject
 
@@ -17,11 +20,16 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _compressableFolderService As CompressableFolderService
     Private ReadOnly _analyserLogger As ILogger(Of Core.Analyser)
+    Private ReadOnly _navigationService As INavigationService
     Private ReadOnly _operationGate As New SemaphoreSlim(1, 1)
+    Private _activeFolder As StandardFolder
+    Private _activeGame As SteamDetailedResult
+    Private _cancelRequested As Boolean
     Private _hasLoaded As Boolean
 
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(HasNoGames))>
+    <NotifyCanExecuteChangedFor(NameOf(RefreshAllCommand))>
     Private _isLoading As Boolean
 
     <ObservableProperty>
@@ -46,17 +54,50 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         End Get
     End Property
 
-    Public Sub New(wikiService As IWikiService, watcher As Watcher.Watcher, compressableFolderService As CompressableFolderService, analyserLogger As ILogger(Of Core.Analyser))
+    Public Sub New(wikiService As IWikiService, watcher As Watcher.Watcher, compressableFolderService As CompressableFolderService, analyserLogger As ILogger(Of Core.Analyser), navigationService As INavigationService)
         _wikiService = wikiService
         _watcher = watcher
         _compressableFolderService = compressableFolderService
         _analyserLogger = analyserLogger
+        _navigationService = navigationService
         FilteredSteamGames = CollectionViewSource.GetDefaultView(SteamGamesData)
         FilteredSteamGames.Filter = AddressOf FilterGames
     End Sub
 
     Private Sub OnSearchTextChanged(value As String)
         FilteredSteamGames.Refresh()
+    End Sub
+
+    <RelayCommand>
+    Private Async Function RefreshAll() As Task
+        SteamGamesData.Clear()
+        _hasLoaded = False
+        Await LoadGamesAsync()
+    End Function
+
+    Private Function CanRefreshAll() As Boolean
+        Return Not IsLoading AndAlso _activeGame Is Nothing
+    End Function
+
+    <RelayCommand>
+    Private Sub AddToCompressionQueue(game As SteamDetailedResult)
+        If game Is Nothing Then Return
+        WeakReferenceMessenger.Default.Send(New WatcherAddedFolderToQueueMessage(game.GamePath))
+    End Sub
+
+    <RelayCommand>
+    Private Sub GoToDatabaseResults(game As SteamDetailedResult)
+        If game Is Nothing Then Return
+        _navigationService.Navigate(GetType(DatabasePage))
+    End Sub
+
+    <RelayCommand>
+    Private Sub CancelOperation(game As SteamDetailedResult)
+        If game Is Nothing OrElse Not ReferenceEquals(game, _activeGame) Then Return
+        _cancelRequested = True
+        game.SetStatus("Cancelling...")
+        _compressableFolderService.CancelEstimation(_activeFolder)
+        If _activeFolder.FolderActionState = ActionState.Working Then _activeFolder.Compressor?.Cancel()
     End Sub
 
     Private Function FilterGames(value As Object) As Boolean
@@ -181,17 +222,25 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         Await _operationGate.WaitAsync()
         Try
             If (uncompress AndAlso Not game.CanUncompress) OrElse (Not uncompress AndAlso Not game.CanCompress) Then Return
+            _cancelRequested = False
             game.SetWorking(True, If(uncompress, "Uncompressing...", "Compressing..."))
             Await RunFolderOperationAsync(game, uncompress)
+            If _cancelRequested Then game.SetStatus("Operation cancelled.")
         Catch ex As Exception
-            game.SetWorking(False, $"Operation failed: {ex.Message}")
+            game.SetWorking(False, If(_cancelRequested OrElse TypeOf ex Is OperationCanceledException, "Operation cancelled.", $"Operation failed: {ex.Message}"))
         Finally
+            _cancelRequested = False
+            _activeGame = Nothing
+            RefreshAllCommand.NotifyCanExecuteChanged()
             _operationGate.Release()
         End Try
     End Function
 
     Private Async Function RunFolderOperationAsync(game As SteamDetailedResult, uncompress As Boolean) As Task
         Dim folder As New StandardFolder(game.GamePath)
+        _activeFolder = folder
+        _activeGame = game
+        RefreshAllCommand.NotifyCanExecuteChanged()
         Dim backgroundingDisabled As Boolean
         Dim sleepPrevented As Boolean
         Dim operationException As Exception = Nothing
@@ -199,6 +248,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         Try
             Await _watcher.DisableBackgrounding()
             backgroundingDisabled = True
+            If _cancelRequested Then Throw New OperationCanceledException()
             Core.SharedMethods.PreventSleep()
             sleepPrevented = True
 
@@ -206,6 +256,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             folder.CompressionOptions.SkipUserSubmittedFiletypes = folder.WikiPoorlyCompressedFiles.Count > 0
             Dim analysisResult = Await _compressableFolderService.AnalyseFolderAsync(folder)
             If analysisResult = -1 Then Throw New UnauthorizedAccessException("CompactGUI does not have permission to modify this folder.")
+            If analysisResult <> 0 OrElse _cancelRequested Then Throw New OperationCanceledException()
 
             Dim isCurrentlyCompressed = folder.AnalysisResults.Any(Function(file) file.CompressionMode <> Core.WOFCompressionAlgorithm.NO_COMPRESSION)
             Dim succeeded As Boolean
@@ -233,6 +284,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             operationException = ex
         Finally
             folder.Dispose()
+            _activeFolder = Nothing
             If sleepPrevented Then Core.SharedMethods.RestoreSleep()
             game.SetWorking(False)
         End Try
@@ -377,9 +429,9 @@ Public Class SteamDetailedResult : Inherits ObservableObject
                 Case SteamGameStatus.Uncompressed
                     Return "Uncompressed"
                 Case SteamGameStatus.RecentlyUpdated
-                    Return "Recently updated"
+                    Return "Recently Updated"
                 Case SteamGameStatus.PendingSteamUpdate
-                    Return "Pending update"
+                    Return "Update Available"
                 Case Else
                     Return "Unknown"
             End Select
@@ -504,7 +556,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     <RelayCommand>
     Private Sub SelectCompressionMode(mode As Core.CompressionMode)
         RecommendedCompressionMode = mode
-        RecommendedAction = $"Compress with {GetCompressionModeName(mode)}"
+        RecommendedAction = $"Compress | {GetCompressionModeName(mode)}"
 
         Dim result = GetCompressionResult(mode)
         HasCompressionEstimate = result IsNot Nothing AndAlso result.TotalResults > 0 AndAlso result.BeforeBytes > 0 AndAlso result.AfterBytes > 0

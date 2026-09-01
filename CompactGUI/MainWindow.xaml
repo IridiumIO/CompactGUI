@@ -3,20 +3,27 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
                  xmlns:local="clr-namespace:CompactGUI"
-      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 x:Name="MainWindow" Title="CompactGUI"
-                 Width="1300" Height="700" MinWidth="768" MinHeight="600"
+                 x:Name="MainWindow"
+                 Title="CompactGUI"
+                 Width="1300"
+                 Height="700"
+                 MinWidth="768"
+                 MinHeight="600"
                  d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
                  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 Closing="MainWindow_Closing" ExtendsContentIntoTitleBar="True"
+                 Closing="MainWindow_Closing"
+                 ExtendsContentIntoTitleBar="True"
                  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 RenderOptions.BitmapScalingMode="HighQuality" WindowBackdropType="Mica"
-                 WindowCornerPreference="Round" WindowStartupLocation="CenterScreen"
+                 RenderOptions.BitmapScalingMode="HighQuality"
+                 WindowBackdropType="Mica"
+                 WindowCornerPreference="Round"
+                 WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d">
     <bh:Interaction.Triggers>
 
@@ -30,21 +37,19 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Grid.Row="0" Grid.ColumnSpan="2"
-                     IsHitTestVisible="True" />
+        <ui:TitleBar Grid.Row="0" Grid.ColumnSpan="2" IsHitTestVisible="True" />
 
 
 
         <ui:NavigationView x:Name="NavigationView"
                            Grid.Row="1"
-                           Margin="0,10,0,0" 
+                           Margin="0 10 0 0"
                            IsBackButtonVisible="Collapsed" PaneDisplayMode="Top" Transition="FadeIn">
             <ui:NavigationView.MenuItems>
 
 
-                <ui:NavigationViewItem loc:L.Value="Home"
-                                       Margin="15,2,15,10"
-                                       NavigationCacheMode="Required"
+                <ui:NavigationViewItem Margin="15 2 15 10"
+                                       loc:L.Value="Home" NavigationCacheMode="Required"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:HomePage}">
                     <ui:NavigationViewItem.Icon>
@@ -53,9 +58,8 @@
                 </ui:NavigationViewItem>
 
 
-                <ui:NavigationViewItem loc:L.Value="Watcher"
-                                       Margin="15,2,15,10"
-                                       NavigationCacheMode="Required"
+                <ui:NavigationViewItem Margin="15 2 15 10"
+                                       loc:L.Value="Watcher" NavigationCacheMode="Required"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:WatcherPage}">
                     <ui:NavigationViewItem.Icon>
@@ -63,9 +67,17 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItem loc:L.Value="Compression DB"
-                                       Margin="15,2,15,10"
-                                       NavigationCacheMode="Disabled"
+                <ui:NavigationViewItem Margin="15 2 15 10"
+                                       Content="Steam Games" NavigationCacheMode="Disabled"
+                                       Tag="{Binding}"
+                                       TargetPageType="{x:Type local:SteamMonitorPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="Games20" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+
+                <ui:NavigationViewItem Margin="15 2 15 10"
+                                       loc:L.Value="Compression DB" NavigationCacheMode="Disabled"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:DatabasePage}">
                     <ui:NavigationViewItem.Icon>
@@ -73,28 +85,19 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItem Content="Steam Monitor"
-                                       Margin="15,2,15,10"
-                                       NavigationCacheMode="Disabled"
-                                       Tag="{Binding}"
-                                       TargetPageType="{x:Type local:SteamMonitorPage}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Filled="False" Symbol="Database24" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
+
 
             </ui:NavigationView.MenuItems>
 
             <ui:NavigationView.FooterMenuItems>
 
-                <ui:NavigationViewItem Margin="-5,0,15,1"
+                <ui:NavigationViewItem Margin="-5 0 15 1"
                                        NavigationCacheMode="Required"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:SettingsPage}">
                     <!--  TargetPageType="{x:Type local:SettingsPage}"  -->
 
-                    <ui:SymbolIcon Margin="0,0,-3,0"
-                                   FontSize="16" Symbol="Settings48" />
+                    <ui:SymbolIcon Margin="0 0 -3 0" FontSize="16" Symbol="Settings48" />
 
                 </ui:NavigationViewItem>
             </ui:NavigationView.FooterMenuItems>
@@ -169,14 +172,12 @@
                                         <ExponentialEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
-                                                 To="1.2" Duration="0:0:6">
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" To="1.2" Duration="0:0:6">
                                     <DoubleAnimation.EasingFunction>
                                         <ExponentialEase EasingMode="EaseIn" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
-                                                 To="1.2" Duration="0:0:8">
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" To="1.2" Duration="0:0:8">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
@@ -208,7 +209,7 @@
             </local:ImageControl>
 
             <Label x:Name="ProgTitle"
-                   Margin="20,16" HorizontalAlignment="Left"
+                   Margin="20 16" HorizontalAlignment="Left"
                    d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
                 <Label.RenderTransform>
                     <TranslateTransform x:Name="TransformL" Y="20" />
@@ -228,8 +229,7 @@
 
                                             <!--  Move upwards animation  -->
                                             <DoubleAnimation BeginTime="0:0:0.5"
-                                                             Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="10" To="0"
-                                                             Duration="0:0:0.5">
+                                                             Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="10" To="0" Duration="0:0:0.5">
                                                 <DoubleAnimation.EasingFunction>
                                                     <CircleEase />
                                                 </DoubleAnimation.EasingFunction>
@@ -242,16 +242,14 @@
                     </Style>
                 </Label.Style>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock loc:L.Value="CompactGUI"
-                               Margin="0,0,20,0" VerticalAlignment="Center"
-                               Foreground="#20FFFFFF"
+                    <TextBlock Margin="0 0 20 0" VerticalAlignment="Center"
+                               loc:L.Value="CompactGUI" Foreground="#20FFFFFF"
                                Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
                     <Border Width="80" Height="22"
                             Background="#20f44336" CornerRadius="10"
                             Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock loc:L.Value="Admin"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   Foreground="White" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   loc:L.Value="Admin" Foreground="White" />
 
                     </Border>
                 </StackPanel>
@@ -267,8 +265,8 @@
                          FocusOnLeftClick="True" MenuOnRightClick="True" TooltipText="CompactGUI">
             <tray:NotifyIcon.Menu>
                 <ContextMenu x:Name="NotifyIconTrayMenu">
-                    <MenuItem Command="{Binding NotifyIconOpenCommand}" loc:L.Value="Open" />
-                    <MenuItem Command="{Binding NotifyIconExitCommand}" loc:L.Value="Exit" />
+                    <MenuItem loc:L.Value="Open" Command="{Binding NotifyIconOpenCommand}" />
+                    <MenuItem loc:L.Value="Exit" Command="{Binding NotifyIconExitCommand}" />
                 </ContextMenu>
             </tray:NotifyIcon.Menu>
         </tray:NotifyIcon>
