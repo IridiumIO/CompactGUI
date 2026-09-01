@@ -20,7 +20,7 @@ Imports Microsoft.Win32
 Imports Microsoft.Win32.Registry
 
 
-Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of Boolean))
+Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of Boolean)), IRecipient(Of PropertyChangedMessage(Of BackgroundMode))
 
     Private ReadOnly _DataFolder As IO.DirectoryInfo
     Private ReadOnly _parseWatchersSemaphore As New SemaphoreSlim(1, 1)
@@ -508,9 +508,13 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Public Sub Receive(message As PropertyChangedMessage(Of Boolean)) Implements IRecipient(Of PropertyChangedMessage(Of Boolean)).Receive
         If (message.Sender.GetType() IsNot GetType(Settings)) Then Return
 
-        If message.PropertyName = NameOf(Settings.EnableBackgroundWatcher) Then : IsWatchingEnabled = message.NewValue
-        ElseIf message.PropertyName = NameOf(Settings.BackgroundModeSelection) Then : IsBackgroundCompactingEnabled = (CType(message.NewValue, BackgroundMode) = BackgroundMode.IdleOnly)
-        End If
+        If message.PropertyName = NameOf(Settings.EnableBackgroundWatcher) Then IsWatchingEnabled = message.NewValue
+    End Sub
+
+    Public Sub Receive(message As PropertyChangedMessage(Of BackgroundMode)) Implements IRecipient(Of PropertyChangedMessage(Of BackgroundMode)).Receive
+        If message.Sender.GetType() IsNot GetType(Settings) Then Return
+
+        If message.PropertyName = NameOf(Settings.BackgroundModeSelection) Then IsBackgroundCompactingEnabled = message.NewValue = BackgroundMode.IdleOnly
 
 
     End Sub
