@@ -87,6 +87,7 @@
 "Operation failed: {0}" = "Operation failed: {0}"
 "Please check your internet connection and try again" = "Please check your internet connection and try again"
 "Please wait until the current operation is finished" = "Please wait until the current operation is finished"
+"Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!"
 "Re-analyse all watched folders" = "Re-analyse all watched folders"
 "Re-analyse this folder" = "Re-analyse this folder"
 "Recently Updated" = "Recently Updated"
@@ -98,6 +99,7 @@
 "Savings" = "Savings"
 "Scanning installed Steam games..." = "Scanning installed Steam games..."
 "Search by game name or SteamID..." = "Search by game name or SteamID..."
+"Select a folder to compress" = "Select a folder to compress"
 "Settings" = "Settings"
 "Show notification on completion" = "Show notification on completion"
 "Sort By" = "Sort By"
@@ -154,6 +156,12 @@
 "{0} files will be skipped" = "{0} files will be skipped"
 "{0} saved" = "{0} saved"
 "{0}% decayed" = "{0}% decayed"
+
+[context."Background Scheduler"]
+"CompactGUI is running a scheduled task and will compress monitored folders in the background" = "CompactGUI is running a scheduled task and will compress monitored folders in the background"
+"Next scheduled task is on {0}" = "Next scheduled task is on {0}"
+"Scheduled Compression Completed" = "Scheduled Compression Completed"
+"Scheduled Compression Running" = "Scheduled Compression Running"
 
 [context."Compression estimate"]
 "unknown" = "unknown"

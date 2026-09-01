@@ -87,6 +87,7 @@
 "Operation failed: {0}" = "Operation failed: {0}" # LOC:TODO
 "Please check your internet connection and try again" = "请检查您的网络连接并重试"
 "Please wait until the current operation is finished" = "请等待当前操作完成"
+"Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" # LOC:TODO
 "Re-analyse all watched folders" = "重新分析所有受监控文件夹"
 "Re-analyse this folder" = "重新分析此文件夹"
 "Recently Updated" = "Recently Updated" # LOC:TODO
@@ -98,6 +99,7 @@
 "Savings" = "节省"
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "按游戏名称或 SteamID 搜索..."
+"Select a folder to compress" = "Select a folder to compress" # LOC:TODO
 "Settings" = "设置"
 "Show notification on completion" = "完成后显示通知"
 "Sort By" = "排序方式"
@@ -154,6 +156,12 @@
 "{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} 已节省"
 "{0}% decayed" = "{0}% 已衰减"
+
+[context."Background Scheduler"]
+"CompactGUI is running a scheduled task and will compress monitored folders in the background" = "CompactGUI is running a scheduled task and will compress monitored folders in the background" # LOC:TODO
+"Next scheduled task is on {0}" = "Next scheduled task is on {0}" # LOC:TODO
+"Scheduled Compression Completed" = "Scheduled Compression Completed" # LOC:TODO
+"Scheduled Compression Running" = "Scheduled Compression Running" # LOC:TODO
 
 [context."Compression estimate"]
 "unknown" = "未知"
@@ -215,6 +223,7 @@
 "Last analysed" = "上次分析"
 "OK" = "好"
 "Off" = "关闭"
+"Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " = "Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " # LOC:TODO
 "Results State" = "数据库状态"
 "Skip file types likely to compress poorly" = "跳过可能压缩效果不佳的文件类型"
 "Skip file types specified in settings" = "跳过设置中指定的文件类型"

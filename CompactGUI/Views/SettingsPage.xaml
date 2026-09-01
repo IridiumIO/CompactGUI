@@ -293,7 +293,7 @@
                                 <CheckBox.ToolTip>
                                     <ToolTip Placement="Top">
                                         <TextBlock Width="200"
-                                                   Text="Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " TextAlignment="Left" TextWrapping="Wrap" />
+                                                   loc:L.Value="Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" TextAlignment="Left" TextWrapping="Wrap" />
                                     </ToolTip>
                                 </CheckBox.ToolTip>
                             </CheckBox>

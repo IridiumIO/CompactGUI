@@ -87,6 +87,7 @@
 "Operation failed: {0}" = "Operation failed: {0}" # LOC:TODO
 "Please check your internet connection and try again" = "Проверьте подключение к интернету и повторите попытку"
 "Please wait until the current operation is finished" = "Подождите завершения текущей операции"
+"Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" # LOC:TODO
 "Re-analyse all watched folders" = "Переанализировать все отслеживаемые папки"
 "Re-analyse this folder" = "Повторно проанализировать эту папку"
 "Recently Updated" = "Recently Updated" # LOC:TODO
@@ -98,6 +99,7 @@
 "Savings" = "Экономия"
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "Поиск по названию игры или SteamID..."
+"Select a folder to compress" = "Select a folder to compress" # LOC:TODO
 "Settings" = "Настройки"
 "Show notification on completion" = "Показывать уведомление о завершении"
 "Sort By" = "Сортировать по"
@@ -154,6 +156,12 @@
 "{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} сэкономлено"
 "{0}% decayed" = "{0}% устарело"
+
+[context."Background Scheduler"]
+"CompactGUI is running a scheduled task and will compress monitored folders in the background" = "CompactGUI is running a scheduled task and will compress monitored folders in the background" # LOC:TODO
+"Next scheduled task is on {0}" = "Next scheduled task is on {0}" # LOC:TODO
+"Scheduled Compression Completed" = "Scheduled Compression Completed" # LOC:TODO
+"Scheduled Compression Running" = "Scheduled Compression Running" # LOC:TODO
 
 [context."Compression estimate"]
 "unknown" = "неизвестно"
@@ -215,6 +223,7 @@
 "Last analysed" = "Последний анализ"
 "OK" = "хорошо"
 "Off" = "Выкл"
+"Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " = "Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " # LOC:TODO
 "Results State" = "Состояние результатов"
 "Skip file types likely to compress poorly" = "Пропускать типы файлов, которые сжимаются плохо"
 "Skip file types specified in settings" = "Пропускать типы файлов, указанные в настройках"

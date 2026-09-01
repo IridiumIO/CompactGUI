@@ -18,7 +18,7 @@
 
     Private Async Sub AddFolderButton_Click(sender As Object, e As RoutedEventArgs) Handles BtnAddFolder1.Click, BtnAddFolder2.Click
         Dim folderBrowser As New Microsoft.Win32.OpenFolderDialog With {
-            .Title = "Select a folder to compress",
+            .Title = "Select a folder to compress".LT(),
             .Multiselect = True,
             .ValidateNames = True
         }
