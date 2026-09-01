@@ -50,8 +50,8 @@ Public Class BackgroundCompactor
         Dim effectiveExclusions = If(excludedFileTypes Is Nothing, _excludedFileTypes, excludedFileTypes)
 
         _compactorAnalyser = New Core.Analyser(folder, NullLogger(Of Core.Analyser).Instance)
-
         _compactor = New Core.Compactor(folder, compressionLevel, effectiveExclusions, _compactorAnalyser)
+        If isCompactingPaused Then _compactor.Pause()
 
         Return _compactor.RunAsync(Nothing)
 
@@ -156,9 +156,8 @@ Public Class BackgroundCompactor
     Public Sub PauseCompacting()
         If Not isCompacting OrElse isCompactingPaused Then Return
 
-
         WatcherLog.PausingBackgroundCompactor(_logger)
-        isCompactingPaused = True ' Indicate compacting is paused
+        isCompactingPaused = True
         _compactor?.Pause()
     End Sub
 
@@ -166,7 +165,7 @@ Public Class BackgroundCompactor
         If Not isCompactingPaused OrElse Not isCompacting Then Return
 
         WatcherLog.ResumingBackgroundCompactor(_logger)
-        isCompactingPaused = False ' Indicate compacting is no longer paused
+        isCompactingPaused = False
         _compactor?.Resume()
     End Sub
 

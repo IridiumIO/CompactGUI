@@ -83,6 +83,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         If bgMode <> BackgroundMode.IdleOnly Then Return
 
         BGCompactor.ResumeCompacting()
+        If IsRunning Then Return
 
         Await RunWatcher(False)
 
@@ -93,15 +94,11 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     <ObservableProperty> Private _isRunning As Boolean = False
 
     Public Async Function RunWatcher(Optional runAll As Boolean = True, Optional cToken As CancellationToken = Nothing) As Task(Of Boolean)
-        RemoveHandler _idleDetector.IsIdle, _idleHandler
-
         IsRunning = True
-
-        For Each watcher In WatchedFolders
-            watcher.PauseMonitoring()
-        Next
-
         Try
+            For Each watcher In WatchedFolders
+                watcher.PauseMonitoring()
+            Next
 
             _settingsService.AppSettings.ScheduledBackgroundLastRan = DateTime.Now
             If Not IsWatchingEnabled Then Return False
@@ -127,8 +124,6 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Catch ex As TaskCanceledException
             Return False
         Finally
-
-            AddHandler _idleDetector.IsIdle, _idleHandler
             For Each watcher In WatchedFolders
                 watcher.ResumeMonitoring()
             Next
