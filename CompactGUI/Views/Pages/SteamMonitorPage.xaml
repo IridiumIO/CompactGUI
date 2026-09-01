@@ -22,13 +22,16 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock VerticalAlignment="Center" FontSize="26" Foreground="{StaticResource CardForeground}" Text="Steam Games" />
-            <ui:Button Width="32" Height="32" Margin="10 0 0 0" Padding="0"
-                       VerticalAlignment="Center"
+            <TextBlock VerticalAlignment="Center"
+                       FontSize="26"
+                       Foreground="{StaticResource CardForeground}"
+                       Text="Steam Games" />
+            <ui:Button Width="32" Height="32"
+                       Margin="10 0 0 0" Padding="0" VerticalAlignment="Center"
                        Background="Transparent" BorderThickness="0"
                        Command="{Binding RefreshAllCommand}"
                        ToolTip="Refresh all games">
-                <ui:SymbolIcon Symbol="ArrowClockwise16" FontSize="18" Margin="0 5 0 0" />
+                <ui:SymbolIcon Margin="0 5 0 0" FontSize="18" Symbol="ArrowClockwise16" />
             </ui:Button>
         </StackPanel>
 
@@ -139,12 +142,8 @@
                             Tag="{Binding DataContext, ElementName=PageRoot}">
                         <Border.ContextMenu>
                             <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                                <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}"
-                                          CommandParameter="{Binding DataContext}"
-                                          Header="Add to Compression Queue" />
-                                <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}"
-                                          CommandParameter="{Binding DataContext}"
-                                          Header="Go to Database Results" />
+                                <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="Add to Compression Queue" />
+                                <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}" CommandParameter="{Binding DataContext}" Header="Go to Database Results" />
                                 <Separator />
                                 <MenuItem Command="{Binding Tag.UncompressCommand}"
                                           CommandParameter="{Binding DataContext}"
@@ -163,10 +162,27 @@
                                 <ColumnDefinition Width="250" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Width="96" Height="54"
-                                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                            <Border Width="170" Height="78"
+                                    Margin="-14 -15 -100 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
                                     Background="{StaticResource CardBackgroundPressed}"
-                                    CornerRadius="4" />
+                                    CornerRadius="4">
+                                <Border.OpacityMask>
+                                    <VisualBrush>
+                                        <VisualBrush.Visual>
+                                            <Border Width="196" Height="78" CornerRadius="4">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                        <GradientStop Offset="0" Color="White" />
+                                                        <GradientStop Offset="1" Color="Transparent" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </Border.OpacityMask>
+
+                                <Image Source="{Binding HeaderImage}" Stretch="UniformToFill" />
+                            </Border>
 
                             <StackPanel Grid.Column="1" Margin="0 0 16 0" VerticalAlignment="Center">
                                 <TextBlock FontSize="16" FontWeight="SemiBold"
@@ -204,8 +220,8 @@
                                     </Ellipse.Style>
                                 </Ellipse>
                                 <TextBlock VerticalAlignment="Center" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding StatusMessage}" />
-                                <Border Width="40" Height="15" Margin="10 0 0 0"
-                                        VerticalAlignment="Center"
+                                <Border Width="40" Height="15"
+                                        Margin="10 0 0 0" VerticalAlignment="Center"
                                         Background="#8373808C" CornerRadius="5">
                                     <Border.Style>
                                         <Style TargetType="Border">
@@ -224,10 +240,13 @@
                             </StackPanel>
 
                             <TextBlock Grid.Column="3"
-                                       HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="13"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       FontSize="13"
                                        Text="{Binding CurrentFolderSize, Converter={StaticResource BytesToReadableConverter}}" />
 
-                            <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="13">
+                            <TextBlock Grid.Column="4"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       FontSize="13">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Text" Value="{Binding DisplayedSavings, Converter={StaticResource BytesToReadableConverter}}" />
@@ -268,7 +287,9 @@
                                     </DataTemplate>
 
                                     <DataTemplate x:Key="CompressActionTemplate">
-                                        <ui:SplitButton Padding="14 8" HorizontalAlignment="Right" Width="200" VerticalAlignment="Stretch" Background="#3000FF00"
+                                        <ui:SplitButton Width="200"
+                                                        Padding="14 8" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                                                        Background="#3000FF00"
                                                         Command="{Binding DataContext.CompressCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                         CommandParameter="{Binding}"
                                                         Content="{Binding RecommendedAction}"
@@ -287,7 +308,8 @@
                                     <DataTemplate x:Key="WorkingActionTemplate">
                                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                                             <ui:ProgressRing Width="24" Height="24" IsIndeterminate="True" />
-                                            <ui:Button Width="32" Height="32" Margin="12 0 0 0" Padding="0"
+                                            <ui:Button Width="32" Height="32"
+                                                       Margin="12 0 0 0" Padding="0"
                                                        Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                        CommandParameter="{Binding}"
                                                        ToolTip="Cancel operation">

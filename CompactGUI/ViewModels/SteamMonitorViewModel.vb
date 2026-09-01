@@ -1,6 +1,7 @@
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.IO
+Imports System.Net.Http
 Imports System.Threading
 
 Imports CommunityToolkit.Mvvm.ComponentModel
@@ -9,6 +10,8 @@ Imports CommunityToolkit.Mvvm.Messaging
 
 Imports Gameloop.Vdf
 Imports Gameloop.Vdf.JsonConverter
+
+Imports CompactGUI.Core.Settings
 
 Imports Microsoft.Extensions.Logging
 
@@ -21,7 +24,10 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private ReadOnly _compressableFolderService As CompressableFolderService
     Private ReadOnly _analyserLogger As ILogger(Of Core.Analyser)
     Private ReadOnly _navigationService As INavigationService
+    Private ReadOnly _settingsService As ISettingsService
     Private ReadOnly _operationGate As New SemaphoreSlim(1, 1)
+    Private ReadOnly _imageDownloadGate As New SemaphoreSlim(4, 4)
+    Private Shared ReadOnly SteamImageClient As New HttpClient()
     Private _activeFolder As StandardFolder
     Private _activeGame As SteamDetailedResult
     Private _cancelRequested As Boolean
@@ -54,12 +60,13 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         End Get
     End Property
 
-    Public Sub New(wikiService As IWikiService, watcher As Watcher.Watcher, compressableFolderService As CompressableFolderService, analyserLogger As ILogger(Of Core.Analyser), navigationService As INavigationService)
+    Public Sub New(wikiService As IWikiService, watcher As Watcher.Watcher, compressableFolderService As CompressableFolderService, analyserLogger As ILogger(Of Core.Analyser), navigationService As INavigationService, settingsService As ISettingsService)
         _wikiService = wikiService
         _watcher = watcher
         _compressableFolderService = compressableFolderService
         _analyserLogger = analyserLogger
         _navigationService = navigationService
+        _settingsService = settingsService
         FilteredSteamGames = CollectionViewSource.GetDefaultView(SteamGamesData)
         FilteredSteamGames.Filter = AddressOf FilterGames
     End Sub
@@ -143,6 +150,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Public Async Function LoadGamesAsync() As Task
         If _hasLoaded OrElse IsLoading Then Return
 
+        Dim imageLoadTasks As New List(Of Task)
         IsLoading = True
         ErrorMessage = Nothing
 
@@ -168,13 +176,51 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 Dim watchedFolder = _watcher.WatchedFolders.FirstOrDefault(Function(folder) String.Equals(folder.Folder, game.InstallDirectory, StringComparison.OrdinalIgnoreCase))
                 Dim detailedResult = CreateDetailedResult(game, databaseResult, watchedFolder)
                 Await AnalyseGameAsync(detailedResult)
-                If detailedResult.CurrentFolderSize > 0 Then SteamGamesData.Add(detailedResult)
+                If detailedResult.CurrentFolderSize > 0 Then
+                    SteamGamesData.Add(detailedResult)
+                    imageLoadTasks.Add(LoadGameHeaderAsync(detailedResult))
+                End If
             Next
         Catch ex As Exception
             ErrorMessage = $"Steam games could not be loaded: {ex.Message}"
         Finally
             _hasLoaded = True
             IsLoading = False
+        End Try
+
+        If imageLoadTasks.Count > 0 Then Await Task.WhenAll(imageLoadTasks)
+    End Function
+
+    Private Async Function LoadGameHeaderAsync(game As SteamDetailedResult) As Task
+        If game.AppID = 0 Then Return
+
+        Dim imageDirectory = Path.Combine(_settingsService.DataFolder.FullName, "SteamCache")
+        Dim imagePath = Path.Combine(imageDirectory, $"{game.AppID}_header.jpg")
+
+        Try
+            Directory.CreateDirectory(imageDirectory)
+
+            If File.Exists(imagePath) Then
+                game.HeaderImage = LoadImageFromDisk(imagePath)
+                Return
+            End If
+
+            Await _imageDownloadGate.WaitAsync()
+            Try
+                If File.Exists(imagePath) Then
+                    game.HeaderImage = LoadImageFromDisk(imagePath)
+                    Return
+                End If
+
+                Dim imageUrl = $"https://steamcdn-a.akamaihd.net/steam/apps/{game.AppID}/header.jpg"
+                Dim imageData = Await SteamImageClient.GetByteArrayAsync(imageUrl)
+                game.HeaderImage = LoadImageFromMemoryStream(imageData)
+                Await File.WriteAllBytesAsync(imagePath, imageData)
+            Finally
+                _imageDownloadGate.Release()
+            End Try
+        Catch ex As Exception
+            Diagnostics.Debug.WriteLine($"Failed to load Steam header for {game.AppID}: {ex.Message}")
         End Try
     End Function
 
@@ -413,6 +459,9 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(HasOperationMessage))>
     Private _operationMessage As String
+
+    <ObservableProperty>
+    Private _headerImage As BitmapImage
 
     Public ReadOnly Property GameName As String
     Public ReadOnly Property GamePath As String
