@@ -155,7 +155,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private Sub CancelOperation(game As SteamDetailedResult)
         If game Is Nothing OrElse Not ReferenceEquals(game, _activeGame) Then Return
         _cancelRequested = True
-        game.SetStatus("Cancelling...")
+        game.SetStatus("Cancelling...".LT())
         _compressableFolderService.CancelEstimation(_activeFolder)
         If _activeFolder.FolderActionState = ActionState.Working Then _activeFolder.Compressor?.Cancel()
     End Sub
@@ -416,11 +416,11 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         Try
             If (uncompress AndAlso Not game.CanUncompress) OrElse (Not uncompress AndAlso Not game.CanCompress) Then Return
             _cancelRequested = False
-            game.SetWorking(True, If(uncompress, "Uncompressing...", "Compressing..."))
+            game.SetWorking(True, If(uncompress, "Uncompressing...".LT(), "Compressing...".LT()))
             Await RunFolderOperationAsync(game, uncompress)
-            If _cancelRequested Then game.SetStatus("Operation cancelled.")
+            If _cancelRequested Then game.SetStatus("Operation cancelled.".LT())
         Catch ex As Exception
-            game.SetWorking(False, If(_cancelRequested OrElse TypeOf ex Is OperationCanceledException, "Operation cancelled.", $"Operation failed: {ex.Message}"))
+            game.SetWorking(False, If(_cancelRequested OrElse TypeOf ex Is OperationCanceledException, "Operation cancelled.".LT(), "Operation failed: {0}".LTF(ex.Message)))
         Finally
             _cancelRequested = False
             _activeGame = Nothing
@@ -624,15 +624,15 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         Get
             Select Case Status
                 Case SteamGameStatus.Compressed
-                    Return "Compressed"
+                    Return "Compressed".LT()
                 Case SteamGameStatus.Uncompressed
-                    Return "Uncompressed"
+                    Return "Uncompressed".LT()
                 Case SteamGameStatus.RecentlyUpdated
-                    Return "Recently Updated"
+                    Return "Recently Updated".LT()
                 Case SteamGameStatus.PendingSteamUpdate
-                    Return "Update Available"
+                    Return "Update Available".LT()
                 Case Else
-                    Return "Unknown"
+                    Return "Unknown".LT()
             End Select
         End Get
     End Property
@@ -733,7 +733,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
 
         If validResults.Count = 0 Then
             RecommendedCompressionMode = Nothing
-            RecommendedAction = "No wiki data"
+            RecommendedAction = "No wiki data".LT()
             ExpectedCompressionSavings = 0
             HasCompressionEstimate = False
             Return
@@ -744,7 +744,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
 
         If bestSaving < MinimumUsefulSaving Then
             RecommendedCompressionMode = Nothing
-            RecommendedAction = "Do not compress"
+            RecommendedAction = "Do not compress".LT()
             ExpectedCompressionSavings = 0
             Return
         End If
@@ -756,7 +756,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     <RelayCommand>
     Private Sub SelectCompressionMode(mode As Core.CompressionMode)
         RecommendedCompressionMode = mode
-        RecommendedAction = $"Compress | {GetCompressionModeName(mode)}"
+        RecommendedAction = "Compress | {0}".LTFC("Steam Library Compression Mode Button", GetCompressionModeName(mode))
 
         Dim result = GetCompressionResult(mode)
         HasCompressionEstimate = result IsNot Nothing AndAlso result.TotalResults > 0 AndAlso result.BeforeBytes > 0 AndAlso result.AfterBytes > 0

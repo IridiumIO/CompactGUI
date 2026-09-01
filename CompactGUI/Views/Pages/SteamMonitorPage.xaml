@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:core="clr-namespace:CompactGUI.Core;assembly=CompactGUI.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -24,14 +25,13 @@
 
         <StackPanel Orientation="Horizontal">
             <TextBlock VerticalAlignment="Top"
-                       FontSize="26"
-                       Foreground="{StaticResource CardForeground}"
-                       Text="Steam Library" />
+                       loc:L.Value="Steam Library" FontSize="26"
+                       Foreground="{StaticResource CardForeground}" />
             <ui:Button Width="32" Height="32"
                        Margin="10 2 0 0" Padding="0" VerticalAlignment="Top"
                        Background="Transparent" BorderThickness="0"
                        Command="{Binding RefreshAllCommand}"
-                       ToolTip="Refresh all games">
+                       ToolTip="{loc:T Reload Steam Library list}">
                 <ui:SymbolIcon Margin="0 5 0 0" FontSize="18" Symbol="ArrowClockwise16" />
             </ui:Button>
         </StackPanel>
@@ -42,33 +42,34 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ui:TextBox Width="250"
+            <ui:TextBox MinWidth="250"
                         VerticalAlignment="Center"
-                        FontSize="14" PlaceholderText="Search by game name or SteamID..."
+                        FontSize="14"
+                        PlaceholderText="{loc:T 'Search by game name or SteamID...'}"
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
             <ui:DropDownButton Grid.Column="1"
                                Height="36"
                                Margin="20 0 0 0" VerticalAlignment="Center"
                                Foreground="{StaticResource LabelForeground}">
-                <TextBlock Text="Sort By" />
+                <TextBlock loc:L.Value="Sort By" />
                 <ui:DropDownButton.Flyout>
                     <ContextMenu>
-                        <MenuItem Header="Game Name">
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="GameNameAsc" Header="Ascending" />
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="GameNameDesc" Header="Descending" />
+                        <MenuItem Header="{loc:T Game Name}">
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="GameNameAsc" Header="{loc:T Ascending}" />
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="GameNameDesc" Header="{loc:T Descending}" />
                         </MenuItem>
-                        <MenuItem Header="Status">
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="StatusAsc" Header="Ascending" />
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="StatusDesc" Header="Descending" />
+                        <MenuItem Header="{loc:T Status}">
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="StatusAsc" Header="{loc:T Ascending}" />
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="StatusDesc" Header="{loc:T Descending}" />
                         </MenuItem>
-                        <MenuItem Header="Current Size">
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="CurrentSizeAsc" Header="Ascending" />
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="CurrentSizeDesc" Header="Descending" />
+                        <MenuItem Header="{loc:T Current Size}">
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="CurrentSizeAsc" Header="{loc:T Ascending}" />
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="CurrentSizeDesc" Header="{loc:T Descending}" />
                         </MenuItem>
-                        <MenuItem Header="Savings">
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsAsc" Header="Ascending" />
-                            <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsDesc" Header="Descending" />
+                        <MenuItem Header="{loc:T Savings}">
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsAsc" Header="{loc:T Ascending}" />
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsDesc" Header="{loc:T Descending}" />
                         </MenuItem>
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
@@ -79,16 +80,30 @@
                     Margin="0 -10 0 20"
                     Orientation="Horizontal"
                     TextBlock.Foreground="{StaticResource TextControlForeground}">
-            
-            <TextBlock Text="{Binding SteamGamesData.Count}" VerticalAlignment="Bottom" FontSize="20"/>
-            <TextBlock Text="games" VerticalAlignment="Bottom" Foreground="{StaticResource TextControlForegroundDisabled}" Margin="10 0 0 1"/>
-            <Separator Margin="10 0 10 -2" VerticalAlignment="Bottom" Height="30" Padding="0" BorderThickness="1"/>
-            <TextBlock Text="{Binding TotalSaved, Converter={StaticResource BytesToReadableConverter}}" VerticalAlignment="Bottom" FontSize="20" Foreground="#63ffa1" Opacity="0.6"/>
-            <TextBlock Text="saved" VerticalAlignment="Bottom" Foreground="{StaticResource TextControlForegroundDisabled}" Margin="10 0 0 1"/>
-            <Separator Margin="10 0 10 -2" VerticalAlignment="Bottom" Height="30" Padding="0" BorderThickness="1"/>
-            <TextBlock Text="{Binding TotalCanBeSaved, Converter={StaticResource BytesToReadableConverter}}" VerticalAlignment="Bottom" FontSize="20" Foreground="#57dbff" Opacity="0.6"/>
-            <TextBlock Text="can be saved" VerticalAlignment="Bottom" Foreground="{StaticResource TextControlForegroundDisabled}" Margin="10 0 0 1"/>
-            
+
+            <TextBlock VerticalAlignment="Bottom" FontSize="20" Text="{Binding SteamGamesData.Count}" />
+            <TextBlock Margin="10 0 0 1" VerticalAlignment="Bottom"
+                       loc:L.Value="games"
+                       Foreground="{StaticResource TextControlForegroundDisabled}" />
+            <Separator Height="30"
+                       Margin="10 0 10 -2" Padding="0" VerticalAlignment="Bottom"
+                       BorderThickness="1" />
+            <TextBlock VerticalAlignment="Bottom"
+                       FontSize="20" Foreground="#63ffa1" Opacity="0.6"
+                       Text="{Binding TotalSaved, Converter={StaticResource BytesToReadableConverter}}" />
+            <TextBlock Margin="10 0 0 1" VerticalAlignment="Bottom"
+                       loc:L.Context="Storage savings" loc:L.Value="saved"
+                       Foreground="{StaticResource TextControlForegroundDisabled}" />
+            <Separator Height="30"
+                       Margin="10 0 10 -2" Padding="0" VerticalAlignment="Bottom"
+                       BorderThickness="1" />
+            <TextBlock VerticalAlignment="Bottom"
+                       FontSize="20" Foreground="#57dbff" Opacity="0.6"
+                       Text="{Binding TotalCanBeSaved, Converter={StaticResource BytesToReadableConverter}}" />
+            <TextBlock Margin="10 0 0 1" VerticalAlignment="Bottom"
+                       loc:L.Value="can be saved"
+                       Foreground="{StaticResource TextControlForegroundDisabled}" />
+
             <!--<Border Height="55"
                     Padding="15 5 20 5"
                     Background="{StaticResource CardBackground}"
@@ -157,26 +172,31 @@
             <TextBlock Grid.Column="1"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="GAME" />
+                       Text="{loc:T GAME,
+                                    Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="2"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="STATUS" />
+                       Text="{loc:T STATUS,
+                                    Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="3"
                        HorizontalAlignment="Right"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="CURRENT SIZE" />
+                       Text="{loc:T CURRENT SIZE,
+                                    Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="4"
                        HorizontalAlignment="Right"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="SAVINGS" />
+                       Text="{loc:T SAVINGS,
+                                    Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="5"
                        Margin="24 0 0 0" HorizontalAlignment="Right"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="RECOMMENDED ACTION" />
+                       Text="{loc:T RECOMMENDED ACTION,
+                                    Context='Steam Library Tab Headings'}" />
         </Grid>
 
         <ListView Grid.Row="4"
@@ -207,12 +227,12 @@
                             Tag="{Binding DataContext, ElementName=PageRoot}">
                         <Border.ContextMenu>
                             <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                                <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="Add to Compression Queue" />
-                                <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}" CommandParameter="{Binding DataContext}" Header="Go to Database Results" />
+                                <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Add to Compression Queue}" />
+                                <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Go to Database Results}" />
                                 <Separator />
                                 <MenuItem Command="{Binding Tag.UncompressCommand}"
                                           CommandParameter="{Binding DataContext}"
-                                          Header="Uncompress"
+                                          Header="{loc:T Uncompress}"
                                           IsEnabled="{Binding DataContext.CanUncompress}" />
                             </ContextMenu>
                         </Border.ContextMenu>
@@ -339,7 +359,7 @@
                                                     <Setter Property="Text" Value="{Binding RecommendedAction}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
-                                                            <Setter Property="Text" Value="Update in Steam" />
+                                                            <Setter Property="Text" Value="{loc:T Update in Steam}" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
                                                             <Setter Property="Text" Value="" />
@@ -376,7 +396,7 @@
                                                        Margin="12 0 0 0" Padding="0"
                                                        Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                        CommandParameter="{Binding}"
-                                                       ToolTip="Cancel operation">
+                                                       ToolTip="{loc:T Cancel operation}">
                                                 <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
                                             </ui:Button>
                                         </StackPanel>
@@ -412,7 +432,7 @@
             <ui:ProgressRing Width="42" Height="42"
                              Margin="0 20 0 0" HorizontalAlignment="Center"
                              IsIndeterminate="True" />
-            <TextBlock Margin="20 12 20 20" Foreground="{StaticResource CardForegroundDisabled}" Text="Scanning installed Steam games..." />
+            <TextBlock Margin="20 12 20 20" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T Scanning installed Steam games...}" />
         </StackPanel>
 
         <StackPanel Grid.Row="4"
@@ -420,7 +440,7 @@
                     IsHitTestVisible="False"
                     Visibility="{Binding HasNoGames, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ui:SymbolIcon HorizontalAlignment="Center" FontSize="36" Symbol="Games24" />
-            <TextBlock Margin="0 12 0 0" FontSize="16" Text="No installed Steam games were found." />
+            <TextBlock Margin="0 12 0 0" FontSize="16" Text="{loc:T No installed Steam games were found.}" />
         </StackPanel>
 
         <Border Grid.Row="4"

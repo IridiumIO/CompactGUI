@@ -7,6 +7,7 @@
 "Add" = "Добавить"
 "Add Folder to Queue" = "Добавить папку в очередь"
 "Add a custom folder to the watchlist" = "Добавить свою папку в список отслеживания"
+"Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
 "Add to compression queue" = "Добавить в очередь сжатия"
 "Add to right-click context menu" = "Добавить в контекстное меню правой кнопки мыши"
 "Add to start menu" = "Добавить в меню «Пуск»"
@@ -22,6 +23,8 @@
 "Background Watcher Settings" = "Настройки фонового отслеживания"
 "Cancel" = "Отмена"
 "Cancel Background Compressor" = "Отменить фоновое сжатие"
+"Cancel operation" = "Cancel operation" # LOC:TODO
+"Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "Не удаётся удалить папку"
 "Check for pre-release updates" = "Проверять предварительные версии обновлений"
 "Click to download" = "Нажмите, чтобы скачать"
@@ -31,6 +34,7 @@
 "Compress Selected" = "Сжать выбранное"
 "Compress folders: " = "Сжимать папки: "
 "Compressed" = "Сжато"
+"Compressing..." = "Compressing..." # LOC:TODO
 "Compression" = "Сжатие"
 "Compression DB" = "База сжатия"
 "Compression Mode" = "Режим сжатия"
@@ -38,8 +42,10 @@
 "Compression Summary" = "Сводка сжатия"
 "Compression options have been applied to all folders" = "Параметры сжатия применены ко всем папкам"
 "Configuration" = "Конфигурация"
+"Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "Результаты базы данных"
 "Descending" = "По убыванию"
+"Do not compress" = "Do not compress" # LOC:TODO
 "Edit skip list for this folder" = "Изменить список исключений для этой папки"
 "Estimate Compression for non-Steam Folders (beta)" = "Оценивать сжатие для папок не из Steam (бета)"
 "Estimated size" = "Предполагаемый размер"
@@ -53,6 +59,7 @@
 "Game" = "Игра"
 "Game Name" = "Названию игры"
 "Games" = "Игры"
+"Go to Database Results" = "Go to Database Results" # LOC:TODO
 "HDDs only use 1 thread" = "Для HDD использовать только 1 поток"
 "Home" = "Главная"
 "Include global skipped file types" = "Включить глобальный список пропускаемых типов"
@@ -69,26 +76,35 @@
 "Monitor compressed folders for changes" = "Отслеживать изменения в сжатых папках"
 "Never" = "Никогда"
 "Next scheduled: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Следующее по расписанию: {0:dd MMM yyyy} в {0:HH:mm:ss}"
+"No installed Steam games were found." = "No installed Steam games were found." # LOC:TODO
+"No wiki data" = "No wiki data" # LOC:TODO
 "Not Compressed" = "Не сжато"
 "On Schedule" = "По расписанию"
 "On Schedule if system is also idle" = "По расписанию, если система также бездействует"
 "Open" = "Открыть"
 "Open Settings Folder" = "Открыть папку настроек"
+"Operation cancelled." = "Operation cancelled." # LOC:TODO
+"Operation failed: {0}" = "Operation failed: {0}" # LOC:TODO
 "Please check your internet connection and try again" = "Проверьте подключение к интернету и повторите попытку"
 "Please wait until the current operation is finished" = "Подождите завершения текущей операции"
 "Re-analyse all watched folders" = "Переанализировать все отслеживаемые папки"
 "Re-analyse this folder" = "Повторно проанализировать эту папку"
+"Recently Updated" = "Recently Updated" # LOC:TODO
 "Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
+"Reload Steam Library list" = "Reload Steam Library list" # LOC:TODO
 "Remove from Watchlist" = "Удалить из списка отслеживания"
 "Reset" = "Сбросить"
 "Restart as Admin" = "Перезапустить от имени администратора"
 "Savings" = "Экономия"
+"Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "Поиск по названию игры или SteamID..."
 "Settings" = "Настройки"
 "Show notification on completion" = "Показывать уведомление о завершении"
 "Sort By" = "Сортировать по"
 "Space Saved" = "Сэкономлено места"
 "Start CompactGUI in system tray" = "Запускать CompactGUI в области уведомлений"
+"Status" = "Status" # LOC:TODO
+"Steam Library" = "Steam Library" # LOC:TODO
 "SteamID" = "SteamID"
 "Submit Results" = "Отправить результаты"
 "Submitted to wiki" = "Отправлено в Вики"
@@ -100,8 +116,13 @@
 "UI Settings" = "Настройки интерфейса"
 "UID" = "UID" # LOC:TODO
 "Uncompress" = "Распаковать"
+"Uncompressed" = "Uncompressed" # LOC:TODO
+"Uncompressing..." = "Uncompressing..." # LOC:TODO
+"Unknown" = "Unknown" # LOC:TODO
+"Update Available" = "Update Available" # LOC:TODO
 "Update Available ▸ Version {0}" = "Доступно обновление ▸ Версия {0}"
 "Update Settings" = "Настройки обновлений"
+"Update in Steam" = "Update in Steam" # LOC:TODO
 "Use skip list" = "Использовать список исключений"
 "Version" = "Версия"
 "Watch folder for changes" = "Отслеживать изменения в папке"
@@ -115,11 +136,13 @@
 "XPRESS 8K" = "XPRESS 8K" # LOC:TODO
 "Yes" = "Да"
 "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "В данный момент отслеживается папок ({0}). Закрытие CompactGUI прекратит их отслеживание.{1}{1}Вы уверены, что хотите выйти?"
+"can be saved" = "can be saved" # LOC:TODO
 "contained files" = "содержит файлов"
 "day(s)" = "дн."
 "edit" = "изменить"
 "edit skipped filetypes" = "изменить список пропускаемых типов"
 "every" = "каждые"
+"games" = "games" # LOC:TODO
 "just now" = "только что"
 "last compressed:" = "последнее сжатие:"
 "last modified:" = "последнее изменение:"
@@ -164,6 +187,16 @@
 
 [context."Skiplist editor"]
 "Save" = "Сохранить"
+
+[context."Steam Library Compression Mode Button"]
+"Compress | {0}" = "Compress | {0}" # LOC:TODO
+
+[context."Steam Library Tab Headings"]
+"CURRENT SIZE" = "CURRENT SIZE" # LOC:TODO
+"GAME" = "GAME" # LOC:TODO
+"RECOMMENDED ACTION" = "RECOMMENDED ACTION" # LOC:TODO
+"SAVINGS" = "SAVINGS" # LOC:TODO
+"STATUS" = "STATUS" # LOC:TODO
 
 [context."Storage savings"]
 "saved" = "сэкономлено"

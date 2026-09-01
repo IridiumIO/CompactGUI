@@ -7,6 +7,7 @@
 "Add" = "添加"
 "Add Folder to Queue" = "添加文件夹到队列"
 "Add a custom folder to the watchlist" = "添加自定义文件夹到监控列表"
+"Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
 "Add to compression queue" = "添加到压缩队列"
 "Add to right-click context menu" = "添加到右键菜单"
 "Add to start menu" = "添加到开始菜单"
@@ -22,6 +23,8 @@
 "Background Watcher Settings" = "后台监控设置"
 "Cancel" = "否"
 "Cancel Background Compressor" = "取消后台压缩"
+"Cancel operation" = "Cancel operation" # LOC:TODO
+"Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "无法移除文件夹"
 "Check for pre-release updates" = "检查预发布更新"
 "Click to download" = "点击下载"
@@ -31,6 +34,7 @@
 "Compress Selected" = "压缩选中项"
 "Compress folders: " = "压缩文件夹："
 "Compressed" = "已压缩"
+"Compressing..." = "Compressing..." # LOC:TODO
 "Compression" = "压缩模式"
 "Compression DB" = "压缩数据库"
 "Compression Mode" = "压缩模式"
@@ -38,8 +42,10 @@
 "Compression Summary" = "压缩摘要"
 "Compression options have been applied to all folders" = "压缩选项已应用到所有文件夹"
 "Configuration" = "配置"
+"Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "数据库结果"
 "Descending" = "降序"
+"Do not compress" = "Do not compress" # LOC:TODO
 "Edit skip list for this folder" = "编辑此文件夹的跳过列表"
 "Estimate Compression for non-Steam Folders (beta)" = "估算非 Steam 文件夹的压缩率 (测试版)"
 "Estimated size" = "预估大小"
@@ -53,6 +59,7 @@
 "Game" = "游戏"
 "Game Name" = "游戏名称"
 "Games" = "游戏列表"
+"Go to Database Results" = "Go to Database Results" # LOC:TODO
 "HDDs only use 1 thread" = "HDD 仅使用 1 个线程"
 "Home" = "主页"
 "Include global skipped file types" = "包含全局跳过的文件类型"
@@ -69,26 +76,35 @@
 "Monitor compressed folders for changes" = "监控已压缩文件夹的更改"
 "Never" = "从不"
 "Next scheduled: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "下次计划: {0:yyyy年 M月 d日 HH:mm:ss}"
+"No installed Steam games were found." = "No installed Steam games were found." # LOC:TODO
+"No wiki data" = "No wiki data" # LOC:TODO
 "Not Compressed" = "未压缩"
 "On Schedule" = "按计划"
 "On Schedule if system is also idle" = "按计划且系统空闲时"
 "Open" = "打开"
 "Open Settings Folder" = "打开设置文件夹"
+"Operation cancelled." = "Operation cancelled." # LOC:TODO
+"Operation failed: {0}" = "Operation failed: {0}" # LOC:TODO
 "Please check your internet connection and try again" = "请检查您的网络连接并重试"
 "Please wait until the current operation is finished" = "请等待当前操作完成"
 "Re-analyse all watched folders" = "重新分析所有受监控文件夹"
 "Re-analyse this folder" = "重新分析此文件夹"
+"Recently Updated" = "Recently Updated" # LOC:TODO
 "Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
+"Reload Steam Library list" = "Reload Steam Library list" # LOC:TODO
 "Remove from Watchlist" = "从监控列表移除"
 "Reset" = "重置"
 "Restart as Admin" = "以管理员身份重新启动"
 "Savings" = "节省"
+"Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "按游戏名称或 SteamID 搜索..."
 "Settings" = "设置"
 "Show notification on completion" = "完成后显示通知"
 "Sort By" = "排序方式"
 "Space Saved" = "节省空间"
 "Start CompactGUI in system tray" = "在系统托盘启动 CompactGUI"
+"Status" = "Status" # LOC:TODO
+"Steam Library" = "Steam Library" # LOC:TODO
 "SteamID" = "SteamID"
 "Submit Results" = "提交结果"
 "Submitted to wiki" = "已提交到 Wiki"
@@ -100,8 +116,13 @@
 "UI Settings" = "UI 设置"
 "UID" = "UID" # LOC:TODO
 "Uncompress" = "解压缩"
+"Uncompressed" = "Uncompressed" # LOC:TODO
+"Uncompressing..." = "Uncompressing..." # LOC:TODO
+"Unknown" = "Unknown" # LOC:TODO
+"Update Available" = "Update Available" # LOC:TODO
 "Update Available ▸ Version {0}" = "更新可用 ▸ 版本 {0}"
 "Update Settings" = "更新设置"
+"Update in Steam" = "Update in Steam" # LOC:TODO
 "Use skip list" = "使用跳过列表"
 "Version" = "版本"
 "Watch folder for changes" = "监控文件夹更改"
@@ -115,11 +136,13 @@
 "XPRESS 8K" = "XPRESS 8K" # LOC:TODO
 "Yes" = "是"
 "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "你目前有 {0} 个文件夹正在被监控。关闭 CompactGUI 将停止对它们的监控。{1}{1}你确定要退出吗？"
+"can be saved" = "can be saved" # LOC:TODO
 "contained files" = "包含文件"
 "day(s)" = "天"
 "edit" = "编辑"
 "edit skipped filetypes" = "编辑跳过类型"
 "every" = "每"
+"games" = "games" # LOC:TODO
 "just now" = "刚刚"
 "last compressed:" = "上次压缩:"
 "last modified:" = "上次修改:"
@@ -164,6 +187,16 @@
 
 [context."Skiplist editor"]
 "Save" = "保存"
+
+[context."Steam Library Compression Mode Button"]
+"Compress | {0}" = "Compress | {0}" # LOC:TODO
+
+[context."Steam Library Tab Headings"]
+"CURRENT SIZE" = "CURRENT SIZE" # LOC:TODO
+"GAME" = "GAME" # LOC:TODO
+"RECOMMENDED ACTION" = "RECOMMENDED ACTION" # LOC:TODO
+"SAVINGS" = "SAVINGS" # LOC:TODO
+"STATUS" = "STATUS" # LOC:TODO
 
 [context."Storage savings"]
 "saved" = "已节省"
