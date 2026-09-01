@@ -201,7 +201,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         Using analyser As New Core.Analyser(game.GamePath, _analyserLogger)
             Dim analysedFiles = Await analyser.GetAnalysedFilesAsync(CancellationToken.None)
             If analysedFiles Is Nothing Then Return
-            game.UpdateAnalysis(analyser.UncompressedBytes, analyser.CompressedBytes, analyser.ContainsCompressedFiles)
+            Dim compressionLevel = If(analyser.ContainsCompressedFiles, analysedFiles.Max(Function(file) file.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
+            game.UpdateAnalysis(analyser.UncompressedBytes, analyser.CompressedBytes, compressionLevel)
         End Using
     End Function
 
@@ -271,7 +272,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 Await _compressableFolderService.AnalyseFolderAsync(folder)
             End If
 
-            game.UpdateAnalysis(folder.UncompressedBytes, folder.CompressedBytes, folder.AnalysisResults.Any(Function(file) file.CompressionMode <> Core.WOFCompressionAlgorithm.NO_COMPRESSION))
+            Dim compressionLevel = If(folder.AnalysisResults.Any(Function(file) file.CompressionMode <> Core.WOFCompressionAlgorithm.NO_COMPRESSION), folder.AnalysisResults.Max(Function(file) file.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
+            game.UpdateAnalysis(folder.UncompressedBytes, folder.CompressedBytes, compressionLevel)
 
             If folder.Analyser IsNot Nothing Then
                 Dim completedAnalyser = folder.Analyser
@@ -377,6 +379,9 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(CanUncompress))>
     Private _isCompressed As Boolean
+
+    <ObservableProperty>
+    Private _compressionLevel As Core.WOFCompressionAlgorithm = Core.WOFCompressionAlgorithm.NO_COMPRESSION
 
     Private ReadOnly _lastSteamUpdate As DateTime
     Private _lastCompactGuiUpdate As DateTime?
@@ -486,10 +491,11 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         Me.WikiPoorlyCompressedFiles = poorlyCompressedFiles
     End Sub
 
-    Public Sub UpdateAnalysis(uncompressedBytes As Long, currentFolderSize As Long, isCompressed As Boolean)
+    Public Sub UpdateAnalysis(uncompressedBytes As Long, currentFolderSize As Long, compressionLevel As Core.WOFCompressionAlgorithm)
         Me.UncompressedBytes = uncompressedBytes
         Me.CurrentFolderSize = currentFolderSize
-        Me.IsCompressed = isCompressed
+        Me.CompressionLevel = compressionLevel
+        Me.IsCompressed = compressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION
         SetRecommendation()
         SetGameStatus()
         OperationMessage = Nothing

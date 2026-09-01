@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock VerticalAlignment="Center" FontSize="26" Foreground="{StaticResource CardForeground}" Text="Steam Games Monitor" />
+            <TextBlock VerticalAlignment="Center" FontSize="26" Foreground="{StaticResource CardForeground}" Text="Steam Games" />
             <ui:Button Width="32" Height="32" Margin="10 0 0 0" Padding="0"
                        VerticalAlignment="Center"
                        Background="Transparent" BorderThickness="0"
@@ -204,13 +204,30 @@
                                     </Ellipse.Style>
                                 </Ellipse>
                                 <TextBlock VerticalAlignment="Center" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding StatusMessage}" />
+                                <Border Width="40" Height="15" Margin="10 0 0 0"
+                                        VerticalAlignment="Center"
+                                        Background="#8373808C" CornerRadius="5">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCompressed}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               FontSize="11" FontWeight="SemiBold" Foreground="#FFF"
+                                               Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" />
+                                </Border>
                             </StackPanel>
 
                             <TextBlock Grid.Column="3"
-                                       HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="13"
                                        Text="{Binding CurrentFolderSize, Converter={StaticResource BytesToReadableConverter}}" />
 
-                            <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12">
+                            <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="13">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Text" Value="{Binding DisplayedSavings, Converter={StaticResource BytesToReadableConverter}}" />
