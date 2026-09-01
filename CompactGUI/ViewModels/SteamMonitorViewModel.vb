@@ -88,7 +88,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     <RelayCommand>
     Private Sub GoToDatabaseResults(game As SteamDetailedResult)
         If game Is Nothing Then Return
-        _navigationService.Navigate(GetType(DatabasePage))
+        If _navigationService.Navigate(GetType(DatabasePage)) Then WeakReferenceMessenger.Default.Send(New DatabaseSearchRequestedMessage(game.AppID))
     End Sub
 
     <RelayCommand>

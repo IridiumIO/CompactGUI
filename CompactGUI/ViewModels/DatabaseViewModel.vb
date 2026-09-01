@@ -3,10 +3,11 @@ Imports System.ComponentModel
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
+Imports CommunityToolkit.Mvvm.Messaging
 
 Imports CompactGUI.Core.Settings
 
-Public Class DatabaseViewModel : Inherits ObservableObject
+Public Class DatabaseViewModel : Inherits ObservableObject : Implements IRecipient(Of DatabaseSearchRequestedMessage)
 
     <ObservableProperty>
     Private _DatabaseResults As ObservableCollection(Of DatabaseCompressionResult)
@@ -41,9 +42,12 @@ Public Class DatabaseViewModel : Inherits ObservableObject
 
 
     Private ReadOnly _SettingsService As ISettingsService
+    Private _exactSteamId As Integer?
+    Private _isApplyingSteamIdSearch As Boolean
 
     Public Sub New(settingsService As ISettingsService, wikiService As IWikiService)
 
+        WeakReferenceMessenger.Default.Register(Of DatabaseSearchRequestedMessage)(Me)
         _SettingsService = settingsService
         DatabaseResults = New ObservableCollection(Of DatabaseCompressionResult)(wikiService.GetAllDatabaseCompressionResultsAsync().GetAwaiter.GetResult)
         FilteredResults = CollectionViewSource.GetDefaultView(DatabaseResults)
@@ -52,6 +56,7 @@ Public Class DatabaseViewModel : Inherits ObservableObject
 
 
     Private Sub OnSearchTextChanged(value As String)
+        If Not _isApplyingSteamIdSearch Then _exactSteamId = Nothing
         FilteredResults.Refresh()
     End Sub
 
@@ -64,6 +69,7 @@ Public Class DatabaseViewModel : Inherits ObservableObject
         If String.IsNullOrWhiteSpace(SearchText) Then Return True
         Dim item = TryCast(obj, DatabaseCompressionResult)
         If item Is Nothing OrElse item.GameName Is Nothing Then Return False
+        If _exactSteamId.HasValue Then Return item.SteamID = _exactSteamId.Value
 
         ' Normalize  GameName for punctuation-insensitive search
         Dim normalizedGameName = NormalizeString(item.GameName)
@@ -72,6 +78,13 @@ Public Class DatabaseViewModel : Inherits ObservableObject
            (normalizedGameName.Contains(SearchText)) OrElse
            (item.SteamID.ToString().Contains(SearchText))
     End Function
+
+    Public Sub Receive(message As DatabaseSearchRequestedMessage) Implements IRecipient(Of DatabaseSearchRequestedMessage).Receive
+        _exactSteamId = message.Value
+        _isApplyingSteamIdSearch = True
+        SearchText = message.Value.ToString()
+        _isApplyingSteamIdSearch = False
+    End Sub
 
 
     <RelayCommand>
