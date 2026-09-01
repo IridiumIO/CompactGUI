@@ -73,6 +73,16 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
+                <ui:NavigationViewItem Content="Steam Monitor"
+                                       Margin="15,2,15,10"
+                                       NavigationCacheMode="Disabled"
+                                       Tag="{Binding}"
+                                       TargetPageType="{x:Type local:SteamMonitorPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Filled="False" Symbol="Database24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+
             </ui:NavigationView.MenuItems>
 
             <ui:NavigationView.FooterMenuItems>
