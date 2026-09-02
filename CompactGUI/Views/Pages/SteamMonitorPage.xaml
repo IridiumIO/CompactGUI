@@ -104,56 +104,6 @@
                        loc:L.Value="can be saved"
                        Foreground="{StaticResource TextControlForegroundDisabled}" />
 
-            <!--<Border Height="55"
-                    Padding="15 5 20 5"
-                    Background="{StaticResource CardBackground}"
-                    CornerRadius="4">
-
-                <StackPanel VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" TextBlock.Foreground="{StaticResource TextControlForegroundDisabled}">
-                        <ui:SymbolIcon Margin="0 0 5 0" FontSize="12" Symbol="Library16" />
-                        <TextBlock FontSize="12" Text="Installed Games" />
-                    </StackPanel>
-                    <TextBlock FontSize="20" Text="{Binding SteamGamesData.Count}" />
-                </StackPanel>
-
-
-            </Border>
-
-            <Border Height="55"
-                    Margin="20 0" Padding="15 5 20 5"
-                    Background="{StaticResource CardBackground}"
-                    CornerRadius="4">
-
-                <StackPanel VerticalAlignment="Center">
-                    <StackPanel Opacity="0.6" Orientation="Horizontal" TextBlock.Foreground="#63ffa1">
-                        <ui:SymbolIcon Margin="0 0 5 0" FontSize="12" Symbol="Box16" />
-                        <TextBlock FontSize="12" Text="Space Saved" />
-                    </StackPanel>
-                    <TextBlock FontSize="20" Text="{Binding TotalSaved, Converter={StaticResource BytesToReadableConverter}}" />
-                </StackPanel>
-
-
-            </Border>
-
-            <Border Height="55"
-                    Padding="15 5 20 5"
-                    Background="{StaticResource CardBackground}"
-                    CornerRadius="4">
-
-                <StackPanel VerticalAlignment="Center">
-                    <StackPanel Opacity="0.8" Orientation="Horizontal" TextBlock.Foreground="#57dbff">
-                        <ui:SymbolIcon Margin="0 0 5 0" FontSize="12" Symbol="Sparkle16" />
-                        <TextBlock FontSize="12" Text="Can be saved" />
-                    </StackPanel>
-                    <TextBlock FontSize="20" Text="{Binding TotalCanBeSaved, Converter={StaticResource BytesToReadableConverter}}" />
-                </StackPanel>
-
-
-            </Border>-->
-
-
-
 
         </StackPanel>
 
@@ -161,39 +111,28 @@
         <Separator Grid.Row="2" Height="1" VerticalAlignment="Bottom" />
         <Grid Grid.Row="3" Margin="14 10 34 8">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="108" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="190" />
-                <ColumnDefinition Width="145" />
-                <ColumnDefinition Width="145" />
-                <ColumnDefinition Width="250" />
+                <ColumnDefinition MaxWidth="108" />
+                <ColumnDefinition Width="*" MinWidth="135" />
+                <ColumnDefinition MinWidth="180" MaxWidth="190" />
+                <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                <ColumnDefinition Width="220" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="1"
-                       
-                       Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="{loc:T GAME,
-                                    Context='Steam Library Tab Headings'}" />
-            <TextBlock Grid.Column="2"
-                       
-                       Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="{loc:T STATUS,
-                                    Context='Steam Library Tab Headings'}" />
+            <TextBlock Grid.Column="1" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T GAME, Context='Steam Library Tab Headings'}" />
+            <TextBlock Grid.Column="2" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T STATUS, Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="3"
-                       HorizontalAlignment="Right"
-                       
+                       Margin="-50 0 0 0" HorizontalAlignment="Right"
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T CURRENT SIZE,
                                     Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="4"
                        HorizontalAlignment="Right"
-                       
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T SAVINGS,
                                     Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="5"
                        Margin="24 0 0 0" HorizontalAlignment="Right"
-                       
                        Foreground="{StaticResource CardForegroundDisabled}"
                        Text="{loc:T RECOMMENDED ACTION,
                                     Context='Steam Library Tab Headings'}" />
@@ -237,18 +176,18 @@
                             </ContextMenu>
                         </Border.ContextMenu>
 
-                        <Grid MinHeight="58" TextBlock.Foreground="{StaticResource TextControlForeground}">
+                        <Grid MinHeight="58" ScrollViewer.CanContentScroll="True" TextBlock.Foreground="{StaticResource TextControlForeground}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="108" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="190" />
-                                <ColumnDefinition Width="145" />
-                                <ColumnDefinition Width="145" />
-                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition MaxWidth="108" />
+                                <ColumnDefinition Width="*" MinWidth="135" />
+                                <ColumnDefinition MinWidth="180" MaxWidth="190" />
+                                <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                                <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                                <ColumnDefinition Width="220" />
                             </Grid.ColumnDefinitions>
 
                             <Border Width="170" Height="78"
-                                    Margin="-14 -15 -100 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                    Margin="-14 -15 -150 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
                                     Background="{StaticResource CardBackgroundPressed}"
                                     CornerRadius="4">
                                 <Border.OpacityMask>
@@ -258,7 +197,7 @@
                                                 <Border.Background>
                                                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="0.85,0.5">
                                                         <GradientStop Offset="0" Color="White" />
-                                                        <GradientStop Offset="1" Color="Transparent" />
+                                                        <GradientStop Offset="0.81" Color="Transparent" />
                                                     </LinearGradientBrush>
                                                 </Border.Background>
                                             </Border>
@@ -277,18 +216,20 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock VerticalAlignment="Center"
-                                               FontSize="16" FontWeight="SemiBold"
+                                               FontSize="14" FontWeight="SemiBold"
                                                Text="{Binding GameName}"
-                                               TextTrimming="CharacterEllipsis" />
+                                               TextOptions.TextFormattingMode="Display" TextTrimming="CharacterEllipsis" />
 
                                     <Border Grid.Column="1"
-                                            Height="25" Margin="8 0 0 0" Padding="6 3"
+                                            Height="25"
+                                            Margin="8 0 0 0" Padding="6 3"
                                             Background="#30FFAA00" CornerRadius="4"
                                             ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}"
                                             Visibility="{Binding IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
                                         <StackPanel Orientation="Horizontal">
                                             <ui:SymbolIcon Margin="0 2 4 0" Foreground="#ffe207" Symbol="Warning20" />
-                                            <TextBlock loc:L.Value="Direct Storage" Foreground="#ffe207" FontSize="11" VerticalAlignment="Center"/>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       loc:L.Value="Direct Storage" FontSize="11" Foreground="#ffe207" />
                                         </StackPanel>
                                     </Border>
                                 </Grid>
