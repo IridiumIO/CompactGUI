@@ -8,6 +8,10 @@ file = "en-AU.toml"
 version = 1
 file = "es-ES.toml"
 
+[locales."ko-KR"]
+version = 1
+file = "ko-KR.toml"
+
 [locales."ru-RU"]
 version = 1
 file = "ru-RU.toml"
