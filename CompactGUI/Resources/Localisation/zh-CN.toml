@@ -1,4 +1,4 @@
-﻿# CompactGUI Localisation
+﻿﻿# CompactGUI Localisation
 # @version 1
 
 # ===================
@@ -7,7 +7,7 @@
 "Add" = "添加"
 "Add Folder to Queue" = "添加文件夹到队列"
 "Add a custom folder to the watchlist" = "添加自定义文件夹到监控列表"
-"Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
+"Add to Compression Queue" = "添加到压缩队列"
 "Add to compression queue" = "添加到压缩队列"
 "Add to right-click context menu" = "添加到右键菜单"
 "Add to start menu" = "添加到开始菜单"
@@ -23,8 +23,8 @@
 "Background Watcher Settings" = "后台监控设置"
 "Cancel" = "否"
 "Cancel Background Compressor" = "取消后台压缩"
-"Cancel operation" = "Cancel operation" # LOC:TODO
-"Cancelling..." = "Cancelling..." # LOC:TODO
+"Cancel operation" = "取消操作"
+"Cancelling..." = "取消中……"
 "Cannot remove folder" = "无法移除文件夹"
 "Check for pre-release updates" = "检查预发布更新"
 "Click to download" = "点击下载"
@@ -34,7 +34,7 @@
 "Compress Selected" = "压缩选中项"
 "Compress folders: " = "压缩文件夹："
 "Compressed" = "已压缩"
-"Compressing..." = "Compressing..." # LOC:TODO
+"Compressing..." = "压缩中……"
 "Compression" = "压缩模式"
 "Compression DB" = "压缩数据库"
 "Compression Mode" = "压缩模式"
@@ -42,12 +42,12 @@
 "Compression Summary" = "压缩摘要"
 "Compression options have been applied to all folders" = "压缩选项已应用到所有文件夹"
 "Configuration" = "配置"
-"Current Size" = "Current Size" # LOC:TODO
+"Current Size" = "当前大小"
 "Database Results" = "数据库结果"
 "Descending" = "降序"
-"Direct Storage" = "Direct Storage" # LOC:TODO
-"Do not compress" = "Do not compress" # LOC:TODO
-"Drive unavailable" = "Drive unavailable" # LOC:TODO
+"Direct Storage" = "Direct Storage"
+"Do not compress" = "无需压缩"
+"Drive unavailable" = "驱动器不可用"
 "Edit skip list for this folder" = "编辑此文件夹的跳过列表"
 "Estimate Compression for non-Steam Folders (beta)" = "估算非 Steam 文件夹的压缩率 (测试版)"
 "Estimated size" = "预估大小"
@@ -61,13 +61,13 @@
 "Game" = "游戏"
 "Game Name" = "游戏名称"
 "Games" = "游戏列表"
-"Go to Database Results" = "Go to Database Results" # LOC:TODO
-"HDDs only use 1 thread" = "HDD 仅使用 1 个线程"
+"Go to Database Results" = "前往数据库结果"
+"HDDs only use 1 thread" = "机械硬盘仅使用 1 个线程"
 "Home" = "主页"
 "Include global skipped file types" = "包含全局跳过的文件类型"
 "Include smart skipped file types" = "包含智能跳过的文件类型"
 "Insufficient permission to access this folder" = "没有足够的权限访问此文件夹"
-"LZX" = "LZX" # LOC:TODO
+"LZX" = "LZX"
 "Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "最后获取: {0:yyyy年 M月 d日 HH:mm:ss}"
 "Last analysed {0}" = "上次分析 {0}"
 "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "上次运行: {0:yyyy年 M月 d日 HH:mm:ss}"
@@ -78,37 +78,37 @@
 "Monitor compressed folders for changes" = "监控已压缩文件夹的更改"
 "Never" = "从不"
 "Next scheduled: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "下次计划: {0:yyyy年 M月 d日 HH:mm:ss}"
-"No installed Steam games were found." = "No installed Steam games were found." # LOC:TODO
-"No wiki data" = "No wiki data" # LOC:TODO
+"No installed Steam games were found." = "未发现已安装的Steam游戏。"
+"No wiki data" = "无wiki数据"
 "Not Compressed" = "未压缩"
 "On Schedule" = "按计划"
 "On Schedule if system is also idle" = "按计划且系统空闲时"
 "Open" = "打开"
 "Open Settings Folder" = "打开设置文件夹"
-"Operation cancelled." = "Operation cancelled." # LOC:TODO
-"Operation failed: {0}" = "Operation failed: {0}" # LOC:TODO
+"Operation cancelled." = "操作已取消。"
+"Operation failed: {0}" = "操作失败： {0}"
 "Please check your internet connection and try again" = "请检查您的网络连接并重试"
 "Please wait until the current operation is finished" = "请等待当前操作完成"
-"Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" # LOC:TODO
+"Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "快速分析文件并估算压缩比而无需写入磁盘。 这将会导致机械硬盘非常卡顿！"
 "Re-analyse all watched folders" = "重新分析所有受监控文件夹"
 "Re-analyse this folder" = "重新分析此文件夹"
-"Recently Updated" = "Recently Updated" # LOC:TODO
-"Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
-"Reload Steam Library list" = "Reload Steam Library list" # LOC:TODO
+"Recently Updated" = "最近更新过"
+"Reload Languages.\nChecks online for updated language definitions" = "重新加载语言。\n在线检查语言定义更新"
+"Reload Steam Library list" = "重新加载Steam库列表"
 "Remove from Watchlist" = "从监控列表移除"
 "Reset" = "重置"
 "Restart as Admin" = "以管理员身份重新启动"
 "Savings" = "节省"
-"Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
-"Search by game name or SteamID..." = "按游戏名称或 SteamID 搜索..."
-"Select a folder to compress" = "Select a folder to compress" # LOC:TODO
+"Scanning installed Steam games..." = "正在扫描已安装的Steam游戏……"
+"Search by game name or SteamID..." = "按游戏名称或 SteamID 搜索……"
+"Select a folder to compress" = "选择一个文件夹压缩"
 "Settings" = "设置"
 "Show notification on completion" = "完成后显示通知"
 "Sort By" = "排序方式"
 "Space Saved" = "节省空间"
 "Start CompactGUI in system tray" = "在系统托盘启动 CompactGUI"
-"Status" = "Status" # LOC:TODO
-"Steam Library" = "Steam Library" # LOC:TODO
+"Status" = "状态"
+"Steam Library" = "Steam库"
 "SteamID" = "SteamID"
 "Submit Results" = "提交结果"
 "Submitted to wiki" = "已提交到 Wiki"
@@ -118,15 +118,15 @@
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "此游戏使用 DirectStorage 技术。如果您正在使用此功能，则不应压缩此游戏。"
 "Total Results" = "总结果"
 "UI Settings" = "UI 设置"
-"UID" = "UID" # LOC:TODO
+"UID" = "UID"
 "Uncompress" = "解压缩"
-"Uncompressed" = "Uncompressed" # LOC:TODO
-"Uncompressing..." = "Uncompressing..." # LOC:TODO
-"Unknown" = "Unknown" # LOC:TODO
-"Update Available" = "Update Available" # LOC:TODO
+"Uncompressed" = "已解压缩"
+"Uncompressing..." = "解压缩中……"
+"Unknown" = "未知"
+"Update Available" = "更新可用"
 "Update Available ▸ Version {0}" = "更新可用 ▸ 版本 {0}"
 "Update Settings" = "更新设置"
-"Update in Steam" = "Update in Steam" # LOC:TODO
+"Update in Steam" = "在Steam中更新"
 "Use skip list" = "使用跳过列表"
 "Version" = "版本"
 "Watch folder for changes" = "监控文件夹更改"
@@ -135,18 +135,18 @@
 "WatcherPage" = "监控页"
 "When System is Idle" = "当系统空闲时"
 "Working" = "正在处理"
-"XPRESS 16K" = "XPRESS 16K" # LOC:TODO
-"XPRESS 4K" = "XPRESS 4K" # LOC:TODO
-"XPRESS 8K" = "XPRESS 8K" # LOC:TODO
+"XPRESS 16K" = "XPRESS 16K"
+"XPRESS 4K" = "XPRESS 4K"
+"XPRESS 8K" = "XPRESS 8K"
 "Yes" = "是"
 "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "你目前有 {0} 个文件夹正在被监控。关闭 CompactGUI 将停止对它们的监控。{1}{1}你确定要退出吗？"
-"can be saved" = "can be saved" # LOC:TODO
+"can be saved" = "可以节省"
 "contained files" = "包含文件"
 "day(s)" = "天"
 "edit" = "编辑"
 "edit skipped filetypes" = "编辑跳过类型"
 "every" = "每"
-"games" = "games" # LOC:TODO
+"games" = "个游戏"
 "just now" = "刚刚"
 "last compressed:" = "上次压缩:"
 "last modified:" = "上次修改:"
@@ -155,15 +155,15 @@
 "{0:0} days ago" = "{0:0} 天前"
 "{0:0} hours ago" = "{0:0} 小时前"
 "{0:0} minutes ago" = "{0:0} 分钟前"
-"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
+"{0} files will be skipped" = "{0} 个文件将会跳过"
 "{0} saved" = "{0} 已节省"
 "{0}% decayed" = "{0}% 已衰减"
 
 [context."Background Scheduler"]
-"CompactGUI is running a scheduled task and will compress monitored folders in the background" = "CompactGUI is running a scheduled task and will compress monitored folders in the background" # LOC:TODO
-"Next scheduled task is on {0}" = "Next scheduled task is on {0}" # LOC:TODO
-"Scheduled Compression Completed" = "Scheduled Compression Completed" # LOC:TODO
-"Scheduled Compression Running" = "Scheduled Compression Running" # LOC:TODO
+"CompactGUI is running a scheduled task and will compress monitored folders in the background" = "CompactGUI正在运行一个计划任务并将会在后台压缩监控文件夹"
+"Next scheduled task is on {0}" = "下一次计划任务在 {0}"
+"Scheduled Compression Completed" = "计划任务压缩完成"
+"Scheduled Compression Running" = "正在运行计划压缩"
 
 [context."Compression estimate"]
 "unknown" = "未知"
@@ -188,7 +188,7 @@
 "Unknown" = "未知"
 
 [context."Schedule"]
-"at" = "at" # LOC:TODO
+"at" = "在"
 
 [context."Skiplist aggression"]
 "high" = "高"
@@ -199,14 +199,14 @@
 "Save" = "保存"
 
 [context."Steam Library Compression Mode Button"]
-"Compress | {0}" = "Compress | {0}" # LOC:TODO
+"Compress | {0}" = "压缩 | {0}"
 
 [context."Steam Library Tab Headings"]
-"CURRENT SIZE" = "CURRENT SIZE" # LOC:TODO
-"GAME" = "GAME" # LOC:TODO
-"RECOMMENDED ACTION" = "RECOMMENDED ACTION" # LOC:TODO
-"SAVINGS" = "SAVINGS" # LOC:TODO
-"STATUS" = "STATUS" # LOC:TODO
+"CURRENT SIZE" = "当前大小"
+"GAME" = "游戏"
+"RECOMMENDED ACTION" = "推荐操作"
+"SAVINGS" = "节省"
+"STATUS" = "状态"
 
 [context."Storage savings"]
 "saved" = "已节省"
@@ -225,12 +225,12 @@
 "Last analysed" = "上次分析"
 "OK" = "好"
 "Off" = "关闭"
-"Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " = "Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " # LOC:TODO
+"Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " = "快速分析文件并估算压缩比而无需写入磁盘。                                                    这将会导致机械硬盘非常卡顿！                                                    "
 "Results State" = "数据库状态"
 "Skip file types likely to compress poorly" = "跳过可能压缩效果不佳的文件类型"
 "Skip file types specified in settings" = "跳过设置中指定的文件类型"
 "Smart: {0} skipped" = "智能: 已跳过 {0}"
 "Welcome" = "欢迎"
-"decayed" = "已衰减"
+"decayed" = "需重新压缩"
 "files will be skipped" = "个文件将被跳过"
 "not configured" = "未配置"
