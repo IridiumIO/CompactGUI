@@ -24,4 +24,19 @@ Public Class SteamMonitorPage
         layoutGrid.ColumnDefinitions(0).Width = New GridLength(1, GridUnitType.Star)
     End Sub
 
+    Private Sub OnDetailCardSizeChanged(sender As Object, e As SizeChangedEventArgs)
+        Dim card = DirectCast(sender, Border)
+        Dim clip = TryCast(card.Clip, Media.RectangleGeometry)
+
+        If clip Is Nothing Then
+            clip = New Media.RectangleGeometry With {
+                .RadiusX = card.CornerRadius.TopLeft,
+                .RadiusY = card.CornerRadius.TopLeft
+            }
+            card.Clip = clip
+        End If
+
+        clip.Rect = New Rect(0, 0, card.ActualWidth, card.ActualHeight)
+    End Sub
+
 End Class

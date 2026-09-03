@@ -29,6 +29,7 @@
 "Check for pre-release updates" = "检查预发布更新"
 "Click to download" = "点击下载"
 "CompactGUI" = "CompactGUI"
+"Compress" = "Compress" # LOC:TODO
 "Compress Again" = "再次压缩"
 "Compress All Now" = "立即全部压缩"
 "Compress Selected" = "压缩选中项"
@@ -150,6 +151,7 @@
 "just now" = "刚刚"
 "last compressed:" = "上次压缩:"
 "last modified:" = "上次修改:"
+"recommended" = "recommended" # LOC:TODO
 "select a folder" = "选择文件夹"
 "uncompressed size" = "未压缩大小"
 "{0:0} days ago" = "{0:0} 天前"

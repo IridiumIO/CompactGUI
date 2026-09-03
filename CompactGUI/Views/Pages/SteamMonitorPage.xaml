@@ -19,7 +19,7 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -36,18 +36,16 @@
             </ui:Button>
         </StackPanel>
 
-        <Grid Grid.Row="0" Margin="20 0 20 0" HorizontalAlignment="Right">
+        <Grid Grid.Row="0" Margin="20 0" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-
             <ui:TextBox MinWidth="250"
                         VerticalAlignment="Center"
                         FontSize="14"
                         PlaceholderText="{loc:T 'Search by game name or SteamID...'}"
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-
             <ui:DropDownButton Grid.Column="1"
                                Height="36"
                                Margin="20 0 0 0" VerticalAlignment="Center"
@@ -80,13 +78,12 @@
                     Margin="0 -10 0 20"
                     Orientation="Horizontal"
                     TextBlock.Foreground="{StaticResource TextControlForeground}">
-
             <TextBlock VerticalAlignment="Bottom" FontSize="20" Text="{Binding SteamGamesData.Count}" />
             <TextBlock Margin="10 0 0 1" VerticalAlignment="Bottom"
                        loc:L.Value="games"
                        Foreground="{StaticResource TextControlForegroundDisabled}" />
             <Separator Height="30"
-                       Margin="10 0 10 -2" Padding="0" VerticalAlignment="Bottom"
+                       Margin="10 0 10 -2" VerticalAlignment="Bottom"
                        BorderThickness="1" />
             <TextBlock VerticalAlignment="Bottom"
                        FontSize="20" Foreground="#63ffa1" Opacity="0.6"
@@ -95,7 +92,7 @@
                        loc:L.Context="Storage savings" loc:L.Value="saved"
                        Foreground="{StaticResource TextControlForegroundDisabled}" />
             <Separator Height="30"
-                       Margin="10 0 10 -2" Padding="0" VerticalAlignment="Bottom"
+                       Margin="10 0 10 -2" VerticalAlignment="Bottom"
                        BorderThickness="1" />
             <TextBlock VerticalAlignment="Bottom"
                        FontSize="20" Foreground="#57dbff" Opacity="0.6"
@@ -103,13 +100,11 @@
             <TextBlock Margin="10 0 0 1" VerticalAlignment="Bottom"
                        loc:L.Value="can be saved"
                        Foreground="{StaticResource TextControlForegroundDisabled}" />
-
-
         </StackPanel>
 
-
         <Separator Grid.Row="2" Height="1" VerticalAlignment="Bottom" />
-        <Grid Grid.Row="3" Margin="14 10 34 8">
+
+        <Grid Grid.Row="3" Margin="14 10 34 8" Visibility="{Binding HasSelectedGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="108" />
                 <ColumnDefinition Width="*" MinWidth="135" />
@@ -118,7 +113,6 @@
                 <ColumnDefinition MinWidth="60" MaxWidth="145" />
                 <ColumnDefinition Width="220" />
             </Grid.ColumnDefinitions>
-
             <TextBlock Grid.Column="1" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T GAME, Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="2" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T STATUS, Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="3"
@@ -139,10 +133,13 @@
         </Grid>
 
         <ListView Grid.Row="4"
-                  Margin="0 0 0 0" Padding="0" HorizontalContentAlignment="Stretch"
+                  Padding="0" HorizontalContentAlignment="Stretch"
                   Background="Transparent" BorderThickness="0"
                   ItemsSource="{Binding FilteredSteamGames}"
-                  ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling">
+                  ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  SelectedItem="{Binding SelectedGame, Mode=TwoWay}"
+                  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling"
+                  Visibility="{Binding HasSelectedGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Padding" Value="0" />
@@ -157,10 +154,9 @@
                     </Setter>
                 </Style>
             </ListView.ItemContainerStyle>
-
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Margin="0 0 0 8" Padding="14 10 14 10"
+                    <Border Margin="0 0 0 8" Padding="14 10"
                             Background="{StaticResource CardBackground}"
                             CornerRadius="6"
                             Tag="{Binding DataContext, ElementName=PageRoot}">
@@ -175,8 +171,7 @@
                                           IsEnabled="{Binding DataContext.CanUncompress}" />
                             </ContextMenu>
                         </Border.ContextMenu>
-
-                        <Grid MinHeight="58" ScrollViewer.CanContentScroll="True" TextBlock.Foreground="{StaticResource TextControlForeground}">
+                        <Grid MinHeight="58" TextBlock.Foreground="{StaticResource TextControlForeground}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MaxWidth="108" />
                                 <ColumnDefinition Width="*" MinWidth="135" />
@@ -185,7 +180,6 @@
                                 <ColumnDefinition MinWidth="60" MaxWidth="145" />
                                 <ColumnDefinition Width="220" />
                             </Grid.ColumnDefinitions>
-
                             <Border Width="170" Height="78"
                                     Margin="-14 -15 -150 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
                                     Background="{StaticResource CardBackgroundPressed}"
@@ -204,24 +198,15 @@
                                         </VisualBrush.Visual>
                                     </VisualBrush>
                                 </Border.OpacityMask>
-
                                 <Image Source="{Binding HeaderImage}" Stretch="UniformToFill" />
                             </Border>
-
                             <StackPanel Grid.Column="1" Margin="0 0 16 0" VerticalAlignment="Center">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
+                                <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center"
                                                FontSize="14" FontWeight="SemiBold"
                                                Text="{Binding GameName}"
-                                               TextOptions.TextFormattingMode="Display" TextTrimming="CharacterEllipsis" />
-
-                                    <Border Grid.Column="1"
-                                            Height="25"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <Border Height="25"
                                             Margin="8 0 0 0" Padding="6 3"
                                             Background="#30FFAA00" CornerRadius="4"
                                             ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}"
@@ -232,7 +217,7 @@
                                                        loc:L.Value="Direct Storage" FontSize="11" Foreground="#ffe207" />
                                         </StackPanel>
                                     </Border>
-                                </Grid>
+                                </StackPanel>
                                 <TextBlock Margin="0 3 0 0"
                                            FontSize="12"
                                            Foreground="{StaticResource CardForegroundDisabled}"
@@ -244,7 +229,6 @@
                                            Text="{Binding OperationMessage}"
                                            Visibility="{Binding HasOperationMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </StackPanel>
-
                             <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal">
                                 <Ellipse Width="13" Height="13" Margin="0 0 10 0">
                                     <Ellipse.Style>
@@ -267,28 +251,17 @@
                                 <TextBlock VerticalAlignment="Center" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding StatusMessage}" />
                                 <Border Width="40" Height="25"
                                         Margin="10 0 0 0" VerticalAlignment="Center"
-                                        Background="#8373808C" CornerRadius="5">
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsCompressed}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
+                                        Background="#8373808C" CornerRadius="5"
+                                        Visibility="{Binding IsCompressed, Converter={StaticResource BoolToVisConverter}}">
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                                                FontSize="11" FontWeight="SemiBold" Foreground="#FFF"
                                                Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" />
                                 </Border>
                             </StackPanel>
-
                             <TextBlock Grid.Column="3"
                                        HorizontalAlignment="Right" VerticalAlignment="Center"
                                        FontSize="13"
                                        Text="{Binding CurrentFolderSize, Converter={StaticResource BytesToReadableConverter}}" />
-
                             <TextBlock Grid.Column="4"
                                        HorizontalAlignment="Right" VerticalAlignment="Center"
                                        FontSize="13">
@@ -308,10 +281,9 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-
                             <Grid Grid.Column="5" Margin="24 -10 -14 -10">
                                 <Grid.Resources>
-                                    <DataTemplate x:Key="ActionTextTemplate">
+                                    <DataTemplate x:Key="FullActionTextTemplate">
                                         <TextBlock Margin="0 0 20 0" HorizontalAlignment="Right" VerticalAlignment="Center"
                                                    TextWrapping="Wrap">
                                             <TextBlock.Style>
@@ -321,7 +293,7 @@
                                                         <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
                                                             <Setter Property="Text" Value="{loc:T Update in Steam}" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
+                                                        <DataTrigger Binding="{Binding IsCompressed}" Value="True">
                                                             <Setter Property="Text" Value="" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -329,8 +301,7 @@
                                             </TextBlock.Style>
                                         </TextBlock>
                                     </DataTemplate>
-
-                                    <DataTemplate x:Key="CompressActionTemplate">
+                                    <DataTemplate x:Key="FullCompressActionTemplate">
                                         <ui:SplitButton Width="200"
                                                         Padding="14 8" HorizontalAlignment="Right" VerticalAlignment="Stretch"
                                                         Background="#3000FF00"
@@ -348,8 +319,7 @@
                                             </ui:SplitButton.Flyout>
                                         </ui:SplitButton>
                                     </DataTemplate>
-
-                                    <DataTemplate x:Key="WorkingActionTemplate">
+                                    <DataTemplate x:Key="FullWorkingActionTemplate">
                                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                                             <ui:ProgressRing Width="24" Height="24" IsIndeterminate="True" />
                                             <ui:Button Width="32" Height="32"
@@ -362,17 +332,16 @@
                                         </StackPanel>
                                     </DataTemplate>
                                 </Grid.Resources>
-
                                 <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Content="{Binding}">
                                     <ContentControl.Style>
                                         <Style TargetType="ContentControl">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource ActionTextTemplate}" />
+                                            <Setter Property="ContentTemplate" Value="{StaticResource FullActionTextTemplate}" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding CanCompress}" Value="True">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource CompressActionTemplate}" />
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource FullCompressActionTemplate}" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsWorking}" Value="True">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource WorkingActionTemplate}" />
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource FullWorkingActionTemplate}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -385,6 +354,566 @@
             </ListView.ItemTemplate>
         </ListView>
 
+        <Grid Grid.Row="3" Grid.RowSpan="2"
+              Margin="0 10 0 0"
+              Visibility="{Binding HasSelectedGame, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="380" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ListView Grid.Column="0"
+                      Margin="0 0 0 10" Padding="0" HorizontalContentAlignment="Stretch"
+                      Background="Transparent" BorderThickness="0"
+                      ItemsSource="{Binding FilteredSteamGames}"
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      SelectedItem="{Binding SelectedGame, Mode=TwoWay}"
+                      VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Margin" Value="0 0 0 8" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Height="74"
+                                Padding="8"
+                                Background="{StaticResource CardBackground}"
+                                CornerRadius="6"
+                                Tag="{Binding DataContext, ElementName=PageRoot}">
+                            <Border.ContextMenu>
+                                <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Add to Compression Queue}" />
+                                    <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Go to Database Results}" />
+                                </ContextMenu>
+                            </Border.ContextMenu>
+                            <Grid TextBlock.Foreground="{StaticResource TextControlForeground}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="112" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Border Width="104" Height="48"
+                                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                                        Background="{StaticResource CardBackgroundPressed}"
+                                        CornerRadius="4">
+                                    <Image Source="{Binding HeaderImage}" Stretch="UniformToFill" />
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock FontSize="14" FontWeight="SemiBold"
+                                               Text="{Binding GameName}"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <Grid Margin="0 5 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Width="10" Height="10" Margin="0 0 7 0">
+                                                <Ellipse.Style>
+                                                    <Style TargetType="Ellipse">
+                                                        <Setter Property="Fill" Value="#D14A4F" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
+                                                                <Setter Property="Fill" Value="#4bd18a" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.RecentlyUpdated}">
+                                                                <Setter Property="Fill" Value="#D1B13C" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
+                                                                <Setter Property="Fill" Value="#44bedf" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Ellipse.Style>
+                                            </Ellipse>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource CardForegroundDisabled}"
+                                                       Text="{Binding StatusMessage}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1"
+                                                    Margin="10 0 5 0" HorizontalAlignment="Right"
+                                                    Orientation="Horizontal" TextBlock.FontWeight="SemiBold" TextOptions.TextFormattingMode="Display">
+                                            <TextBlock VerticalAlignment="Center" FontSize="12" Foreground="#45c1e8">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="~" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsCompressed}" Value="True">
+                                                                <Setter Property="Text" Value="" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock Margin="5 0 0 0" VerticalAlignment="Center"
+                                                       FontSize="12"
+                                                       Text="{Binding DetailSavings, Converter={StaticResource BytesToReadableConverter}}"
+                                                       TextAlignment="Right">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#45c1e8" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsCompressed}" Value="True">
+                                                                <Setter Property="Foreground" Value="#65dc9d" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Border x:Name="DetailCard"
+                    Grid.Column="2"
+                    Margin="0 0 00 10"
+                    Background="{StaticResource CardBackground}"
+                    ClipToBounds="True" CornerRadius="6" SizeChanged="OnDetailCardSizeChanged">
+                <ContentControl Content="{Binding SelectedGame}">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <ScrollViewer HorizontalContentAlignment="Stretch" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <Grid TextBlock.Foreground="{StaticResource TextControlForeground}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="220" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Rectangle Grid.Row="0" RadiusX="8" RadiusY="8">
+                                        <Rectangle.Fill>
+                                            <ImageBrush ImageSource="{Binding HeaderImage}" Stretch="UniformToFill" />
+                                        </Rectangle.Fill>
+                                        <Rectangle.OpacityMask>
+                                            <LinearGradientBrush StartPoint="0.5,0.3" EndPoint="0.5,1">
+                                                <GradientStop Offset="0" Color="White" />
+                                                <GradientStop Offset="1" Color="Transparent" />
+                                            </LinearGradientBrush>
+                                        </Rectangle.OpacityMask>
+                                        <Rectangle.Effect>
+                                            <BlurEffect KernelType="Gaussian" Radius="64" RenderingBias="Quality" />
+                                        </Rectangle.Effect>
+                                    </Rectangle>
+                                    <Rectangle Grid.Row="0" Height="290" Fill="#40000000">
+                                        <Rectangle.OpacityMask>
+                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,0.7">
+                                                <GradientStop Offset="0" Color="White" />
+                                                <GradientStop Offset="1" Color="Transparent" />
+                                            </LinearGradientBrush>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+
+                                    <Grid Grid.Row="0" Margin="20 20 20 50">
+                                        <ui:Button HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                   Appearance="Transparent"
+                                                   Command="{Binding DataContext.ClearSelectionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon Margin="0 0 6 0" Symbol="ArrowLeft20" />
+                                                <TextBlock VerticalAlignment="Center" Text="All games" />
+                                            </StackPanel>
+                                        </ui:Button>
+
+                                        <StackPanel VerticalAlignment="Bottom">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                    <TextBlock VerticalAlignment="Center"
+                                                               FontSize="24" FontWeight="SemiBold"
+                                                               Text="{Binding GameName}"
+                                                               TextWrapping="Wrap" />
+                                                    <!--<Border Grid.Column="1"
+                                                            Height="25"
+                                                            Margin="12 0 0 0" Padding="6 3"
+                                                            Background="#30D1B13C" CornerRadius="4"
+                                                            ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}"
+                                                            Visibility="{Binding IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <ui:SymbolIcon Margin="0 2 4 0" Foreground="#e8d69b" Symbol="Warning20" />
+                                                            <TextBlock VerticalAlignment="Center"
+                                                                       loc:L.Value="Direct Storage" FontSize="11" Foreground="#e8d69b" />
+                                                        </StackPanel>
+                                                    </Border>-->
+                                                </StackPanel>
+
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="0 5 0 0"
+                                                           Foreground="{StaticResource CardForegroundDisabled}"
+                                                           Text="{Binding DisplayPath, Converter={StaticResource TokenisedFolderPathConverter}}"
+                                                           TextWrapping="Wrap" />
+
+
+                                            </Grid>
+                                            <StackPanel Height="24"
+                                                        Margin="0 8 0 0"
+                                                        Orientation="Horizontal" TextOptions.TextFormattingMode="Display">
+                                                <Ellipse Width="11" Height="11" Margin="0 0 9 -2">
+                                                    <Ellipse.Style>
+                                                        <Style TargetType="Ellipse">
+                                                            <Setter Property="Fill" Value="#D14A4F" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
+                                                                    <Setter Property="Fill" Value="#4bd18a" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.RecentlyUpdated}">
+                                                                    <Setter Property="Fill" Value="#D1B13C" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
+                                                                    <Setter Property="Fill" Value="#44bedf" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Ellipse.Style>
+                                                </Ellipse>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding StatusMessage}" />
+                                                <Border Height="24"
+                                                        Margin="10 0 0 0" Padding="8 2"
+                                                        Background="#8373808C" CornerRadius="5"
+                                                        Visibility="{Binding IsCompressed, Converter={StaticResource BoolToVisConverter}}">
+                                                    <TextBlock VerticalAlignment="Center"
+                                                               FontSize="11" FontWeight="SemiBold" Foreground="#FFF"
+                                                               Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" />
+                                                </Border>
+
+                                                <TextBlock Margin="20 0" VerticalAlignment="Center"
+                                                           FontWeight="SemiBold" Foreground="#44bedf"
+                                                           Text="{Binding OperationMessage}"
+                                                           Visibility="{Binding HasOperationMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            </StackPanel>
+
+
+
+
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel Grid.Row="1" Margin="20 -10 20 20" UseLayoutRounding="True">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="150" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.ColumnSpan="2"
+                                                    Height="80"
+                                                    Padding="20 15" VerticalAlignment="Top"
+                                                    Background="#00FFFFFF" BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="6">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition MaxWidth="200" />
+                                                        <ColumnDefinition MaxWidth="200" />
+                                                        <ColumnDefinition MaxWidth="200" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition Height="30" />
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock FontSize="13" Foreground="{StaticResource CardForegroundDisabled}" Text="Current size" />
+                                                    <TextBlock Grid.Row="1" FontSize="20" Text="{Binding CurrentFolderSize, Converter={StaticResource BytesToReadableConverter}}" />
+                                                    <TextBlock Grid.Column="1"
+                                                               FontSize="13"
+                                                               Foreground="{StaticResource CardForegroundDisabled}"
+                                                               Text="Base size" />
+                                                    <TextBlock Grid.Row="1" Grid.Column="1"
+                                                               FontSize="20"
+                                                               Text="{Binding UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
+                                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+
+                                                        <TextBlock Grid.Column="2"
+                                                                   FontSize="13"
+                                                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                                                   Text="Estimated ">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsCompressed}" Value="False">
+                                                                            <Setter Property="Visibility" Value="Visible" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Grid.Column="2"
+                                                                   FontSize="13"
+                                                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                                                   Text="Savings" />
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Row="1" Grid.Column="2"
+                                                               Margin="-13 4 0 0"
+                                                               FontSize="18" Foreground="#44bedf">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsCompressed}" Value="False">
+                                                                        <Setter Property="Text" Value="~" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
+
+                                                        <TextBlock Grid.Row="1" Grid.Column="2"
+                                                                   VerticalAlignment="Bottom"
+                                                                   FontSize="20"
+                                                                   Text="{Binding DetailSavings, Converter={StaticResource BytesToReadableConverter}}">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="#65dc9d" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsCompressed}" Value="False">
+                                                                            <Setter Property="Foreground" Value="#44bedf" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+
+                                                        <TextBlock Margin="10 0 0 3" VerticalAlignment="Bottom"
+                                                                   FontSize="14"
+                                                                   Foreground="{StaticResource TextControlForegroundDisabled}"
+                                                                   Text="{Binding SavingsPercentage, StringFormat={}{0:0}%}"
+                                                                   TextOptions.TextFormattingMode="Display" />
+
+
+                                                    </StackPanel>
+
+                                                </Grid>
+                                            </Border>
+                                            <ProgressBar Grid.ColumnSpan="2"
+                                                         Height="8"
+                                                         VerticalAlignment="Bottom"
+                                                         Background="#60FFFFFF" BorderThickness="0"
+                                                         Value="{Binding SavingsPercentage, Mode=OneWay}">
+                                                <ProgressBar.Style>
+                                                    <Style BasedOn="{StaticResource {x:Type ProgressBar}}" TargetType="ProgressBar">
+                                                        <Setter Property="Foreground" Value="#65dc9d" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsCompressed}" Value="False">
+                                                                <Setter Property="Foreground" Value="#44bedf" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ProgressBar.Style>
+                                            </ProgressBar>
+
+                                        </Grid>
+
+
+
+                                        <ui:Card Margin="0 10 0 0"
+                                                 Background="#30D1B13C" BorderBrush="Transparent"
+                                                 Visibility="{Binding IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
+                                            <TextBlock FontSize="12" TextWrapping="Wrap">
+                                                <ui:SymbolIcon Margin="0 0 0 -2" Foreground="#e8d69b" Symbol="Warning12" />
+                                                <Run Text="Direct Storage Detected." />
+                                                <Run Foreground="#e8d69b" Text="Compression may affect asset streaming performance for this game and is not recommended if you're using this technology." />
+                                            </TextBlock>
+                                        </ui:Card>
+                                        <Separator Margin="0 10 0 0" />
+
+                                        <TextBlock Margin="0 15 0 10"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource TextControlForegroundDisabled}"
+                                                   Text="COMPRESSION " />
+
+
+
+                                        <ui:Card Margin="0 0 0 10"
+                                                 Background="#30D1B13C" BorderBrush="Transparent"
+                                                 Visibility="{Binding IsCompressionRecommended, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                                            <TextBlock FontSize="12" TextWrapping="Wrap">
+                                                <ui:SymbolIcon Margin="0 0 0 -2" Foreground="#e8d69b" Symbol="Warning12" />
+                                                <Run Text="Compression is not recommended for this game." />
+                                            </TextBlock>
+                                        </ui:Card>
+
+                                        <ComboBox Height="42"
+                                                  VerticalContentAlignment="Center"
+                                                  BorderBrush="#50FFFFFF" BorderThickness="1"
+                                                  DisplayMemberPath="DisplayName"
+                                                  ItemsSource="{Binding CompressionModeOptions}"
+                                                  SelectedItem="{Binding SelectedCompressionOption, Mode=TwoWay}"
+                                                  Visibility="{Binding IsCompressionRecommended, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        </ComboBox>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="220" />
+                                            </Grid.ColumnDefinitions>
+                                            <Button Height="42"
+                                                    Margin="0 10 0 0" Padding="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                                    BorderBrush="#50FFFFFF" BorderThickness="1"
+                                                    Command="{Binding DataContext.EditSkipListCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}">
+                                                <Grid Height="42" Margin="10 0 -5 0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="50" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Orientation="Horizontal">
+
+                                                        <TextBlock VerticalAlignment="Center" Text="SKIPLIST" />
+                                                        <Separator Margin="5 0" />
+
+                                                        <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding CompressionOptions.SkipList}">
+                                                            <ItemsControl.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Horizontal" />
+                                                                </ItemsPanelTemplate>
+                                                            </ItemsControl.ItemsPanel>
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border MinWidth="40"
+                                                                            Margin="5 0" Padding="5 5"
+                                                                            Background="#40FFFFFF" CornerRadius="4">
+                                                                        <TextBlock FontSize="12" Text="{Binding}" TextAlignment="Center" />
+
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+
+                                                    </StackPanel>
+
+                                                    <ui:SymbolIcon Grid.Column="1" FontSize="20" Symbol="WindowSettings20" />
+
+                                                </Grid>
+                                                <Button.Style>
+                                                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                                                        <Setter Property="IsEnabled" Value="True" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsWorking}" Value="True">
+                                                                <Setter Property="IsEnabled" Value="False" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+
+                                            <Grid Grid.Column="1" Margin="10 10 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <ContentControl Content="{Binding}">
+                                                    <ContentControl.Resources>
+                                                        <DataTemplate x:Key="CompressTemplate">
+                                                            <ui:Button Height="42"
+                                                                       HorizontalAlignment="Stretch"
+                                                                       Background="#304BD18A" BorderBrush="#654BD18A"
+                                                                       Command="{Binding DataContext.CompressCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                       CommandParameter="{Binding}"
+                                                                       Content="{loc:T Compress}"
+                                                                       IsEnabled="{Binding CanCompress}" />
+                                                        </DataTemplate>
+                                                        <DataTemplate x:Key="NoActionTemplate"><Grid /></DataTemplate>
+                                                        <DataTemplate x:Key="UncompressTemplate">
+                                                            <ui:Button Height="42"
+                                                                       HorizontalAlignment="Stretch"
+                                                                       Appearance="Danger"
+                                                                       Command="{Binding DataContext.UncompressCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                       CommandParameter="{Binding}"
+                                                                       Content="{loc:T Uncompress}" />
+                                                        </DataTemplate>
+                                                        <DataTemplate x:Key="WorkingTemplate">
+                                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                                <ui:ProgressRing Width="28" Height="28" IsIndeterminate="True" />
+                                                                <ui:Button Width="36" Height="36"
+                                                                           Margin="12 0 0 0" Padding="0"
+                                                                           Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                           CommandParameter="{Binding}"
+                                                                           ToolTip="{loc:T Cancel operation}">
+                                                                    <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                                                                </ui:Button>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ContentControl.Resources>
+                                                    <ContentControl.Style>
+                                                        <Style TargetType="ContentControl">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource CompressTemplate}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsCompressionRecommended}" Value="False">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource NoActionTemplate}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsCompressed}" Value="True">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource UncompressTemplate}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsWorking}" Value="True">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource WorkingTemplate}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ContentControl.Style>
+                                                </ContentControl>
+
+                                            </Grid>
+
+                                        </Grid>
+
+                                        <Separator Margin="0 10 0 0" />
+
+                                        <Grid Margin="0 10 0 0" TextOptions.TextFormattingMode="Display"
+                                              Visibility="{Binding IsWatched, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+
+                                            <ui:SymbolIcon VerticalAlignment="Center" Foreground="{StaticResource TextControlForegroundDisabled}" Symbol="SearchVisual16" />
+                                            <StackPanel Grid.Column="1" Margin="10 0">
+                                                <TextBlock Margin="0 0 0 7"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                                                           Text="LAST ANALYSED " />
+                                                <TextBlock FontSize="12" Text="{Binding WatchlistEntry.LastCheckedDate, Converter={StaticResource RelativeDateConverter}}" />
+                                            </StackPanel>
+
+                                            <ui:SymbolIcon Grid.Row="1"
+                                                           Margin="0 15 0 0" VerticalAlignment="Center"
+                                                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                                                           Symbol="Box16" />
+                                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="10 15 0 0">
+                                                <TextBlock Margin="0 0 0 7"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                                                           Text="LAST COMPRESSED " />
+                                                <TextBlock FontSize="12" Text="{Binding WatchlistEntry.LastCompressedDate, Converter={StaticResource RelativeDateConverter}}" />
+                                            </StackPanel>
+
+                                        </Grid>
+
+
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </ScrollViewer>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+            </Border>
+        </Grid>
+
         <StackPanel Grid.Row="4"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     Background="#90000000" IsHitTestVisible="False"
@@ -394,7 +923,6 @@
                              IsIndeterminate="True" />
             <TextBlock Margin="20 12 20 20" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T Scanning installed Steam games...}" />
         </StackPanel>
-
         <StackPanel Grid.Row="4"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     IsHitTestVisible="False"
@@ -402,7 +930,6 @@
             <ui:SymbolIcon HorizontalAlignment="Center" FontSize="36" Symbol="Games24" />
             <TextBlock Margin="0 12 0 0" FontSize="16" Text="{loc:T No installed Steam games were found.}" />
         </StackPanel>
-
         <Border Grid.Row="4"
                 Margin="0 12 0 0" Padding="12" HorizontalAlignment="Stretch" VerticalAlignment="Top"
                 Background="#33D9534F" CornerRadius="6" IsHitTestVisible="False"

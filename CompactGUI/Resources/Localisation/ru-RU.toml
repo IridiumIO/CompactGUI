@@ -29,6 +29,7 @@
 "Check for pre-release updates" = "Проверять предварительные версии обновлений"
 "Click to download" = "Нажмите, чтобы скачать"
 "CompactGUI" = "CompactGUI"
+"Compress" = "Compress" # LOC:TODO
 "Compress Again" = "Сжать заново"
 "Compress All Now" = "Сжать всё сейчас"
 "Compress Selected" = "Сжать выбранное"
@@ -150,6 +151,7 @@
 "just now" = "только что"
 "last compressed:" = "последнее сжатие:"
 "last modified:" = "последнее изменение:"
+"recommended" = "recommended" # LOC:TODO
 "select a folder" = "выберите папку"
 "uncompressed size" = "исходный размер"
 "{0:0} days ago" = "{0:0} дн. назад"
