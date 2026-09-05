@@ -31,6 +31,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private ReadOnly _operationGate As New SemaphoreSlim(1, 1)
     Private ReadOnly _imageDownloadGate As New SemaphoreSlim(4, 4)
     Private ReadOnly _trackedSteamGames As New HashSet(Of SteamDetailedResult)
+    Private ReadOnly _selectedGames As New List(Of SteamDetailedResult)
     Private Shared ReadOnly SteamImageClient As New HttpClient()
     Private _activeFolder As StandardFolder
     Private _activeGame As SteamDetailedResult
@@ -56,9 +57,32 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     <NotifyPropertyChangedFor(NameOf(HasSelectedGame))>
     Private _selectedGame As SteamDetailedResult
 
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(HasSelectedGames))>
+    Private _selectedGameCount As Integer
+
+    <ObservableProperty>
+    <NotifyCanExecuteChangedFor(NameOf(AddSelectedToQueueCommand))>
+    Private _useRecommendedCompressionLevel As Boolean = True
+
+    <ObservableProperty>
+    Private _queueCompressionMode As Core.CompressionMode = Core.CompressionMode.XPRESS4K
+
+    <ObservableProperty>
+    Private _useGlobalSkiplist As Boolean
+
+    <ObservableProperty>
+    Private _useSmartSkiplist As Boolean
+
     Public ReadOnly Property HasSelectedGame As Boolean
         Get
             Return SelectedGame IsNot Nothing
+        End Get
+    End Property
+
+    Public ReadOnly Property HasSelectedGames As Boolean
+        Get
+            Return SelectedGameCount > 0
         End Get
     End Property
 
@@ -97,6 +121,9 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         _analyserLogger = analyserLogger
         _navigationService = navigationService
         _settingsService = settingsService
+        QueueCompressionMode = settingsService.AppSettings.SelectedCompressionMode
+        UseGlobalSkiplist = settingsService.AppSettings.SkipNonCompressable
+        UseSmartSkiplist = settingsService.AppSettings.SkipUserNonCompressable
         FilteredSteamGames = CollectionViewSource.GetDefaultView(SteamGamesData)
         FilteredSteamGames.Filter = AddressOf FilterGames
         AddHandler SteamGamesData.CollectionChanged, AddressOf OnSteamGamesCollectionChanged
@@ -150,6 +177,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     <RelayCommand>
     Private Async Function RefreshAll() As Task
         SelectedGame = Nothing
+        _selectedGames.Clear()
+        SelectedGameCount = 0
         SteamGamesData.Clear()
         _hasLoaded = False
         Await LoadGamesAsync()
@@ -195,6 +224,32 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         If _statusFilter.HasValue AndAlso game.Status <> _statusFilter.Value Then Return False
         If _recommendedActionFilter.HasValue AndAlso game.RecommendedActionCategory <> _recommendedActionFilter.Value Then Return False
         Return True
+    End Function
+
+    Friend Sub UpdateSelectedGames(selectedItems As IList)
+        _selectedGames.Clear()
+        _selectedGames.AddRange(selectedItems.Cast(Of SteamDetailedResult))
+        SelectedGameCount = _selectedGames.Count
+        AddSelectedToQueueCommand.NotifyCanExecuteChanged()
+    End Sub
+
+    <RelayCommand>
+    Private Sub AddSelectedToQueue()
+        Dim requests = _selectedGames.Select(Function(game)
+                                                 Dim mode = If(UseRecommendedCompressionLevel, game.RecommendedCompressionMode.Value, QueueCompressionMode)
+                                                 Dim options As New CompressionOptions With {
+                                                     .SelectedCompressionMode = mode,
+                                                     .SkipPoorlyCompressedFileTypes = UseGlobalSkiplist,
+                                                     .SkipUserSubmittedFiletypes = UseSmartSkiplist,
+                                                     .SkipListEnabled = UseGlobalSkiplist OrElse UseSmartSkiplist
+                                                 }
+                                                 Return New SteamQueueItem(game.GamePath, options)
+                                             End Function).ToList()
+        WeakReferenceMessenger.Default.Send(New SteamGamesAddedToQueueMessage(requests))
+    End Sub
+
+    Private Function CanAddSelectedToQueue() As Boolean
+        Return _selectedGames.Count > 0 AndAlso (Not UseRecommendedCompressionLevel OrElse _selectedGames.All(Function(game) game.RecommendedCompressionMode.HasValue))
     End Function
 
     <RelayCommand>

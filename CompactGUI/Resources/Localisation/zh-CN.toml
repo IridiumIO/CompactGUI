@@ -7,6 +7,7 @@
 "Add" = "添加"
 "Add Folder to Queue" = "添加文件夹到队列"
 "Add a custom folder to the watchlist" = "添加自定义文件夹到监控列表"
+"Add all to queue" = "Add all to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
 "Add to compression queue" = "添加到压缩队列"
 "Add to right-click context menu" = "添加到右键菜单"
@@ -108,8 +109,10 @@
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "按游戏名称或 SteamID 搜索..."
 "Select a folder to compress" = "Select a folder to compress" # LOC:TODO
+"Select all visible games" = "Select all visible games" # LOC:TODO
 "Settings" = "设置"
 "Show notification on completion" = "完成后显示通知"
+"Sort" = "Sort" # LOC:TODO
 "Sort By" = "排序方式"
 "Space Saved" = "节省空间"
 "Start CompactGUI in system tray" = "在系统托盘启动 CompactGUI"
@@ -133,7 +136,10 @@
 "Update Available ▸ Version {0}" = "更新可用 ▸ 版本 {0}"
 "Update Settings" = "更新设置"
 "Update in Steam" = "Update in Steam" # LOC:TODO
+"Use global skiplist" = "Use global skiplist" # LOC:TODO
+"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
 "Use skip list" = "使用跳过列表"
+"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Version" = "版本"
 "Watch folder for changes" = "监控文件夹更改"
 "Watched Folders" = "受监控文件夹"

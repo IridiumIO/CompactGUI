@@ -7,6 +7,7 @@
 "Add" = "Добавить"
 "Add Folder to Queue" = "Добавить папку в очередь"
 "Add a custom folder to the watchlist" = "Добавить свою папку в список отслеживания"
+"Add all to queue" = "Add all to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
 "Add to compression queue" = "Добавить в очередь сжатия"
 "Add to right-click context menu" = "Добавить в контекстное меню правой кнопки мыши"
@@ -108,8 +109,10 @@
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "Поиск по названию игры или SteamID..."
 "Select a folder to compress" = "Select a folder to compress" # LOC:TODO
+"Select all visible games" = "Select all visible games" # LOC:TODO
 "Settings" = "Настройки"
 "Show notification on completion" = "Показывать уведомление о завершении"
+"Sort" = "Sort" # LOC:TODO
 "Sort By" = "Сортировать по"
 "Space Saved" = "Сэкономлено места"
 "Start CompactGUI in system tray" = "Запускать CompactGUI в области уведомлений"
@@ -133,7 +136,10 @@
 "Update Available ▸ Version {0}" = "Доступно обновление ▸ Версия {0}"
 "Update Settings" = "Настройки обновлений"
 "Update in Steam" = "Update in Steam" # LOC:TODO
+"Use global skiplist" = "Use global skiplist" # LOC:TODO
+"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
 "Use skip list" = "Использовать список исключений"
+"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Version" = "Версия"
 "Watch folder for changes" = "Отслеживать изменения в папке"
 "Watched Folders" = "Отслеживаемые папки"

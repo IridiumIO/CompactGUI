@@ -13,7 +13,7 @@ Imports CompactGUI.Logging
 
 Imports Microsoft.Extensions.Logging
 
-Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
+Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient : Implements IRecipient(Of WatcherAddedFolderToQueueMessage), IRecipient(Of SteamGamesAddedToQueueMessage)
 
     Private ReadOnly _folderViewModels As New Dictionary(Of CompressableFolder, FolderViewModel)
 
@@ -64,6 +64,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
     Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel), settingsService As ISettingsService, compressableFolderService As CompressableFolderService)
         WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
+        WeakReferenceMessenger.Default.Register(Of SteamGamesAddedToQueueMessage)(Me)
         AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
         _watcher = watcher
         _snackbarService = snackbarService
@@ -106,7 +107,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
 
 
-    Public Async Function AddFoldersAsync(folderPaths As IEnumerable(Of String)) As Task
+    Public Async Function AddFoldersAsync(folderPaths As IEnumerable(Of String), Optional queueOptions As IReadOnlyDictionary(Of String, CompressionOptions) = Nothing) As Task
 
         HomeViewModelLog.AddingFolders(_logger, folderPaths)
 
@@ -127,6 +128,10 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             newFolder.CompressionOptions.SelectedCompressionMode = _settingsService.AppSettings.SelectedCompressionMode
             newFolder.CompressionOptions.SkipPoorlyCompressedFileTypes = _settingsService.AppSettings.SkipNonCompressable
             newFolder.CompressionOptions.SkipUserSubmittedFiletypes = _settingsService.AppSettings.SkipUserNonCompressable
+
+            Dim requestedOptions As CompressionOptions = Nothing
+            Dim hasRequestedOptions = queueOptions?.TryGetValue(folderName, requestedOptions)
+            If hasRequestedOptions Then newFolder.CompressionOptions = requestedOptions.Clone()
 
             If Not Folders.Any(Function(f) f.FolderName = newFolder.FolderName) Then
                 Folders.Add(newFolder)
@@ -149,11 +154,13 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             If _watcher.WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
                 Dim watchedFolder = _watcher.WatchedFolders.First(Function(w) w.Folder = newFolder.FolderName)
                 newFolder.CompressionOptions.WatchFolderForChanges = True
-                If watchedFolder.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION Then
-                    newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
-                End If
-                If watchedFolder.SkipList IsNot Nothing Then
-                    newFolder.CompressionOptions.SkipList = New List(Of String)(watchedFolder.SkipList)
+                If Not hasRequestedOptions Then
+                    If watchedFolder.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION Then
+                        newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
+                    End If
+                    If watchedFolder.SkipList IsNot Nothing Then
+                        newFolder.CompressionOptions.SkipList = New List(Of String)(watchedFolder.SkipList)
+                    End If
                 End If
 
             End If
@@ -319,5 +326,11 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Public Async Sub Receive(message As WatcherAddedFolderToQueueMessage) Implements IRecipient(Of WatcherAddedFolderToQueueMessage).Receive
         Application.GetService(Of CustomSnackBarService).ShowAddedToQueue()
         Await AddFoldersAsync({message.Value})
+    End Sub
+
+    Public Async Sub Receive(message As SteamGamesAddedToQueueMessage) Implements IRecipient(Of SteamGamesAddedToQueueMessage).Receive
+        Application.GetService(Of CustomSnackBarService).ShowAddedToQueue()
+        Dim options = message.Value.GroupBy(Function(item) item.FolderPath, StringComparer.OrdinalIgnoreCase).ToDictionary(Function(group) group.Key, Function(group) group.Last().CompressionOptions, StringComparer.OrdinalIgnoreCase)
+        Await AddFoldersAsync(options.Keys, options)
     End Sub
 End Class

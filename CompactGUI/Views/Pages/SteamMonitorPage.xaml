@@ -12,6 +12,7 @@
              d:DesignHeight="600"
              d:DesignWidth="1100"
              Loaded="OnLoaded"
+             Unloaded="OnUnloaded"
              mc:Ignorable="d">
 
     <Grid Margin="40 20 20 0">
@@ -152,6 +153,10 @@
                 <ColumnDefinition MinWidth="60" MaxWidth="145" />
                 <ColumnDefinition Width="220" />
             </Grid.ColumnDefinitions>
+            <CheckBox x:Name="SelectAllVisibleCheckBox"
+                      Margin="-20 -10 0 -10" HorizontalAlignment="Left"
+                      Click="OnSelectAllVisibleClick" IsThreeState="True"
+                      ToolTip="{loc:T Select all visible games}" />
             <TextBlock Grid.Column="1" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T GAME, Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="2" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T STATUS, Context='Steam Library Tab Headings'}" />
             <TextBlock Grid.Column="3"
@@ -171,13 +176,15 @@
                                     Context='Steam Library Tab Headings'}" />
         </Grid>
 
-        <ListView Grid.Row="4"
+        <ListView x:Name="SteamGamesList"
+                  Grid.Row="4"
                   Padding="0" HorizontalContentAlignment="Stretch"
                   Background="Transparent" BorderThickness="0"
                   ItemsSource="{Binding FilteredSteamGames}"
                   ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectedItem="{Binding SelectedGame, Mode=TwoWay}"
-                  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling" Visibility="Visible">
+                  SelectionChanged="OnSteamGamesSelectionChanged" SelectionMode="Extended" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling"
+                  Visibility="Visible">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Padding" Value="0" />
@@ -218,6 +225,22 @@
                                 <ColumnDefinition MinWidth="60" MaxWidth="145" />
                                 <ColumnDefinition Width="220" />
                             </Grid.ColumnDefinitions>
+                            <CheckBox Margin="-20 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Panel.ZIndex="5"
+                                      IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Mode=TwoWay}">
+                                <CheckBox.Style>
+                                    <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
                             <Border Width="170" Height="78"
                                     Margin="-14 -15 -150 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
                                     Background="{StaticResource CardBackgroundPressed}"
@@ -951,6 +974,62 @@
                 </ContentControl>
             </Border>
         </Grid>
+
+        <Border Grid.Row="4"
+                Margin="20 0 40 20" Padding="16 12" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Panel.ZIndex="20"
+                Background="#445667" BorderBrush="#50FFFFFF" BorderThickness="1" CornerRadius="8"
+                Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox VerticalAlignment="Center" Content="{loc:T Use recommended compression level}" IsChecked="{Binding UseRecommendedCompressionLevel}" />
+
+                <ComboBox Grid.Column="1"
+                          Height="36"
+                          Margin="16 0 0 0" VerticalContentAlignment="Center"
+                          SelectedValue="{Binding QueueCompressionMode}"
+                          SelectedValuePath="Tag">
+                    <ComboBox.Style>
+                        <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+                            <Setter Property="IsEnabled" Value="True" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding UseRecommendedCompressionLevel}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                    <ComboBox.Items>
+                        <ComboBoxItem Content="XPRESS 4K" Tag="{x:Static core:CompressionMode.XPRESS4K}" />
+                        <ComboBoxItem Content="XPRESS 8K" Tag="{x:Static core:CompressionMode.XPRESS8K}" />
+                        <ComboBoxItem Content="XPRESS 16K" Tag="{x:Static core:CompressionMode.XPRESS16K}" />
+                        <ComboBoxItem Content="LZX" Tag="{x:Static core:CompressionMode.LZX}" />
+                    </ComboBox.Items>
+                </ComboBox>
+
+                <CheckBox Grid.Column="2"
+                          Margin="20 0 0 0" VerticalAlignment="Center"
+                          Content="{loc:T Use global skiplist}"
+                          IsChecked="{Binding UseGlobalSkiplist}" />
+                <CheckBox Grid.Column="3"
+                          Margin="20 0 0 0" VerticalAlignment="Center"
+                          Content="{loc:T Use smart skiplist}"
+                          IsChecked="{Binding UseSmartSkiplist}" />
+
+                <ui:Button Grid.Column="5"
+                           Height="38"
+                           Margin="20 0 0 0" Padding="18 0"
+                           Command="{Binding AddSelectedToQueueCommand}"
+                           Content="{loc:T Add all to queue}" />
+            </Grid>
+        </Border>
 
         <StackPanel Grid.Row="4"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
