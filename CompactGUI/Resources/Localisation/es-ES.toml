@@ -7,7 +7,7 @@
 "Add" = "Añadir "
 "Add Folder to Queue" = "Añadir carpeta a la cola"
 "Add a custom folder to the watchlist" = "Añadir carpeta personalizada a la lista"
-"Add all to queue" = "Add all to queue" # LOC:TODO
+"Add selected to queue" = "Add selected to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
 "Add to compression queue" = "Añadir a la cola de compresión"
 "Add to right-click context menu" = "Añadir al menú contextual"
@@ -48,6 +48,7 @@
 "Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "Resultados de la base de datos"
 "Descending" = "Descendente"
+"Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "Direct Storage" # LOC:TODO
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
@@ -69,7 +70,9 @@
 "Go to Database Results" = "Go to Database Results" # LOC:TODO
 "HDDs only use 1 thread" = "Los HDD usan solo 1 hilo"
 "Home" = "Inicio"
+"Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "Incluir tipos de archivo omitidos globales"
+"Include smart skiplist" = "Include smart skiplist" # LOC:TODO
 "Include smart skipped file types" = "Incluir tipos de archivo inteligentes omitidos"
 "Insufficient permission to access this folder" = "Permiso insuficiente para acceder a esta carpeta."
 "LZX" = "LZX"
@@ -108,7 +111,10 @@
 "Savings" = "Ahorro"
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "Buscar por nombre o SteamID..."
+"Select" = "Select" # LOC:TODO
 "Select a folder to compress" = "Select a folder to compress" # LOC:TODO
+"Select all" = "Select all" # LOC:TODO
+"Select all compressable" = "Select all compressable" # LOC:TODO
 "Select all visible games" = "Select all visible games" # LOC:TODO
 "Settings" = "Ajustes"
 "Show notification on completion" = "Mostrar notificación al finalizar"
@@ -136,10 +142,8 @@
 "Update Available ▸ Version {0}" = "Actualización disponible ▸ Versión {0}"
 "Update Settings" = "Ajustes de actualización"
 "Update in Steam" = "Update in Steam" # LOC:TODO
-"Use global skiplist" = "Use global skiplist" # LOC:TODO
-"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use recommended mode" = "Use recommended mode" # LOC:TODO
 "Use skip list" = "Usar lista de exclusión"
-"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Version" = "Versión"
 "Watch folder for changes" = "Monitorizar cambios en carpeta"
 "Watched Folders" = "Carpetas monitorizadas"
@@ -225,6 +229,7 @@
 "saved" = "ahorrado"
 
 [obsolete]
+"Add all to queue" = "Add all to queue" # LOC:TODO
 "Custom list — {0} entries" = "Lista personalizada — {0} entradas"
 "Custom: {0} entries" = "Personalizada: {0} entradas"
 "DB — {0} files" = "Wiki — {0} archivos"
@@ -243,6 +248,9 @@
 "Skip file types likely to compress poorly" = "Omitir tipos de archivo difícilmente comprimibles"
 "Skip file types specified in settings" = "Omitir tipos de archivo especificados en ajustes"
 "Smart: {0} skipped" = "Inteligente: {0} omitidos"
+"Use global skiplist" = "Use global skiplist" # LOC:TODO
+"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "Bienvenido"
 "decayed" = "degradado"
 "files will be skipped" = "archivos serán omitidos"

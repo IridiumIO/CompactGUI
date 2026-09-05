@@ -7,7 +7,7 @@
 "Add" = "Добавить"
 "Add Folder to Queue" = "Добавить папку в очередь"
 "Add a custom folder to the watchlist" = "Добавить свою папку в список отслеживания"
-"Add all to queue" = "Add all to queue" # LOC:TODO
+"Add selected to queue" = "Add selected to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
 "Add to compression queue" = "Добавить в очередь сжатия"
 "Add to right-click context menu" = "Добавить в контекстное меню правой кнопки мыши"
@@ -48,6 +48,7 @@
 "Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "Результаты базы данных"
 "Descending" = "По убыванию"
+"Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "Direct Storage" # LOC:TODO
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
@@ -69,7 +70,9 @@
 "Go to Database Results" = "Go to Database Results" # LOC:TODO
 "HDDs only use 1 thread" = "Для HDD использовать только 1 поток"
 "Home" = "Главная"
+"Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "Включить глобальный список пропускаемых типов"
+"Include smart skiplist" = "Include smart skiplist" # LOC:TODO
 "Include smart skipped file types" = "Включить умные пропускаемые типы файлов"
 "Insufficient permission to access this folder" = "Недостаточно прав для доступа к этой папке"
 "LZX" = "LZX" # LOC:TODO
@@ -108,7 +111,10 @@
 "Savings" = "Экономия"
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "Поиск по названию игры или SteamID..."
+"Select" = "Select" # LOC:TODO
 "Select a folder to compress" = "Select a folder to compress" # LOC:TODO
+"Select all" = "Select all" # LOC:TODO
+"Select all compressable" = "Select all compressable" # LOC:TODO
 "Select all visible games" = "Select all visible games" # LOC:TODO
 "Settings" = "Настройки"
 "Show notification on completion" = "Показывать уведомление о завершении"
@@ -136,10 +142,8 @@
 "Update Available ▸ Version {0}" = "Доступно обновление ▸ Версия {0}"
 "Update Settings" = "Настройки обновлений"
 "Update in Steam" = "Update in Steam" # LOC:TODO
-"Use global skiplist" = "Use global skiplist" # LOC:TODO
-"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use recommended mode" = "Use recommended mode" # LOC:TODO
 "Use skip list" = "Использовать список исключений"
-"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Version" = "Версия"
 "Watch folder for changes" = "Отслеживать изменения в папке"
 "Watched Folders" = "Отслеживаемые папки"
@@ -225,6 +229,7 @@
 "saved" = "сэкономлено"
 
 [obsolete]
+"Add all to queue" = "Add all to queue" # LOC:TODO
 "Custom list — {0} entries" = "Свой список — {0} записей"
 "Custom: {0} entries" = "Свой: {0} записей"
 "DB — {0} files" = "Вики — {0} файлов"
@@ -243,6 +248,9 @@
 "Skip file types likely to compress poorly" = "Пропускать типы файлов, которые сжимаются плохо"
 "Skip file types specified in settings" = "Пропускать типы файлов, указанные в настройках"
 "Smart: {0} skipped" = "Умный: {0} пропущено"
+"Use global skiplist" = "Use global skiplist" # LOC:TODO
+"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "Добро пожаловать"
 "decayed" = "устарело"
 "files will be skipped" = "фл. будет пропущено"

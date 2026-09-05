@@ -7,7 +7,7 @@
 "Add" = "添加"
 "Add Folder to Queue" = "添加文件夹到队列"
 "Add a custom folder to the watchlist" = "添加自定义文件夹到监控列表"
-"Add all to queue" = "Add all to queue" # LOC:TODO
+"Add selected to queue" = "Add selected to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
 "Add to compression queue" = "添加到压缩队列"
 "Add to right-click context menu" = "添加到右键菜单"
@@ -48,6 +48,7 @@
 "Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "数据库结果"
 "Descending" = "降序"
+"Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "Direct Storage" # LOC:TODO
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
@@ -69,7 +70,9 @@
 "Go to Database Results" = "Go to Database Results" # LOC:TODO
 "HDDs only use 1 thread" = "HDD 仅使用 1 个线程"
 "Home" = "主页"
+"Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "包含全局跳过的文件类型"
+"Include smart skiplist" = "Include smart skiplist" # LOC:TODO
 "Include smart skipped file types" = "包含智能跳过的文件类型"
 "Insufficient permission to access this folder" = "没有足够的权限访问此文件夹"
 "LZX" = "LZX" # LOC:TODO
@@ -108,7 +111,10 @@
 "Savings" = "节省"
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "按游戏名称或 SteamID 搜索..."
+"Select" = "Select" # LOC:TODO
 "Select a folder to compress" = "Select a folder to compress" # LOC:TODO
+"Select all" = "Select all" # LOC:TODO
+"Select all compressable" = "Select all compressable" # LOC:TODO
 "Select all visible games" = "Select all visible games" # LOC:TODO
 "Settings" = "设置"
 "Show notification on completion" = "完成后显示通知"
@@ -136,10 +142,8 @@
 "Update Available ▸ Version {0}" = "更新可用 ▸ 版本 {0}"
 "Update Settings" = "更新设置"
 "Update in Steam" = "Update in Steam" # LOC:TODO
-"Use global skiplist" = "Use global skiplist" # LOC:TODO
-"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use recommended mode" = "Use recommended mode" # LOC:TODO
 "Use skip list" = "使用跳过列表"
-"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Version" = "版本"
 "Watch folder for changes" = "监控文件夹更改"
 "Watched Folders" = "受监控文件夹"
@@ -225,6 +229,7 @@
 "saved" = "已节省"
 
 [obsolete]
+"Add all to queue" = "Add all to queue" # LOC:TODO
 "Custom list — {0} entries" = "自定义列表 — {0} 条"
 "Custom: {0} entries" = "自定义: {0} 条"
 "DB — {0} files" = "Wiki — {0} 个文件"
@@ -243,6 +248,9 @@
 "Skip file types likely to compress poorly" = "跳过可能压缩效果不佳的文件类型"
 "Skip file types specified in settings" = "跳过设置中指定的文件类型"
 "Smart: {0} skipped" = "智能: 已跳过 {0}"
+"Use global skiplist" = "Use global skiplist" # LOC:TODO
+"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "欢迎"
 "decayed" = "已衰减"
 "files will be skipped" = "个文件将被跳过"

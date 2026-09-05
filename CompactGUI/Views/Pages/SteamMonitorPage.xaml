@@ -42,6 +42,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ui:TextBox MinWidth="250"
                         VerticalAlignment="Center"
@@ -52,6 +53,15 @@
                                Height="36"
                                Margin="20 0 0 0" VerticalAlignment="Center"
                                Foreground="{StaticResource LabelForeground}">
+                <ui:DropDownButton.Style>
+                    <Style BasedOn="{StaticResource {x:Type ui:DropDownButton}}" TargetType="ui:DropDownButton">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasActiveFilters}" Value="True">
+                                <Setter Property="Background" Value="#3044BEDF" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ui:DropDownButton.Style>
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="Filter12" />
                     <TextBlock Margin="5 0 0 0" loc:L.Value="Filter" />
@@ -83,6 +93,7 @@
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
             </ui:DropDownButton>
+
             <ui:DropDownButton Grid.Column="2"
                                Height="36"
                                Margin="20 0 0 0" VerticalAlignment="Center"
@@ -109,6 +120,23 @@
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsAsc" Header="{loc:T Ascending}" />
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsDesc" Header="{loc:T Descending}" />
                         </MenuItem>
+                    </ContextMenu>
+                </ui:DropDownButton.Flyout>
+            </ui:DropDownButton>
+            <ui:DropDownButton Grid.Column="3"
+                               Height="36"
+                               Margin="20 0 0 0" VerticalAlignment="Center"
+                               Foreground="{StaticResource LabelForeground}">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Symbol="MultiselectLtr16" />
+                    <TextBlock Margin="5 0 0 0" loc:L.Value="Select" />
+                </StackPanel>
+                <ui:DropDownButton.Flyout>
+                    <ContextMenu>
+                        <MenuItem Click="OnSelectAllClick" Header="{loc:T Select all}" />
+                        <MenuItem Click="OnSelectAllCompressableClick" Header="{loc:T Select all compressable}" />
+                        <Separator />
+                        <MenuItem Click="OnDeselectAllClick" Header="{loc:T Deselect all}" />
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
             </ui:DropDownButton>
@@ -218,9 +246,18 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="0 0 0 8" Padding="14 10"
-                            Background="{StaticResource CardBackground}"
                             CornerRadius="6"
                             Tag="{Binding DataContext, ElementName=PageRoot}">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="{StaticResource CardBackground}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                        <Setter Property="Background" Value="#3044BEDF" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <Border.ContextMenu>
                             <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                                 <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Add to Compression Queue}" />
@@ -992,58 +1029,69 @@
         </Grid>
 
         <Border Grid.Row="4"
-                Margin="20 0 40 20" Padding="16 12" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Panel.ZIndex="20"
+                Margin="20 0 40 20" Padding="15 16" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Panel.ZIndex="20"
                 Background="#445667" BorderBrush="#50FFFFFF" BorderThickness="1" CornerRadius="8"
                 Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <CheckBox VerticalAlignment="Center" Content="{loc:T Use recommended compression level}" IsChecked="{Binding UseRecommendedCompressionLevel}" />
+                <StackPanel Grid.Column="0">
+                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" Text="COMPRESSION MODE " />
+                    <CheckBox Margin="-10 0 0 0" Content="{loc:T Use recommended mode}" IsChecked="{Binding UseRecommendedCompressionLevel}" />
+                    <ComboBox Grid.Column="2"
+                              Height="36"
+                              SelectedValue="{Binding QueueCompressionMode}"
+                              SelectedValuePath="Tag">
+                        <ComboBox.Style>
+                            <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+                                <Setter Property="IsEnabled" Value="True" />
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding UseRecommendedCompressionLevel}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                        <ComboBox.Items>
+                            <ComboBoxItem Content="XPRESS 4K" Tag="{x:Static core:CompressionMode.XPRESS4K}" />
+                            <ComboBoxItem Content="XPRESS 8K" Tag="{x:Static core:CompressionMode.XPRESS8K}" />
+                            <ComboBoxItem Content="XPRESS 16K" Tag="{x:Static core:CompressionMode.XPRESS16K}" />
+                            <ComboBoxItem Content="LZX" Tag="{x:Static core:CompressionMode.LZX}" />
+                        </ComboBox.Items>
+                    </ComboBox>
+                </StackPanel>
 
-                <ComboBox Grid.Column="1"
-                          Height="36"
-                          Margin="16 0 0 0" VerticalContentAlignment="Center"
-                          SelectedValue="{Binding QueueCompressionMode}"
-                          SelectedValuePath="Tag">
-                    <ComboBox.Style>
-                        <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
-                            <Setter Property="IsEnabled" Value="True" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding UseRecommendedCompressionLevel}" Value="True">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ComboBox.Style>
-                    <ComboBox.Items>
-                        <ComboBoxItem Content="XPRESS 4K" Tag="{x:Static core:CompressionMode.XPRESS4K}" />
-                        <ComboBoxItem Content="XPRESS 8K" Tag="{x:Static core:CompressionMode.XPRESS8K}" />
-                        <ComboBoxItem Content="XPRESS 16K" Tag="{x:Static core:CompressionMode.XPRESS16K}" />
-                        <ComboBoxItem Content="LZX" Tag="{x:Static core:CompressionMode.LZX}" />
-                    </ComboBox.Items>
-                </ComboBox>
+                <Separator Grid.Column="1" Margin="10 0 10 0" />
 
-                <CheckBox Grid.Column="2"
-                          Margin="20 0 0 0" VerticalAlignment="Center"
-                          Content="{loc:T Use global skiplist}"
-                          IsChecked="{Binding UseGlobalSkiplist}" />
-                <CheckBox Grid.Column="3"
-                          Margin="20 0 0 0" VerticalAlignment="Center"
-                          Content="{loc:T Use smart skiplist}"
-                          IsChecked="{Binding UseSmartSkiplist}" />
+                <StackPanel Grid.Column="2">
+                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" Text="SKIPLIST SELECTION" />
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Grid.Column="3"
+                                  Margin="-10 0 0 0"
+                                  Content="{loc:T Include global skiplist}"
+                                  IsChecked="{Binding UseGlobalSkiplist}" />
+                        <CheckBox Grid.Column="4" Content="{loc:T Include smart skiplist}" IsChecked="{Binding UseSmartSkiplist}" />
+                    </StackPanel>
 
-                <ui:Button Grid.Column="5"
+                </StackPanel>
+
+
+
+                <ui:Button Grid.Column="6"
                            Height="38"
                            Margin="20 0 0 0" Padding="18 0"
                            Command="{Binding AddSelectedToQueueCommand}"
-                           Content="{loc:T Add all to queue}" />
+                           Content="{loc:T Add selected to queue}" />
             </Grid>
         </Border>
 

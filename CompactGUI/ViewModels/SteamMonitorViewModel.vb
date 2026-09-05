@@ -86,6 +86,12 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         End Get
     End Property
 
+    Public ReadOnly Property HasActiveFilters As Boolean
+        Get
+            Return _libraryFilter IsNot Nothing OrElse _statusFilter.HasValue OrElse _recommendedActionFilter.HasValue
+        End Get
+    End Property
+
     Public ReadOnly Property SteamGamesData As New ObservableCollection(Of SteamDetailedResult)
     Public ReadOnly Property LibraryLocations As New ObservableCollection(Of SteamLibraryFilterOption)
     Public ReadOnly Property FilteredSteamGames As ICollectionView
@@ -241,7 +247,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                                                      .SelectedCompressionMode = mode,
                                                      .SkipPoorlyCompressedFileTypes = UseGlobalSkiplist,
                                                      .SkipUserSubmittedFiletypes = UseSmartSkiplist,
-                                                     .SkipListEnabled = UseGlobalSkiplist OrElse UseSmartSkiplist
+                                                     .SkipListEnabled = UseGlobalSkiplist OrElse UseSmartSkiplist,
+                                                     .WatchFolderForChanges = True
                                                  }
                                                  Return New SteamQueueItem(game.GamePath, options)
                                              End Function).ToList()
@@ -255,19 +262,19 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     <RelayCommand>
     Private Sub FilterLibrary(path As String)
         _libraryFilter = If(String.Equals(_libraryFilter, path, StringComparison.OrdinalIgnoreCase), Nothing, path)
-        FilteredSteamGames.Refresh()
+        RefreshFilters()
     End Sub
 
     <RelayCommand>
     Private Sub FilterStatus(status As SteamGameStatus)
         _statusFilter = If(_statusFilter = status, CType(Nothing, SteamGameStatus?), status)
-        FilteredSteamGames.Refresh()
+        RefreshFilters()
     End Sub
 
     <RelayCommand>
     Private Sub FilterRecommendedAction(action As SteamRecommendedAction)
         _recommendedActionFilter = If(_recommendedActionFilter = action, CType(Nothing, SteamRecommendedAction?), action)
-        FilteredSteamGames.Refresh()
+        RefreshFilters()
     End Sub
 
     <RelayCommand>
@@ -275,6 +282,11 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         _libraryFilter = Nothing
         _statusFilter = Nothing
         _recommendedActionFilter = Nothing
+        RefreshFilters()
+    End Sub
+
+    Private Sub RefreshFilters()
+        OnPropertyChanged(NameOf(HasActiveFilters))
         FilteredSteamGames.Refresh()
     End Sub
 

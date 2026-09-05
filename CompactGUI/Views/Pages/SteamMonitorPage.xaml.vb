@@ -32,20 +32,35 @@ Public Class SteamMonitorPage
         UpdateMasterCheckbox()
     End Sub
 
+    'Today I learned about Func and this seems like a perfectly dumb place to use it
     Private Sub OnSelectAllVisibleClick(sender As Object, e As RoutedEventArgs)
         Dim visibleGames = SteamGamesList.Items.Cast(Of Object).ToList()
         Dim allVisibleSelected = visibleGames.Count > 0 AndAlso visibleGames.All(Function(game) SteamGamesList.SelectedItems.Contains(game))
 
+        SetVisibleSelection(Function(game) Not allVisibleSelected)
+    End Sub
+
+    Private Sub OnSelectAllClick(sender As Object, e As RoutedEventArgs)
+        SetVisibleSelection(Function(game) True)
+    End Sub
+
+    Private Sub OnSelectAllCompressableClick(sender As Object, e As RoutedEventArgs)
+        SetVisibleSelection(Function(game) game.CanCompress)
+    End Sub
+
+    Private Sub OnDeselectAllClick(sender As Object, e As RoutedEventArgs)
+        SetVisibleSelection(Function(game) False)
+    End Sub
+
+    Private Sub SetVisibleSelection(shouldSelect As Func(Of SteamDetailedResult, Boolean))
         _isUpdatingSelection = True
-        If allVisibleSelected Then
-            For Each game In visibleGames
-                SteamGamesList.SelectedItems.Remove(game)
-            Next
-        Else
-            For Each game In visibleGames
+        For Each game As SteamDetailedResult In SteamGamesList.Items
+            If shouldSelect(game) Then
                 If Not SteamGamesList.SelectedItems.Contains(game) Then SteamGamesList.SelectedItems.Add(game)
-            Next
-        End If
+            Else
+                SteamGamesList.SelectedItems.Remove(game)
+            End If
+        Next
         _isUpdatingSelection = False
 
         _viewModel.UpdateSelectedGames(SteamGamesList.SelectedItems)
