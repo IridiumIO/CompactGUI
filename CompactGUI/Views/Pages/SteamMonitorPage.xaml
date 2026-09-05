@@ -185,6 +185,22 @@
                   SelectedItem="{Binding SelectedGame, Mode=TwoWay}"
                   SelectionChanged="OnSteamGamesSelectionChanged" SelectionMode="Extended" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling"
                   Visibility="Visible">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel>
+                        <VirtualizingStackPanel.Style>
+                            <Style TargetType="VirtualizingStackPanel">
+                                <Setter Property="Margin" Value="0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.HasSelectedGames, RelativeSource={RelativeSource AncestorType=ListView}}" Value="True">
+                                        <Setter Property="Margin" Value="0 0 0 90" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </VirtualizingStackPanel.Style>
+                    </VirtualizingStackPanel>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Padding" Value="0" />
