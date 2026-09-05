@@ -423,7 +423,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         Await RunGameOperationAsync(game, True)
     End Function
 
-    <RelayCommand>
+    <RelayCommand> 'TODO: Fix the issue with creating a new StandardFolder - this does not allow the extensions to show up in the skiplist. Need to retain a thin version of the analyser results for this. 
     Private Sub EditSkipList(game As SteamDetailedResult)
         If game Is Nothing OrElse game.IsWorking Then Return
 

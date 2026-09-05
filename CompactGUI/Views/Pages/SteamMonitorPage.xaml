@@ -104,7 +104,7 @@
 
         <Separator Grid.Row="2" Height="1" VerticalAlignment="Bottom" />
 
-        <Grid Grid.Row="3" Margin="14 10 34 8" Visibility="{Binding HasSelectedGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+        <Grid Grid.Row="3" Margin="14 10 34 8" Visibility="Visible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="108" />
                 <ColumnDefinition Width="*" MinWidth="135" />
@@ -138,8 +138,7 @@
                   ItemsSource="{Binding FilteredSteamGames}"
                   ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectedItem="{Binding SelectedGame, Mode=TwoWay}"
-                  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling"
-                  Visibility="{Binding HasSelectedGame, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling" Visibility="Visible">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Padding" Value="0" />
@@ -356,7 +355,8 @@
 
         <Grid Grid.Row="3" Grid.RowSpan="2"
               Margin="0 10 0 0"
-              Visibility="{Binding HasSelectedGame, Converter={StaticResource BooleanToVisibilityConverter}}">
+              Visibility="Collapsed"> 
+            <!--  {Binding HasSelectedGame, Converter={StaticResource BooleanToVisibilityConverter}}">  -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="380" />
                 <ColumnDefinition Width="16" />
@@ -743,12 +743,10 @@
 
                                         <ComboBox Height="42"
                                                   VerticalContentAlignment="Center"
-                                                  BorderBrush="#50FFFFFF" BorderThickness="1"
-                                                  DisplayMemberPath="DisplayName"
+                                                  BorderBrush="#50FFFFFF" BorderThickness="1" DisplayMemberPath="DisplayName"
                                                   ItemsSource="{Binding CompressionModeOptions}"
                                                   SelectedItem="{Binding SelectedCompressionOption, Mode=TwoWay}"
-                                                  Visibility="{Binding IsCompressionRecommended, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                        </ComboBox>
+                                                  Visibility="{Binding IsCompressionRecommended, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -821,7 +819,9 @@
                                                                        Content="{loc:T Compress}"
                                                                        IsEnabled="{Binding CanCompress}" />
                                                         </DataTemplate>
-                                                        <DataTemplate x:Key="NoActionTemplate"><Grid /></DataTemplate>
+                                                        <DataTemplate x:Key="NoActionTemplate">
+                                                            <Grid />
+                                                        </DataTemplate>
                                                         <DataTemplate x:Key="UncompressTemplate">
                                                             <ui:Button Height="42"
                                                                        HorizontalAlignment="Stretch"
@@ -867,8 +867,7 @@
 
                                         <Separator Margin="0 10 0 0" />
 
-                                        <Grid Margin="0 10 0 0" TextOptions.TextFormattingMode="Display"
-                                              Visibility="{Binding IsWatched, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Grid Margin="0 10 0 0" TextOptions.TextFormattingMode="Display" Visibility="{Binding IsWatched, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="20" />
                                                 <ColumnDefinition />
