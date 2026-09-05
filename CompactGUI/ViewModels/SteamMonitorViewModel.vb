@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Net.Http
 Imports System.Text.Json
 Imports System.Threading
+Imports System.Windows.Input
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
@@ -35,6 +36,9 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private _activeGame As SteamDetailedResult
     Private _cancelRequested As Boolean
     Private _hasLoaded As Boolean
+    Private _libraryFilter As String
+    Private _statusFilter As SteamGameStatus?
+    Private _recommendedActionFilter As SteamRecommendedAction?
 
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(HasNoGames))>
@@ -59,6 +63,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     End Property
 
     Public ReadOnly Property SteamGamesData As New ObservableCollection(Of SteamDetailedResult)
+    Public ReadOnly Property LibraryLocations As New ObservableCollection(Of SteamLibraryFilterOption)
     Public ReadOnly Property FilteredSteamGames As ICollectionView
 
     Public ReadOnly Property HasError As Boolean
@@ -103,6 +108,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 RemoveHandler game.PropertyChanged, AddressOf OnSteamGamePropertyChanged
             Next
             _trackedSteamGames.Clear()
+            LibraryLocations.Clear()
         Else
             If e.OldItems IsNot Nothing Then
                 For Each game As SteamDetailedResult In e.OldItems
@@ -114,6 +120,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             If e.NewItems IsNot Nothing Then
                 For Each game As SteamDetailedResult In e.NewItems
                     If _trackedSteamGames.Add(game) Then AddHandler game.PropertyChanged, AddressOf OnSteamGamePropertyChanged
+                    If Not LibraryLocations.Any(Function(location) String.Equals(location.DisplayPath, game.DisplayPath, StringComparison.OrdinalIgnoreCase)) Then LibraryLocations.Add(New SteamLibraryFilterOption(game.DisplayPath, FilterLibraryCommand))
                 Next
             End If
         End If
@@ -127,6 +134,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             Case Nothing, String.Empty, NameOf(SteamDetailedResult.UncompressedBytes), NameOf(SteamDetailedResult.CurrentFolderSize), NameOf(SteamDetailedResult.IsCompressed), NameOf(SteamDetailedResult.RecommendedCompressionMode), NameOf(SteamDetailedResult.ExpectedCompressionSavings), NameOf(SteamDetailedResult.HasCompressionEstimate)
                 NotifySavingsTotalsChanged()
         End Select
+
+        If _statusFilter.HasValue OrElse _recommendedActionFilter.HasValue Then FilteredSteamGames.Refresh()
     End Sub
 
     Private Sub NotifySavingsTotalsChanged()
@@ -171,16 +180,48 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         If _activeFolder.FolderActionState = ActionState.Working Then _activeFolder.Compressor?.Cancel()
     End Sub
 
+    'TODO: DIsable string.equals linting so rsharper stops being mad
     Private Function FilterGames(value As Object) As Boolean
-        If String.IsNullOrWhiteSpace(SearchText) Then Return True
-
         Dim game = TryCast(value, SteamDetailedResult)
         If game Is Nothing Then Return False
 
-        Dim search = SearchText.Trim()
-        Dim normalizedSearch = NormalizeSearchText(search)
-        Return game.GameName.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0 OrElse NormalizeSearchText(game.GameName).Contains(normalizedSearch) OrElse game.AppID.ToString().Contains(search)
+        If Not String.IsNullOrWhiteSpace(SearchText) Then
+            Dim search = SearchText.Trim()
+            Dim normalizedSearch = NormalizeSearchText(search)
+            If game.GameName.IndexOf(search, StringComparison.OrdinalIgnoreCase) < 0 AndAlso Not NormalizeSearchText(game.GameName).Contains(normalizedSearch) AndAlso Not game.AppID.ToString().Contains(search) Then Return False
+        End If
+
+        If _libraryFilter IsNot Nothing AndAlso Not String.Equals(game.DisplayPath, _libraryFilter, StringComparison.OrdinalIgnoreCase) Then Return False
+        If _statusFilter.HasValue AndAlso game.Status <> _statusFilter.Value Then Return False
+        If _recommendedActionFilter.HasValue AndAlso game.RecommendedActionCategory <> _recommendedActionFilter.Value Then Return False
+        Return True
     End Function
+
+    <RelayCommand>
+    Private Sub FilterLibrary(path As String)
+        _libraryFilter = If(String.Equals(_libraryFilter, path, StringComparison.OrdinalIgnoreCase), Nothing, path)
+        FilteredSteamGames.Refresh()
+    End Sub
+
+    <RelayCommand>
+    Private Sub FilterStatus(status As SteamGameStatus)
+        _statusFilter = If(_statusFilter = status, CType(Nothing, SteamGameStatus?), status)
+        FilteredSteamGames.Refresh()
+    End Sub
+
+    <RelayCommand>
+    Private Sub FilterRecommendedAction(action As SteamRecommendedAction)
+        _recommendedActionFilter = If(_recommendedActionFilter = action, CType(Nothing, SteamRecommendedAction?), action)
+        FilteredSteamGames.Refresh()
+    End Sub
+
+    <RelayCommand>
+    Private Sub ClearFilters()
+        _libraryFilter = Nothing
+        _statusFilter = Nothing
+        _recommendedActionFilter = Nothing
+        FilteredSteamGames.Refresh()
+    End Sub
 
     Private Shared Function NormalizeSearchText(value As String) As String
         If String.IsNullOrEmpty(value) Then Return String.Empty
@@ -585,6 +626,13 @@ Public Enum SteamGameStatus
     PendingSteamUpdate
 End Enum
 
+Public Enum SteamRecommendedAction
+    None
+    Compress
+    DoNotCompress
+    UpdateInSteam
+End Enum
+
 Public Class SteamDetailedResult : Inherits ObservableObject
 
     Private Const MinimumUsefulSaving As Double = 0.05
@@ -599,7 +647,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private _currentFolderSize As Long
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(CanUncompress))>
+    <NotifyPropertyChangedFor(NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(CanUncompress), NameOf(RecommendedActionCategory))>
     Private _isCompressed As Boolean
 
     <ObservableProperty>
@@ -610,7 +658,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private ReadOnly _hasPendingSteamUpdate As Boolean
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(StatusMessage), NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(HasSavingsData), NameOf(CanCompress))>
+    <NotifyPropertyChangedFor(NameOf(StatusMessage), NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(RecommendedActionCategory))>
     Private _status As SteamGameStatus
 
     <ObservableProperty>
@@ -622,7 +670,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private _selectedCompressionOption As SteamCompressionOption
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(CanCompress))>
+    <NotifyPropertyChangedFor(NameOf(CanCompress), NameOf(RecommendedActionCategory))>
     Private _isCompressionRecommended As Boolean
 
     <ObservableProperty>
@@ -730,6 +778,16 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Public ReadOnly Property CanCompress As Boolean
         Get
             Return Not IsWorking AndAlso Status <> SteamGameStatus.PendingSteamUpdate AndAlso IsCompressionRecommended AndAlso SelectedCompressionOption IsNot Nothing AndAlso (Not IsCompressed OrElse Status = SteamGameStatus.RecentlyUpdated)
+        End Get
+    End Property
+
+    Public ReadOnly Property RecommendedActionCategory As SteamRecommendedAction
+        Get
+            If Status = SteamGameStatus.PendingSteamUpdate Then Return SteamRecommendedAction.UpdateInSteam
+            If IsCompressed AndAlso Status <> SteamGameStatus.RecentlyUpdated Then Return SteamRecommendedAction.None
+            If IsCompressionRecommended Then Return SteamRecommendedAction.Compress
+            If HasCompressionEstimate Then Return SteamRecommendedAction.DoNotCompress
+            Return SteamRecommendedAction.None
         End Get
     End Property
 
@@ -918,5 +976,15 @@ Public Class SteamCompressionOption
     Public Sub New(mode As Core.CompressionMode, displayName As String)
         Me.Mode = mode
         Me.DisplayName = displayName
+    End Sub
+End Class
+
+Public Class SteamLibraryFilterOption
+    Public ReadOnly Property DisplayPath As String
+    Public ReadOnly Property Command As ICommand
+
+    Public Sub New(displayPath As String, command As ICommand)
+        Me.DisplayPath = displayPath
+        Me.Command = command
     End Sub
 End Class

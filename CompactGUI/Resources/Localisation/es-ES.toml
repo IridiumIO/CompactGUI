@@ -27,6 +27,7 @@
 "Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "No se puede eliminar la carpeta"
 "Check for pre-release updates" = "Buscar actualizaciones preliminares"
+"Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "Clic para descargar"
 "CompactGUI" = "CompactGUI"
 "Compress" = "Compress" # LOC:TODO
@@ -47,6 +48,7 @@
 "Database Results" = "Resultados de la base de datos"
 "Descending" = "Descendente"
 "Direct Storage" = "Direct Storage" # LOC:TODO
+"Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
 "Edit skip list for this folder" = "Editar lista de exclusión de esta carpeta"
@@ -57,6 +59,7 @@
 "Failed to submit to wiki" = "Fallo al enviar a la wiki"
 "Files Compressed" = "Archivos comprimidos"
 "Filetype Management" = "Gestión de tipos de archivo"
+"Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Para juegos de Steam, esto utiliza la base de datos para determinar los tipos a omitir. Para carpetas que no son de Steam, se basa en el analizador inteligente."
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "Solo para juegos de Steam.\nAl elegir omitir los tipos de archivo enviados por los usuarios, esta configuración determina cuántas solicitudes se requieren para cada tipo de archivo para considerar su omisión.\nGeneralmente, la opción \"baja\" es la mejor, ya que las opciones más altas conllevan el riesgo de omitir archivos que, de otro modo, se comprimirían correctamente."
 "Game" = "Juego"
@@ -72,6 +75,7 @@
 "Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "Última obtención: {0:dd MMM yyyy HH:mm:ss}"
 "Last analysed {0}" = "Último análisis {0}"
 "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Última ejecución: {0:dd MMM yyyy} a las {0:HH:mm:ss}"
+"Library location" = "Library location" # LOC:TODO
 "Manage local skipped filetypes" = "Gestionar tipos de archivo omitidos locales"
 "Max Savings" = "Ahorro máx."
 "Maximum Compression Threads" = "Hilos máximos de compresión"
@@ -94,6 +98,7 @@
 "Re-analyse all watched folders" = "Reanalizar todas las carpetas monitorizadas"
 "Re-analyse this folder" = "Reanalizar esta carpeta"
 "Recently Updated" = "Recently Updated" # LOC:TODO
+"Recommended Action" = "Recommended Action" # LOC:TODO
 "Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
 "Reload Steam Library list" = "Reload Steam Library list" # LOC:TODO
 "Remove from Watchlist" = "Eliminar de la lista"

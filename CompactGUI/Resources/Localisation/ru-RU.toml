@@ -27,6 +27,7 @@
 "Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "Не удаётся удалить папку"
 "Check for pre-release updates" = "Проверять предварительные версии обновлений"
+"Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "Нажмите, чтобы скачать"
 "CompactGUI" = "CompactGUI"
 "Compress" = "Compress" # LOC:TODO
@@ -47,6 +48,7 @@
 "Database Results" = "Результаты базы данных"
 "Descending" = "По убыванию"
 "Direct Storage" = "Direct Storage" # LOC:TODO
+"Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
 "Edit skip list for this folder" = "Изменить список исключений для этой папки"
@@ -57,6 +59,7 @@
 "Failed to submit to wiki" = "Не удалось отправить в Вики"
 "Files Compressed" = "Файлов сжато"
 "Filetype Management" = "Управление типами файлов"
+"Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Для игр Steam используется база данных для определения пропускаемых типов. Для папок не из Steam это основано на умном анализаторе."
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "Только для игр Steam.\nПри выборе пропуска файлов, предложенных пользователями, этот параметр определяет, сколько подтверждений необходимо для каждого типа файлов, чтобы его пропускать.\n«Низкий» обычно оптимален, так как более высокие значения могут привести к пропуску файлов, которые на самом деле хорошо сжимаются."
 "Game" = "Игра"
@@ -72,6 +75,7 @@
 "Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "Последнее получение: {0:dd MMM yyyy HH:mm:ss}"
 "Last analysed {0}" = "Последний анализ {0}"
 "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Последний запуск: {0:dd MMM yyyy} в {0:HH:mm:ss}"
+"Library location" = "Library location" # LOC:TODO
 "Manage local skipped filetypes" = "Управление локальным списком пропускаемых типов файлов"
 "Max Savings" = "Максимальной экономии"
 "Maximum Compression Threads" = "Максимум потоков сжатия"
@@ -94,6 +98,7 @@
 "Re-analyse all watched folders" = "Переанализировать все отслеживаемые папки"
 "Re-analyse this folder" = "Повторно проанализировать эту папку"
 "Recently Updated" = "Recently Updated" # LOC:TODO
+"Recommended Action" = "Recommended Action" # LOC:TODO
 "Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
 "Reload Steam Library list" = "Reload Steam Library list" # LOC:TODO
 "Remove from Watchlist" = "Удалить из списка отслеживания"

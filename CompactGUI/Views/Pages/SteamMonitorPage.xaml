@@ -40,6 +40,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ui:TextBox MinWidth="250"
                         VerticalAlignment="Center"
@@ -50,7 +51,45 @@
                                Height="36"
                                Margin="20 0 0 0" VerticalAlignment="Center"
                                Foreground="{StaticResource LabelForeground}">
-                <TextBlock loc:L.Value="Sort By" />
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Symbol="Filter12" />
+                    <TextBlock Margin="5 0 0 0" loc:L.Value="Filter" />
+                </StackPanel>
+                <ui:DropDownButton.Flyout>
+                    <ContextMenu>
+                        <MenuItem Header="{loc:T Library location}" ItemsSource="{Binding LibraryLocations}">
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Header" Value="{Binding DisplayPath}" />
+                                    <Setter Property="Command" Value="{Binding Command}" />
+                                    <Setter Property="CommandParameter" Value="{Binding DisplayPath}" />
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
+                        </MenuItem>
+                        <MenuItem Header="{loc:T Status}">
+                            <MenuItem Command="{Binding FilterStatusCommand}" CommandParameter="{x:Static local:SteamGameStatus.Compressed}" Header="{loc:T Compressed}" />
+                            <MenuItem Command="{Binding FilterStatusCommand}" CommandParameter="{x:Static local:SteamGameStatus.Uncompressed}" Header="{loc:T Uncompressed}" />
+                            <MenuItem Command="{Binding FilterStatusCommand}" CommandParameter="{x:Static local:SteamGameStatus.PendingSteamUpdate}" Header="{loc:T Update Available}" />
+                            <MenuItem Command="{Binding FilterStatusCommand}" CommandParameter="{x:Static local:SteamGameStatus.RecentlyUpdated}" Header="{loc:T Recently Updated}" />
+                        </MenuItem>
+                        <MenuItem Header="{loc:T Recommended Action}">
+                            <MenuItem Command="{Binding FilterRecommendedActionCommand}" CommandParameter="{x:Static local:SteamRecommendedAction.Compress}" Header="{loc:T Compress}" />
+                            <MenuItem Command="{Binding FilterRecommendedActionCommand}" CommandParameter="{x:Static local:SteamRecommendedAction.DoNotCompress}" Header="{loc:T Do Not Compress}" />
+                            <MenuItem Command="{Binding FilterRecommendedActionCommand}" CommandParameter="{x:Static local:SteamRecommendedAction.UpdateInSteam}" Header="{loc:T Update in Steam}" />
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Command="{Binding ClearFiltersCommand}" Header="{loc:T Clear filters}" />
+                    </ContextMenu>
+                </ui:DropDownButton.Flyout>
+            </ui:DropDownButton>
+            <ui:DropDownButton Grid.Column="2"
+                               Height="36"
+                               Margin="20 0 0 0" VerticalAlignment="Center"
+                               Foreground="{StaticResource LabelForeground}">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Symbol="ArrowSort16" />
+                    <TextBlock Margin="5 0 0 0" loc:L.Value="Sort" />
+                </StackPanel>
                 <ui:DropDownButton.Flyout>
                     <ContextMenu>
                         <MenuItem Header="{loc:T Game Name}">
@@ -355,7 +394,7 @@
 
         <Grid Grid.Row="3" Grid.RowSpan="2"
               Margin="0 10 0 0"
-              Visibility="Collapsed"> 
+              Visibility="Collapsed">
             <!--  {Binding HasSelectedGame, Converter={StaticResource BooleanToVisibilityConverter}}">  -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="380" />

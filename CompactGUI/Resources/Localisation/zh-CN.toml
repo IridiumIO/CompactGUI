@@ -27,6 +27,7 @@
 "Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "无法移除文件夹"
 "Check for pre-release updates" = "检查预发布更新"
+"Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "点击下载"
 "CompactGUI" = "CompactGUI"
 "Compress" = "Compress" # LOC:TODO
@@ -47,6 +48,7 @@
 "Database Results" = "数据库结果"
 "Descending" = "降序"
 "Direct Storage" = "Direct Storage" # LOC:TODO
+"Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
 "Edit skip list for this folder" = "编辑此文件夹的跳过列表"
@@ -57,6 +59,7 @@
 "Failed to submit to wiki" = "提交到 Wiki 失败"
 "Files Compressed" = "文件已压缩"
 "Filetype Management" = "文件类型管理"
+"Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "对于 Steam 游戏，使用数据库来确定要跳过的类型。对于非 Steam 文件夹，则基于智能分析器。"
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "仅限 Steam 游戏。\n在选择跳过用户提交的文件类型时，该设置决定了每种文件类型需要提交多少次才能考虑跳过该类型。\n“低”通常是最好的，因为高档有跳过本来可以很好地压缩的文件的风险。"
 "Game" = "游戏"
@@ -72,6 +75,7 @@
 "Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "最后获取: {0:yyyy年 M月 d日 HH:mm:ss}"
 "Last analysed {0}" = "上次分析 {0}"
 "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "上次运行: {0:yyyy年 M月 d日 HH:mm:ss}"
+"Library location" = "Library location" # LOC:TODO
 "Manage local skipped filetypes" = "管理本地跳过的文件类型"
 "Max Savings" = "最大节省"
 "Maximum Compression Threads" = "最大压缩线程数"
@@ -94,6 +98,7 @@
 "Re-analyse all watched folders" = "重新分析所有受监控文件夹"
 "Re-analyse this folder" = "重新分析此文件夹"
 "Recently Updated" = "Recently Updated" # LOC:TODO
+"Recommended Action" = "Recommended Action" # LOC:TODO
 "Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
 "Reload Steam Library list" = "Reload Steam Library list" # LOC:TODO
 "Remove from Watchlist" = "从监控列表移除"
