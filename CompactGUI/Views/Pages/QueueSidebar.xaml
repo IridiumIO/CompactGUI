@@ -1,0 +1,159 @@
+<UserControl x:Class="QueueSidebar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
+             xmlns:local="clr-namespace:CompactGUI"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             x:Name="PageRoot" HorizontalContentAlignment="Stretch"
+             d:DataContext="{d:DesignInstance Type=local:HomeViewModel}"
+             TextBlock.Foreground="{StaticResource TextControlForeground}"
+             mc:Ignorable="d">
+    <Border 
+            BorderBrush="{StaticResource SeparatorBorderBrush}"
+            BorderThickness="0" CornerRadius="6">
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Margin="0 0 0 12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="Queue" VerticalAlignment="Center" />
+                    <TextBlock Margin="8 3 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding Folders.Count, StringFormat={}({0})}" VerticalAlignment="Center" />
+                </StackPanel>
+                <ui:Button Grid.Column="1"
+                           Width="34" Height="34"
+                           Padding="0"
+                           Click="AddFolderButton_Click" ToolTip="Add folder">
+                    <ui:SymbolIcon Symbol="Add16" />
+                </ui:Button>
+                <ui:Button Grid.Column="2"
+                           Width="34" Height="34"
+                           Margin="6 0 0 0" Padding="0"
+                           Command="{Binding DataContext.ToggleQueueSidebarCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                           ToolTip="Close queue"
+                           Visibility="{Binding ShowCloseButton, RelativeSource={RelativeSource AncestorType=local:QueueSidebar}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ui:SymbolIcon Symbol="Dismiss12" />
+                </ui:Button>
+            </Grid>
+
+            <ui:ListView Grid.Row="1"
+                         Padding="0"
+                         Background="Transparent" BorderThickness="0"
+                         ItemsSource="{Binding Folders}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         SelectedItem="{Binding SelectedFolder, Mode=TwoWay}">
+                <ui:ListView.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource {x:Type ui:ListViewItem}}" TargetType="ui:ListViewItem">
+                        <Setter Property="Margin" Value="0 0 0 8" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+                </ui:ListView.ItemContainerStyle>
+                <ui:ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="ItemCard"
+                                Height="74"
+                                Padding="0"
+                                Background="Transparent" CornerRadius="6"
+                                Tag="{Binding DataContext, ElementName=PageRoot}"
+                                TextBlock.Foreground="{StaticResource TextControlForeground}">
+                            <Border.ContextMenu>
+                                <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Command="{Binding Tag.RemoveFolderCommand}" CommandParameter="{Binding DataContext}" Header="Remove From Queue" />
+
+                                </ContextMenu>
+                            </Border.ContextMenu>
+                            <Grid Margin="10" Background="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <!--<Border Width="4" Height="48"
+                                        VerticalAlignment="Center"
+                                        Background="{StaticResource AccentFillColorDefaultBrush}"
+                                        CornerRadius="2"
+                                        Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
+                                <Grid Grid.Column="1" Margin="0 0 0 0" VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock FontSize="13" FontWeight="SemiBold"
+                                               Text="{Binding DisplayName}"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <StackPanel Grid.Row="1" Margin="0 5 0 0" Orientation="Horizontal">
+                                        <ui:ProgressRing Width="12" Height="12"
+                                                         Margin="0 0 6 0"
+                                                         IsIndeterminate="True"
+                                                         Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}" />
+                                        <TextBlock FontSize="11"
+                                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                                   Text="{Binding FolderName, Converter={StaticResource TokenisedFolderPathConverter}}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                </Grid>
+                                
+                            </Grid>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                            <Setter Property="Background" Value="#3345A9E8" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </DataTemplate>
+                </ui:ListView.ItemTemplate>
+            </ui:ListView>
+
+            <StackPanel Grid.Row="2" Margin="0 12 0 0">
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <ui:Button Height="36" Margin="0 0 8 0" Command="{Binding CompressAllCommand}">
+                        <TextBlock loc:L.Value="Compress Selected" />
+                    </ui:Button>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedFolder.FolderActionState}" Value="Working">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedFolder.FolderActionState}" Value="Paused">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ui:Button Width="42" Height="36"
+                                   Padding="0"
+                                   Command="{Binding SelectedFolderViewModel.PauseCommand}">
+                            <ui:SymbolIcon Filled="True" Symbol="{Binding SelectedFolder.FolderActionState, Converter={StaticResource FolderWorkingStateToPauseSymbolConverter}}" />
+                        </ui:Button>
+                        <ui:Button Width="42" Height="36"
+                                   Margin="8 0 0 0" Padding="0"
+                                   Command="{Binding SelectedFolderViewModel.CancelCommand}">
+                            <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                        </ui:Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

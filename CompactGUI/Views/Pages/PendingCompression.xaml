@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:core="clr-namespace:CompactGUI.Core;assembly=CompactGUI.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:local="clr-namespace:CompactGUI"
-      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              d:DataContext="{d:DesignInstance Type=local:FolderViewModel}"
@@ -22,8 +22,8 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TextBlock Margin="0 30 0 20" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold"
-                      loc:L.Value="Compression Mode" />
+        <ui:TextBlock Margin="0 30 0 20" VerticalAlignment="Center"
+                      loc:L.Value="Compression Mode" FontSize="16" FontWeight="SemiBold" />
 
         <WrapPanel Grid.Row="1"
                    Margin="0 0 0 0"
@@ -69,7 +69,7 @@
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}"
                                          Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
             <local:CompressionMode_Radio Width="185" Height="85"
-                                         Margin="0 0 20 10"
+                                         Margin="0 0 -20 10"
                                          d:CompressionMode="LZX" BorderBrush="Transparent"
                                          BytesAfter="{Binding Folder.WikiCompressionResults.LZX.AfterBytes}"
                                          BytesSaved="{Binding Folder.WikiCompressionResults.LZX.BytesSaved}"
@@ -111,13 +111,12 @@
                 <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#4ca5ff"/>
                 <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#6fb6ff"/>
             </StackPanel.Resources>-->
-            <ui:TextBlock Margin="0 0 0 20" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold"
-                          loc:L.Value="Configuration" />
+            <ui:TextBlock Margin="0 0 0 20" VerticalAlignment="Center"
+                          loc:L.Value="Configuration" FontSize="16" FontWeight="SemiBold" />
             <WrapPanel Margin="0 0 0 15" Orientation="Horizontal">
                 <CheckBox x:Name="UiChkSkipListEnabled"
-                          VerticalAlignment="Center" Checked="UiChkSkipListEnabled_Checked"
-                          loc:L.Value="Use skip list"
-                          FontSize="16"
+                          VerticalAlignment="Center"
+                          loc:L.Value="Use skip list" Checked="UiChkSkipListEnabled_Checked" FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.SkipListEnabled, Mode=TwoWay}"
                           Unchecked="UiChkSkipListEnabled_Unchecked" />
 
@@ -136,17 +135,16 @@
                     <TextBlock VerticalAlignment="Center"
                                d:Text="123 files will be skipped" FontSize="13"
                                Foreground="{StaticResource CardForeground}"
-                               Text="{loc:Binding Folder.SkippedFileCount, Format={} {0} files will be skipped}" />
+                               Text="{loc:Binding Folder.SkippedFileCount,
+                                                  Format={} {0} files will be skipped}" />
                 </Border>
-                <ui:Button Margin="14 0 0 0" VerticalAlignment="Center" Click="UiEditSkipList_Click"
-                           loc:L.Value="Edit skip list for this folder"
-                           FontSize="13" />
+                <ui:Button Margin="14 0 0 0" VerticalAlignment="Center"
+                           loc:L.Value="Edit skip list for this folder" Click="UiEditSkipList_Click" FontSize="13" />
             </WrapPanel>
             <WrapPanel Margin="0 0 0 15" Orientation="Horizontal">
                 <CheckBox x:Name="uiChkWatchFolderForChanges"
-                          VerticalAlignment="Center" Checked="uiChkWatchFolderForChanges_Checked"
-                          loc:L.Value="Watch folder for changes"
-                          FontSize="16"
+                          VerticalAlignment="Center"
+                          loc:L.Value="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked" FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}"
                           Unchecked="uiChkWatchFolderForChanges_Unchecked" />
             </WrapPanel>
@@ -157,9 +155,9 @@
         <ui:Button Grid.Row="3"
                    Width="140" Height="40"
                    Margin="0 0 0 10" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                   loc:L.Value="Apply to all"
                    Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                    Command="{Binding ApplyToAllCommand}"
-                   loc:L.Value="Apply to all"
                    FontSize="16" />
 
     </Grid>

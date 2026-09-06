@@ -5,7 +5,6 @@
 # Translations
 
 "Add" = "添加"
-"Add Folder to Queue" = "添加文件夹到队列"
 "Add a custom folder to the watchlist" = "添加自定义文件夹到监控列表"
 "Add selected to queue" = "Add selected to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
@@ -229,6 +228,7 @@
 "saved" = "已节省"
 
 [obsolete]
+"Add Folder to Queue" = "添加文件夹到队列"
 "Add all to queue" = "Add all to queue" # LOC:TODO
 "Custom list — {0} entries" = "自定义列表 — {0} 条"
 "Custom: {0} entries" = "自定义: {0} 条"

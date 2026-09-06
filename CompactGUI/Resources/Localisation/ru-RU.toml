@@ -5,7 +5,6 @@
 # Translations
 
 "Add" = "Добавить"
-"Add Folder to Queue" = "Добавить папку в очередь"
 "Add a custom folder to the watchlist" = "Добавить свою папку в список отслеживания"
 "Add selected to queue" = "Add selected to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
@@ -229,6 +228,7 @@
 "saved" = "сэкономлено"
 
 [obsolete]
+"Add Folder to Queue" = "Добавить папку в очередь"
 "Add all to queue" = "Add all to queue" # LOC:TODO
 "Custom list — {0} entries" = "Свой список — {0} записей"
 "Custom: {0} entries" = "Свой: {0} записей"

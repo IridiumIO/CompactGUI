@@ -5,7 +5,6 @@
 # Translations
 
 "Add" = "Añadir "
-"Add Folder to Queue" = "Añadir carpeta a la cola"
 "Add a custom folder to the watchlist" = "Añadir carpeta personalizada a la lista"
 "Add selected to queue" = "Add selected to queue" # LOC:TODO
 "Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
@@ -229,6 +228,7 @@
 "saved" = "ahorrado"
 
 [obsolete]
+"Add Folder to Queue" = "Añadir carpeta a la cola"
 "Add all to queue" = "Add all to queue" # LOC:TODO
 "Custom list — {0} entries" = "Lista personalizada — {0} entradas"
 "Custom: {0} entries" = "Personalizada: {0} entradas"

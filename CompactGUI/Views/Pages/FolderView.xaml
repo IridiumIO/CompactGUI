@@ -198,7 +198,7 @@
                                 CanContentScroll="True" Focusable="False" IsDeferredScrollingEnabled="False">
 
 
-            <ContentControl Margin="20 0" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+            <ContentControl Margin="0 0" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                             Content="{Binding Folder.FolderActionState}"
                             ContentTemplateSelector="{StaticResource FolderActionStateTemplateSelector}" />
 

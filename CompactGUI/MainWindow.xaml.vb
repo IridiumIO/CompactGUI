@@ -52,10 +52,12 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
     Private Sub OnNavigated(sender As NavigationView, args As NavigatedEventArgs)
         If args.Page.GetType Is GetType(HomePage) Then
             _isOnHomePage = True
+            QueueOverlayHost.Visibility = Visibility.Collapsed
             _MainWindowViewModel.IsActive = True
             HVPropertyChanged(Application.GetService(Of HomeViewModel)(), New PropertyChangedEventArgs(NameOf(HomeViewModel.HomeViewIsFresh)))
         Else
             _isOnHomePage = False
+            QueueOverlayHost.Visibility = Visibility.Visible
             _MainWindowViewModel.IsActive = False
             ProgTitle.Visibility = Visibility.Visible
         End If
