@@ -6,13 +6,12 @@
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             x:Name="PageRoot" HorizontalContentAlignment="Stretch"
+             x:Name="PageRoot"
+             HorizontalContentAlignment="Stretch"
              d:DataContext="{d:DesignInstance Type=local:HomeViewModel}"
              TextBlock.Foreground="{StaticResource TextControlForeground}"
              mc:Ignorable="d">
-    <Border 
-            BorderBrush="{StaticResource SeparatorBorderBrush}"
-            BorderThickness="0" CornerRadius="6">
+    <Border BorderBrush="{StaticResource SeparatorBorderBrush}" BorderThickness="0" CornerRadius="6">
         <Grid Margin="12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -27,8 +26,11 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="Queue" VerticalAlignment="Center" />
-                    <TextBlock Margin="8 3 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding Folders.Count, StringFormat={}({0})}" VerticalAlignment="Center" />
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="18" FontWeight="SemiBold" Text="Queue" />
+                    <TextBlock Margin="8 3 0 0" VerticalAlignment="Center"
+                               Foreground="{StaticResource CardForegroundDisabled}"
+                               Text="{Binding Folders.Count, StringFormat={}({0})}" />
                 </StackPanel>
                 <ui:Button Grid.Column="1"
                            Width="34" Height="34"
@@ -106,7 +108,7 @@
                                                    TextTrimming="CharacterEllipsis" />
                                     </StackPanel>
                                 </Grid>
-                                
+
                             </Grid>
                             <Border.Style>
                                 <Style TargetType="Border">

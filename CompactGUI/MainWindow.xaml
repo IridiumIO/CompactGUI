@@ -31,7 +31,7 @@
             <bh:InvokeCommandAction Command="{Binding ClosingCommand}" PassEventArgsToCommand="True" />
         </bh:EventTrigger>
     </bh:Interaction.Triggers>
-    <Grid>
+    <Grid PreviewMouseDown="Root_PreviewMouseDown">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -114,13 +114,12 @@
             <ui:NavigationView.ContentOverlay>
                 <Grid>
                     <Grid x:Name="QueueOverlayHost">
-                        <ui:Button  
-                                   Margin="0 " Padding="5 20" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        <ui:Button Margin="0" Padding="5 20" HorizontalAlignment="Left" VerticalAlignment="Center"
                                    Background="#43697d"
                                    Command="{Binding ToggleQueueSidebarCommand}"
                                    RenderTransformOrigin="0.5,0.5"
                                    Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                            <TextBlock Text="SHOW QUEUE" TextOptions.TextFormattingMode="Display" FontSize="12" FontWeight="SemiBold">
+                            <TextBlock FontSize="12" FontWeight="SemiBold" Text="SHOW QUEUE" TextOptions.TextFormattingMode="Display">
                                 <TextBlock.LayoutTransform>
                                     <RotateTransform Angle="-90" />
                                 </TextBlock.LayoutTransform>
@@ -128,13 +127,14 @@
 
                         </ui:Button>
 
-                        <Border Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                        <Border x:Name="QueueHostBorder"
+                                Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch"
                                 Background="#FF445667" BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="6"
                                 Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="30" Opacity="0.6" />
                             </Border.Effect>
-                            <local:QueueSidebar />
+                            <local:QueueSidebar Width="370" />
                         </Border>
                     </Grid>
 
