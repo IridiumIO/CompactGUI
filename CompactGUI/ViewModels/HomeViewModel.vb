@@ -41,6 +41,70 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         End Get
     End Property
 
+    Public ReadOnly Property AwaitingFolderCount As Integer
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Idle).Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property WorkingFolderCount As Integer
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused).Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property IsQueueRunning As Boolean
+        Get
+            Return WorkingFolderCount > 0
+        End Get
+    End Property
+
+    Public ReadOnly Property ActiveFolderViewModel As FolderViewModel
+        Get
+            Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
+            If activeFolder Is Nothing Then Return Nothing
+
+            Dim value As FolderViewModel = Nothing
+            Return If(_folderViewModels.TryGetValue(activeFolder, value), value, Nothing)
+        End Get
+    End Property
+
+    Public ReadOnly Property QueueStatusSummary As String
+        Get
+            Return $"{AwaitingFolderCount} awaiting · {WorkingFolderCount} working"
+        End Get
+    End Property
+
+    Public ReadOnly Property TotalQueuedSize As Long
+        Get
+            Return Folders.Sum(Function(folder) folder.UncompressedBytes)
+        End Get
+    End Property
+
+    Public ReadOnly Property HasAwaitingFolders As Boolean
+        Get
+            Return AwaitingFolderCount > 0
+        End Get
+    End Property
+
+    Public ReadOnly Property HasCompressedFolders As Boolean
+        Get
+            Return Folders.Any(Function(folder) folder.FolderActionState = ActionState.Results)
+        End Get
+    End Property
+
+    Public ReadOnly Property AwaitingEstimatedSavings As Long
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Idle).Sum(Function(folder) GetSelectedModeEstimatedSavings(folder))
+        End Get
+    End Property
+
+    Public ReadOnly Property TotalSaved As Long
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Results).Sum(Function(folder) Math.Max(0, folder.BytesSaved))
+        End Get
+    End Property
+
     Public ReadOnly Property DisplayVersion As String
         Get
             Return Application.AppVersion.Friendly
@@ -88,21 +152,71 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             OnPropertyChanged(NameOf(HomeViewModelState))
             Application.Current.Dispatcher.Invoke(Sub() RemoveFolderCommand.NotifyCanExecuteChanged())
         End If
+
+        If e.PropertyName = NameOf(CompressableFolder.FolderActionState) OrElse
+           e.PropertyName = NameOf(CompressableFolder.UncompressedBytes) OrElse
+           e.PropertyName = NameOf(CompressableFolder.CompressedBytes) OrElse
+           e.PropertyName = NameOf(CompressableFolder.WikiCompressionResults) OrElse
+           e.PropertyName = NameOf(CompressableFolder.CompressionOptions) Then
+            NotifyQueueSummaryChanged()
+        End If
+
+        If e.PropertyName = NameOf(CompressableFolder.CompressionOptions) Then
+            AddHandler CType(sender, CompressableFolder).CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
+        End If
     End Sub
+
+    Private Sub OnCompressionOptionsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName = NameOf(CompressionOptions.SelectedCompressionMode) Then NotifyQueueSummaryChanged()
+    End Sub
+
+    Private Sub NotifyQueueSummaryChanged()
+        OnPropertyChanged(NameOf(AwaitingFolderCount))
+        OnPropertyChanged(NameOf(WorkingFolderCount))
+        OnPropertyChanged(NameOf(IsQueueRunning))
+        OnPropertyChanged(NameOf(ActiveFolderViewModel))
+        OnPropertyChanged(NameOf(QueueStatusSummary))
+        OnPropertyChanged(NameOf(TotalQueuedSize))
+        OnPropertyChanged(NameOf(HasAwaitingFolders))
+        OnPropertyChanged(NameOf(HasCompressedFolders))
+        OnPropertyChanged(NameOf(AwaitingEstimatedSavings))
+        OnPropertyChanged(NameOf(TotalSaved))
+    End Sub
+
+    Private Shared Function GetSelectedModeEstimatedSavings(folder As CompressableFolder) As Long
+        If folder.WikiCompressionResults Is Nothing Then Return 0
+
+        Dim result As CompressionResult = Nothing
+        Select Case folder.CompressionOptions.SelectedCompressionMode
+            Case Core.CompressionMode.XPRESS4K
+                result = folder.WikiCompressionResults.XPress4K
+            Case Core.CompressionMode.XPRESS8K
+                result = folder.WikiCompressionResults.XPress8K
+            Case Core.CompressionMode.XPRESS16K
+                result = folder.WikiCompressionResults.XPress16K
+            Case Core.CompressionMode.LZX
+                result = folder.WikiCompressionResults.LZX
+        End Select
+
+        Return If(result Is Nothing, 0, Math.Max(0, result.BytesSaved))
+    End Function
 
     Private Sub OnFoldersCollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
         OnPropertyChanged(NameOf(HomeViewModelState))
         If e.Action = NotifyCollectionChangedAction.Add Then
             For Each folder As CompressableFolder In e.NewItems
                 AddHandler folder.PropertyChanged, AddressOf OnAnyFolderPropertyChanged
+                AddHandler folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
             Next
         ElseIf e.Action = NotifyCollectionChangedAction.Remove Then
             For Each folder As CompressableFolder In e.OldItems
                 RemoveHandler folder.PropertyChanged, AddressOf OnAnyFolderPropertyChanged
+                RemoveHandler folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
             Next
         End If
 
         OnPropertyChanged(NameOf(HomeViewIsFresh))
+        NotifyQueueSummaryChanged()
     End Sub
 
 

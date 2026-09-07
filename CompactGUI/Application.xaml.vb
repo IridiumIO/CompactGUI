@@ -161,6 +161,7 @@ Partial Public Class Application
         Await GetService(Of LocalisationService).InitializeAsync()
 
         GetService(Of Watcher.Watcher)()
+        GetService(Of HomeViewModel)()
 
         Await _host.StartAsync()
         Await GetService(Of SettingsViewModel).InitializeEnvironment()

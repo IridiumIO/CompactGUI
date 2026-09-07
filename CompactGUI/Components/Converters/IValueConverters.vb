@@ -86,6 +86,9 @@ Public Class TokenisedFolderPathConverter : Implements IValueConverter
         If value Is Nothing Then Return Nothing
         Dim Str = CType(value, String)
         Dim formattedString = Str.Replace("\"c, " 🢒 ")
+        If parameter?.ToString() = "TrimStart" AndAlso formattedString.Length > 72 Then
+            Return "…" & formattedString.Substring(formattedString.Length - 71)
+        End If
         Return formattedString
     End Function
 
@@ -131,6 +134,23 @@ Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
             Case Core.WOFCompressionAlgorithm.XPRESS8K : Return "X8"
             Case Core.WOFCompressionAlgorithm.XPRESS16K : Return "X16"
             Case Core.WOFCompressionAlgorithm.LZX : Return "LZX"
+            Case Else : Return "NIL"
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class CompressionModeAbbreviatedConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim mode = CType(value, Core.CompressionMode)
+        Select Case mode
+            Case Core.CompressionMode.XPRESS4K : Return "X4"
+            Case Core.CompressionMode.XPRESS8K : Return "X8"
+            Case Core.CompressionMode.XPRESS16K : Return "X16"
+            Case Core.CompressionMode.LZX : Return "LZX"
             Case Else : Return "NIL"
         End Select
     End Function
