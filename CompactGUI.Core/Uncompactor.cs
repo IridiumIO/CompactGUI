@@ -12,7 +12,7 @@ namespace CompactGUI.Core;
 public sealed class Uncompactor : ICompressor, IDisposable
 {
 
-    private SemaphoreSlim pauseSemaphore = new SemaphoreSlim(1, 2);
+    private readonly ManualResetEventSlim pauseGate = new(initialState: true);
     private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private ConcurrentDictionary<string, int> processedFileCount = new ConcurrentDictionary<string, int>();
 
@@ -27,7 +27,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
     {
         int totalFiles = filesList.Count;
         if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
-        ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism };
+        ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
         processedFileCount.Clear();
 
         UncompactorLog.StartingDecompression(_logger, totalFiles, maxParallelism);
@@ -57,8 +57,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
         UncompactorLog.ProcessingFile(_logger, file);
         try
         {
-            await pauseSemaphore.WaitAsync(ctx).ConfigureAwait(false);
-            pauseSemaphore.Release();
+            pauseGate.Wait(ctx);
         }
         catch (OperationCanceledException) { throw; }
         ctx.ThrowIfCancellationRequested();
@@ -91,27 +90,27 @@ public sealed class Uncompactor : ICompressor, IDisposable
     public void Pause()
     {
         UncompactorLog.DecompressionPaused(_logger);
-        pauseSemaphore.Wait();
+        pauseGate.Reset();
     }
 
 
     public void Resume()
     {
-        if (pauseSemaphore.CurrentCount == 0) pauseSemaphore.Release();
+        pauseGate.Set();
         UncompactorLog.DecompressionResumed(_logger);
     }
 
 
     public void Cancel()
     {
-        Resume();
+        pauseGate.Set();
         cancellationTokenSource.Cancel();
     }
 
 
     public void Dispose()
     {
-        pauseSemaphore.Dispose();
+        pauseGate.Dispose();
         cancellationTokenSource.Dispose();
     }
 

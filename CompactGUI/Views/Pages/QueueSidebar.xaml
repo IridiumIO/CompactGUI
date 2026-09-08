@@ -367,12 +367,12 @@
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ui:Button Width="42" Height="36"
                                    Padding="0"
-                                   Command="{Binding ActiveFolderViewModel.PauseCommand}">
+                                   Command="{Binding PauseQueueCommand}">
                             <ui:SymbolIcon Filled="True" Symbol="{Binding ActiveFolderViewModel.Folder.FolderActionState, Converter={StaticResource FolderWorkingStateToPauseSymbolConverter}}" />
                         </ui:Button>
                         <ui:Button Width="42" Height="36"
                                    Margin="8 0 0 0" Padding="0"
-                                   Command="{Binding ActiveFolderViewModel.CancelCommand}">
+                                   Command="{Binding CancelQueueCommand}">
                             <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
                         </ui:Button>
                     </StackPanel>

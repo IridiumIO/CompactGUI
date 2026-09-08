@@ -50,6 +50,12 @@ Public Class CompressableFolderService
 
             Dim res = Await compressor.RunAsync(filesList, progress, GetThreadCount(folder))
 
+            If Not res Then
+                folder.FolderActionState = ActionState.Idle
+                folder.IsFreshlyCompressed = False
+                Return False
+            End If
+
             If isCompressing Then
                 folder.FolderActionState = ActionState.Results
                 folder.IsFreshlyCompressed = res
@@ -58,12 +64,11 @@ Public Class CompressableFolderService
                 folder.IsFreshlyCompressed = False
                 Await AnalyseFolderAsync(folder)
             End If
-            compressor.Dispose()
-
             Return res
 
         Finally
 
+            compressor.Dispose()
             ReleaseToken(folder, cts)
 
         End Try

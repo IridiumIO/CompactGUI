@@ -477,6 +477,31 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     <NotifyPropertyChangedFor(NameOf(HomeViewModelState))>
     Private _Compressing As Boolean = False
 
+    Private _cancelQueueRequested As Boolean
+
+    <RelayCommand>
+    Private Sub PauseQueue()
+        Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
+        If activeFolder?.Compressor Is Nothing Then Return
+
+        If activeFolder.FolderActionState = ActionState.Working Then
+            activeFolder.Compressor.Pause()
+            activeFolder.FolderActionState = ActionState.Paused
+        Else
+            activeFolder.Compressor.Resume()
+            activeFolder.FolderActionState = ActionState.Working
+        End If
+    End Sub
+
+    <RelayCommand>
+    Private Sub CancelQueue()
+        Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
+        If activeFolder?.Compressor Is Nothing Then Return
+
+        _cancelQueueRequested = True
+        activeFolder.Compressor.Cancel()
+    End Sub
+
 
 
 
@@ -486,6 +511,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         Await _watcher.DisableBackgrounding()
 
         Compressing = True
+        _cancelQueueRequested = False
         Core.SharedMethods.PreventSleep()
         Dim queuedFolderCount = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).Count()
         HomeViewModelLog.StartingBatchCompression(_logger, queuedFolderCount)
@@ -494,9 +520,12 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             Dim folder = Folders.FirstOrDefault(Function(f) f.FolderActionState = ActionState.Idle)
             If folder Is Nothing Then Exit Do
 
-            Await Task.Run(Async Function()
+            Dim completed = Await Task.Run(Async Function()
                                    HomeViewModelLog.CompressingFolder(_logger, folder.FolderName)
                                    Dim ret = Await _compressableFolderService.CompressFolder(folder)
+
+                                   If Not ret Then Return False
+
                                    Dim analysis = Await _compressableFolderService.AnalyseFolderAsync(folder)
 
                                    If _settingsService.AppSettings.ShowNotifications Then
@@ -513,6 +542,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
                                    Return True
                                End Function)
+            If _cancelQueueRequested OrElse Not completed Then Exit Do
         Loop
         Compressing = False
 
