@@ -29,4 +29,9 @@ Class QueueSidebar
             Await CType(DataContext, HomeViewModel).AddFoldersAsync(folderBrowser.FolderNames)
         End If
     End Sub
+
+    Private Sub QueueSelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Dim selectedFolder = If(e.AddedItems.Count > 0, TryCast(e.AddedItems(0), CompressableFolder), Nothing)
+        If selectedFolder IsNot Nothing Then CType(DataContext, HomeViewModel).SelectedFolder = selectedFolder
+    End Sub
 End Class

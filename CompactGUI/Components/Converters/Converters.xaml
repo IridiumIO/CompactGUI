@@ -12,6 +12,9 @@
     <local:RelativeDateConverter x:Key="RelativeDateConverter" />
     <local:CompressionLevelAbbreviatedConverter x:Key="CompressionLevelAbbreviatedConverter" />
     <local:CompressionModeAbbreviatedConverter x:Key="CompressionModeAbbreviatedConverter" />
+    <local:QueueCompressionModeLabelConverter x:Key="QueueCompressionModeLabelConverter" />
+    <local:QueueStatusToStringConverter x:Key="QueueStatusToStringConverter" />
+    <local:SelectedModeEstimatedSavingsConverter x:Key="SelectedModeEstimatedSavingsConverter" />
     <!-- <local:ConfidenceIntToColorConverter x:Key="ConfidenceIntToColorConverter" /> -->
     <!-- <local:ConfidenceIntToStringConverter x:Key="ConfidenceIntToStringConverter" /> -->
     <!-- <local:WikiCompressionLevelAbbreviatedConverter x:Key="WikiCompressionLevelAbbreviatedConverter" /> -->

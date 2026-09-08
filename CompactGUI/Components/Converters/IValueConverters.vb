@@ -160,6 +160,65 @@ Public Class CompressionModeAbbreviatedConverter : Implements IValueConverter
     End Function
 End Class
 
+Public Class QueueCompressionModeLabelConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Select Case CType(value, Core.CompressionMode)
+            Case Core.CompressionMode.XPRESS4K : Return "X4K"
+            Case Core.CompressionMode.XPRESS8K : Return "X8K"
+            Case Core.CompressionMode.XPRESS16K : Return "X16K"
+            Case Core.CompressionMode.LZX : Return "LZX"
+            Case Else : Return "NIL"
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class QueueStatusToStringConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Select Case CType(value, ActionState)
+            Case ActionState.Idle, ActionState.Waiting : Return "Waiting"
+            Case ActionState.Analysing : Return "Preparing"
+            Case ActionState.Working : Return "Working"
+            Case ActionState.Paused : Return "Paused"
+            Case ActionState.Results : Return "Complete"
+            Case Else : Return "Failed"
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class SelectedModeEstimatedSavingsConverter : Implements IMultiValueConverter
+    Public Function Convert(values() As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IMultiValueConverter.Convert
+        Dim results = TryCast(values(0), WikiCompressionResults)
+        If results Is Nothing Then Return 0L
+
+        Dim result As CompressionResult = Nothing
+        Select Case CType(values(1), Core.CompressionMode)
+            Case Core.CompressionMode.XPRESS4K
+                result = results.XPress4K
+            Case Core.CompressionMode.XPRESS8K
+                result = results.XPress8K
+            Case Core.CompressionMode.XPRESS16K
+                result = results.XPress16K
+            Case Core.CompressionMode.LZX
+                result = results.LZX
+        End Select
+
+        Dim savings = If(result Is Nothing, 0L, Math.Max(0, result.BytesSaved))
+        Return New BytesToReadableConverter().Convert(savings, GetType(String), Nothing, culture)
+    End Function
+
+    Public Function ConvertBack(value As Object, targetTypes() As Type, parameter As Object, culture As CultureInfo) As Object() Implements IMultiValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
 
 Public Class ConfidenceIntToStringConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert

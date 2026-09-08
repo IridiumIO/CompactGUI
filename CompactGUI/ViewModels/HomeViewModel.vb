@@ -75,6 +75,67 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         End Get
     End Property
 
+    Public ReadOnly Property QueueFolders As IEnumerable(Of CompressableFolder)
+        Get
+            Return Folders.OrderBy(Function(folder) If(folder.FolderActionState = ActionState.Results, 1, 0))
+        End Get
+    End Property
+
+    Public ReadOnly Property UpNextFolders As IEnumerable(Of CompressableFolder)
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState <> ActionState.Results)
+        End Get
+    End Property
+
+    Public ReadOnly Property CompletedFolders As IEnumerable(Of CompressableFolder)
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Results)
+        End Get
+    End Property
+
+    Public ReadOnly Property CompletedFolderCount As Integer
+        Get
+            Return CompletedFolders.Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property UpNextFolderCount As Integer
+        Get
+            Return UpNextFolders.Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property HasUpNextFolders As Boolean
+        Get
+            Return UpNextFolderCount > 0
+        End Get
+    End Property
+
+    Public ReadOnly Property QueueCompletionProgress As Double
+        Get
+            If Folders.Count = 0 Then Return 0
+            Return CompletedFolderCount / CDbl(Folders.Count) * 100
+        End Get
+    End Property
+
+    Public ReadOnly Property ToProcessSize As Long
+        Get
+            Return UpNextFolders.Sum(Function(folder) folder.UncompressedBytes)
+        End Get
+    End Property
+
+    Public ReadOnly Property ExpectedSavings As Long
+        Get
+            Return UpNextFolders.Sum(Function(folder) GetSelectedModeEstimatedSavings(folder))
+        End Get
+    End Property
+
+    Public ReadOnly Property CompressButtonText As String
+        Get
+            Return $"Compress {AwaitingFolderCount} {If(AwaitingFolderCount = 1, "game", "games")}".LT()
+        End Get
+    End Property
+
     Public ReadOnly Property TotalQueuedSize As Long
         Get
             Return Folders.Sum(Function(folder) folder.UncompressedBytes)
@@ -177,6 +238,16 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         OnPropertyChanged(NameOf(IsQueueRunning))
         OnPropertyChanged(NameOf(ActiveFolderViewModel))
         OnPropertyChanged(NameOf(QueueStatusSummary))
+        OnPropertyChanged(NameOf(QueueFolders))
+        OnPropertyChanged(NameOf(UpNextFolders))
+        OnPropertyChanged(NameOf(CompletedFolders))
+        OnPropertyChanged(NameOf(CompletedFolderCount))
+        OnPropertyChanged(NameOf(UpNextFolderCount))
+        OnPropertyChanged(NameOf(HasUpNextFolders))
+        OnPropertyChanged(NameOf(QueueCompletionProgress))
+        OnPropertyChanged(NameOf(ToProcessSize))
+        OnPropertyChanged(NameOf(ExpectedSavings))
+        OnPropertyChanged(NameOf(CompressButtonText))
         OnPropertyChanged(NameOf(TotalQueuedSize))
         OnPropertyChanged(NameOf(HasAwaitingFolders))
         OnPropertyChanged(NameOf(HasCompressedFolders))
@@ -322,6 +393,13 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         End If
 
         folder.Dispose()
+    End Sub
+
+    <RelayCommand>
+    Private Sub ClearCompleted()
+        For Each folder In CompletedFolders.ToList()
+            RemoveFolder(folder)
+        Next
     End Sub
 
     Public Function CanRemoveFolder() As Boolean
