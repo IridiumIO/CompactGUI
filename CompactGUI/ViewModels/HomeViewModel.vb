@@ -87,6 +87,12 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         End Get
     End Property
 
+    Public ReadOnly Property QueueDropHandler As QueueDropHandler
+        Get
+            Return _queueDropHandler
+        End Get
+    End Property
+
     Public ReadOnly Property CompletedFolders As IEnumerable(Of CompressableFolder)
         Get
             Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Results)
@@ -186,6 +192,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Private ReadOnly _logger As ILogger(Of HomeViewModel)
     Private ReadOnly _settingsService As ISettingsService
     Private ReadOnly _compressableFolderService As CompressableFolderService
+    Private ReadOnly _queueDropHandler As QueueDropHandler
 
     Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel), settingsService As ISettingsService, compressableFolderService As CompressableFolderService)
         WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
@@ -196,6 +203,39 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         _logger = logger
         _settingsService = settingsService
         _compressableFolderService = compressableFolderService
+        _queueDropHandler = New QueueDropHandler(Me)
+    End Sub
+
+    Public Function CanReorderQueuedFolder(folder As CompressableFolder) As Boolean
+        Return folder IsNot Nothing AndAlso
+               folder.FolderActionState = ActionState.Idle AndAlso
+               Not Folders.Any(Function(item) item.FolderActionState = ActionState.Analysing)
+    End Function
+
+    Public Sub MoveQueuedFolder(folder As CompressableFolder, insertIndex As Integer)
+        If Not CanReorderQueuedFolder(folder) Then Return
+
+        Dim awaitingFolders = Folders.Where(Function(item) item.FolderActionState = ActionState.Idle).ToList()
+        Dim sourceQueueIndex = awaitingFolders.IndexOf(folder)
+        If sourceQueueIndex < 0 Then Return
+
+        Dim destinationQueueIndex = Math.Max(0, Math.Min(insertIndex, awaitingFolders.Count))
+        If destinationQueueIndex > sourceQueueIndex Then destinationQueueIndex -= 1
+
+        awaitingFolders.RemoveAt(sourceQueueIndex)
+        If destinationQueueIndex > awaitingFolders.Count Then destinationQueueIndex = awaitingFolders.Count
+        If destinationQueueIndex = sourceQueueIndex Then Return
+
+        Dim sourceFolderIndex = Folders.IndexOf(folder)
+        Dim insertionFolderIndex As Integer
+        If destinationQueueIndex < awaitingFolders.Count Then
+            insertionFolderIndex = Folders.IndexOf(awaitingFolders(destinationQueueIndex))
+        Else
+            insertionFolderIndex = Folders.IndexOf(awaitingFolders.Last()) + 1
+        End If
+
+        If sourceFolderIndex < insertionFolderIndex Then insertionFolderIndex -= 1
+        Folders.Move(sourceFolderIndex, insertionFolderIndex)
     End Sub
 
 
@@ -447,12 +487,14 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
         Compressing = True
         Core.SharedMethods.PreventSleep()
-        Dim tasks As New List(Of Task)()
-        Dim foldersToCompress = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).ToList
-        HomeViewModelLog.StartingBatchCompression(_logger, foldersToCompress.Count)
-        For Each folder In foldersToCompress
-            If folder.FolderActionState = ActionState.Idle Then
-                Await Task.Run(Async Function()
+        Dim queuedFolderCount = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).Count()
+        HomeViewModelLog.StartingBatchCompression(_logger, queuedFolderCount)
+
+        Do
+            Dim folder = Folders.FirstOrDefault(Function(f) f.FolderActionState = ActionState.Idle)
+            If folder Is Nothing Then Exit Do
+
+            Await Task.Run(Async Function()
                                    HomeViewModelLog.CompressingFolder(_logger, folder.FolderName)
                                    Dim ret = Await _compressableFolderService.CompressFolder(folder)
                                    Dim analysis = Await _compressableFolderService.AnalyseFolderAsync(folder)
@@ -471,8 +513,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
                                    Return True
                                End Function)
-            End If
-        Next
+        Loop
         Compressing = False
 
         For Each folder In Folders.Where(Function(f) f.CompressionOptions.WatchFolderForChanges)

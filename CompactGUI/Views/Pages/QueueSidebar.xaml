@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,15 +22,34 @@
         </Style>
         <DataTemplate x:Key="QueueItemTemplate">
             <Border x:Name="ItemCard"
-                    Padding="0"
+                    Padding="0" 
                     Background="Transparent" CornerRadius="6"
                     Tag="{Binding DataContext, ElementName=PageRoot}">
-                <Grid Margin="8">
+                <Grid Margin="8" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Grid Margin="0 0 8 0">
+                    <Border Margin="0 0 5 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Background="Transparent" Cursor="SizeAll">
+                        <TextBlock Margin="0 0 5 0"
+                                   FontSize="13"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   IsHitTestVisible="False" Text="⠿">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding FolderActionState}" Value="Idle">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+
+                    <Grid Margin="16 0 8 0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -141,7 +161,7 @@
                     <ui:Button Grid.Column="1"
                                Width="24" Height="24"
                                Margin="0 0 -2 0" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center"
-                               BorderBrush="{StaticResource PaletteRedBrush}"  
+                               BorderBrush="{StaticResource PaletteRedBrush}"
                                Command="{Binding Tag.RemoveFolderCommand, RelativeSource={RelativeSource AncestorType=Border}}"
                                CommandParameter="{Binding}">
                         <ui:SymbolIcon FontSize="11" Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
@@ -222,9 +242,11 @@
                     <ui:SymbolIcon Symbol="Dismiss12" />
                 </ui:Button>
             </Grid>
-            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0 0 -10 0">
-         
-                <StackPanel Margin="0 0 13 0" >
+            <ScrollViewer Grid.Row="1"
+                          Margin="0 0 -10 0"
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+
+                <StackPanel Margin="0 0 13 0">
                     <Grid Margin="0 0 0 6" Visibility="{Binding HasUpNextFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -238,16 +260,17 @@
                                 Height="1"
                                 Margin="8 0" VerticalAlignment="Center"
                                 Background="#40FFFFFF" />
-                        <TextBlock Grid.Column="2" 
+                        <TextBlock Grid.Column="2"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="{Binding UpNextFolderCount, Mode=OneWay}" />
                     </Grid>
-                    <ui:ListView Padding="0" 
-                                 Background="Transparent" BorderThickness="0"
+                    <ui:ListView Padding="0"
+                                 dd:DragDrop.DropHandler="{Binding QueueDropHandler}"
+                                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Background="Transparent" BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
                                  ItemTemplate="{StaticResource QueueItemTemplate}"
-                                 ItemsSource="{Binding UpNextFolders}"
+                                 ItemsSource="{Binding UpNextFolders}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                  SelectedItem="{Binding SelectedFolder, Mode=OneWay}"
                                  SelectionChanged="QueueSelectionChanged" />
@@ -265,11 +288,11 @@
                                 Margin="8 0" VerticalAlignment="Center"
                                 Background="#40FFFFFF" />
                         <TextBlock Grid.Column="2"
-                                   FontSize="10" 
+                                   FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="{Binding CompletedFolderCount, Mode=OneWay}" />
                     </Grid>
-                    <ui:ListView Padding="0" 
+                    <ui:ListView Padding="0"
                                  Background="Transparent" BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
                                  ItemTemplate="{StaticResource QueueItemTemplate}"
