@@ -32,6 +32,14 @@ Class QueueSidebar
 
     Private Sub QueueSelectionChanged(sender As Object, e As SelectionChangedEventArgs)
         Dim selectedFolder = If(e.AddedItems.Count > 0, TryCast(e.AddedItems(0), CompressableFolder), Nothing)
-        If selectedFolder IsNot Nothing Then CType(DataContext, HomeViewModel).SelectedFolder = selectedFolder
+        If selectedFolder Is Nothing Then Return
+
+        If ReferenceEquals(sender, UpNextListView) Then
+            CompletedListView.SelectedItem = Nothing
+        Else
+            UpNextListView.SelectedItem = Nothing
+        End If
+
+        CType(DataContext, HomeViewModel).SelectedFolder = selectedFolder
     End Sub
 End Class

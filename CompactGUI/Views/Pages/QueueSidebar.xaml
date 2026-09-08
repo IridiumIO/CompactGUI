@@ -265,7 +265,8 @@
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="{Binding UpNextFolderCount, Mode=OneWay}" />
                     </Grid>
-                    <ui:ListView Padding="0"
+                    <ui:ListView x:Name="UpNextListView"
+                                 Padding="0" 
                                  dd:DragDrop.DropHandler="{Binding QueueDropHandler}"
                                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Background="Transparent" BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
@@ -292,7 +293,8 @@
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="{Binding CompletedFolderCount, Mode=OneWay}" />
                     </Grid>
-                    <ui:ListView Padding="0"
+                    <ui:ListView x:Name="CompletedListView"
+                                 Padding="0" 
                                  Background="Transparent" BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
                                  ItemTemplate="{StaticResource QueueItemTemplate}"
