@@ -56,8 +56,8 @@
                          SelectedItem="{Binding SelectedFolder, Mode=TwoWay}">
                 <ui:ListView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource {x:Type ui:ListViewItem}}" TargetType="ui:ListViewItem">
-                        <Setter Property="Margin" Value="0 0 0 8" />
-                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="0 0 0 0" />
+                        <Setter Property="Padding" Value="0 -5" />
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderThickness" Value="0" />
