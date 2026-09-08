@@ -1045,7 +1045,7 @@
         </Grid>
 
         <Border Grid.Row="4"
-                Margin="20 0 40 20" Padding="15 16" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Panel.ZIndex="20"
+                Margin="20 0 40 20" Padding="15 16" HorizontalAlignment="Center" VerticalAlignment="Bottom" Panel.ZIndex="20"
                 Background="#445667" BorderBrush="#50FFFFFF" BorderThickness="1" CornerRadius="8"
                 Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
@@ -1101,11 +1101,11 @@
 
                 </StackPanel>
 
-
+                <Separator Grid.Column="3" Margin="10 0 10 0" />
 
                 <ui:Button Grid.Column="6"
-                           Height="38"
-                           Margin="20 0 0 0" Padding="18 0"
+                           Height="48" Background="{StaticResource PaletteGreenBrush}"
+                           Margin="10 0 0 0" Padding="18 0" 
                            Command="{Binding AddSelectedToQueueCommand}"
                            Content="{loc:T Add selected to queue}" />
             </Grid>
