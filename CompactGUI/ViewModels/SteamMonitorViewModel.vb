@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Net.Http
 Imports System.Text.Json
 Imports System.Threading
+Imports System.Windows.Threading
 Imports System.Windows.Input
 
 Imports CommunityToolkit.Mvvm.ComponentModel
@@ -45,6 +46,10 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     <NotifyPropertyChangedFor(NameOf(HasNoGames))>
     <NotifyCanExecuteChangedFor(NameOf(RefreshAllCommand))>
     Private _isLoading As Boolean
+
+    <ObservableProperty>
+    <NotifyCanExecuteChangedFor(NameOf(RefreshAllCommand))>
+    Private _isAnalysingGames As Boolean
 
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(HasError))>
@@ -158,11 +163,15 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             End If
         End If
 
-        OnPropertyChanged(NameOf(HasNoGames))
-        NotifySavingsTotalsChanged()
+        If Not IsLoading Then
+            OnPropertyChanged(NameOf(HasNoGames))
+            NotifySavingsTotalsChanged()
+        End If
     End Sub
 
     Private Sub OnSteamGamePropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If IsAnalysingGames Then Return
+
         Select Case e.PropertyName
             Case Nothing, String.Empty, NameOf(SteamDetailedResult.UncompressedBytes), NameOf(SteamDetailedResult.CurrentFolderSize), NameOf(SteamDetailedResult.IsCompressed), NameOf(SteamDetailedResult.RecommendedCompressionMode), NameOf(SteamDetailedResult.ExpectedCompressionSavings), NameOf(SteamDetailedResult.HasCompressionEstimate)
                 NotifySavingsTotalsChanged()
@@ -191,7 +200,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     End Function
 
     Private Function CanRefreshAll() As Boolean
-        Return Not IsLoading AndAlso _activeGame Is Nothing
+        Return Not IsLoading AndAlso Not IsAnalysingGames AndAlso _activeGame Is Nothing
     End Function
 
     <RelayCommand>
@@ -323,6 +332,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         If _hasLoaded OrElse IsLoading Then Return
 
         Dim imageLoadTasks As New List(Of Task)
+        Dim gamesToAnalyse As New List(Of SteamDetailedResult)
+        Dim displayedGames As New List(Of SteamDetailedResult)
         IsLoading = True
         ErrorMessage = Nothing
 
@@ -339,6 +350,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             End Try
 
             Dim databaseByAppId = databaseResults.GroupBy(Function(result) result.SteamID).ToDictionary(Function(group) group.Key, Function(group) group.First())
+            Dim watchedByPath = _watcher.WatchedFolders.GroupBy(Function(folder) folder.Folder, StringComparer.OrdinalIgnoreCase).ToDictionary(Function(group) group.Key, Function(group) group.First(), StringComparer.OrdinalIgnoreCase)
 
             For Each game In games.OrderBy(Function(item) item.GameName)
                 If Not Directory.Exists(game.InstallDirectory) Then Continue For
@@ -346,22 +358,55 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 Dim databaseResult As DatabaseCompressionResult = Nothing
                 databaseByAppId.TryGetValue(game.AppID, databaseResult)
 
-                Dim watchedFolder = _watcher.WatchedFolders.FirstOrDefault(Function(folder) String.Equals(folder.Folder, game.InstallDirectory, StringComparison.OrdinalIgnoreCase))
+                Dim watchedFolder As Watcher.WatchedFolder = Nothing
+                watchedByPath.TryGetValue(game.InstallDirectory, watchedFolder)
                 Dim detailedResult = CreateDetailedResult(game, databaseResult, watchedFolder)
-                Await AnalyseGameAsync(detailedResult)
-                If detailedResult.CurrentFolderSize > 0 Then
+                Dim requiresAnalysis = Not TryApplyWatchedAnalysis(detailedResult, game, watchedFolder)
+
+                If requiresAnalysis Then gamesToAnalyse.Add(detailedResult)
+                If requiresAnalysis OrElse detailedResult.CurrentFolderSize > 0 Then
+                    displayedGames.Add(detailedResult)
                     SteamGamesData.Add(detailedResult)
-                    imageLoadTasks.Add(LoadGameHeaderAsync(detailedResult, steamFolder))
                 End If
+            Next
+
+            _hasLoaded = True
+            IsAnalysingGames = gamesToAnalyse.Count > 0
+            IsLoading = False
+            OnPropertyChanged(NameOf(HasNoGames))
+            NotifySavingsTotalsChanged()
+
+            Await Dispatcher.Yield(DispatcherPriority.Background)
+
+            For Each game In displayedGames
+                imageLoadTasks.Add(LoadGameHeaderAsync(game, steamFolder))
+            Next
+
+            For Each game In gamesToAnalyse
+                Await AnalyseGameAsync(game)
+                If game.CurrentFolderSize = 0 Then SteamGamesData.Remove(game)
             Next
         Catch ex As Exception
             ErrorMessage = $"Steam games could not be loaded: {ex.Message}"
         Finally
             _hasLoaded = True
             IsLoading = False
+            IsAnalysingGames = False
+            OnPropertyChanged(NameOf(HasNoGames))
+            NotifySavingsTotalsChanged()
+            If _statusFilter.HasValue OrElse _recommendedActionFilter.HasValue Then FilteredSteamGames.Refresh()
         End Try
 
         If imageLoadTasks.Count > 0 Then Await Task.WhenAll(imageLoadTasks)
+    End Function
+
+    Private Shared Function TryApplyWatchedAnalysis(game As SteamDetailedResult, steamGame As SteamACFResult, watchedFolder As Watcher.WatchedFolder) As Boolean
+        If watchedFolder Is Nothing OrElse watchedFolder.HasTargetChanged Then Return False
+        If watchedFolder.LastCheckedDate <= DateTime.UnixEpoch OrElse steamGame.LastUpdated > watchedFolder.LastCheckedDate Then Return False
+        If watchedFolder.LastUncompressedSize <= 0 OrElse watchedFolder.LastCheckedSize <= 0 Then Return False
+
+        game.UpdateAnalysis(watchedFolder.LastUncompressedSize, watchedFolder.LastCheckedSize, watchedFolder.CompressionLevel, False)
+        Return True
     End Function
 
     Private Async Function LoadGameHeaderAsync(game As SteamDetailedResult, steamFolder As DirectoryInfo) As Task
@@ -691,6 +736,7 @@ Public Enum SteamGameStatus
     Uncompressed
     RecentlyUpdated
     PendingSteamUpdate
+    Analysing
 End Enum
 
 Public Enum SteamRecommendedAction
@@ -797,6 +843,8 @@ Public Class SteamDetailedResult : Inherits ObservableObject
                     Return "Recently Updated".LT()
                 Case SteamGameStatus.PendingSteamUpdate
                     Return "Update Available".LT()
+                Case SteamGameStatus.Analysing
+                    Return "Analysing...".LT()
                 Case Else
                     Return "Unknown".LT()
             End Select
@@ -875,6 +923,8 @@ Public Class SteamDetailedResult : Inherits ObservableObject
         Me.WikiCompressionResults = wikiResults
         Me.WikiPoorlyCompressedFiles = poorlyCompressedFiles
         CompressionOptions.SkipUserSubmittedFiletypes = poorlyCompressedFiles.Count > 0
+        Status = SteamGameStatus.Analysing
+        RecommendedAction = "Analysing...".LT()
     End Sub
 
     Public Sub UpdateAnalysis(uncompressedBytes As Long, currentFolderSize As Long, compressionLevel As Core.WOFCompressionAlgorithm, isDirectStorage As Boolean)

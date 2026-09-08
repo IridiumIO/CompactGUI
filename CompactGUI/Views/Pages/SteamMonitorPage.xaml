@@ -32,9 +32,14 @@
                        Margin="10 2 0 0" Padding="0" VerticalAlignment="Top"
                        Background="Transparent" BorderThickness="0"
                        Command="{Binding RefreshAllCommand}"
-                       ToolTip="{loc:T Reload Steam Library list}">
+                       ToolTip="{loc:T Reload Steam Library list}"
+                       Visibility="{Binding IsAnalysingGames, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
                 <ui:SymbolIcon Margin="0 5 0 0" FontSize="18" Symbol="ArrowClockwise16" />
             </ui:Button>
+            <ui:ProgressRing Width="20" Height="20"
+                             Margin="15 0 0 0"
+                             IsIndeterminate="True"
+                             Visibility="{Binding IsAnalysingGames, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
 
         <Grid Grid.Row="0" Margin="20 0" HorizontalAlignment="Right">
@@ -153,6 +158,10 @@
             <Separator Height="30"
                        Margin="10 0 10 -2" VerticalAlignment="Bottom"
                        BorderThickness="1" />
+            <ui:ProgressRing Width="14" Height="14"
+                             Margin="0 0 5 4" VerticalAlignment="Bottom"
+                             Foreground="#63ffa1" IsIndeterminate="True"
+                             Visibility="{Binding IsAnalysingGames, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <TextBlock VerticalAlignment="Bottom"
                        FontSize="20" Foreground="#63ffa1" Opacity="0.6"
                        Text="{Binding TotalSaved, Converter={StaticResource BytesToReadableConverter}}" />
@@ -162,6 +171,10 @@
             <Separator Height="30"
                        Margin="10 0 10 -2" VerticalAlignment="Bottom"
                        BorderThickness="1" />
+            <ui:ProgressRing Width="14" Height="14"
+                             Margin="0 0 5 4" VerticalAlignment="Bottom"
+                             Foreground="#57dbff" IsIndeterminate="True"
+                             Visibility="{Binding IsAnalysingGames, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <TextBlock VerticalAlignment="Bottom"
                        FontSize="20" Foreground="#57dbff" Opacity="0.6"
                        Text="{Binding TotalCanBeSaved, Converter={StaticResource BytesToReadableConverter}}" />
@@ -357,6 +370,9 @@
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
                                                     <Setter Property="Fill" Value="#44bedf" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Analysing}">
+                                                    <Setter Property="Fill" Value="#8373808C" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>

@@ -16,6 +16,7 @@
 "Aggression of online skiplist" = "在线跳过列表的激进程度"
 "Always show details on Compression Mode buttons" = "始终显示压缩模式按钮的详细信息"
 "Analysing" = "正在分析"
+"Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "已应用到所有文件夹"
 "Apply to all" = "应用到所有"
 "Ascending" = "升序"

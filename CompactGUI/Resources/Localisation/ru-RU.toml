@@ -16,6 +16,7 @@
 "Aggression of online skiplist" = "Уровень агрессивности онлайн-списка пропуска"
 "Always show details on Compression Mode buttons" = "Всегда показывать подробности на кнопках режимов сжатия"
 "Analysing" = "Анализ"
+"Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "Применено ко всем папкам"
 "Apply to all" = "Применить ко всем"
 "Ascending" = "По возрастанию"

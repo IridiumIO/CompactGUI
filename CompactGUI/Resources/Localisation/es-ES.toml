@@ -16,6 +16,7 @@
 "Aggression of online skiplist" = "Agresividad de la lista de omisión online"
 "Always show details on Compression Mode buttons" = "Mostrar siempre detalles en botones de modo de compresión"
 "Analysing" = "Analizando"
+"Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "Aplicado a todas las carpetas"
 "Apply to all" = "Aplicar a todo"
 "Ascending" = "Ascendente"
