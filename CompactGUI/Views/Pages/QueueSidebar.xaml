@@ -109,11 +109,13 @@
                                         <Ellipse Width="10" Height="10"
                                                  Margin="0 0 7 0" VerticalAlignment="Center"
                                                  Fill="{Binding FolderActionState, Converter={StaticResource FolderStatusToColorConverter}}" />
-                                        <TextBlock VerticalAlignment="Center"
-                                                   FontSize="11" Grid.Column="1"
+                                        <TextBlock Grid.Column="1"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="11"
                                                    Foreground="{StaticResource CardForegroundDisabled}"
                                                    Text="{Binding FolderActionState, Converter={StaticResource FolderStatusToStringConverter}}" />
-                                        <Border Width="40" Height="25" Grid.Column="2"
+                                        <Border Grid.Column="2"
+                                                Width="40" Height="25"
                                                 Margin="10 0 0 0" VerticalAlignment="Center"
                                                 Background="#8373808C" CornerRadius="5">
                                             <Border.Style>
@@ -134,8 +136,8 @@
                                                        Text="{Binding CompressionOptions.SelectedCompressionMode, Converter={StaticResource CompressionModeAbbreviatedConverter}}" />
                                         </Border>
                                         <ProgressBar Grid.Column="3"
-                                                     Height="8" VerticalAlignment="Center"
-                                                     Margin="10 0 0 0"
+                                                     Height="8"
+                                                     Margin="10 0 0 0" VerticalAlignment="Center"
                                                      Background="{StaticResource CardBackgroundPressed}"
                                                      Foreground="#92F1AB"
                                                      Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}"
@@ -144,16 +146,13 @@
 
 
                                     </Grid>
-                                    <Grid Grid.Row="2" Margin="0 5 0 0" Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}">
+                                    <!--<Grid Grid.Row="2" Margin="0 5 0 0" Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
-                                        <TextBlock FontSize="10"
-                                                   Foreground="{StaticResource CardForegroundDisabled}"
-                                                   Text="{Binding CompressionProgress.FileName, Converter={StaticResource TokenisedFolderPathConverter}, ConverterParameter=TrimStart}"
-                                                   />
+                                        --><!--<TextBlock FontSize="10" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding CompressionProgress.FileName, Converter={StaticResource TokenisedFolderPathConverter}, ConverterParameter=TrimStart}" />--><!--
 
-                                    </Grid>
+                                    </Grid>-->
                                 </Grid>
 
                                 <ui:Button Grid.Column="1"
@@ -196,9 +195,7 @@
                                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
                                             <Setter Property="Background" Value="#3345A9E8" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding FolderActionState}" Value="Working">
-                                            
-                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding FolderActionState}" Value="Working" />
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
@@ -241,26 +238,49 @@
                                    Text="{Binding TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
                     </StackPanel>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <ui:Button Height="36" Margin="0 0 8 0"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ui:Button Height="36"
+                               HorizontalAlignment="Stretch"
                                Command="{Binding CompressAllCommand}"
-                               Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                        <TextBlock loc:L.Value="Compress Selected" />
-                    </ui:Button>
-                    <StackPanel Orientation="Horizontal"
+                               Content="Begin Compression"
+                               Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+                    <StackPanel Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <ui:Button Width="42" Height="36"
-                                   Padding="0"
-                                   Command="{Binding ActiveFolderViewModel.PauseCommand}">
-                            <ui:SymbolIcon Filled="True" Symbol="{Binding ActiveFolderViewModel.Folder.FolderActionState, Converter={StaticResource FolderWorkingStateToPauseSymbolConverter}}" />
+                        <ui:Button Height="36" Command="{Binding ActiveFolderViewModel.PauseCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Filled="True" Symbol="{Binding ActiveFolderViewModel.Folder.FolderActionState, Converter={StaticResource FolderWorkingStateToPauseSymbolConverter}}" />
+                                <TextBlock Margin="8 0 0 0">
+                                    <TextBlock.Style>
+                                        <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
+                                            <Setter Property="Text" Value="Pause Queue" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ActiveFolderViewModel.Folder.FolderActionState}" Value="{x:Static local:ActionState.Paused}">
+                                                    <Setter Property="Text" Value="Resume Queue" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
                         </ui:Button>
-                        <ui:Button Width="42" Height="36"
-                                   Margin="8 0 0 0" Padding="0"
+                        <ui:Button Height="36"
+                                   Margin="8 0 0 0"
                                    Command="{Binding ActiveFolderViewModel.CancelCommand}">
-                            <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                            <StackPanel Orientation="Horizontal">
+
+                                <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                                <TextBlock Margin="8 0 0 0" Text="Cancel Queue" Foreground="{StaticResource PaletteRedBrush}">
+                                    
+                                </TextBlock>
+                            </StackPanel>
                         </ui:Button>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
             </StackPanel>
         </Grid>
     </Border>

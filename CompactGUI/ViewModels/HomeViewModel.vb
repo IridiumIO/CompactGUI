@@ -151,6 +151,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         If e.PropertyName = NameOf(CompressableFolder.FolderActionState) Then
             OnPropertyChanged(NameOf(HomeViewModelState))
             Application.Current.Dispatcher.Invoke(Sub() RemoveFolderCommand.NotifyCanExecuteChanged())
+            Application.Current.Dispatcher.Invoke(Sub() CompressAllCommand.NotifyCanExecuteChanged())
         End If
 
         If e.PropertyName = NameOf(CompressableFolder.FolderActionState) OrElse
@@ -203,6 +204,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
     Private Sub OnFoldersCollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
         OnPropertyChanged(NameOf(HomeViewModelState))
+        CompressAllCommand.NotifyCanExecuteChanged()
         If e.Action = NotifyCollectionChangedAction.Add Then
             For Each folder As CompressableFolder In e.NewItems
                 AddHandler folder.PropertyChanged, AddressOf OnAnyFolderPropertyChanged
@@ -406,7 +408,9 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
 
     Private Function CanCompressAll() As Boolean
-        Return HomeViewModelState <> ActionState.Working AndAlso Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
+        Return Folders.Any(Function(f) f.FolderActionState = ActionState.Idle) AndAlso
+               HomeViewModelState <> ActionState.Working AndAlso
+               Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
     End Function
 
 
