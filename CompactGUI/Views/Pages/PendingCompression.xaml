@@ -19,13 +19,114 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ui:TextBlock Margin="0 30 0 20" VerticalAlignment="Center"
-                      loc:L.Value="Compression Mode" FontSize="16" FontWeight="SemiBold" />
+                      loc:L.Value="Choose Compression" FontSize="14" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
 
-        <WrapPanel Grid.Row="1"
+        <Grid Grid.Row="1" Margin="0 10 0 0" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="200" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+            <Border Grid.ColumnSpan="7"
+                    Height="80"
+                    Background="#00FFFFFF" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="6" />
+
+
+            <StackPanel Margin="10 0" VerticalAlignment="Center">
+
+                <TextBlock FontSize="30" FontWeight="SemiBold" Foreground="#50c8ed">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource SelectedModeEstimatedSavingsConverter}" StringFormat="{}≈ {0}">
+                            <Binding Path="Folder.WikiCompressionResults" />
+                            <Binding Path="Folder.CompressionOptions.SelectedCompressionMode" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           Margin="30 0 0 6" HorizontalAlignment="Left"
+                           FontSize="12" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                           Text="estimated savings" TextOptions.TextFormattingMode="Display" />
+
+            </StackPanel>
+            <Separator Grid.Column="1"
+                       Margin="0 10"
+                       BorderBrush="#40FFFFFF" BorderThickness="1" />
+
+            <Grid Grid.Column="2" Margin="30 10 10 10" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="90" MaxWidth="150" />
+                    <ColumnDefinition Width="*" MaxWidth="100" />
+                    <ColumnDefinition Width="auto" MinWidth="35" />
+                    <ColumnDefinition Width="*" MaxWidth="150" />
+                    <ColumnDefinition Width="*" MinWidth="90" MaxWidth="150" />
+
+                    <ColumnDefinition Width="*" MinWidth="80" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock FontSize="11" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                           Text="Original Size" TextOptions.TextFormattingMode="Display" />
+                <TextBlock Grid.Row="1"
+                           FontSize="20" FontWeight="SemiBold"
+                           Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
+
+
+                <ui:SymbolIcon Grid.Row="1" Grid.Column="2"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Foreground="{StaticResource TextControlForegroundDisabled}"
+                               Symbol="ArrowRight20" />
+
+
+                <TextBlock Grid.Column="4"
+                           FontSize="11" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                           Text="Estimated Size" TextOptions.TextFormattingMode="Display" />
+                <TextBlock Grid.Row="1" Grid.Column="4"
+                           FontSize="20" FontWeight="SemiBold">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource SelectedModeEstimatedSavingsConverter}" ConverterParameter="AB" StringFormat="{}≈ {0}">
+                            <Binding Path="Folder.WikiCompressionResults" />
+                            <Binding Path="Folder.CompressionOptions.SelectedCompressionMode" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <ProgressBar Grid.Row="2" Grid.ColumnSpan="6"
+                             Height="8"
+                             Margin="0 5"
+                             Background="#40FFFFFF" BorderThickness="0" FlowDirection="RightToLeft" Foreground="#58d895"
+                             Maximum="{Binding Folder.UncompressedBytes}"
+                             Value="{Binding Folder.BytesSaved, Mode=OneWay}" />
+
+
+            </Grid>
+
+        </Grid>
+
+        <ui:TextBlock Grid.Row="2"
+                      Margin="0 10 0 5" VerticalAlignment="Center"
+                      loc:L.Value="COMPARE METHODS" FontSize="11" FontWeight="SemiBold"
+                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                      TextOptions.TextFormattingMode="Display" Visibility="Collapsed" />
+
+        <WrapPanel Grid.Row="3"
                    Margin="0 0 0 0"
                    Orientation="Horizontal" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom">
 
@@ -105,60 +206,153 @@
 
         </WrapPanel>
 
+        <Separator Grid.Row="4"
+                   Margin="0 5" VerticalAlignment="Top"
+                   BorderBrush="#20FFFFFF" />
 
-        <StackPanel Grid.Row="2" Margin="0 20 0 0">
-            <!--<StackPanel.Resources>
-                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#4ca5ff"/>
-                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#6fb6ff"/>
-            </StackPanel.Resources>-->
-            <ui:TextBlock Margin="0 0 0 20" VerticalAlignment="Center"
-                          loc:L.Value="Configuration" FontSize="16" FontWeight="SemiBold" />
-            <WrapPanel Margin="0 0 0 15" Orientation="Horizontal">
+        <Grid x:Name="ConfigurationOptionsHost" Grid.Row="5" Margin="-10 0">
+            <Grid.Resources>
+                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#50c8ed" />
+            </Grid.Resources>
+
+            <Grid x:Name="WideConfigurationOptions">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <Binding Converter="{StaticResource WidthAtMostConverter}"
+                                             ConverterParameter="600" ElementName="ConfigurationOptionsHost" Path="ActualWidth" />
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MaxWidth="410" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
                 <CheckBox x:Name="UiChkSkipListEnabled"
                           VerticalAlignment="Center"
-                          loc:L.Value="Use skip list" Checked="UiChkSkipListEnabled_Checked" FontSize="16"
+                          Checked="UiChkSkipListEnabled_Checked" FontSize="16"
                           IsChecked="{Binding Folder.CompressionOptions.SkipListEnabled, Mode=TwoWay}"
-                          Unchecked="UiChkSkipListEnabled_Unchecked" />
+                          Unchecked="UiChkSkipListEnabled_Unchecked">
+                    <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                        <ui:TextBlock VerticalAlignment="Center"
+                                      loc:L.Value="Use exclusions" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                        <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                      FontSize="11" FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                                      Text="{Binding Folder.SkippedFileCount, StringFormat={}{0} files will be skipped}"
+                                      TextOptions.TextFormattingMode="Display" />
+                    </StackPanel>
+                </CheckBox>
 
-                <Border Margin="12 0 0 0" Padding="10 0"
-                        Background="#7AB3C6D8" CornerRadius="12">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Setter Property="Opacity" Value="1" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Folder.CompressionOptions.SkipListEnabled}" Value="False">
-                                    <Setter Property="Opacity" Value="0.5" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                    <TextBlock VerticalAlignment="Center"
-                               d:Text="123 files will be skipped" FontSize="13"
-                               Foreground="{StaticResource CardForeground}"
-                               Text="{loc:Binding Folder.SkippedFileCount,
-                                                  Format={} {0} files will be skipped}" />
-                </Border>
-                <ui:Button Margin="14 0 0 0" VerticalAlignment="Center"
-                           loc:L.Value="Edit skip list for this folder" Click="UiEditSkipList_Click" FontSize="13" />
-            </WrapPanel>
-            <WrapPanel Margin="0 0 0 15" Orientation="Horizontal">
+                <ui:Button Margin="14 0 20 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           loc:L.Value="Edit list" Background="Transparent" Click="UiEditSkipList_Click" FontSize="13" />
+
+                <Separator Grid.Column="1" HorizontalAlignment="Left" />
+
                 <CheckBox x:Name="uiChkWatchFolderForChanges"
-                          VerticalAlignment="Center"
-                          loc:L.Value="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked" FontSize="16"
+                          Grid.Column="2"
+                          Margin="10 0 0 0" VerticalAlignment="Center"
+                          Checked="uiChkWatchFolderForChanges_Checked"
                           IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}"
-                          Unchecked="uiChkWatchFolderForChanges_Unchecked" />
-            </WrapPanel>
+                          Unchecked="uiChkWatchFolderForChanges_Unchecked">
+                    <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                        <ui:TextBlock VerticalAlignment="Center"
+                                      loc:L.Value="Watch folder for changes" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                        <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                      FontSize="11" FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                                      Text="Monitors and keeps this folder compressed" TextOptions.TextFormattingMode="Display" />
+                    </StackPanel>
+                </CheckBox>
+            </Grid>
 
-        </StackPanel>
+            <StackPanel x:Name="WrappedConfigurationOptions" Margin="10 0">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <Binding Converter="{StaticResource WidthAtMostConverter}"
+                                             ConverterParameter="600" ElementName="ConfigurationOptionsHost" Path="ActualWidth" />
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox VerticalAlignment="Center"
+                              Checked="UiChkSkipListEnabled_Checked" FontSize="16"
+                              IsChecked="{Binding Folder.CompressionOptions.SkipListEnabled, Mode=TwoWay}"
+                              Unchecked="UiChkSkipListEnabled_Unchecked">
+                        <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                            <ui:TextBlock VerticalAlignment="Center"
+                                          loc:L.Value="Use exclusions" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                            <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                          FontSize="11" FontWeight="SemiBold"
+                                          Foreground="{StaticResource TextControlForegroundDisabled}"
+                                          Text="{Binding Folder.SkippedFileCount, StringFormat={}{0} files will be skipped}"
+                                          TextOptions.TextFormattingMode="Display" />
+                        </StackPanel>
+                    </CheckBox>
+                    <ui:Button Grid.Column="1"
+                               Margin="14 0 0 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               loc:L.Value="Edit list" Background="Transparent" Click="UiEditSkipList_Click" FontSize="13" />
+                </Grid>
+
+                <Separator Margin="0 3" BorderBrush="#20FFFFFF" />
+
+                <CheckBox Margin="0 0 0 2" VerticalAlignment="Center"
+                          Checked="uiChkWatchFolderForChanges_Checked"
+                          IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}"
+                          Unchecked="uiChkWatchFolderForChanges_Unchecked">
+                    <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                        <ui:TextBlock VerticalAlignment="Center"
+                                      loc:L.Value="Watch folder for changes" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                        <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                      FontSize="11" FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                                      Text="Monitors and keeps this folder compressed" TextOptions.TextFormattingMode="Display" />
+                    </StackPanel>
+                </CheckBox>
+            </StackPanel>
+        </Grid>
+
+        <Separator Grid.Row="6"
+                   Margin="0 5" VerticalAlignment="Top"
+                   BorderBrush="#20FFFFFF" />
 
 
-        <ui:Button Grid.Row="3"
-                   Width="140" Height="40"
-                   Margin="0 0 0 10" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                   loc:L.Value="Apply to all"
-                   Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
-                   Command="{Binding ApplyToAllCommand}"
-                   FontSize="16" />
+        <Button Grid.Row="7"
+                Height="40"
+                Margin="0 15 0 10" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                Command="{Binding ApplyToAllCommand}"
+                FontSize="16">
+            <Button.Style>
+                <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.Folders.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HomePage}}}" Value="1">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <TextBlock Text="{Binding DataContext.Folders.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HomePage}}, StringFormat='{}Apply to all {0} folders in queue'}" />
+        </Button>
 
     </Grid>
 </UserControl>

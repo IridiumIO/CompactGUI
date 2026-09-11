@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock HorizontalAlignment="Left"
-                   loc:L.Value="COMPRESSION SUMMARY" FontSize="14" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                   loc:L.Value="Compression Summary" FontSize="14" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
 
         <Grid Grid.Row="1" Grid.ColumnSpan="2"
               Margin="0 20" HorizontalAlignment="Stretch">
@@ -45,8 +45,8 @@
                 <TextBlock FontSize="30" FontWeight="SemiBold" Foreground="#58d895"
                            Text="{Binding Folder.BytesSaved, Converter={StaticResource BytesToReadableConverter}}" />
 
-                <TextBlock Grid.Row="3" Grid.Column="0" Margin="0 5 0 6"
-                           HorizontalAlignment="Left"
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           Margin="0 5 0 6" HorizontalAlignment="Left"
                            FontSize="12" FontWeight="SemiBold" Foreground="#58d895"
                            Text="{Binding Folder.CompressionRatio, Mode=OneWay, Converter={StaticResource DecimalToPercentageConverter}, ConverterParameter='IF', StringFormat='{}{0} saved'}"
                            TextOptions.TextFormattingMode="Display" />
@@ -97,8 +97,8 @@
 
                 <ProgressBar Grid.Row="2" Grid.ColumnSpan="6"
                              Height="8"
-                             Margin="0 5" FlowDirection="RightToLeft"
-                             Background="#40FFFFFF" BorderThickness="0" Foreground="#58d895"
+                             Margin="0 5"
+                             Background="#40FFFFFF" BorderThickness="0" FlowDirection="RightToLeft" Foreground="#58d895"
                              Maximum="{Binding Folder.UncompressedBytes}"
                              Value="{Binding Folder.BytesSaved, Mode=OneWay}" />
 

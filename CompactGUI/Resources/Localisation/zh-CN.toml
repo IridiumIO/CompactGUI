@@ -18,16 +18,17 @@
 "Analysing" = "正在分析"
 "Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "已应用到所有文件夹"
-"Apply to all" = "应用到所有"
 "Ascending" = "升序"
 "Awaiting Compression" = "等待压缩"
 "Background Watcher Settings" = "后台监控设置"
+"COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
 "Cancel" = "否"
 "Cancel Background Compressor" = "取消后台压缩"
 "Cancel operation" = "Cancel operation" # LOC:TODO
 "Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "无法移除文件夹"
 "Check for pre-release updates" = "检查预发布更新"
+"Choose Compression" = "Choose Compression" # LOC:TODO
 "Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "点击下载"
 "CompactGUI" = "CompactGUI"
@@ -40,11 +41,9 @@
 "Compressing..." = "Compressing..." # LOC:TODO
 "Compression" = "压缩模式"
 "Compression DB" = "压缩数据库"
-"Compression Mode" = "压缩模式"
 "Compression Settings" = "压缩设置"
 "Compression Summary" = "压缩摘要"
 "Compression options have been applied to all folders" = "压缩选项已应用到所有文件夹"
-"Configuration" = "配置"
 "Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "数据库结果"
 "Descending" = "降序"
@@ -53,13 +52,12 @@
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
-"Edit skip list for this folder" = "编辑此文件夹的跳过列表"
+"Edit list" = "Edit list" # LOC:TODO
 "Estimate Compression for non-Steam Folders (beta)" = "估算非 Steam 文件夹的压缩率 (测试版)"
 "Estimated size" = "预估大小"
 "Exit" = "退出"
 "Extensions in this folder" = "此文件夹中的扩展名"
 "Failed to submit to wiki" = "提交到 Wiki 失败"
-"Files Compressed" = "文件已压缩"
 "Filetype Management" = "文件类型管理"
 "Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "对于 Steam 游戏，使用数据库来确定要跳过的类型。对于非 Steam 文件夹，则基于智能分析器。"
@@ -120,7 +118,6 @@
 "Show notification on completion" = "完成后显示通知"
 "Sort" = "Sort" # LOC:TODO
 "Sort By" = "排序方式"
-"Space Saved" = "节省空间"
 "Start CompactGUI in system tray" = "在系统托盘启动 CompactGUI"
 "Status" = "Status" # LOC:TODO
 "Steam Library" = "Steam Library" # LOC:TODO
@@ -142,8 +139,8 @@
 "Update Available ▸ Version {0}" = "更新可用 ▸ 版本 {0}"
 "Update Settings" = "更新设置"
 "Update in Steam" = "Update in Steam" # LOC:TODO
+"Use exclusions" = "Use exclusions" # LOC:TODO
 "Use recommended mode" = "Use recommended mode" # LOC:TODO
-"Use skip list" = "使用跳过列表"
 "Version" = "版本"
 "Watch folder for changes" = "监控文件夹更改"
 "Watched Folders" = "受监控文件夹"
@@ -172,7 +169,6 @@
 "{0:0} days ago" = "{0:0} 天前"
 "{0:0} hours ago" = "{0:0} 小时前"
 "{0:0} minutes ago" = "{0:0} 分钟前"
-"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} 已节省"
 "{0}% decayed" = "{0}% 已衰减"
 
@@ -231,9 +227,16 @@
 [obsolete]
 "Add Folder to Queue" = "添加文件夹到队列"
 "Add all to queue" = "Add all to queue" # LOC:TODO
+"Apply Settings to All Items in Queue" = "Apply Settings to All Items in Queue" # LOC:TODO
+"Apply to all" = "应用到所有"
+"COMPRESSION SUMMARY" = "COMPRESSION SUMMARY" # LOC:TODO
+"Compression Mode" = "压缩模式"
+"Configuration" = "配置"
 "Custom list — {0} entries" = "自定义列表 — {0} 条"
 "Custom: {0} entries" = "自定义: {0} 条"
 "DB — {0} files" = "Wiki — {0} 个文件"
+"Edit skip list for this folder" = "编辑此文件夹的跳过列表"
+"Files Compressed" = "文件已压缩"
 "For Steam Games:\nskips files based on database results\n\nFor Non-Steam Folders:\nskips files based on compression estimate" = "对于 Steam 游戏：\n根据数据库结果跳过文件\n\n对于非 Steam 文件夹：\n基于压缩估计跳过文件"
 "Global + DB — {0} files" = "全局 + Wiki — {0} 个文件"
 "Global — {0} files" = "全局 — {0} 个文件"
@@ -249,10 +252,13 @@
 "Skip file types likely to compress poorly" = "跳过可能压缩效果不佳的文件类型"
 "Skip file types specified in settings" = "跳过设置中指定的文件类型"
 "Smart: {0} skipped" = "智能: 已跳过 {0}"
+"Space Saved" = "节省空间"
 "Use global skiplist" = "Use global skiplist" # LOC:TODO
 "Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use skip list" = "使用跳过列表"
 "Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "欢迎"
 "decayed" = "已衰减"
 "files will be skipped" = "个文件将被跳过"
 "not configured" = "未配置"
+"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO

@@ -210,7 +210,16 @@ Public Class SelectedModeEstimatedSavingsConverter : Implements IMultiValueConve
                 result = results.LZX
         End Select
 
-        Dim savings = If(result Is Nothing, 0L, Math.Max(0, result.BytesSaved))
+        Dim savings As Long
+
+        If parameter Is Nothing Then
+            savings = If(result Is Nothing, 0L, Math.Max(0, result.BytesSaved))
+        ElseIf CStr(parameter) = "AB" Then
+            savings = If(result Is Nothing, 0L, Math.Max(0, result.AfterBytes))
+
+        End If
+
+
         Return New BytesToReadableConverter().Convert(savings, GetType(String), Nothing, culture)
     End Function
 
@@ -218,7 +227,6 @@ Public Class SelectedModeEstimatedSavingsConverter : Implements IMultiValueConve
         Throw New NotImplementedException()
     End Function
 End Class
-
 
 Public Class ConfidenceIntToStringConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
@@ -337,6 +345,22 @@ Public Class BooleanToInverseVisibilityConverter : Implements IValueConverter
         Throw New NotImplementedException()
     End Function
 
+End Class
+
+Public Class WidthAtMostConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim width As Double
+        Dim threshold As Double
+
+        If value Is Nothing OrElse Not Double.TryParse(value.ToString(), NumberStyles.Float, culture, width) Then Return False
+        If parameter Is Nothing OrElse Not Double.TryParse(parameter.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, threshold) Then Return False
+
+        Return width <= threshold
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
 End Class
 
 Public Class EnumToRadioButtonConverter : Implements IValueConverter

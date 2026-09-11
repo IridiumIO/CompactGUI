@@ -18,16 +18,17 @@
 "Analysing" = "Analizando"
 "Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "Aplicado a todas las carpetas"
-"Apply to all" = "Aplicar a todo"
 "Ascending" = "Ascendente"
 "Awaiting Compression" = "Esperando compresión"
 "Background Watcher Settings" = "Ajustes del Monitor en segundo plano"
+"COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
 "Cancel" = "Cancelar "
 "Cancel Background Compressor" = "Cancelar compresor en segundo plano"
 "Cancel operation" = "Cancel operation" # LOC:TODO
 "Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "No se puede eliminar la carpeta"
 "Check for pre-release updates" = "Buscar actualizaciones preliminares"
+"Choose Compression" = "Choose Compression" # LOC:TODO
 "Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "Clic para descargar"
 "CompactGUI" = "CompactGUI"
@@ -40,11 +41,9 @@
 "Compressing..." = "Compressing..." # LOC:TODO
 "Compression" = "Compresión"
 "Compression DB" = "DB de Compresión"
-"Compression Mode" = "Modo de compresión"
 "Compression Settings" = "Ajustes de compresión"
 "Compression Summary" = "Resumen de compresión"
 "Compression options have been applied to all folders" = "Las opciones de compresión se han aplicado a todas las carpetas"
-"Configuration" = "Configuración"
 "Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "Resultados de la base de datos"
 "Descending" = "Descendente"
@@ -53,13 +52,12 @@
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
-"Edit skip list for this folder" = "Editar lista de exclusión de esta carpeta"
+"Edit list" = "Edit list" # LOC:TODO
 "Estimate Compression for non-Steam Folders (beta)" = "Estimar compresión para carpetas no-Steam (beta)"
 "Estimated size" = "Tamaño estimado"
 "Exit" = "Salir"
 "Extensions in this folder" = "Extensiones en esta carpeta"
 "Failed to submit to wiki" = "Fallo al enviar a la wiki"
-"Files Compressed" = "Archivos comprimidos"
 "Filetype Management" = "Gestión de tipos de archivo"
 "Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Para juegos de Steam, esto utiliza la base de datos para determinar los tipos a omitir. Para carpetas que no son de Steam, se basa en el analizador inteligente."
@@ -120,7 +118,6 @@
 "Show notification on completion" = "Mostrar notificación al finalizar"
 "Sort" = "Sort" # LOC:TODO
 "Sort By" = "Ordenar por"
-"Space Saved" = "Espacio ahorrado"
 "Start CompactGUI in system tray" = "Iniciar CompactGUI en la bandeja del sistema"
 "Status" = "Status" # LOC:TODO
 "Steam Library" = "Steam Library" # LOC:TODO
@@ -142,8 +139,8 @@
 "Update Available ▸ Version {0}" = "Actualización disponible ▸ Versión {0}"
 "Update Settings" = "Ajustes de actualización"
 "Update in Steam" = "Update in Steam" # LOC:TODO
+"Use exclusions" = "Use exclusions" # LOC:TODO
 "Use recommended mode" = "Use recommended mode" # LOC:TODO
-"Use skip list" = "Usar lista de exclusión"
 "Version" = "Versión"
 "Watch folder for changes" = "Monitorizar cambios en carpeta"
 "Watched Folders" = "Carpetas monitorizadas"
@@ -172,7 +169,6 @@
 "{0:0} days ago" = "{0:0} hace días"
 "{0:0} hours ago" = "{0:0} hace horas"
 "{0:0} minutes ago" = "{0:0} hace minutos"
-"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} ahorrado"
 "{0}% decayed" = "{0}% degradado"
 
@@ -231,9 +227,16 @@
 [obsolete]
 "Add Folder to Queue" = "Añadir carpeta a la cola"
 "Add all to queue" = "Add all to queue" # LOC:TODO
+"Apply Settings to All Items in Queue" = "Apply Settings to All Items in Queue" # LOC:TODO
+"Apply to all" = "Aplicar a todo"
+"COMPRESSION SUMMARY" = "COMPRESSION SUMMARY" # LOC:TODO
+"Compression Mode" = "Modo de compresión"
+"Configuration" = "Configuración"
 "Custom list — {0} entries" = "Lista personalizada — {0} entradas"
 "Custom: {0} entries" = "Personalizada: {0} entradas"
 "DB — {0} files" = "Wiki — {0} archivos"
+"Edit skip list for this folder" = "Editar lista de exclusión de esta carpeta"
+"Files Compressed" = "Archivos comprimidos"
 "For Steam Games:\nskips files based on database results\n\nFor Non-Steam Folders:\nskips files based on compression estimate" = "Para juegos de Steam:\nomite archivos basado en resultados de la BD\n\nPara carpetas no-Steam:\nomite archivos basado en estimación de compresión"
 "Global + DB — {0} files" = "Global + Wiki — {0} archivos"
 "Global — {0} files" = "Global — {0} archivos"
@@ -249,10 +252,13 @@
 "Skip file types likely to compress poorly" = "Omitir tipos de archivo difícilmente comprimibles"
 "Skip file types specified in settings" = "Omitir tipos de archivo especificados en ajustes"
 "Smart: {0} skipped" = "Inteligente: {0} omitidos"
+"Space Saved" = "Espacio ahorrado"
 "Use global skiplist" = "Use global skiplist" # LOC:TODO
 "Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use skip list" = "Usar lista de exclusión"
 "Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "Bienvenido"
 "decayed" = "degradado"
 "files will be skipped" = "archivos serán omitidos"
 "not configured" = "no configurado"
+"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO

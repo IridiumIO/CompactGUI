@@ -18,16 +18,17 @@
 "Analysing" = "Анализ"
 "Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "Применено ко всем папкам"
-"Apply to all" = "Применить ко всем"
 "Ascending" = "По возрастанию"
 "Awaiting Compression" = "Ожидание сжатия"
 "Background Watcher Settings" = "Настройки фонового отслеживания"
+"COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
 "Cancel" = "Отмена"
 "Cancel Background Compressor" = "Отменить фоновое сжатие"
 "Cancel operation" = "Cancel operation" # LOC:TODO
 "Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "Не удаётся удалить папку"
 "Check for pre-release updates" = "Проверять предварительные версии обновлений"
+"Choose Compression" = "Choose Compression" # LOC:TODO
 "Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "Нажмите, чтобы скачать"
 "CompactGUI" = "CompactGUI"
@@ -40,11 +41,9 @@
 "Compressing..." = "Compressing..." # LOC:TODO
 "Compression" = "Сжатие"
 "Compression DB" = "База сжатия"
-"Compression Mode" = "Режим сжатия"
 "Compression Settings" = "Настройки сжатия"
 "Compression Summary" = "Сводка сжатия"
 "Compression options have been applied to all folders" = "Параметры сжатия применены ко всем папкам"
-"Configuration" = "Конфигурация"
 "Current Size" = "Current Size" # LOC:TODO
 "Database Results" = "Результаты базы данных"
 "Descending" = "По убыванию"
@@ -53,13 +52,12 @@
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
-"Edit skip list for this folder" = "Изменить список исключений для этой папки"
+"Edit list" = "Edit list" # LOC:TODO
 "Estimate Compression for non-Steam Folders (beta)" = "Оценивать сжатие для папок не из Steam (бета)"
 "Estimated size" = "Предполагаемый размер"
 "Exit" = "Выход"
 "Extensions in this folder" = "Расширения в этой папке"
 "Failed to submit to wiki" = "Не удалось отправить в Вики"
-"Files Compressed" = "Файлов сжато"
 "Filetype Management" = "Управление типами файлов"
 "Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Для игр Steam используется база данных для определения пропускаемых типов. Для папок не из Steam это основано на умном анализаторе."
@@ -120,7 +118,6 @@
 "Show notification on completion" = "Показывать уведомление о завершении"
 "Sort" = "Sort" # LOC:TODO
 "Sort By" = "Сортировать по"
-"Space Saved" = "Сэкономлено места"
 "Start CompactGUI in system tray" = "Запускать CompactGUI в области уведомлений"
 "Status" = "Status" # LOC:TODO
 "Steam Library" = "Steam Library" # LOC:TODO
@@ -142,8 +139,8 @@
 "Update Available ▸ Version {0}" = "Доступно обновление ▸ Версия {0}"
 "Update Settings" = "Настройки обновлений"
 "Update in Steam" = "Update in Steam" # LOC:TODO
+"Use exclusions" = "Use exclusions" # LOC:TODO
 "Use recommended mode" = "Use recommended mode" # LOC:TODO
-"Use skip list" = "Использовать список исключений"
 "Version" = "Версия"
 "Watch folder for changes" = "Отслеживать изменения в папке"
 "Watched Folders" = "Отслеживаемые папки"
@@ -172,7 +169,6 @@
 "{0:0} days ago" = "{0:0} дн. назад"
 "{0:0} hours ago" = "{0:0} ч. назад"
 "{0:0} minutes ago" = "{0:0} мин. назад"
-"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
 "{0} saved" = "{0} сэкономлено"
 "{0}% decayed" = "{0}% устарело"
 
@@ -231,9 +227,16 @@
 [obsolete]
 "Add Folder to Queue" = "Добавить папку в очередь"
 "Add all to queue" = "Add all to queue" # LOC:TODO
+"Apply Settings to All Items in Queue" = "Apply Settings to All Items in Queue" # LOC:TODO
+"Apply to all" = "Применить ко всем"
+"COMPRESSION SUMMARY" = "COMPRESSION SUMMARY" # LOC:TODO
+"Compression Mode" = "Режим сжатия"
+"Configuration" = "Конфигурация"
 "Custom list — {0} entries" = "Свой список — {0} записей"
 "Custom: {0} entries" = "Свой: {0} записей"
 "DB — {0} files" = "Вики — {0} файлов"
+"Edit skip list for this folder" = "Изменить список исключений для этой папки"
+"Files Compressed" = "Файлов сжато"
 "For Steam Games:\nskips files based on database results\n\nFor Non-Steam Folders:\nskips files based on compression estimate" = "Для игр Steam:\nпропускает файлы на основе результатов базы данных\n\nДля папок не из Steam:\nпропускает файлы на основе оценки сжатия"
 "Global + DB — {0} files" = "Глобальный + Вики — {0} файлов"
 "Global — {0} files" = "Глобальный — {0} файлов"
@@ -249,10 +252,13 @@
 "Skip file types likely to compress poorly" = "Пропускать типы файлов, которые сжимаются плохо"
 "Skip file types specified in settings" = "Пропускать типы файлов, указанные в настройках"
 "Smart: {0} skipped" = "Умный: {0} пропущено"
+"Space Saved" = "Сэкономлено места"
 "Use global skiplist" = "Use global skiplist" # LOC:TODO
 "Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use skip list" = "Использовать список исключений"
 "Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "Добро пожаловать"
 "decayed" = "устарело"
 "files will be skipped" = "фл. будет пропущено"
 "not configured" = "не настроено"
+"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO
