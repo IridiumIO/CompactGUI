@@ -22,20 +22,21 @@
         </Style>
         <DataTemplate x:Key="QueueItemTemplate">
             <Border x:Name="ItemCard"
-                    Padding="0" 
+                    Padding="0"
                     Background="Transparent" CornerRadius="6"
                     Tag="{Binding DataContext, ElementName=PageRoot}">
-                <Grid Margin="8" >
+                <Grid Margin="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Border Margin="0 0 5 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    <Border Margin="-5 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"
                             Background="Transparent" Cursor="SizeAll">
-                        <TextBlock Margin="0 0 5 0"
-                                   FontSize="13"
+                        <TextBlock
+                                   FontSize="16" VerticalAlignment="Center"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   IsHitTestVisible="False" Text="⠿">
+                                   IsHitTestVisible="False" Text="⋮⋮" >
+                
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -266,13 +267,13 @@
                                    Text="{Binding UpNextFolderCount, Mode=OneWay}" />
                     </Grid>
                     <ui:ListView x:Name="UpNextListView"
-                                 Padding="0" 
+                                 Padding="0"
                                  dd:DragDrop.DropHandler="{Binding QueueDropHandler}"
                                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Background="Transparent" BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
                                  ItemTemplate="{StaticResource QueueItemTemplate}"
-                                 ItemsSource="{Binding UpNextFolders}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                 ItemsSource="{Binding UpNextFolders}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                  SelectedItem="{Binding SelectedFolder, Mode=OneWay}"
                                  SelectionChanged="QueueSelectionChanged" />
                     <Grid Margin="0 12 0 6" Visibility="{Binding HasCompressedFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -294,7 +295,7 @@
                                    Text="{Binding CompletedFolderCount, Mode=OneWay}" />
                     </Grid>
                     <ui:ListView x:Name="CompletedListView"
-                                 Padding="0" 
+                                 Padding="0"
                                  Background="Transparent" BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
                                  ItemTemplate="{StaticResource QueueItemTemplate}"
@@ -304,6 +305,7 @@
                                  SelectionChanged="QueueSelectionChanged" />
                 </StackPanel>
             </ScrollViewer>
+            <Separator Grid.Row="2" VerticalAlignment="Top" />
             <StackPanel Grid.Row="2" Margin="0 12 0 0">
                 <Grid>
                     <TextBlock HorizontalAlignment="Left" FontSize="11" Foreground="{StaticResource CardForegroundDisabled}">
@@ -316,7 +318,7 @@
                         <TextBlock FontSize="11" Foreground="{StaticResource CardForegroundDisabled}" Text="Clear completed" />
                     </ui:Button>
                 </Grid>
-                <ProgressBar Height="4"
+                <ProgressBar Height="6"
                              Margin="0 5 0 10"
                              Background="{StaticResource CardBackgroundPressed}"
                              Foreground="#65dc9d" Maximum="100"
@@ -332,7 +334,7 @@
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="To process" />
-                        <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center" Margin="0 5 0 0"
                                    FontSize="11" FontWeight="SemiBold"
                                    Text="{Binding ToProcessSize, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
                     </StackPanel>
@@ -340,8 +342,8 @@
                         <TextBlock HorizontalAlignment="Center"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="Expected saving" />
-                        <TextBlock HorizontalAlignment="Center"
+                                   Text="Expected savings" />
+                        <TextBlock HorizontalAlignment="Center" Margin="0 5 0 0"
                                    FontSize="11" FontWeight="SemiBold" Foreground="#45c1e8"
                                    Text="{Binding ExpectedSavings, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
                     </StackPanel>
@@ -349,8 +351,8 @@
                         <TextBlock HorizontalAlignment="Center"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="Already saved" />
-                        <TextBlock HorizontalAlignment="Center"
+                                   Text="Saved" />
+                        <TextBlock HorizontalAlignment="Center" Margin="0 5 0 0"
                                    FontSize="11" FontWeight="SemiBold" Foreground="#65dc9d"
                                    Text="{Binding TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
                     </StackPanel>
@@ -366,7 +368,15 @@
                                Command="{Binding CompressAllCommand}"
                                Content="{Binding CompressButtonText}"
                                Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ui:ProgressRing Width="20" Height="20"
+                                     HorizontalAlignment="Left"
+                                     Foreground="#45c1e8" IsIndeterminate="True"
+                                     Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <StackPanel Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToVisibilityConverter}}">
+
                         <ui:Button Width="42" Height="36"
                                    Padding="0"
                                    Command="{Binding PauseQueueCommand}">
