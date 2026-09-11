@@ -29,7 +29,7 @@ Public Class BytesToReadableConverter : Implements IValueConverter
 
         If value = 1010101010101010 Then Return "?"
 
-        If value = 0 Then Return "0" & suf(0)
+        If value = 0 Then Return "0 " & suf(0)
         Dim bytes As Long = Math.Abs(value)
         Dim place As Integer = CInt(Math.Floor(Math.Log(bytes, 1024)))
 
@@ -57,7 +57,7 @@ Public Class BytesToReadableConverter : Implements IValueConverter
         Dim decimalPlaces As Integer = Math.Max(0, roundingSigDigits - digitsBeforeDecimal)
         Dim roundedNum As Double = Math.Round(num, decimalPlaces)
 
-        Return (Math.Sign(value) * roundedNum).ToString() & suf(place)
+        Return (Math.Sign(value) * roundedNum).ToString() & " " & suf(place)
 
 
     End Function
