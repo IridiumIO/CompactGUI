@@ -306,7 +306,8 @@
                 </StackPanel>
             </ScrollViewer>
             <Separator Grid.Row="2" VerticalAlignment="Top" />
-            <StackPanel Grid.Row="2" Margin="0 12 0 0">
+            <StackPanel Grid.Row="2" Margin="0 12 0 0"
+                        Visibility="{Binding HomeViewIsFresh, Mode=OneWay, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
                 <Grid>
                     <TextBlock HorizontalAlignment="Left" FontSize="11" Foreground="{StaticResource CardForegroundDisabled}">
                         <Run Text="{Binding CompletedFolderCount, Mode=OneWay}" /><Run Text=" of " /><Run Text="{Binding Folders.Count, Mode=OneWay}" /><Run Text=" completed" />
