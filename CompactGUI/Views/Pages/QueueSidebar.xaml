@@ -256,7 +256,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock FontSize="10" FontWeight="SemiBold"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="UP NEXT" />
+                                   Text="PENDING" />
                         <Border Grid.Column="1"
                                 Height="1"
                                 Margin="8 0" VerticalAlignment="Center"
@@ -267,7 +267,9 @@
                                    Text="{Binding UpNextFolderCount, Mode=OneWay}" />
                     </Grid>
                     <ui:ListView x:Name="UpNextListView"
-                                 Padding="0"
+                                 Padding="0" dd:DragDrop.UseDefaultDragAdorner="True"
+dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
+dd:DragDrop.DefaultDragAdornerOpacity="1"
                                  dd:DragDrop.DropHandler="{Binding QueueDropHandler}"
                                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Background="Transparent" BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
