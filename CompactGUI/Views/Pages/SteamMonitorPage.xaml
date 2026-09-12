@@ -1104,7 +1104,7 @@
                 <Separator Grid.Column="3" Margin="10 0 10 0" />
 
                 <ui:Button Grid.Column="6"
-                           Height="48" Background="{StaticResource PaletteGreenBrush}"
+                           Height="48" Background="#278A52"
                            Margin="10 0 0 0" Padding="18 0" 
                            Command="{Binding AddSelectedToQueueCommand}"
                            Content="{loc:T Add selected to queue}" />
