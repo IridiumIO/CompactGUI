@@ -12,6 +12,9 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
     <ObservableProperty>
     Private _BackgroundImage As BitmapImage
 
+    <ObservableProperty>
+    Private _IsQueueSidebarOpen As Boolean
+
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _windowService As IWindowService
     Private ReadOnly _settingsService As ISettingsService
@@ -33,6 +36,11 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
     <RelayCommand>
     Private Sub NotifyIconOpen()
         _windowService.ShowMainWindow()
+    End Sub
+
+    <RelayCommand>
+    Private Sub ToggleQueueSidebar()
+        IsQueueSidebarOpen = Not IsQueueSidebarOpen
     End Sub
 
 

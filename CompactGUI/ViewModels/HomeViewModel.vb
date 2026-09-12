@@ -13,7 +13,7 @@ Imports CompactGUI.Logging
 
 Imports Microsoft.Extensions.Logging
 
-Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient : Implements IRecipient(Of WatcherAddedFolderToQueueMessage)
+Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient : Implements IRecipient(Of WatcherAddedFolderToQueueMessage), IRecipient(Of SteamGamesAddedToQueueMessage)
 
     Private ReadOnly _folderViewModels As New Dictionary(Of CompressableFolder, FolderViewModel)
 
@@ -41,6 +41,137 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         End Get
     End Property
 
+    Public ReadOnly Property AwaitingFolderCount As Integer
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Idle).Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property WorkingFolderCount As Integer
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused).Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property IsQueueRunning As Boolean
+        Get
+            Return WorkingFolderCount > 0
+        End Get
+    End Property
+
+    Public ReadOnly Property ActiveFolderViewModel As FolderViewModel
+        Get
+            Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
+            If activeFolder Is Nothing Then Return Nothing
+
+            Dim value As FolderViewModel = Nothing
+            Return If(_folderViewModels.TryGetValue(activeFolder, value), value, Nothing)
+        End Get
+    End Property
+
+    Public ReadOnly Property QueueStatusSummary As String
+        Get
+            Return $"{AwaitingFolderCount} awaiting · {WorkingFolderCount} working"
+        End Get
+    End Property
+
+    Public ReadOnly Property QueueFolders As IEnumerable(Of CompressableFolder)
+        Get
+            Return Folders.OrderBy(Function(folder) If(folder.FolderActionState = ActionState.Results, 1, 0))
+        End Get
+    End Property
+
+    Public ReadOnly Property UpNextFolders As IEnumerable(Of CompressableFolder)
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState <> ActionState.Results)
+        End Get
+    End Property
+
+    Public ReadOnly Property QueueDropHandler As QueueDropHandler
+        Get
+            Return _queueDropHandler
+        End Get
+    End Property
+
+    Public ReadOnly Property CompletedFolders As IEnumerable(Of CompressableFolder)
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Results)
+        End Get
+    End Property
+
+    Public ReadOnly Property CompletedFolderCount As Integer
+        Get
+            Return CompletedFolders.Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property UpNextFolderCount As Integer
+        Get
+            Return UpNextFolders.Count()
+        End Get
+    End Property
+
+    Public ReadOnly Property HasUpNextFolders As Boolean
+        Get
+            Return UpNextFolderCount > 0
+        End Get
+    End Property
+
+    Public ReadOnly Property QueueCompletionProgress As Double
+        Get
+            If Folders.Count = 0 Then Return 0
+            Return CompletedFolderCount / CDbl(Folders.Count) * 100
+        End Get
+    End Property
+
+    Public ReadOnly Property ToProcessSize As Long
+        Get
+            Return UpNextFolders.Sum(Function(folder) folder.UncompressedBytes)
+        End Get
+    End Property
+
+    Public ReadOnly Property ExpectedSavings As Long
+        Get
+            Return UpNextFolders.Sum(Function(folder) GetSelectedModeEstimatedSavings(folder))
+        End Get
+    End Property
+
+    Public ReadOnly Property CompressButtonText As String
+        Get
+            Return $"Compress {AwaitingFolderCount} {If(AwaitingFolderCount = 1, "game", "games")}".LT()
+        End Get
+    End Property
+
+    Public ReadOnly Property TotalQueuedSize As Long
+        Get
+            Return Folders.Sum(Function(folder) folder.UncompressedBytes)
+        End Get
+    End Property
+
+    Public ReadOnly Property HasAwaitingFolders As Boolean
+        Get
+            Return AwaitingFolderCount > 0
+        End Get
+    End Property
+
+    Public ReadOnly Property HasCompressedFolders As Boolean
+        Get
+            Return Folders.Any(Function(folder) folder.FolderActionState = ActionState.Results)
+        End Get
+    End Property
+
+    Public ReadOnly Property AwaitingEstimatedSavings As Long
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Idle).Sum(Function(folder) GetSelectedModeEstimatedSavings(folder))
+        End Get
+    End Property
+
+    Public ReadOnly Property TotalSaved As Long
+        Get
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Results).Sum(Function(folder) Math.Max(0, folder.BytesSaved))
+        End Get
+    End Property
+
     Public ReadOnly Property DisplayVersion As String
         Get
             Return Application.AppVersion.Friendly
@@ -61,15 +192,50 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Private ReadOnly _logger As ILogger(Of HomeViewModel)
     Private ReadOnly _settingsService As ISettingsService
     Private ReadOnly _compressableFolderService As CompressableFolderService
+    Private ReadOnly _queueDropHandler As QueueDropHandler
 
     Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService, logger As ILogger(Of HomeViewModel), settingsService As ISettingsService, compressableFolderService As CompressableFolderService)
         WeakReferenceMessenger.Default.Register(Of WatcherAddedFolderToQueueMessage)(Me)
+        WeakReferenceMessenger.Default.Register(Of SteamGamesAddedToQueueMessage)(Me)
         AddHandler Folders.CollectionChanged, AddressOf OnFoldersCollectionChanged
         _watcher = watcher
         _snackbarService = snackbarService
         _logger = logger
         _settingsService = settingsService
         _compressableFolderService = compressableFolderService
+        _queueDropHandler = New QueueDropHandler(Me)
+    End Sub
+
+    Public Function CanReorderQueuedFolder(folder As CompressableFolder) As Boolean
+        Return folder IsNot Nothing AndAlso
+               folder.FolderActionState = ActionState.Idle AndAlso
+               Not Folders.Any(Function(item) item.FolderActionState = ActionState.Analysing)
+    End Function
+
+    Public Sub MoveQueuedFolder(folder As CompressableFolder, insertIndex As Integer)
+        If Not CanReorderQueuedFolder(folder) Then Return
+
+        Dim awaitingFolders = Folders.Where(Function(item) item.FolderActionState = ActionState.Idle).ToList()
+        Dim sourceQueueIndex = awaitingFolders.IndexOf(folder)
+        If sourceQueueIndex < 0 Then Return
+
+        Dim destinationQueueIndex = Math.Max(0, Math.Min(insertIndex, awaitingFolders.Count))
+        If destinationQueueIndex > sourceQueueIndex Then destinationQueueIndex -= 1
+
+        awaitingFolders.RemoveAt(sourceQueueIndex)
+        If destinationQueueIndex > awaitingFolders.Count Then destinationQueueIndex = awaitingFolders.Count
+        If destinationQueueIndex = sourceQueueIndex Then Return
+
+        Dim sourceFolderIndex = Folders.IndexOf(folder)
+        Dim insertionFolderIndex As Integer
+        If destinationQueueIndex < awaitingFolders.Count Then
+            insertionFolderIndex = Folders.IndexOf(awaitingFolders(destinationQueueIndex))
+        Else
+            insertionFolderIndex = Folders.IndexOf(awaitingFolders.Last()) + 1
+        End If
+
+        If sourceFolderIndex < insertionFolderIndex Then insertionFolderIndex -= 1
+        Folders.Move(sourceFolderIndex, insertionFolderIndex)
     End Sub
 
 
@@ -86,27 +252,89 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         If e.PropertyName = NameOf(CompressableFolder.FolderActionState) Then
             OnPropertyChanged(NameOf(HomeViewModelState))
             Application.Current.Dispatcher.Invoke(Sub() RemoveFolderCommand.NotifyCanExecuteChanged())
+            Application.Current.Dispatcher.Invoke(Sub() CompressAllCommand.NotifyCanExecuteChanged())
+        End If
+
+        If e.PropertyName = NameOf(CompressableFolder.FolderActionState) OrElse
+           e.PropertyName = NameOf(CompressableFolder.UncompressedBytes) OrElse
+           e.PropertyName = NameOf(CompressableFolder.CompressedBytes) OrElse
+           e.PropertyName = NameOf(CompressableFolder.WikiCompressionResults) OrElse
+           e.PropertyName = NameOf(CompressableFolder.CompressionOptions) Then
+            NotifyQueueSummaryChanged()
+        End If
+
+        If e.PropertyName = NameOf(CompressableFolder.CompressionOptions) Then
+            AddHandler CType(sender, CompressableFolder).CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
         End If
     End Sub
 
+    Private Sub OnCompressionOptionsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName = NameOf(CompressionOptions.SelectedCompressionMode) Then NotifyQueueSummaryChanged()
+    End Sub
+
+    Private Sub NotifyQueueSummaryChanged()
+        OnPropertyChanged(NameOf(AwaitingFolderCount))
+        OnPropertyChanged(NameOf(WorkingFolderCount))
+        OnPropertyChanged(NameOf(IsQueueRunning))
+        OnPropertyChanged(NameOf(ActiveFolderViewModel))
+        OnPropertyChanged(NameOf(QueueStatusSummary))
+        OnPropertyChanged(NameOf(QueueFolders))
+        OnPropertyChanged(NameOf(UpNextFolders))
+        OnPropertyChanged(NameOf(CompletedFolders))
+        OnPropertyChanged(NameOf(CompletedFolderCount))
+        OnPropertyChanged(NameOf(UpNextFolderCount))
+        OnPropertyChanged(NameOf(HasUpNextFolders))
+        OnPropertyChanged(NameOf(QueueCompletionProgress))
+        OnPropertyChanged(NameOf(ToProcessSize))
+        OnPropertyChanged(NameOf(ExpectedSavings))
+        OnPropertyChanged(NameOf(CompressButtonText))
+        OnPropertyChanged(NameOf(TotalQueuedSize))
+        OnPropertyChanged(NameOf(HasAwaitingFolders))
+        OnPropertyChanged(NameOf(HasCompressedFolders))
+        OnPropertyChanged(NameOf(AwaitingEstimatedSavings))
+        OnPropertyChanged(NameOf(TotalSaved))
+    End Sub
+
+    Private Shared Function GetSelectedModeEstimatedSavings(folder As CompressableFolder) As Long
+        If folder.WikiCompressionResults Is Nothing Then Return 0
+
+        Dim result As CompressionResult = Nothing
+        Select Case folder.CompressionOptions.SelectedCompressionMode
+            Case Core.CompressionMode.XPRESS4K
+                result = folder.WikiCompressionResults.XPress4K
+            Case Core.CompressionMode.XPRESS8K
+                result = folder.WikiCompressionResults.XPress8K
+            Case Core.CompressionMode.XPRESS16K
+                result = folder.WikiCompressionResults.XPress16K
+            Case Core.CompressionMode.LZX
+                result = folder.WikiCompressionResults.LZX
+        End Select
+
+        Return If(result Is Nothing, 0, Math.Max(0, result.BytesSaved))
+    End Function
+
     Private Sub OnFoldersCollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
         OnPropertyChanged(NameOf(HomeViewModelState))
+        CompressAllCommand.NotifyCanExecuteChanged()
         If e.Action = NotifyCollectionChangedAction.Add Then
             For Each folder As CompressableFolder In e.NewItems
                 AddHandler folder.PropertyChanged, AddressOf OnAnyFolderPropertyChanged
+                AddHandler folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
             Next
         ElseIf e.Action = NotifyCollectionChangedAction.Remove Then
             For Each folder As CompressableFolder In e.OldItems
                 RemoveHandler folder.PropertyChanged, AddressOf OnAnyFolderPropertyChanged
+                RemoveHandler folder.CompressionOptions.PropertyChanged, AddressOf OnCompressionOptionsPropertyChanged
             Next
         End If
 
         OnPropertyChanged(NameOf(HomeViewIsFresh))
+        NotifyQueueSummaryChanged()
     End Sub
 
 
 
-    Public Async Function AddFoldersAsync(folderPaths As IEnumerable(Of String)) As Task
+    Public Async Function AddFoldersAsync(folderPaths As IEnumerable(Of String), Optional queueOptions As IReadOnlyDictionary(Of String, CompressionOptions) = Nothing) As Task
 
         HomeViewModelLog.AddingFolders(_logger, folderPaths)
 
@@ -127,6 +355,10 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             newFolder.CompressionOptions.SelectedCompressionMode = _settingsService.AppSettings.SelectedCompressionMode
             newFolder.CompressionOptions.SkipPoorlyCompressedFileTypes = _settingsService.AppSettings.SkipNonCompressable
             newFolder.CompressionOptions.SkipUserSubmittedFiletypes = _settingsService.AppSettings.SkipUserNonCompressable
+
+            Dim requestedOptions As CompressionOptions = Nothing
+            Dim hasRequestedOptions = queueOptions?.TryGetValue(folderName, requestedOptions)
+            If hasRequestedOptions Then newFolder.CompressionOptions = requestedOptions.Clone()
 
             If Not Folders.Any(Function(f) f.FolderName = newFolder.FolderName) Then
                 Folders.Add(newFolder)
@@ -149,11 +381,13 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
             If _watcher.WatchedFolders.Any(Function(w) w.Folder = newFolder.FolderName) Then
                 Dim watchedFolder = _watcher.WatchedFolders.First(Function(w) w.Folder = newFolder.FolderName)
                 newFolder.CompressionOptions.WatchFolderForChanges = True
-                If watchedFolder.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION Then
-                    newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
-                End If
-                If watchedFolder.SkipList IsNot Nothing Then
-                    newFolder.CompressionOptions.SkipList = New List(Of String)(watchedFolder.SkipList)
+                If Not hasRequestedOptions Then
+                    If watchedFolder.CompressionLevel <> Core.WOFCompressionAlgorithm.NO_COMPRESSION Then
+                        newFolder.CompressionOptions.SelectedCompressionMode = Core.WOFHelper.CompressionModeFromWOFMode(watchedFolder.CompressionLevel)
+                    End If
+                    If watchedFolder.SkipList IsNot Nothing Then
+                        newFolder.CompressionOptions.SkipList = New List(Of String)(watchedFolder.SkipList)
+                    End If
                 End If
 
             End If
@@ -201,6 +435,13 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         folder.Dispose()
     End Sub
 
+    <RelayCommand>
+    Private Sub ClearCompleted()
+        For Each folder In CompletedFolders.ToList()
+            RemoveFolder(folder)
+        Next
+    End Sub
+
     Public Function CanRemoveFolder() As Boolean
         Return HomeViewModelState = ActionState.Results OrElse HomeViewModelState = ActionState.Idle
     End Function
@@ -236,6 +477,31 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     <NotifyPropertyChangedFor(NameOf(HomeViewModelState))>
     Private _Compressing As Boolean = False
 
+    Private _cancelQueueRequested As Boolean
+
+    <RelayCommand>
+    Private Sub PauseQueue()
+        Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
+        If activeFolder?.Compressor Is Nothing Then Return
+
+        If activeFolder.FolderActionState = ActionState.Working Then
+            activeFolder.Compressor.Pause()
+            activeFolder.FolderActionState = ActionState.Paused
+        Else
+            activeFolder.Compressor.Resume()
+            activeFolder.FolderActionState = ActionState.Working
+        End If
+    End Sub
+
+    <RelayCommand>
+    Private Sub CancelQueue()
+        Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
+        If activeFolder?.Compressor Is Nothing Then Return
+
+        _cancelQueueRequested = True
+        activeFolder.Compressor.Cancel()
+    End Sub
+
 
 
 
@@ -245,15 +511,21 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         Await _watcher.DisableBackgrounding()
 
         Compressing = True
+        _cancelQueueRequested = False
         Core.SharedMethods.PreventSleep()
-        Dim tasks As New List(Of Task)()
-        Dim foldersToCompress = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).ToList
-        HomeViewModelLog.StartingBatchCompression(_logger, foldersToCompress.Count)
-        For Each folder In foldersToCompress
-            If folder.FolderActionState = ActionState.Idle Then
-                Await Task.Run(Async Function()
+        Dim queuedFolderCount = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle).Count()
+        HomeViewModelLog.StartingBatchCompression(_logger, queuedFolderCount)
+
+        Do
+            Dim folder = Folders.FirstOrDefault(Function(f) f.FolderActionState = ActionState.Idle)
+            If folder Is Nothing Then Exit Do
+
+            Dim completed = Await Task.Run(Async Function()
                                    HomeViewModelLog.CompressingFolder(_logger, folder.FolderName)
                                    Dim ret = Await _compressableFolderService.CompressFolder(folder)
+
+                                   If Not ret Then Return False
+
                                    Dim analysis = Await _compressableFolderService.AnalyseFolderAsync(folder)
 
                                    If _settingsService.AppSettings.ShowNotifications Then
@@ -270,8 +542,8 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
                                    Return True
                                End Function)
-            End If
-        Next
+            If _cancelQueueRequested OrElse Not completed Then Exit Do
+        Loop
         Compressing = False
 
         For Each folder In Folders.Where(Function(f) f.CompressionOptions.WatchFolderForChanges)
@@ -285,7 +557,9 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
 
     Private Function CanCompressAll() As Boolean
-        Return HomeViewModelState <> ActionState.Working AndAlso Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
+        Return Folders.Any(Function(f) f.FolderActionState = ActionState.Idle) AndAlso
+               HomeViewModelState <> ActionState.Working AndAlso
+               Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
     End Function
 
 
@@ -319,5 +593,11 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Public Async Sub Receive(message As WatcherAddedFolderToQueueMessage) Implements IRecipient(Of WatcherAddedFolderToQueueMessage).Receive
         Application.GetService(Of CustomSnackBarService).ShowAddedToQueue()
         Await AddFoldersAsync({message.Value})
+    End Sub
+
+    Public Async Sub Receive(message As SteamGamesAddedToQueueMessage) Implements IRecipient(Of SteamGamesAddedToQueueMessage).Receive
+        Application.GetService(Of CustomSnackBarService).ShowAddedToQueue()
+        Dim options = message.Value.GroupBy(Function(item) item.FolderPath, StringComparer.OrdinalIgnoreCase).ToDictionary(Function(group) group.Key, Function(group) group.Last().CompressionOptions, StringComparer.OrdinalIgnoreCase)
+        Await AddFoldersAsync(options.Keys, options)
     End Sub
 End Class

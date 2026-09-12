@@ -1,0 +1,406 @@
+<UserControl x:Class="QueueSidebar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
+             xmlns:local="clr-namespace:CompactGUI"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             x:Name="PageRoot"
+             d:DataContext="{d:DesignInstance Type=local:HomeViewModel}"
+             TextBlock.Foreground="{StaticResource TextControlForeground}"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="QueueListItemStyle" BasedOn="{StaticResource {x:Type ui:ListViewItem}}" TargetType="ui:ListViewItem">
+            <Setter Property="Margin" Value="0 0 0 4" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        </Style>
+        <DataTemplate x:Key="QueueItemTemplate">
+            <Border x:Name="ItemCard"
+                    Padding="0"
+                    Background="Transparent" CornerRadius="6"
+                    Tag="{Binding DataContext, ElementName=PageRoot}">
+                <Grid Margin="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border Margin="-5 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Background="Transparent" Cursor="SizeAll">
+                        <TextBlock VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   IsHitTestVisible="False" Text="⋮⋮">
+
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding FolderActionState}" Value="Idle">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+
+                    <Grid Margin="16 0 8 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="13" FontWeight="SemiBold"
+                                   Text="{Binding DisplayName}"
+                                   TextOptions.TextFormattingMode="Display" TextTrimming="CharacterEllipsis" />
+                        <Grid Grid.Row="1" Margin="0 6 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Ellipse Width="8" Height="8"
+                                     Margin="0 0 6 0" VerticalAlignment="Center"
+                                     Fill="{Binding FolderActionState, Converter={StaticResource FolderStatusToColorConverter}}" />
+                            <TextBlock Grid.Column="1"
+                                       VerticalAlignment="Center"
+                                       FontSize="10"
+                                       Foreground="{StaticResource CardForegroundDisabled}"
+                                       Text="{Binding FolderActionState, Converter={StaticResource QueueStatusToStringConverter}}" />
+                            <Border Grid.Column="2"
+                                    Margin="8 0 0 0" Padding="5 2"
+                                    Background="#8073808C" CornerRadius="4">
+                                <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="White"
+                                           Text="{Binding CompressionOptions.SelectedCompressionMode, Converter={StaticResource QueueCompressionModeLabelConverter}}"
+                                           TextOptions.TextFormattingMode="Display" />
+                            </Border>
+                            <ProgressBar Grid.Column="3"
+                                         Height="5"
+                                         Margin="10 0 0 0" VerticalAlignment="Center"
+                                         Background="{StaticResource CardBackgroundPressed}"
+                                         Foreground="#92F1AB"
+                                         Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}"
+                                         Value="{Binding CompressionProgress.ProgressPercent}" />
+                        </Grid>
+                    </Grid>
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <StackPanel.RenderTransform>
+                            <TranslateTransform X="0" />
+                        </StackPanel.RenderTransform>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Opacity" Value="1" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Border}}" Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="0" To="-20" Duration="0:0:0.2" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="-20" To="0" Duration="0:0:0.2" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock HorizontalAlignment="Right"
+                                   FontSize="10"
+                                   Foreground="{StaticResource TextControlForegroundDisabled}"
+                                   Text="{Binding UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
+                        <StackPanel Margin="0 8 0 0" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding FolderActionState}" Value="Results">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#65dc9d"
+                                       Text="{Binding BytesSaved, Converter={StaticResource BytesToReadableConverter}}" />
+                            <TextBlock Margin="3 0 0 0"
+                                       FontSize="10" Foreground="#65dc9d" Text="saved" />
+                        </StackPanel>
+                        <StackPanel Margin="0 8 0 0" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding FolderActionState}" Value="Idle">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#45c1e8" Text="≈" />
+                            <TextBlock Margin="2 0 0 0"
+                                       FontSize="10" FontWeight="SemiBold" Foreground="#45c1e8">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource SelectedModeEstimatedSavingsConverter}">
+                                        <Binding Path="WikiCompressionResults" />
+                                        <Binding Path="CompressionOptions.SelectedCompressionMode" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Margin="3 0 0 0"
+                                       FontSize="10" Foreground="#45c1e8" Text="saved" />
+                        </StackPanel>
+                    </StackPanel>
+                    <ui:Button Grid.Column="1"
+                               Width="24" Height="24"
+                               Margin="0 0 -2 0" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               BorderBrush="{StaticResource PaletteRedBrush}"
+                               Command="{Binding Tag.RemoveFolderCommand, RelativeSource={RelativeSource AncestorType=Border}}"
+                               CommandParameter="{Binding}">
+                        <ui:Button.RenderTransform>
+                            <TranslateTransform X="20" />
+                        </ui:Button.RenderTransform>
+                        <ui:SymbolIcon FontSize="11" Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                        <ui:Button.Style>
+                            <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
+                                <Setter Property="Opacity" Value="0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Border}}" Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="20" To="0" Duration="0:0:0.2" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="0" To="20" Duration="0:0:0.2" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:Button.Style>
+                    </ui:Button>
+                </Grid>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                <Setter Property="Background" Value="#3345A9E8" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Border BorderThickness="0" CornerRadius="6">
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Margin="0 0 0 12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock FontSize="17" FontWeight="SemiBold" Text="Queue" TextOptions.TextFormattingMode="Display" />
+                    <Border Margin="8 0 0 0" Padding="12 6"
+                            Background="#3373808C" CornerRadius="9" TextOptions.TextFormattingMode="Display">
+                        <TextBlock FontSize="10" FontWeight="SemiBold" Text="{Binding Folders.Count, Mode=OneWay}" />
+                    </Border>
+                </StackPanel>
+                <ui:Button Grid.Column="1"
+                           Height="32"
+                           Padding="10 1 10 0"
+                           Click="AddFolderButton_Click" TextOptions.TextFormattingMode="Display">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="0 0 5 0" Symbol="Add12" />
+                        <TextBlock VerticalAlignment="Center" FontSize="12" Text="Add" />
+                    </StackPanel>
+                </ui:Button>
+                <ui:Button Grid.Column="2"
+                           Width="32" Height="32"
+                           Margin="6 0 0 0" Padding="0"
+                           Command="{Binding DataContext.ToggleQueueSidebarCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                           TextOptions.TextFormattingMode="Display"
+                           Visibility="{Binding ShowCloseButton, RelativeSource={RelativeSource AncestorType=local:QueueSidebar}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ui:SymbolIcon Symbol="Dismiss12" />
+                </ui:Button>
+            </Grid>
+            <ScrollViewer Grid.Row="1"
+                          Margin="0 0 -10 0"
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+
+                <StackPanel Margin="0 0 13 0">
+                    <Grid Margin="0 0 0 6" Visibility="{Binding HasUpNextFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   Text="PENDING" />
+                        <Border Grid.Column="1"
+                                Height="1"
+                                Margin="8 0" VerticalAlignment="Center"
+                                Background="#40FFFFFF" />
+                        <TextBlock Grid.Column="2"
+                                   FontSize="10"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   Text="{Binding UpNextFolderCount, Mode=OneWay}" />
+                    </Grid>
+                    <ui:ListView x:Name="UpNextListView"
+                                 Padding="0"
+                                 dd:DragDrop.DefaultDragAdornerOpacity="1"
+                                 dd:DragDrop.DropHandler="{Binding QueueDropHandler}"
+                                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True" Background="Transparent"
+                                 BorderThickness="0"
+                                 ItemContainerStyle="{StaticResource QueueListItemStyle}"
+                                 ItemTemplate="{StaticResource QueueItemTemplate}"
+                                 ItemsSource="{Binding UpNextFolders}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                 SelectedItem="{Binding SelectedFolder, Mode=OneWay}"
+                                 SelectionChanged="QueueSelectionChanged" />
+                    <Grid Margin="0 12 0 6" Visibility="{Binding HasCompressedFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   Text="COMPLETED" />
+                        <Border Grid.Column="1"
+                                Height="1"
+                                Margin="8 0" VerticalAlignment="Center"
+                                Background="#40FFFFFF" />
+                        <TextBlock Grid.Column="2"
+                                   FontSize="10"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   Text="{Binding CompletedFolderCount, Mode=OneWay}" />
+                    </Grid>
+                    <ui:ListView x:Name="CompletedListView"
+                                 Padding="0"
+                                 Background="Transparent" BorderThickness="0"
+                                 ItemContainerStyle="{StaticResource QueueListItemStyle}"
+                                 ItemTemplate="{StaticResource QueueItemTemplate}"
+                                 ItemsSource="{Binding CompletedFolders}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                 SelectedItem="{Binding SelectedFolder, Mode=OneWay}"
+                                 SelectionChanged="QueueSelectionChanged" />
+                </StackPanel>
+            </ScrollViewer>
+            <Separator Grid.Row="2" VerticalAlignment="Top" />
+            <StackPanel Grid.Row="2" Margin="0 12 0 0" Visibility="{Binding HomeViewIsFresh, Mode=OneWay, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                <Grid>
+                    <TextBlock HorizontalAlignment="Left" FontSize="11" Foreground="{StaticResource CardForegroundDisabled}">
+                        <Run Text="{Binding CompletedFolderCount, Mode=OneWay}" /><Run Text=" of " /><Run Text="{Binding Folders.Count, Mode=OneWay}" /><Run Text=" completed" />
+                    </TextBlock>
+                    <ui:Button Padding="0" HorizontalAlignment="Right"
+                               Background="Transparent" BorderThickness="0"
+                               Command="{Binding ClearCompletedCommand}"
+                               Visibility="{Binding HasCompressedFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock FontSize="11" Foreground="{StaticResource CardForegroundDisabled}" Text="Clear completed" />
+                    </ui:Button>
+                </Grid>
+                <ProgressBar Height="6"
+                             Margin="0 5 0 10"
+                             Background="{StaticResource CardBackgroundPressed}"
+                             Foreground="#65dc9d" Maximum="100"
+                             Value="{Binding QueueCompletionProgress, Mode=OneWay}" />
+                <Grid Margin="0 0 0 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontSize="10"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   Text="To process" />
+                        <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
+                                   FontSize="11" FontWeight="SemiBold"
+                                   Text="{Binding ToProcessSize, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Visibility="{Binding HasAwaitingFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontSize="10"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   Text="Expected savings" />
+                        <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
+                                   FontSize="11" FontWeight="SemiBold" Foreground="#45c1e8"
+                                   Text="{Binding ExpectedSavings, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Visibility="{Binding HasCompressedFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontSize="10"
+                                   Foreground="{StaticResource CardForegroundDisabled}"
+                                   Text="Saved" />
+                        <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
+                                   FontSize="11" FontWeight="SemiBold" Foreground="#65dc9d"
+                                   Text="{Binding TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
+                    </StackPanel>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ui:Button Height="36"
+                               HorizontalAlignment="Stretch"
+                               Background="#278A52"
+                               Command="{Binding CompressAllCommand}"
+                               Content="{Binding CompressButtonText}"
+                               Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+                    <ui:ProgressRing Width="20" Height="20"
+                                     HorizontalAlignment="Left"
+                                     Foreground="#45c1e8" IsIndeterminate="True"
+                                     Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <StackPanel Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Visibility="{Binding IsQueueRunning, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                        <ui:Button Width="42" Height="36"
+                                   Padding="0"
+                                   Command="{Binding PauseQueueCommand}">
+                            <ui:SymbolIcon Filled="True" Symbol="{Binding ActiveFolderViewModel.Folder.FolderActionState, Converter={StaticResource FolderWorkingStateToPauseSymbolConverter}}" />
+                        </ui:Button>
+                        <ui:Button Width="42" Height="36"
+                                   Margin="8 0 0 0" Padding="0"
+                                   Command="{Binding CancelQueueCommand}">
+                            <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                        </ui:Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

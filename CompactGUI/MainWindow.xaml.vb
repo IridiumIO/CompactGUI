@@ -52,10 +52,12 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
     Private Sub OnNavigated(sender As NavigationView, args As NavigatedEventArgs)
         If args.Page.GetType Is GetType(HomePage) Then
             _isOnHomePage = True
+            QueueOverlayHost.Visibility = Visibility.Collapsed
             _MainWindowViewModel.IsActive = True
             HVPropertyChanged(Application.GetService(Of HomeViewModel)(), New PropertyChangedEventArgs(NameOf(HomeViewModel.HomeViewIsFresh)))
         Else
             _isOnHomePage = False
+            QueueOverlayHost.Visibility = Visibility.Visible
             _MainWindowViewModel.IsActive = False
             ProgTitle.Visibility = Visibility.Visible
         End If
@@ -73,6 +75,13 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
                 ProgTitle.Visibility = Visibility.Visible
             End If
         End If
+    End Sub
+
+    Private Sub Root_PreviewMouseDown(sender As Object, e As MouseButtonEventArgs)
+        If _isOnHomePage OrElse Not _MainWindowViewModel.IsQueueSidebarOpen Then Return
+        If QueueHostBorder.IsMouseOver Then Return
+
+        _MainWindowViewModel.IsQueueSidebarOpen = False
     End Sub
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged

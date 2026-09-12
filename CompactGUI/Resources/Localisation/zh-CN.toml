@@ -5,7 +5,6 @@
 # Translations
 
 "Add" = "添加"
-"Add Folder to Queue" = "添加文件夹到队列"
 "Add a custom folder to the watchlist" = "添加自定义文件夹到监控列表"
 "Add to Compression Queue" = "添加到压缩队列"
 "Add to compression queue" = "添加到压缩队列"
@@ -16,19 +15,23 @@
 "Aggression of online skiplist" = "在线跳过列表的激进程度"
 "Always show details on Compression Mode buttons" = "始终显示压缩模式按钮的详细信息"
 "Analysing" = "正在分析"
+"Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "已应用到所有文件夹"
-"Apply to all" = "应用到所有"
 "Ascending" = "升序"
 "Awaiting Compression" = "等待压缩"
 "Background Watcher Settings" = "后台监控设置"
+"COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
 "Cancel" = "否"
 "Cancel Background Compressor" = "取消后台压缩"
 "Cancel operation" = "取消操作"
 "Cancelling..." = "取消中……"
 "Cannot remove folder" = "无法移除文件夹"
 "Check for pre-release updates" = "检查预发布更新"
+"Choose Compression" = "Choose Compression" # LOC:TODO
+"Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "点击下载"
 "CompactGUI" = "CompactGUI"
+"Compress" = "Compress" # LOC:TODO
 "Compress Again" = "再次压缩"
 "Compress All Now" = "立即全部压缩"
 "Compress Selected" = "压缩选中项"
@@ -37,7 +40,6 @@
 "Compressing..." = "压缩中……"
 "Compression" = "压缩模式"
 "Compression DB" = "压缩数据库"
-"Compression Mode" = "压缩模式"
 "Compression Settings" = "压缩设置"
 "Compression Summary" = "压缩摘要"
 "Compression options have been applied to all folders" = "压缩选项已应用到所有文件夹"
@@ -54,8 +56,8 @@
 "Exit" = "退出"
 "Extensions in this folder" = "此文件夹中的扩展名"
 "Failed to submit to wiki" = "提交到 Wiki 失败"
-"Files Compressed" = "文件已压缩"
 "Filetype Management" = "文件类型管理"
+"Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "对于 Steam 游戏，使用数据库来确定要跳过的类型。对于非 Steam 文件夹，则基于智能分析器。"
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "仅限 Steam 游戏。\n在选择跳过用户提交的文件类型时，该设置决定了每种文件类型需要提交多少次才能考虑跳过该类型。\n“低”通常是最好的，因为高档有跳过本来可以很好地压缩的文件的风险。"
 "Game" = "游戏"
@@ -64,13 +66,16 @@
 "Go to Database Results" = "前往数据库结果"
 "HDDs only use 1 thread" = "机械硬盘仅使用 1 个线程"
 "Home" = "主页"
+"Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "包含全局跳过的文件类型"
+"Include smart skiplist" = "Include smart skiplist" # LOC:TODO
 "Include smart skipped file types" = "包含智能跳过的文件类型"
 "Insufficient permission to access this folder" = "没有足够的权限访问此文件夹"
 "LZX" = "LZX"
 "Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "最后获取: {0:yyyy年 M月 d日 HH:mm:ss}"
 "Last analysed {0}" = "上次分析 {0}"
 "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "上次运行: {0:yyyy年 M月 d日 HH:mm:ss}"
+"Library location" = "Library location" # LOC:TODO
 "Manage local skipped filetypes" = "管理本地跳过的文件类型"
 "Max Savings" = "最大节省"
 "Maximum Compression Threads" = "最大压缩线程数"
@@ -104,8 +109,8 @@
 "Select a folder to compress" = "选择一个文件夹压缩"
 "Settings" = "设置"
 "Show notification on completion" = "完成后显示通知"
+"Sort" = "Sort" # LOC:TODO
 "Sort By" = "排序方式"
-"Space Saved" = "节省空间"
 "Start CompactGUI in system tray" = "在系统托盘启动 CompactGUI"
 "Status" = "状态"
 "Steam Library" = "Steam库"
@@ -150,6 +155,7 @@
 "just now" = "刚刚"
 "last compressed:" = "上次压缩:"
 "last modified:" = "上次修改:"
+"recommended" = "recommended" # LOC:TODO
 "select a folder" = "选择文件夹"
 "uncompressed size" = "未压缩大小"
 "{0:0} days ago" = "{0:0} 天前"
@@ -212,9 +218,18 @@
 "saved" = "已节省"
 
 [obsolete]
+"Add Folder to Queue" = "添加文件夹到队列"
+"Add all to queue" = "Add all to queue" # LOC:TODO
+"Apply Settings to All Items in Queue" = "Apply Settings to All Items in Queue" # LOC:TODO
+"Apply to all" = "应用到所有"
+"COMPRESSION SUMMARY" = "COMPRESSION SUMMARY" # LOC:TODO
+"Compression Mode" = "压缩模式"
+"Configuration" = "配置"
 "Custom list — {0} entries" = "自定义列表 — {0} 条"
 "Custom: {0} entries" = "自定义: {0} 条"
 "DB — {0} files" = "Wiki — {0} 个文件"
+"Edit skip list for this folder" = "编辑此文件夹的跳过列表"
+"Files Compressed" = "文件已压缩"
 "For Steam Games:\nskips files based on database results\n\nFor Non-Steam Folders:\nskips files based on compression estimate" = "对于 Steam 游戏：\n根据数据库结果跳过文件\n\n对于非 Steam 文件夹：\n基于压缩估计跳过文件"
 "Global + DB — {0} files" = "全局 + Wiki — {0} 个文件"
 "Global — {0} files" = "全局 — {0} 个文件"
@@ -230,7 +245,13 @@
 "Skip file types likely to compress poorly" = "跳过可能压缩效果不佳的文件类型"
 "Skip file types specified in settings" = "跳过设置中指定的文件类型"
 "Smart: {0} skipped" = "智能: 已跳过 {0}"
+"Space Saved" = "节省空间"
+"Use global skiplist" = "Use global skiplist" # LOC:TODO
+"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
+"Use skip list" = "使用跳过列表"
+"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "欢迎"
 "decayed" = "需重新压缩"
 "files will be skipped" = "个文件将被跳过"
 "not configured" = "未配置"
+"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO

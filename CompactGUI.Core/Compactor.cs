@@ -23,7 +23,7 @@ public sealed class Compactor : ICompressor, IDisposable
     private UInt32 compressionInfoSize;
 
     private long totalProcessedBytes = 0;
-    private readonly SemaphoreSlim pauseSemaphore = new SemaphoreSlim(1, 2);
+    private readonly ManualResetEventSlim pauseGate = new(initialState: true);
     private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
     private ILogger<Compactor> _logger;
@@ -96,8 +96,8 @@ public sealed class Compactor : ICompressor, IDisposable
     {
         CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize);
 
-        await pauseSemaphore.WaitAsync(token).ConfigureAwait(false);
-        pauseSemaphore.Release();
+        pauseGate.Wait(token);
+        token.ThrowIfCancellationRequested();
 
         var res = WOFCompressFile(file.FileName);
         Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
@@ -148,20 +148,20 @@ public sealed class Compactor : ICompressor, IDisposable
     public void Pause()
     {
         CompactorLog.CompressionPaused(_logger);
-        pauseSemaphore.Wait(cancellationTokenSource.Token);
+        pauseGate.Reset();
     }
 
 
     public void Resume()
     {
-        if (pauseSemaphore.CurrentCount == 0) pauseSemaphore.Release();  
+        pauseGate.Set();
         CompactorLog.CompressionResumed(_logger);
     }
 
 
     public void Cancel()
     {
-        Resume();
+        pauseGate.Set();
         cancellationTokenSource.Cancel();
     }
 
@@ -169,7 +169,7 @@ public sealed class Compactor : ICompressor, IDisposable
     public void Dispose()
     {
         cancellationTokenSource?.Dispose();
-        pauseSemaphore?.Dispose();
+        pauseGate?.Dispose();
         if (compressionInfoPtr != IntPtr.Zero)
         {
             Marshal.FreeHGlobal(compressionInfoPtr);

@@ -1,4 +1,3 @@
-
 <p align="center"><img src="https://github.com/IridiumIO/CompactGUI/assets/1491536/64f66b5d-0710-4f66-8b88-6a69f7eb9b63" width="500"></p>
 
 <p align="center">
@@ -9,7 +8,6 @@
   </br> 
 </p>
 
-
 <p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It works directly with the Win32 API to achieve the same thing as the native <code>compact.exe</code> command-line tool available from Windows 10 onwards.</b></p>
 
 &nbsp;
@@ -17,22 +15,24 @@
 
 <p align="center"><img src="CompactGUI/assets/Home.png" width="750"/></p>
 <p align="center">
-  <img src="CompactGUI/assets/Compression.png" width="250"/>
+<img src="CompactGUI/assets/Compression.png" width="250"/>
 <img src="CompactGUI/assets/Database.png" width="250"/>
 <img src="CompactGUI/assets/Watcher.png" width="250"/>
 </p>
 
 ---
+
 <p align="center">
   <a href="README.md">English</a> -
   <a href="README/README_ru.md">Русский</a> -
-  <a href="README/README_cn.md">简体中文</a>
+  <a href="README/README_cn.md">简体中文</a> -
+  <a href="README/README_it.md">Italian</a>
 </p>
 &nbsp;
 
 **How it works**:
 
-CompactGUI is a friendly interface that makes use of the underlying filesystem compression algorithms exposed by the Windows Overlay Filter (WOF) Driver, utilising high-performance compression that was first introduced in Windows 10. It allows compression of any files or folders (with a focus on games) to occur transparently, without any resultant performance loss and allowing large disk storage savings. 
+CompactGUI is a friendly interface that makes use of the underlying filesystem compression algorithms exposed by the Windows Overlay Filter (WOF) Driver, utilising high-performance compression that was first introduced in Windows 10. It allows compression of any files or folders (with a focus on games) to occur transparently, without any resultant performance loss and allowing large disk storage savings.
 
 **Transparently? What does that mean?**
 
@@ -40,9 +40,7 @@ Transparent compression means that files can still be used normally on the compu
 
 **How is this different from the built-in compression in older versions of Windows?**
 
-This is *similar* to the old compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact.  [More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx)
-
-
+This is _similar_ to the old compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. [More information can be found here](<https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx>)
 
 <h2>Installation  </h> 
    
@@ -50,7 +48,8 @@ This is *similar* to the old compression built-in to Windows (Right click > Prop
 
 <img alt="Static Badge" src="https://img.shields.io/badge/DOWNLOAD%20From%20Github-steelblue?style=for-the-badge&logo=github&link=https%3A%2F%2Fgithub.com%2FIridiumIO%2FCompactGUI%2Freleases">
 
-Or install with Winget: 
+Or install with Winget:
+
 ```py
 winget install CompactGUI
 ```
@@ -62,14 +61,14 @@ Use this tool to compress folders while still being able to use/run them normall
 - Reduce the size of games (e.g. ARK-Survival Evolved: 169 GB > 91.2 GB)
 - Reduce the size of programs (e.g. Adobe Photoshop: 1.71 GB > 886 MB)
 - Compress any other folder on your computer
-  
+
 ## Extra Features
 
 - Visual feedback on compression progress and statistics
 - Configurable list of poorly-compressed filetypes that can be skipped, editable per-folder
 - Compression Estimation - built using over 100,000 community submission (honestly it was way more, but I didn't realise google forms broke at 100,000 so I've lost a lot of submissions) for accurate data on many Steam Games
-   - Non-Steam games can still utilise an algorithmic estimation instead that still gives a reasonable idea of compressability. 
-   - If you would like to contribute, Steam game results can be submitted to the online database from within CompactGUI
+  - Non-Steam games can still utilise an algorithmic estimation instead that still gives a reasonable idea of compressability.
+  - If you would like to contribute, Steam game results can be submitted to the online database from within CompactGUI
 - Integration into Windows Explorer context menus for easier use.
 - Analyze the status of existing folders
 - Background Watcher - keeps track of folders and monitors them for changes (e.g. Steam game updates) and automatically keeps them compressed in the background.
@@ -87,9 +86,9 @@ DirectStorage is a new API that allows games to load assets directly from the SS
 
 Windows 10 introduced a little-known but very useful tool called `compact.exe` that allows one to compress folders and files on disk, decompressing them at runtime. With any modern CPU (I have tested as old as an i3-370M from 2010 with negligible impact), this added load is hardly noticed, and the space savings are of most use on those with smaller SSDs.
 
-As program folders and games can be shrunk by up to 60%, this has the added bonus of potentially reducing load times - especially on slower HDDs. 
+As program folders and games can be shrunk by up to 60%, this has the added bonus of potentially reducing load times - especially on slower HDDs.
 
-More information on the inbuilt Windows function can be found [here](https://technet.microsoft.com/library/bb490884.aspx) and [here](https://msdn.microsoft.com/library/windows/desktop/hh920921(v=vs.85).aspx) or by typing `compact /q` into the commandline
+More information on the inbuilt Windows function can be found [here](https://technet.microsoft.com/library/bb490884.aspx) and [here](<https://msdn.microsoft.com/library/windows/desktop/hh920921(v=vs.85).aspx>) or by typing `compact /q` into the commandline
 
 This tool is intentionally designed to only compress folders and files. Whole drives and entire Windows installations cannot be modified from within CompactGUI - users seeking that functionality should use `compact /compactOS` from the commandline.
 
@@ -101,18 +100,17 @@ By default, the program runs Compact with the `XPRESS8K` algorithm active. This 
 
 Optional Compression Modes:
 
-Algorithm|Core Advantages|Detailed Description
-:---|:---|:---
-XPRESS4K|Fastest, but weakest|Suitable for game files with extremely high read speed requirements, it can maximize performance while compressing.
-XPRESS8K|Balance of speed and compression|A better balance has been achieved between compression speed and compression ratio.
-XPRESS16K|Slower, but stronger|Suitable for scenarios with limited storage space and low loading speed requirements.
-LZX|Slowest, but strongest|Suitable for storing archived files, backup data, or cold data that is not frequently accessed.
+| Algorithm | Core Advantages                  | Detailed Description                                                                                                |
+| :-------- | :------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
+| XPRESS4K  | Fastest, but weakest             | Suitable for game files with extremely high read speed requirements, it can maximize performance while compressing. |
+| XPRESS8K  | Balance of speed and compression | A better balance has been achieved between compression speed and compression ratio.                                 |
+| XPRESS16K | Slower, but stronger             | Suitable for scenarios with limited storage space and low loading speed requirements.                               |
+| LZX       | Slowest, but strongest           | Suitable for storing archived files, backup data, or cold data that is not frequently accessed.                     |
 
- ---
+---
 
 ### Like this project?
 
- Please consider leaving a tip on Ko-Fi :)
+Please consider leaving a tip on Ko-Fi :)
 
  <p align="center"><a href='https://ko-fi.com/iridiumio' target='_blank'><img height='42' style='border:0px;height:42px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></p>
-  

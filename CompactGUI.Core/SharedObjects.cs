@@ -25,8 +25,8 @@ public sealed class ExtensionResult
 
 public struct CompressionProgress
 {
-    public int ProgressPercent;
-    public string FileName;
+    public int ProgressPercent { get; set; }
+    public string FileName { get; set; }
 
     public CompressionProgress(int progressPercent, string fileName)
     {
