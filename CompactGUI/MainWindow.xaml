@@ -20,8 +20,7 @@
                  Closing="MainWindow_Closing"
                  ExtendsContentIntoTitleBar="True"
                  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 RenderOptions.BitmapScalingMode="HighQuality"
-                 WindowBackdropType="Mica"
+                 WindowBackdropType="None"
                  WindowCornerPreference="Round"
                  WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d">
@@ -119,7 +118,7 @@
                                    Command="{Binding ToggleQueueSidebarCommand}"
                                    RenderTransformOrigin="0.5,0.5"
                                    Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                            <TextBlock FontSize="12" FontWeight="SemiBold" loc:L.Value="SHOW QUEUE" TextOptions.TextFormattingMode="Display">
+                            <TextBlock loc:L.Value="SHOW QUEUE" FontSize="12" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display">
                                 <TextBlock.LayoutTransform>
                                     <RotateTransform Angle="-90" />
                                 </TextBlock.LayoutTransform>

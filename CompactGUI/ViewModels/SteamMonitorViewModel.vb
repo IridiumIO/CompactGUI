@@ -420,7 +420,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
 
             If File.Exists(imagePath) Then
                 Try
-                    game.HeaderImage = LoadImageFromDisk(imagePath)
+                    game.HeaderImage = CreateFadedHeaderImage(LoadImageFromDisk(imagePath))
                     Return
                 Catch ex As Exception
                     File.Delete(imagePath)
@@ -430,7 +430,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             Await _imageDownloadGate.WaitAsync()
             Try
                 If File.Exists(imagePath) Then
-                    game.HeaderImage = LoadImageFromDisk(imagePath)
+                    game.HeaderImage = CreateFadedHeaderImage(LoadImageFromDisk(imagePath))
                     Return
                 End If
 
@@ -438,7 +438,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 If steamCachedHeader IsNot Nothing Then
                     Try
                         Dim cachedImageData = Await File.ReadAllBytesAsync(steamCachedHeader)
-                        game.HeaderImage = LoadImageFromMemoryStream(cachedImageData)
+                        game.HeaderImage = CreateFadedHeaderImage(LoadImageFromMemoryStream(cachedImageData))
                         Await File.WriteAllBytesAsync(imagePath, cachedImageData)
                         Return
                     Catch ex As Exception
@@ -450,7 +450,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 Dim headerImage As BitmapImage = Nothing
                 If imageData IsNot Nothing Then
                     Try
-                        headerImage = LoadImageFromMemoryStream(imageData)
+                        headerImage = CreateFadedHeaderImage(LoadImageFromMemoryStream(imageData))
                     Catch ex As Exception
                         imageData = Nothing
                     End Try
@@ -459,7 +459,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 If imageData Is Nothing Then
                     Dim storeHeaderUrl = Await GetStoreHeaderUrlAsync(game.AppID)
                     imageData = Await TryDownloadImageAsync(storeHeaderUrl)
-                    If imageData IsNot Nothing Then headerImage = LoadImageFromMemoryStream(imageData)
+                    If imageData IsNot Nothing Then headerImage = CreateFadedHeaderImage(LoadImageFromMemoryStream(imageData))
                 End If
 
                 If imageData Is Nothing Then Return
@@ -471,6 +471,45 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         Catch ex As Exception
             Diagnostics.Debug.WriteLine($"Failed to load Steam header for {game.AppID}: {ex.Message}")
         End Try
+    End Function
+
+
+    Private Shared Function CreateFadedHeaderImage(source As BitmapImage) As BitmapImage
+        If source Is Nothing OrElse source.PixelWidth = 0 OrElse source.PixelHeight = 0 Then Return source
+
+        Const fadeEndRatio As Double = 0.69
+        Dim converted As New FormatConvertedBitmap(source, PixelFormats.Bgra32, Nothing, 0)
+        Dim pixelWidth = converted.PixelWidth
+        Dim pixelHeight = converted.PixelHeight
+        Dim stride = pixelWidth * 4
+        Dim pixels((stride * pixelHeight) - 1) As Byte
+        converted.CopyPixels(pixels, stride, 0)
+
+        Dim fadeEnd = Math.Max(1, CInt(Math.Ceiling(pixelWidth * fadeEndRatio)))
+        For x = 0 To pixelWidth - 1
+            Dim fade = If(x >= fadeEnd, 0.0, 1.0 - CDbl(x) / fadeEnd)
+            For y = 0 To pixelHeight - 1
+                Dim alphaIndex = (y * stride) + (x * 4) + 3
+                pixels(alphaIndex) = CByte(Math.Round(pixels(alphaIndex) * fade))
+            Next
+        Next
+
+        Dim fadedSource = BitmapSource.Create(pixelWidth, pixelHeight, source.DpiX, source.DpiY, PixelFormats.Bgra32, Nothing, pixels, stride)
+        Dim encoder As New PngBitmapEncoder()
+        encoder.Frames.Add(BitmapFrame.Create(fadedSource))
+
+        Dim fadedImage As New BitmapImage()
+        Using stream As New MemoryStream()
+            encoder.Save(stream)
+            stream.Position = 0
+            fadedImage.BeginInit()
+            fadedImage.CacheOption = BitmapCacheOption.OnLoad
+            fadedImage.StreamSource = stream
+            fadedImage.EndInit()
+        End Using
+
+        If fadedImage.CanFreeze Then fadedImage.Freeze()
+        Return fadedImage
     End Function
 
     Private Shared Function FindSteamCachedHeader(steamFolder As DirectoryInfo, appId As Integer) As String

@@ -38,7 +38,7 @@
             </ui:Button>
             <ui:ProgressRing Width="20" Height="20"
                              Margin="15 0 0 0"
-                             IsIndeterminate="True"
+                             IsIndeterminate="{Binding IsAnalysingGames}"
                              Visibility="{Binding IsAnalysingGames, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
 
@@ -160,7 +160,8 @@
                        BorderThickness="1" />
             <ui:ProgressRing Width="14" Height="14"
                              Margin="0 0 5 4" VerticalAlignment="Bottom"
-                             Foreground="#63ffa1" IsIndeterminate="True"
+                             Foreground="#63ffa1"
+                             IsIndeterminate="{Binding IsAnalysingGames}"
                              Visibility="{Binding IsAnalysingGames, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <TextBlock VerticalAlignment="Bottom"
                        FontSize="20" Foreground="#63ffa1" Opacity="0.6"
@@ -173,7 +174,8 @@
                        BorderThickness="1" />
             <ui:ProgressRing Width="14" Height="14"
                              Margin="0 0 5 4" VerticalAlignment="Bottom"
-                             Foreground="#57dbff" IsIndeterminate="True"
+                             Foreground="#57dbff"
+                             IsIndeterminate="{Binding IsAnalysingGames}"
                              Visibility="{Binding IsAnalysingGames, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <TextBlock VerticalAlignment="Bottom"
                        FontSize="20" Foreground="#57dbff" Opacity="0.6"
@@ -309,23 +311,11 @@
                             </CheckBox>
                             <Border Width="170" Height="78"
                                     Margin="-14 -15 -150 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                    Background="{StaticResource CardBackgroundPressed}"
                                     CornerRadius="4">
-                                <Border.OpacityMask>
-                                    <VisualBrush>
-                                        <VisualBrush.Visual>
-                                            <Border Width="196" Height="78" CornerRadius="4">
-                                                <Border.Background>
-                                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="0.85,0.5">
-                                                        <GradientStop Offset="0" Color="White" />
-                                                        <GradientStop Offset="0.81" Color="Transparent" />
-                                                    </LinearGradientBrush>
-                                                </Border.Background>
-                                            </Border>
-                                        </VisualBrush.Visual>
-                                    </VisualBrush>
-                                </Border.OpacityMask>
-                                <Image Source="{Binding HeaderImage}" Stretch="UniformToFill" />
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding HeaderImage}" Stretch="UniformToFill" />
+                                </Border.Background>
+
                             </Border>
                             <StackPanel Grid.Column="1" Margin="0 0 16 0" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
@@ -451,7 +441,7 @@
                                     </DataTemplate>
                                     <DataTemplate x:Key="FullWorkingActionTemplate">
                                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                                            <ui:ProgressRing Width="24" Height="24" IsIndeterminate="True" />
+                                            <ui:ProgressRing Width="24" Height="24" IsIndeterminate="{Binding IsWorking}" />
                                             <ui:Button Width="32" Height="32"
                                                        Margin="12 0 0 0" Padding="0"
                                                        Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
@@ -963,7 +953,7 @@
                                                         </DataTemplate>
                                                         <DataTemplate x:Key="WorkingTemplate">
                                                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                                <ui:ProgressRing Width="28" Height="28" IsIndeterminate="True" />
+                                                                <ui:ProgressRing Width="28" Height="28" IsIndeterminate="{Binding IsWorking}" />
                                                                 <ui:Button Width="36" Height="36"
                                                                            Margin="12 0 0 0" Padding="0"
                                                                            Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -1060,7 +1050,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" loc:L.Value="COMPRESSION MODE " />
+                    <TextBlock loc:L.Value="COMPRESSION MODE " FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" />
                     <CheckBox Margin="-10 0 0 0" Content="{loc:T Use recommended mode}" IsChecked="{Binding UseRecommendedCompressionLevel}" />
                     <ComboBox Grid.Column="2"
                               Height="36"
@@ -1090,7 +1080,7 @@
                 <Separator Grid.Column="1" Margin="10 0 10 0" />
 
                 <StackPanel Grid.Column="2">
-                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" loc:L.Value="SKIPLIST SELECTION" />
+                    <TextBlock loc:L.Value="SKIPLIST SELECTION" FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" />
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Grid.Column="3"
                                   Margin="-10 0 0 0"
@@ -1104,8 +1094,9 @@
                 <Separator Grid.Column="3" Margin="10 0 10 0" />
 
                 <ui:Button Grid.Column="6"
-                           Height="48" Background="#278A52"
-                           Margin="10 0 0 0" Padding="18 0" 
+                           Height="48"
+                           Margin="10 0 0 0" Padding="18 0"
+                           Background="#278A52"
                            Command="{Binding AddSelectedToQueueCommand}"
                            Content="{loc:T Add selected to queue}" />
             </Grid>
@@ -1117,7 +1108,7 @@
                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ui:ProgressRing Width="42" Height="42"
                              Margin="0 20 0 0" HorizontalAlignment="Center"
-                             IsIndeterminate="True" />
+                             IsIndeterminate="{Binding IsLoading}" />
             <TextBlock Margin="20 12 20 20" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T Scanning installed Steam games...}" />
         </StackPanel>
         <StackPanel Grid.Row="4"
