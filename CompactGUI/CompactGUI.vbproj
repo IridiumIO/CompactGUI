@@ -59,8 +59,8 @@
     <PackageReference Include="Gameloop.Vdf.JsonConverter" Version="0.2.1" />
     <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
     <PackageReference Include="IridiumIO.MVVM.VBSourceGenerators" Version="0.6.1" PrivateAssets="All" />
-    <PackageReference Include="LazyTranslate" Version="0.1.1" />
-    <PackageReference Include="LazyTranslate.CatalogueBuilder" Version="0.1.1" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="LazyTranslate" Version="0.1.2" />
+    <PackageReference Include="LazyTranslate.CatalogueBuilder" Version="0.1.2" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
