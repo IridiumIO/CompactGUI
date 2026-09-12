@@ -3,19 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:local="clr-namespace:CompactGUI"
-      xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              x:Name="Root"
-             Width="185" Height="85"
+             Width="185"
+             Height="85"
              mc:Ignorable="d">
 
 
     <RadioButton.Template>
         <ControlTemplate TargetType="RadioButton">
             <ui:Card x:Name="CheckMark"
-                     Padding="15,10,15,5" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+                     Padding="15 10 15 5" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
                      Background="#20FFFFFF"
                      BorderBrush="{TemplateBinding BorderBrush}"
                      BorderThickness="1" Visibility="Visible">
@@ -32,9 +33,9 @@
 
 
                     <ui:TextBlock x:Name="Mode_Text"
-                                  Text="{Binding CompressionMode, FallbackValue=XPRESS4K, RelativeSource={RelativeSource TemplatedParent}}"
                                   HorizontalAlignment="Left" VerticalAlignment="Center"
-                                  FontSize="14" FontWeight="SemiBold">
+                                  FontSize="14" FontWeight="SemiBold"
+                                  Text="{Binding CompressionMode, FallbackValue=XPRESS4K, RelativeSource={RelativeSource TemplatedParent}}">
                         <ui:TextBlock.RenderTransform>
                             <TranslateTransform x:Name="ModeTextTransform" Y="0" />
                         </ui:TextBlock.RenderTransform>
@@ -42,11 +43,11 @@
 
 
                     <ui:TextBlock x:Name="estimatedSize_Text"
-                                  loc:L.Value="Estimated size"
                                   Grid.Row="0"
-                                  Margin="-10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                  Foreground="{StaticResource AccentFillColorDisabledBrush}"
-                                  Opacity="0"
+                                  Margin="-10 15 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                  loc:L.Value="Estimated size" FontSize="11" FontWeight="SemiBold"
+                                  Foreground="{StaticResource TextControlForegroundDisabled}"
+                                  Opacity="0" TextOptions.TextFormattingMode="Display"
                                   Visibility="{Binding EstimatedVisibility, RelativeSource={RelativeSource TemplatedParent}}">
                         <ui:TextBlock.RenderTransform>
                             <TranslateTransform x:Name="EstSize_LabelTextTransform" X="10" Y="3" />
@@ -54,22 +55,21 @@
                     </ui:TextBlock>
 
                     <ui:TextBlock x:Name="savings_Text"
-                                  loc:L.Value="Savings"
                                   Grid.Row="0"
-                                  Margin="0,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                  Foreground="{StaticResource AccentFillColorDisabledBrush}"
-                                  Opacity="0"
+                                  Margin="0 35 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                  loc:L.Value="Savings" FontSize="11" FontWeight="SemiBold"
+                                  Foreground="{StaticResource TextControlForegroundDisabled}"
+                                  Opacity="0" TextOptions.TextFormattingMode="Display"
                                   Visibility="{Binding EstimatedVisibility, RelativeSource={RelativeSource TemplatedParent}}">
                         <ui:TextBlock.RenderTransform>
-                            <TranslateTransform x:Name="EstSavings_LabelTextTransform" Y="5" />
+                            <TranslateTransform x:Name="EstSavings_LabelTextTransform" Y="12" />
                         </ui:TextBlock.RenderTransform>
                     </ui:TextBlock>
 
 
                     <Grid Grid.Column="1" Visibility="{Binding IsEstimating, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                        <ui:TextBlock loc:L.Context="Compression estimate" loc:L.Value="unknown"
-                                      HorizontalAlignment="Right" VerticalAlignment="Center"
-                                      FontSize="13" Foreground="#30FFFFFF"
+                        <ui:TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                                      loc:L.Context="Compression estimate" loc:L.Value="unknown" FontSize="13" Foreground="#30FFFFFF"
                                       Visibility="{Binding BytesAfter, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ZeroCountToVisibilityConverter}, ConverterParameter=invert}" />
                     </Grid>
 
@@ -77,7 +77,7 @@
 
                         <ui:TextBlock x:Name="BytesAfter_Text"
                                       Grid.Column="1"
-                                      Margin="0,-22,0,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                      Margin="0 -22 0 0" HorizontalAlignment="Right" VerticalAlignment="Center"
                                       FontSize="13"
                                       Visibility="{Binding IsEstimating, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
                             <Run Text="{Binding BytesAfter, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=9.4 GB, Converter={StaticResource BytesToReadableConverter}, ConverterParameter=3}" />
@@ -87,7 +87,7 @@
                         </ui:TextBlock>
                         <ui:TextBlock x:Name="BytesSaved_Text"
                                       Grid.Column="1"
-                                      Margin="0,22,0,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                      Margin="0 22 0 0" HorizontalAlignment="Right" VerticalAlignment="Center"
                                       FontSize="13" Foreground="#92F1AB"
                                       Visibility="{Binding IsEstimating, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
                             <Run Text="↓" />
@@ -101,7 +101,7 @@
 
                         <ui:TextBlock x:Name="PercentSaved_Text"
                                       Grid.Column="1"
-                                      Margin="0,22,0,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                      Margin="0 22 0 0" HorizontalAlignment="Right" VerticalAlignment="Center"
                                       FontSize="13" Foreground="#92F1AB" Opacity="0"
                                       Visibility="{Binding IsEstimating, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
                             <Run Text="↓" />
@@ -115,7 +115,7 @@
                     <ui:ProgressRing x:Name="Loading_ProgressRing"
                                      Grid.Column="1"
                                      Width="18" Height="18"
-                                     Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                     Margin="0 0 5 0" HorizontalAlignment="Right" VerticalAlignment="Center"
                                      Foreground="#92F1AB" IsIndeterminate="True"
                                      Visibility="{Binding IsEstimating, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ui:ProgressRing.RenderTransform>
@@ -125,9 +125,8 @@
 
                     <Border x:Name="Progress_Area"
                             Grid.Row="1" Grid.ColumnSpan="2"
-                            Margin="-15,-5" VerticalAlignment="Bottom"
-                            Background="Transparent" ClipToBounds="True" CornerRadius="5"
-                            RenderTransformOrigin="0.5 1">
+                            Margin="-15 -5" VerticalAlignment="Bottom"
+                            Background="Transparent" ClipToBounds="True" CornerRadius="5" RenderTransformOrigin="0.5 1">
                         <Border.RenderTransform>
                             <ScaleTransform x:Name="ProgressAreaTransform" ScaleY="1" />
                         </Border.RenderTransform>
@@ -139,8 +138,7 @@
                             <ProgressBar.Template>
                                 <ControlTemplate TargetType="ProgressBar">
                                     <Grid x:Name="GridRoot" SnapsToDevicePixels="true">
-                                        <Border x:Name="PART_Track"
-                                                Background="#30FFFFFF" CornerRadius="0 0 3 3" />
+                                        <Border x:Name="PART_Track" Background="#30FFFFFF" CornerRadius="0 0 3 3" />
                                         <Border x:Name="PART_Indicator"
                                                 Width="0"
                                                 HorizontalAlignment="Left"
@@ -158,9 +156,7 @@
                     <VisualStateGroup x:Name="CheckStates">
                         <VisualState x:Name="Checked">
                             <Storyboard>
-                                <ColorAnimation Storyboard.TargetName="CheckMark"
-                                                Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)" To="#92F1AB"
-                                                Duration="0:0:0.4" />
+                                <ColorAnimation Storyboard.TargetName="CheckMark" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)" To="#92F1AB" Duration="0:0:0.4" />
                             </Storyboard>
                         </VisualState>
                         <VisualState x:Name="Unchecked" />
@@ -169,52 +165,36 @@
                     <VisualStateGroup x:Name="HoverStates">
                         <VisualState x:Name="MouseOver">
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetName="Mode_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="-20"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="Mode_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="-20" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetName="estimatedSize_Text" Storyboard.TargetProperty="Opacity" To="1"
-                                                 Duration="0:0:0.2" />
-                                <DoubleAnimation Storyboard.TargetName="savings_Text" Storyboard.TargetProperty="Opacity" To="1"
-                                                 Duration="0:0:0.2" />
-                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text" Storyboard.TargetProperty="Opacity" To="1"
-                                                 Duration="0:0:0.0" />
-                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text" Storyboard.TargetProperty="Opacity" To="0"
-                                                 Duration="0:0:0.0" />
-                                <DoubleAnimation Storyboard.TargetName="Progress_Area"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.3"
-                                                 Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetName="estimatedSize_Text" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetName="savings_Text" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.0" />
+                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.0" />
+                                <DoubleAnimation Storyboard.TargetName="Progress_Area" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.3" Duration="0:0:0.2" />
 
 
 
-                                <DoubleAnimation Storyboard.TargetName="BytesAfter_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="20"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="BytesAfter_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="20" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
 
-                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="16"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="16" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="16"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="16" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetName="Loading_ProgressRing"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="16"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="Loading_ProgressRing" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="16" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
@@ -224,47 +204,31 @@
                         </VisualState>
                         <VisualState x:Name="MouseLeave">
                             <Storyboard BeginTime="0:0:0.1">
-                                <DoubleAnimation Storyboard.TargetName="Mode_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0"
-                                                 Duration="0:0:0.2" />
-                                <DoubleAnimation Storyboard.TargetName="estimatedSize_Text" Storyboard.TargetProperty="Opacity" To="0"
-                                                 Duration="0:0:0.2" />
-                                <DoubleAnimation Storyboard.TargetName="savings_Text" Storyboard.TargetProperty="Opacity" To="0"
-                                                 Duration="0:0:0.2" />
-                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text" Storyboard.TargetProperty="Opacity" To="0"
-                                                 Duration="0:0:0.0" />
-                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text" Storyboard.TargetProperty="Opacity" To="1"
-                                                 Duration="0:0:0.0" />
-                                <DoubleAnimation Storyboard.TargetName="Progress_Area"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1"
-                                                 Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetName="Mode_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0" Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetName="estimatedSize_Text" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetName="savings_Text" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.0" />
+                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.0" />
+                                <DoubleAnimation Storyboard.TargetName="Progress_Area" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.2" />
 
 
-                                <DoubleAnimation Storyboard.TargetName="BytesAfter_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="BytesAfter_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
 
-                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="BytesSaved_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="PercentSaved_Text" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetName="Loading_ProgressRing"
-                                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0"
-                                                 Duration="0:0:0.2">
+                                <DoubleAnimation Storyboard.TargetName="Loading_ProgressRing" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" To="0" Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
                                         <SineEase />
                                     </DoubleAnimation.EasingFunction>
