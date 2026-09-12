@@ -23,6 +23,7 @@
 "Awaiting Compression" = "압축 대기 중"
 "Background Watcher Settings" = "백그라운드 모니터링 설정"
 "COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
+"COMPRESSION MODE " = "COMPRESSION MODE " # LOC:TODO
 "Cancel" = "취소"
 "Cancel Background Compressor" = "백그라운드 압축 취소"
 "Cancel operation" = "작업 취소"
@@ -33,6 +34,7 @@
 "Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "클릭해서 다운로드"
 "CompactGUI" = "CompactGUI"
+"Complete" = "Complete" # LOC:TODO
 "Compress" = "Compress" # LOC:TODO
 "Compress Again" = "재압축"
 "Compress All Now" = "전부 압축"
@@ -55,9 +57,11 @@
 "Drive unavailable" = "드라이브 사용 불가"
 "Edit list" = "Edit list" # LOC:TODO
 "Estimate Compression for non-Steam Folders (beta)" = "Steam 외의 폴더도 압축량 추정 (베타)"
+"Estimated Size" = "Estimated Size" # LOC:TODO
 "Estimated size" = "예상 크기"
 "Exit" = "종료"
 "Extensions in this folder" = "이 폴더의 파일 확장자"
+"Failed" = "Failed" # LOC:TODO
 "Failed to submit to wiki" = "위키 제출에 실패했습니다"
 "Filetype Management" = "파일 확장자 관리"
 "Filter" = "Filter" # LOC:TODO
@@ -95,8 +99,11 @@
 "Open Settings Folder" = "설정 폴더 열기"
 "Operation cancelled." = "작업이 취소되었습니다."
 "Operation failed: {0}" = "작업에 실패했습니다: {0}"
+"Original Size" = "Original Size" # LOC:TODO
+"Paused" = "Paused" # LOC:TODO
 "Please check your internet connection and try again" = "인터넷 연결을 확인한 후 다시 시도해주세요"
 "Please wait until the current operation is finished" = "현재 작업이 완료되기 전까지 기다려 주세요"
+"Preparing" = "Preparing" # LOC:TODO
 "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "디스크에 쓰지 않고 파일을 빠르게 분석하여 압축률을 추정합니다. 하드 디스크를 사용하는 경우 매우 느려질 수 있습니다."
 "Re-analyse all watched folders" = "모니터링 중인 모든 폴더 재분석"
 "Re-analyse this folder" = "이 폴더 재분석"
@@ -107,6 +114,9 @@
 "Remove from Watchlist" = "모니터링 리스트에서 제거"
 "Reset" = "초기화"
 "Restart as Admin" = "관리자 권한으로 재시작"
+"SHOW QUEUE" = "SHOW QUEUE" # LOC:TODO
+"SKIPLIST SELECTION" = "SKIPLIST SELECTION" # LOC:TODO
+"Saved" = "Saved" # LOC:TODO
 "Savings" = "절감률"
 "Scanning installed Steam games..." = "설치된 Steam 게임 스캔 중..."
 "Search by game name or SteamID..." = "게임 이름 또는 Steam ID로 검색..."
@@ -143,6 +153,7 @@
 "Use exclusions" = "Use exclusions" # LOC:TODO
 "Use recommended mode" = "Use recommended mode" # LOC:TODO
 "Version" = "버전"
+"Waiting" = "Waiting" # LOC:TODO
 "Watch folder for changes" = "폴더 변경 사항 모니터링"
 "Watched Folders" = "모니터링 리스트"
 "Watcher" = "모니터링"
@@ -154,17 +165,21 @@
 "XPRESS 8K" = "XPRESS 8K"
 "Yes" = "예"
 "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "{0}개의 모니터링 중인 폴더가 있습니다. CompactGUI를 종료하면 모니터링이 중단됩니다.{1}{1}정말 종료할까요?"
+"Your settings have been reset to their default to accommodate the update" = "Your settings have been reset to their default to accommodate the update" # LOC:TODO
+"Your settings have been reset to their default." = "Your settings have been reset to their default." # LOC:TODO
 "can be saved" = "절약 가능"
 "contained files" = "파일 수"
 "day(s)" = "일"
 "edit" = "편집"
 "edit skipped filetypes" = "압축에서 제외할 파일 확장자"
+"estimated savings" = "estimated savings" # LOC:TODO
 "every" = "매"
 "games" = "개"
 "just now" = "방금 전"
 "last compressed:" = "마지막 압축:"
 "last modified:" = "마지막 수정:"
 "recommended" = "recommended" # LOC:TODO
+"saved" = "saved" # LOC:TODO
 "select a folder" = "폴더를 선택하세요"
 "uncompressed size" = "압축 전 크기"
 "{0:0} days ago" = "{0:0}일 전"
@@ -194,6 +209,15 @@
 "MB" = "MB"
 "PB" = "PB"
 "TB" = "TB"
+
+[context."Folder Compression Queue"]
+"COMPLETED" = "COMPLETED" # LOC:TODO
+"Clear completed" = "Clear completed" # LOC:TODO
+"Expected savings" = "Expected savings" # LOC:TODO
+"PENDING" = "PENDING" # LOC:TODO
+"Queue" = "Queue" # LOC:TODO
+"To process" = "To process" # LOC:TODO
+"{0} of {1} completed" = "{0} of {1} completed" # LOC:TODO
 
 [context."Folder status"]
 "Unknown" = "알 수 없음"

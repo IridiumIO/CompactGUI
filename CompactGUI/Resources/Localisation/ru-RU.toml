@@ -23,6 +23,7 @@
 "Awaiting Compression" = "Ожидание сжатия"
 "Background Watcher Settings" = "Настройки фонового отслеживания"
 "COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
+"COMPRESSION MODE " = "COMPRESSION MODE " # LOC:TODO
 "Cancel" = "Отмена"
 "Cancel Background Compressor" = "Отменить фоновое сжатие"
 "Cancel operation" = "Cancel operation" # LOC:TODO
@@ -33,6 +34,7 @@
 "Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "Нажмите, чтобы скачать"
 "CompactGUI" = "CompactGUI"
+"Complete" = "Complete" # LOC:TODO
 "Compress" = "Compress" # LOC:TODO
 "Compress Again" = "Сжать заново"
 "Compress All Now" = "Сжать всё сейчас"
@@ -55,9 +57,11 @@
 "Drive unavailable" = "Drive unavailable" # LOC:TODO
 "Edit list" = "Edit list" # LOC:TODO
 "Estimate Compression for non-Steam Folders (beta)" = "Оценивать сжатие для папок не из Steam (бета)"
+"Estimated Size" = "Estimated Size" # LOC:TODO
 "Estimated size" = "Предполагаемый размер"
 "Exit" = "Выход"
 "Extensions in this folder" = "Расширения в этой папке"
+"Failed" = "Failed" # LOC:TODO
 "Failed to submit to wiki" = "Не удалось отправить в Вики"
 "Filetype Management" = "Управление типами файлов"
 "Filter" = "Filter" # LOC:TODO
@@ -95,8 +99,11 @@
 "Open Settings Folder" = "Открыть папку настроек"
 "Operation cancelled." = "Operation cancelled." # LOC:TODO
 "Operation failed: {0}" = "Operation failed: {0}" # LOC:TODO
+"Original Size" = "Original Size" # LOC:TODO
+"Paused" = "Paused" # LOC:TODO
 "Please check your internet connection and try again" = "Проверьте подключение к интернету и повторите попытку"
 "Please wait until the current operation is finished" = "Подождите завершения текущей операции"
+"Preparing" = "Preparing" # LOC:TODO
 "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" # LOC:TODO
 "Re-analyse all watched folders" = "Переанализировать все отслеживаемые папки"
 "Re-analyse this folder" = "Повторно проанализировать эту папку"
@@ -107,6 +114,9 @@
 "Remove from Watchlist" = "Удалить из списка отслеживания"
 "Reset" = "Сбросить"
 "Restart as Admin" = "Перезапустить от имени администратора"
+"SHOW QUEUE" = "SHOW QUEUE" # LOC:TODO
+"SKIPLIST SELECTION" = "SKIPLIST SELECTION" # LOC:TODO
+"Saved" = "Saved" # LOC:TODO
 "Savings" = "Экономия"
 "Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
 "Search by game name or SteamID..." = "Поиск по названию игры или SteamID..."
@@ -143,6 +153,7 @@
 "Use exclusions" = "Use exclusions" # LOC:TODO
 "Use recommended mode" = "Use recommended mode" # LOC:TODO
 "Version" = "Версия"
+"Waiting" = "Waiting" # LOC:TODO
 "Watch folder for changes" = "Отслеживать изменения в папке"
 "Watched Folders" = "Отслеживаемые папки"
 "Watcher" = "Наблюдение"
@@ -154,17 +165,21 @@
 "XPRESS 8K" = "XPRESS 8K" # LOC:TODO
 "Yes" = "Да"
 "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "В данный момент отслеживается папок ({0}). Закрытие CompactGUI прекратит их отслеживание.{1}{1}Вы уверены, что хотите выйти?"
+"Your settings have been reset to their default to accommodate the update" = "Your settings have been reset to their default to accommodate the update" # LOC:TODO
+"Your settings have been reset to their default." = "Your settings have been reset to their default." # LOC:TODO
 "can be saved" = "can be saved" # LOC:TODO
 "contained files" = "содержит файлов"
 "day(s)" = "дн."
 "edit" = "изменить"
 "edit skipped filetypes" = "изменить список пропускаемых типов"
+"estimated savings" = "estimated savings" # LOC:TODO
 "every" = "каждые"
 "games" = "games" # LOC:TODO
 "just now" = "только что"
 "last compressed:" = "последнее сжатие:"
 "last modified:" = "последнее изменение:"
 "recommended" = "recommended" # LOC:TODO
+"saved" = "saved" # LOC:TODO
 "select a folder" = "выберите папку"
 "uncompressed size" = "исходный размер"
 "{0:0} days ago" = "{0:0} дн. назад"
@@ -194,6 +209,15 @@
 "MB" = "Мб"
 "PB" = "Пб"
 "TB" = "Тб"
+
+[context."Folder Compression Queue"]
+"COMPLETED" = "COMPLETED" # LOC:TODO
+"Clear completed" = "Clear completed" # LOC:TODO
+"Expected savings" = "Expected savings" # LOC:TODO
+"PENDING" = "PENDING" # LOC:TODO
+"Queue" = "Queue" # LOC:TODO
+"To process" = "To process" # LOC:TODO
+"{0} of {1} completed" = "{0} of {1} completed" # LOC:TODO
 
 [context."Folder status"]
 "Unknown" = "Неизвестно"
@@ -227,10 +251,7 @@
 
 [obsolete]
 "Add Folder to Queue" = "Добавить папку в очередь"
-"Add all to queue" = "Add all to queue" # LOC:TODO
-"Apply Settings to All Items in Queue" = "Apply Settings to All Items in Queue" # LOC:TODO
 "Apply to all" = "Применить ко всем"
-"COMPRESSION SUMMARY" = "COMPRESSION SUMMARY" # LOC:TODO
 "Compression Mode" = "Режим сжатия"
 "Configuration" = "Конфигурация"
 "Custom list — {0} entries" = "Свой список — {0} записей"
@@ -248,18 +269,13 @@
 "Last analysed" = "Последний анализ"
 "OK" = "хорошо"
 "Off" = "Выкл"
-"Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " = "Quickly parses over files and estimates their compression ratio without writing to disk.                                                    This will likely be super laggy on HDDs!                                                    " # LOC:TODO
 "Results State" = "Состояние результатов"
 "Skip file types likely to compress poorly" = "Пропускать типы файлов, которые сжимаются плохо"
 "Skip file types specified in settings" = "Пропускать типы файлов, указанные в настройках"
 "Smart: {0} skipped" = "Умный: {0} пропущено"
 "Space Saved" = "Сэкономлено места"
-"Use global skiplist" = "Use global skiplist" # LOC:TODO
-"Use recommended compression level" = "Use recommended compression level" # LOC:TODO
 "Use skip list" = "Использовать список исключений"
-"Use smart skiplist" = "Use smart skiplist" # LOC:TODO
 "Welcome" = "Добро пожаловать"
 "decayed" = "устарело"
 "files will be skipped" = "фл. будет пропущено"
 "not configured" = "не настроено"
-"{0} files will be skipped" = "{0} files will be skipped" # LOC:TODO

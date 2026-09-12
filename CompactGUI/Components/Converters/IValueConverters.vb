@@ -179,12 +179,12 @@ End Class
 Public Class QueueStatusToStringConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Select Case CType(value, ActionState)
-            Case ActionState.Idle, ActionState.Waiting : Return "Waiting"
-            Case ActionState.Analysing : Return "Preparing"
-            Case ActionState.Working : Return "Working"
-            Case ActionState.Paused : Return "Paused"
-            Case ActionState.Results : Return "Complete"
-            Case Else : Return "Failed"
+            Case ActionState.Idle, ActionState.Waiting : Return "Waiting".LT()
+            Case ActionState.Analysing : Return "Preparing".LT()
+            Case ActionState.Working : Return "Working".LT()
+            Case ActionState.Paused : Return "Paused".LT()
+            Case ActionState.Results : Return "Complete".LT()
+            Case Else : Return "Failed".LT()
         End Select
     End Function
 

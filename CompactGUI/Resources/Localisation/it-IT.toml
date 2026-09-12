@@ -23,6 +23,7 @@
 "Awaiting Compression" = "In attesa di compressione"
 "Background Watcher Settings" = "Impostazioni monitoraggio in background"
 "COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
+"COMPRESSION MODE " = "COMPRESSION MODE " # LOC:TODO
 "Cancel" = "Annulla"
 "Cancel Background Compressor" = "Annulla compressione in background"
 "Cancel operation" = "Annulla operazione"
@@ -33,6 +34,7 @@
 "Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "Clicca per scaricare"
 "CompactGUI" = "CompactGUI"
+"Complete" = "Complete" # LOC:TODO
 "Compress" = "Compress" # LOC:TODO
 "Compress Again" = "Comprimi di nuovo"
 "Compress All Now" = "Comprimi tutto ora"
@@ -55,9 +57,11 @@
 "Drive unavailable" = "Unità non disponibile"
 "Edit list" = "Edit list" # LOC:TODO
 "Estimate Compression for non-Steam Folders (beta)" = "Stima compressione per cartelle non-Steam (beta)"
+"Estimated Size" = "Estimated Size" # LOC:TODO
 "Estimated size" = "Dimensione stimata"
 "Exit" = "Esci"
 "Extensions in this folder" = "Estensioni in questa cartella"
+"Failed" = "Failed" # LOC:TODO
 "Failed to submit to wiki" = "Invio al wiki fallito"
 "Filetype Management" = "Gestione tipi di file"
 "Filter" = "Filter" # LOC:TODO
@@ -95,8 +99,11 @@
 "Open Settings Folder" = "Apri cartella impostazioni"
 "Operation cancelled." = "Operazione annullata."
 "Operation failed: {0}" = "Operazione fallita: {0}"
+"Original Size" = "Original Size" # LOC:TODO
+"Paused" = "Paused" # LOC:TODO
 "Please check your internet connection and try again" = "Controlla la connessione internet e riprova"
 "Please wait until the current operation is finished" = "Attendi il termine dell'operazione corrente"
+"Preparing" = "Preparing" # LOC:TODO
 "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "Analizza rapidamente i file e stima il loro rapporto di compressione senza scrivere su disco. Su HDD sarà molto lento!"
 "Re-analyse all watched folders" = "Rianalizza tutte le cartelle monitorate"
 "Re-analyse this folder" = "Rianalizza questa cartella"
@@ -107,6 +114,9 @@
 "Remove from Watchlist" = "Rimuovi dalla lista di monitoraggio"
 "Reset" = "Reimposta"
 "Restart as Admin" = "Riavvia come Admin"
+"SHOW QUEUE" = "SHOW QUEUE" # LOC:TODO
+"SKIPLIST SELECTION" = "SKIPLIST SELECTION" # LOC:TODO
+"Saved" = "Saved" # LOC:TODO
 "Savings" = "Risparmio"
 "Scanning installed Steam games..." = "Scansione giochi Steam installati..."
 "Search by game name or SteamID..." = "Cerca per nome gioco o SteamID..."
@@ -143,6 +153,7 @@
 "Use exclusions" = "Use exclusions" # LOC:TODO
 "Use recommended mode" = "Use recommended mode" # LOC:TODO
 "Version" = "Versione"
+"Waiting" = "Waiting" # LOC:TODO
 "Watch folder for changes" = "Monitora modifiche nella cartella"
 "Watched Folders" = "Cartelle monitorate"
 "Watcher" = "Monitoraggio"
@@ -154,17 +165,21 @@
 "XPRESS 8K" = "XPRESS 8K"
 "Yes" = "Sì"
 "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "Attualmente hai {0} cartelle monitorate. Chiudendo CompactGUI verranno interrotte.{1}{1}Sei sicuro di voler uscire?"
+"Your settings have been reset to their default to accommodate the update" = "Your settings have been reset to their default to accommodate the update" # LOC:TODO
+"Your settings have been reset to their default." = "Your settings have been reset to their default." # LOC:TODO
 "can be saved" = "possono essere risparmiati"
 "contained files" = "file contenuti"
 "day(s)" = "giorno(i)"
 "edit" = "modifica"
 "edit skipped filetypes" = "modifica tipi di file esclusi"
+"estimated savings" = "estimated savings" # LOC:TODO
 "every" = "ogni"
 "games" = "giochi"
 "just now" = "proprio ora"
 "last compressed:" = "ultima compressione:"
 "last modified:" = "ultima modifica:"
 "recommended" = "recommended" # LOC:TODO
+"saved" = "saved" # LOC:TODO
 "select a folder" = "seleziona una cartella"
 "uncompressed size" = "dimensione non compressa"
 "{0:0} days ago" = "{0:0} giorni fa"
@@ -194,6 +209,15 @@
 "MB" = "MB"
 "PB" = "PB"
 "TB" = "TB"
+
+[context."Folder Compression Queue"]
+"COMPLETED" = "COMPLETED" # LOC:TODO
+"Clear completed" = "Clear completed" # LOC:TODO
+"Expected savings" = "Expected savings" # LOC:TODO
+"PENDING" = "PENDING" # LOC:TODO
+"Queue" = "Queue" # LOC:TODO
+"To process" = "To process" # LOC:TODO
+"{0} of {1} completed" = "{0} of {1} completed" # LOC:TODO
 
 [context."Folder status"]
 "Unknown" = "Sconosciuto"

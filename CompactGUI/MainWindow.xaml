@@ -119,7 +119,7 @@
                                    Command="{Binding ToggleQueueSidebarCommand}"
                                    RenderTransformOrigin="0.5,0.5"
                                    Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                            <TextBlock FontSize="12" FontWeight="SemiBold" Text="SHOW QUEUE" TextOptions.TextFormattingMode="Display">
+                            <TextBlock FontSize="12" FontWeight="SemiBold" loc:L.Value="SHOW QUEUE" TextOptions.TextFormattingMode="Display">
                                 <TextBlock.LayoutTransform>
                                     <RotateTransform Angle="-90" />
                                 </TextBlock.LayoutTransform>

@@ -136,7 +136,7 @@
                             <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#65dc9d"
                                        Text="{Binding BytesSaved, Converter={StaticResource BytesToReadableConverter}}" />
                             <TextBlock Margin="3 0 0 0"
-                                       FontSize="10" Foreground="#65dc9d" Text="saved" />
+                                       FontSize="10" Foreground="#65dc9d" loc:L.Value="saved" />
                         </StackPanel>
                         <StackPanel Margin="0 8 0 0" HorizontalAlignment="Right" Orientation="Horizontal">
                             <StackPanel.Style>
@@ -160,7 +160,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
                             <TextBlock Margin="3 0 0 0"
-                                       FontSize="10" Foreground="#45c1e8" Text="saved" />
+                                       FontSize="10" Foreground="#45c1e8" loc:L.Value="saved" />
                         </StackPanel>
                     </StackPanel>
                     <ui:Button Grid.Column="1"
@@ -228,7 +228,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock FontSize="17" FontWeight="SemiBold" Text="Queue" TextOptions.TextFormattingMode="Display" />
+                    <TextBlock FontSize="17" FontWeight="SemiBold" loc:L.Value="Queue" loc:L.Context="Folder Compression Queue" TextOptions.TextFormattingMode="Display" />
                     <Border Margin="8 0 0 0" Padding="12 6"
                             Background="#3373808C" CornerRadius="9" TextOptions.TextFormattingMode="Display">
                         <TextBlock FontSize="10" FontWeight="SemiBold" Text="{Binding Folders.Count, Mode=OneWay}" />
@@ -240,7 +240,7 @@
                            Click="AddFolderButton_Click" TextOptions.TextFormattingMode="Display">
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Margin="0 0 5 0" Symbol="Add12" />
-                        <TextBlock VerticalAlignment="Center" FontSize="12" Text="Add" />
+                        <TextBlock VerticalAlignment="Center" FontSize="12" loc:L.Value="Add" />
                     </StackPanel>
                 </ui:Button>
                 <ui:Button Grid.Column="2"
@@ -265,7 +265,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock FontSize="10" FontWeight="SemiBold"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="PENDING" />
+                                   loc:L.Value="PENDING" loc:L.Context="Folder Compression Queue" />
                         <Border Grid.Column="1"
                                 Height="1"
                                 Margin="8 0" VerticalAlignment="Center"
@@ -295,7 +295,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock FontSize="10" FontWeight="SemiBold"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="COMPLETED" />
+                                   loc:L.Value="COMPLETED" loc:L.Context="Folder Compression Queue"/>
                         <Border Grid.Column="1"
                                 Height="1"
                                 Margin="8 0" VerticalAlignment="Center"
@@ -320,13 +320,18 @@
             <StackPanel Grid.Row="2" Margin="0 12 0 0" Visibility="{Binding HomeViewIsFresh, Mode=OneWay, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
                 <Grid>
                     <TextBlock HorizontalAlignment="Left" FontSize="11" Foreground="{StaticResource CardForegroundDisabled}">
-                        <Run Text="{Binding CompletedFolderCount, Mode=OneWay}" /><Run Text=" of " /><Run Text="{Binding Folders.Count, Mode=OneWay}" /><Run Text=" completed" />
+                        <TextBlock.Text>
+                            <loc:MultiBinding Format="{}{0} of {1} completed" Context="Folder Compression Queue">
+                                <Binding Path="CompletedFolderCount" Mode="OneWay" />
+                                <Binding Path="Folders.Count" Mode="OneWay" />
+                            </loc:MultiBinding>
+                        </TextBlock.Text>
                     </TextBlock>
                     <ui:Button Padding="0" HorizontalAlignment="Right"
                                Background="Transparent" BorderThickness="0"
                                Command="{Binding ClearCompletedCommand}"
                                Visibility="{Binding HasCompressedFolders, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock FontSize="11" Foreground="{StaticResource CardForegroundDisabled}" Text="Clear completed" />
+                        <TextBlock FontSize="11" Foreground="{StaticResource CardForegroundDisabled}" loc:L.Value="Clear completed" loc:L.Context="Folder Compression Queue" />
                     </ui:Button>
                 </Grid>
                 <ProgressBar Height="6"
@@ -344,7 +349,7 @@
                         <TextBlock HorizontalAlignment="Center"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="To process" />
+                                   loc:L.Value="To process" loc:L.Context="Folder Compression Queue"/>
                         <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
                                    FontSize="11" FontWeight="SemiBold"
                                    Text="{Binding ToProcessSize, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
@@ -353,7 +358,7 @@
                         <TextBlock HorizontalAlignment="Center"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="Expected savings" />
+                                   loc:L.Value="Expected savings" loc:L.Context="Folder Compression Queue"/>
                         <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
                                    FontSize="11" FontWeight="SemiBold" Foreground="#45c1e8"
                                    Text="{Binding ExpectedSavings, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
@@ -362,7 +367,7 @@
                         <TextBlock HorizontalAlignment="Center"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   Text="Saved" />
+                                   loc:L.Value="Saved" />
                         <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
                                    FontSize="11" FontWeight="SemiBold" Foreground="#65dc9d"
                                    Text="{Binding TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />

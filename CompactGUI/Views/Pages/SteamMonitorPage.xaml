@@ -1060,7 +1060,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" Text="COMPRESSION MODE " />
+                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" loc:L.Value="COMPRESSION MODE " />
                     <CheckBox Margin="-10 0 0 0" Content="{loc:T Use recommended mode}" IsChecked="{Binding UseRecommendedCompressionLevel}" />
                     <ComboBox Grid.Column="2"
                               Height="36"
@@ -1090,7 +1090,7 @@
                 <Separator Grid.Column="1" Margin="10 0 10 0" />
 
                 <StackPanel Grid.Column="2">
-                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" Text="SKIPLIST SELECTION" />
+                    <TextBlock FontSize="12" Foreground="{StaticResource TextControlForegroundDisabled}" loc:L.Value="SKIPLIST SELECTION" />
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Grid.Column="3"
                                   Margin="-10 0 0 0"

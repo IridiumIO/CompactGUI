@@ -56,7 +56,7 @@
                            Margin="30 0 0 6" HorizontalAlignment="Left"
                            FontSize="12" FontWeight="SemiBold"
                            Foreground="{StaticResource TextControlForegroundDisabled}"
-                           Text="estimated savings" TextOptions.TextFormattingMode="Display" />
+                           loc:L.Value="estimated savings" TextOptions.TextFormattingMode="Display" />
 
             </StackPanel>
             <Separator Grid.Column="1"
@@ -82,7 +82,7 @@
 
                 <TextBlock FontSize="11" FontWeight="SemiBold"
                            Foreground="{StaticResource TextControlForegroundDisabled}"
-                           Text="Original Size" TextOptions.TextFormattingMode="Display" />
+                           loc:L.Value="Original Size" TextOptions.TextFormattingMode="Display" />
                 <TextBlock Grid.Row="1"
                            FontSize="20" FontWeight="SemiBold"
                            Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
@@ -97,7 +97,7 @@
                 <TextBlock Grid.Column="4"
                            FontSize="11" FontWeight="SemiBold"
                            Foreground="{StaticResource TextControlForegroundDisabled}"
-                           Text="Estimated Size" TextOptions.TextFormattingMode="Display" />
+                           loc:L.Value="Estimated Size" TextOptions.TextFormattingMode="Display" />
                 <TextBlock Grid.Row="1" Grid.Column="4"
                            FontSize="20" FontWeight="SemiBold">
                     <TextBlock.Text>
