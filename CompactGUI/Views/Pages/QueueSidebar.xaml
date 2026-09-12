@@ -32,11 +32,11 @@
                     </Grid.ColumnDefinitions>
                     <Border Margin="-5 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"
                             Background="Transparent" Cursor="SizeAll">
-                        <TextBlock
-                                   FontSize="16" VerticalAlignment="Center"
+                        <TextBlock VerticalAlignment="Center"
+                                   FontSize="16"
                                    Foreground="{StaticResource CardForegroundDisabled}"
-                                   IsHitTestVisible="False" Text="⋮⋮" >
-                
+                                   IsHitTestVisible="False" Text="⋮⋮">
+
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -90,6 +90,9 @@
                         </Grid>
                     </Grid>
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <StackPanel.RenderTransform>
+                            <TranslateTransform X="0" />
+                        </StackPanel.RenderTransform>
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">
                                 <Setter Property="Opacity" Value="1" />
@@ -98,6 +101,7 @@
                                         <DataTrigger.EnterActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="0" To="-20" Duration="0:0:0.2" />
                                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
@@ -105,11 +109,11 @@
                                         <DataTrigger.ExitActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="-20" To="0" Duration="0:0:0.2" />
                                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </DataTrigger.ExitActions>
-                                        <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -165,6 +169,9 @@
                                BorderBrush="{StaticResource PaletteRedBrush}"
                                Command="{Binding Tag.RemoveFolderCommand, RelativeSource={RelativeSource AncestorType=Border}}"
                                CommandParameter="{Binding}">
+                        <ui:Button.RenderTransform>
+                            <TranslateTransform X="20" />
+                        </ui:Button.RenderTransform>
                         <ui:SymbolIcon FontSize="11" Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
                         <ui:Button.Style>
                             <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
@@ -174,6 +181,7 @@
                                         <DataTrigger.EnterActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="20" To="0" Duration="0:0:0.2" />
                                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
@@ -181,6 +189,7 @@
                                         <DataTrigger.ExitActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="0" To="20" Duration="0:0:0.2" />
                                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
@@ -267,11 +276,11 @@
                                    Text="{Binding UpNextFolderCount, Mode=OneWay}" />
                     </Grid>
                     <ui:ListView x:Name="UpNextListView"
-                                 Padding="0" dd:DragDrop.UseDefaultDragAdorner="True"
-dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
-dd:DragDrop.DefaultDragAdornerOpacity="1"
+                                 Padding="0"
+                                 dd:DragDrop.DefaultDragAdornerOpacity="1"
                                  dd:DragDrop.DropHandler="{Binding QueueDropHandler}"
-                                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Background="Transparent" BorderThickness="0"
+                                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True" Background="Transparent"
+                                 BorderThickness="0"
                                  ItemContainerStyle="{StaticResource QueueListItemStyle}"
                                  ItemTemplate="{StaticResource QueueItemTemplate}"
                                  ItemsSource="{Binding UpNextFolders}"
@@ -308,8 +317,7 @@ dd:DragDrop.DefaultDragAdornerOpacity="1"
                 </StackPanel>
             </ScrollViewer>
             <Separator Grid.Row="2" VerticalAlignment="Top" />
-            <StackPanel Grid.Row="2" Margin="0 12 0 0"
-                        Visibility="{Binding HomeViewIsFresh, Mode=OneWay, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+            <StackPanel Grid.Row="2" Margin="0 12 0 0" Visibility="{Binding HomeViewIsFresh, Mode=OneWay, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
                 <Grid>
                     <TextBlock HorizontalAlignment="Left" FontSize="11" Foreground="{StaticResource CardForegroundDisabled}">
                         <Run Text="{Binding CompletedFolderCount, Mode=OneWay}" /><Run Text=" of " /><Run Text="{Binding Folders.Count, Mode=OneWay}" /><Run Text=" completed" />
@@ -337,7 +345,7 @@ dd:DragDrop.DefaultDragAdornerOpacity="1"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="To process" />
-                        <TextBlock HorizontalAlignment="Center" Margin="0 5 0 0"
+                        <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
                                    FontSize="11" FontWeight="SemiBold"
                                    Text="{Binding ToProcessSize, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
                     </StackPanel>
@@ -346,7 +354,7 @@ dd:DragDrop.DefaultDragAdornerOpacity="1"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="Expected savings" />
-                        <TextBlock HorizontalAlignment="Center" Margin="0 5 0 0"
+                        <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
                                    FontSize="11" FontWeight="SemiBold" Foreground="#45c1e8"
                                    Text="{Binding ExpectedSavings, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
                     </StackPanel>
@@ -355,7 +363,7 @@ dd:DragDrop.DefaultDragAdornerOpacity="1"
                                    FontSize="10"
                                    Foreground="{StaticResource CardForegroundDisabled}"
                                    Text="Saved" />
-                        <TextBlock HorizontalAlignment="Center" Margin="0 5 0 0"
+                        <TextBlock Margin="0 5 0 0" HorizontalAlignment="Center"
                                    FontSize="11" FontWeight="SemiBold" Foreground="#65dc9d"
                                    Text="{Binding TotalSaved, Mode=OneWay, Converter={StaticResource BytesToReadableConverter}}" />
                     </StackPanel>
