@@ -1,12 +1,13 @@
-# CompactGUI Localisation
+﻿# CompactGUI Localisation
 # @version 1
+# @programversion 4.0.0-beta.11
 
 # ===================
 # Translations
 
 "Add" = "추가하기"
-"Add Folder to Queue" = "새로운 폴더 추가"
 "Add a custom folder to the watchlist" = "모니터링 리스트에 커스텀 폴더 추가"
+"Add selected to queue" = "Add selected to queue" # LOC:TODO
 "Add to Compression Queue" = "압축 대기열에 추가"
 "Add to compression queue" = "압축 대기열에 추가"
 "Add to right-click context menu" = "우클릭 메뉴에 추가"
@@ -16,19 +17,23 @@
 "Aggression of online skiplist" = "온라인 제외 리스트 적용 강도"
 "Always show details on Compression Mode buttons" = "압축 모드 버튼에 세부 정보 항상 표시"
 "Analysing" = "분석 중"
+"Analysing..." = "Analysing..." # LOC:TODO
 "Applied to all folders" = "모든 폴더에 적용되었습니다"
-"Apply to all" = "모든 폴더에 적용"
 "Ascending" = "오름차순"
 "Awaiting Compression" = "압축 대기 중"
 "Background Watcher Settings" = "백그라운드 모니터링 설정"
+"COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
 "Cancel" = "취소"
 "Cancel Background Compressor" = "백그라운드 압축 취소"
 "Cancel operation" = "작업 취소"
 "Cancelling..." = "취소 중..."
 "Cannot remove folder" = "폴더를 대기열에서 제거할 수 없습니다"
 "Check for pre-release updates" = "프리릴리스 업데이트까지 확인"
+"Choose Compression" = "Choose Compression" # LOC:TODO
+"Clear filters" = "Clear filters" # LOC:TODO
 "Click to download" = "클릭해서 다운로드"
 "CompactGUI" = "CompactGUI"
+"Compress" = "Compress" # LOC:TODO
 "Compress Again" = "재압축"
 "Compress All Now" = "전부 압축"
 "Compress Selected" = "선택한 폴더 압축"
@@ -37,25 +42,25 @@
 "Compressing..." = "압축 중..."
 "Compression" = "압축"
 "Compression DB" = "압축 데이터베이스"
-"Compression Mode" = "압축 모드"
 "Compression Settings" = "압축 설정"
 "Compression Summary" = "압축 결과"
 "Compression options have been applied to all folders" = "압축 설정이 모든 폴더에 적용되었습니다"
-"Configuration" = "설정"
 "Current Size" = "현재 크기"
 "Database Results" = "압축 데이터 목록"
 "Descending" = "내림차순"
+"Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "DirectStorage"
+"Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "압축하지 않기"
 "Drive unavailable" = "드라이브 사용 불가"
-"Edit skip list for this folder" = "이 폴더에서 제외할 항목 편집"
+"Edit list" = "Edit list" # LOC:TODO
 "Estimate Compression for non-Steam Folders (beta)" = "Steam 외의 폴더도 압축량 추정 (베타)"
 "Estimated size" = "예상 크기"
 "Exit" = "종료"
 "Extensions in this folder" = "이 폴더의 파일 확장자"
 "Failed to submit to wiki" = "위키 제출에 실패했습니다"
-"Files Compressed" = "압축한 파일 수"
 "Filetype Management" = "파일 확장자 관리"
+"Filter" = "Filter" # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Steam 게임은 데이터베이스를, 그 외 폴더는 분석 결과를 바탕으로 제외할 파일 형식을 자동으로 정합니다."
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "다른 사용자들이 제출한 정보를 바탕으로 파일 형식을 얼마나 적극적으로 제외할지 설정합니다.\n\n일반적으로는 '약하게'가 적합하며, 더 강하게 설정하면 압축이 잘 되는 파일까지 제외할 수 있습니다.\n\nSteam 게임에서만 적용됩니다."
 "Game" = "게임"
@@ -64,13 +69,16 @@
 "Go to Database Results" = "압축 데이터 목록으로 이동"
 "HDDs only use 1 thread" = "하드 디스크일 경우 하나의 스레드만 사용"
 "Home" = "홈"
+"Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "공통으로 제외할 파일 형식 포함"
+"Include smart skiplist" = "Include smart skiplist" # LOC:TODO
 "Include smart skipped file types" = "자동으로 제외할 파일 형식 포함"
 "Insufficient permission to access this folder" = "이 폴더에 접근할 권한이 부족합니다"
 "LZX" = "LZX"
 "Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "마지막 확인: {0:yyyy년 M월 d일 HH:mm:ss}"
 "Last analysed {0}" = "마지막 분석 시점: {0}"
 "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "마지막 실행 시점: {0:yyyy년 M월 d일 HH:mm:ss}"
+"Library location" = "Library location" # LOC:TODO
 "Manage local skipped filetypes" = "압축하지 않을 파일 확장자 관리"
 "Max Savings" = "최대 절감률"
 "Maximum Compression Threads" = "최대 압축 스레드 수"
@@ -93,6 +101,7 @@
 "Re-analyse all watched folders" = "모니터링 중인 모든 폴더 재분석"
 "Re-analyse this folder" = "이 폴더 재분석"
 "Recently Updated" = "최근 업데이트됨"
+"Recommended Action" = "Recommended Action" # LOC:TODO
 "Reload Languages.\nChecks online for updated language definitions" = "언어 새로고침\n온라인에서 업데이트된 번역 파일을 확인합니다"
 "Reload Steam Library list" = "Steam 라이브러리 목록 새로고침"
 "Remove from Watchlist" = "모니터링 리스트에서 제거"
@@ -101,11 +110,15 @@
 "Savings" = "절감률"
 "Scanning installed Steam games..." = "설치된 Steam 게임 스캔 중..."
 "Search by game name or SteamID..." = "게임 이름 또는 Steam ID로 검색..."
+"Select" = "Select" # LOC:TODO
 "Select a folder to compress" = "압축할 폴더 선택"
+"Select all" = "Select all" # LOC:TODO
+"Select all compressable" = "Select all compressable" # LOC:TODO
+"Select all visible games" = "Select all visible games" # LOC:TODO
 "Settings" = "설정"
 "Show notification on completion" = "완료 시 알림"
+"Sort" = "Sort" # LOC:TODO
 "Sort By" = "정렬 기준"
-"Space Saved" = "절약된 공간"
 "Start CompactGUI in system tray" = "CompactGUI를 시스템 트레이에서 시작"
 "Status" = "상태"
 "Steam Library" = "Steam 라이브러리"
@@ -127,7 +140,8 @@
 "Update Available ▸ Version {0}" = "업데이트가 가능합니다 ▸ 버전: {0}"
 "Update Settings" = "업데이트 설정"
 "Update in Steam" = "Steam에서 업데이트"
-"Use skip list" = "제외 리스트 사용"
+"Use exclusions" = "Use exclusions" # LOC:TODO
+"Use recommended mode" = "Use recommended mode" # LOC:TODO
 "Version" = "버전"
 "Watch folder for changes" = "폴더 변경 사항 모니터링"
 "Watched Folders" = "모니터링 리스트"
@@ -150,12 +164,12 @@
 "just now" = "방금 전"
 "last compressed:" = "마지막 압축:"
 "last modified:" = "마지막 수정:"
+"recommended" = "recommended" # LOC:TODO
 "select a folder" = "폴더를 선택하세요"
 "uncompressed size" = "압축 전 크기"
 "{0:0} days ago" = "{0:0}일 전"
 "{0:0} hours ago" = "{0:0}시간 전"
 "{0:0} minutes ago" = "{0:0}분 전"
-"{0} files will be skipped" = "{0}개의 파일이 제외됩니다"
 "{0} saved" = "{0} 절약됨"
 "{0}% decayed" = "압축 효과 {0}% 감소"
 
@@ -210,3 +224,14 @@
 
 [context."Storage savings"]
 "saved" = "절약됨"
+
+[obsolete]
+"Add Folder to Queue" = "새로운 폴더 추가"
+"Apply to all" = "모든 폴더에 적용"
+"Compression Mode" = "압축 모드"
+"Configuration" = "설정"
+"Edit skip list for this folder" = "이 폴더에서 제외할 항목 편집"
+"Files Compressed" = "압축한 파일 수"
+"Space Saved" = "절약된 공간"
+"Use skip list" = "제외 리스트 사용"
+"{0} files will be skipped" = "{0}개의 파일이 제외됩니다"
