@@ -43,7 +43,7 @@
         <ui:NavigationView x:Name="NavigationView"
                            Grid.Row="1"
                            Margin="0 10 0 0"
-                           IsBackButtonVisible="Collapsed" PaneDisplayMode="Top" Transition="FadeIn">
+                           IsBackButtonVisible="Collapsed" Loaded="NavigationView_Loaded" PaneDisplayMode="Top" Transition="FadeIn">
             <ui:NavigationView.MenuItems>
 
 
@@ -125,16 +125,24 @@
                             </TextBlock>
 
                         </ui:Button>
-
-                        <Border x:Name="QueueHostBorder"
+                        
+                        <Border Width="{Binding ElementName=QueueHostBorder, Path=ActualWidth}"
                                 Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch"
-                                Background="#FF445667" BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="6"
-                                Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Background="#FFFFFFFF" BorderThickness="2" CornerRadius="6" Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="30" Opacity="0.6" />
+                                <DropShadowEffect BlurRadius="20" Direction="0" Opacity="0.6" />
                             </Border.Effect>
+                        </Border>
+                        
+                        <Border x:Name="QueueHostBorder"
+                                Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch" local:LiveBlurBackground.BlurOpacity="0.6" 
+                                local:LiveBlurBackground.BlurRadius="50" local:LiveBlurBackground.EnableBlur="True"  Background="#FF445667" BorderBrush="#40FFFFFF"
+                                BorderThickness="1" CornerRadius="6"
+                                Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+
                             <local:QueueSidebar Width="370" />
                         </Border>
+
                     </Grid>
 
                     <ui:SnackbarPresenter x:Name="SnackbarPresenter" Panel.ZIndex="1" />

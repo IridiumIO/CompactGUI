@@ -119,4 +119,11 @@ Class MainWindow : Implements INavigationWindow, INotifyPropertyChanged
         _SettingsService.AppSettings.WindowTop = Top
         _SettingsService.SaveSettings()
     End Sub
+
+    Private Sub NavigationView_Loaded(sender As Object, e As RoutedEventArgs)
+        NavigationView.ApplyTemplate()
+        Dim contentPresenter = TryCast(NavigationView.Template.FindName("PART_NavigationViewContentPresenter", NavigationView), Visual)
+        If contentPresenter Is Nothing Then Throw New InvalidOperationException("fuck")
+        LiveBlurBackground.SetSource(QueueHostBorder, contentPresenter)
+    End Sub
 End Class

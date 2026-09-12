@@ -219,8 +219,9 @@
                                     Context='Steam Library Tab Headings'}" />
         </Grid>
 
-        <ListView x:Name="SteamGamesList"
-                  Grid.Row="4"
+        <Grid x:Name="SteamGamesListBlurSource" Grid.Row="4">
+             <ListView x:Name="SteamGamesList"
+                  Grid.Row="4" TextOptions.TextRenderingMode="Grayscale"
                   Padding="0" HorizontalContentAlignment="Stretch"
                   Background="Transparent" BorderThickness="0"
                   ItemsSource="{Binding FilteredSteamGames}"
@@ -473,6 +474,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        </Grid>
+       
 
         <Grid Grid.Row="3" Grid.RowSpan="2"
               Margin="0 10 0 0"
@@ -1034,10 +1037,22 @@
             </Border>
         </Grid>
 
-        <Border Grid.Row="4"
-                Margin="20 0 40 20" Padding="15 16" HorizontalAlignment="Center" VerticalAlignment="Bottom" Panel.ZIndex="20"
+ 
+         <Border Grid.Row="4" 
+         Margin="20 0 40 12"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Panel.ZIndex="20"
+         Background="#445667" BorderThickness="1" CornerRadius="8" Width="{Binding ElementName=Compression_Options_Overlay, Path=ActualWidth}" Height="{Binding ElementName=Compression_Options_Overlay, Path=ActualHeight}"
+         Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
+             <Border.Effect>
+                 <DropShadowEffect BlurRadius="20" Opacity="0.6"/>
+             </Border.Effect>
+         </Border>
+        
+        
+        <Border x:Name="Compression_Options_Overlay" Grid.Row="4"   local:LiveBlurBackground.EnableBlur="True" local:LiveBlurBackground.Source="{Binding ElementName=SteamGamesList}" local:LiveBlurBackground.BlurOpacity="0.7" 
+                Margin="20 0 40 12" Padding="15 16" HorizontalAlignment="Center" VerticalAlignment="Bottom" Panel.ZIndex="20"
                 Background="#445667" BorderBrush="#50FFFFFF" BorderThickness="1" CornerRadius="8"
                 Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
+            
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
