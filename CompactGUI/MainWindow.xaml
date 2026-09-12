@@ -112,6 +112,50 @@
 
             <ui:NavigationView.ContentOverlay>
                 <Grid>
+                    <Grid.Resources>
+                        <Style x:Key="QueueOverlayFadeStyle" TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="IsHitTestVisible" Value="False" />
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform X="-24" />
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsQueueSidebarOpen}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="IsHitTestVisible" Value="True" />
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                                 From="-24" To="0" Duration="0:0:0.1" />
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <!-- Keep the overlay in the visual tree until the fade-out completes. -->
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.18" Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                                 From="0" To="-24" Duration="0:0:0.1" />
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
                     <Grid x:Name="QueueOverlayHost">
                         <ui:Button Margin="0" Padding="5 20" HorizontalAlignment="Left" VerticalAlignment="Center"
                                    Background="#43697d"
@@ -128,7 +172,8 @@
                         
                         <Border Width="{Binding ElementName=QueueHostBorder, Path=ActualWidth}"
                                 Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch"
-                                Background="#FFFFFFFF" BorderThickness="2" CornerRadius="6" Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Background="Transparent" BorderThickness="2" CornerRadius="6"
+                                Style="{StaticResource QueueOverlayFadeStyle}">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="20" Direction="0" Opacity="0.6" />
                             </Border.Effect>
@@ -136,10 +181,12 @@
                         
                         <Border x:Name="QueueHostBorder"
                                 Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch" local:LiveBlurBackground.BlurOpacity="0.6" 
-                                local:LiveBlurBackground.BlurRadius="50" local:LiveBlurBackground.EnableBlur="True"  Background="#FF445667" BorderBrush="#40FFFFFF"
-                                BorderThickness="1" CornerRadius="6"
-                                Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                                 local:LiveBlurBackground.BlurRadius="50" local:LiveBlurBackground.EnableBlur="True"  Background="#FF445667" BorderBrush="#40FFFFFF"
+                                 BorderThickness="1" CornerRadius="6"
+                                 Style="{StaticResource QueueOverlayFadeStyle}">
+<Border.Effect>
+    <DropShadowEffect BlurRadius="20" Direction="0" Opacity="0.4" />
+</Border.Effect>
                             <local:QueueSidebar Width="370" />
                         </Border>
 

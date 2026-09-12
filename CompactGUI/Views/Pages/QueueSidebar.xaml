@@ -335,7 +335,7 @@
                     </ui:Button>
                 </Grid>
                 <ProgressBar Height="6"
-                             Margin="0 5 0 10"
+                             Margin="0 5 0 10" BorderThickness="0"
                              Background="{StaticResource CardBackgroundPressed}"
                              Foreground="#65dc9d" Maximum="100"
                              Value="{Binding QueueCompletionProgress, Mode=OneWay}" />
