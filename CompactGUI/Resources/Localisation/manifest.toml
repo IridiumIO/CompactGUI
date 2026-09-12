@@ -8,6 +8,10 @@ file = "en-AU.toml"
 version = 1
 file = "es-ES.toml"
 
+[locales."ko-KR"]
+version = 1
+file = "ko-KR.toml"
+
 [locales."ru-RU"]
 version = 1
 file = "ru-RU.toml"
@@ -15,3 +19,7 @@ file = "ru-RU.toml"
 [locales."zh-CN"]
 version = 1
 file = "zh-CN.toml"
+
+[locales."it-IT"]
+version = 1
+file = "it-IT.toml"
