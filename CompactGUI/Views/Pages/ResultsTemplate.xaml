@@ -194,12 +194,31 @@
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Orientation="Horizontal">
 
-            <ui:Button Width="140" Height="40"
+            <ui:Button MinWidth="140" Height="40"
                        Margin="0 0 0 10"
-                       loc:L.Value="Uncompress"
                        Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
                        Command="{Binding UncompressCommand}"
-                       FontSize="16" />
+                       FontSize="16">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock loc:L.Value="Uncompress" VerticalAlignment="Center"/>
+                    <Border Margin="10 0 0 0" Padding="10 5" VerticalAlignment="Center"
+                            Background="#80C42B1C" CornerRadius="4" ToolTipService.ShowOnDisabled="True"
+                            Visibility="{Binding Folder.HasInsufficientFreeSpaceForUncompression, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Margin="0 1 3 0"
+                                           FontSize="11"
+                                           Foreground="{StaticResource PaletteRedBrush}"
+                                           Symbol="Warning12" />
+                            <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="White" Text="Not enough space" TextOptions.TextFormattingMode="Display" />
+                        </StackPanel>
+                        <Border.ToolTip>
+                            <ToolTip>
+                                <TextBlock Text="Not enough free space to safely uncompress this folder" TextWrapping="Wrap" />
+                            </ToolTip>
+                        </Border.ToolTip>
+                    </Border>
+                </StackPanel>
+            </ui:Button>
             <ui:Button Width="140" Height="40"
                        Margin="40 0 0 10"
                        loc:L.Value="Compress Again"

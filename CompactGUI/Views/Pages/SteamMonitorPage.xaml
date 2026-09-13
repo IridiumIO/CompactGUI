@@ -220,262 +220,296 @@
         </Grid>
 
         <Grid x:Name="SteamGamesListBlurSource" Grid.Row="4">
-             <ListView x:Name="SteamGamesList"
-                  Grid.Row="4" TextOptions.TextRenderingMode="Grayscale"
-                  Padding="0" HorizontalContentAlignment="Stretch"
-                  Background="Transparent" BorderThickness="0"
-                  ItemsSource="{Binding FilteredSteamGames}"
-                  ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  SelectedItem="{Binding SelectedGame, Mode=TwoWay}"
-                  SelectionChanged="OnSteamGamesSelectionChanged" SelectionMode="Extended" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel" VirtualizingPanel.VirtualizationMode="Recycling"
-                  Visibility="Visible">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel>
-                        <VirtualizingStackPanel.Style>
-                            <Style TargetType="VirtualizingStackPanel">
-                                <Setter Property="Margin" Value="0" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding DataContext.HasSelectedGames, RelativeSource={RelativeSource AncestorType=ListView}}" Value="True">
-                                        <Setter Property="Margin" Value="0 0 0 90" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </VirtualizingStackPanel.Style>
-                    </VirtualizingStackPanel>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Padding" Value="0" />
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <ContentPresenter Margin="0 0 20 0" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="0 0 0 8" Padding="14 10"
-                            CornerRadius="6"
-                            Tag="{Binding DataContext, ElementName=PageRoot}">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Background" Value="{StaticResource CardBackground}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
-                                        <Setter Property="Background" Value="#3044BEDF" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Border.ContextMenu>
-                            <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                                <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Add to Compression Queue}" />
-                                <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Go to Database Results}" />
-                                <Separator />
-                                <MenuItem Command="{Binding Tag.UncompressCommand}"
-                                          CommandParameter="{Binding DataContext}"
-                                          Header="{loc:T Uncompress}"
-                                          IsEnabled="{Binding DataContext.CanUncompress}" />
-                            </ContextMenu>
-                        </Border.ContextMenu>
-                        <Grid MinHeight="58" TextBlock.Foreground="{StaticResource TextControlForeground}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition MaxWidth="108" />
-                                <ColumnDefinition Width="*" MinWidth="135" />
-                                <ColumnDefinition MinWidth="180" MaxWidth="190" />
-                                <ColumnDefinition MinWidth="60" MaxWidth="145" />
-                                <ColumnDefinition MinWidth="60" MaxWidth="145" />
-                                <ColumnDefinition Width="220" />
-                            </Grid.ColumnDefinitions>
-                            <CheckBox Margin="-20 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Panel.ZIndex="5"
-                                      IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Mode=TwoWay}">
-                                <CheckBox.Style>
-                                    <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </CheckBox.Style>
-                            </CheckBox>
-                            <Border Width="170" Height="78"
-                                    Margin="-14 -15 -150 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                    CornerRadius="4">
-                                <Border.Background>
-                                    <ImageBrush ImageSource="{Binding HeaderImage}" Stretch="UniformToFill" />
-                                </Border.Background>
+            <ListView x:Name="SteamGamesList"
+                      Grid.Row="4"
+                      Padding="0" HorizontalContentAlignment="Stretch"
+                      Background="Transparent" BorderThickness="0"
+                      ItemsSource="{Binding FilteredSteamGames}"
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      SelectedItem="{Binding SelectedGame, Mode=TwoWay}"
+                      SelectionChanged="OnSteamGamesSelectionChanged" SelectionMode="Extended" TextOptions.TextRenderingMode="Grayscale" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel"
+                      VirtualizingPanel.VirtualizationMode="Recycling" Visibility="Visible">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel>
+                            <VirtualizingStackPanel.Style>
+                                <Style TargetType="VirtualizingStackPanel">
+                                    <Setter Property="Margin" Value="0" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.HasSelectedGames, RelativeSource={RelativeSource AncestorType=ListView}}" Value="True">
+                                            <Setter Property="Margin" Value="0 0 0 90" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </VirtualizingStackPanel.Style>
+                        </VirtualizingStackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ContentPresenter Margin="0 0 20 0" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0 0 0 8" Padding="14 10"
+                                CornerRadius="6"
+                                Tag="{Binding DataContext, ElementName=PageRoot}">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{StaticResource CardBackground}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                            <Setter Property="Background" Value="#3044BEDF" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Border.ContextMenu>
+                                <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Add to Compression Queue}" />
+                                    <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Go to Database Results}" />
+                                    <Separator />
+                                    
+                                    <MenuItem Command="{Binding Tag.UncompressCommand}" CommandParameter="{Binding DataContext}" IsEnabled="{Binding DataContext.CanUncompress}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal" ToolTipService.ShowOnDisabled="True">
+                                                <TextBlock Text="{loc:T Uncompress}" VerticalAlignment="Center" />
+                                                <Border Margin="10 0 0 0" Padding="5 5" Background="#80C42B1C" ToolTipService.ShowOnDisabled="True" CornerRadius="4" VerticalAlignment="Center" Visibility="{Binding DataContext.HasInsufficientFreeSpaceForUncompression, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <ui:SymbolIcon Margin="0 1 3 0"
+                                                                       FontSize="11" 
+                                                                       Foreground="{StaticResource PaletteRedBrush}"
+                                                                       Symbol="Warning12" />
+                                                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="White" Text="Not enough space" TextOptions.TextFormattingMode="Display" />
+                                                    </StackPanel>
+                                                    <Border.ToolTip>
+                                                        <ToolTip>
+                                                            <TextBlock TextWrapping="Wrap" Text="Not enough free space to safely uncompress this folder"/>
+                                                        </ToolTip>
+                                                    </Border.ToolTip>
+                                                </Border>
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Border.ContextMenu>
+                            <Grid MinHeight="58" TextBlock.Foreground="{StaticResource TextControlForeground}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MaxWidth="108" />
+                                    <ColumnDefinition Width="*" MinWidth="135" />
+                                    <ColumnDefinition MinWidth="180" MaxWidth="190" />
+                                    <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                                    <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                                    <ColumnDefinition Width="220" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Margin="-20 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Panel.ZIndex="5"
+                                          IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Mode=TwoWay}">
+                                    <CheckBox.Style>
+                                        <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </CheckBox.Style>
+                                </CheckBox>
+                                <Border Width="170" Height="78"
+                                        Margin="-14 -15 -150 -15" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                        CornerRadius="4">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{Binding HeaderImage}" Stretch="UniformToFill" />
+                                    </Border.Background>
 
-                            </Border>
-                            <StackPanel Grid.Column="1" Margin="0 0 16 0" VerticalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center"
-                                               FontSize="14" FontWeight="SemiBold"
-                                               Text="{Binding GameName}"
-                                               TextTrimming="CharacterEllipsis" />
-                                    <Border Height="25"
-                                            Margin="8 0 0 0" Padding="6 3"
-                                            Background="#30FFAA00" CornerRadius="4"
-                                            ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}"
-                                            Visibility="{Binding IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <ui:SymbolIcon Margin="0 2 4 0" Foreground="#ffe207" Symbol="Warning20" />
-                                            <TextBlock VerticalAlignment="Center"
-                                                       loc:L.Value="Direct Storage" FontSize="11" Foreground="#ffe207" />
-                                        </StackPanel>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="0 0 16 0" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   FontSize="14" FontWeight="SemiBold"
+                                                   Text="{Binding GameName}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <Border Height="25"
+                                                Margin="8 0 0 0" Padding="6 3"
+                                                Background="#80C42B1C" CornerRadius="4" Cursor="Help"
+                                                Visibility="{Binding HasInsufficientFreeSpace, Converter={StaticResource BoolToVisConverter}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon Margin="0 2 4 0" Foreground="{StaticResource PaletteRedBrush}" Symbol="Warning20" />
+                                                <TextBlock VerticalAlignment="Center"
+                                                           loc:L.Value="Not enough space" FontSize="11"
+                                                           Foreground="{StaticResource ButtonForeground}" />
+                                            </StackPanel>
+                                            <Border.ToolTip>
+                                                <ToolTip MaxWidth="300">
+                                                    <TextBlock loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." TextWrapping="Wrap" />
+                                                </ToolTip>
+                                            </Border.ToolTip>
+                                        </Border>
+                                        <Border Height="25"
+                                                Margin="8 0 0 0" Padding="6 3"
+                                                Background="#30FFAA00" CornerRadius="4"
+                                                ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}"
+                                                Visibility="{Binding IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon Margin="0 2 4 0" Foreground="#ffe207" Symbol="Warning20" />
+                                                <TextBlock VerticalAlignment="Center"
+                                                           loc:L.Value="Direct Storage" FontSize="11" Foreground="#ffe207" />
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                    <TextBlock Margin="0 3 0 0"
+                                               FontSize="12"
+                                               Foreground="{StaticResource CardForegroundDisabled}"
+                                               Text="{Binding DisplayPath}"
+                                               TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding GamePath}" />
+                                    <TextBlock Margin="0 3 0 0"
+                                               FontSize="12" Foreground="#D1B13C"
+                                               Text="{Binding OperationMessage}"
+                                               Visibility="{Binding HasOperationMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal">
+                                    <Ellipse Width="13" Height="13" Margin="0 0 10 0">
+                                        <Ellipse.Style>
+                                            <Style TargetType="Ellipse">
+                                                <Setter Property="Fill" Value="#D14A4F" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
+                                                        <Setter Property="Fill" Value="#4bd18a" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.RecentlyUpdated}">
+                                                        <Setter Property="Fill" Value="#D1B13C" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
+                                                        <Setter Property="Fill" Value="#44bedf" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Analysing}">
+                                                        <Setter Property="Fill" Value="#8373808C" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Ellipse.Style>
+                                    </Ellipse>
+                                    <TextBlock VerticalAlignment="Center" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding StatusMessage}" />
+                                    <Border Width="40" Height="25"
+                                            Margin="10 0 0 0" VerticalAlignment="Center"
+                                            Background="#8373808C" CornerRadius="5"
+                                            Visibility="{Binding IsCompressed, Converter={StaticResource BoolToVisConverter}}">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   FontSize="11" FontWeight="SemiBold" Foreground="#FFF"
+                                                   Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" />
                                     </Border>
                                 </StackPanel>
-                                <TextBlock Margin="0 3 0 0"
-                                           FontSize="12"
-                                           Foreground="{StaticResource CardForegroundDisabled}"
-                                           Text="{Binding DisplayPath}"
-                                           TextTrimming="CharacterEllipsis"
-                                           ToolTip="{Binding GamePath}" />
-                                <TextBlock Margin="0 3 0 0"
-                                           FontSize="12" Foreground="#D1B13C"
-                                           Text="{Binding OperationMessage}"
-                                           Visibility="{Binding HasOperationMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal">
-                                <Ellipse Width="13" Height="13" Margin="0 0 10 0">
-                                    <Ellipse.Style>
-                                        <Style TargetType="Ellipse">
-                                            <Setter Property="Fill" Value="#D14A4F" />
+                                <TextBlock Grid.Column="3"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                                           FontSize="13"
+                                           Text="{Binding CurrentFolderSize, Converter={StaticResource BytesToReadableConverter}}" />
+                                <TextBlock Grid.Column="4"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                                           FontSize="13">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="{Binding DisplayedSavings, Converter={StaticResource BytesToReadableConverter}}" />
+                                            <Setter Property="Foreground" Value="#45c1e8" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Compressed}">
-                                                    <Setter Property="Fill" Value="#4bd18a" />
+                                                <DataTrigger Binding="{Binding IsDisplayingActualSavings}" Value="True">
+                                                    <Setter Property="Foreground" Value="#65dc9d" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.RecentlyUpdated}">
-                                                    <Setter Property="Fill" Value="#D1B13C" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
-                                                    <Setter Property="Fill" Value="#44bedf" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.Analysing}">
-                                                    <Setter Property="Fill" Value="#8373808C" />
+                                                <DataTrigger Binding="{Binding HasSavingsData}" Value="False">
+                                                    <Setter Property="Text" Value="—" />
+                                                    <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </Ellipse.Style>
-                                </Ellipse>
-                                <TextBlock VerticalAlignment="Center" Foreground="{StaticResource CardForegroundDisabled}" Text="{Binding StatusMessage}" />
-                                <Border Width="40" Height="25"
-                                        Margin="10 0 0 0" VerticalAlignment="Center"
-                                        Background="#8373808C" CornerRadius="5"
-                                        Visibility="{Binding IsCompressed, Converter={StaticResource BoolToVisConverter}}">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                               FontSize="11" FontWeight="SemiBold" Foreground="#FFF"
-                                               Text="{Binding CompressionLevel, Converter={StaticResource CompressionLevelAbbreviatedConverter}}" />
-                                </Border>
-                            </StackPanel>
-                            <TextBlock Grid.Column="3"
-                                       HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       FontSize="13"
-                                       Text="{Binding CurrentFolderSize, Converter={StaticResource BytesToReadableConverter}}" />
-                            <TextBlock Grid.Column="4"
-                                       HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       FontSize="13">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Text" Value="{Binding DisplayedSavings, Converter={StaticResource BytesToReadableConverter}}" />
-                                        <Setter Property="Foreground" Value="#45c1e8" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsDisplayingActualSavings}" Value="True">
-                                                <Setter Property="Foreground" Value="#65dc9d" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding HasSavingsData}" Value="False">
-                                                <Setter Property="Text" Value="—" />
-                                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <Grid Grid.Column="5" Margin="24 -10 -14 -10">
-                                <Grid.Resources>
-                                    <DataTemplate x:Key="FullActionTextTemplate">
-                                        <TextBlock Margin="0 0 20 0" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                                   TextWrapping="Wrap">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="{Binding RecommendedAction}" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
-                                                            <Setter Property="Text" Value="{loc:T Update in Steam}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsCompressed}" Value="True">
-                                                            <Setter Property="Text" Value="" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                    <DataTemplate x:Key="FullCompressActionTemplate">
-                                        <ui:SplitButton Width="200"
-                                                        Padding="14 8" HorizontalAlignment="Right" VerticalAlignment="Stretch"
-                                                        Background="#3000FF00"
-                                                        Command="{Binding DataContext.CompressCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                        CommandParameter="{Binding}"
-                                                        Content="{Binding RecommendedAction}"
-                                                        Loaded="OnCompressSplitButtonLoaded">
-                                            <ui:SplitButton.Flyout>
-                                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                                                    <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.XPRESS4K}" Header="X4K" />
-                                                    <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.XPRESS8K}" Header="X8K" />
-                                                    <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.XPRESS16K}" Header="X16K" />
-                                                    <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.LZX}" Header="LZX" />
-                                                </ContextMenu>
-                                            </ui:SplitButton.Flyout>
-                                        </ui:SplitButton>
-                                    </DataTemplate>
-                                    <DataTemplate x:Key="FullWorkingActionTemplate">
-                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                                            <ui:ProgressRing Width="24" Height="24" IsIndeterminate="{Binding IsWorking}" />
-                                            <ui:Button Width="32" Height="32"
-                                                       Margin="12 0 0 0" Padding="0"
-                                                       Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                       CommandParameter="{Binding}"
-                                                       ToolTip="{loc:T Cancel operation}">
-                                                <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
-                                            </ui:Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </Grid.Resources>
-                                <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Content="{Binding}">
-                                    <ContentControl.Style>
-                                        <Style TargetType="ContentControl">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource FullActionTextTemplate}" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding CanCompress}" Value="True">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource FullCompressActionTemplate}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsWorking}" Value="True">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource FullWorkingActionTemplate}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ContentControl.Style>
-                                </ContentControl>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <Grid Grid.Column="5" Margin="24 -10 -14 -10">
+                                    <Grid.Resources>
+                                        <DataTemplate x:Key="FullActionTextTemplate">
+                                            <TextBlock Margin="0 0 20 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                       TextWrapping="Wrap">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="{Binding RecommendedAction}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static local:SteamGameStatus.PendingSteamUpdate}">
+                                                                <Setter Property="Text" Value="{loc:T Update in Steam}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsCompressed}" Value="True">
+                                                                <Setter Property="Text" Value="" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                        <DataTemplate x:Key="FullCompressActionTemplate">
+                                            <ui:SplitButton Width="200"
+                                                            Padding="14 8" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                                                            Background="#3000FF00"
+                                                            Command="{Binding DataContext.CompressCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="{Binding RecommendedAction}"
+                                                            Loaded="OnCompressSplitButtonLoaded">
+                                                <ui:SplitButton.Flyout>
+                                                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                                        <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.XPRESS4K}" Header="X4K" />
+                                                        <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.XPRESS8K}" Header="X8K" />
+                                                        <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.XPRESS16K}" Header="X16K" />
+                                                        <MenuItem Command="{Binding SelectCompressionModeCommand}" CommandParameter="{x:Static core:CompressionMode.LZX}" Header="LZX" />
+                                                    </ContextMenu>
+                                                </ui:SplitButton.Flyout>
+                                            </ui:SplitButton>
+                                        </DataTemplate>
+                                        <DataTemplate x:Key="FullWorkingActionTemplate">
+                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                                <ui:ProgressRing Width="24" Height="24" IsIndeterminate="{Binding IsWorking}" />
+                                                <ui:Button Width="32" Height="32"
+                                                           Margin="12 0 0 0" Padding="0"
+                                                           Command="{Binding DataContext.CancelOperationCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                           CommandParameter="{Binding}"
+                                                           ToolTip="{loc:T Cancel operation}">
+                                                    <ui:SymbolIcon Foreground="{StaticResource PaletteRedBrush}" Symbol="Dismiss12" />
+                                                </ui:Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Grid.Resources>
+                                    <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Content="{Binding}">
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource FullActionTextTemplate}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CanCompress}" Value="True">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource FullCompressActionTemplate}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsWorking}" Value="True">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource FullWorkingActionTemplate}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
-       
+
 
         <Grid Grid.Row="3" Grid.RowSpan="2"
               Margin="0 10 0 0"
@@ -1038,22 +1072,27 @@
             </Border>
         </Grid>
 
- 
-         <Border Grid.Row="4" 
-         Margin="20 0 40 12"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Panel.ZIndex="20"
-         Background="#445667" BorderThickness="1" CornerRadius="8" Width="{Binding ElementName=Compression_Options_Overlay, Path=ActualWidth}" Height="{Binding ElementName=Compression_Options_Overlay, Path=ActualHeight}"
-         Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
-             <Border.Effect>
-                 <DropShadowEffect BlurRadius="20" Opacity="0.6"/>
-             </Border.Effect>
-         </Border>
-        
-        
-        <Border x:Name="Compression_Options_Overlay" Grid.Row="4"   local:LiveBlurBackground.EnableBlur="True" local:LiveBlurBackground.Source="{Binding ElementName=SteamGamesList}" local:LiveBlurBackground.BlurOpacity="0.7" 
+
+        <Border Grid.Row="4"
+                Width="{Binding ElementName=Compression_Options_Overlay, Path=ActualWidth}"
+                Height="{Binding ElementName=Compression_Options_Overlay, Path=ActualHeight}"
+                Margin="20 0 40 12" HorizontalAlignment="Center" VerticalAlignment="Bottom" Panel.ZIndex="20"
+                Background="#445667" BorderThickness="1" CornerRadius="8"
+                Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" Opacity="0.6" />
+            </Border.Effect>
+        </Border>
+
+
+        <Border x:Name="Compression_Options_Overlay"
+                Grid.Row="4"
                 Margin="20 0 40 12" Padding="15 16" HorizontalAlignment="Center" VerticalAlignment="Bottom" Panel.ZIndex="20"
+                local:LiveBlurBackground.BlurOpacity="0.7" local:LiveBlurBackground.EnableBlur="True"
+                local:LiveBlurBackground.Source="{Binding ElementName=SteamGamesList}"
                 Background="#445667" BorderBrush="#50FFFFFF" BorderThickness="1" CornerRadius="8"
                 Visibility="{Binding HasSelectedGames, Converter={StaticResource BooleanToVisibilityConverter}}">
-            
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

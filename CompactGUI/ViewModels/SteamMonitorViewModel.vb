@@ -600,6 +600,12 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             If analysedFiles Is Nothing Then Return
             Dim compressionLevel = If(analyser.ContainsCompressedFiles, analysedFiles.Max(Function(file) file.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
             game.UpdateAnalysis(analyser.UncompressedBytes, analyser.CompressedBytes, compressionLevel, analyser.IsDirectStorage)
+            If game.SelectedCompressionOption IsNot Nothing Then
+                game.HasInsufficientFreeSpace = Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(game.GamePath,
+                                                                                                               analysedFiles,
+                                                                                                               Core.WOFHelper.WOFConvertCompressionLevel(game.SelectedCompressionOption.Mode),
+                                                                                                               Array.Empty(Of String)())
+            End If
             game.HasInsufficientFreeSpaceForUncompression = Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(game.GamePath,
                                                                                                                              analysedFiles,
                                                                                                                              Core.WOFCompressionAlgorithm.NO_COMPRESSION,
@@ -690,6 +696,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 If game.SelectedCompressionOption Is Nothing Then Throw New InvalidOperationException("This game does not have a selected compression mode.")
                 folder.CompressionOptions.SelectedCompressionMode = game.SelectedCompressionOption.Mode
                 folder.HasInsufficientFreeSpace = Not _compressableFolderService.HasSufficientFreeSpace(folder)
+                game.HasInsufficientFreeSpace = folder.HasInsufficientFreeSpace
                 If folder.HasInsufficientFreeSpace Then Return
                 succeeded = Await _compressableFolderService.CompressFolder(folder)
                 Await _compressableFolderService.AnalyseFolderAsync(folder)
@@ -858,6 +865,10 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(CanCompress), NameOf(CanUncompress))>
     Private _isWorking As Boolean
+
+    <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(CanCompress))>
+    Private _hasInsufficientFreeSpace As Boolean
 
     <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(CanUncompress))>
