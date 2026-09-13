@@ -93,6 +93,7 @@
 "No installed Steam games were found." = "No installed Steam games were found." # LOC:TODO
 "No wiki data" = "No wiki data" # LOC:TODO
 "Not Compressed" = "No comprimido"
+"Not enough space" = "Not enough space" # LOC:TODO
 "On Schedule" = "Programado"
 "On Schedule if system is also idle" = "Programado (si el sistema está inactivo)"
 "Open" = "Abrir"
@@ -138,6 +139,7 @@
 "Success" = "Éxito"
 "System Integration" = "Integración del sistema"
 "The SnackbarPresenter was never set" = "The SnackbarPresenter was never set" # LOC:TODO
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Este juego usa tecnología DirectStorage. Si usa esta función, no debería comprimir este juego."
 "Total Results" = "Totales"
 "UI Settings" = "Ajustes de interfaz"

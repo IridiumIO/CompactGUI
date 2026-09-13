@@ -30,6 +30,8 @@ Public Class CompressableFolderService
 
     Public Async Function UncompressFolder(folder As CompressableFolder) As Task(Of Boolean)
 
+        If folder.HasInsufficientFreeSpaceForUncompression Then Return False
+
         folder.Compressor = New Uncompactor(UncompactorLogger)
         Dim compressedFilesList = folder.AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
         Return Await RunCompressionAsync(folder, folder.Compressor, compressedFilesList, isCompressing:=False)
@@ -109,6 +111,7 @@ Public Class CompressableFolderService
             folder.CompressedBytes = folder.Analyser.CompressedBytes
             folder.IsDirectStorage = folder.Analyser.IsDirectStorage
             folder.HasInsufficientFreeSpace = Not HasSufficientFreeSpace(folder)
+            folder.HasInsufficientFreeSpaceForUncompression = Not HasSufficientFreeSpaceForUncompression(folder)
 
             If folder.Analyser.ContainsCompressedFiles OrElse folder.IsFreshlyCompressed Then
                 folder.FolderActionState = ActionState.Results
@@ -251,6 +254,10 @@ Public Class CompressableFolderService
     Public Function HasSufficientFreeSpace(folder As CompressableFolder) As Boolean
         Dim compressionAlgorithm = WOFHelper.WOFConvertCompressionLevel(folder.CompressionOptions.SelectedCompressionMode)
         Return Core.SharedMethods.HasSufficientFreeSpaceForCompression(folder.FolderName, folder.AnalysisResults, compressionAlgorithm, GetSkipList(folder))
+    End Function
+
+    Public Function HasSufficientFreeSpaceForUncompression(folder As CompressableFolder) As Boolean
+        Return Core.SharedMethods.HasSufficientFreeSpaceForCompression(folder.FolderName, folder.AnalysisResults, WOFCompressionAlgorithm.NO_COMPRESSION, Array.Empty(Of String)(), reserveUncompressedSize:=True)
     End Function
 
     Private Sub ReleaseToken(folder As CompressableFolder, cts As CancellationTokenSource)

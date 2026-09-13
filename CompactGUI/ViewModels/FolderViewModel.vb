@@ -142,6 +142,9 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
             CompressionProgress = Folder.CompressionProgress.ProgressPercent
             CompressionProgressFile = Folder.CompressionProgress.FileName.Replace(Folder.FolderName, "")
 
+        ElseIf e.PropertyName = NameOf(Folder.HasInsufficientFreeSpaceForUncompression) Then
+            UncompressCommand.NotifyCanExecuteChanged()
+
         End If
     End Sub
 
@@ -155,6 +158,10 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
     Private Async Function Uncompress() As Task
         Await _compressableFolderService.UncompressFolder(Folder)
         _watcher.UpdateWatched(Folder.FolderName, Folder.Analyser, False)
+    End Function
+
+    Private Function CanUncompress() As Boolean
+        Return Not Folder.HasInsufficientFreeSpaceForUncompression
     End Function
 
     <RelayCommand>

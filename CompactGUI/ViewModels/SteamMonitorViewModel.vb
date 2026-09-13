@@ -600,6 +600,11 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             If analysedFiles Is Nothing Then Return
             Dim compressionLevel = If(analyser.ContainsCompressedFiles, analysedFiles.Max(Function(file) file.CompressionMode), Core.WOFCompressionAlgorithm.NO_COMPRESSION)
             game.UpdateAnalysis(analyser.UncompressedBytes, analyser.CompressedBytes, compressionLevel, analyser.IsDirectStorage)
+            game.HasInsufficientFreeSpaceForUncompression = Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(game.GamePath,
+                                                                                                                             analysedFiles,
+                                                                                                                             Core.WOFCompressionAlgorithm.NO_COMPRESSION,
+                                                                                                                             Array.Empty(Of String)(),
+                                                                                                                             reserveUncompressedSize:=True)
         End Using
     End Function
 
@@ -679,6 +684,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
 
             If uncompress Then
                 If Not isCurrentlyCompressed Then Throw New InvalidOperationException("This game is not currently compressed.")
+                If folder.HasInsufficientFreeSpaceForUncompression Then Return
                 succeeded = Await _compressableFolderService.UncompressFolder(folder)
             Else
                 If game.SelectedCompressionOption Is Nothing Then Throw New InvalidOperationException("This game does not have a selected compression mode.")
@@ -854,6 +860,10 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private _isWorking As Boolean
 
     <ObservableProperty>
+    <NotifyPropertyChangedFor(NameOf(CanUncompress))>
+    Private _hasInsufficientFreeSpaceForUncompression As Boolean
+
+    <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(HasOperationMessage))>
     Private _operationMessage As String
 
@@ -960,7 +970,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
 
     Public ReadOnly Property CanUncompress As Boolean
         Get
-            Return Not IsWorking AndAlso IsCompressed
+            Return Not IsWorking AndAlso IsCompressed AndAlso Not HasInsufficientFreeSpaceForUncompression
         End Get
     End Property
 

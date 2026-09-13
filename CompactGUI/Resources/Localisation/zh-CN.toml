@@ -93,6 +93,7 @@
 "No installed Steam games were found." = "未发现已安装的Steam游戏。"
 "No wiki data" = "无wiki数据"
 "Not Compressed" = "未压缩"
+"Not enough space" = "Not enough space" # LOC:TODO
 "On Schedule" = "按计划"
 "On Schedule if system is also idle" = "按计划且系统空闲时"
 "Open" = "打开"
@@ -138,6 +139,7 @@
 "Success" = "成功"
 "System Integration" = "系统集成"
 "The SnackbarPresenter was never set" = "SnackbarPresenter 从未被设置"
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "此游戏使用 DirectStorage 技术。如果您正在使用此功能，则不应压缩此游戏。"
 "Total Results" = "总结果"
 "UI Settings" = "UI 设置"

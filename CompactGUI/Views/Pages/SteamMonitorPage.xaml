@@ -952,7 +952,8 @@
                                                                        Appearance="Danger"
                                                                        Command="{Binding DataContext.UncompressCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                        CommandParameter="{Binding}"
-                                                                       Content="{loc:T Uncompress}" />
+                                                                       Content="{loc:T Uncompress}"
+                                                                       IsEnabled="{Binding CanUncompress}" />
                                                         </DataTemplate>
                                                         <DataTemplate x:Key="WorkingTemplate">
                                                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
