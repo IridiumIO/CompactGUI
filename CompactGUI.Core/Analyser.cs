@@ -116,7 +116,7 @@ public sealed class Analyser : IDisposable
                 ? WOFCompressionAlgorithm.NO_COMPRESSION
                 : WOFHelper.DetectCompression(fileInfo);
 
-            return new AnalysedFileDetails { FileName = file, CompressedSize = compressedSize, UncompressedSize = uncompressedSize, CompressionMode = compressionMode};
+            return new AnalysedFileDetails { FileName = file, Attributes = fileInfo.Attributes, CompressedSize = compressedSize, UncompressedSize = uncompressedSize, CompressionMode = compressionMode};
         }
         catch (IOException ex)
         {

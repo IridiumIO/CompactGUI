@@ -136,6 +136,7 @@ public sealed class Compactor : ICompressor, IDisposable
             .Where(fl =>
                 fl.CompressionMode != wofCompressionAlgorithm
                 && fl.UncompressedSize > clusterSize
+                && !fl.Attributes.HasFlag(FileAttributes.SparseFile)
                 && !excludedFiles.Contains(fl.FileName)
             )
             .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize))

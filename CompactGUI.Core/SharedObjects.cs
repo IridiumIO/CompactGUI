@@ -4,6 +4,7 @@
 public sealed class AnalysedFileDetails
 {
     public required string FileName { get; set; }
+    public FileAttributes Attributes { get; set; }
     public long UncompressedSize { get; set; }
     public long CompressedSize { get; set; }
     public WOFCompressionAlgorithm CompressionMode { get; set; }
