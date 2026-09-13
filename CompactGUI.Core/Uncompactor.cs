@@ -15,8 +15,10 @@ public sealed class Uncompactor : ICompressor, IDisposable
     private readonly ManualResetEventSlim pauseGate = new(initialState: true);
     private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private readonly object cancellationGate = new();
+    private readonly ConcurrentDictionary<string, byte> activeFiles = new();
     private int activeFileOperations;
     private bool cancellationRequested;
+    private long lastProgressReportTicks;
     private ConcurrentDictionary<string, int> processedFileCount = new ConcurrentDictionary<string, int>();
 
     private readonly ILogger<Uncompactor> _logger;
@@ -46,11 +48,13 @@ public sealed class Uncompactor : ICompressor, IDisposable
         }
         catch (OperationCanceledException) {
             UncompactorLog.DecompressionCanceled(_logger);
+            ReportProgress(progressMonitor, totalFiles, "", true);
             return false; 
         }
         finally { sw.Stop(); }
 
         UncompactorLog.DecompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
+        ReportProgress(progressMonitor, totalFiles, "", true);
         return true;
 
     }
@@ -67,22 +71,33 @@ public sealed class Uncompactor : ICompressor, IDisposable
         {
             if (cancellationRequested) return;
             activeFileOperations++;
+            activeFiles.TryAdd(file, 0);
         }
+        ReportProgress(progressMonitor, totalFiles, file);
 
         try
         {
             var _ = WOFDecompressFile(file);
             processedFileCount.TryAdd(file, 1);
-            progressMonitor?.Report(new CompressionProgress(
-                    (int)(processedFileCount.Count / (float)totalFiles * 100),
-                    file)
-            );
         }
         finally
         {
-            lock (cancellationGate) activeFileOperations--;
+            lock (cancellationGate)
+            {
+                activeFileOperations--;
+                activeFiles.TryRemove(file, out _);
+            }
         }
 
+    }
+
+    private void ReportProgress(IProgress<CompressionProgress>? progressMonitor, int totalFiles, string fileName, bool force = false)
+    {
+        long now = Stopwatch.GetTimestamp();
+        if (!force && now - Interlocked.Read(ref lastProgressReportTicks) < Stopwatch.Frequency / 5) return;
+
+        Interlocked.Exchange(ref lastProgressReportTicks, now);
+        progressMonitor?.Report(new CompressionProgress((int)(processedFileCount.Count / (float)totalFiles * 100), fileName, activeFiles.Keys.ToArray()));
     }
 
     private unsafe bool? WOFDecompressFile(string file)

@@ -28,11 +28,13 @@ public struct CompressionProgress
 {
     public int ProgressPercent { get; set; }
     public string FileName { get; set; }
+    public string[] ActiveFiles { get; set; }
 
-    public CompressionProgress(int progressPercent, string fileName)
+    public CompressionProgress(int progressPercent, string fileName, string[] activeFiles = null)
     {
         ProgressPercent = progressPercent;
         FileName = fileName;
+        ActiveFiles = activeFiles ?? Array.Empty<string>();
     }
 }
 

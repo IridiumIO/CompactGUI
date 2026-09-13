@@ -30,10 +30,24 @@
                            Foreground="{StaticResource PaletteAmberBrush}"
                            Text="{Binding Folder.ActiveFileOperations, StringFormat=Finishing {0} active file operations; do not power off.}"
                            Visibility="{Binding Folder.IsCancelling, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <TextBlock Margin="0 5 0 0" HorizontalAlignment="Left"
-                           Foreground="{StaticResource AccentFillColorDisabledBrush}"
-                           Text="{Binding CompressionProgressFile, Mode=OneWay, Converter={StaticResource TokenisedFolderPathConverter}}"
-                           TextTrimming="CharacterEllipsis" />
+                <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                    <ui:ProgressRing IsIndeterminate="True" Width="16" Height="16" Margin="0 0 10 0" VerticalAlignment="Top" />
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Folder.VisibleActiveCompressionFiles}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="{StaticResource AccentFillColorDisabledBrush}"
+                                               Text="{Binding DisplayName, Converter={StaticResource TokenisedFolderPathConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Margin="0 2 0 0"
+                                   Foreground="{StaticResource AccentFillColorDisabledBrush}"
+                                   Text="{Binding Folder.AdditionalActiveCompressionFileCount, StringFormat=+ {0} more active}"
+                                   Visibility="{Binding Folder.HasAdditionalActiveCompressionFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </StackPanel>
+                </StackPanel>
                 <ProgressBar Height="30"
                              Margin="0 50 0 50"
                              Background="{StaticResource CardBackground}"

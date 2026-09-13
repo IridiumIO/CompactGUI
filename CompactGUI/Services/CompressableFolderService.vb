@@ -50,7 +50,10 @@ Public Class CompressableFolderService
 
         Try
 
-            Dim progress As IProgress(Of CompressionProgress) = New Progress(Of CompressionProgress)(Sub(x) folder.CompressionProgress = x)
+            Dim progress As IProgress(Of CompressionProgress) = New Progress(Of CompressionProgress)(Sub(x)
+                                                                                                         folder.CompressionProgress = x
+                                                                                                         UpdateActiveCompressionFiles(folder, x.ActiveFiles)
+                                                                                                     End Sub)
 
             progress.Report(New CompressionProgress(0, ""))
 
@@ -76,6 +79,7 @@ Public Class CompressableFolderService
 
             folder.IsCancelling = False
             folder.ActiveFileOperations = 0
+            UpdateActiveCompressionFiles(folder, Array.Empty(Of String)())
             compressor.Dispose()
             ReleaseToken(folder, cts)
 
@@ -254,6 +258,45 @@ Public Class CompressableFolderService
 
         Return exclist
     End Function
+
+    Private Shared Sub UpdateActiveCompressionFiles(folder As CompressableFolder, fileNames As String())
+        If Not Application.Current.Dispatcher.CheckAccess() Then
+            Application.Current.Dispatcher.BeginInvoke(Sub() UpdateActiveCompressionFiles(folder, fileNames))
+            Return
+        End If
+
+        Dim activeFiles = folder.ActiveCompressionFiles
+
+        For Each activeFile In activeFiles
+            activeFile.IsActive = fileNames.Contains(activeFile.FileName)
+        Next
+
+        For Each fileName In fileNames
+            If activeFiles.Any(Function(activeFile) activeFile.IsActive AndAlso activeFile.FileName = fileName) Then Continue For
+
+            Dim availableSlot = activeFiles.FirstOrDefault(Function(activeFile) Not activeFile.IsActive)
+            If availableSlot Is Nothing Then
+                activeFiles.Add(New ActiveCompressionFile With {.FileName = fileName, .DisplayName = fileName.Replace(folder.FolderName, ""), .IsActive = True})
+            Else
+                availableSlot.FileName = fileName
+                availableSlot.DisplayName = fileName.Replace(folder.FolderName, "")
+                availableSlot.IsActive = True
+            End If
+        Next
+
+        Dim visibleFiles = activeFiles.Where(Function(activeFile) activeFile.IsActive).Take(5).ToList()
+        Dim displayedFiles = folder.VisibleActiveCompressionFiles
+
+        For index = displayedFiles.Count - 1 To 0 Step -1
+            If Not visibleFiles.Contains(displayedFiles(index)) Then displayedFiles.RemoveAt(index)
+        Next
+
+        For Each visibleFile In visibleFiles
+            If Not displayedFiles.Contains(visibleFile) Then displayedFiles.Add(visibleFile)
+        Next
+
+        folder.AdditionalActiveCompressionFileCount = Math.Max(0, activeFiles.Where(Function(activeFile) activeFile.IsActive).Count() - visibleFiles.Count)
+    End Sub
 
     Public Function HasSufficientFreeSpace(folder As CompressableFolder) As Boolean
         Dim compressionAlgorithm = WOFHelper.WOFConvertCompressionLevel(folder.CompressionOptions.SelectedCompressionMode)
