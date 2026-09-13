@@ -22,6 +22,9 @@ public static partial class CompactorLog
     [LoggerMessage(Level = LogLevel.Warning, Message = "File compression failed for: {FileName} with error: {ErrorMessage}")]
     public static partial void FileCompressionFailed(ILogger logger, string fileName, string errorMessage);
 
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Compression did not start because the free-space reserve was not met on {Drive}. Available: {AvailableBytes} bytes; reserve: {ReserveBytes} bytes.")]
+    public static partial void FreeSpaceReserveReached(ILogger logger, string drive, long availableBytes, long reserveBytes);
+
     [LoggerMessage(Level = LogLevel.Information, Message = "Compression paused.")]
     public static partial void CompressionPaused(ILogger logger);
 

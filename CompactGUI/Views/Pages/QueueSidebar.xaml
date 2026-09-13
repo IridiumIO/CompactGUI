@@ -63,6 +63,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Ellipse Width="8" Height="8"
@@ -80,7 +81,21 @@
                                            Text="{Binding CompressionOptions.SelectedCompressionMode, Converter={StaticResource QueueCompressionModeLabelConverter}}"
                                            TextOptions.TextFormattingMode="Display" />
                             </Border>
-                            <ProgressBar Grid.Column="3"
+                            <Border Grid.Column="3" Cursor="Help"
+                                    Margin="6 0 0 0" Padding="5 2"
+                                    Background="#80C42B1C" CornerRadius="4"
+                                    Visibility="{Binding HasInsufficientFreeSpace, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Margin="0 1 3 0" FontSize="11" Foreground="{StaticResource PaletteRedBrush}" Symbol="Warning12" />
+                                    <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="White" loc:L.Value="Not enough space" TextOptions.TextFormattingMode="Display" />
+                                </StackPanel>
+                                <Border.ToolTip>
+                                    <ToolTip MaxWidth="300"  >
+                                        <TextBlock TextWrapping="Wrap" loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues."/>
+                                    </ToolTip>
+                                </Border.ToolTip>
+                            </Border>
+                            <ProgressBar Grid.Column="4"
                                          Height="5"
                                          Margin="10 0 0 0" VerticalAlignment="Center"
                                          Background="{StaticResource CardBackgroundPressed}"

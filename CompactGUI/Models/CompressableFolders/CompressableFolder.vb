@@ -34,6 +34,7 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     <ObservableProperty> Private _PoorlyCompressedFiles As List(Of ExtensionResult)
     <ObservableProperty> Private _CompressionOptions As New CompressionOptions
     <ObservableProperty> Private _IsFreshlyCompressed As Boolean
+    <ObservableProperty> Private _HasInsufficientFreeSpace As Boolean
 
     <ObservableProperty> Private _FolderBGImage As BitmapImage = Nothing
 

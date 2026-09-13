@@ -683,6 +683,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             Else
                 If game.SelectedCompressionOption Is Nothing Then Throw New InvalidOperationException("This game does not have a selected compression mode.")
                 folder.CompressionOptions.SelectedCompressionMode = game.SelectedCompressionOption.Mode
+                folder.HasInsufficientFreeSpace = Not _compressableFolderService.HasSufficientFreeSpace(folder)
+                If folder.HasInsufficientFreeSpace Then Return
                 succeeded = Await _compressableFolderService.CompressFolder(folder)
                 Await _compressableFolderService.AnalyseFolderAsync(folder)
             End If
@@ -696,7 +698,9 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             End If
 
             If succeeded AndAlso Not uncompress Then game.SetLastCompactGuiUpdate(DateTime.Now)
-            If Not succeeded Then game.SetStatus("The operation did not complete successfully.")
+            If Not succeeded Then
+                game.SetStatus("The operation did not complete successfully.")
+            End If
         Catch ex As Exception
             operationException = ex
         Finally

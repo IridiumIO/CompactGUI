@@ -43,17 +43,22 @@ Public Class BackgroundCompactor
     End Sub
 
 
-    Public Function BeginCompacting(folder As String, compressionLevel As Core.WOFCompressionAlgorithm, Optional excludedFileTypes As String() = Nothing) As Task(Of Boolean)
+    Public Async Function BeginCompacting(folder As String, compressionLevel As Core.WOFCompressionAlgorithm, Optional excludedFileTypes As String() = Nothing) As Task(Of Boolean)
 
-        If compressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION Then Return Task.FromResult(False)
+        If compressionLevel = Core.WOFCompressionAlgorithm.NO_COMPRESSION Then Return False
 
         Dim effectiveExclusions = If(excludedFileTypes Is Nothing, _excludedFileTypes, excludedFileTypes)
 
         _compactorAnalyser = New Core.Analyser(folder, NullLogger(Of Core.Analyser).Instance)
+        Dim analysedFiles = Await _compactorAnalyser.GetAnalysedFilesAsync(cancellationTokenSource.Token)
+        If cancellationTokenSource.IsCancellationRequested OrElse analysedFiles Is Nothing Then Return False
+
+        If Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(folder, analysedFiles, compressionLevel, effectiveExclusions) Then Return False
+
         _compactor = New Core.Compactor(folder, compressionLevel, effectiveExclusions, _compactorAnalyser)
         If isCompactingPaused Then _compactor.Pause()
 
-        Return _compactor.RunAsync(Nothing)
+        Return Await _compactor.RunAsync(Nothing)
 
     End Function
 
