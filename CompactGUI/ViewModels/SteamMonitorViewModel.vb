@@ -756,8 +756,11 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     End Function
 
     Private Shared Sub AddSteamLibrary(results As List(Of SteamLibraryACFEntry), knownPaths As HashSet(Of String), steamAppsPath As String)
-        If Not Directory.Exists(steamAppsPath) OrElse Not knownPaths.Add(steamAppsPath) Then Return
-        results.Add(New SteamLibraryACFEntry With {.Path = steamAppsPath})
+        If Not Directory.Exists(steamAppsPath) Then Return
+
+        Dim normalizedSteamAppsPath = Core.SharedMethods.NormalizeLocalPath(steamAppsPath)
+        If Not knownPaths.Add(normalizedSteamAppsPath) Then Return
+        results.Add(New SteamLibraryACFEntry(normalizedSteamAppsPath))
     End Sub
 
     Private Class RawSteamLibraryEntry
@@ -768,6 +771,12 @@ End Class
 
 Public Class SteamLibraryACFEntry
     Public Property Path As String
+
+    Public Sub New(steamAppsPath As String)
+        'normalise drive letter to capitals so it doesn't look bad
+        Path = If(String.IsNullOrWhiteSpace(steamAppsPath), String.Empty, Char.ToUpperInvariant(steamAppsPath(0)) & steamAppsPath.Substring(1))
+    End Sub
+
 End Class
 
 Public Enum SteamGameStatus

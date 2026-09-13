@@ -26,6 +26,8 @@ public static class SharedMethods
 
     public static FolderVerificationResult VerifyFolder(string folder)
     {
+        folder = NormalizeLocalPath(folder);
+
         if (!Directory.Exists(folder))
             return FolderVerificationResult.DirectoryDoesNotExist;
         else if (folder.ToLowerInvariant().Contains(Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToLowerInvariant()))
@@ -36,7 +38,7 @@ public static class SharedMethods
             return FolderVerificationResult.DirectoryEmptyOrUnauthorized;
         else if (IsOneDriveFolder(folder))
             return FolderVerificationResult.OneDriveFolder;
-        else if (DriveInfo.GetDrives().First(f => folder.StartsWith(f.Name)).DriveFormat != "NTFS")
+        else if (!IsSupportedLocalNtfsDrive(folder))
             return FolderVerificationResult.NonNTFSDrive;
         else if (!HasDirectoryWritePermission(folder))
             return FolderVerificationResult.InsufficientPermission;
@@ -44,6 +46,31 @@ public static class SharedMethods
             return FolderVerificationResult.LZNT1Compressed;
 
         return FolderVerificationResult.Valid;
+    }
+
+    public static string NormalizeLocalPath(string folder)
+    {
+        try
+        {
+            return NormalizeLocalDrivePath(new DirectoryInfo(folder).FullName);
+        }
+        catch (ArgumentException)
+        {
+            return folder;
+        }
+    }
+
+    private static string NormalizeLocalDrivePath(string folder)
+    {
+        if (folder.Length < 2 || folder[1] != ':' || !char.IsAsciiLetter(folder[0])) return folder;
+
+        return char.ToUpperInvariant(folder[0]) + folder[1..];
+    }
+
+    private static bool IsSupportedLocalNtfsDrive(string folder)
+    {
+        var drive = DriveInfo.GetDrives().FirstOrDefault(f => folder.StartsWith(f.Name, StringComparison.OrdinalIgnoreCase));
+        return drive is not null && drive.DriveType != DriveType.Network && drive.DriveFormat == "NTFS";
     }
 
     public static string GetFolderVerificationMessage(FolderVerificationResult result)
