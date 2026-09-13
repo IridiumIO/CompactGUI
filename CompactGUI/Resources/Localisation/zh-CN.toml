@@ -27,7 +27,6 @@
 "Cancel" = "否"
 "Cancel Background Compressor" = "取消后台压缩"
 "Cancel operation" = "取消操作"
-"Cancelling..." = "取消中……"
 "Cannot remove folder" = "无法移除文件夹"
 "Check for pre-release updates" = "检查预发布更新"
 "Choose Compression" = "Choose Compression" # LOC:TODO
@@ -65,6 +64,7 @@
 "Failed to submit to wiki" = "提交到 Wiki 失败"
 "Filetype Management" = "文件类型管理"
 "Filter" = "Filter" # LOC:TODO
+"Finishing {0} active file operations; do not power off." = "Finishing {0} active file operations; do not power off." # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "对于 Steam 游戏，使用数据库来确定要跳过的类型。对于非 Steam 文件夹，则基于智能分析器。"
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "仅限 Steam 游戏。\n在选择跳过用户提交的文件类型时，该设置决定了每种文件类型需要提交多少次才能考虑跳过该类型。\n“低”通常是最好的，因为高档有跳过本来可以很好地压缩的文件的风险。"
 "Game" = "游戏"
@@ -254,6 +254,7 @@
 [obsolete]
 "Add Folder to Queue" = "添加文件夹到队列"
 "Apply to all" = "应用到所有"
+"Cancelling..." = "取消中……"
 "Compression Mode" = "压缩模式"
 "Configuration" = "配置"
 "Custom list — {0} entries" = "自定义列表 — {0} 条"

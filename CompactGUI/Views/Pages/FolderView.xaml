@@ -26,6 +26,10 @@
                 <TextBlock HorizontalAlignment="Left"
                            FontSize="16" FontWeight="SemiBold"
                            Text="{Binding Folder.FolderActionState}" />
+                <TextBlock Margin="0 5 0 0"
+                           Foreground="{StaticResource PaletteAmberBrush}"
+                           Text="{Binding Folder.ActiveFileOperations, StringFormat=Finishing {0} active file operations; do not power off.}"
+                           Visibility="{Binding Folder.IsCancelling, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <TextBlock Margin="0 5 0 0" HorizontalAlignment="Left"
                            Foreground="{StaticResource AccentFillColorDisabledBrush}"
                            Text="{Binding CompressionProgressFile, Mode=OneWay, Converter={StaticResource TokenisedFolderPathConverter}}"

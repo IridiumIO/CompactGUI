@@ -183,6 +183,7 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
 
     <RelayCommand>
     Private Sub Pause()
+        If Folder.IsCancelling Then Return
 
         If Folder.FolderActionState = ActionState.Working Then
             Folder.Compressor?.Pause()
@@ -196,7 +197,9 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
 
     <RelayCommand>
     Private Sub Cancel()
-        Folder.Compressor?.Cancel()
+        If Folder.Compressor Is Nothing Then Return
+        Folder.ActiveFileOperations = Folder.Compressor.Cancel()
+        Folder.IsCancelling = True
     End Sub
 
     <RelayCommand>

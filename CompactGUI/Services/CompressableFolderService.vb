@@ -41,6 +41,8 @@ Public Class CompressableFolderService
 
     Private Async Function RunCompressionAsync(folder As CompressableFolder, compressor As ICompressor, filesList As List(Of String), isCompressing As Boolean) As Task(Of Boolean)
         folder.FolderActionState = ActionState.Working
+        folder.IsCancelling = False
+        folder.ActiveFileOperations = 0
 
         CancelEstimation(folder)
         Dim cts = New CancellationTokenSource()
@@ -72,6 +74,8 @@ Public Class CompressableFolderService
 
         Finally
 
+            folder.IsCancelling = False
+            folder.ActiveFileOperations = 0
             compressor.Dispose()
             ReleaseToken(folder, cts)
 

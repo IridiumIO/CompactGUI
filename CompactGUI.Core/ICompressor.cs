@@ -8,7 +8,7 @@ public interface ICompressor : IDisposable
 
     void Pause();
     void Resume();
-    void Cancel();
+    int Cancel();
 
 
 }

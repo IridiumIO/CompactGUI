@@ -219,9 +219,11 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private Sub CancelOperation(game As SteamDetailedResult)
         If game Is Nothing OrElse Not ReferenceEquals(game, _activeGame) Then Return
         _cancelRequested = True
-        game.SetStatus("Cancelling...".LT())
         _compressableFolderService.CancelEstimation(_activeFolder)
-        If _activeFolder.FolderActionState = ActionState.Working Then _activeFolder.Compressor?.Cancel()
+        If _activeFolder.FolderActionState = ActionState.Working AndAlso _activeFolder.Compressor IsNot Nothing Then
+            Dim activeOperations = _activeFolder.Compressor.Cancel()
+            game.SetStatus("Finishing {0} active file operations; do not power off.".LTF(activeOperations))
+        End If
     End Sub
 
     'TODO: DIsable string.equals linting so rsharper stops being mad

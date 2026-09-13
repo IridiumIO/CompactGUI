@@ -54,6 +54,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock FontSize="13" FontWeight="SemiBold"
                                    Text="{Binding DisplayName}"
@@ -103,6 +104,10 @@
                                          Visibility="{Binding FolderActionState, Converter={StaticResource FolderActionStateWorkingToVisibilityConverter}}"
                                          Value="{Binding CompressionProgress.ProgressPercent}" />
                         </Grid>
+                        <TextBlock Grid.Row="2" Margin="0 4 0 0"
+                                   FontSize="10" Foreground="{StaticResource PaletteAmberBrush}"
+                                   Text="{loc:Binding ActiveFileOperations, Format='Finishing {0} active file operations; do not power off.'}"
+                                   Visibility="{Binding IsCancelling, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </Grid>
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <StackPanel.RenderTransform>

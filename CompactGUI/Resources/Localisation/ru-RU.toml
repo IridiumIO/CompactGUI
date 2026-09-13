@@ -27,7 +27,6 @@
 "Cancel" = "Отмена"
 "Cancel Background Compressor" = "Отменить фоновое сжатие"
 "Cancel operation" = "Cancel operation" # LOC:TODO
-"Cancelling..." = "Cancelling..." # LOC:TODO
 "Cannot remove folder" = "Не удаётся удалить папку"
 "Check for pre-release updates" = "Проверять предварительные версии обновлений"
 "Choose Compression" = "Choose Compression" # LOC:TODO
@@ -65,6 +64,7 @@
 "Failed to submit to wiki" = "Не удалось отправить в Вики"
 "Filetype Management" = "Управление типами файлов"
 "Filter" = "Filter" # LOC:TODO
+"Finishing {0} active file operations; do not power off." = "Finishing {0} active file operations; do not power off." # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Для игр Steam используется база данных для определения пропускаемых типов. Для папок не из Steam это основано на умном анализаторе."
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "Только для игр Steam.\nПри выборе пропуска файлов, предложенных пользователями, этот параметр определяет, сколько подтверждений необходимо для каждого типа файлов, чтобы его пропускать.\n«Низкий» обычно оптимален, так как более высокие значения могут привести к пропуску файлов, которые на самом деле хорошо сжимаются."
 "Game" = "Игра"

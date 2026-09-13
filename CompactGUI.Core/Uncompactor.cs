@@ -14,6 +14,9 @@ public sealed class Uncompactor : ICompressor, IDisposable
 
     private readonly ManualResetEventSlim pauseGate = new(initialState: true);
     private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private readonly object cancellationGate = new();
+    private int activeFileOperations;
+    private bool cancellationRequested;
     private ConcurrentDictionary<string, int> processedFileCount = new ConcurrentDictionary<string, int>();
 
     private readonly ILogger<Uncompactor> _logger;
@@ -60,14 +63,25 @@ public sealed class Uncompactor : ICompressor, IDisposable
             pauseGate.Wait(ctx);
         }
         catch (OperationCanceledException) { throw; }
-        ctx.ThrowIfCancellationRequested();
+        lock (cancellationGate)
+        {
+            if (cancellationRequested) return;
+            activeFileOperations++;
+        }
 
-        var _ = WOFDecompressFile(file);
-        processedFileCount.TryAdd(file, 1);
-        progressMonitor?.Report(new CompressionProgress(
-                (int)(processedFileCount.Count / (float)totalFiles * 100),
-                file)
-        );
+        try
+        {
+            var _ = WOFDecompressFile(file);
+            processedFileCount.TryAdd(file, 1);
+            progressMonitor?.Report(new CompressionProgress(
+                    (int)(processedFileCount.Count / (float)totalFiles * 100),
+                    file)
+            );
+        }
+        finally
+        {
+            lock (cancellationGate) activeFileOperations--;
+        }
 
     }
 
@@ -101,10 +115,17 @@ public sealed class Uncompactor : ICompressor, IDisposable
     }
 
 
-    public void Cancel()
+    public int Cancel()
     {
+        int activeOperations;
+        lock (cancellationGate)
+        {
+            cancellationRequested = true;
+            activeOperations = activeFileOperations;
+        }
         pauseGate.Set();
         cancellationTokenSource.Cancel();
+        return activeOperations;
     }
 
 

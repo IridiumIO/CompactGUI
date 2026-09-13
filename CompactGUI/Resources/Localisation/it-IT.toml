@@ -27,7 +27,6 @@
 "Cancel" = "Annulla"
 "Cancel Background Compressor" = "Annulla compressione in background"
 "Cancel operation" = "Annulla operazione"
-"Cancelling..." = "Annullamento in corso..."
 "Cannot remove folder" = "Impossibile rimuovere la cartella"
 "Check for pre-release updates" = "Verifica aggiornamenti pre-release"
 "Choose Compression" = "Choose Compression" # LOC:TODO
@@ -65,6 +64,7 @@
 "Failed to submit to wiki" = "Invio al wiki fallito"
 "Filetype Management" = "Gestione tipi di file"
 "Filter" = "Filter" # LOC:TODO
+"Finishing {0} active file operations; do not power off." = "Finishing {0} active file operations; do not power off." # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Per i giochi Steam, usa il database per determinare i tipi da escludere. Per le cartelle non-Steam si basa sull'analizzatore intelligente."
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "Solo per giochi Steam.\nQuando si sceglie di escludere i tipi di file inviati dagli utenti, questa impostazione determina quanti invii sono necessari per ogni tipo di file per considerarlo da escludere. \n'low' è generalmente la scelta migliore, poiché opzioni più alte comportano il rischio di escludere file che altrimenti si comprimerebbero bene."
 "Game" = "Gioco"
@@ -254,6 +254,7 @@
 [obsolete]
 "Add Folder to Queue" = "Aggiungi cartella alla coda"
 "Apply to all" = "Applica a tutto"
+"Cancelling..." = "Annullamento in corso..."
 "Compression Mode" = "Modalità di compressione"
 "Configuration" = "Configurazione"
 "Custom list — {0} entries" = "Lista personalizzata — {0} voci"

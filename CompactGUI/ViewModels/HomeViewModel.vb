@@ -488,6 +488,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Private Sub PauseQueue()
         Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
         If activeFolder?.Compressor Is Nothing Then Return
+        If activeFolder.IsCancelling Then Return
 
         If activeFolder.FolderActionState = ActionState.Working Then
             activeFolder.Compressor.Pause()
@@ -502,9 +503,11 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
     Private Sub CancelQueue()
         Dim activeFolder = Folders.FirstOrDefault(Function(folder) folder.FolderActionState = ActionState.Working OrElse folder.FolderActionState = ActionState.Paused)
         If activeFolder?.Compressor Is Nothing Then Return
+        If activeFolder.IsCancelling Then Return
 
         _cancelQueueRequested = True
-        activeFolder.Compressor.Cancel()
+        activeFolder.ActiveFileOperations = activeFolder.Compressor.Cancel()
+        activeFolder.IsCancelling = True
     End Sub
 
 

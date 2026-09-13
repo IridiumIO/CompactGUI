@@ -36,6 +36,8 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     <ObservableProperty> Private _IsFreshlyCompressed As Boolean
     <ObservableProperty> Private _HasInsufficientFreeSpace As Boolean
     <ObservableProperty> Private _HasInsufficientFreeSpaceForUncompression As Boolean
+    <ObservableProperty> Private _IsCancelling As Boolean
+    <ObservableProperty> Private _ActiveFileOperations As Integer
 
     <ObservableProperty> Private _FolderBGImage As BitmapImage = Nothing
 

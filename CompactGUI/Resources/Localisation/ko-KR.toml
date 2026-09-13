@@ -27,7 +27,6 @@
 "Cancel" = "취소"
 "Cancel Background Compressor" = "백그라운드 압축 취소"
 "Cancel operation" = "작업 취소"
-"Cancelling..." = "취소 중..."
 "Cannot remove folder" = "폴더를 대기열에서 제거할 수 없습니다"
 "Check for pre-release updates" = "프리릴리스 업데이트까지 확인"
 "Choose Compression" = "Choose Compression" # LOC:TODO
@@ -65,6 +64,7 @@
 "Failed to submit to wiki" = "위키 제출에 실패했습니다"
 "Filetype Management" = "파일 확장자 관리"
 "Filter" = "Filter" # LOC:TODO
+"Finishing {0} active file operations; do not power off." = "Finishing {0} active file operations; do not power off." # LOC:TODO
 "For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Steam 게임은 데이터베이스를, 그 외 폴더는 분석 결과를 바탕으로 제외할 파일 형식을 자동으로 정합니다."
 "For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "다른 사용자들이 제출한 정보를 바탕으로 파일 형식을 얼마나 적극적으로 제외할지 설정합니다.\n\n일반적으로는 '약하게'가 적합하며, 더 강하게 설정하면 압축이 잘 되는 파일까지 제외할 수 있습니다.\n\nSteam 게임에서만 적용됩니다."
 "Game" = "게임"
@@ -254,6 +254,7 @@
 [obsolete]
 "Add Folder to Queue" = "새로운 폴더 추가"
 "Apply to all" = "모든 폴더에 적용"
+"Cancelling..." = "취소 중..."
 "Compression Mode" = "압축 모드"
 "Configuration" = "설정"
 "Edit skip list for this folder" = "이 폴더에서 제외할 항목 편집"

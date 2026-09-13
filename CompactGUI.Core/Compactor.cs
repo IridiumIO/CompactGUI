@@ -25,6 +25,9 @@ public sealed class Compactor : ICompressor, IDisposable
     private long totalProcessedBytes = 0;
     private readonly ManualResetEventSlim pauseGate = new(initialState: true);
     private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private readonly object cancellationGate = new();
+    private int activeFileOperations;
+    private bool cancellationRequested;
 
     private ILogger<Compactor> _logger;
 
@@ -62,7 +65,7 @@ public sealed class Compactor : ICompressor, IDisposable
 
         var sw = Stopwatch.StartNew();
 
-        if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
+        maxParallelism = GetWorkerCount(maxParallelism, workingFiles);
         ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
 
         CompactorLog.StartingCompression(_logger, workingDirectory, wofCompressionAlgorithm.ToString(), maxParallelism);
@@ -97,11 +100,22 @@ public sealed class Compactor : ICompressor, IDisposable
         CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize);
 
         pauseGate.Wait(token);
-        token.ThrowIfCancellationRequested();
+        lock (cancellationGate)
+        {
+            if (cancellationRequested) return;
+            activeFileOperations++;
+        }
 
-        var res = WOFCompressFile(file.FileName);
-        Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
-        progressMonitor?.Report(new CompressionProgress((int)((double)totalProcessedBytes / totalFilesSize * 100.0), file.FileName));
+        try
+        {
+            var res = WOFCompressFile(file.FileName);
+            Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
+            progressMonitor?.Report(new CompressionProgress((int)((double)totalProcessedBytes / totalFilesSize * 100.0), file.FileName));
+        }
+        finally
+        {
+            lock (cancellationGate) activeFileOperations--;
+        }
 
     }
 
@@ -139,8 +153,29 @@ public sealed class Compactor : ICompressor, IDisposable
                 && !fl.Attributes.HasFlag(FileAttributes.SparseFile)
                 && !excludedFiles.Contains(fl.FileName)
             )
-            .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize))
+            .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize, fl.CompressedSize))
             .ToList();
+    }
+
+    private int GetWorkerCount(int requestedWorkerCount, IEnumerable<FileDetails> files)
+    {
+        int workerCount = requestedWorkerCount <= 0 ? Environment.ProcessorCount : requestedWorkerCount;
+        var fileList = files.ToList();
+        bool containsDiskImage = fileList.Any(file => new[] { ".vhd", ".vhdx", ".vmdk", ".qcow2", ".img", ".iso" }.Contains(Path.GetExtension(file.FileName), StringComparer.OrdinalIgnoreCase));
+
+        try
+        {
+            var root = Path.GetPathRoot(workingDirectory);
+            if (string.IsNullOrWhiteSpace(root)) return workerCount;
+
+            long reserveBytes = fileList.Sum(file => file.AllocatedSize) / 2 + fileList.Select(file => file.AllocatedSize).DefaultIfEmpty().Max();
+            bool lowFreeSpace = new DriveInfo(root).AvailableFreeSpace < reserveBytes * 2;
+            return lowFreeSpace || containsDiskImage ? 1 : workerCount;
+        }
+        catch (IOException)
+        {
+            return containsDiskImage ? 1 : workerCount;
+        }
     }
 
 
@@ -160,10 +195,17 @@ public sealed class Compactor : ICompressor, IDisposable
     }
 
 
-    public void Cancel()
+    public int Cancel()
     {
+        int activeOperations;
+        lock (cancellationGate)
+        {
+            cancellationRequested = true;
+            activeOperations = activeFileOperations;
+        }
         pauseGate.Set();
         cancellationTokenSource.Cancel();
+        return activeOperations;
     }
 
 
@@ -179,7 +221,7 @@ public sealed class Compactor : ICompressor, IDisposable
     }
 
 
-    public readonly record struct FileDetails(string FileName, long UncompressedSize);
+    public readonly record struct FileDetails(string FileName, long UncompressedSize, long AllocatedSize);
 
 
 }
