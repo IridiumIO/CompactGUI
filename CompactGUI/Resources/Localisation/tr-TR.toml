@@ -1,0 +1,252 @@
+﻿# CompactGUI Localisation
+# @version 1
+# @programversion 4.0.0-beta.11
+
+# ===================
+# Translations
+
+"Add" = "Ekle"
+"Add a custom folder to the watchlist" = "─░zleme listesine ├Âzel klas├Âr ekle"
+"Add selected to queue" = "Add selected to queue" # LOC:TODO
+"Add to Compression Queue" = "Add to Compression Queue" # LOC:TODO
+"Add to compression queue" = "S─▒k─▒┼şt─▒rma kuyru─şuna ekle"
+"Add to right-click context menu" = "Sa─ş t─▒k ba─şlam men├╝s├╝ne ekle"
+"Add to start menu" = "Ba┼şlat men├╝s├╝ne ekle"
+"Added to Queue" = "Kuyru─şa Eklendi"
+"Admin" = "Y├Ânetici"
+"Aggression of online skiplist" = "├çevrimi├ği atlama listesi agresifli─şi"
+"Always show details on Compression Mode buttons" = "S─▒k─▒┼şt─▒rma Modu d├╝─şmelerinde her zaman ayr─▒nt─▒lar─▒ g├Âster"
+"Analysing" = "Analiz Ediliyor"
+"Analysing..." = "Analysing..." # LOC:TODO
+"Applied to all folders" = "T├╝m klas├Ârlere uyguland─▒"
+"Ascending" = "Artan"
+"Awaiting Compression" = "S─▒k─▒┼şt─▒rma Bekleniyor"
+"Background Watcher Settings" = "Arkaplan ─░zleyici Ayarlar─▒"
+"COMPARE METHODS" = "COMPARE METHODS" # LOC:TODO
+"COMPRESSION MODE " = "COMPRESSION MODE " # LOC:TODO
+"Cancel" = "─░ptal"
+"Cancel Background Compressor" = "Arkaplan S─▒k─▒┼şt─▒r─▒c─▒y─▒ ─░ptal Et"
+"Cancel operation" = "Cancel operation" # LOC:TODO
+"Cannot remove folder" = "Klas├Âr kald─▒r─▒lam─▒yor"
+"Check for pre-release updates" = "├ûn s├╝r├╝m g├╝ncellemelerini denetle"
+"Choose Compression" = "Choose Compression" # LOC:TODO
+"Clear filters" = "Clear filters" # LOC:TODO
+"Click to download" = "─░ndirmek i├ğin t─▒klay─▒n"
+"CompactGUI" = "CompactGUI"
+"Complete" = "Complete" # LOC:TODO
+"Compress" = "Compress" # LOC:TODO
+"Compress Again" = "Tekrar S─▒k─▒┼şt─▒r"
+"Compress All Now" = "Hepsini ┼Şimdi S─▒k─▒┼şt─▒r"
+"Compress Selected" = "Se├ğilenleri S─▒k─▒┼şt─▒r"
+"Compress folders: " = "Klas├Ârleri s─▒k─▒┼şt─▒r: "
+"Compressed" = "S─▒k─▒┼şt─▒r─▒ld─▒"
+"Compressing..." = "Compressing..." # LOC:TODO
+"Compression" = "S─▒k─▒┼şt─▒rma"
+"Compression DB" = "S─▒k─▒┼şt─▒rma Veritaban─▒"
+"Compression Settings" = "S─▒k─▒┼şt─▒rma Ayarlar─▒"
+"Compression Summary" = "S─▒k─▒┼şt─▒rma ├ûzeti"
+"Compression options have been applied to all folders" = "S─▒k─▒┼şt─▒rma se├ğenekleri t├╝m klas├Ârlere uyguland─▒"
+"Current Size" = "Current Size" # LOC:TODO
+"Database Results" = "Veritaban─▒ Sonu├ğlar─▒"
+"Descending" = "Azalan"
+"Deselect all" = "Deselect all" # LOC:TODO
+"Direct Storage" = "Direct Storage" # LOC:TODO
+"Do Not Compress" = "Do Not Compress" # LOC:TODO
+"Do not compress" = "Do not compress" # LOC:TODO
+"Drive unavailable" = "Drive unavailable" # LOC:TODO
+"Edit list" = "Edit list" # LOC:TODO
+"Estimate Compression for non-Steam Folders (beta)" = "Steam d─▒┼ş─▒ klas├Ârler i├ğin s─▒k─▒┼şt─▒rmay─▒ tahmin et (beta)"
+"Estimated Size" = "Estimated Size" # LOC:TODO
+"Estimated size" = "Tahmini boyut"
+"Exit" = "├ç─▒k─▒┼ş"
+"Extensions in this folder" = "Bu klas├Ârdeki uzant─▒lar"
+"Failed" = "Failed" # LOC:TODO
+"Failed to submit to wiki" = "Wiki'ye g├Ânderilemedi"
+"Filetype Management" = "Dosya T├╝r├╝ Y├Ânetimi"
+"Filter" = "Filter" # LOC:TODO
+"Finishing {0} active file operations; do not power off." = "Finishing {0} active file operations; do not power off." # LOC:TODO
+"For Steam Games, this uses the database to determine types to skip. For non-Steam folders this is based on the smart analyser." = "Steam Oyunlar─▒ i├ğin, atlanacak t├╝rleri belirlemek amac─▒yla veritaban─▒n─▒ kullan─▒r. Steam d─▒┼ş─▒ klas├Ârler i├ğin ak─▒ll─▒ analizciye dayan─▒r."
+"For Steam games only.\nWhen choosing to skip user-submitted filetypes, this setting determines how many submissions are required for each filetype to consider skipping it. \n'low' is generally best, as higher options run the risk of skipping files that would otherwise compress well." = "Sadece Steam oyunlar─▒ i├ğin.\nKullan─▒c─▒ taraf─▒ndan g├Ânderilen dosya t├╝rlerinin atlanmas─▒ se├ğildi─şinde, bu ayar her bir dosya t├╝r├╝n├╝n atlanmas─▒ i├ğin ka├ğ g├Ânderim gerekti─şini belirler. \n'd├╝┼ş├╝k' genellikle en iyisidir, ├ğ├╝nk├╝ daha y├╝ksek se├ğenekler normalde iyi s─▒k─▒┼şabilecek dosyalar─▒n atlanmas─▒ riskini ta┼ş─▒r."
+"Game" = "Oyun"
+"Game Name" = "Oyun Ad─▒"
+"Games" = "Oyunlar"
+"Go to Database Results" = "Go to Database Results" # LOC:TODO
+"HDDs only use 1 thread" = "HDD'ler yaln─▒zca 1 i┼ş par├ğac─▒─ş─▒ kullans─▒n"
+"Home" = "Giri┼ş"
+"Include global skiplist" = "Include global skiplist" # LOC:TODO
+"Include global skipped file types" = "Genel atlanan dosya t├╝rlerini dahil et"
+"Include smart skiplist" = "Include smart skiplist" # LOC:TODO
+"Include smart skipped file types" = "Ak─▒ll─▒ atlanan dosya t├╝rlerini dahil et"
+"Insufficient permission to access this folder" = "Bu klas├Âre eri┼şmek i├ğin yetersiz izin"
+"LZX" = "LZX"
+"Last Fetched: {0:dd MMM yyyy HH:mm:ss}" = "Son Alma: {0:dd MMM yyyy HH:mm:ss}"
+"Last analysed {0}" = "Last analysed {0}" # LOC:TODO
+"Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Last ran: {0:dd MMM yyyy} at {0:HH:mm:ss}" # LOC:TODO
+"Library location" = "Library location" # LOC:TODO
+"Manage local skipped filetypes" = "Yerel olarak atlanan dosya t├╝rlerini y├Ânet"
+"Max Savings" = "Maksimum Tasarruf"
+"Maximum Compression Threads" = "Maksimum S─▒k─▒┼şt─▒rma ─░┼ş Par├ğac─▒─ş─▒"
+"Mode" = "Mod"
+"Monitor compressed folders for changes" = "S─▒k─▒┼şt─▒r─▒lm─▒┼ş klas├Ârleri de─şi┼şiklikler i├ğin izle"
+"Never" = "Asla"
+"Next scheduled: {0:dd MMM yyyy} at {0:HH:mm:ss}" = "Next scheduled: {0:dd MMM yyyy} at {0:HH:mm:ss}" # LOC:TODO
+"No installed Steam games were found." = "No installed Steam games were found." # LOC:TODO
+"No wiki data" = "No wiki data" # LOC:TODO
+"Not Compressed" = "S─▒k─▒┼şt─▒r─▒lmam─▒┼ş"
+"Not enough space" = "Not enough space" # LOC:TODO
+"On Schedule" = "Zamanlamaya G├Âre"
+"On Schedule if system is also idle" = "Sistem bo┼şta ise zamanlamaya g├Âre"
+"Open" = "A├ğ"
+"Open Settings Folder" = "Ayarlar Klas├Âr├╝n├╝ A├ğ"
+"Operation cancelled." = "Operation cancelled." # LOC:TODO
+"Operation failed: {0}" = "Operation failed: {0}" # LOC:TODO
+"Original Size" = "Original Size" # LOC:TODO
+"Paused" = "Paused" # LOC:TODO
+"Please check your internet connection and try again" = "L├╝tfen internet ba─şlant─▒n─▒z─▒ kontrol edip tekrar deneyin"
+"Please wait until the current operation is finished" = "L├╝tfen mevcut i┼şlem bitene kadar bekleyin"
+"Preparing" = "Preparing" # LOC:TODO
+"Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" = "Quickly parses over files and estimates their compression ratio without writing to disk. This will likely be super laggy on HDDs!" # LOC:TODO
+"Re-analyse all watched folders" = "T├╝m izlenen klas├Ârleri yeniden analiz et"
+"Re-analyse this folder" = "Bu klas├Âr├╝ yeniden analiz et"
+"Recently Updated" = "Recently Updated" # LOC:TODO
+"Recommended Action" = "Recommended Action" # LOC:TODO
+"Reload Languages.\nChecks online for updated language definitions" = "Reload Languages.\nChecks online for updated language definitions" # LOC:TODO
+"Reload Steam Library list" = "Reload Steam Library list" # LOC:TODO
+"Remove from Watchlist" = "─░zleme Listesinden Kald─▒r"
+"Reset" = "S─▒f─▒rla"
+"Restart as Admin" = "Y├Ânetici Olarak Yeniden Ba┼şlat"
+"SHOW QUEUE" = "SHOW QUEUE" # LOC:TODO
+"SKIPLIST SELECTION" = "SKIPLIST SELECTION" # LOC:TODO
+"Saved" = "Saved" # LOC:TODO
+"Savings" = "Tasarruf"
+"Scanning installed Steam games..." = "Scanning installed Steam games..." # LOC:TODO
+"Search by game name or SteamID..." = "Oyun ad─▒ veya SteamID ile ara..."
+"Select" = "Select" # LOC:TODO
+"Select a folder to compress" = "Select a folder to compress" # LOC:TODO
+"Select all" = "Select all" # LOC:TODO
+"Select all compressable" = "Select all compressable" # LOC:TODO
+"Select all visible games" = "Select all visible games" # LOC:TODO
+"Settings" = "Ayarlar"
+"Show notification on completion" = "Tamamland─▒─ş─▒nda bildirim g├Âster"
+"Sort" = "Sort" # LOC:TODO
+"Sort By" = "S─▒ralama ├ûl├ğ├╝t├╝"
+"Start CompactGUI in system tray" = "CompactGUI'yi sistem tepsisinde ba┼şlat"
+"Status" = "Status" # LOC:TODO
+"Steam Library" = "Steam Library" # LOC:TODO
+"SteamID" = "SteamID"
+"Submit Results" = "Sonu├ğlar─▒ G├Ânder"
+"Submitted to wiki" = "Wiki'ye g├Ânderildi"
+"Success" = "Ba┼şar─▒l─▒"
+"System Integration" = "Sistem Entegrasyonu"
+"The SnackbarPresenter was never set" = "SnackbarPresenter ayarlanmad─▒"
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." # LOC:TODO
+"This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Bu oyun DirectStorage teknolojisini kullan─▒yor. E─şer bu ├Âzelli─şi kullan─▒yorsan─▒z, bu oyunu s─▒k─▒┼şt─▒rmamal─▒s─▒n─▒z."
+"Total Results" = "Toplam Sonu├ğlar"
+"UI Settings" = "Aray├╝z Ayarlar─▒"
+"UID" = "UID"
+"Uncompress" = "S─▒k─▒┼şt─▒rmay─▒ A├ğ"
+"Uncompressed" = "Uncompressed" # LOC:TODO
+"Uncompressing..." = "Uncompressing..." # LOC:TODO
+"Unknown" = "Bilinmiyor"
+"Update Available" = "Update Available" # LOC:TODO
+"Update Available ▸ Version {0}" = "Update Available ▸ Version {0}" # LOC:TODO
+"Update Settings" = "G├╝ncelleme Ayarlar─▒"
+"Update in Steam" = "Update in Steam" # LOC:TODO
+"Use exclusions" = "Use exclusions" # LOC:TODO
+"Use recommended mode" = "Use recommended mode" # LOC:TODO
+"Version" = "S├╝r├╝m"
+"Waiting" = "Waiting" # LOC:TODO
+"Watch folder for changes" = "Klas├Âr├╝ de─şi┼şiklikler i├ğin izle"
+"Watched Folders" = "─░zlenen Klas├Ârler"
+"Watcher" = "─░zleyici"
+"WatcherPage" = "WatcherPage"
+"When System is Idle" = "Sistem Bo┼ştayken"
+"Working" = "├çal─▒┼ş─▒yor"
+"XPRESS 16K" = "XPRESS 16K"
+"XPRESS 4K" = "XPRESS 4K"
+"XPRESS 8K" = "XPRESS 8K"
+"Yes" = "Evet"
+"You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" = "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?" # LOC:TODO
+"Your settings have been reset to their default to accommodate the update" = "Your settings have been reset to their default to accommodate the update" # LOC:TODO
+"Your settings have been reset to their default." = "Your settings have been reset to their default." # LOC:TODO
+"can be saved" = "can be saved" # LOC:TODO
+"contained files" = "i├ğerilen dosyalar"
+"day(s)" = "g├╝n"
+"edit" = "d├╝zenle"
+"edit skipped filetypes" = "atlanan dosya t├╝rlerini d├╝zenle"
+"estimated savings" = "estimated savings" # LOC:TODO
+"every" = "her"
+"games" = "games" # LOC:TODO
+"just now" = "az ├Ânce"
+"last compressed:" = "son s─▒k─▒┼şt─▒r─▒lma:"
+"last modified:" = "son de─şi┼ştirilme:"
+"recommended" = "recommended" # LOC:TODO
+"saved" = "kaydedildi"
+"select a folder" = "bir klas├Âr se├ğin"
+"uncompressed size" = "s─▒k─▒┼şt─▒r─▒lmam─▒┼ş boyut"
+"{0:0} days ago" = "{0:0} g├╝n ├Ânce"
+"{0:0} hours ago" = "{0:0} saat ├Ânce"
+"{0:0} minutes ago" = "{0:0} dakika ├Ânce"
+"{0} saved" = "{0} saved" # LOC:TODO
+"{0}% decayed" = "{0}% decayed" # LOC:TODO
+
+[context."Background Scheduler"]
+"CompactGUI is running a scheduled task and will compress monitored folders in the background" = "CompactGUI is running a scheduled task and will compress monitored folders in the background" # LOC:TODO
+"Next scheduled task is on {0}" = "Next scheduled task is on {0}" # LOC:TODO
+"Scheduled Compression Completed" = "Scheduled Compression Completed" # LOC:TODO
+"Scheduled Compression Running" = "Scheduled Compression Running" # LOC:TODO
+
+[context."Compression estimate"]
+"unknown" = "bilinmiyor"
+
+[context."Compression size"]
+"After" = "Sonra"
+"Before" = "├ûnce"
+
+[context."File size"]
+"B" = "B"
+"EB" = "EB"
+"GB" = "GB"
+"KB" = "KB"
+"MB" = "MB"
+"PB" = "PB"
+"TB" = "TB"
+
+[context."Folder Compression Queue"]
+"COMPLETED" = "COMPLETED" # LOC:TODO
+"Clear completed" = "Clear completed" # LOC:TODO
+"Expected savings" = "Expected savings" # LOC:TODO
+"PENDING" = "PENDING" # LOC:TODO
+"Queue" = "Queue" # LOC:TODO
+"To process" = "To process" # LOC:TODO
+"{0} of {1} completed" = "{0} of {1} completed" # LOC:TODO
+
+[context."Folder status"]
+"Unknown" = "Bilinmiyor"
+
+[context."Relative date"]
+"Unknown" = "Bilinmiyor"
+
+[context."Schedule"]
+"at" = "saat"
+
+[context."Skiplist aggression"]
+"high" = "y├╝ksek"
+"low" = "d├╝┼ş├╝k"
+"medium" = "orta"
+
+[context."Skiplist editor"]
+"Save" = "Kaydet"
+
+[context."Steam Library Compression Mode Button"]
+"Compress | {0}" = "Compress | {0}" # LOC:TODO
+
+[context."Steam Library Tab Headings"]
+"CURRENT SIZE" = "CURRENT SIZE" # LOC:TODO
+"GAME" = "GAME" # LOC:TODO
+"RECOMMENDED ACTION" = "RECOMMENDED ACTION" # LOC:TODO
+"SAVINGS" = "SAVINGS" # LOC:TODO
+"STATUS" = "STATUS" # LOC:TODO
+
+[context."Storage savings"]
+"saved" = "kaydedildi"
