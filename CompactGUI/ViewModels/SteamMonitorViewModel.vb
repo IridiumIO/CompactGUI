@@ -441,7 +441,6 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                     Try
                         Dim cachedImageData = Await File.ReadAllBytesAsync(steamCachedHeader)
                         game.HeaderImage = CreateFadedHeaderImage(LoadImageFromMemoryStream(cachedImageData))
-                        Await File.WriteAllBytesAsync(imagePath, cachedImageData)
                         Return
                     Catch ex As Exception
                         Diagnostics.Debug.WriteLine($"Failed to use Steam's cached header for {game.AppID}: {ex.Message}")
@@ -521,21 +520,19 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         If Not Directory.Exists(appCacheDirectory) Then Return Nothing
 
         Try
-            Dim directories = {appCacheDirectory}.Concat(Directory.EnumerateDirectories(appCacheDirectory))
-            Return directories.SelectMany(Function(directoryPath) Directory.EnumerateFiles(directoryPath, "*header*", SearchOption.TopDirectoryOnly)).Where(AddressOf IsSupportedHeaderImage).OrderBy(Function(filePath) If(String.Equals(Path.GetFileName(filePath), "library_header.jpg", StringComparison.OrdinalIgnoreCase), 0, 1)).FirstOrDefault()
-        Catch ex As Exception When TypeOf ex Is IOException OrElse TypeOf ex Is UnauthorizedAccessException
+            Dim searchFolders = {appCacheDirectory}.Concat(Directory.EnumerateDirectories(appCacheDirectory))
+
+            Return searchFolders.
+                    SelectMany(Function(folderPath) Directory.EnumerateFiles(folderPath, "*header*", SearchOption.TopDirectoryOnly)).
+                    Where(Function(imageFile) Path.GetExtension(imageFile).Equals(".jpg", StringComparison.OrdinalIgnoreCase) OrElse
+                                                Path.GetExtension(imageFile).Equals(".jpeg", StringComparison.OrdinalIgnoreCase) OrElse
+                                                Path.GetExtension(imageFile).Equals(".png", StringComparison.OrdinalIgnoreCase)).
+                    FirstOrDefault()
+        Catch ex As Exception
             Return Nothing
         End Try
     End Function
 
-    Private Shared Function IsSupportedHeaderImage(filePath As String) As Boolean
-        Select Case Path.GetExtension(filePath).ToLowerInvariant()
-            Case ".jpg", ".jpeg", ".png"
-                Return True
-            Case Else
-                Return False
-        End Select
-    End Function
 
     Private Shared Async Function TryDownloadImageAsync(url As String) As Task(Of Byte())
         If String.IsNullOrWhiteSpace(url) Then Return Nothing
