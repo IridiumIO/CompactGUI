@@ -204,8 +204,8 @@
                       Margin="-20 -10 0 -10" HorizontalAlignment="Left"
                       Click="OnSelectAllVisibleClick" IsThreeState="True"
                       ToolTip="{loc:T Select all visible games}" />
-            <Button Grid.Column="1" Margin="-23 0 0 0"
-                    Padding="0" HorizontalAlignment="Left"
+            <Button Grid.Column="1"
+                    Margin="-23 0 0 0" Padding="0" HorizontalAlignment="Left"
                     Background="Transparent" BorderThickness="0"
                     Command="{Binding CycleSortCommand}"
                     CommandParameter="GameName" ToolTip="Sort by game name">
@@ -260,15 +260,23 @@
                     <TextBlock Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T GAME, Context='Steam Library Tab Headings'}" />
                 </StackPanel>
             </Button>
-            <Button Grid.Column="2" Margin="-2 0 0 0"
-                    Padding="0" HorizontalAlignment="Left"
+            <Button Grid.Column="2"
+                    Margin="-2 0 0 0" Padding="0" HorizontalAlignment="Left"
                     Background="Transparent" BorderThickness="0"
                     Command="{Binding CycleSortCommand}"
                     CommandParameter="Status" ToolTip="Sort by status">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
                         <ui:SymbolIcon.Style>
-                            <Style TargetType="ui:SymbolIcon"><Setter Property="Visibility" Value="Visible" /><Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" /><Style.Triggers><DataTrigger Binding="{Binding ActiveSortColumn}" Value="Status"><Setter Property="Visibility" Value="Collapsed" /></DataTrigger></Style.Triggers></Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="Status">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
                         </ui:SymbolIcon.Style>
                     </ui:SymbolIcon>
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
@@ -316,7 +324,15 @@
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
                         <ui:SymbolIcon.Style>
-                            <Style TargetType="ui:SymbolIcon"><Setter Property="Visibility" Value="Visible" /><Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" /><Style.Triggers><DataTrigger Binding="{Binding ActiveSortColumn}" Value="CurrentSize"><Setter Property="Visibility" Value="Collapsed" /></DataTrigger></Style.Triggers></Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="CurrentSize">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
                         </ui:SymbolIcon.Style>
                     </ui:SymbolIcon>
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
@@ -364,7 +380,15 @@
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
                         <ui:SymbolIcon.Style>
-                            <Style TargetType="ui:SymbolIcon"><Setter Property="Visibility" Value="Visible" /><Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" /><Style.Triggers><DataTrigger Binding="{Binding ActiveSortColumn}" Value="Savings"><Setter Property="Visibility" Value="Collapsed" /></DataTrigger></Style.Triggers></Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="Savings">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
                         </ui:SymbolIcon.Style>
                     </ui:SymbolIcon>
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
@@ -412,7 +436,15 @@
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
                         <ui:SymbolIcon.Style>
-                            <Style TargetType="ui:SymbolIcon"><Setter Property="Visibility" Value="Visible" /><Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" /><Style.Triggers><DataTrigger Binding="{Binding ActiveSortColumn}" Value="RecommendedAction"><Setter Property="Visibility" Value="Collapsed" /></DataTrigger></Style.Triggers></Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="RecommendedAction">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
                         </ui:SymbolIcon.Style>
                     </ui:SymbolIcon>
                     <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
@@ -506,6 +538,21 @@
                                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
                                             <Setter Property="Background" Value="#3044BEDF" />
                                         </DataTrigger>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#1044BEFF" Duration="0:0:0.1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource CardBackground}" Duration="0:0:0.1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
