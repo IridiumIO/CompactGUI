@@ -23,3 +23,7 @@ file = "zh-CN.toml"
 [locales."it-IT"]
 version = 1
 file = "it-IT.toml"
+
+[locales."tr-TR"]
+version = 1
+file = "tr-TR.toml"
