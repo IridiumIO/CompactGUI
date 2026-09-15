@@ -59,6 +59,12 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private _searchText As String
 
     <ObservableProperty>
+    Private _activeSortColumn As String
+
+    <ObservableProperty>
+    Private _isSortDescending As Boolean
+
+    <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(HasSelectedGame))>
     Private _selectedGame As SteamDetailedResult
 
@@ -137,6 +143,9 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         UseSmartSkiplist = settingsService.AppSettings.SkipUserNonCompressable
         FilteredSteamGames = CollectionViewSource.GetDefaultView(SteamGamesData)
         FilteredSteamGames.Filter = AddressOf FilterGames
+        ActiveSortColumn = "GameName"
+        IsSortDescending = False
+        ApplySort()
         AddHandler SteamGamesData.CollectionChanged, AddressOf OnSteamGamesCollectionChanged
     End Sub
 
@@ -308,26 +317,45 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
 
     <RelayCommand>
     Private Sub Sort(parameter As Object)
-        FilteredSteamGames.SortDescriptions.Clear()
+        Dim requestedSort = parameter?.ToString()
 
-        Select Case parameter?.ToString()
-            Case "GameNameAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.GameName), ListSortDirection.Ascending))
-            Case "GameNameDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.GameName), ListSortDirection.Descending))
-            Case "StatusAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.StatusMessage), ListSortDirection.Ascending))
-            Case "StatusDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.StatusMessage), ListSortDirection.Descending))
-            Case "CurrentSizeAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.CurrentFolderSize), ListSortDirection.Ascending))
-            Case "CurrentSizeDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.CurrentFolderSize), ListSortDirection.Descending))
-            Case "SavingsAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.DisplayedSavings), ListSortDirection.Ascending))
-            Case "SavingsDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.DisplayedSavings), ListSortDirection.Descending))
+        IsSortDescending = requestedSort.EndsWith("Desc", StringComparison.Ordinal)
+        ActiveSortColumn = requestedSort.Substring(0, requestedSort.Length - If(IsSortDescending, 4, 3))
+        ApplySort()
+    End Sub
+
+    <RelayCommand>
+    Private Sub CycleSort(column As String)
+        If Not String.Equals(ActiveSortColumn, column, StringComparison.Ordinal) Then
+            ActiveSortColumn = column
+            IsSortDescending = False
+        ElseIf Not IsSortDescending Then
+            IsSortDescending = Not IsSortDescending
+        Else
+            ActiveSortColumn = "GameName"
+            IsSortDescending = False
+        End If
+
+        ApplySort()
+    End Sub
+
+    Private Sub ApplySort()
+        Dim propertyName As String
+        Select Case ActiveSortColumn
+            Case "Status"
+                propertyName = NameOf(SteamDetailedResult.StatusMessage)
+            Case "CurrentSize"
+                propertyName = NameOf(SteamDetailedResult.CurrentFolderSize)
+            Case "Savings"
+                propertyName = NameOf(SteamDetailedResult.DisplayedSavings)
+            Case "RecommendedAction"
+                propertyName = NameOf(SteamDetailedResult.RecommendedActionCategory)
+            Case Else
+                propertyName = NameOf(SteamDetailedResult.GameName)
         End Select
+
+        FilteredSteamGames.SortDescriptions.Clear()
+        FilteredSteamGames.SortDescriptions.Add(New SortDescription(propertyName, If(IsSortDescending, ListSortDirection.Descending, ListSortDirection.Ascending)))
     End Sub
 
     Public Async Function LoadGamesAsync() As Task
