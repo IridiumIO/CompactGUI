@@ -138,6 +138,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         _analyserLogger = analyserLogger
         _navigationService = navigationService
         _settingsService = settingsService
+        AddHandler _settingsService.AppSettings.PropertyChanged, AddressOf OnAppSettingsPropertyChanged
         QueueCompressionMode = settingsService.AppSettings.SelectedCompressionMode
         UseGlobalSkiplist = settingsService.AppSettings.SkipNonCompressable
         UseSmartSkiplist = settingsService.AppSettings.SkipUserNonCompressable
@@ -322,6 +323,14 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         IsSortDescending = requestedSort.EndsWith("Desc", StringComparison.Ordinal)
         ActiveSortColumn = requestedSort.Substring(0, requestedSort.Length - If(IsSortDescending, 4, 3))
         ApplySort()
+    End Sub
+
+    Private Sub OnAppSettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName <> NameOf(Settings.BypassLowSpaceProtection) Then Return
+
+        For Each game In SteamGamesData
+            game.NotifyCanUncompressChanged()
+        Next
     End Sub
 
     <RelayCommand>
@@ -717,14 +726,14 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
 
             If uncompress Then
                 If Not isCurrentlyCompressed Then Throw New InvalidOperationException("This game is not currently compressed.")
-                If folder.HasInsufficientFreeSpaceForUncompression Then Return
+                If Not _settingsService.AppSettings.BypassLowSpaceProtection AndAlso folder.HasInsufficientFreeSpaceForUncompression Then Return
                 succeeded = Await _compressableFolderService.UncompressFolder(folder)
             Else
                 If game.SelectedCompressionOption Is Nothing Then Throw New InvalidOperationException("This game does not have a selected compression mode.")
                 folder.CompressionOptions.SelectedCompressionMode = game.SelectedCompressionOption.Mode
                 folder.HasInsufficientFreeSpace = Not _compressableFolderService.HasSufficientFreeSpace(folder)
                 game.HasInsufficientFreeSpace = folder.HasInsufficientFreeSpace
-                If folder.HasInsufficientFreeSpace Then Return
+                If Not Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection AndAlso folder.HasInsufficientFreeSpace Then Return
                 succeeded = Await _compressableFolderService.CompressFolder(folder)
                 Await _compressableFolderService.AnalyseFolderAsync(folder)
             End If
@@ -1008,9 +1017,13 @@ Public Class SteamDetailedResult : Inherits ObservableObject
 
     Public ReadOnly Property CanUncompress As Boolean
         Get
-            Return Not IsWorking AndAlso IsCompressed AndAlso Not HasInsufficientFreeSpaceForUncompression
+            Return Not IsWorking AndAlso IsCompressed AndAlso (Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection OrElse Not HasInsufficientFreeSpaceForUncompression)
         End Get
     End Property
+
+    Public Sub NotifyCanUncompressChanged()
+        OnPropertyChanged(NameOf(CanUncompress))
+    End Sub
 
     Public Sub New(gameName As String, gamePath As String, appId As Integer, lastSteamUpdate As DateTime, hasPendingSteamUpdate As Boolean, watchedFolder As Watcher.WatchedFolder, wikiResults As WikiCompressionResults, poorlyCompressedFiles As List(Of String))
         Me.GameName = gameName

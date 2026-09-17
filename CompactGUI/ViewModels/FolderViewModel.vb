@@ -46,6 +46,8 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
             AlwaysShowDetailsCompressionMode = Application.GetService(Of Core.Settings.ISettingsService).AppSettings.AlwaysShowDetailedCompressionMode
         ElseIf e.PropertyName = NameOf(Core.Settings.Settings.NonCompressableList) Then
             Folder.NotifyPropertyChanged(NameOf(CompressableFolder.SkippedFileCount))
+        ElseIf e.PropertyName = NameOf(Core.Settings.Settings.BypassLowSpaceProtection) Then
+            NotifyCanUncompressChanged()
         End If
     End Sub
 
@@ -143,7 +145,7 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
             CompressionProgressFile = Folder.CompressionProgress.FileName.Replace(Folder.FolderName, "")
 
         ElseIf e.PropertyName = NameOf(Folder.HasInsufficientFreeSpaceForUncompression) Then
-            UncompressCommand.NotifyCanExecuteChanged()
+            NotifyCanUncompressChanged()
 
         End If
     End Sub
@@ -161,7 +163,7 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
     End Function
 
     Private Function CanUncompress() As Boolean
-        Return Not Folder.HasInsufficientFreeSpaceForUncompression
+        Return _appSettings.BypassLowSpaceProtection OrElse Not Folder.HasInsufficientFreeSpaceForUncompression
     End Function
 
     <RelayCommand>
@@ -200,6 +202,14 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
         If Folder.Compressor Is Nothing Then Return
         Folder.ActiveFileOperations = Folder.Compressor.Cancel()
         Folder.IsCancelling = True
+    End Sub
+
+    Private Sub NotifyCanUncompressChanged()
+        If Application.Current.Dispatcher.CheckAccess() Then
+            UncompressCommand.NotifyCanExecuteChanged()
+        Else
+            Application.Current.Dispatcher.BeginInvoke(Sub() UncompressCommand.NotifyCanExecuteChanged())
+        End If
     End Sub
 
     <RelayCommand>

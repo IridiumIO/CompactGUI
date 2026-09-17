@@ -55,7 +55,7 @@ public sealed class Compactor : ICompressor, IDisposable
 
     }
 
-    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress> progressMonitor = null, int maxParallelism = 1)
+    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress> progressMonitor = null, int maxParallelism = 1, bool bypassLowDiskSpaceProtection = false)
     {
         if(cancellationTokenSource.IsCancellationRequested) { return false; }
 
@@ -67,7 +67,7 @@ public sealed class Compactor : ICompressor, IDisposable
 
         var sw = Stopwatch.StartNew();
 
-        maxParallelism = GetWorkerCount(maxParallelism, workingFiles);
+        maxParallelism = GetWorkerCount(maxParallelism, workingFiles, bypassLowDiskSpaceProtection);
         Debug.WriteLine($"Compactor: Using {maxParallelism} parallel workers for compression.");
         ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
 
@@ -176,9 +176,12 @@ public sealed class Compactor : ICompressor, IDisposable
             .ToList();
     }
 
-    private int GetWorkerCount(int requestedWorkerCount, IEnumerable<FileDetails> files)
+    private int GetWorkerCount(int requestedWorkerCount, IEnumerable<FileDetails> files, bool bypassLowDiskSpaceProtection)
     {
         int workerCount = requestedWorkerCount <= 0 ? Environment.ProcessorCount : requestedWorkerCount;
+
+        if (bypassLowDiskSpaceProtection) return workerCount;
+
         var fileList = files.ToList();
         bool containsDiskImage = fileList.Any(file => new[] { ".vhd", ".vhdx", ".vmdk", ".qcow2", ".img", ".iso" }.Contains(Path.GetExtension(file.FileName), StringComparer.OrdinalIgnoreCase));
 

@@ -48,6 +48,8 @@ public partial class Settings : ObservableRecipient
 
     [ObservableProperty] private string language = "en-AU";
 
+    [ObservableProperty] private bool bypassLowSpaceProtection = false;
+
     partial void OnScheduledBackgroundIntervalChanged(int value) => UpdateNextScheduledBackgroundRun();
 
     partial void OnScheduledBackgroundHourChanged(int value) => UpdateNextScheduledBackgroundRun();

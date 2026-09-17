@@ -28,7 +28,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
         _logger = logger ?? NullLogger<Uncompactor>.Instance;
     }
 
-    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1)
+    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1, bool bypassLowDiskSpaceProtection = false)
     {
         int totalFiles = filesList.Count;
         if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
