@@ -27,6 +27,7 @@
   <a href="README_ru.md">Русский</a> -
   简体中文 -
   <a href="README_it.md">Italian</a>
+  <a href="README_id.md">Bahasa Indonesia</a>
 </p>
 &nbsp;
 
