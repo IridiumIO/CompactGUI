@@ -17,9 +17,17 @@ version = 1
 file = "ru-RU.toml"
 
 [locales."zh-CN"]
-version = 1
+version = 2
 file = "zh-CN.toml"
 
 [locales."it-IT"]
 version = 1
 file = "it-IT.toml"
+
+[locales."tr-TR"]
+version = 1
+file = "tr-TR.toml"
+
+[locales."id-ID"]
+version = 1
+file = "id-ID.toml"

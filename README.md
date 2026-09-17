@@ -26,7 +26,8 @@
   <a href="README.md">English</a> -
   <a href="README/README_ru.md">Русский</a> -
   <a href="README/README_cn.md">简体中文</a> -
-  <a href="README/README_it.md">Italian</a>
+  <a href="README/README_it.md">Italian</a> -
+  <a href="README/README_id.md">Bahasa Indonesia</a>
 </p>
 &nbsp;
 
