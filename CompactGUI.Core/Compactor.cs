@@ -61,9 +61,22 @@ public sealed class Compactor : ICompressor, IDisposable
 
         CompactorLog.BuildingWorkingFilesList(_logger, workingDirectory);
         var workingFiles = await BuildWorkingFilesList().ConfigureAwait(false);
+        if (workingFiles is null)
+        {
+            CompactorLog.CompressionFailed(_logger, "Unable to build the compression file list.");
+            return false;
+        }
+
         long totalFilesSize = workingFiles.Sum((f) => f.UncompressedSize);
 
         totalProcessedBytes = 0;
+        if (totalFilesSize == 0)
+        {
+            CompactorLog.CompressionCompleted(_logger, 0);
+            progressMonitor?.Report(new CompressionProgress(100, ""));
+            return true;
+        }
+
         int failedFileCount = 0;
 
         var sw = Stopwatch.StartNew();
@@ -173,14 +186,14 @@ public sealed class Compactor : ICompressor, IDisposable
         }
     }
 
-    public async Task<IEnumerable<FileDetails>> BuildWorkingFilesList()
+    public async Task<IEnumerable<FileDetails>?> BuildWorkingFilesList()
     {
         uint clusterSize = SharedMethods.GetClusterSize(workingDirectory);
 
         
         var analysedFiles = await _analyser.GetAnalysedFilesAsync(cancellationTokenSource.Token);
 
-        if (analysedFiles is null) return Enumerable.Empty<FileDetails>();
+        if (analysedFiles is null) return null;
 
         var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(f => f.FileName), exclusionList);
 
