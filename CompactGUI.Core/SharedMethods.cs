@@ -122,6 +122,19 @@ public static class SharedMethods
 
     }
 
+    public static bool IsDiskImage(string fileName)
+    {
+        ReadOnlySpan<char> extension = Path.GetExtension(fileName.AsSpan());
+        return extension.Equals(".vhd", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".vhdx", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".vmdk", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".qcow2", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".img", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".iso", StringComparison.OrdinalIgnoreCase);
+    }
+
+
+
     public static void PreventSleep()
     {
         PInvoke.SetThreadExecutionState(

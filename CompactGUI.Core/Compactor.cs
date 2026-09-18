@@ -177,7 +177,7 @@ public sealed class Compactor : ICompressor, IDisposable
         }
     }
 
-    public async Task<IEnumerable<FileDetails>?> BuildWorkingFilesList()
+    public async Task<List<FileDetails>?> BuildWorkingFilesList()
     {
         uint clusterSize = SharedMethods.GetClusterSize(workingDirectory);
 
@@ -199,21 +199,29 @@ public sealed class Compactor : ICompressor, IDisposable
             .ToList();
     }
 
-    private int GetWorkerCount(int requestedWorkerCount, IEnumerable<FileDetails> files, bool bypassLowDiskSpaceProtection)
+    private int GetWorkerCount(int requestedWorkerCount, IReadOnlyList<FileDetails> files, bool bypassLowDiskSpaceProtection)
     {
         int workerCount = requestedWorkerCount <= 0 ? Environment.ProcessorCount : requestedWorkerCount;
 
         if (bypassLowDiskSpaceProtection) return workerCount;
 
-        var fileList = files.ToList();
-        bool containsDiskImage = fileList.Any(file => new[] { ".vhd", ".vhdx", ".vmdk", ".qcow2", ".img", ".iso" }.Contains(Path.GetExtension(file.FileName), StringComparer.OrdinalIgnoreCase));
+        long totalAllocatedSize = 0;
+        long largestAllocatedSize = 0;
+        bool containsDiskImage = false;
+
+        foreach (FileDetails file in files)
+        {
+            totalAllocatedSize = checked(totalAllocatedSize + file.AllocatedSize);
+            largestAllocatedSize = Math.Max(largestAllocatedSize, file.AllocatedSize);
+            containsDiskImage |= SharedMethods.IsDiskImage(file.FileName);
+        }
 
         try
         {
             var root = Path.GetPathRoot(workingDirectory);
             if (string.IsNullOrWhiteSpace(root)) return workerCount;
 
-            long reserveBytes = fileList.Sum(file => file.AllocatedSize) / 2 + fileList.Select(file => file.AllocatedSize).DefaultIfEmpty().Max();
+            long reserveBytes = totalAllocatedSize / 2 + largestAllocatedSize;
             bool lowFreeSpace = new DriveInfo(root).AvailableFreeSpace < reserveBytes * 2;
             return lowFreeSpace || containsDiskImage ? 1 : workerCount;
         }
@@ -222,6 +230,7 @@ public sealed class Compactor : ICompressor, IDisposable
             return containsDiskImage ? 1 : workerCount;
         }
     }
+
 
 
 
