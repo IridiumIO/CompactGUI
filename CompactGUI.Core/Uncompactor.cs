@@ -31,6 +31,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
     public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1, bool bypassLowDiskSpaceProtection = false)
     {
         int totalFiles = filesList.Count;
+        int failedFileCount = 0;
         if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
         ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
         processedFileCount.Clear();
@@ -43,7 +44,12 @@ public sealed class Uncompactor : ICompressor, IDisposable
                 (file, ctx) =>
                 {
                     ctx.ThrowIfCancellationRequested();
-                    return new ValueTask(PauseAndProcessFile(file, totalFiles, progressMonitor, cancellationTokenSource.Token));
+                    if (!PauseAndProcessFile(file, totalFiles, progressMonitor, cancellationTokenSource.Token))
+                    {
+                        Interlocked.Increment(ref failedFileCount);
+                    }
+
+                    return ValueTask.CompletedTask;
                 });
         }
         catch (OperationCanceledException) {
@@ -51,7 +57,19 @@ public sealed class Uncompactor : ICompressor, IDisposable
             ReportProgress(progressMonitor, totalFiles, "", true);
             return false; 
         }
+        catch (Exception ex)
+        {
+            UncompactorLog.DecompressionFailed(_logger, ex.Message);
+            return false;
+        }
         finally { sw.Stop(); }
+
+        if (failedFileCount > 0)
+        {
+            UncompactorLog.DecompressionFailed(_logger, $"{failedFileCount} file operation(s) failed.");
+            ReportProgress(progressMonitor, totalFiles, "", true);
+            return true;
+        }
 
         UncompactorLog.DecompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
         ReportProgress(progressMonitor, totalFiles, "", true);
@@ -59,7 +77,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
 
     }
 
-    private async Task PauseAndProcessFile(string file, int totalFiles, IProgress<CompressionProgress>? progressMonitor, CancellationToken ctx)
+    private bool PauseAndProcessFile(string file, int totalFiles, IProgress<CompressionProgress>? progressMonitor, CancellationToken ctx)
     {
         UncompactorLog.ProcessingFile(_logger, file);
         try
@@ -69,7 +87,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
         catch (OperationCanceledException) { throw; }
         lock (cancellationGate)
         {
-            if (cancellationRequested) return;
+            if (cancellationRequested) return true;
             activeFileOperations++;
             activeFiles.TryAdd(file, 0);
         }
@@ -77,8 +95,10 @@ public sealed class Uncompactor : ICompressor, IDisposable
 
         try
         {
-            var _ = WOFDecompressFile(file);
-            processedFileCount.TryAdd(file, 1);
+            bool succeeded = WOFDecompressFile(file);
+            if (succeeded) processedFileCount.TryAdd(file, 1);
+
+            return succeeded;
         }
         finally
         {
@@ -100,19 +120,21 @@ public sealed class Uncompactor : ICompressor, IDisposable
         progressMonitor?.Report(new CompressionProgress((int)(processedFileCount.Count / (float)totalFiles * 100), fileName, activeFiles.Keys.ToArray()));
     }
 
-    private unsafe bool? WOFDecompressFile(string file)
+    private unsafe bool WOFDecompressFile(string file)
     {
         try
         {
             using (SafeFileHandle fs = File.OpenHandle(file))
             {
-                var res = PInvoke.DeviceIoControl(fs, WOFHelper.FSCTL_DELETE_EXTERNAL_BACKING, null, 0, null, 0, null, null);
-                return res;
+                uint bytesReturned;
+                bool succeeded = PInvoke.DeviceIoControl(fs, WOFHelper.FSCTL_DELETE_EXTERNAL_BACKING, null, 0, null, 0, &bytesReturned, null);
+                if (succeeded) return true;
+
+                return false;
             }  
         }
-        catch (Exception ex) { 
-            UncompactorLog.FileDecompressionFailed(_logger, file, ex.Message);
-            return null; 
+        catch (Exception) { 
+            return false; 
         }
     }
 

@@ -64,6 +64,7 @@ public sealed class Compactor : ICompressor, IDisposable
         long totalFilesSize = workingFiles.Sum((f) => f.UncompressedSize);
 
         totalProcessedBytes = 0;
+        int failedFileCount = 0;
 
         var sw = Stopwatch.StartNew();
 
@@ -79,7 +80,12 @@ public sealed class Compactor : ICompressor, IDisposable
                 {
                     ctx.ThrowIfCancellationRequested();
 
-                    return new ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor));
+                    if (!PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor))
+                    {
+                        Interlocked.Increment(ref failedFileCount);
+                    }
+
+                    return ValueTask.CompletedTask;
                 }).ConfigureAwait(false);
         }
         catch (OperationCanceledException){
@@ -93,6 +99,12 @@ public sealed class Compactor : ICompressor, IDisposable
         }
         finally { sw.Stop();}
 
+        if (failedFileCount > 0)
+        {
+            CompactorLog.CompressionFailed(_logger, $"{failedFileCount} file operation(s) failed.");
+            ReportProgress(progressMonitor, totalFilesSize, "", true);
+            return true;
+        }
 
         
         CompactorLog.CompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
@@ -100,14 +112,14 @@ public sealed class Compactor : ICompressor, IDisposable
         return true;
     }
 
-    private async Task PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress> progressMonitor)
+    private bool PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress> progressMonitor)
     {
         CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize);
 
         pauseGate.Wait(token);
         lock (cancellationGate)
         {
-            if (cancellationRequested) return;
+            if (cancellationRequested) return true;
             activeFileOperations++;
             activeFiles.TryAdd(file.FileName, 0);
         }
@@ -115,8 +127,10 @@ public sealed class Compactor : ICompressor, IDisposable
 
         try
         {
-            var res = WOFCompressFile(file.FileName);
-            Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
+            bool succeeded = WOFCompressFile(file.FileName);
+            if (succeeded) Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
+          
+            return succeeded;
         }
         finally
         {
@@ -138,19 +152,24 @@ public sealed class Compactor : ICompressor, IDisposable
         progressMonitor?.Report(new CompressionProgress((int)((double)totalProcessedBytes / totalFilesSize * 100.0), fileName, activeFiles.Keys.ToArray()));
     }
 
-    private unsafe int? WOFCompressFile(string filePath)
+    private unsafe bool WOFCompressFile(string filePath)
     {
+        const int ErrorCompressionNotBeneficialHResult = unchecked((int)0x80070158);
+
         try
         {
             using (SafeFileHandle fs = File.OpenHandle(filePath))
             {
-                return PInvoke.WofSetFileDataLocation(fs, (uint)WOFHelper.WOF_PROVIDER_FILE, compressionInfoPtr.ToPointer(), compressionInfoSize);
+                int result = PInvoke.WofSetFileDataLocation(fs, (uint)WOFHelper.WOF_PROVIDER_FILE, compressionInfoPtr.ToPointer(), compressionInfoSize);
+
+                if (result >= 0 || result == ErrorCompressionNotBeneficialHResult)  return true;
+
+                return false;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            CompactorLog.FileCompressionFailed(_logger, filePath, ex.Message);
-            return null;
+            return false;
         }
     }
 
