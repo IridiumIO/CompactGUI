@@ -16,6 +16,7 @@ public sealed class Compactor : ICompressor, IDisposable
     private readonly string workingDirectory;
     private readonly HashSet<string> exclusionList;
     private readonly WOFCompressionAlgorithm wofCompressionAlgorithm;
+    private readonly bool bypassLowDiskSpaceProtection;
 
 
     private long totalProcessedBytes = 0;
@@ -31,16 +32,17 @@ public sealed class Compactor : ICompressor, IDisposable
 
     private Analyser _analyser;
 
-    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, Analyser analyser, ILogger<Compactor>? logger = null)
+    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, Analyser analyser, bool bypassLowDiskSpaceProtection, ILogger<Compactor>? logger = null)
     {
         workingDirectory = folderPath;
         exclusionList = new HashSet<string>(excludedFileTypes, StringComparer.OrdinalIgnoreCase);
         wofCompressionAlgorithm = compressionLevel;
+        this.bypassLowDiskSpaceProtection = bypassLowDiskSpaceProtection;
         _logger = logger ?? NullLogger<Compactor>.Instance;
         _analyser = analyser;
     }
 
-    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress> progressMonitor = null, int maxParallelism = 1, bool bypassLowDiskSpaceProtection = false)
+    public async Task<bool> RunAsync(IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1)
     {
         if(cancellationTokenSource.IsCancellationRequested) { return false; }
 
@@ -110,7 +112,7 @@ public sealed class Compactor : ICompressor, IDisposable
         return true;
     }
 
-    private bool PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress> progressMonitor)
+    private bool PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress>? progressMonitor)
     {
         CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize);
 
@@ -141,7 +143,7 @@ public sealed class Compactor : ICompressor, IDisposable
 
     }
 
-    private void ReportProgress(IProgress<CompressionProgress> progressMonitor, long totalFilesSize, string fileName, bool force = false)
+    private void ReportProgress(IProgress<CompressionProgress>? progressMonitor, long totalFilesSize, string fileName, bool force = false)
     {
         long now = Stopwatch.GetTimestamp();
         if (!force && now - Interlocked.Read(ref lastProgressReportTicks) < Stopwatch.Frequency / 10) return;

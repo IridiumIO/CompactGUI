@@ -12,8 +12,9 @@ namespace CompactGUI.Core;
 public sealed class Uncompactor : ICompressor, IDisposable
 {
 
+    private readonly IReadOnlyList<string> filesList;
     private readonly ManualResetEventSlim pauseGate = new(initialState: true);
-    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private readonly object cancellationGate = new();
     private readonly ConcurrentDictionary<string, byte> activeFiles = new();
     private int activeFileOperations;
@@ -23,12 +24,13 @@ public sealed class Uncompactor : ICompressor, IDisposable
 
     private readonly ILogger<Uncompactor> _logger;
 
-    public Uncompactor(ILogger<Uncompactor>? logger = null)
+    public Uncompactor(IReadOnlyList<string> filesList, ILogger<Uncompactor>? logger = null)
     {
+        this.filesList = filesList ?? throw new ArgumentNullException(nameof(filesList));
         _logger = logger ?? NullLogger<Uncompactor>.Instance;
     }
 
-    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1, bool bypassLowDiskSpaceProtection = false)
+    public async Task<bool> RunAsync(IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1)
     {
         int totalFiles = filesList.Count;
         int failedFileCount = 0;

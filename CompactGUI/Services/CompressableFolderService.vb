@@ -19,10 +19,11 @@ Public Class CompressableFolderService
 
 
     Public Async Function CompressFolder(folder As CompressableFolder) As Task(Of Boolean)
-        If Not Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection AndAlso folder.HasInsufficientFreeSpace Then Return False
+        Dim bypassLowSpaceProtection = Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection
+        If Not bypassLowSpaceProtection AndAlso folder.HasInsufficientFreeSpace Then Return False
 
-        folder.Compressor = New Compactor(folder.FolderName, WOFHelper.WOFConvertCompressionLevel(folder.CompressionOptions.SelectedCompressionMode), GetSkipList(folder), folder.Analyser, CompactorLogger)
-        Return Await RunCompressionAsync(folder, folder.Compressor, Nothing, True)
+        folder.Compressor = New Compactor(folder.FolderName, WOFHelper.WOFConvertCompressionLevel(folder.CompressionOptions.SelectedCompressionMode), GetSkipList(folder), folder.Analyser, bypassLowSpaceProtection, CompactorLogger)
+        Return Await RunCompressionAsync(folder, folder.Compressor, True)
 
 
     End Function
@@ -32,14 +33,14 @@ Public Class CompressableFolderService
 
         If Not Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection AndAlso folder.HasInsufficientFreeSpaceForUncompression Then Return False
 
-        folder.Compressor = New Uncompactor(UncompactorLogger)
         Dim compressedFilesList = folder.AnalysisResults.Where(Function(rs) rs.CompressedSize < rs.UncompressedSize).Select(Of String)(Function(f) f.FileName).ToList
-        Return Await RunCompressionAsync(folder, folder.Compressor, compressedFilesList, isCompressing:=False)
+        folder.Compressor = New Uncompactor(compressedFilesList, UncompactorLogger)
+        Return Await RunCompressionAsync(folder, folder.Compressor, isCompressing:=False)
 
 
     End Function
 
-    Private Async Function RunCompressionAsync(folder As CompressableFolder, compressor As ICompressor, filesList As List(Of String), isCompressing As Boolean) As Task(Of Boolean)
+    Private Async Function RunCompressionAsync(folder As CompressableFolder, compressor As ICompressor, isCompressing As Boolean) As Task(Of Boolean)
         folder.FolderActionState = ActionState.Working
         folder.IsCancelling = False
         folder.ActiveFileOperations = 0
@@ -57,7 +58,7 @@ Public Class CompressableFolderService
 
             progress.Report(New CompressionProgress(0, ""))
 
-            Dim res = Await compressor.RunAsync(filesList, progress, GetThreadCount(folder), Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection)
+            Dim res = Await compressor.RunAsync(progress, GetThreadCount(folder))
 
             If Not res Then
                 folder.FolderActionState = ActionState.Idle
