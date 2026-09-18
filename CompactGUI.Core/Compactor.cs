@@ -6,7 +6,6 @@ using Microsoft.Win32.SafeHandles;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Enumeration;
-using System.Runtime.InteropServices;
 using Windows.Win32;
 
 namespace CompactGUI.Core;
@@ -18,9 +17,6 @@ public sealed class Compactor : ICompressor, IDisposable
     private readonly HashSet<string> exclusionList;
     private readonly WOFCompressionAlgorithm wofCompressionAlgorithm;
 
-
-    private IntPtr compressionInfoPtr;
-    private UInt32 compressionInfoSize;
 
     private long totalProcessedBytes = 0;
     private readonly ManualResetEventSlim pauseGate = new(initialState: true);
@@ -42,17 +38,6 @@ public sealed class Compactor : ICompressor, IDisposable
         wofCompressionAlgorithm = compressionLevel;
         _logger = logger ?? NullLogger<Compactor>.Instance;
         _analyser = analyser;
-        InitializeCompressionInfoPointer();
-    }
-
-
-    private void InitializeCompressionInfoPointer()
-    {
-        var _EFInfo = new WOFHelper.WOF_FILE_COMPRESSION_INFO_V1 { Algorithm = (UInt32)wofCompressionAlgorithm, Flags = 0 };
-        compressionInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(_EFInfo));
-        compressionInfoSize = (UInt32)Marshal.SizeOf(_EFInfo);
-        Marshal.StructureToPtr(_EFInfo, compressionInfoPtr, true);
-
     }
 
     public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress> progressMonitor = null, int maxParallelism = 1, bool bypassLowDiskSpaceProtection = false)
@@ -173,7 +158,13 @@ public sealed class Compactor : ICompressor, IDisposable
         {
             using (SafeFileHandle fs = File.OpenHandle(filePath))
             {
-                int result = PInvoke.WofSetFileDataLocation(fs, (uint)WOFHelper.WOF_PROVIDER_FILE, compressionInfoPtr.ToPointer(), compressionInfoSize);
+                WOFHelper.WOF_FILE_COMPRESSION_INFO_V1 compressionInfo = new()
+                {
+                    Algorithm = (uint)wofCompressionAlgorithm,
+                    Flags = 0
+                };
+
+                int result = PInvoke.WofSetFileDataLocation(fs,(uint)WOFHelper.WOF_PROVIDER_FILE, &compressionInfo, (uint)sizeof(WOFHelper.WOF_FILE_COMPRESSION_INFO_V1));
 
                 if (result >= 0 || result == ErrorCompressionNotBeneficialHResult)  return true;
 
@@ -265,13 +256,8 @@ public sealed class Compactor : ICompressor, IDisposable
 
     public void Dispose()
     {
-        cancellationTokenSource?.Dispose();
-        pauseGate?.Dispose();
-        if (compressionInfoPtr != IntPtr.Zero)
-        {
-            Marshal.FreeHGlobal(compressionInfoPtr);
-            compressionInfoPtr = IntPtr.Zero;
-        }
+        cancellationTokenSource.Dispose();
+        pauseGate.Dispose();
     }
 
 
