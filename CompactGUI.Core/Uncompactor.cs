@@ -19,7 +19,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
     private int activeFileOperations;
     private bool cancellationRequested;
     private long lastProgressReportTicks;
-    private ConcurrentDictionary<string, int> processedFileCount = new ConcurrentDictionary<string, int>();
+    private int processedFileCount;
 
     private readonly ILogger<Uncompactor> _logger;
 
@@ -34,7 +34,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
         int failedFileCount = 0;
         if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
         ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
-        processedFileCount.Clear();
+        Interlocked.Exchange(ref processedFileCount, 0);
 
         UncompactorLog.StartingDecompression(_logger, totalFiles, maxParallelism);
         Stopwatch sw = Stopwatch.StartNew();
@@ -96,7 +96,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
         try
         {
             bool succeeded = WOFDecompressFile(file);
-            if (succeeded) processedFileCount.TryAdd(file, 1);
+            if (succeeded) Interlocked.Increment(ref processedFileCount);
 
             return succeeded;
         }
@@ -117,7 +117,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
         if (!force && now - Interlocked.Read(ref lastProgressReportTicks) < Stopwatch.Frequency / 5) return;
 
         Interlocked.Exchange(ref lastProgressReportTicks, now);
-        progressMonitor?.Report(new CompressionProgress((int)(processedFileCount.Count / (float)totalFiles * 100), fileName, activeFiles.Keys.ToArray()));
+        progressMonitor?.Report(new CompressionProgress((int)(Volatile.Read(ref processedFileCount) / (float)totalFiles * 100), fileName, activeFiles.Keys.ToArray()));
     }
 
     private unsafe bool WOFDecompressFile(string file)
