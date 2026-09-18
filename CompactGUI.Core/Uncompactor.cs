@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using Windows.Win32;
 using CompactGUI.Logging.Core;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace CompactGUI.Core;
 
@@ -34,6 +35,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
     {
         int totalFiles = filesList.Count;
         int failedFileCount = 0;
+        ConcurrentBag<string> diskSpaceFailures = new();
         if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
         ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
         Interlocked.Exchange(ref processedFileCount, 0);
@@ -46,13 +48,25 @@ public sealed class Uncompactor : ICompressor, IDisposable
                 (file, ctx) =>
                 {
                     ctx.ThrowIfCancellationRequested();
-                    if (!PauseAndProcessFile(file, totalFiles, progressMonitor, cancellationTokenSource.Token))
+                    FileOperationResult result = PauseAndProcessFile(file, totalFiles, progressMonitor, cancellationTokenSource.Token);
+                    if (result == FileOperationResult.InsufficientDiskSpace)
+                    {
+                        diskSpaceFailures.Add(file);
+                    }
+                    else if (result == FileOperationResult.Failed)
                     {
                         Interlocked.Increment(ref failedFileCount);
                     }
 
                     return ValueTask.CompletedTask;
                 });
+
+            failedFileCount += FileOperationRecovery.Retry(
+                diskSpaceFailures,
+                GetFileLength,
+                file => PauseAndProcessFile(file, totalFiles, progressMonitor, cancellationTokenSource.Token),
+                cancellationTokenSource.Token,
+                repeatWhileProgress: false);
         }
         catch (OperationCanceledException) {
             UncompactorLog.DecompressionCanceled(_logger);
@@ -79,7 +93,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
 
     }
 
-    private bool PauseAndProcessFile(string file, int totalFiles, IProgress<CompressionProgress>? progressMonitor, CancellationToken ctx)
+    private FileOperationResult PauseAndProcessFile(string file, int totalFiles, IProgress<CompressionProgress>? progressMonitor, CancellationToken ctx)
     {
         UncompactorLog.ProcessingFile(_logger, file);
         try
@@ -89,7 +103,7 @@ public sealed class Uncompactor : ICompressor, IDisposable
         catch (OperationCanceledException) { throw; }
         lock (cancellationGate)
         {
-            if (cancellationRequested) return true;
+            if (cancellationRequested) return FileOperationResult.Success;
             activeFileOperations++;
             activeFiles.TryAdd(file, 0);
         }
@@ -97,10 +111,10 @@ public sealed class Uncompactor : ICompressor, IDisposable
 
         try
         {
-            bool succeeded = WOFDecompressFile(file);
-            if (succeeded) Interlocked.Increment(ref processedFileCount);
+            FileOperationResult result = WOFDecompressFile(file);
+            if (result == FileOperationResult.Success) Interlocked.Increment(ref processedFileCount);
 
-            return succeeded;
+            return result;
         }
         finally
         {
@@ -122,21 +136,38 @@ public sealed class Uncompactor : ICompressor, IDisposable
         progressMonitor?.Report(new CompressionProgress((int)(Volatile.Read(ref processedFileCount) / (float)totalFiles * 100), fileName, activeFiles.Keys.ToArray()));
     }
 
-    private unsafe bool WOFDecompressFile(string file)
+    private unsafe FileOperationResult WOFDecompressFile(string file)
     {
         try
         {
             using (SafeFileHandle fs = File.OpenHandle(file))
             {
                 uint bytesReturned;
-                bool succeeded = PInvoke.DeviceIoControl(fs, WOFHelper.FSCTL_DELETE_EXTERNAL_BACKING, null, 0, null, 0, &bytesReturned, null);
-                if (succeeded) return true;
+                if (PInvoke.DeviceIoControl(fs, WOFHelper.FSCTL_DELETE_EXTERNAL_BACKING, null, 0, null, 0, &bytesReturned, null))
+                {
+                    return FileOperationResult.Success;
+                }
 
-                return false;
+                int errorCode = Marshal.GetLastPInvokeError();
+                return FileOperationRecovery.IsInsufficientDiskSpaceError(errorCode)
+                    ? FileOperationResult.InsufficientDiskSpace
+                    : FileOperationResult.Failed;
             }  
         }
         catch (Exception) { 
-            return false; 
+            return FileOperationResult.Failed;
+        }
+    }
+
+    private static long GetFileLength(string file)
+    {
+        try
+        {
+            return new FileInfo(file).Length;
+        }
+        catch
+        {
+            return long.MaxValue;
         }
     }
 

@@ -65,6 +65,7 @@ public sealed class Compactor : ICompressor, IDisposable
         }
 
         int failedFileCount = 0;
+        ConcurrentBag<FileDetails> diskSpaceFailures = new();
 
         var sw = Stopwatch.StartNew();
 
@@ -80,13 +81,28 @@ public sealed class Compactor : ICompressor, IDisposable
                 {
                     ctx.ThrowIfCancellationRequested();
 
-                    if (!PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor))
+                    FileOperationResult result = PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor);
+                    if (result == FileOperationResult.InsufficientDiskSpace)
+                    {
+                        diskSpaceFailures.Add(file);
+                    }
+                    else if (result == FileOperationResult.Failed)
                     {
                         Interlocked.Increment(ref failedFileCount);
                     }
 
                     return ValueTask.CompletedTask;
                 }).ConfigureAwait(false);
+
+            Debug.WriteLine($"Disk space failures: {diskSpaceFailures.Count}");
+
+            // Sequentiall retry any files that failed due to insufficient disk space
+            failedFileCount += FileOperationRecovery.Retry(
+                diskSpaceFailures,
+                file => file.UncompressedSize,
+                file => PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor),
+                cancellationTokenSource.Token,
+                repeatWhileProgress: true);
         }
         catch (OperationCanceledException){
             CompactorLog.CompressionCanceled(_logger);
@@ -112,14 +128,14 @@ public sealed class Compactor : ICompressor, IDisposable
         return true;
     }
 
-    private bool PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress>? progressMonitor)
+    private FileOperationResult PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress>? progressMonitor)
     {
         CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize);
 
         pauseGate.Wait(token);
         lock (cancellationGate)
         {
-            if (cancellationRequested) return true;
+            if (cancellationRequested) return FileOperationResult.Success;
             activeFileOperations++;
             activeFiles.TryAdd(file.FileName, 0);
         }
@@ -127,10 +143,13 @@ public sealed class Compactor : ICompressor, IDisposable
 
         try
         {
-            bool succeeded = WOFCompressFile(file.FileName);
-            if (succeeded) Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
+            FileOperationResult result = WOFCompressFile(file.FileName);
+            if (result == FileOperationResult.Success)
+            {
+                Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
+            }
           
-            return succeeded;
+            return result;
         }
         finally
         {
@@ -152,7 +171,7 @@ public sealed class Compactor : ICompressor, IDisposable
         progressMonitor?.Report(new CompressionProgress((int)((double)totalProcessedBytes / totalFilesSize * 100.0), fileName, activeFiles.Keys.ToArray()));
     }
 
-    private unsafe bool WOFCompressFile(string filePath)
+    private unsafe FileOperationResult WOFCompressFile(string filePath)
     {
         const int ErrorCompressionNotBeneficialHResult = unchecked((int)0x80070158);
 
@@ -168,14 +187,15 @@ public sealed class Compactor : ICompressor, IDisposable
 
                 int result = PInvoke.WofSetFileDataLocation(fs,(uint)WOFHelper.WOF_PROVIDER_FILE, &compressionInfo, (uint)sizeof(WOFHelper.WOF_FILE_COMPRESSION_INFO_V1));
 
-                if (result >= 0 || result == ErrorCompressionNotBeneficialHResult)  return true;
+                if (result >= 0 || result == ErrorCompressionNotBeneficialHResult) return FileOperationResult.Success;
+                if (FileOperationRecovery.IsInsufficientDiskSpaceHResult(result)) return FileOperationResult.InsufficientDiskSpace;
 
-                return false;
+                return FileOperationResult.Failed;
             }
         }
         catch (Exception)
         {
-            return false;
+            return FileOperationResult.Failed;
         }
     }
 
@@ -190,15 +210,14 @@ public sealed class Compactor : ICompressor, IDisposable
 
         var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(f => f.FileName), exclusionList);
 
-        return analysedFiles
-            .Where(fl =>
-                fl.CompressionMode != wofCompressionAlgorithm
-                && fl.UncompressedSize > clusterSize
-                && !fl.Attributes.HasFlag(FileAttributes.SparseFile)
-                && !excludedFiles.Contains(fl.FileName)
-            )
-            .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize, fl.CompressedSize))
-            .ToList();
+        return [.. analysedFiles
+                    .Where(fl =>
+                        fl.CompressionMode != wofCompressionAlgorithm
+                        && fl.UncompressedSize > clusterSize
+                        && !fl.Attributes.HasFlag(FileAttributes.SparseFile)
+                        && !excludedFiles.Contains(fl.FileName)
+                    )
+                    .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize, fl.CompressedSize))];
     }
 
     private int GetWorkerCount(int requestedWorkerCount, IReadOnlyList<FileDetails> files, bool bypassLowDiskSpaceProtection)
@@ -273,6 +292,5 @@ public sealed class Compactor : ICompressor, IDisposable
 
 
     public readonly record struct FileDetails(string FileName, long UncompressedSize, long AllocatedSize);
-
 
 }
