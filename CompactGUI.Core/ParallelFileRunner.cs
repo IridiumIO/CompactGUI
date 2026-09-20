@@ -35,6 +35,7 @@ internal sealed class ParallelFileRunner<T>(ParallelFileRunnerOptions<T> options
     private long processedWeight;
     private long totalWeight;
     private long lastProgressReportTicks;
+    private CompressionProgressStatus? status;
 
     public CancellationToken Token => cancellationTokenSource.Token;
     public bool IsCancellationRequested => cancellationTokenSource.IsCancellationRequested;
@@ -45,6 +46,7 @@ internal sealed class ParallelFileRunner<T>(ParallelFileRunnerOptions<T> options
         this.totalWeight = totalWeight;
         Interlocked.Exchange(ref processedWeight, 0);
         Interlocked.Exchange(ref lastProgressReportTicks, 0);
+        status = null;
 
         if (files.Count == 0 || totalWeight == 0)
         {
@@ -68,6 +70,7 @@ internal sealed class ParallelFileRunner<T>(ParallelFileRunnerOptions<T> options
         }).ConfigureAwait(false);
 
         Debug.WriteLine($"Disk space failures: {diskSpaceFailures.Count}");
+        if (!diskSpaceFailures.IsEmpty) ReportStatus(progressMonitor, CompressionProgressStatus.LowDiskSpaceRetryingSequentially);
         return failedFileCount + RetryDiskSpaceFailures(diskSpaceFailures, progressMonitor);
     }
 
@@ -139,7 +142,7 @@ internal sealed class ParallelFileRunner<T>(ParallelFileRunnerOptions<T> options
     {
         if (totalWeight == 0)
         {
-            if (force) progressMonitor?.Report(new CompressionProgress(100, fileName, activeFiles.Keys.ToArray()));
+            if (force) progressMonitor?.Report(new CompressionProgress(100, fileName, activeFiles.Keys.ToArray(), status));
             return;
         }
 
@@ -147,7 +150,13 @@ internal sealed class ParallelFileRunner<T>(ParallelFileRunnerOptions<T> options
         if (!force && now - Interlocked.Read(ref lastProgressReportTicks) < progressIntervalTicks) return;
 
         Interlocked.Exchange(ref lastProgressReportTicks, now);
-        progressMonitor?.Report(new CompressionProgress((int)((double)Interlocked.Read(ref processedWeight) / totalWeight * 100.0), fileName, activeFiles.Keys.ToArray()));
+        progressMonitor?.Report(new CompressionProgress((int)((double)Interlocked.Read(ref processedWeight) / totalWeight * 100.0), fileName, activeFiles.Keys.ToArray(), status));
+    }
+
+    public void ReportStatus(IProgress<CompressionProgress>? progressMonitor, CompressionProgressStatus? status)
+    {
+        this.status = status;
+        ReportProgress(progressMonitor, force: true);
     }
 
     public void Pause() => pauseGate.Reset();

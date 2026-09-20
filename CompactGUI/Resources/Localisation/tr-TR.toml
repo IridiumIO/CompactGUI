@@ -51,6 +51,7 @@
 "Descending" = "Azalan"
 "Deselect all" = "Tüm seçimleri kaldır"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Sıkıştırma"
 "Do not compress" = "Sıkıştırma"
 "Drive unavailable" = "Sürücü kullanılamıyor"

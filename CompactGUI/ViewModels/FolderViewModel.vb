@@ -21,6 +21,9 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
     Private _CompressionProgressFile As String
 
     <ObservableProperty>
+    Private _CompressionStatusMessage As String = String.Empty
+
+    <ObservableProperty>
     Private _AlwaysShowDetailsCompressionMode As Boolean = False
 
     Private ReadOnly _watcher As Watcher.Watcher
@@ -143,6 +146,7 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
         ElseIf e.PropertyName = NameOf(Folder.CompressionProgress) Then
             CompressionProgress = Folder.CompressionProgress.ProgressPercent
             CompressionProgressFile = Folder.CompressionProgress.FileName.Replace(Folder.FolderName, "")
+            CompressionStatusMessage = GetCompressionStatusMessage(Folder.CompressionProgress.Status)
 
         ElseIf e.PropertyName = NameOf(Folder.HasInsufficientFreeSpaceForUncompression) Then
             NotifyCanUncompressChanged()
@@ -211,6 +215,17 @@ Public NotInheritable Class FolderViewModel : Inherits ObservableObject : Implem
             Application.Current.Dispatcher.BeginInvoke(Sub() UncompressCommand.NotifyCanExecuteChanged())
         End If
     End Sub
+
+    Private Shared Function GetCompressionStatusMessage(status As Core.CompressionProgressStatus?) As String
+        If Not status.HasValue Then Return String.Empty
+
+        Select Case status.Value
+            Case Core.CompressionProgressStatus.LowDiskSpaceRetryingSequentially
+                Return "Disk space is low. Retrying affected files sequentially.".LT()
+            Case Else
+                Return String.Empty
+        End Select
+    End Function
 
     <RelayCommand>
     Private Async Function SubmitToWiki() As Task

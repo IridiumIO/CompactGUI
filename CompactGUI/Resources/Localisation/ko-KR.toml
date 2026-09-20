@@ -51,6 +51,7 @@
 "Descending" = "내림차순"
 "Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "DirectStorage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "압축하지 않기"
 "Drive unavailable" = "드라이브 사용 불가"

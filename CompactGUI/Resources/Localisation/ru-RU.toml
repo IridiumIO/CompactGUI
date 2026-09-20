@@ -51,6 +51,7 @@
 "Descending" = "По убыванию"
 "Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "Direct Storage" # LOC:TODO
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Do not compress" # LOC:TODO
 "Drive unavailable" = "Drive unavailable" # LOC:TODO

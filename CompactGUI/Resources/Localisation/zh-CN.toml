@@ -51,6 +51,7 @@
 "Descending" = "递减"
 "Deselect all" = "取消全选"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "无需压缩"
 "Do not compress" = "无需压缩"
 "Drive unavailable" = "驱动器不可用"

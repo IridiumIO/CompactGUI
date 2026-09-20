@@ -51,6 +51,7 @@
 "Descending" = "Descending"
 "Deselect all" = "Deselect all"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially."
 "Do Not Compress" = "Do Not Compress"
 "Do not compress" = "Do not compress"
 "Drive unavailable" = "Drive unavailable"

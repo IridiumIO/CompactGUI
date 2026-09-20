@@ -30,6 +30,21 @@
                            Foreground="{StaticResource PaletteAmberBrush}"
                            Text="{Binding Folder.ActiveFileOperations, StringFormat=Finishing {0} active file operations; do not power off.}"
                            Visibility="{Binding Folder.IsCancelling, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock Margin="0 5 0 0"
+                           Foreground="{StaticResource PaletteAmberBrush}"
+                           Text="{Binding CompressionStatusMessage}"
+                           TextWrapping="Wrap">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
                     <ui:ProgressRing IsIndeterminate="True" Width="16" Height="16" Margin="0 0 10 0" VerticalAlignment="Top" />
                     <StackPanel>

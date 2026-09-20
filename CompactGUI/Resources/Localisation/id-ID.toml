@@ -51,6 +51,7 @@
 "Descending" = "Menurun"
 "Deselect all" = "Hapus semua pilihan"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Jangan Kompres"
 "Do not compress" = "Jangan kompres"
 "Drive unavailable" = "Drive tidak tersedia"
