@@ -305,7 +305,7 @@ Public Class CompressableFolderService
     End Function
 
     Public Function HasSufficientFreeSpaceForUncompression(folder As CompressableFolder) As Boolean
-        Return Core.SharedMethods.HasSufficientFreeSpaceForCompression(folder.FolderName, folder.AnalysisResults, WOFCompressionAlgorithm.NO_COMPRESSION, Array.Empty(Of String)(), reserveUncompressedSize:=True)
+        Return Core.SharedMethods.HasSufficientFreeSpaceForCompression(folder.FolderName, folder.AnalysisResults, WOFCompressionAlgorithm.NO_COMPRESSION, Array.Empty(Of String)())
     End Function
 
     Private Sub ReleaseToken(folder As CompressableFolder, cts As CancellationTokenSource)

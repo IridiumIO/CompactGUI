@@ -645,8 +645,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             game.HasInsufficientFreeSpaceForUncompression = Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(game.GamePath,
                                                                                                                              analysedFiles,
                                                                                                                              Core.WOFCompressionAlgorithm.NO_COMPRESSION,
-                                                                                                                             Array.Empty(Of String)(),
-                                                                                                                             reserveUncompressedSize:=True)
+                                                                                                                             Array.Empty(Of String)())
         End Using
     End Function
 

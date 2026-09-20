@@ -206,7 +206,7 @@ public static class SharedMethods
 
     }
 
-    public static bool HasSufficientFreeSpaceForCompression(string workingDirectory, IEnumerable<AnalysedFileDetails> analysedFiles, WOFCompressionAlgorithm compressionAlgorithm, IEnumerable<string> exclusionList, bool reserveUncompressedSize = false)
+    public static bool HasSufficientFreeSpaceForCompression(string workingDirectory, IEnumerable<AnalysedFileDetails> analysedFiles, WOFCompressionAlgorithm compressionAlgorithm, IEnumerable<string> exclusionList)
     {
         uint clusterSize = GetClusterSize(workingDirectory);
         var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(file => file.FileName), exclusionList);
@@ -217,20 +217,12 @@ public static class SharedMethods
                 !excludedFiles.Contains(file.FileName))
             .ToList();
 
-        long requiredBytes;
-        if (reserveUncompressedSize)
-        {
-            requiredBytes = candidates.Sum(file => file.UncompressedSize) /2 + candidates.Select(file => file.UncompressedSize).DefaultIfEmpty().Max();
-        }
-        else
-        {
-            requiredBytes = candidates.Sum(file => file.CompressedSize) /2 +  candidates.Select(file => file.CompressedSize).DefaultIfEmpty().Max();
-        }
+        long largestCandidateSize = candidates.Select(file => file.UncompressedSize).DefaultIfEmpty().Max();
 
         try
         {
             var root = Path.GetPathRoot(workingDirectory);
-            return !string.IsNullOrWhiteSpace(root) && new DriveInfo(root).AvailableFreeSpace > requiredBytes;
+            return !string.IsNullOrWhiteSpace(root) && largestCandidateSize * 2 <= new DriveInfo(root).AvailableFreeSpace;
         }
         catch (IOException)
         {
