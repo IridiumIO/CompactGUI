@@ -548,7 +548,7 @@
                                         <EventTrigger RoutedEvent="MouseLeave">
                                             <BeginStoryboard>
                                                 <Storyboard>
-                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource CardBackground}" Duration="0:0:0.1" />
+                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource CardBackgroundFillColorDefault}" Duration="0:0:0.1" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger>
