@@ -140,7 +140,7 @@
 "Success" = "성공"
 "System Integration" = "시스템 연동"
 "The SnackbarPresenter was never set" = "SnackbarPresenter가 설정되어 있지 않습니다"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." # LOC:TODO
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "이 게임은 DirectStorage 기술을 사용합니다. 이 기능을 사용 중이라면 이 게임을 압축하지 않는 것이 좋습니다."
 "Total Results" = "제출된 결과 수"
 "UI Settings" = "UI 설정"

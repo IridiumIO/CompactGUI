@@ -46,14 +46,14 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
-                    <ui:ProgressRing IsIndeterminate="True" Width="16" Height="16" Margin="0 0 10 0" VerticalAlignment="Top" />
+                    <ui:ProgressRing Width="16" Height="16"
+                                     Margin="0 0 10 0" VerticalAlignment="Top"
+                                     IsIndeterminate="True" />
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Folder.VisibleActiveCompressionFiles}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Foreground="{StaticResource AccentFillColorDisabledBrush}"
-                                               Text="{Binding DisplayName, Converter={StaticResource TokenisedFolderPathConverter}}"
-                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Foreground="{StaticResource AccentFillColorDisabledBrush}" Text="{Binding DisplayName, Converter={StaticResource TokenisedFolderPathConverter}}" TextTrimming="CharacterEllipsis" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -120,17 +120,17 @@
             <StackPanel Grid.ColumnSpan="3" Margin="0 12" Orientation="Horizontal">
                 <ui:TextBlock d:Text="Hades" FontSize="30" FontWeight="SemiBold"
                               Text="{Binding Folder.DisplayName}" />
-                <Border Height="25" Cursor="Help"
+                <Border Height="25"
                         Margin="14 6" Padding="6 3"
-                        Background="#80C42B1C" CornerRadius="5"
+                        Background="#80C42B1C" CornerRadius="5" Cursor="Help"
                         Visibility="{Binding Folder.HasInsufficientFreeSpace, Converter={StaticResource BoolToVisConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Margin="0 2 4 0" Foreground="{StaticResource PaletteRedBrush}" Symbol="Warning20" />
-                        <TextBlock Foreground="{StaticResource ButtonForeground}" loc:L.Value="Not enough space" />
+                        <TextBlock loc:L.Value="Not enough space" Foreground="{StaticResource ButtonForeground}" />
                     </StackPanel>
                     <Border.ToolTip>
                         <ToolTip MaxWidth="300">
-                            <TextBlock loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." TextWrapping="Wrap" />
+                            <TextBlock loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." TextWrapping="Wrap" />
                         </ToolTip>
                     </Border.ToolTip>
                 </Border>

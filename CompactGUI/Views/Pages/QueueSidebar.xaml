@@ -92,7 +92,7 @@
                                 </StackPanel>
                                 <Border.ToolTip>
                                     <ToolTip MaxWidth="300"  >
-                                        <TextBlock TextWrapping="Wrap" loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues."/>
+                                        <TextBlock TextWrapping="Wrap" loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues."/>
                                     </ToolTip>
                                 </Border.ToolTip>
                             </Border>

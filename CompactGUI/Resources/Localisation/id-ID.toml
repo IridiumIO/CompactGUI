@@ -140,7 +140,7 @@
 "Success" = "Berhasil"
 "System Integration" = "Integrasi Sistem"
 "The SnackbarPresenter was never set" = "SnackbarPresenter belum pernah diatur"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "Ruang kosong pada drive ini tidak cukup untuk mengompresi folder ini dengan aman. Anda memerlukan ruang kosong setidaknya 50% dari ukuran folder ini agar Windows tidak mengalami masalah."
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Game ini menggunakan teknologi DirectStorage. Jika Anda menggunakan fitur ini, sebaiknya jangan kompres game ini."
 "Total Results" = "Total Hasil"
 "UI Settings" = "Pengaturan UI"
@@ -253,3 +253,6 @@
 
 [context."Storage savings"]
 "saved" = "dihemat"
+
+[obsolete]
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "Ruang kosong pada drive ini tidak cukup untuk mengompresi folder ini dengan aman. Anda memerlukan ruang kosong setidaknya 50% dari ukuran folder ini agar Windows tidak mengalami masalah."

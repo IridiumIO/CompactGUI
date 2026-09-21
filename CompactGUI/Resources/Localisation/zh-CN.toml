@@ -140,7 +140,7 @@
 "Success" = "成功"
 "System Integration" = "系统集成"
 "The SnackbarPresenter was never set" = "SnackbarPresenter 从未被设置"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "驱动器的可用空间不足以安全压缩此文件夹。你需要至少预留相当于此文件夹大小的 50% 的可用空间以确保 Windows 不会出现问题。"
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "此游戏使用 DirectStorage 技术。如果你正在使用此功能，则不应压缩此游戏。"
 "Total Results" = "结果总数"
 "UI Settings" = "UI 设置"
@@ -253,3 +253,6 @@
 
 [context."Storage savings"]
 "saved" = "已节省"
+
+[obsolete]
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "驱动器的可用空间不足以安全压缩此文件夹。你需要至少预留相当于此文件夹大小的 50% 的可用空间以确保 Windows 不会出现问题。"

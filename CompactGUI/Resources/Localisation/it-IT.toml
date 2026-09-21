@@ -140,7 +140,7 @@
 "Success" = "Successo"
 "System Integration" = "Integrazione di sistema"
 "The SnackbarPresenter was never set" = "The SnackbarPresenter non è stata mai settata"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." # LOC:TODO
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Questo gioco utilizza la tecnologia DirectStorage. Se utilizzi questa funzione, non dovresti comprimere questo gioco."
 "Total Results" = "Risultati totali"
 "UI Settings" = "Impostazioni interfaccia"

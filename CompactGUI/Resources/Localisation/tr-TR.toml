@@ -140,7 +140,7 @@
 "Success" = "Ba┼şar─▒l─▒"
 "System Integration" = "Sistem Entegrasyonu"
 "The SnackbarPresenter was never set" = "SnackbarPresenter ayarlanmad─▒"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "Bu klasörü güvenle sıkıştırmak için sürücüde yeterli boş alan yok. Windows'un sorun çıkarmaması için klasör boyutunun en az %50'si kadar boş alan gereklidir."
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Bu oyun DirectStorage teknolojisini kullan─▒yor. E─şer bu ├Âzelli─şi kullan─▒yorsan─▒z, bu oyunu s─▒k─▒┼şt─▒rmamal─▒s─▒n─▒z."
 "Total Results" = "Toplam Sonu├ğlar"
 "UI Settings" = "Aray├╝z Ayarlar─▒"
@@ -253,3 +253,6 @@
 
 [context."Storage savings"]
 "saved" = "kaydedildi"
+
+[obsolete]
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "Bu klasörü güvenle sıkıştırmak için sürücüde yeterli boş alan yok. Windows'un sorun çıkarmaması için klasör boyutunun en az %50'si kadar boş alan gereklidir."
