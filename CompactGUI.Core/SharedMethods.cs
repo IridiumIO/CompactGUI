@@ -208,21 +208,37 @@ public static class SharedMethods
 
     public static bool HasSufficientFreeSpaceForCompression(string workingDirectory, IEnumerable<AnalysedFileDetails> analysedFiles, WOFCompressionAlgorithm compressionAlgorithm, IEnumerable<string> exclusionList)
     {
-        uint clusterSize = GetClusterSize(workingDirectory);
-        var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(file => file.FileName), exclusionList);
-        var candidates = analysedFiles.Where(file =>
-                file.CompressionMode != compressionAlgorithm &&
-                file.UncompressedSize > clusterSize &&
-                !file.Attributes.HasFlag(FileAttributes.SparseFile) &&
-                !excludedFiles.Contains(file.FileName))
-            .ToList();
+        long requiredBytes;
+        if (compressionAlgorithm == WOFCompressionAlgorithm.NO_COMPRESSION)
+        {
+            long largestCandidateSize = 0;
+            requiredBytes = 0;
 
-        long largestCandidateSize = candidates.Select(file => file.UncompressedSize).DefaultIfEmpty().Max();
+            foreach (AnalysedFileDetails file in analysedFiles)
+            {
+                if (file.CompressedSize >= file.UncompressedSize) continue;
+                requiredBytes += file.UncompressedSize - file.CompressedSize;
+                largestCandidateSize = Math.Max(largestCandidateSize, file.UncompressedSize);
+            }
+
+            requiredBytes += largestCandidateSize;
+        }
+        else
+        {
+            uint clusterSize = GetClusterSize(workingDirectory);
+            var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(file => file.FileName), exclusionList);
+            requiredBytes = analysedFiles.Where(file =>
+                    file.CompressionMode != compressionAlgorithm &&
+                    file.UncompressedSize > clusterSize &&
+                    !file.Attributes.HasFlag(FileAttributes.SparseFile) &&
+                    !excludedFiles.Contains(file.FileName))
+                .Select(file => file.UncompressedSize).DefaultIfEmpty().Max() * 2;
+        }
 
         try
         {
             var root = Path.GetPathRoot(workingDirectory);
-            return !string.IsNullOrWhiteSpace(root) && largestCandidateSize * 2 <= new DriveInfo(root).AvailableFreeSpace;
+            return !string.IsNullOrWhiteSpace(root) && requiredBytes <= new DriveInfo(root).AvailableFreeSpace;
         }
         catch (IOException)
         {
