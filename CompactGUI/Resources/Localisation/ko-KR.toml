@@ -73,6 +73,8 @@
 "Games" = "개"
 "Go to Database Results" = "압축 데이터 목록으로 이동"
 "HDDs only use 1 thread" = "하드 디스크일 경우 하나의 스레드만 사용"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "홈"
 "Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "공통으로 제외할 파일 형식 포함"

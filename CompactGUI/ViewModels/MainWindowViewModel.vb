@@ -1,4 +1,6 @@
 ﻿
+Imports System.ComponentModel
+
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
@@ -19,10 +21,33 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
     Private ReadOnly _windowService As IWindowService
     Private ReadOnly _settingsService As ISettingsService
 
+    Public ReadOnly Property HideSteamLibrary As Boolean
+        Get
+            Return _settingsService.AppSettings.HideSteamLibraryTab
+        End Get
+    End Property
+
+    Public ReadOnly Property HideCompressionDbTab As Boolean
+        Get
+            Return _settingsService.AppSettings.HideCompressionDbTab
+        End Get
+    End Property
+
     Public Sub New(windowService As IWindowService, watcher As Watcher.Watcher, settingsService As ISettingsService)
         _watcher = watcher
         _windowService = windowService
         _settingsService = settingsService
+
+        AddHandler _settingsService.AppSettings.PropertyChanged, AddressOf AppSettings_PropertyChanged
+
+    End Sub
+
+    Private Sub AppSettings_PropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName = NameOf(_settingsService.AppSettings.HideSteamLibraryTab) Then
+            OnPropertyChanged(NameOf(HideSteamLibrary))
+        ElseIf e.PropertyName = NameOf(_settingsService.AppSettings.HideCompressionDbTab) Then
+            OnPropertyChanged(NameOf(HideCompressionDbTab))
+        End If
     End Sub
 
     Public ReadOnly Property IsAdmin As Boolean

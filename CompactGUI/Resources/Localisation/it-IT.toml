@@ -73,6 +73,8 @@
 "Games" = "Giochi"
 "Go to Database Results" = "Vai al database dei risultati"
 "HDDs only use 1 thread" = "Gli HDD usano solo 1 thread"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "Home"
 "Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "Includi tutti i tipi di file esclusi globalmente"

@@ -52,6 +52,9 @@ public partial class Settings : ObservableRecipient
 
     [ObservableProperty] private bool disableHardwareRendering = false;
 
+    [ObservableProperty] private bool hideSteamLibraryTab = false;
+    [ObservableProperty] private bool hideCompressionDbTab = false;
+
     partial void OnScheduledBackgroundIntervalChanged(int value) => UpdateNextScheduledBackgroundRun();
 
     partial void OnScheduledBackgroundHourChanged(int value) => UpdateNextScheduledBackgroundRun();

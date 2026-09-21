@@ -73,6 +73,8 @@
 "Games" = "Game"
 "Go to Database Results" = "Buka Hasil Database"
 "HDDs only use 1 thread" = "HDD hanya menggunakan 1 thread"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "Beranda"
 "Include global skiplist" = "Sertakan daftar pengecualian global"
 "Include global skipped file types" = "Sertakan jenis file yang dikecualikan secara global"

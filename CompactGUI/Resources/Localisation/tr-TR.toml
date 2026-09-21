@@ -73,6 +73,8 @@
 "Games" = "Oyunlar"
 "Go to Database Results" = "Veritabanı Sonuçlarına Git"
 "HDDs only use 1 thread" = "HDD'ler yaln─▒zca 1 i┼ş par├ğac─▒─ş─▒ kullans─▒n"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "Giri┼ş"
 "Include global skiplist" = "Genel atlama listesini dahil et"
 "Include global skipped file types" = "Genel atlanan dosya t├╝rlerini dahil et"

@@ -73,6 +73,8 @@
 "Games" = "个游戏"
 "Go to Database Results" = "查看数据库结果"
 "HDDs only use 1 thread" = "机械硬盘仅使用 1 个线程"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "主页"
 "Include global skiplist" = "使用全局跳过列表"
 "Include global skipped file types" = "使用全局跳过的文件类型"

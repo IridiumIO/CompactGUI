@@ -73,6 +73,8 @@
 "Games" = "Игры"
 "Go to Database Results" = "Go to Database Results" # LOC:TODO
 "HDDs only use 1 thread" = "Для HDD использовать только 1 поток"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "Главная"
 "Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "Включить глобальный список пропускаемых типов"
