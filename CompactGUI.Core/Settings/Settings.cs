@@ -50,6 +50,8 @@ public partial class Settings : ObservableRecipient
 
     [ObservableProperty] private bool bypassLowSpaceProtection = false;
 
+    [ObservableProperty] private bool disableHardwareRendering = false;
+
     partial void OnScheduledBackgroundIntervalChanged(int value) => UpdateNextScheduledBackgroundRun();
 
     partial void OnScheduledBackgroundHourChanged(int value) => UpdateNextScheduledBackgroundRun();
