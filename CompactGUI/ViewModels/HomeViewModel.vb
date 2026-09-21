@@ -138,7 +138,8 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
     Public ReadOnly Property CompressButtonText As String
         Get
-            Return $"Compress {AwaitingFolderCount} {If(AwaitingFolderCount = 1, "game", "games")}".LT()
+            Return "Compress".LT() & " " & AwaitingFolderCount & " " & If(AwaitingFolderCount = 1, "item".LT(), "items".LT())
+
         End Get
     End Property
 

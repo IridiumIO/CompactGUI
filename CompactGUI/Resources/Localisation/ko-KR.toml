@@ -178,6 +178,8 @@
 "estimated savings" = "estimated savings" # LOC:TODO
 "every" = "매"
 "games" = "개"
+"item" = "item" # LOC:TODO
+"items" = "items" # LOC:TODO
 "just now" = "방금 전"
 "last compressed:" = "마지막 압축:"
 "last modified:" = "마지막 수정:"

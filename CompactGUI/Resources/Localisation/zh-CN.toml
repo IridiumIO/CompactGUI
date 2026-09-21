@@ -178,6 +178,8 @@
 "estimated savings" = "预估节省"
 "every" = "每"
 "games" = "个游戏"
+"item" = "item" # LOC:TODO
+"items" = "items" # LOC:TODO
 "just now" = "刚刚"
 "last compressed:" = "上次压缩："
 "last modified:" = "上次修改："
