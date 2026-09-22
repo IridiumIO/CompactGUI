@@ -2,11 +2,13 @@
 
 <p align="center">
   <a href="https://github.com/IridiumIO/CompactGUI/releases">
-    <img alt="Github 下载量" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github&label=%E4%B8%8B%E8%BD%BD%E9%87%8F">
-    <img alt="GitHub 上的最新版本" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC">
-  </a>
+    <img alt="GitHub 下载量" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github&label=%E4%B8%8B%E8%BD%BD%E9%87%8F"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  <a href="https://github.com/IridiumIO/CompactGUI/releases">
+    <img alt="GitHub 上的最新版本" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge&label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC"></a>
   </br> 
 </p>
+
 
 <p align="center"><b>CompactGUI 会透明地压缩你的游戏和程序，在不影响其功能的情况下减少它们的空间占用。它直接调用 Win32 API 以实现与 Windows 10 及更高版本中原生的 <code>compact.exe</code> 命令行工具相同的功能。</b></p>
 
@@ -21,6 +23,7 @@
 </p>
 
 ---
+
 
 <p align="center">
   <a href="../README.md">English</a> -
