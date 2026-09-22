@@ -43,7 +43,7 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
     Public ReadOnly Property AwaitingFolderCount As Integer
         Get
-            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Idle AndAlso Not folder.HasInsufficientFreeSpace).Count()
+            Return Folders.Where(Function(folder) folder.FolderActionState = ActionState.Idle AndAlso (Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection OrElse Not folder.HasInsufficientFreeSpace)).Count()
         End Get
     End Property
 
@@ -138,7 +138,8 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
     Public ReadOnly Property CompressButtonText As String
         Get
-            Return $"Compress {AwaitingFolderCount} {If(AwaitingFolderCount = 1, "game", "games")}".LT()
+            Return "Compress".LT() & " " & AwaitingFolderCount & " " & If(AwaitingFolderCount = 1, "item".LT(), "items".LT())
+
         End Get
     End Property
 
@@ -202,8 +203,16 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         _snackbarService = snackbarService
         _logger = logger
         _settingsService = settingsService
+        AddHandler _settingsService.AppSettings.PropertyChanged, AddressOf OnAppSettingsPropertyChanged
         _compressableFolderService = compressableFolderService
         _queueDropHandler = New QueueDropHandler(Me)
+    End Sub
+
+    Private Sub OnAppSettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName = NameOf(Settings.BypassLowSpaceProtection) Then
+            NotifyQueueSummaryChanged()
+            CompressAllCommand.NotifyCanExecuteChanged()
+        End If
     End Sub
 
     Public Function CanReorderQueuedFolder(folder As CompressableFolder) As Boolean
@@ -521,11 +530,12 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
         Compressing = True
         _cancelQueueRequested = False
         Core.SharedMethods.PreventSleep()
-        Dim queuedFolderCount = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle AndAlso Not f.HasInsufficientFreeSpace).Count()
+        Dim bypassLowSpaceProtection = Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection
+        Dim queuedFolderCount = Folders.Where(Function(f) f.FolderActionState = ActionState.Idle AndAlso (bypassLowSpaceProtection OrElse Not f.HasInsufficientFreeSpace)).Count()
         HomeViewModelLog.StartingBatchCompression(_logger, queuedFolderCount)
 
         Do
-            Dim folder = Folders.FirstOrDefault(Function(f) f.FolderActionState = ActionState.Idle AndAlso Not f.HasInsufficientFreeSpace)
+            Dim folder = Folders.FirstOrDefault(Function(f) f.FolderActionState = ActionState.Idle AndAlso (bypassLowSpaceProtection OrElse Not f.HasInsufficientFreeSpace))
             If folder Is Nothing Then Exit Do
 
             Dim completed = Await Task.Run(Async Function()
@@ -568,9 +578,12 @@ Partial Public NotInheritable Class HomeViewModel : Inherits ObservableRecipient
 
 
     Private Function CanCompressAll() As Boolean
-        Return Folders.Any(Function(f) f.FolderActionState = ActionState.Idle AndAlso Not f.HasInsufficientFreeSpace) AndAlso
-               HomeViewModelState <> ActionState.Working AndAlso
-               Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
+        Dim bypassLowSpaceProtection = Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection
+
+        Return Folders.Any(Function(f) f.FolderActionState = ActionState.Idle AndAlso
+           (bypassLowSpaceProtection OrElse Not f.HasInsufficientFreeSpace)) AndAlso
+           HomeViewModelState <> ActionState.Working AndAlso
+           Not Folders.Any(Function(f) f.FolderActionState = ActionState.Analysing)
     End Function
 
 

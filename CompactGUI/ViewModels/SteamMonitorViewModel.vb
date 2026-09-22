@@ -59,6 +59,12 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
     Private _searchText As String
 
     <ObservableProperty>
+    Private _activeSortColumn As String
+
+    <ObservableProperty>
+    Private _isSortDescending As Boolean
+
+    <ObservableProperty>
     <NotifyPropertyChangedFor(NameOf(HasSelectedGame))>
     Private _selectedGame As SteamDetailedResult
 
@@ -132,11 +138,15 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
         _analyserLogger = analyserLogger
         _navigationService = navigationService
         _settingsService = settingsService
+        AddHandler _settingsService.AppSettings.PropertyChanged, AddressOf OnAppSettingsPropertyChanged
         QueueCompressionMode = settingsService.AppSettings.SelectedCompressionMode
         UseGlobalSkiplist = settingsService.AppSettings.SkipNonCompressable
         UseSmartSkiplist = settingsService.AppSettings.SkipUserNonCompressable
         FilteredSteamGames = CollectionViewSource.GetDefaultView(SteamGamesData)
         FilteredSteamGames.Filter = AddressOf FilterGames
+        ActiveSortColumn = "GameName"
+        IsSortDescending = False
+        ApplySort()
         AddHandler SteamGamesData.CollectionChanged, AddressOf OnSteamGamesCollectionChanged
     End Sub
 
@@ -308,26 +318,53 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
 
     <RelayCommand>
     Private Sub Sort(parameter As Object)
-        FilteredSteamGames.SortDescriptions.Clear()
+        Dim requestedSort = parameter?.ToString()
 
-        Select Case parameter?.ToString()
-            Case "GameNameAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.GameName), ListSortDirection.Ascending))
-            Case "GameNameDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.GameName), ListSortDirection.Descending))
-            Case "StatusAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.StatusMessage), ListSortDirection.Ascending))
-            Case "StatusDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.StatusMessage), ListSortDirection.Descending))
-            Case "CurrentSizeAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.CurrentFolderSize), ListSortDirection.Ascending))
-            Case "CurrentSizeDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.CurrentFolderSize), ListSortDirection.Descending))
-            Case "SavingsAsc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.DisplayedSavings), ListSortDirection.Ascending))
-            Case "SavingsDesc"
-                FilteredSteamGames.SortDescriptions.Add(New SortDescription(NameOf(SteamDetailedResult.DisplayedSavings), ListSortDirection.Descending))
+        IsSortDescending = requestedSort.EndsWith("Desc", StringComparison.Ordinal)
+        ActiveSortColumn = requestedSort.Substring(0, requestedSort.Length - If(IsSortDescending, 4, 3))
+        ApplySort()
+    End Sub
+
+    Private Sub OnAppSettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName <> NameOf(Settings.BypassLowSpaceProtection) Then Return
+
+        For Each game In SteamGamesData
+            game.NotifyCanUncompressChanged()
+        Next
+    End Sub
+
+    <RelayCommand>
+    Private Sub CycleSort(column As String)
+        If Not String.Equals(ActiveSortColumn, column, StringComparison.Ordinal) Then
+            ActiveSortColumn = column
+            IsSortDescending = False
+        ElseIf Not IsSortDescending Then
+            IsSortDescending = Not IsSortDescending
+        Else
+            ActiveSortColumn = "GameName"
+            IsSortDescending = False
+        End If
+
+        ApplySort()
+    End Sub
+
+    Private Sub ApplySort()
+        Dim propertyName As String
+        Select Case ActiveSortColumn
+            Case "Status"
+                propertyName = NameOf(SteamDetailedResult.StatusMessage)
+            Case "CurrentSize"
+                propertyName = NameOf(SteamDetailedResult.CurrentFolderSize)
+            Case "Savings"
+                propertyName = NameOf(SteamDetailedResult.DisplayedSavings)
+            Case "RecommendedAction"
+                propertyName = NameOf(SteamDetailedResult.RecommendedActionCategory)
+            Case Else
+                propertyName = NameOf(SteamDetailedResult.GameName)
         End Select
+
+        FilteredSteamGames.SortDescriptions.Clear()
+        FilteredSteamGames.SortDescriptions.Add(New SortDescription(propertyName, If(IsSortDescending, ListSortDirection.Descending, ListSortDirection.Ascending)))
     End Sub
 
     Public Async Function LoadGamesAsync() As Task
@@ -608,8 +645,7 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
             game.HasInsufficientFreeSpaceForUncompression = Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(game.GamePath,
                                                                                                                              analysedFiles,
                                                                                                                              Core.WOFCompressionAlgorithm.NO_COMPRESSION,
-                                                                                                                             Array.Empty(Of String)(),
-                                                                                                                             reserveUncompressedSize:=True)
+                                                                                                                             Array.Empty(Of String)())
         End Using
     End Function
 
@@ -689,14 +725,14 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
 
             If uncompress Then
                 If Not isCurrentlyCompressed Then Throw New InvalidOperationException("This game is not currently compressed.")
-                If folder.HasInsufficientFreeSpaceForUncompression Then Return
+                If Not _settingsService.AppSettings.BypassLowSpaceProtection AndAlso folder.HasInsufficientFreeSpaceForUncompression Then Return
                 succeeded = Await _compressableFolderService.UncompressFolder(folder)
             Else
                 If game.SelectedCompressionOption Is Nothing Then Throw New InvalidOperationException("This game does not have a selected compression mode.")
                 folder.CompressionOptions.SelectedCompressionMode = game.SelectedCompressionOption.Mode
                 folder.HasInsufficientFreeSpace = Not _compressableFolderService.HasSufficientFreeSpace(folder)
                 game.HasInsufficientFreeSpace = folder.HasInsufficientFreeSpace
-                If folder.HasInsufficientFreeSpace Then Return
+                If Not Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection AndAlso folder.HasInsufficientFreeSpace Then Return
                 succeeded = Await _compressableFolderService.CompressFolder(folder)
                 Await _compressableFolderService.AnalyseFolderAsync(folder)
             End If
@@ -980,9 +1016,13 @@ Public Class SteamDetailedResult : Inherits ObservableObject
 
     Public ReadOnly Property CanUncompress As Boolean
         Get
-            Return Not IsWorking AndAlso IsCompressed AndAlso Not HasInsufficientFreeSpaceForUncompression
+            Return Not IsWorking AndAlso IsCompressed AndAlso (Application.GetService(Of ISettingsService).AppSettings.BypassLowSpaceProtection OrElse Not HasInsufficientFreeSpaceForUncompression)
         End Get
     End Property
+
+    Public Sub NotifyCanUncompressChanged()
+        OnPropertyChanged(NameOf(CanUncompress))
+    End Sub
 
     Public Sub New(gameName As String, gamePath As String, appId As Integer, lastSteamUpdate As DateTime, hasPendingSteamUpdate As Boolean, watchedFolder As Watcher.WatchedFolder, wikiResults As WikiCompressionResults, poorlyCompressedFiles As List(Of String))
         Me.GameName = gameName

@@ -29,13 +29,20 @@ public struct CompressionProgress
     public int ProgressPercent { get; set; }
     public string FileName { get; set; }
     public string[] ActiveFiles { get; set; }
+    public CompressionProgressStatus? Status { get; set; }
 
-    public CompressionProgress(int progressPercent, string fileName, string[] activeFiles = null)
+    public CompressionProgress(int progressPercent, string fileName, string[]? activeFiles = null, CompressionProgressStatus? status = null)
     {
         ProgressPercent = progressPercent;
         FileName = fileName;
         ActiveFiles = activeFiles ?? Array.Empty<string>();
+        Status = status;
     }
+}
+
+public enum CompressionProgressStatus
+{
+    LowDiskSpaceRetryingSequentially
 }
 
 

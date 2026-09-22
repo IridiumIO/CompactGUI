@@ -1,6 +1,6 @@
-# CompactGUI Localisation
+﻿# CompactGUI Localisation
 # @version 1
-# @programversion 4.0.0-beta.11
+# @programversion 4.0.0-beta.12
 
 # ===================
 # Translations
@@ -51,6 +51,7 @@
 "Descending" = "Menurun"
 "Deselect all" = "Hapus semua pilihan"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Jangan Kompres"
 "Do not compress" = "Jangan kompres"
 "Drive unavailable" = "Drive tidak tersedia"
@@ -72,6 +73,8 @@
 "Games" = "Game"
 "Go to Database Results" = "Buka Hasil Database"
 "HDDs only use 1 thread" = "HDD hanya menggunakan 1 thread"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "Beranda"
 "Include global skiplist" = "Sertakan daftar pengecualian global"
 "Include global skipped file types" = "Sertakan jenis file yang dikecualikan secara global"
@@ -139,7 +142,7 @@
 "Success" = "Berhasil"
 "System Integration" = "Integrasi Sistem"
 "The SnackbarPresenter was never set" = "SnackbarPresenter belum pernah diatur"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "Ruang kosong pada drive ini tidak cukup untuk mengompresi folder ini dengan aman. Anda memerlukan ruang kosong setidaknya 50% dari ukuran folder ini agar Windows tidak mengalami masalah."
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Game ini menggunakan teknologi DirectStorage. Jika Anda menggunakan fitur ini, sebaiknya jangan kompres game ini."
 "Total Results" = "Total Hasil"
 "UI Settings" = "Pengaturan UI"
@@ -177,6 +180,8 @@
 "estimated savings" = "perkiraan penghematan"
 "every" = "setiap"
 "games" = "game"
+"item" = "item" # LOC:TODO
+"items" = "items" # LOC:TODO
 "just now" = "baru saja"
 "last compressed:" = "terakhir dikompresi:"
 "last modified:" = "terakhir diubah:"
@@ -250,3 +255,6 @@
 
 [context."Storage savings"]
 "saved" = "dihemat"
+
+[obsolete]
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "Ruang kosong pada drive ini tidak cukup untuk mengompresi folder ini dengan aman. Anda memerlukan ruang kosong setidaknya 50% dari ukuran folder ini agar Windows tidak mengalami masalah."

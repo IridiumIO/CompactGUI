@@ -122,6 +122,19 @@ public static class SharedMethods
 
     }
 
+    public static bool IsDiskImage(string fileName)
+    {
+        ReadOnlySpan<char> extension = Path.GetExtension(fileName.AsSpan());
+        return extension.Equals(".vhd", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".vhdx", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".vmdk", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".qcow2", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".img", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".iso", StringComparison.OrdinalIgnoreCase);
+    }
+
+
+
     public static void PreventSleep()
     {
         PInvoke.SetThreadExecutionState(
@@ -193,31 +206,39 @@ public static class SharedMethods
 
     }
 
-    public static bool HasSufficientFreeSpaceForCompression(string workingDirectory, IEnumerable<AnalysedFileDetails> analysedFiles, WOFCompressionAlgorithm compressionAlgorithm, IEnumerable<string> exclusionList, bool reserveUncompressedSize = false)
+    public static bool HasSufficientFreeSpaceForCompression(string workingDirectory, IEnumerable<AnalysedFileDetails> analysedFiles, WOFCompressionAlgorithm compressionAlgorithm, IEnumerable<string> exclusionList)
     {
-        uint clusterSize = GetClusterSize(workingDirectory);
-        var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(file => file.FileName), exclusionList);
-        var candidates = analysedFiles.Where(file =>
-                file.CompressionMode != compressionAlgorithm &&
-                file.UncompressedSize > clusterSize &&
-                !file.Attributes.HasFlag(FileAttributes.SparseFile) &&
-                !excludedFiles.Contains(file.FileName))
-            .ToList();
-
         long requiredBytes;
-        if (reserveUncompressedSize)
+        if (compressionAlgorithm == WOFCompressionAlgorithm.NO_COMPRESSION)
         {
-            requiredBytes = candidates.Sum(file => file.UncompressedSize) /2 + candidates.Select(file => file.UncompressedSize).DefaultIfEmpty().Max();
+            long largestCandidateSize = 0;
+            requiredBytes = 0;
+
+            foreach (AnalysedFileDetails file in analysedFiles)
+            {
+                if (file.CompressedSize >= file.UncompressedSize) continue;
+                requiredBytes += file.UncompressedSize - file.CompressedSize;
+                largestCandidateSize = Math.Max(largestCandidateSize, file.UncompressedSize);
+            }
+
+            requiredBytes += largestCandidateSize;
         }
         else
         {
-            requiredBytes = candidates.Sum(file => file.CompressedSize) /2 +  candidates.Select(file => file.CompressedSize).DefaultIfEmpty().Max();
+            uint clusterSize = GetClusterSize(workingDirectory);
+            var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(file => file.FileName), exclusionList);
+            requiredBytes = analysedFiles.Where(file =>
+                    file.CompressionMode != compressionAlgorithm &&
+                    file.UncompressedSize > clusterSize &&
+                    !file.Attributes.HasFlag(FileAttributes.SparseFile) &&
+                    !excludedFiles.Contains(file.FileName))
+                .Select(file => file.UncompressedSize).DefaultIfEmpty().Max() * 2;
         }
 
         try
         {
             var root = Path.GetPathRoot(workingDirectory);
-            return !string.IsNullOrWhiteSpace(root) && new DriveInfo(root).AvailableFreeSpace > requiredBytes;
+            return !string.IsNullOrWhiteSpace(root) && requiredBytes <= new DriveInfo(root).AvailableFreeSpace;
         }
         catch (IOException)
         {

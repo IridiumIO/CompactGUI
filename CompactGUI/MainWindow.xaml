@@ -57,7 +57,7 @@
                 </ui:NavigationViewItem>
 
 
-                <ui:NavigationViewItem Margin="15 2 15 10"
+                <ui:NavigationViewItem Margin="15 2 15 10" Visibility="{Binding HideSteamLibrary, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
                                        NavigationCacheMode="Disabled"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:SteamMonitorPage}">
@@ -83,7 +83,7 @@
 
 
 
-                <ui:NavigationViewItem Margin="15 2 15 10"
+                <ui:NavigationViewItem Margin="15 2 15 10" Visibility="{Binding HideCompressionDbTab, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
                                        loc:L.Value="Compression DB" NavigationCacheMode="Disabled"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:DatabasePage}">
@@ -344,7 +344,7 @@
 
 
         </Grid>
-        <ui:SnackbarPresenter x:Name="RootSnackbar"
+        <ui:SnackbarPresenter x:Name="RootSnackbar" d:Visibility="Collapsed"
                               Grid.Row="1" Grid.Column="0"
                               MaxWidth="600" />
         <tray:NotifyIcon x:Name="NotifyIconTray"

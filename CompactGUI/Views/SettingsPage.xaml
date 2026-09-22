@@ -265,6 +265,8 @@
                                 <RowDefinition />
                                 <RowDefinition Height="5" />
                                 <RowDefinition />
+                                <RowDefinition Height="5" />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <Label loc:L.Value="Maximum Compression Threads" />
@@ -297,6 +299,27 @@
                                     </ToolTip>
                                 </CheckBox.ToolTip>
                             </CheckBox>
+
+                            <CheckBox x:Name="BypassLowSpaceProtection"
+                                      Grid.Row="6" Grid.ColumnSpan="2"
+                                      Margin="-10 0"
+                                      IsChecked="{Binding AppSettings.BypassLowSpaceProtection}">
+                                <TextBlock>
+                                    <Run Text="Bypass low disk space protection" />
+                                    <Run FontWeight="SemiBold" Foreground="{StaticResource PaletteRedBrush}" Text="(Caution)" />
+                                </TextBlock>
+                                <CheckBox.Resources>
+                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="{StaticResource PaletteRedColor}" />
+                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#ff5338" />
+                                </CheckBox.Resources>
+                                <CheckBox.ToolTip>
+                                    <ToolTip Placement="Top">
+                                        <TextBlock Width="200"
+                                                   Text="Bypasses the low space protection mechanism, allowing compression to proceed even when disk space is low." TextAlignment="Left" TextWrapping="Wrap" />
+                                    </ToolTip>
+                                </CheckBox.ToolTip>
+                            </CheckBox>
+
                         </Grid>
                     </StackPanel>
 
@@ -439,6 +462,14 @@
                                       Margin="0 -3"
                                       loc:L.Value="Always show details on Compression Mode buttons"
                                       IsChecked="{Binding AppSettings.AlwaysShowDetailedCompressionMode}" />
+                            <CheckBox x:Name="UiHideSteamLibraryTab"
+                                      Margin="0 -3"
+                                      loc:L.Value="Hide Steam Library Tab"
+                                      IsChecked="{Binding AppSettings.HideSteamLibraryTab}" />
+                            <CheckBox x:Name="UiHideCompressionDbTab"
+                                      Margin="0 -3"
+                                      loc:L.Value="Hide Compression DB Tab"
+                                      IsChecked="{Binding AppSettings.HideCompressionDbTab}" />
                         </StackPanel>
                     </StackPanel>
 

@@ -27,6 +27,7 @@ Public Class BackgroundCompactor
 
     Private _compactor As Core.Compactor
     Private _compactorAnalyser As Core.Analyser
+    Private _settingsService As Core.Settings.ISettingsService
 
     Private _excludedFileTypes As String()
 
@@ -36,10 +37,11 @@ Public Class BackgroundCompactor
 
     Public Event IsCompactingEvent As EventHandler(Of Boolean)
 
-    Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher))
+    Public Sub New(excludedFileTypes As String(), logger As ILogger(Of Watcher), settingsService As Core.Settings.ISettingsService)
 
         _excludedFileTypes = excludedFileTypes
         _logger = logger
+        _settingsService = settingsService
     End Sub
 
 
@@ -53,12 +55,13 @@ Public Class BackgroundCompactor
         Dim analysedFiles = Await _compactorAnalyser.GetAnalysedFilesAsync(cancellationTokenSource.Token)
         If cancellationTokenSource.IsCancellationRequested OrElse analysedFiles Is Nothing Then Return False
 
-        If Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(folder, analysedFiles, compressionLevel, effectiveExclusions) Then Return False
+        Dim bypassLowSpaceProtection = _settingsService.AppSettings.BypassLowSpaceProtection
+        If Not bypassLowSpaceProtection AndAlso Not Core.SharedMethods.HasSufficientFreeSpaceForCompression(folder, analysedFiles, compressionLevel, effectiveExclusions) Then Return False
 
-        _compactor = New Core.Compactor(folder, compressionLevel, effectiveExclusions, _compactorAnalyser)
+        _compactor = New Core.Compactor(folder, compressionLevel, effectiveExclusions, _compactorAnalyser, bypassLowSpaceProtection)
         If isCompactingPaused Then _compactor.Pause()
 
-        Return Await _compactor.RunAsync(Nothing)
+        Return Await _compactor.RunAsync()
 
     End Function
 

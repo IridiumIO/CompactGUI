@@ -44,6 +44,10 @@ Public Class SettingsService : Implements ISettingsService
 
         End If
 
+        If AppSettings.DisableHardwareRendering Then RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly
+
+
+
         Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
         IO.File.WriteAllText(SettingsJSONFile.FullName, output)
     End Sub

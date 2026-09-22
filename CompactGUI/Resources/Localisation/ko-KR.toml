@@ -1,6 +1,6 @@
 ﻿# CompactGUI Localisation
 # @version 1
-# @programversion 4.0.0-beta.11
+# @programversion 4.0.0-beta.12
 
 # ===================
 # Translations
@@ -51,6 +51,7 @@
 "Descending" = "내림차순"
 "Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "DirectStorage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "압축하지 않기"
 "Drive unavailable" = "드라이브 사용 불가"
@@ -72,6 +73,8 @@
 "Games" = "개"
 "Go to Database Results" = "압축 데이터 목록으로 이동"
 "HDDs only use 1 thread" = "하드 디스크일 경우 하나의 스레드만 사용"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "홈"
 "Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "공통으로 제외할 파일 형식 포함"
@@ -139,7 +142,7 @@
 "Success" = "성공"
 "System Integration" = "시스템 연동"
 "The SnackbarPresenter was never set" = "SnackbarPresenter가 설정되어 있지 않습니다"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." # LOC:TODO
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "이 게임은 DirectStorage 기술을 사용합니다. 이 기능을 사용 중이라면 이 게임을 압축하지 않는 것이 좋습니다."
 "Total Results" = "제출된 결과 수"
 "UI Settings" = "UI 설정"
@@ -177,6 +180,8 @@
 "estimated savings" = "estimated savings" # LOC:TODO
 "every" = "매"
 "games" = "개"
+"item" = "item" # LOC:TODO
+"items" = "items" # LOC:TODO
 "just now" = "방금 전"
 "last compressed:" = "마지막 압축:"
 "last modified:" = "마지막 수정:"

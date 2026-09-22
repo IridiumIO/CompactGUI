@@ -1,6 +1,6 @@
 ﻿# CompactGUI Localisation
-# @version 2
-# @programversion 4.0.0-beta.11
+# @version 1
+# @programversion 4.0.0-beta.12
 
 # ===================
 # Translations
@@ -51,6 +51,7 @@
 "Descending" = "递减"
 "Deselect all" = "取消全选"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "无需压缩"
 "Do not compress" = "无需压缩"
 "Drive unavailable" = "驱动器不可用"
@@ -72,6 +73,8 @@
 "Games" = "个游戏"
 "Go to Database Results" = "查看数据库结果"
 "HDDs only use 1 thread" = "机械硬盘仅使用 1 个线程"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "主页"
 "Include global skiplist" = "使用全局跳过列表"
 "Include global skipped file types" = "使用全局跳过的文件类型"
@@ -139,7 +142,7 @@
 "Success" = "成功"
 "System Integration" = "系统集成"
 "The SnackbarPresenter was never set" = "SnackbarPresenter 从未被设置"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "驱动器的可用空间不足以安全压缩此文件夹。你需要至少预留相当于此文件夹大小的 50% 的可用空间以确保 Windows 不会出现问题。"
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "此游戏使用 DirectStorage 技术。如果你正在使用此功能，则不应压缩此游戏。"
 "Total Results" = "结果总数"
 "UI Settings" = "UI 设置"
@@ -177,6 +180,8 @@
 "estimated savings" = "预估节省"
 "every" = "每"
 "games" = "个游戏"
+"item" = "item" # LOC:TODO
+"items" = "items" # LOC:TODO
 "just now" = "刚刚"
 "last compressed:" = "上次压缩："
 "last modified:" = "上次修改："
@@ -250,3 +255,6 @@
 
 [context."Storage savings"]
 "saved" = "已节省"
+
+[obsolete]
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "驱动器的可用空间不足以安全压缩此文件夹。你需要至少预留相当于此文件夹大小的 50% 的可用空间以确保 Windows 不会出现问题。"
