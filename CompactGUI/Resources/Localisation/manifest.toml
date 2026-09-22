@@ -5,7 +5,7 @@ version = 1
 file = "en-AU.toml"
 
 [locales."es-ES"]
-version = 1
+version = 2
 file = "es-ES.toml"
 
 [locales."ko-KR"]
