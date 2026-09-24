@@ -1,6 +1,6 @@
 ﻿# CompactGUI Localisation
 # @version 1
-# @programversion 4.0.0-beta.11
+# @programversion 4.0.0-beta.12
 
 # ===================
 # Translations
@@ -51,6 +51,7 @@
 "Descending" = "Decrescente"
 "Deselect all" = "Deselect all" # LOC:TODO
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Do Not Compress" # LOC:TODO
 "Do not compress" = "Non comprimere"
 "Drive unavailable" = "Unità non disponibile"
@@ -72,6 +73,8 @@
 "Games" = "Giochi"
 "Go to Database Results" = "Vai al database dei risultati"
 "HDDs only use 1 thread" = "Gli HDD usano solo 1 thread"
+"Hide Compression DB Tab" = "Hide Compression DB Tab" # LOC:TODO
+"Hide Steam Library Tab" = "Hide Steam Library Tab" # LOC:TODO
 "Home" = "Home"
 "Include global skiplist" = "Include global skiplist" # LOC:TODO
 "Include global skipped file types" = "Includi tutti i tipi di file esclusi globalmente"
@@ -139,7 +142,7 @@
 "Success" = "Successo"
 "System Integration" = "Integrazione di sistema"
 "The SnackbarPresenter was never set" = "The SnackbarPresenter non è stata mai settata"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." # LOC:TODO
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." # LOC:TODO
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "Questo gioco utilizza la tecnologia DirectStorage. Se utilizzi questa funzione, non dovresti comprimere questo gioco."
 "Total Results" = "Risultati totali"
 "UI Settings" = "Impostazioni interfaccia"
@@ -177,6 +180,8 @@
 "estimated savings" = "estimated savings" # LOC:TODO
 "every" = "ogni"
 "games" = "giochi"
+"item" = "item" # LOC:TODO
+"items" = "items" # LOC:TODO
 "just now" = "proprio ora"
 "last compressed:" = "ultima compressione:"
 "last modified:" = "ultima modifica:"

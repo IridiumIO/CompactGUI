@@ -125,6 +125,10 @@
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsAsc" Header="{loc:T Ascending}" />
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsDesc" Header="{loc:T Descending}" />
                         </MenuItem>
+                        <MenuItem Header="{loc:T Recommended Action}">
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="RecommendedActionAsc" Header="{loc:T Ascending}" />
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="RecommendedActionDesc" Header="{loc:T Descending}" />
+                        </MenuItem>
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
             </ui:DropDownButton>
@@ -200,23 +204,286 @@
                       Margin="-20 -10 0 -10" HorizontalAlignment="Left"
                       Click="OnSelectAllVisibleClick" IsThreeState="True"
                       ToolTip="{loc:T Select all visible games}" />
-            <TextBlock Grid.Column="1" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T GAME, Context='Steam Library Tab Headings'}" />
-            <TextBlock Grid.Column="2" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T STATUS, Context='Steam Library Tab Headings'}" />
-            <TextBlock Grid.Column="3"
-                       Margin="-50 0 0 0" HorizontalAlignment="Right"
-                       Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="{loc:T CURRENT SIZE,
-                                    Context='Steam Library Tab Headings'}" />
-            <TextBlock Grid.Column="4"
-                       HorizontalAlignment="Right"
-                       Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="{loc:T SAVINGS,
-                                    Context='Steam Library Tab Headings'}" />
-            <TextBlock Grid.Column="5"
-                       Margin="24 0 0 0" HorizontalAlignment="Right"
-                       Foreground="{StaticResource CardForegroundDisabled}"
-                       Text="{loc:T RECOMMENDED ACTION,
-                                    Context='Steam Library Tab Headings'}" />
+            <Button Grid.Column="1"
+                    Margin="-23 0 0 0" Padding="0" HorizontalAlignment="Left"
+                    Background="Transparent" BorderThickness="0"
+                    Command="{Binding CycleSortCommand}"
+                    CommandParameter="GameName" ToolTip="Sort by game name">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="GameName">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="GameName" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortDescending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="GameName" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <TextBlock Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T GAME, Context='Steam Library Tab Headings'}" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="2"
+                    Margin="-2 0 0 0" Padding="0" HorizontalAlignment="Left"
+                    Background="Transparent" BorderThickness="0"
+                    Command="{Binding CycleSortCommand}"
+                    CommandParameter="Status" ToolTip="Sort by status">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="Status">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="Status" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortDescending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="Status" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <TextBlock Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T STATUS, Context='Steam Library Tab Headings'}" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="3"
+                    Margin="-50 0 0 0" Padding="0" HorizontalAlignment="Right"
+                    Background="Transparent" BorderThickness="0"
+                    Command="{Binding CycleSortCommand}"
+                    CommandParameter="CurrentSize" ToolTip="Sort by current size">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="CurrentSize">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="CurrentSize" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortDescending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="CurrentSize" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <TextBlock Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T CURRENT SIZE, Context='Steam Library Tab Headings'}" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="4"
+                    Padding="0" HorizontalAlignment="Right"
+                    Background="Transparent" BorderThickness="0"
+                    Command="{Binding CycleSortCommand}"
+                    CommandParameter="Savings" ToolTip="Sort by savings">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="Savings">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="Savings" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortDescending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="Savings" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <TextBlock Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T SAVINGS, Context='Steam Library Tab Headings'}" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="5"
+                    Margin="24 0 0 0" Padding="0" HorizontalAlignment="Right"
+                    Background="Transparent" BorderThickness="0"
+                    Command="{Binding CycleSortCommand}"
+                    CommandParameter="RecommendedAction" ToolTip="Sort by recommended action">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="RecommendedAction">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="RecommendedAction" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortDescending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="RecommendedAction" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <TextBlock Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T RECOMMENDED ACTION, Context='Steam Library Tab Headings'}" />
+                </StackPanel>
+            </Button>
         </Grid>
 
         <Grid x:Name="SteamGamesListBlurSource" Grid.Row="4">
@@ -271,6 +538,21 @@
                                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
                                             <Setter Property="Background" Value="#3044BEDF" />
                                         </DataTrigger>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#1044BEFF" Duration="0:0:0.1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource CardBackgroundFillColorDefault}" Duration="0:0:0.1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
@@ -279,22 +561,24 @@
                                     <MenuItem Command="{Binding Tag.AddToCompressionQueueCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Add to Compression Queue}" />
                                     <MenuItem Command="{Binding Tag.GoToDatabaseResultsCommand}" CommandParameter="{Binding DataContext}" Header="{loc:T Go to Database Results}" />
                                     <Separator />
-                                    
+
                                     <MenuItem Command="{Binding Tag.UncompressCommand}" CommandParameter="{Binding DataContext}" IsEnabled="{Binding DataContext.CanUncompress}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal" ToolTipService.ShowOnDisabled="True">
-                                                <TextBlock Text="{loc:T Uncompress}" VerticalAlignment="Center" />
-                                                <Border Margin="10 0 0 0" Padding="5 5" Background="#80C42B1C" ToolTipService.ShowOnDisabled="True" CornerRadius="4" VerticalAlignment="Center" Visibility="{Binding DataContext.HasInsufficientFreeSpaceForUncompression, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <TextBlock VerticalAlignment="Center" Text="{loc:T Uncompress}" />
+                                                <Border Margin="10 0 0 0" Padding="5 5" VerticalAlignment="Center"
+                                                        Background="#80C42B1C" CornerRadius="4" ToolTipService.ShowOnDisabled="True"
+                                                        Visibility="{Binding DataContext.HasInsufficientFreeSpaceForUncompression, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <StackPanel Orientation="Horizontal">
                                                         <ui:SymbolIcon Margin="0 1 3 0"
-                                                                       FontSize="11" 
+                                                                       FontSize="11"
                                                                        Foreground="{StaticResource PaletteRedBrush}"
                                                                        Symbol="Warning12" />
                                                         <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="White" Text="Not enough space" TextOptions.TextFormattingMode="Display" />
                                                     </StackPanel>
                                                     <Border.ToolTip>
                                                         <ToolTip>
-                                                            <TextBlock TextWrapping="Wrap" Text="Not enough free space to safely uncompress this folder"/>
+                                                            <TextBlock Text="Not enough free space to safely uncompress this folder" TextWrapping="Wrap" />
                                                         </ToolTip>
                                                     </Border.ToolTip>
                                                 </Border>
@@ -354,7 +638,7 @@
                                             </StackPanel>
                                             <Border.ToolTip>
                                                 <ToolTip MaxWidth="300">
-                                                    <TextBlock loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." TextWrapping="Wrap" />
+                                                    <TextBlock loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." TextWrapping="Wrap" />
                                                 </ToolTip>
                                             </Border.ToolTip>
                                         </Border>

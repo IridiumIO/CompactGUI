@@ -63,7 +63,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
 
-        BGCompactor = New BackgroundCompactor(Array.Empty(Of String), _logger)
+        BGCompactor = New BackgroundCompactor(Array.Empty(Of String), _logger, settingsService)
 
 
         InitializeWatchedFoldersAsync()

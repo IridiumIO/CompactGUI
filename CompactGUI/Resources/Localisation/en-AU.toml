@@ -1,6 +1,6 @@
 ﻿# CompactGUI Localisation
 # @version 1
-# @programversion 4.0.0-beta.11
+# @programversion 4.0.0-beta.12
 
 # ===================
 # Translations
@@ -51,6 +51,7 @@
 "Descending" = "Descending"
 "Deselect all" = "Deselect all"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially."
 "Do Not Compress" = "Do Not Compress"
 "Do not compress" = "Do not compress"
 "Drive unavailable" = "Drive unavailable"
@@ -72,6 +73,8 @@
 "Games" = "Games"
 "Go to Database Results" = "Go to Database Results"
 "HDDs only use 1 thread" = "HDDs only use 1 thread"
+"Hide Compression DB Tab" = "Hide Compression DB Tab"
+"Hide Steam Library Tab" = "Hide Steam Library Tab"
 "Home" = "Home"
 "Include global skiplist" = "Include global skiplist"
 "Include global skipped file types" = "Include global skipped file types"
@@ -139,7 +142,7 @@
 "Success" = "Success"
 "System Integration" = "System Integration"
 "The SnackbarPresenter was never set" = "The SnackbarPresenter was never set"
-"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues."
+"There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." = "There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues."
 "This game uses DirectStorage technology. If you are using this feature, you should not compress this game." = "This game uses DirectStorage technology. If you are using this feature, you should not compress this game."
 "Total Results" = "Total Results"
 "UI Settings" = "UI Settings"
@@ -177,6 +180,8 @@
 "estimated savings" = "estimated savings"
 "every" = "every"
 "games" = "games"
+"item" = "item"
+"items" = "items"
 "just now" = "just now"
 "last compressed:" = "last compressed:"
 "last modified:" = "last modified:"

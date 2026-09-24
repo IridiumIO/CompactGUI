@@ -51,6 +51,7 @@
 "Descending" = "Azalan"
 "Deselect all" = "Tüm seçimleri kaldır"
 "Direct Storage" = "Direct Storage"
+"Disk space is low. Retrying affected files sequentially." = "Disk space is low. Retrying affected files sequentially." # LOC:TODO
 "Do Not Compress" = "Sıkıştırma"
 "Do not compress" = "Sıkıştırma"
 "Drive unavailable" = "Sürücü kullanılamıyor"
@@ -250,3 +251,6 @@
 
 [context."Storage savings"]
 "saved" = "kaydedildi"
+
+[obsolete]
+"There is not enough free space on this drive to safely compress this folder. You need at least 50% of this folder's size free to ensure Windows does not cause issues." = "Bu klasörü güvenle sıkıştırmak için sürücüde yeterli boş alan yok. Windows'un sorun çıkarmaması için klasör boyutunun en az %50'si kadar boş alan gereklidir."

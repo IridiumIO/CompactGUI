@@ -2,11 +2,13 @@
 
 <p align="center">
   <a href="https://github.com/IridiumIO/CompactGUI/releases">
-    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github">
-    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge">
-  </a>
+    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  <a href="https://github.com/IridiumIO/CompactGUI/releases">
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge"></a>
   </br> 
 </p>
+
 
 <p align="center"><b>CompactGUI transparently compresses your games and programs reducing the space they use without affecting their functionality. It works directly with the Win32 API to achieve the same thing as the native <code>compact.exe</code> command-line tool available from Windows 10 onwards.</b></p>
 
@@ -22,12 +24,12 @@
 
 ---
 
+
 <p align="center">
-  <a href="README.md">English</a> -
-  <a href="README/README_ru.md">Русский</a> -
-  <a href="README/README_cn.md">简体中文</a> -
-  <a href="README/README_it.md">Italian</a>
+  <a href="README/"><img src="https://img.shields.io/badge/Readme%20Translations-606070?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjYTFlMWZmIj48cGF0aCBkPSJNMzIzLTExMS41UTI1MC0xNDMgMTk2LTE5N3QtODUtMTI3LjVRODAtMzk4IDgwLTQ4MnQzMS0xNTYuNVExNDItNzExIDE5Ni03NjV0MTI3LTg0LjVRMzk2LTg4MCA0ODAtODgwdDE1NyAzMC41UTcxMC04MTkgNzY0LTc2NXQ4NSAxMjYuNVE4ODAtNTY2IDg4MC00ODJ0LTMxIDE1Ny41UTgxOC0yNTEgNzY0LTE5N3QtMTI3IDg1LjVRNTY0LTgwIDQ4MC04MHQtMTU3LTMxLjVaTTQ4MC0xMzhxMzUtMzYgNTguNS04Mi41VDU3Ny0zMzFIMzg0cTE0IDYwIDM3LjUgMTA4dDU4LjUgODVabS04NS0xMnEtMjUtMzgtNDMtODJ0LTMwLTk5SDE3MnEzOCA3MSA4OCAxMTEuNVQzOTUtMTUwWm0xNzEtMXE3Mi0yMyAxMjkuNS02OVQ3ODgtMzMxSDYzOXEtMTMgNTQtMzAuNSA5OFQ1NjYtMTUxWk0xNTItMzkxaDE1OXEtMy0yNy0zLjUtNDguNVQzMDctNDgycTAtMjUgMS00NC41dDQtNDMuNUgxNTJxLTcgMjQtOS41IDQzdC0yLjUgNDVxMCAyNiAyLjUgNDYuNVQxNTItMzkxWm0yMjEgMGgyMTVxNC0zMSA1LTUwLjV0MS00MC41cTAtMjAtMS0zOC41dC01LTQ5LjVIMzczcS00IDMxLTUgNDkuNXQtMSAzOC41cTAgMjEgMSA0MC41dDUgNTAuNVptMjc1IDBoMTYwcTctMjQgOS41LTQ0LjVUODIwLTQ4MnEwLTI2LTIuNS00NXQtOS41LTQzSDY0OXEzIDM1IDQgNTMuNXQxIDM0LjVxMCAyMi0xLjUgNDEuNVQ2NDgtMzkxWm0tMTAtMjM5aDE1MHEtMzMtNjktOTAuNS0xMTVUNTY1LTgxMHEyNSAzNyA0Mi41IDgwVDYzOC02MzBabS0yNTQgMGgxOTRxLTExLTUzLTM3LTEwMi41VDQ4MC04MjBxLTMyIDI3LTU0IDcxdC00MiAxMTlabS0yMTIgMGgxNTFxMTEtNTQgMjgtOTYuNXQ0My04Mi41cS03NSAxOS0xMzEgNjR0LTkxIDExNVoiLz48L3N2Zz4="/></a>
 </p>
+
+
 &nbsp;
 
 **How it works**:
@@ -114,3 +116,4 @@ Optional Compression Modes:
 Please consider leaving a tip on Ko-Fi :)
 
  <p align="center"><a href='https://ko-fi.com/iridiumio' target='_blank'><img height='42' style='border:0px;height:42px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></p>
+
