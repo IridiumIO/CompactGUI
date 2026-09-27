@@ -40,19 +40,25 @@ Public Class WikiService : Implements IWikiService
                 Return
             End If
 
-            Using httpClient As New HttpClient()
-                Using responseStream = Await httpClient.GetStreamAsync(dlPath).ConfigureAwait(False)
-                    Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
-                        Await responseStream.CopyToAsync(fs).ConfigureAwait(False)
+            Dim tempPath = JSONFile.FullName & "." & Guid.NewGuid().ToString("N") & ".tmp"
+            Try
+                Using httpClient As New HttpClient()
+                    Using responseStream = Await httpClient.GetStreamAsync(dlPath).ConfigureAwait(False)
+                        Using fs As New IO.FileStream(tempPath, IO.FileMode.CreateNew)
+                            Await responseStream.CopyToAsync(fs).ConfigureAwait(False)
+                        End Using
                     End Using
                 End Using
-            End Using
 
-            If Not Await IsDatabaseJsonValidAsync(JSONFile.FullName).ConfigureAwait(False) Then
-                Debug.WriteLine("Downloaded database JSON is invalid.")
-                IO.File.Delete(JSONFile.FullName)
-                Return
-            End If
+                If Not Await IsDatabaseJsonValidAsync(tempPath).ConfigureAwait(False) Then
+                    Debug.WriteLine("Downloaded database JSON is invalid.")
+                    Return
+                End If
+
+                IO.File.Move(tempPath, JSONFile.FullName, True)
+            Finally
+                If IO.File.Exists(tempPath) Then IO.File.Delete(tempPath)
+            End Try
 
             _settingsService.AppSettings.ResultsDBLastUpdated = DateTime.Now
             _settingsService.SaveSettings()
