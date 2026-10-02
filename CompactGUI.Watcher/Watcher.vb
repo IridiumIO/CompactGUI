@@ -211,14 +211,34 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     End Function
 
     Private Sub UpdateRegistryBasedOnWatchedFolders()
-        Dim registryKey As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
-
-        If WatchedFolders.Count > 0 Then
-            registryKey.SetValue("CompactGUI", Environment.ProcessPath & " -tray")
-        Else
-            registryKey.DeleteValue("CompactGUI", False)
+        'Autostart is best-effort; registry access should not break folder management.
+        If Not UpdateRegistryBasedOnWatchedFolders(Registry.CurrentUser, "Software\Microsoft\Windows\CurrentVersion\Run", WatchedFolders.Count, Environment.ProcessPath) Then
+            _logger.LogWarning("Could not update CompactGUI watcher autostart.")
         End If
     End Sub
+
+    Friend Shared Function UpdateRegistryBasedOnWatchedFolders(rootKey As RegistryKey, subKeyPath As String, watchedFolderCount As Integer, processPath As String) As Boolean
+        Try
+            'Don't create the Run key just to remove an entry that may not exist.
+            Dim registryKey = If(watchedFolderCount > 0,
+                                 rootKey.CreateSubKey(subKeyPath),
+                                 rootKey.OpenSubKey(subKeyPath, True))
+            If registryKey Is Nothing Then Return watchedFolderCount = 0
+
+            Using registryKey
+                If watchedFolderCount > 0 Then
+                    registryKey.SetValue("CompactGUI", """" & processPath & """" & " -tray")
+                Else
+                    registryKey.DeleteValue("CompactGUI", False)
+                End If
+            End Using
+            Return True
+        Catch ex As Exception When TypeOf ex Is UnauthorizedAccessException OrElse
+                                   TypeOf ex Is Security.SecurityException OrElse
+                                   TypeOf ex Is IO.IOException
+            Return False
+        End Try
+    End Function
 
 
     Public Sub AddOrUpdateWatched(item As WatchedFolder, Optional immediateFlushToDisk As Boolean = True)
@@ -232,6 +252,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         End If
         OnPropertyChanged(NameOf(TotalSaved))
         If immediateFlushToDisk Then WriteToFile()
+        If existingItem Is Nothing Then UpdateRegistryBasedOnWatchedFolders()
 
     End Sub
 
@@ -287,6 +308,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         item.Dispose()
         WatchedFolders.Remove(item)
         If writeToFile Then Await WriteToFileAsync()
+        UpdateRegistryBasedOnWatchedFolders()
 
     End Function
 
