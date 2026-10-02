@@ -9,7 +9,7 @@ version = 2
 file = "es-ES.toml"
 
 [locales."ko-KR"]
-version = 1
+version = 2
 file = "ko-KR.toml"
 
 [locales."ru-RU"]
