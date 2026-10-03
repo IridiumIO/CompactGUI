@@ -20,4 +20,8 @@
     <ProjectReference Include="..\CompactGUI.Logging\CompactGUI.Logging.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="CompactGUI.Tests" />
+  </ItemGroup>
+
 </Project>
