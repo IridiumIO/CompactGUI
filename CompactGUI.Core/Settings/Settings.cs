@@ -46,7 +46,7 @@ public partial class Settings : ObservableRecipient
     [ObservableProperty] private WindowState windowState = WindowState.Normal;
     [ObservableProperty] private bool alwaysShowDetailedCompressionMode = false;
 
-    [ObservableProperty] private string language = "en-AU";
+    [ObservableProperty] private string language = ""; // empty means "follow the system language"
 
     [ObservableProperty] private bool bypassLowSpaceProtection = false;
 
