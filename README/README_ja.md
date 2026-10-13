@@ -10,7 +10,7 @@
 </p>
 
 
-<p align="center"><b>CompactGUI は、ゲームやプログラムの機能を損なうことなく、使用容量を削減するために透過的な圧縮を行います。本ツールは Win32 API を直接的に利用することで、Windows 10 以降の環境で利用可能な標準のコマンドラインツール <code>compact.exe</code> と同等の機能を実現しています。</b></p>
+<p align="center"><b>CompactGUI は、ゲームやプログラムの機能を損なうことなく、使用容量を削減するために透過的な圧縮を行います。本ツールは Win32 API を直接的に利用することで、Windows 10 以降の環境で利用可能な標準のコマンドラインツール <code>compact.exe</code> と同等の機能を実現。</b></p>
 
 &nbsp;
 &nbsp;
