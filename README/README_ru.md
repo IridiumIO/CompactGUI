@@ -57,7 +57,7 @@
 <h4 align="center"><b>Смотрите <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Вики</a> со списком <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/9779-Games-blue.svg"></a>, протестированных на основе <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/-82436-lightgrey.svg"></a> отчётов</b></h3>
 <p>&nbsp;</p>
 
-<p align="center"><img src="CompactGUI/assets/Watcher_ru.png" width="750"/></p>
+<p align="center"><img src="../CompactGUI/assets/Watcher_ru.png" width="750"/></p>
 
 ## Важное замечание
 
