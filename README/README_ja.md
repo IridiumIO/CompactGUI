@@ -15,11 +15,11 @@
 &nbsp;
 &nbsp;
 
-<p align="center"><img src="../CompactGUI/assets/Home_zh.png" width="750"/></p>
+<p align="center"><img src="../CompactGUI/assets/Home.png" width="750"/></p>
 <p align="center">
 <img src="../CompactGUI/assets/Compression.png" width="250"/>
 <img src="../CompactGUI/assets/Database.png" width="250"/>
-<img src="../CompactGUI/assets/Watcher_zh.png" width="250"/>
+<img src="../CompactGUI/assets/Watcher.png" width="250"/>
 </p>
 
 ---
