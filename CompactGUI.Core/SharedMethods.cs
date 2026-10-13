@@ -26,9 +26,11 @@ public static class SharedMethods
 
     public static FolderVerificationResult VerifyFolder(string folder)
     {
+        folder = NormalizeLocalPath(folder);
+
         if (!Directory.Exists(folder))
             return FolderVerificationResult.DirectoryDoesNotExist;
-        else if (folder.ToLowerInvariant().Contains(Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToLowerInvariant()))
+        else if (IsPathWithinDirectory(folder, Environment.GetFolderPath(Environment.SpecialFolder.Windows)))
             return FolderVerificationResult.SystemDirectory;
         else if (folder.EndsWith(":\\"))
             return FolderVerificationResult.RootDirectory;
@@ -36,7 +38,7 @@ public static class SharedMethods
             return FolderVerificationResult.DirectoryEmptyOrUnauthorized;
         else if (IsOneDriveFolder(folder))
             return FolderVerificationResult.OneDriveFolder;
-        else if (DriveInfo.GetDrives().First(f => folder.StartsWith(f.Name)).DriveFormat != "NTFS")
+        else if (!IsSupportedLocalNtfsDrive(folder))
             return FolderVerificationResult.NonNTFSDrive;
         else if (!HasDirectoryWritePermission(folder))
             return FolderVerificationResult.InsufficientPermission;
@@ -44,6 +46,40 @@ public static class SharedMethods
             return FolderVerificationResult.LZNT1Compressed;
 
         return FolderVerificationResult.Valid;
+    }
+
+    public static string NormalizeLocalPath(string folder)
+    {
+        try
+        {
+            return NormalizeLocalDrivePath(new DirectoryInfo(folder).FullName);
+        }
+        catch (ArgumentException)
+        {
+            return folder;
+        }
+    }
+
+    private static string NormalizeLocalDrivePath(string folder)
+    {
+        if (folder.Length < 2 || folder[1] != ':' || !char.IsAsciiLetter(folder[0])) return folder;
+
+        return char.ToUpperInvariant(folder[0]) + folder[1..];
+    }
+
+    internal static bool IsPathWithinDirectory(string path, string directory)
+    {
+        string normalizedPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        string normalizedDirectory = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+        return normalizedPath.Equals(normalizedDirectory, StringComparison.OrdinalIgnoreCase)
+            || normalizedPath.StartsWith(normalizedDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsSupportedLocalNtfsDrive(string folder)
+    {
+        var drive = DriveInfo.GetDrives().FirstOrDefault(f => folder.StartsWith(f.Name, StringComparison.OrdinalIgnoreCase));
+        return drive is not null && drive.DriveType != DriveType.Network && drive.DriveFormat == "NTFS";
     }
 
     public static string GetFolderVerificationMessage(FolderVerificationResult result)
@@ -88,12 +124,22 @@ public static class SharedMethods
             Path.Combine(userProfile, "OneDrive - Business") // Alternative OneDrive for Business
         };
 
-        string normalizedFolderPath = Path.GetFullPath(folderPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).ToLowerInvariant();
-
-        return oneDrivePaths.Any(oneDrivePath =>
-                    normalizedFolderPath.StartsWith(Path.GetFullPath(oneDrivePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).ToLowerInvariant()));
+        return oneDrivePaths.Any(oneDrivePath => IsPathWithinDirectory(folderPath, oneDrivePath));
 
     }
+
+    public static bool IsDiskImage(string fileName)
+    {
+        ReadOnlySpan<char> extension = Path.GetExtension(fileName.AsSpan());
+        return extension.Equals(".vhd", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".vhdx", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".vmdk", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".qcow2", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".img", StringComparison.OrdinalIgnoreCase)
+            || extension.Equals(".iso", StringComparison.OrdinalIgnoreCase);
+    }
+
+
 
     public static void PreventSleep()
     {
@@ -164,6 +210,46 @@ public static class SharedMethods
 
         return lpSectorsPerCluster * lpBytesPerSector;
 
+    }
+
+    public static bool HasSufficientFreeSpaceForCompression(string workingDirectory, IEnumerable<AnalysedFileDetails> analysedFiles, WOFCompressionAlgorithm compressionAlgorithm, IEnumerable<string> exclusionList)
+    {
+        long requiredBytes;
+        if (compressionAlgorithm == WOFCompressionAlgorithm.NO_COMPRESSION)
+        {
+            long largestCandidateSize = 0;
+            requiredBytes = 0;
+
+            foreach (AnalysedFileDetails file in analysedFiles)
+            {
+                if (file.CompressedSize >= file.UncompressedSize) continue;
+                requiredBytes += file.UncompressedSize - file.CompressedSize;
+                largestCandidateSize = Math.Max(largestCandidateSize, file.UncompressedSize);
+            }
+
+            requiredBytes += largestCandidateSize;
+        }
+        else
+        {
+            uint clusterSize = GetClusterSize(workingDirectory);
+            var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(file => file.FileName), exclusionList);
+            requiredBytes = analysedFiles.Where(file =>
+                    file.CompressionMode != compressionAlgorithm &&
+                    file.UncompressedSize > clusterSize &&
+                    !file.Attributes.HasFlag(FileAttributes.SparseFile) &&
+                    !excludedFiles.Contains(file.FileName))
+                .Select(file => file.UncompressedSize).DefaultIfEmpty().Max() * 2;
+        }
+
+        try
+        {
+            var root = Path.GetPathRoot(workingDirectory);
+            return !string.IsNullOrWhiteSpace(root) && requiredBytes <= new DriveInfo(root).AvailableFreeSpace;
+        }
+        catch (IOException)
+        {
+            return false;
+        }
     }
 
 

@@ -2,118 +2,122 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
-using System.Collections.Concurrent;
 using Windows.Win32;
 using CompactGUI.Logging.Core;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace CompactGUI.Core;
 
 public sealed class Uncompactor : ICompressor, IDisposable
 {
 
-    private SemaphoreSlim pauseSemaphore = new SemaphoreSlim(1, 2);
-    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-    private ConcurrentDictionary<string, int> processedFileCount = new ConcurrentDictionary<string, int>();
-
+    private readonly IReadOnlyList<string> filesList;
     private readonly ILogger<Uncompactor> _logger;
+    private readonly ParallelFileRunner<string> runner;
 
-    public Uncompactor(ILogger<Uncompactor>? logger = null)
+    public Uncompactor(IReadOnlyList<string> filesList, ILogger<Uncompactor>? logger = null)
     {
+        this.filesList = filesList ?? throw new ArgumentNullException(nameof(filesList));
         _logger = logger ?? NullLogger<Uncompactor>.Instance;
+        runner = new ParallelFileRunner<string>(new ParallelFileRunnerOptions<string>
+        {
+            GetFileName = file => file,
+            GetProgressWeight = _ => 1,
+            ProcessFile = WOFDecompressFile,
+            OnProcessing = file => UncompactorLog.ProcessingFile(_logger, file),
+            GetRecoveryOrder = GetFileLength,
+            ProgressInterval = TimeSpan.FromMilliseconds(200)
+        });
     }
 
-    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1)
+    public async Task<bool> RunAsync(IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1)
     {
         int totalFiles = filesList.Count;
+        int failedFileCount = 0;
         if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
-        ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism };
-        processedFileCount.Clear();
 
         UncompactorLog.StartingDecompression(_logger, totalFiles, maxParallelism);
         Stopwatch sw = Stopwatch.StartNew();
         try
         {
-            await Parallel.ForEachAsync(filesList, parallelOptions,
-                (file, ctx) =>
-                {
-                    ctx.ThrowIfCancellationRequested();
-                    return new ValueTask(PauseAndProcessFile(file, totalFiles, progressMonitor, cancellationTokenSource.Token));
-                });
+            failedFileCount = await runner.RunAsync(filesList, totalFiles, maxParallelism, progressMonitor).ConfigureAwait(false);
         }
         catch (OperationCanceledException) {
             UncompactorLog.DecompressionCanceled(_logger);
+            runner.ReportProgress(progressMonitor, force: true);
             return false; 
+        }
+        catch (Exception ex)
+        {
+            UncompactorLog.DecompressionFailed(_logger, ex.Message);
+            return false;
         }
         finally { sw.Stop(); }
 
+        if (failedFileCount > 0)
+        {
+            UncompactorLog.DecompressionFailed(_logger, $"{failedFileCount} file operation(s) failed.");
+            runner.ReportProgress(progressMonitor, force: true);
+            return true;
+        }
+
         UncompactorLog.DecompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
+        runner.ReportProgress(progressMonitor, force: true);
         return true;
 
     }
 
-    private async Task PauseAndProcessFile(string file, int totalFiles, IProgress<CompressionProgress>? progressMonitor, CancellationToken ctx)
-    {
-        UncompactorLog.ProcessingFile(_logger, file);
-        try
-        {
-            await pauseSemaphore.WaitAsync(ctx).ConfigureAwait(false);
-            pauseSemaphore.Release();
-        }
-        catch (OperationCanceledException) { throw; }
-        ctx.ThrowIfCancellationRequested();
-
-        var _ = WOFDecompressFile(file);
-        processedFileCount.TryAdd(file, 1);
-        progressMonitor?.Report(new CompressionProgress(
-                (int)(processedFileCount.Count / (float)totalFiles * 100),
-                file)
-        );
-
-    }
-
-    private unsafe bool? WOFDecompressFile(string file)
+    private unsafe FileOperationResult WOFDecompressFile(string file)
     {
         try
         {
             using (SafeFileHandle fs = File.OpenHandle(file))
             {
-                var res = PInvoke.DeviceIoControl(fs, WOFHelper.FSCTL_DELETE_EXTERNAL_BACKING, null, 0, null, 0, null, null);
-                return res;
+                uint bytesReturned;
+                if (PInvoke.DeviceIoControl(fs, WOFHelper.FSCTL_DELETE_EXTERNAL_BACKING, null, 0, null, 0, &bytesReturned, null)) return FileOperationResult.Success;
+
+                int errorCode = Marshal.GetLastPInvokeError();
+                return FileOperationRecovery.IsInsufficientDiskSpaceError(errorCode)
+                    ? FileOperationResult.InsufficientDiskSpace
+                    : FileOperationResult.Failed;
             }  
         }
-        catch (Exception ex) { 
-            UncompactorLog.FileDecompressionFailed(_logger, file, ex.Message);
-            return null; 
+        catch (Exception) { 
+            return FileOperationResult.Failed;
+        }
+    }
+
+    private static long GetFileLength(string file)
+    {
+        try
+        {
+            return new FileInfo(file).Length;
+        }
+        catch
+        {
+            return long.MaxValue;
         }
     }
 
     public void Pause()
     {
         UncompactorLog.DecompressionPaused(_logger);
-        pauseSemaphore.Wait();
+        runner.Pause();
     }
 
 
     public void Resume()
     {
-        if (pauseSemaphore.CurrentCount == 0) pauseSemaphore.Release();
+        runner.Resume();
         UncompactorLog.DecompressionResumed(_logger);
     }
 
 
-    public void Cancel()
-    {
-        Resume();
-        cancellationTokenSource.Cancel();
-    }
+    public int Cancel() => runner.Cancel();
 
 
-    public void Dispose()
-    {
-        pauseSemaphore.Dispose();
-        cancellationTokenSource.Dispose();
-    }
+    public void Dispose() => runner.Dispose();
 
 
 

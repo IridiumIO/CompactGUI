@@ -49,7 +49,7 @@ Public Class SteamACFParser
         Return TryCast(SteamLibraryCache.Get(steamAppsFolder.FullName), Dictionary(Of String, SteamACFResult?))
     End Function
 
-    Private Shared Function LookupAllSteamGames(steamAppsFolder As IO.DirectoryInfo) As Dictionary(Of String, SteamACFResult?)
+    Public Shared Function LookupAllSteamGames(steamAppsFolder As IO.DirectoryInfo) As Dictionary(Of String, SteamACFResult?)
         Dim allGames As New Dictionary(Of String, SteamACFResult?)
 
         For Each fl In steamAppsFolder.EnumerateFiles("*.acf").Where(Function(f) f.Length > 0)
@@ -72,8 +72,16 @@ Public Class SteamACFParser
         Dim appID = CInt(ACFFile.Value.Item("appid").ToString)
         Dim sName = ACFFile.Value.Item("name").ToString
         Dim sInstallDir = ACFFile.Value.Item("installdir").ToString
-        Return New SteamACFResult With {.AppID = appID, .GameName = sName, .InstallDirectory = sInstallDir}
+        Dim stateFlags As Long
+        Dim lastUpdatedUnix As Long
+        Long.TryParse(ACFFile.Value.Item("StateFlags")?.ToString, stateFlags)
+        Long.TryParse(ACFFile.Value.Item("LastUpdated")?.ToString, lastUpdatedUnix)
+
+        Dim lastUpdated = If(lastUpdatedUnix > 0, DateTimeOffset.FromUnixTimeSeconds(lastUpdatedUnix).LocalDateTime, DateTime.MinValue)
+        Return New SteamACFResult With {.AppID = appID, .GameName = sName, .InstallDirectory = sInstallDir, .LastUpdated = lastUpdated, .HasPendingUpdate = (stateFlags And 2) <> 0}
     End Function
 
 
 End Class
+
+

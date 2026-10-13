@@ -34,6 +34,14 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
     <ObservableProperty> Private _PoorlyCompressedFiles As List(Of ExtensionResult)
     <ObservableProperty> Private _CompressionOptions As New CompressionOptions
     <ObservableProperty> Private _IsFreshlyCompressed As Boolean
+    <ObservableProperty> Private _HasInsufficientFreeSpace As Boolean
+    <ObservableProperty> Private _HasInsufficientFreeSpaceForUncompression As Boolean
+    <ObservableProperty> Private _IsCancelling As Boolean
+    <ObservableProperty> Private _ActiveFileOperations As Integer
+    <ObservableProperty> Private _ActiveCompressionFiles As New ObservableCollection(Of ActiveCompressionFile)
+    <ObservableProperty> Private _VisibleActiveCompressionFiles As New ObservableCollection(Of ActiveCompressionFile)
+    <NotifyPropertyChangedFor(NameOf(HasAdditionalActiveCompressionFiles))>
+    <ObservableProperty> Private _AdditionalActiveCompressionFileCount As Integer
 
     <ObservableProperty> Private _FolderBGImage As BitmapImage = Nothing
 
@@ -58,6 +66,12 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
         Get
             If CompressedBytes = 0 Then Return 0
             Return CompressedBytes / UncompressedBytes
+        End Get
+    End Property
+
+    Public ReadOnly Property HasAdditionalActiveCompressionFiles As Boolean
+        Get
+            Return AdditionalActiveCompressionFileCount > 0
         End Get
     End Property
 
@@ -123,17 +137,28 @@ Public MustInherit Class CompressableFolder : Inherits ObservableObject : Implem
 
     Public Sub Dispose() Implements IDisposable.Dispose
         Compressor?.Dispose()
+        Compressor = Nothing
+
         Analyser?.Dispose()
+        Analyser = Nothing
 
-        AnalysisResults?.Clear()
-        PoorlyCompressedFiles?.Clear()
-        WikiPoorlyCompressedFiles?.Clear()
+        AnalysisResults = New ObservableCollection(Of AnalysedFileDetails)()
+        AnalysisResults.Clear()
 
+        PoorlyCompressedFiles = Nothing
+        WikiPoorlyCompressedFiles = New List(Of String)()
+        WikiCompressionResults = Nothing
+        FolderBGImage = Nothing
 
         GC.SuppressFinalize(Me)
     End Sub
 End Class
 
+Public Class ActiveCompressionFile : Inherits ObservableObject
+    <ObservableProperty> Private _FileName As String
+    <ObservableProperty> Private _DisplayName As String
+    <ObservableProperty> Private _IsActive As Boolean
+End Class
 
 
 Public Enum ActionState

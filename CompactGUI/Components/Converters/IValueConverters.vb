@@ -18,18 +18,18 @@ Public Class BytesToReadableConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
 
         Dim suf As String() = {
-            LanguageHelper.GetString("SizeUnit_B"),
-            LanguageHelper.GetString("SizeUnit_KB"),
-            LanguageHelper.GetString("SizeUnit_MB"),
-            LanguageHelper.GetString("SizeUnit_GB"),
-            LanguageHelper.GetString("SizeUnit_TB"),
-            LanguageHelper.GetString("SizeUnit_PB"),
-            LanguageHelper.GetString("SizeUnit_EB")
+            "B".LT("File size"),
+            "KB".LT("File size"),
+            "MB".LT("File size"),
+            "GB".LT("File size"),
+            "TB".LT("File size"),
+            "PB".LT("File size"),
+            "EB".LT("File size")
         }
 
         If value = 1010101010101010 Then Return "?"
 
-        If value = 0 Then Return "0" & suf(0)
+        If value = 0 Then Return "0 " & suf(0)
         Dim bytes As Long = Math.Abs(value)
         Dim place As Integer = CInt(Math.Floor(Math.Log(bytes, 1024)))
 
@@ -57,7 +57,7 @@ Public Class BytesToReadableConverter : Implements IValueConverter
         Dim decimalPlaces As Integer = Math.Max(0, roundingSigDigits - digitsBeforeDecimal)
         Dim roundedNum As Double = Math.Round(num, decimalPlaces)
 
-        Return (Math.Sign(value) * roundedNum).ToString() & suf(place)
+        Return (Math.Sign(value) * roundedNum).ToString() & " " & suf(place)
 
 
     End Function
@@ -86,6 +86,9 @@ Public Class TokenisedFolderPathConverter : Implements IValueConverter
         If value Is Nothing Then Return Nothing
         Dim Str = CType(value, String)
         Dim formattedString = Str.Replace("\"c, " 🢒 ")
+        If parameter?.ToString() = "TrimStart" AndAlso formattedString.Length > 72 Then
+            Return "…" & formattedString.Substring(formattedString.Length - 71)
+        End If
         Return formattedString
     End Function
 
@@ -102,16 +105,16 @@ Public Class RelativeDateConverter : Implements IValueConverter
         Dim ts As TimeSpan = DateTime.Now - dt
 
         If ts > TimeSpan.FromDays(19000) Then
-            Return LanguageHelper.GetString("Time_Unknown")
+            Return "Unknown".LT("Relative date")
         End If
         If ts > TimeSpan.FromDays(2) Then
-            Return String.Format(LanguageHelper.GetString("Time_DaysAgo"), ts.TotalDays)
+            Return "{0:0} days ago".LTF(ts.TotalDays)
         ElseIf ts > TimeSpan.FromHours(2) Then
-            Return String.Format(LanguageHelper.GetString("Time_HoursAgo"), ts.TotalHours)
+            Return "{0:0} hours ago".LTF(ts.TotalHours)
         ElseIf ts > TimeSpan.FromMinutes(2) Then
-            Return String.Format(LanguageHelper.GetString("Time_MinutesAgo"), ts.TotalMinutes)
+            Return "{0:0} minutes ago".LTF(ts.TotalMinutes)
         Else
-            Return LanguageHelper.GetString("Time_Now")
+            Return "just now".LT()
         End If
     End Function
 
@@ -140,6 +143,90 @@ Public Class CompressionLevelAbbreviatedConverter : Implements IValueConverter
     End Function
 End Class
 
+Public Class CompressionModeAbbreviatedConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim mode = CType(value, Core.CompressionMode)
+        Select Case mode
+            Case Core.CompressionMode.XPRESS4K : Return "X4"
+            Case Core.CompressionMode.XPRESS8K : Return "X8"
+            Case Core.CompressionMode.XPRESS16K : Return "X16"
+            Case Core.CompressionMode.LZX : Return "LZX"
+            Case Else : Return "NIL"
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class QueueCompressionModeLabelConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Select Case CType(value, Core.CompressionMode)
+            Case Core.CompressionMode.XPRESS4K : Return "X4K"
+            Case Core.CompressionMode.XPRESS8K : Return "X8K"
+            Case Core.CompressionMode.XPRESS16K : Return "X16K"
+            Case Core.CompressionMode.LZX : Return "LZX"
+            Case Else : Return "NIL"
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class QueueStatusToStringConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Select Case CType(value, ActionState)
+            Case ActionState.Idle, ActionState.Waiting : Return "Waiting".LT()
+            Case ActionState.Analysing : Return "Preparing".LT()
+            Case ActionState.Working : Return "Working".LT()
+            Case ActionState.Paused : Return "Paused".LT()
+            Case ActionState.Results : Return "Complete".LT()
+            Case Else : Return "Failed".LT()
+        End Select
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class SelectedModeEstimatedSavingsConverter : Implements IMultiValueConverter
+    Public Function Convert(values() As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IMultiValueConverter.Convert
+        Dim results = TryCast(values(0), WikiCompressionResults)
+        If results Is Nothing Then Return 0L
+
+        Dim result As CompressionResult = Nothing
+        Select Case CType(values(1), Core.CompressionMode)
+            Case Core.CompressionMode.XPRESS4K
+                result = results.XPress4K
+            Case Core.CompressionMode.XPRESS8K
+                result = results.XPress8K
+            Case Core.CompressionMode.XPRESS16K
+                result = results.XPress16K
+            Case Core.CompressionMode.LZX
+                result = results.LZX
+        End Select
+
+        Dim savings As Long
+
+        If parameter Is Nothing Then
+            savings = If(result Is Nothing, 0L, Math.Max(0, result.BytesSaved))
+        ElseIf CStr(parameter) = "AB" Then
+            savings = If(result Is Nothing, 0L, Math.Max(0, result.AfterBytes))
+
+        End If
+
+
+        Return New BytesToReadableConverter().Convert(savings, GetType(String), Nothing, culture)
+    End Function
+
+    Public Function ConvertBack(value As Object, targetTypes() As Type, parameter As Object, culture As CultureInfo) As Object() Implements IMultiValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
 
 Public Class ConfidenceIntToStringConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
@@ -260,6 +347,22 @@ Public Class BooleanToInverseVisibilityConverter : Implements IValueConverter
 
 End Class
 
+Public Class WidthAtMostConverter : Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        Dim width As Double
+        Dim threshold As Double
+
+        If value Is Nothing OrElse Not Double.TryParse(value.ToString(), NumberStyles.Float, culture, width) Then Return False
+        If parameter Is Nothing OrElse Not Double.TryParse(parameter.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, threshold) Then Return False
+
+        Return width <= threshold
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        Throw New NotImplementedException()
+    End Function
+End Class
+
 Public Class EnumToRadioButtonConverter : Implements IValueConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
         Dim enumValue = CType(value, [Enum])
@@ -300,15 +403,15 @@ Public Class FolderStatusToStringConverter : Implements IValueConverter
         Dim status = CType(value, ActionState)
         Select Case status
             Case ActionState.Idle
-                Return LanguageHelper.GetString("Status_AwaitingCompression")
+                Return "Awaiting Compression".LT()
             Case ActionState.Analysing
-                Return LanguageHelper.GetString("Status_Analysing")
+                Return "Analysing".LT()
             Case ActionState.Working, ActionState.Paused
-                Return LanguageHelper.GetString("Status_Working")
+                Return "Working".LT()
             Case ActionState.Results
-                Return LanguageHelper.GetString("Status_Compressed")
+                Return "Compressed".LT()
             Case Else
-                Return LanguageHelper.GetString("Status_Unknown")
+                Return "Unknown".LT("Folder status")
         End Select
     End Function
     Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack

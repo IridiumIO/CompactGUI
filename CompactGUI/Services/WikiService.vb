@@ -1,5 +1,6 @@
 ﻿Imports System.Net.Http
 Imports System.Text.Json
+Imports System.Threading
 
 Imports CompactGUI.Core.Settings
 
@@ -17,6 +18,7 @@ Public Class WikiService : Implements IWikiService
     Private ReadOnly dlPath As String
 
     Private ReadOnly _settingsService As ISettingsService
+    Private ReadOnly _databaseGate As New SemaphoreSlim(1, 1)
 
     Public Sub New(settingsService As ISettingsService)
         _settingsService = settingsService
@@ -30,47 +32,89 @@ Public Class WikiService : Implements IWikiService
         Debug.WriteLine("Updating JSON file")
         Dim JSONFile As New IO.FileInfo(filePath)
 
-        If JSONFile.Exists AndAlso _settingsService.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now Then Return
+        Await _databaseGate.WaitAsync().ConfigureAwait(False)
+        Try
+            If JSONFile.Exists AndAlso
+               _settingsService.AppSettings.ResultsDBLastUpdated.AddHours(6) >= DateTime.Now AndAlso
+               Await IsDatabaseJsonValidAsync(JSONFile.FullName).ConfigureAwait(False) Then
+                Return
+            End If
 
-        Dim httpClient As New HttpClient
+            Dim tempPath = JSONFile.FullName & "." & Guid.NewGuid().ToString("N") & ".tmp"
+            Try
+                Using httpClient As New HttpClient()
+                    Using responseStream = Await httpClient.GetStreamAsync(dlPath).ConfigureAwait(False)
+                        Using fs As New IO.FileStream(tempPath, IO.FileMode.CreateNew)
+                            Await responseStream.CopyToAsync(fs).ConfigureAwait(False)
+                        End Using
+                    End Using
+                End Using
+
+                If Not Await IsDatabaseJsonValidAsync(tempPath).ConfigureAwait(False) Then
+                    Debug.WriteLine("Downloaded database JSON is invalid.")
+                    Return
+                End If
+
+                IO.File.Move(tempPath, JSONFile.FullName, True)
+            Finally
+                If IO.File.Exists(tempPath) Then IO.File.Delete(tempPath)
+            End Try
+
+            _settingsService.AppSettings.ResultsDBLastUpdated = DateTime.Now
+            _settingsService.SaveSettings()
+            Debug.WriteLine("Updated JSON file")
+
+        Catch ex As Exception When TypeOf ex Is TaskCanceledException OrElse
+                                   TypeOf ex Is IO.IOException OrElse
+                                   TypeOf ex Is HttpRequestException OrElse
+                                   TypeOf ex Is UnauthorizedAccessException
+            Debug.WriteLine($"Could not update database JSON: {ex.Message}")
+        Finally
+            _databaseGate.Release()
+        End Try
+    End Function
+
+    Private Async Function IsDatabaseJsonValidAsync(path As String) As Task(Of Boolean)
+        If Not IO.File.Exists(path) Then Return False
 
         Try
-
-            Dim res = Await httpClient.GetStreamAsync(dlPath)
-
-            Using fs As New IO.FileStream(JSONFile.FullName, IO.FileMode.Create)
-                Await res.CopyToAsync(fs)
+            Using stream = IO.File.OpenRead(path)
+                Using document = Await JsonDocument.ParseAsync(stream).ConfigureAwait(False)
+                    Return document.RootElement.ValueKind = JsonValueKind.Array
+                End Using
             End Using
-
-        Catch ex As TaskCanceledException
-            Debug.WriteLine("HTTP request timed out.")
-            Return
-
-        Catch ex As IO.IOException
-            Debug.WriteLine("Could not update JSON file: file is in use.")
-            Return
-        Catch ex As HttpRequestException
-            Debug.WriteLine($"Unable to reach endpoint. Likely no internet connection")
-            Return
-        Finally
-            httpClient.Dispose()
+        Catch ex As Exception When TypeOf ex Is JsonException OrElse
+                                   TypeOf ex Is IO.IOException OrElse
+                                   TypeOf ex Is UnauthorizedAccessException
+            Debug.WriteLine($"Database JSON is invalid or unreadable: {ex.Message}")
+            Return False
         End Try
-
-
-        _settingsService.AppSettings.ResultsDBLastUpdated = DateTime.Now
-        _settingsService.SaveSettings()
-        Debug.WriteLine("Updated JSON file")
-
     End Function
 
     Private ReadOnly JsonDefaultSettings As New JsonSerializerOptions With {.IncludeFields = True}
 
-    Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult))) Implements IWikiService.ParseData
-        Dim JSONFile As New IO.FileInfo(filePath)
-        If Not JSONFile.Exists Then Return Nothing
+    Private Async Function ReadDatabaseAsync() As Task(Of List(Of SteamResultsData))
+        Await _databaseGate.WaitAsync().ConfigureAwait(False)
+        Try
+            If Not IO.File.Exists(filePath) Then Return Nothing
 
-        Dim jStream As IO.FileStream = JSONFile.OpenRead
-        Dim parsedSteamWikiResults = Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(jStream, JsonDefaultSettings).ConfigureAwait(False)
+            Using stream = IO.File.OpenRead(filePath)
+                Return Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(stream, JsonDefaultSettings).ConfigureAwait(False)
+            End Using
+        Catch ex As Exception When TypeOf ex Is JsonException OrElse
+                                   TypeOf ex Is IO.IOException OrElse
+                                   TypeOf ex Is UnauthorizedAccessException
+            Debug.WriteLine($"Database JSON is invalid or unreadable: {ex.Message}")
+            Return Nothing
+        Finally
+            _databaseGate.Release()
+        End Try
+    End Function
+
+    Async Function ParseData(appid As Integer) As Task(Of (estimatedRatio As Decimal, confidence As Integer, poorlyCompressedList As Dictionary(Of String, Integer), compressionResults As List(Of CompressionResult))) Implements IWikiService.ParseData
+        Dim parsedSteamWikiResults = Await ReadDatabaseAsync().ConfigureAwait(False)
+        If parsedSteamWikiResults Is Nothing Then Return Nothing
+
         Dim workingGame = parsedSteamWikiResults.Find(Function(game) game.SteamID = appid)
 
         If workingGame Is Nothing Then Return Nothing
@@ -89,23 +133,16 @@ Public Class WikiService : Implements IWikiService
 
         estimatedRatio /= totaldataPoints
         Return (estimatedRatio, workingGame.Confidence, workingGame.PoorlyCompressedExtensions, workingGame.CompressionResults)
-
     End Function
 
 
     Public Async Function GetAllDatabaseCompressionResultsAsync() As Task(Of List(Of DatabaseCompressionResult)) Implements IWikiService.GetAllDatabaseCompressionResultsAsync
-        Dim JSONFile As New IO.FileInfo(filePath)
-        If Not JSONFile.Exists Then Return New List(Of DatabaseCompressionResult)()
+        Dim parsedResults = Await ReadDatabaseAsync().ConfigureAwait(False)
+        If parsedResults Is Nothing Then Return New List(Of DatabaseCompressionResult)()
 
-        Using jStream As IO.FileStream = JSONFile.OpenRead()
-            ' Deserialize the JSON into a list of SteamResultsData (or your source model)
-            Dim parsedResults = Await JsonSerializer.DeserializeAsync(Of List(Of SteamResultsData))(jStream, JsonDefaultSettings).ConfigureAwait(False)
-            If parsedResults Is Nothing Then Return New List(Of DatabaseCompressionResult)()
-
-            ' Map each SteamResultsData to DatabaseCompressionResult
-            Dim results As New List(Of DatabaseCompressionResult)
-            For Each item In parsedResults
-                Dim dbResult As New DatabaseCompressionResult With {
+        Dim results As New List(Of DatabaseCompressionResult)
+        For Each item In parsedResults
+            Dim dbResult As New DatabaseCompressionResult With {
                 .GameName = item.GameName,
                 .SteamID = item.SteamID,
                 .Confidence = CType(item.Confidence, DBResultConfidence),
@@ -115,11 +152,10 @@ Public Class WikiService : Implements IWikiService
                 .Result_LZX = item.CompressionResults.FirstOrDefault(Function(r) r.CompType = 3),
                 .PoorlyCompressedExtensions = item.PoorlyCompressedExtensions?.Select(Function(kvp) New DBPoorlyCompressedExtension With {.Extension = kvp.Key, .Count = kvp.Value}).ToList()
             }
-                results.Add(dbResult)
-            Next
+            results.Add(dbResult)
+        Next
 
-            Return results
-        End Using
+        Return results
     End Function
 
 

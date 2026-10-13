@@ -3,10 +3,7 @@ using CompactGUI.Logging.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
-using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.IO.Enumeration;
-using System.Runtime.InteropServices;
 using Windows.Win32;
 
 namespace CompactGUI.Core;
@@ -17,67 +14,65 @@ public sealed class Compactor : ICompressor, IDisposable
     private readonly string workingDirectory;
     private readonly HashSet<string> exclusionList;
     private readonly WOFCompressionAlgorithm wofCompressionAlgorithm;
-
-
-    private IntPtr compressionInfoPtr;
-    private UInt32 compressionInfoSize;
-
-    private long totalProcessedBytes = 0;
-    private readonly SemaphoreSlim pauseSemaphore = new SemaphoreSlim(1, 2);
-    private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private readonly bool bypassLowDiskSpaceProtection;
+    private readonly ParallelFileRunner<FileDetails> runner;
 
     private ILogger<Compactor> _logger;
 
     private Analyser _analyser;
 
-    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, Analyser analyser, ILogger<Compactor>? logger = null)
+    public Compactor(string folderPath, WOFCompressionAlgorithm compressionLevel, string[] excludedFileTypes, Analyser analyser, bool bypassLowDiskSpaceProtection, ILogger<Compactor>? logger = null)
     {
         workingDirectory = folderPath;
         exclusionList = new HashSet<string>(excludedFileTypes, StringComparer.OrdinalIgnoreCase);
         wofCompressionAlgorithm = compressionLevel;
+        this.bypassLowDiskSpaceProtection = bypassLowDiskSpaceProtection;
         _logger = logger ?? NullLogger<Compactor>.Instance;
         _analyser = analyser;
-        InitializeCompressionInfoPointer();
+        runner = new ParallelFileRunner<FileDetails>(new ParallelFileRunnerOptions<FileDetails>
+        {
+            GetFileName = file => file.FileName,
+            GetProgressWeight = file => file.UncompressedSize,
+            ProcessFile = file => WOFCompressFile(file.FileName),
+            OnProcessing = file => CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize),
+            RecoveryMode = DiskSpaceRecoveryMode.RepeatWhileProgress
+        });
     }
 
-
-    private void InitializeCompressionInfoPointer()
+    public async Task<bool> RunAsync(IProgress<CompressionProgress>? progressMonitor = null, int maxParallelism = 1)
     {
-        var _EFInfo = new WOFHelper.WOF_FILE_COMPRESSION_INFO_V1 { Algorithm = (UInt32)wofCompressionAlgorithm, Flags = 0 };
-        compressionInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(_EFInfo));
-        compressionInfoSize = (UInt32)Marshal.SizeOf(_EFInfo);
-        Marshal.StructureToPtr(_EFInfo, compressionInfoPtr, true);
-
-    }
-
-    public async Task<bool> RunAsync(List<string> filesList, IProgress<CompressionProgress> progressMonitor = null, int maxParallelism = 1)
-    {
-        if(cancellationTokenSource.IsCancellationRequested) { return false; }
+        if (runner.IsCancellationRequested) return false;
 
         CompactorLog.BuildingWorkingFilesList(_logger, workingDirectory);
         var workingFiles = await BuildWorkingFilesList().ConfigureAwait(false);
+        if (workingFiles is null)
+        {
+            CompactorLog.CompressionFailed(_logger, "Unable to build the compression file list.");
+            return false;
+        }
+
         long totalFilesSize = workingFiles.Sum((f) => f.UncompressedSize);
 
-        totalProcessedBytes = 0;
+        if (totalFilesSize == 0)
+        {
+            CompactorLog.CompressionCompleted(_logger, 0);
+            progressMonitor?.Report(new CompressionProgress(100, ""));
+            return true;
+        }
 
         var sw = Stopwatch.StartNew();
 
-        if (maxParallelism <= 0) maxParallelism = Environment.ProcessorCount;
-        ParallelOptions parallelOptions = new() { MaxDegreeOfParallelism = maxParallelism, CancellationToken = cancellationTokenSource.Token };
-
+        maxParallelism = GetWorkerCount(maxParallelism, workingFiles, bypassLowDiskSpaceProtection);
+        Debug.WriteLine($"Compactor: Using {maxParallelism} parallel workers for compression.");
         CompactorLog.StartingCompression(_logger, workingDirectory, wofCompressionAlgorithm.ToString(), maxParallelism);
+        int failedFileCount;
         try
         {
-           await Parallel.ForEachAsync(workingFiles, parallelOptions,
-                (file, ctx) =>
-                {
-                    ctx.ThrowIfCancellationRequested();
-
-                    return new ValueTask(PauseAndProcessFile(file, totalFilesSize, cancellationTokenSource.Token, progressMonitor));
-                }).ConfigureAwait(false);
+            failedFileCount = await runner.RunAsync(workingFiles, totalFilesSize, maxParallelism, progressMonitor).ConfigureAwait(false);
         }
         catch (OperationCanceledException){
             CompactorLog.CompressionCanceled(_logger);
+            runner.ReportProgress(progressMonitor, force: true);
             return false; 
         }
         catch (Exception ex){ 
@@ -86,61 +81,100 @@ public sealed class Compactor : ICompressor, IDisposable
         }
         finally { sw.Stop();}
 
+        if (failedFileCount > 0)
+        {
+            CompactorLog.CompressionFailed(_logger, $"{failedFileCount} file operation(s) failed.");
+            runner.ReportProgress(progressMonitor, force: true);
+            return true;
+        }
 
         
         CompactorLog.CompressionCompleted(_logger, Math.Round(sw.Elapsed.TotalSeconds, 3));
+        runner.ReportProgress(progressMonitor, force: true);
         return true;
     }
 
-    private async Task PauseAndProcessFile(FileDetails file, long totalFilesSize, CancellationToken token, IProgress<CompressionProgress> progressMonitor)
+    private unsafe FileOperationResult WOFCompressFile(string filePath)
     {
-        CompactorLog.ProcessingFile(_logger, file.FileName, file.UncompressedSize);
+        const int ErrorCompressionNotBeneficialHResult = unchecked((int)0x80070158);
 
-        await pauseSemaphore.WaitAsync(token).ConfigureAwait(false);
-        pauseSemaphore.Release();
-
-        var res = WOFCompressFile(file.FileName);
-        Interlocked.Add(ref totalProcessedBytes, file.UncompressedSize);
-        progressMonitor?.Report(new CompressionProgress((int)((double)totalProcessedBytes / totalFilesSize * 100.0), file.FileName));
-
-    }
-
-    private unsafe int? WOFCompressFile(string filePath)
-    {
         try
         {
             using (SafeFileHandle fs = File.OpenHandle(filePath))
             {
-                return PInvoke.WofSetFileDataLocation(fs, (uint)WOFHelper.WOF_PROVIDER_FILE, compressionInfoPtr.ToPointer(), compressionInfoSize);
+                WOFHelper.WOF_FILE_COMPRESSION_INFO_V1 compressionInfo = new()
+                {
+                    Algorithm = (uint)wofCompressionAlgorithm,
+                    Flags = 0
+                };
+
+                int result = PInvoke.WofSetFileDataLocation(fs,(uint)WOFHelper.WOF_PROVIDER_FILE, &compressionInfo, (uint)sizeof(WOFHelper.WOF_FILE_COMPRESSION_INFO_V1));
+
+                if (result >= 0 || result == ErrorCompressionNotBeneficialHResult) return FileOperationResult.Success;
+                if (FileOperationRecovery.IsInsufficientDiskSpaceHResult(result)) return FileOperationResult.InsufficientDiskSpace;
+
+                return FileOperationResult.Failed;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            CompactorLog.FileCompressionFailed(_logger, filePath, ex.Message);
-            return null;
+            return FileOperationResult.Failed;
         }
     }
 
-    public async Task<IEnumerable<FileDetails>> BuildWorkingFilesList()
+    public async Task<List<FileDetails>?> BuildWorkingFilesList()
     {
         uint clusterSize = SharedMethods.GetClusterSize(workingDirectory);
 
         
-        var analysedFiles = await _analyser.GetAnalysedFilesAsync(cancellationTokenSource.Token);
+        var analysedFiles = await _analyser.GetAnalysedFilesAsync(runner.Token);
 
-        if (analysedFiles is null) return Enumerable.Empty<FileDetails>();
+        if (analysedFiles is null) return null;
 
         var excludedFiles = SkipListMatcher.GetExcludedFiles(workingDirectory, analysedFiles.Select(f => f.FileName), exclusionList);
 
-        return analysedFiles
-            .Where(fl =>
-                fl.CompressionMode != wofCompressionAlgorithm
-                && fl.UncompressedSize > clusterSize
-                && !excludedFiles.Contains(fl.FileName)
-            )
-            .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize))
-            .ToList();
+        return [.. analysedFiles
+                    .Where(fl =>
+                        fl.CompressionMode != wofCompressionAlgorithm
+                        && fl.UncompressedSize > clusterSize
+                        && !fl.Attributes.HasFlag(FileAttributes.SparseFile)
+                        && !excludedFiles.Contains(fl.FileName)
+                    )
+                    .Select(fl => new FileDetails(fl.FileName, fl.UncompressedSize, fl.CompressedSize))];
     }
+
+    private int GetWorkerCount(int requestedWorkerCount, IReadOnlyList<FileDetails> files, bool bypassLowDiskSpaceProtection)
+    {
+        int workerCount = requestedWorkerCount <= 0 ? Environment.ProcessorCount : requestedWorkerCount;
+
+        if (bypassLowDiskSpaceProtection) return workerCount;
+
+        long totalAllocatedSize = 0;
+        long largestAllocatedSize = 0;
+        bool containsDiskImage = false;
+
+        foreach (FileDetails file in files)
+        {
+            totalAllocatedSize = checked(totalAllocatedSize + file.AllocatedSize);
+            largestAllocatedSize = Math.Max(largestAllocatedSize, file.AllocatedSize);
+            containsDiskImage |= SharedMethods.IsDiskImage(file.FileName);
+        }
+
+        try
+        {
+            var root = Path.GetPathRoot(workingDirectory);
+            if (string.IsNullOrWhiteSpace(root)) return workerCount;
+
+            long reserveBytes = totalAllocatedSize / 2 + largestAllocatedSize;
+            bool lowFreeSpace = new DriveInfo(root).AvailableFreeSpace < reserveBytes * 2;
+            return lowFreeSpace || containsDiskImage ? 1 : workerCount;
+        }
+        catch (IOException)
+        {
+            return containsDiskImage ? 1 : workerCount;
+        }
+    }
+
 
 
 
@@ -148,37 +182,23 @@ public sealed class Compactor : ICompressor, IDisposable
     public void Pause()
     {
         CompactorLog.CompressionPaused(_logger);
-        pauseSemaphore.Wait(cancellationTokenSource.Token);
+        runner.Pause();
     }
 
 
     public void Resume()
     {
-        if (pauseSemaphore.CurrentCount == 0) pauseSemaphore.Release();  
+        runner.Resume();
         CompactorLog.CompressionResumed(_logger);
     }
 
 
-    public void Cancel()
-    {
-        Resume();
-        cancellationTokenSource.Cancel();
-    }
+    public int Cancel() => runner.Cancel();
 
 
-    public void Dispose()
-    {
-        cancellationTokenSource?.Dispose();
-        pauseSemaphore?.Dispose();
-        if (compressionInfoPtr != IntPtr.Zero)
-        {
-            Marshal.FreeHGlobal(compressionInfoPtr);
-            compressionInfoPtr = IntPtr.Zero;
-        }
-    }
+    public void Dispose() => runner.Dispose();
 
 
-    public readonly record struct FileDetails(string FileName, long UncompressedSize);
-
+    public readonly record struct FileDetails(string FileName, long UncompressedSize, long AllocatedSize);
 
 }

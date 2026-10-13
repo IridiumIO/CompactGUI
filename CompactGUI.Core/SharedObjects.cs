@@ -4,10 +4,10 @@
 public sealed class AnalysedFileDetails
 {
     public required string FileName { get; set; }
+    public FileAttributes Attributes { get; set; }
     public long UncompressedSize { get; set; }
     public long CompressedSize { get; set; }
     public WOFCompressionAlgorithm CompressionMode { get; set; }
-    public FileInfo? FileInfo { get; set; }
 }
 
 
@@ -26,14 +26,23 @@ public sealed class ExtensionResult
 
 public struct CompressionProgress
 {
-    public int ProgressPercent;
-    public string FileName;
+    public int ProgressPercent { get; set; }
+    public string FileName { get; set; }
+    public string[] ActiveFiles { get; set; }
+    public CompressionProgressStatus? Status { get; set; }
 
-    public CompressionProgress(int progressPercent, string fileName)
+    public CompressionProgress(int progressPercent, string fileName, string[]? activeFiles = null, CompressionProgressStatus? status = null)
     {
         ProgressPercent = progressPercent;
         FileName = fileName;
+        ActiveFiles = activeFiles ?? Array.Empty<string>();
+        Status = status;
     }
+}
+
+public enum CompressionProgressStatus
+{
+    LowDiskSpaceRetryingSequentially
 }
 
 

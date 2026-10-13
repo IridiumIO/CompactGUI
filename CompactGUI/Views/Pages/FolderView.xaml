@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -25,10 +26,43 @@
                 <TextBlock HorizontalAlignment="Left"
                            FontSize="16" FontWeight="SemiBold"
                            Text="{Binding Folder.FolderActionState}" />
-                <TextBlock Margin="0 5 0 0" HorizontalAlignment="Left"
-                           Foreground="{StaticResource AccentFillColorDisabledBrush}"
-                           Text="{Binding CompressionProgressFile, Mode=OneWay, Converter={StaticResource TokenisedFolderPathConverter}}"
-                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Margin="0 5 0 0"
+                           Foreground="{StaticResource PaletteAmberBrush}"
+                           Text="{Binding Folder.ActiveFileOperations, StringFormat=Finishing {0} active file operations; do not power off.}"
+                           Visibility="{Binding Folder.IsCancelling, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock Margin="0 5 0 0"
+                           Foreground="{StaticResource PaletteAmberBrush}"
+                           Text="{Binding CompressionStatusMessage}"
+                           TextWrapping="Wrap">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                    <ui:ProgressRing Width="16" Height="16"
+                                     Margin="0 0 10 0" VerticalAlignment="Top"
+                                     IsIndeterminate="True" />
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Folder.VisibleActiveCompressionFiles}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="{StaticResource AccentFillColorDisabledBrush}" Text="{Binding DisplayName, Converter={StaticResource TokenisedFolderPathConverter}}" TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Margin="0 2 0 0"
+                                   Foreground="{StaticResource AccentFillColorDisabledBrush}"
+                                   Text="{Binding Folder.AdditionalActiveCompressionFileCount, StringFormat=+ {0} more active}"
+                                   Visibility="{Binding Folder.HasAdditionalActiveCompressionFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </StackPanel>
+                </StackPanel>
                 <ProgressBar Height="30"
                              Margin="0 50 0 50"
                              Background="{StaticResource CardBackground}"
@@ -86,6 +120,20 @@
             <StackPanel Grid.ColumnSpan="3" Margin="0 12" Orientation="Horizontal">
                 <ui:TextBlock d:Text="Hades" FontSize="30" FontWeight="SemiBold"
                               Text="{Binding Folder.DisplayName}" />
+                <Border Height="25"
+                        Margin="14 6" Padding="6 3"
+                        Background="#80C42B1C" CornerRadius="5" Cursor="Help"
+                        Visibility="{Binding Folder.HasInsufficientFreeSpace, Converter={StaticResource BoolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="0 2 4 0" Foreground="{StaticResource PaletteRedBrush}" Symbol="Warning20" />
+                        <TextBlock loc:L.Value="Not enough space" Foreground="{StaticResource ButtonForeground}" />
+                    </StackPanel>
+                    <Border.ToolTip>
+                        <ToolTip MaxWidth="300">
+                            <TextBlock loc:L.Value="There is not enough free space on this drive to safely compress this folder. You need at least 2x the space of the largest item in this folder free to ensure Windows does not cause issues." TextWrapping="Wrap" />
+                        </ToolTip>
+                    </Border.ToolTip>
+                </Border>
                 <Border Margin="14 6" Padding="7 2 7 2"
                         Background="#20FFFFFF" CornerRadius="4"
                         Visibility="{Binding IsSteamIDVisible, Converter={StaticResource BoolToVisConverter}}">
@@ -103,9 +151,9 @@
                         Padding="6 3"
                         Background="#80FFAA00" CornerRadius="5"
                         Visibility="{Binding Folder.IsDirectStorage, Converter={StaticResource BoolToVisConverter}}">
-                    <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Margin="0 2 4 0" Foreground="{StaticResource PaletteAmberBrush}" Symbol="Warning20" />
-                        <TextBlock  Foreground="{StaticResource ButtonForeground}" Text="Direct Storage" ToolTip="{local:Localize SnackBar_DirectStorageTechnology}" />
+                        <TextBlock loc:L.Value="Direct Storage" Foreground="{StaticResource ButtonForeground}" ToolTip="{loc:T 'This game uses DirectStorage technology. If you are using this feature, you should not compress this game.'}" />
                     </StackPanel>
                 </Border>
 
@@ -119,15 +167,13 @@
 
             <StackPanel Grid.Row="1" Margin="0 0 0 5" Orientation="Horizontal">
                 <ui:TextBlock Margin="0 0 8 -1" VerticalAlignment="Bottom"
-                              d:Text="uncompressed size" FontSize="13" Foreground="#30FFFFFF"
-                              Text="{local:Localize Status_UncompressedSize}" />
+                              loc:L.Value="uncompressed size" FontSize="13" Foreground="#30FFFFFF" />
                 <ui:TextBlock Width="80"
                               VerticalAlignment="Bottom"
                               FontSize="20"
                               Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
                 <ui:TextBlock Margin="30 0 8 -1" VerticalAlignment="Bottom"
-                              d:Text="contained files" FontSize="13" Foreground="#30FFFFFF"
-                              Text="{local:Localize Status_ContainedFiles}" />
+                              loc:L.Value="contained files" FontSize="13" Foreground="#30FFFFFF" />
                 <ui:TextBlock VerticalAlignment="Bottom" FontSize="20" Text="{Binding TotalFiles, Converter={StaticResource NumberWithSpacesConverter}}" />
             </StackPanel>
 
@@ -199,7 +245,7 @@
                                 CanContentScroll="True" Focusable="False" IsDeferredScrollingEnabled="False">
 
 
-            <ContentControl Margin="20 0" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+            <ContentControl Margin="0 0" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                             Content="{Binding Folder.FolderActionState}"
                             ContentTemplateSelector="{StaticResource FolderActionStateTemplateSelector}" />
 
@@ -213,3 +259,4 @@
     </Grid>
 
 </UserControl>
+

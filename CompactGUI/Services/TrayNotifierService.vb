@@ -95,14 +95,14 @@ Public Class TrayNotifierService
     End Sub
 
     Public Sub Notify_BackgroundSchedulerRunning()
-        Dim title = "Scheduled Compression Running"
-        Dim message = "CompactGUI is running a scheduled task and will compress monitored folders in the background"
+        Dim title = "Scheduled Compression Running".LT("Background Scheduler")
+        Dim message = "CompactGUI is running a scheduled task and will compress monitored folders in the background".LT("Background Scheduler")
         ShowBalloon(title, message)
     End Sub
 
     Public Sub Notify_BackgroundSchedulerCompleted()
-        Dim title = "Scheduled Compression Completed"
-        Dim message = $"Next scheduled task is on {Application.GetService(Of ISettingsService).AppSettings.NextScheduledBackgroundRun}"
+        Dim title = "Scheduled Compression Completed".LT("Background Scheduler")
+        Dim message = "Next scheduled task is on {0}".LTFC("Background Scheduler", Application.GetService(Of ISettingsService).AppSettings.NextScheduledBackgroundRun)
         ShowBalloon(title, message)
     End Sub
 

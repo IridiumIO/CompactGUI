@@ -3,19 +3,26 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
                  xmlns:local="clr-namespace:CompactGUI"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 x:Name="MainWindow" Title="CompactGUI"
-                 Width="1300" Height="700" MinWidth="768" MinHeight="600"
+                 x:Name="MainWindow"
+                 Title="CompactGUI"
+                 Width="1300"
+                 Height="700"
+                 MinWidth="768"
+                 MinHeight="600"
                  d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
                  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 Closing="MainWindow_Closing" ExtendsContentIntoTitleBar="True"
+                 Closing="MainWindow_Closing"
+                 ExtendsContentIntoTitleBar="True"
                  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                 RenderOptions.BitmapScalingMode="HighQuality" WindowBackdropType="Mica"
-                 WindowCornerPreference="Round" WindowStartupLocation="CenterScreen"
+                 WindowBackdropType="None"
+                 WindowCornerPreference="Round"
+                 WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d">
     <bh:Interaction.Triggers>
 
@@ -23,28 +30,25 @@
             <bh:InvokeCommandAction Command="{Binding ClosingCommand}" PassEventArgsToCommand="True" />
         </bh:EventTrigger>
     </bh:Interaction.Triggers>
-    <Grid>
+    <Grid PreviewMouseDown="Root_PreviewMouseDown">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Grid.Row="0" Grid.ColumnSpan="2"
-                     IsHitTestVisible="True" />
+        <ui:TitleBar Grid.Row="0" Grid.ColumnSpan="2" IsHitTestVisible="True" />
 
 
 
         <ui:NavigationView x:Name="NavigationView"
                            Grid.Row="1"
-                           Margin="0,10,0,0" 
-                           IsBackButtonVisible="Collapsed" PaneDisplayMode="Top" Transition="FadeIn">
+                           Margin="0 10 0 0"
+                           IsBackButtonVisible="Collapsed" Loaded="NavigationView_Loaded" PaneDisplayMode="Top" Transition="FadeIn">
             <ui:NavigationView.MenuItems>
 
 
-                <ui:NavigationViewItem Content="{local:Localize Title_Home}"
-                                       d:Content="Home"
-                                       Margin="15,2,15,10"
-                                       NavigationCacheMode="Required"
+                <ui:NavigationViewItem Margin="15 2 15 10"
+                                       loc:L.Value="Home" NavigationCacheMode="Required"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:HomePage}">
                     <ui:NavigationViewItem.Icon>
@@ -53,10 +57,23 @@
                 </ui:NavigationViewItem>
 
 
-                <ui:NavigationViewItem Content="{local:Localize Title_Watcher}"
-                                       d:Content="Watcher"
-                                       Margin="15,2,15,10"
-                                       NavigationCacheMode="Required"
+                <ui:NavigationViewItem Margin="15 2 15 10" Visibility="{Binding HideSteamLibrary, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+                                       NavigationCacheMode="Disabled"
+                                       Tag="{Binding}"
+                                       TargetPageType="{x:Type local:SteamMonitorPage}">
+                    <StackPanel Orientation="Horizontal">
+                        <Viewbox Width="15" Height="15"
+                                 Margin="0 2 8 0" HorizontalAlignment="Left"
+                                 Visibility="{Binding IsSteamGame, Converter={StaticResource BoolToVisConverter}}">
+                            <Path Data="M110.5,87.3c0,0.2,0,0.4,0,0.6L82,129.3c-4.6-0.2-9.3,0.6-13.6,2.4c-1.9,0.8-3.8,1.8-5.5,2.9L0.3,108.8  c0,0-1.4,23.8,4.6,41.6l44.3,18.3c2.2,9.9,9,18.6,19.1,22.8c16.4,6.9,35.4-1,42.2-17.4c1.8-4.3,2.6-8.8,2.5-13.3l40.8-29.1  c0.3,0,0.7,0,1,0c24.4,0,44.3-19.9,44.3-44.3c0-24.4-19.8-44.3-44.3-44.3C130.4,43,110.5,62.9,110.5,87.3z M103.7,171.2  c-5.3,12.7-19.9,18.7-32.6,13.4c-5.9-2.4-10.3-6.9-12.8-12.2l14.4,6c9.4,3.9,20.1-0.5,24-9.9c3.9-9.4-0.5-20.1-9.9-24l-14.9-6.2  c5.7-2.2,12.3-2.3,18.4,0.3c6.2,2.6,10.9,7.4,13.5,13.5S106.2,165.1,103.7,171.2 M154.8,116.9c-16.3,0-29.5-13.3-29.5-29.5  c0-16.3,13.2-29.5,29.5-29.5c16.3,0,29.5,13.3,29.5,29.5C184.2,103.6,171,116.9,154.8,116.9 M132.7,87.3c0-12.3,9.9-22.2,22.1-22.2  c12.2,0,22.1,9.9,22.1,22.2c0,12.3-9.9,22.2-22.1,22.2C142.6,109.5,132.7,99.5,132.7,87.3z M233,116.5c0,64.3-52.2,116.5-116.5,116.5S0,180.8,0,116.5c0-30.4,11-60.2,30.7-78.8C53.5,16.1,82.5,0,116.5,0  C180.8,0,233,52.2,233,116.5z" Fill="#FFFFFF" />
+                        </Viewbox>
+                        <TextBlock loc:L.Value="Steam Library" />
+                    </StackPanel>
+
+                </ui:NavigationViewItem>
+
+                <ui:NavigationViewItem Margin="15 2 15 10"
+                                       loc:L.Value="Watcher" NavigationCacheMode="Required"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:WatcherPage}">
                     <ui:NavigationViewItem.Icon>
@@ -64,10 +81,10 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItem Content="{local:Localize Title_CompressionDB}"
-                                       d:Content="Compression DB"
-                                       Margin="15,2,15,10"
-                                       NavigationCacheMode="Disabled"
+
+
+                <ui:NavigationViewItem Margin="15 2 15 10" Visibility="{Binding HideCompressionDbTab, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+                                       loc:L.Value="Compression DB" NavigationCacheMode="Disabled"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:DatabasePage}">
                     <ui:NavigationViewItem.Icon>
@@ -75,18 +92,19 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
+
+
             </ui:NavigationView.MenuItems>
 
             <ui:NavigationView.FooterMenuItems>
 
-                <ui:NavigationViewItem Margin="-5,0,15,1"
+                <ui:NavigationViewItem Margin="-5 0 15 1"
                                        NavigationCacheMode="Required"
                                        Tag="{Binding}"
                                        TargetPageType="{x:Type local:SettingsPage}">
                     <!--  TargetPageType="{x:Type local:SettingsPage}"  -->
 
-                    <ui:SymbolIcon Margin="0,0,-3,0"
-                                   FontSize="16" Symbol="Settings48" />
+                    <ui:SymbolIcon Margin="0 0 -3 0" FontSize="16" Symbol="Settings48" />
 
                 </ui:NavigationViewItem>
             </ui:NavigationView.FooterMenuItems>
@@ -94,7 +112,87 @@
 
             <ui:NavigationView.ContentOverlay>
                 <Grid>
-                    <ui:SnackbarPresenter x:Name="SnackbarPresenter" />
+                    <Grid.Resources>
+                        <Style x:Key="QueueOverlayFadeStyle" TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Opacity" Value="0" />
+                            <Setter Property="IsHitTestVisible" Value="False" />
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform X="-24" />
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsQueueSidebarOpen}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="IsHitTestVisible" Value="True" />
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                                 From="-24" To="0" Duration="0:0:0.1" />
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <!-- Keep the overlay in the visual tree until the fade-out completes. -->
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.18" Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                                 From="0" To="-24" Duration="0:0:0.1" />
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid x:Name="QueueOverlayHost">
+                        <ui:Button Margin="0" Padding="5 20" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                   Background="#43697d"
+                                   Command="{Binding ToggleQueueSidebarCommand}"
+                                   RenderTransformOrigin="0.5,0.5"
+                                   Visibility="{Binding IsQueueSidebarOpen, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                            <TextBlock loc:L.Value="SHOW QUEUE" FontSize="12" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display">
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="-90" />
+                                </TextBlock.LayoutTransform>
+                            </TextBlock>
+
+                        </ui:Button>
+                        
+                        <Border Width="{Binding ElementName=QueueHostBorder, Path=ActualWidth}"
+                                Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                                Background="Transparent" BorderThickness="2" CornerRadius="6"
+                                Style="{StaticResource QueueOverlayFadeStyle}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="20" Direction="0" Opacity="0.6" />
+                            </Border.Effect>
+                        </Border>
+                        
+                        <Border x:Name="QueueHostBorder"
+                                Margin="12" HorizontalAlignment="Left" VerticalAlignment="Stretch" local:LiveBlurBackground.BlurOpacity="0.6" 
+                                 local:LiveBlurBackground.BlurRadius="50" local:LiveBlurBackground.EnableBlur="True"  Background="#FF445667" BorderBrush="#40FFFFFF"
+                                 BorderThickness="1" CornerRadius="6"
+                                 Style="{StaticResource QueueOverlayFadeStyle}">
+<Border.Effect>
+    <DropShadowEffect BlurRadius="20" Direction="0" Opacity="0.4" />
+</Border.Effect>
+                            <local:QueueSidebar Width="370" />
+                        </Border>
+
+                    </Grid>
+
+                    <ui:SnackbarPresenter x:Name="SnackbarPresenter" Panel.ZIndex="1" />
                 </Grid>
             </ui:NavigationView.ContentOverlay>
 
@@ -161,14 +259,12 @@
                                         <ExponentialEase />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
-                                                 To="1.2" Duration="0:0:6">
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" To="1.2" Duration="0:0:6">
                                     <DoubleAnimation.EasingFunction>
                                         <ExponentialEase EasingMode="EaseIn" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
-                                                 To="1.2" Duration="0:0:8">
+                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" To="1.2" Duration="0:0:8">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
@@ -200,7 +296,7 @@
             </local:ImageControl>
 
             <Label x:Name="ProgTitle"
-                   Margin="20,16" HorizontalAlignment="Left"
+                   Margin="20 16" HorizontalAlignment="Left"
                    d:Visibility="Visible" FontSize="14" Visibility="Collapsed">
                 <Label.RenderTransform>
                     <TranslateTransform x:Name="TransformL" Y="20" />
@@ -220,8 +316,7 @@
 
                                             <!--  Move upwards animation  -->
                                             <DoubleAnimation BeginTime="0:0:0.5"
-                                                             Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="10" To="0"
-                                                             Duration="0:0:0.5">
+                                                             Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)" From="10" To="0" Duration="0:0:0.5">
                                                 <DoubleAnimation.EasingFunction>
                                                     <CircleEase />
                                                 </DoubleAnimation.EasingFunction>
@@ -234,16 +329,14 @@
                     </Style>
                 </Label.Style>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock Text="{local:Localize Title_CompactGUI}" d:Text="CompactGUI"
-                               Margin="0,0,20,0" VerticalAlignment="Center"
-                               Foreground="#20FFFFFF"
+                    <TextBlock Margin="0 0 20 0" VerticalAlignment="Center"
+                               loc:L.Value="CompactGUI" Foreground="#20FFFFFF"
                                Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
                     <Border Width="80" Height="22"
                             Background="#20f44336" CornerRadius="10"
                             Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{local:Localize UniAdmin}" d:Text="Admin"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   Foreground="White" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   loc:L.Value="Admin" Foreground="White" />
 
                     </Border>
                 </StackPanel>
@@ -251,7 +344,7 @@
 
 
         </Grid>
-        <ui:SnackbarPresenter x:Name="RootSnackbar"
+        <ui:SnackbarPresenter x:Name="RootSnackbar" d:Visibility="Collapsed"
                               Grid.Row="1" Grid.Column="0"
                               MaxWidth="600" />
         <tray:NotifyIcon x:Name="NotifyIconTray"
@@ -259,11 +352,12 @@
                          FocusOnLeftClick="True" MenuOnRightClick="True" TooltipText="CompactGUI">
             <tray:NotifyIcon.Menu>
                 <ContextMenu x:Name="NotifyIconTrayMenu">
-                    <MenuItem Command="{Binding NotifyIconOpenCommand}" Header="{local:Localize UniOpen}" />
-                    <MenuItem Command="{Binding NotifyIconExitCommand}" Header="{local:Localize UniExit}" />
+                    <MenuItem loc:L.Value="Open" Command="{Binding NotifyIconOpenCommand}" />
+                    <MenuItem loc:L.Value="Exit" Command="{Binding NotifyIconExitCommand}" />
                 </ContextMenu>
             </tray:NotifyIcon.Menu>
         </tray:NotifyIcon>
 
     </Grid>
 </ui:FluentWindow>
+

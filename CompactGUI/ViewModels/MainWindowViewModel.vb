@@ -1,4 +1,6 @@
 ﻿
+Imports System.ComponentModel
+
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
 Imports CommunityToolkit.Mvvm.Messaging
@@ -12,14 +14,40 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
     <ObservableProperty>
     Private _BackgroundImage As BitmapImage
 
+    <ObservableProperty>
+    Private _IsQueueSidebarOpen As Boolean
+
     Private ReadOnly _watcher As Watcher.Watcher
     Private ReadOnly _windowService As IWindowService
     Private ReadOnly _settingsService As ISettingsService
+
+    Public ReadOnly Property HideSteamLibrary As Boolean
+        Get
+            Return _settingsService.AppSettings.HideSteamLibraryTab
+        End Get
+    End Property
+
+    Public ReadOnly Property HideCompressionDbTab As Boolean
+        Get
+            Return _settingsService.AppSettings.HideCompressionDbTab
+        End Get
+    End Property
 
     Public Sub New(windowService As IWindowService, watcher As Watcher.Watcher, settingsService As ISettingsService)
         _watcher = watcher
         _windowService = windowService
         _settingsService = settingsService
+
+        AddHandler _settingsService.AppSettings.PropertyChanged, AddressOf AppSettings_PropertyChanged
+
+    End Sub
+
+    Private Sub AppSettings_PropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName = NameOf(_settingsService.AppSettings.HideSteamLibraryTab) Then
+            OnPropertyChanged(NameOf(HideSteamLibrary))
+        ElseIf e.PropertyName = NameOf(_settingsService.AppSettings.HideCompressionDbTab) Then
+            OnPropertyChanged(NameOf(HideCompressionDbTab))
+        End If
     End Sub
 
     Public ReadOnly Property IsAdmin As Boolean
@@ -35,12 +63,17 @@ Partial Public Class MainWindowViewModel : Inherits ObservableRecipient : Implem
         _windowService.ShowMainWindow()
     End Sub
 
+    <RelayCommand>
+    Private Sub ToggleQueueSidebar()
+        IsQueueSidebarOpen = Not IsQueueSidebarOpen
+    End Sub
+
 
     <RelayCommand>
     Private Async Function NotifyIconExit() As Task
         If _watcher.WatchedFolders.Count = 0 Then Application.Current.Shutdown()
-        Dim message As String = String.Format(LanguageHelper.GetString("MessageBox_ExitText"), _watcher.WatchedFolders.Count)
-        Dim confirmed = Await _windowService.ShowMessageBox(LanguageHelper.GetString("Title_CompactGUI"), message)
+        Dim message = "You currently have {0} folders being watched. Closing CompactGUI will stop them from being monitored.{1}{1}Are you sure you want to exit?".LTF(_watcher.WatchedFolders.Count, vbCrLf)
+        Dim confirmed = Await _windowService.ShowMessageBox("CompactGUI".LT(), message)
         If Not confirmed Then Return
         _watcher.WriteToFile()
         Application.Current.Shutdown()

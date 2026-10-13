@@ -27,6 +27,9 @@ public static partial class UncompactorLog
     [LoggerMessage(Level = LogLevel.Information, Message = "Decompression canceled.")]
     public static partial void DecompressionCanceled(ILogger logger);
 
+    [LoggerMessage(Level = LogLevel.Error, Message = "Decompression failed with error: {ErrorMessage}")]
+    public static partial void DecompressionFailed(ILogger logger, string errorMessage);
+
     [LoggerMessage(Level = LogLevel.Information, Message = "Decompression completed successfully in {TimeTaken}s.")]
     public static partial void DecompressionCompleted(ILogger logger, double timeTaken);
 }

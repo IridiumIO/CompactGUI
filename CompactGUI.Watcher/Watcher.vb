@@ -20,7 +20,7 @@ Imports Microsoft.Win32
 Imports Microsoft.Win32.Registry
 
 
-Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of Boolean))
+Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipient(Of PropertyChangedMessage(Of Boolean)), IRecipient(Of PropertyChangedMessage(Of BackgroundMode))
 
     Private ReadOnly _DataFolder As IO.DirectoryInfo
     Private ReadOnly _parseWatchersSemaphore As New SemaphoreSlim(1, 1)
@@ -63,7 +63,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         AddHandler WatchedFolders.CollectionChanged, AddressOf WatchedFolders_CollectionChanged
 
 
-        BGCompactor = New BackgroundCompactor(Array.Empty(Of String), _logger)
+        BGCompactor = New BackgroundCompactor(Array.Empty(Of String), _logger, settingsService)
 
 
         InitializeWatchedFoldersAsync()
@@ -83,6 +83,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         If bgMode <> BackgroundMode.IdleOnly Then Return
 
         BGCompactor.ResumeCompacting()
+        If IsRunning Then Return
 
         Await RunWatcher(False)
 
@@ -93,15 +94,11 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     <ObservableProperty> Private _isRunning As Boolean = False
 
     Public Async Function RunWatcher(Optional runAll As Boolean = True, Optional cToken As CancellationToken = Nothing) As Task(Of Boolean)
-        RemoveHandler _idleDetector.IsIdle, _idleHandler
-
         IsRunning = True
-
-        For Each watcher In WatchedFolders
-            watcher.PauseMonitoring()
-        Next
-
         Try
+            For Each watcher In WatchedFolders
+                watcher.PauseMonitoring()
+            Next
 
             _settingsService.AppSettings.ScheduledBackgroundLastRan = DateTime.Now
             If Not IsWatchingEnabled Then Return False
@@ -127,8 +124,6 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Catch ex As TaskCanceledException
             Return False
         Finally
-
-            AddHandler _idleDetector.IsIdle, _idleHandler
             For Each watcher In WatchedFolders
                 watcher.ResumeMonitoring()
             Next
@@ -198,23 +193,52 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
         WatchedFolders.Clear()
 
-        For Each folder In initialWatchedFolders.Where(Function(f) IO.Directory.Exists(f.Folder))
-            WatchedFolders.Add(folder)
+        For Each folder In initialWatchedFolders
+            If IO.Directory.Exists(folder.Folder) Then
+                folder.IsDriveUnavailable = False
+                folder.InitializeMonitoring()
+            ElseIf IsRootUnavailable(folder.Folder) Then
+                folder.IsDriveUnavailable = True
+            Else
+                Continue For
+            End If
+
             folder.LastChangedDate = folder.LastSystemModifiedDate
+            WatchedFolders.Add(folder)
         Next
 
         UpdateRegistryBasedOnWatchedFolders()
     End Function
 
     Private Sub UpdateRegistryBasedOnWatchedFolders()
-        Dim registryKey As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Run", True)
-
-        If WatchedFolders.Count > 0 Then
-            registryKey.SetValue("CompactGUI", Environment.ProcessPath & " -tray")
-        Else
-            registryKey.DeleteValue("CompactGUI", False)
+        'Autostart is best-effort; registry access should not break folder management.
+        If Not UpdateRegistryBasedOnWatchedFolders(Registry.CurrentUser, "Software\Microsoft\Windows\CurrentVersion\Run", WatchedFolders.Count, Environment.ProcessPath) Then
+            _logger.LogWarning("Could not update CompactGUI watcher autostart.")
         End If
     End Sub
+
+    Friend Shared Function UpdateRegistryBasedOnWatchedFolders(rootKey As RegistryKey, subKeyPath As String, watchedFolderCount As Integer, processPath As String) As Boolean
+        Try
+            'Don't create the Run key just to remove an entry that may not exist.
+            Dim registryKey = If(watchedFolderCount > 0,
+                                 rootKey.CreateSubKey(subKeyPath),
+                                 rootKey.OpenSubKey(subKeyPath, True))
+            If registryKey Is Nothing Then Return watchedFolderCount = 0
+
+            Using registryKey
+                If watchedFolderCount > 0 Then
+                    registryKey.SetValue("CompactGUI", """" & processPath & """" & " -tray")
+                Else
+                    registryKey.DeleteValue("CompactGUI", False)
+                End If
+            End Using
+            Return True
+        Catch ex As Exception When TypeOf ex Is UnauthorizedAccessException OrElse
+                                   TypeOf ex Is Security.SecurityException OrElse
+                                   TypeOf ex Is IO.IOException
+            Return False
+        End Try
+    End Function
 
 
     Public Sub AddOrUpdateWatched(item As WatchedFolder, Optional immediateFlushToDisk As Boolean = True)
@@ -228,6 +252,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         End If
         OnPropertyChanged(NameOf(TotalSaved))
         If immediateFlushToDisk Then WriteToFile()
+        If existingItem Is Nothing Then UpdateRegistryBasedOnWatchedFolders()
 
     End Sub
 
@@ -283,6 +308,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         item.Dispose()
         WatchedFolders.Remove(item)
         If writeToFile Then Await WriteToFileAsync()
+        UpdateRegistryBasedOnWatchedFolders()
 
     End Function
 
@@ -290,14 +316,32 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Public Async Function DeleteWatchersWithNonExistentFolders() As Task
 
         For i As Integer = WatchedFolders.Count - 1 To 0 Step -1
-            If Not IO.Directory.Exists(WatchedFolders(i).Folder) Then
-                WatcherLog.RemovingNonexistentFolders(_logger, 1)
-                Await RemoveWatched(WatchedFolders(i), False)
+            Dim watchedFolder = WatchedFolders(i)
+
+            If IO.Directory.Exists(watchedFolder.Folder) Then
+                If watchedFolder.IsDriveUnavailable Then watchedFolder.InitializeMonitoring()
+                watchedFolder.IsDriveUnavailable = False
+                Continue For
             End If
+
+            watchedFolder.IsDriveUnavailable = IsRootUnavailable(watchedFolder.Folder)
+            If watchedFolder.IsDriveUnavailable Then Continue For
+
+            WatcherLog.RemovingNonexistentFolders(_logger, 1)
+            Await RemoveWatched(watchedFolder, False)
         Next
 
         Await WriteToFileAsync()
 
+    End Function
+
+    Private Shared Function IsRootUnavailable(folderPath As String) As Boolean
+        Try
+            Dim rootPath = IO.Path.GetPathRoot(folderPath)
+            Return Not String.IsNullOrWhiteSpace(rootPath) AndAlso Not IO.Directory.Exists(rootPath)
+        Catch ex As Exception When TypeOf ex Is ArgumentException OrElse TypeOf ex Is IO.IOException OrElse TypeOf ex Is UnauthorizedAccessException
+            Return False
+        End Try
     End Function
 
 
@@ -325,12 +369,6 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Dim validatedResult As (DateTime, ObservableCollection(Of WatchedFolder))
         Try
             validatedResult = JsonSerializer.Deserialize(Of (DateTime, ObservableCollection(Of WatchedFolder)))(WatcherJSON, DeserializeOptions)
-
-            If validatedResult.Item2 IsNot Nothing Then
-                For Each folder In validatedResult.Item2.Where(Function(f) IO.Directory.Exists(f.Folder))
-                    folder.InitializeMonitoring()
-                Next
-            End If
 
         Catch ex As Exception
             validatedResult = (DateTime.Now, Nothing)
@@ -364,10 +402,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
             WatcherLog.ParsingWatchers(_logger, ParseAll)
             Await DeleteWatchersWithNonExistentFolders()
 
-            Dim WatchersQuery = If(ParseAll,
-                    WatchedFolders,
-                    WatchedFolders.Where(Function(w) w.HasTargetChanged)
-                    ).OrderBy(Function(f) f.DisplayName)
+            Dim WatchersQuery = WatchedFolders.Where(Function(w) Not w.IsDriveUnavailable AndAlso (ParseAll OrElse w.HasTargetChanged)).OrderBy(Function(f) f.DisplayName)
 
             If Not WatchersQuery.Any() Then Return
 
@@ -396,10 +431,14 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
         Try
             If watchedFolder Is Nothing Then Return
             If Not IO.Directory.Exists(watchedFolder.Folder) Then
+                watchedFolder.IsDriveUnavailable = IsRootUnavailable(watchedFolder.Folder)
+                If watchedFolder.IsDriveUnavailable Then Return
                 Await RemoveWatched(watchedFolder)
                 Return
             End If
 
+            If watchedFolder.IsDriveUnavailable Then watchedFolder.InitializeMonitoring()
+            watchedFolder.IsDriveUnavailable = False
             Await Analyse(watchedFolder.Folder, False)
             LastAnalysed = DateTime.Now
             Await WriteToFileAsync()
@@ -423,7 +462,7 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
 
             Dim foldersToCompress = WatchedFolders.
                 Where(Function(folder)
-                          Dim eligible = folder.DecayPercentage <> 0 AndAlso folder.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION
+                          Dim eligible = Not folder.IsDriveUnavailable AndAlso folder.DecayPercentage <> 0 AndAlso folder.CompressionLevel <> WOFCompressionAlgorithm.NO_COMPRESSION
                           Dim recentlyModified = folder.LastSystemModifiedDate > recentThresholdDate AndAlso Not runAll
                           If eligible AndAlso recentlyModified Then
                               WatcherLog.SkippingRecentlyModifiedFolder(_logger, folder.DisplayName)
@@ -491,9 +530,13 @@ Partial Public Class Watcher : Inherits ObservableRecipient : Implements IRecipi
     Public Sub Receive(message As PropertyChangedMessage(Of Boolean)) Implements IRecipient(Of PropertyChangedMessage(Of Boolean)).Receive
         If (message.Sender.GetType() IsNot GetType(Settings)) Then Return
 
-        If message.PropertyName = NameOf(Settings.EnableBackgroundWatcher) Then : IsWatchingEnabled = message.NewValue
-        ElseIf message.PropertyName = NameOf(Settings.BackgroundModeSelection) Then : IsBackgroundCompactingEnabled = (CType(message.NewValue, BackgroundMode) = BackgroundMode.IdleOnly)
-        End If
+        If message.PropertyName = NameOf(Settings.EnableBackgroundWatcher) Then IsWatchingEnabled = message.NewValue
+    End Sub
+
+    Public Sub Receive(message As PropertyChangedMessage(Of BackgroundMode)) Implements IRecipient(Of PropertyChangedMessage(Of BackgroundMode)).Receive
+        If message.Sender.GetType() IsNot GetType(Settings) Then Return
+
+        If message.PropertyName = NameOf(Settings.BackgroundModeSelection) Then IsBackgroundCompactingEnabled = message.NewValue = BackgroundMode.IdleOnly
 
 
     End Sub
