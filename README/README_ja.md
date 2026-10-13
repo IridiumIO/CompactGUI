@@ -15,12 +15,25 @@
 &nbsp;
 &nbsp;
 
-<p align="center"><img src="CompactGUI/assets/Home.png" width="750"/></p>
+<p align="center"><img src="../CompactGUI/assets/Home_zh.png" width="750"/></p>
 <p align="center">
-<img src="CompactGUI/assets/Compression.png" width="250"/>
-<img src="CompactGUI/assets/Database.png" width="250"/>
-<img src="CompactGUI/assets/Watcher.png" width="250"/>
+<img src="../CompactGUI/assets/Compression.png" width="250"/>
+<img src="../CompactGUI/assets/Database.png" width="250"/>
+<img src="../CompactGUI/assets/Watcher_zh.png" width="250"/>
 </p>
+
+---
+
+
+<p align="center">
+  <a href="../README.md">English</a> -
+  <a href="README_ru.md">Русский</a> -
+  <a href="README_cn.md">简体中文</a> -  
+  <a href="README_it.md">Italian</a> -
+  <a href="README_id.md">Bahasa Indonesia</a>
+ - 日本語
+</p>
+&nbsp;
 
 ---
 
