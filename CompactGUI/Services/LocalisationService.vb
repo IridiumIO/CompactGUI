@@ -1,3 +1,4 @@
+Imports System.Globalization
 Imports System.IO
 
 Imports CompactGUI.Core.Settings
@@ -31,15 +32,43 @@ Public NotInheritable Class LocalisationService
             _settingsService.SaveSettings()
         End If
 
+        Dim followSystemLanguage = String.IsNullOrWhiteSpace(configuredLanguage)
+
         Await LazyTranslate.InitialiseAsync(New LocalisationOptions With {
             .SourceCulture = DefaultCulture,
-            .InitialCulture = configuredLanguage,
+            .InitialCulture = If(followSystemLanguage, DefaultCulture, configuredLanguage),
             .CatalogueDirectory = LocalisationFolder,
             .ResourceAssembly = GetType(Application).Assembly,
             .ApplicationName = "CompactGUI",
             .ProgramVersion = Application.AppVersionText,
             .OutputMissingTranslationsToDebug = False
         })
+
+        If followSystemLanguage Then ApplySystemLanguage()
+    End Function
+
+    'Catalogues can only be enumerated after InitialiseAsync has populated the directory, and the resolved
+    'culture is deliberately not saved - persisting it would stop the app following later OS changes.
+    Private Sub ApplySystemLanguage()
+        Dim systemLanguage = ResolveSystemLanguage()
+        If systemLanguage IsNot Nothing Then L.TryLoadLanguage(systemLanguage)
+    End Sub
+
+    Private Shared Function ResolveSystemLanguage() As String
+        Dim uiCulture = CultureInfo.CurrentUICulture
+        If String.IsNullOrEmpty(uiCulture.Name) Then Return Nothing
+
+        Dim availableCultures = LazyTranslate.GetAvailableLanguages().Select(Function(language) language.CultureCode).ToList()
+
+        Dim exactMatch = availableCultures.FirstOrDefault(Function(culture) String.Equals(culture, uiCulture.Name, StringComparison.OrdinalIgnoreCase))
+        If exactMatch IsNot Nothing Then Return exactMatch
+
+        Return availableCultures.FirstOrDefault(Function(culture) String.Equals(GetLanguageSubtag(culture), uiCulture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase))
+    End Function
+
+    Private Shared Function GetLanguageSubtag(cultureCode As String) As String
+        Dim separatorIndex = cultureCode.IndexOf("-"c)
+        Return If(separatorIndex < 0, cultureCode, cultureCode.Substring(0, separatorIndex))
     End Function
 
     Public Function LoadLanguage(languageCode As String) As Boolean
@@ -50,8 +79,12 @@ Public NotInheritable Class LocalisationService
         Return True
     End Function
 
+    Public Sub ReloadCurrentLanguage()
+        L.TryLoadLanguage(L.CurrentCulture.Name)
+    End Sub
+
     Public Async Function CheckForLanguageUpdate() As Task(Of Boolean)
-        Return Await LazyTranslate.CheckForLanguageUpdateAsync(_settingsService.AppSettings.Language, LocalisationBaseUri)
+        Return Await LazyTranslate.CheckForLanguageUpdateAsync(L.CurrentCulture.Name, LocalisationBaseUri)
     End Function
 
 End Class
