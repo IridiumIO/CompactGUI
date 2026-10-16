@@ -1,5 +1,5 @@
 ﻿# CompactGUI Localisation
-# @version 2
+# @version 3
 # @programversion 4.0.0-beta.12
 
 # ===================
@@ -122,6 +122,7 @@
 "SKIPLIST SELECTION" = "跳过列表选择"
 "Saved" = "已节省"
 "Savings" = "节省"
+"Savings %" = "节省占比"
 "Scanning installed Steam games..." = "正在扫描已安装的 Steam 游戏……"
 "Search by game name or SteamID..." = "按游戏名称或 SteamID 搜索……"
 "Select" = "选择"
@@ -251,6 +252,7 @@
 "GAME" = "游戏"
 "RECOMMENDED ACTION" = "推荐操作"
 "SAVINGS" = "节省"
+"SAVINGS %" = "节省占比"
 "STATUS" = "状态"
 
 [context."Storage savings"]

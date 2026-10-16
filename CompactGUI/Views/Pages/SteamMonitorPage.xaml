@@ -125,6 +125,10 @@
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsAsc" Header="{loc:T Ascending}" />
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsDesc" Header="{loc:T Descending}" />
                         </MenuItem>
+                        <MenuItem Header="{loc:T Savings %}">
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsPercentageAsc" Header="{loc:T Ascending}" />
+                            <MenuItem Command="{Binding SortCommand}" CommandParameter="SavingsPercentageDesc" Header="{loc:T Descending}" />
+                        </MenuItem>
                         <MenuItem Header="{loc:T Recommended Action}">
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="RecommendedActionAsc" Header="{loc:T Ascending}" />
                             <MenuItem Command="{Binding SortCommand}" CommandParameter="RecommendedActionDesc" Header="{loc:T Descending}" />
@@ -197,7 +201,8 @@
                 <ColumnDefinition Width="*" MinWidth="135" />
                 <ColumnDefinition MinWidth="180" MaxWidth="190" />
                 <ColumnDefinition MinWidth="60" MaxWidth="145" />
-                <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                <ColumnDefinition MinWidth="88" MaxWidth="145" />
+                <ColumnDefinition Width="104" />
                 <ColumnDefinition Width="220" />
             </Grid.ColumnDefinitions>
             <CheckBox x:Name="SelectAllVisibleCheckBox"
@@ -429,6 +434,62 @@
                 </StackPanel>
             </Button>
             <Button Grid.Column="5"
+                    Padding="0" HorizontalAlignment="Right"
+                    Background="Transparent" BorderThickness="0"
+                    Command="{Binding CycleSortCommand}"
+                    CommandParameter="SavingsPercentage" ToolTip="Sort by savings percentage">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="ArrowSort16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ActiveSortColumn}" Value="SavingsPercentage">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortAscending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="SavingsPercentage" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <ui:SymbolIcon Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Symbol="TextSortDescending16">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ActiveSortColumn}" Value="SavingsPercentage" />
+                                            <Condition Binding="{Binding IsSortDescending}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <TextBlock Margin="5 0 0 0" Foreground="{StaticResource CardForegroundDisabled}" Text="{loc:T SAVINGS %, Context='Steam Library Tab Headings'}" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="6"
                     Margin="24 0 0 0" Padding="0" HorizontalAlignment="Right"
                     Background="Transparent" BorderThickness="0"
                     Command="{Binding CycleSortCommand}"
@@ -593,7 +654,8 @@
                                     <ColumnDefinition Width="*" MinWidth="135" />
                                     <ColumnDefinition MinWidth="180" MaxWidth="190" />
                                     <ColumnDefinition MinWidth="60" MaxWidth="145" />
-                                    <ColumnDefinition MinWidth="60" MaxWidth="145" />
+                                    <ColumnDefinition MinWidth="88" MaxWidth="145" />
+                                    <ColumnDefinition Width="104" />
                                     <ColumnDefinition Width="220" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Margin="-20 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Panel.ZIndex="5"
@@ -720,7 +782,26 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Grid Grid.Column="5" Margin="24 -10 -14 -10">
+                                <TextBlock Grid.Column="5"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                                           FontSize="13">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="{Binding DisplayedSavingsPercentage, StringFormat={}{0:0}%}" />
+                                            <Setter Property="Foreground" Value="#45c1e8" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDisplayingActualSavings}" Value="True">
+                                                    <Setter Property="Foreground" Value="#65dc9d" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding HasSavingsData}" Value="False">
+                                                    <Setter Property="Text" Value="—" />
+                                                    <Setter Property="Foreground" Value="{StaticResource CardForegroundDisabled}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <Grid Grid.Column="6" Margin="24 -10 -14 -10">
                                     <Grid.Resources>
                                         <DataTemplate x:Key="FullActionTextTemplate">
                                             <TextBlock Margin="0 0 20 0" HorizontalAlignment="Right" VerticalAlignment="Center"

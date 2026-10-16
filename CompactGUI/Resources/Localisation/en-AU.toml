@@ -1,5 +1,5 @@
 ﻿# CompactGUI Localisation
-# @version 1
+# @version 2
 # @programversion 4.0.0-beta.12
 
 # ===================
@@ -122,6 +122,7 @@
 "SKIPLIST SELECTION" = "SKIPLIST SELECTION"
 "Saved" = "Saved"
 "Savings" = "Savings"
+"Savings %" = "Savings %"
 "Scanning installed Steam games..." = "Scanning installed Steam games..."
 "Search by game name or SteamID..." = "Search by game name or SteamID..."
 "Select" = "Select"
@@ -251,6 +252,7 @@
 "GAME" = "GAME"
 "RECOMMENDED ACTION" = "RECOMMENDED ACTION"
 "SAVINGS" = "SAVINGS"
+"SAVINGS %" = "SAVINGS %"
 "STATUS" = "STATUS"
 
 [context."Storage savings"]

@@ -357,6 +357,8 @@ Public Class SteamMonitorViewModel : Inherits ObservableObject
                 propertyName = NameOf(SteamDetailedResult.CurrentFolderSize)
             Case "Savings"
                 propertyName = NameOf(SteamDetailedResult.DisplayedSavings)
+            Case "SavingsPercentage"
+                propertyName = NameOf(SteamDetailedResult.DisplayedSavingsPercentage)
             Case "RecommendedAction"
                 propertyName = NameOf(SteamDetailedResult.RecommendedActionCategory)
             Case Else
@@ -852,15 +854,15 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private Const MaximumIncrementalSaving As Double = 0.02
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage))>
+    <NotifyPropertyChangedFor(NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage), NameOf(DisplayedSavingsPercentage))>
     Private _uncompressedBytes As Long
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage))>
+    <NotifyPropertyChangedFor(NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage), NameOf(DisplayedSavingsPercentage))>
     Private _currentFolderSize As Long
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(CanUncompress), NameOf(RecommendedActionCategory))>
+    <NotifyPropertyChangedFor(NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(DisplayedSavingsPercentage), NameOf(DetailSavings), NameOf(SavingsPercentage), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(CanUncompress), NameOf(RecommendedActionCategory))>
     Private _isCompressed As Boolean
 
     <ObservableProperty>
@@ -871,7 +873,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private ReadOnly _hasPendingSteamUpdate As Boolean
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(StatusMessage), NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(RecommendedActionCategory))>
+    <NotifyPropertyChangedFor(NameOf(StatusMessage), NameOf(IsDisplayingActualSavings), NameOf(DisplayedSavings), NameOf(DisplayedSavingsPercentage), NameOf(HasSavingsData), NameOf(CanCompress), NameOf(RecommendedActionCategory))>
     Private _status As SteamGameStatus
 
     <ObservableProperty>
@@ -890,7 +892,7 @@ Public Class SteamDetailedResult : Inherits ObservableObject
     Private _recommendedAction As String
 
     <ObservableProperty>
-    <NotifyPropertyChangedFor(NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage))>
+    <NotifyPropertyChangedFor(NameOf(DisplayedSavings), NameOf(DetailSavings), NameOf(SavingsPercentage), NameOf(DisplayedSavingsPercentage))>
     Private _expectedCompressionSavings As Long
 
     <ObservableProperty>
@@ -975,10 +977,21 @@ Public Class SteamDetailedResult : Inherits ObservableObject
 
     Public ReadOnly Property SavingsPercentage As Double
         Get
-            If UncompressedBytes <= 0 Then Return 0
-            Return Math.Clamp(CDbl(DetailSavings) / UncompressedBytes * 100, 0, 100)
+            Return GetSavingsPercentage(DetailSavings)
         End Get
     End Property
+
+    'The library row shows DisplayedSavings, so its percentage must be derived from the same figure.
+    Public ReadOnly Property DisplayedSavingsPercentage As Double
+        Get
+            Return GetSavingsPercentage(DisplayedSavings)
+        End Get
+    End Property
+
+    Private Function GetSavingsPercentage(savings As Long) As Double
+        If UncompressedBytes <= 0 Then Return 0
+        Return Math.Clamp(CDbl(savings) / UncompressedBytes * 100, 0, 100)
+    End Function
 
     Public ReadOnly Property IsDisplayingActualSavings As Boolean
         Get
