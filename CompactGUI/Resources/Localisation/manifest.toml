@@ -1,7 +1,7 @@
 schema = 1
 
 [locales."en-AU"]
-version = 1
+version = 2
 file = "en-AU.toml"
 
 [locales."es-ES"]
@@ -17,7 +17,7 @@ version = 1
 file = "ru-RU.toml"
 
 [locales."zh-CN"]
-version = 2
+version = 3
 file = "zh-CN.toml"
 
 [locales."it-IT"]
