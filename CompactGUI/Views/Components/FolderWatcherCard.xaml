@@ -5,7 +5,6 @@
              xmlns:local="clr-namespace:CompactGUI"
       xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              Margin="0"
              Padding="0"
@@ -18,11 +17,6 @@
     <Grid Margin="30 10 30 0" VerticalAlignment="Stretch">
 
         <Grid.Resources>
-            <CollectionViewSource x:Key="Src" Source="{Binding Watcher.WatchedFolders}">
-                <CollectionViewSource.SortDescriptions>
-                    <scm:SortDescription PropertyName="DisplayName" />
-                </CollectionViewSource.SortDescriptions>
-            </CollectionViewSource>
             <CollectionViewSource x:Key="Dtd" d:Source="{d:SampleData ItemCount=3}" />
         </Grid.Resources>
 
@@ -63,6 +57,13 @@
                 </Button.ToolTip>
             </Button>
         </StackPanel>
+
+        <!--  Search Box  -->
+        <ui:TextBox Grid.Row="0" Grid.Column="1"
+                    MinWidth="220" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    FontSize="14"
+                    PlaceholderText="{loc:T 'Search watched folders...'}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
 
 
@@ -130,7 +131,7 @@
                   Margin="-10 0 -20 0" Padding="0 0 10 0" HorizontalAlignment="Stretch"
                   d:ItemsSource="{Binding Source={StaticResource Dtd}}"
                   Background="Transparent" BorderThickness="0"
-                  ItemsSource="{Binding Source={StaticResource Src}}"
+                  ItemsSource="{Binding FilteredWatchedFolders}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible" VirtualizingPanel.ScrollUnit="Pixel">
 
             <ListView.ItemContainerStyle>
@@ -341,6 +342,12 @@
             </ListView.ItemTemplate>
 
         </ListView>
+
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontSize="14" Foreground="#80FFFFFF"
+                   loc:L.Value="No watched folders match your search."
+                   Visibility="{Binding HasFilteredResults, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
 
 
 

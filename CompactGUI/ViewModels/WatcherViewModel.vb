@@ -1,4 +1,6 @@
-﻿Imports System.Threading
+﻿Imports System.ComponentModel
+Imports System.Threading
+Imports System.Windows.Data
 
 Imports CommunityToolkit.Mvvm.ComponentModel
 Imports CommunityToolkit.Mvvm.Input
@@ -13,10 +15,40 @@ Public NotInheritable Class WatcherViewModel : Inherits ObservableObject
     Private ReadOnly _snackbarService As CustomSnackBarService
     Public ReadOnly Property Watcher As Watcher.Watcher
 
+    <ObservableProperty>
+    Private _searchText As String
+
+    Public ReadOnly Property FilteredWatchedFolders As ICollectionView
+
+    Public ReadOnly Property HasFilteredResults As Boolean
+        Get
+            Return Not FilteredWatchedFolders.IsEmpty
+        End Get
+    End Property
+
     Public Sub New(watcher As Watcher.Watcher, snackbarService As CustomSnackBarService)
         Me.Watcher = watcher
         _snackbarService = snackbarService
+
+        FilteredWatchedFolders = CollectionViewSource.GetDefaultView(Watcher.WatchedFolders)
+        FilteredWatchedFolders.SortDescriptions.Add(New SortDescription("DisplayName", ListSortDirection.Ascending))
+        FilteredWatchedFolders.Filter = AddressOf FilterWatchedFolders
+        AddHandler FilteredWatchedFolders.CollectionChanged, Sub(s, e) OnPropertyChanged(NameOf(HasFilteredResults))
     End Sub
+
+    Private Sub OnSearchTextChanged(value As String)
+        FilteredWatchedFolders.Refresh()
+        OnPropertyChanged(NameOf(HasFilteredResults))
+    End Sub
+
+    Private Function FilterWatchedFolders(obj As Object) As Boolean
+        If String.IsNullOrWhiteSpace(SearchText) Then Return True
+        Dim item = TryCast(obj, Watcher.WatchedFolder)
+        If item Is Nothing Then Return False
+
+        Return (item.DisplayName IsNot Nothing AndAlso item.DisplayName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0) OrElse
+               (item.Folder IsNot Nothing AndAlso item.Folder.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+    End Function
 
 
 
