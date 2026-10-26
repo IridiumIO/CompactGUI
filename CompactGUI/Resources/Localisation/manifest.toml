@@ -36,6 +36,10 @@ file = "id-ID.toml"
 version = 1
 file = "ja-JP.toml"
 
+[locales."pt-BR"]
+version = 1
+file = "pt-BR.toml"
+
 [locales."de-DE"]
 version = 1
 file = "de-DE.toml"
