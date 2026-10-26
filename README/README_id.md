@@ -28,7 +28,8 @@
   <a href="README_cn.md">简体中文</a> -
   <a href="README_it.md">Italian</a> -
   Bahasa Indonesia -
-  <a href="README_ja.md">日本語</a>
+  <a href="README_ja.md">日本語</a> -
+  <a href="README_pt-BR.md">Português</a>
 </p>
 &nbsp;
 
