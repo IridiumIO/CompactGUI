@@ -159,35 +159,41 @@ public class Estimator
 
     unsafe long GetFirstLcn(string fileName)
     {
-        SafeFileHandle handle = File.OpenHandle(fileName);
+        try
+        {
+            using SafeFileHandle handle = File.OpenHandle(fileName);
 
-        if (handle.IsInvalid) throw new IOException("Failed to open file handle for " + fileName);
+            if (handle.IsInvalid) return long.MaxValue;
 
-        NTFSInterop.STARTING_VCN_INPUT_BUFFER inBuffer = new() { StartingVcn = 0 };
-        uint inBufferSize = (uint)sizeof(NTFSInterop.STARTING_VCN_INPUT_BUFFER);
+            NTFSInterop.STARTING_VCN_INPUT_BUFFER inBuffer = new() { StartingVcn = 0 };
+            uint inBufferSize = (uint)sizeof(NTFSInterop.STARTING_VCN_INPUT_BUFFER);
 
-        int outBufferSize = 4096;
-        byte* outBuffer = stackalloc byte[outBufferSize];
+            int outBufferSize = 4096;
+            byte* outBuffer = stackalloc byte[outBufferSize];
 
-        uint bytesReturned = 0;
+            uint bytesReturned = 0;
 
-        var result = PInvoke.DeviceIoControl(
-            handle,
-            NTFSInterop.FSCTL_GET_RETRIEVAL_POINTERS,
-            &inBuffer,
-            inBufferSize,
-            outBuffer,
-            (uint)outBufferSize,
-            &bytesReturned,
-            null);
+            var result = PInvoke.DeviceIoControl(
+                handle,
+                NTFSInterop.FSCTL_GET_RETRIEVAL_POINTERS,
+                &inBuffer,
+                inBufferSize,
+                outBuffer,
+                (uint)outBufferSize,
+                &bytesReturned,
+                null);
 
-        if (!result) return long.MaxValue;
+            if (!result) return long.MaxValue;
 
-        int extentOffset = Marshal.OffsetOf<NTFSInterop.RETRIEVAL_POINTERS_BUFFER>("Extents").ToInt32();
-        long lcn = Marshal.ReadInt64((IntPtr)outBuffer + extentOffset + 8);
+            int extentOffset = Marshal.OffsetOf<NTFSInterop.RETRIEVAL_POINTERS_BUFFER>("Extents").ToInt32();
+            long lcn = Marshal.ReadInt64((IntPtr)outBuffer + extentOffset + 8);
 
-        return lcn;
-
+            return lcn;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return long.MaxValue;
+        }
     }
 
 
