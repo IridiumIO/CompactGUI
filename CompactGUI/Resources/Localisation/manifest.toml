@@ -39,3 +39,7 @@ file = "ja-JP.toml"
 [locales."de-DE"]
 version = 1
 file = "de-DE.toml"
+
+[locales."th-TH"]
+version = 1
+file = "th-TH.toml"
